@@ -1,0 +1,9 @@
+.container {
+    @apply bg-[#F7FFFC] w-[100vw] h-[100vh];
+}
+
+.form {
+    @apply w-[774px] h-[730px] p-6 bg-white;
+    margin: 40px auto 76px;
+    box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.05);
+}
