@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { Logger } from '@/utils/logger';
 import { Services } from '@/types/axios';
 import { config } from '@config';
@@ -9,7 +9,7 @@ import { config } from '@config';
  * @param {*} res 
  * @returns
  */
-export const logResponser = <T>(res: Services.ApiResponse<T>): void => {
+export const logResponser = <T>(res: AxiosResponse<Services.ApiResponse<T>>): void => {
   if (!res) return;
   const { config } = res;
   const loadTime = performance.now();
