@@ -1,8 +1,8 @@
-import { combineReducers } from "@reduxjs/toolkit";
-import exampleSlice from "./slice/exampleSlice";
-import responserSlice from "./slice/responserSlice";
+import { Reducer, combineReducers } from '@reduxjs/toolkit';
+import exampleSlice from './slice/exampleSlice';
+import responserSlice from './slice/responserSlice';
 
-const reducers = combineReducers({
+const reducers: Reducer = combineReducers({
   example: exampleSlice,
   responser: responserSlice,
 });
