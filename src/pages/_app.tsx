@@ -6,9 +6,11 @@ import createEmotionCache from '@/utils/createEmotionCache';
 import { CacheProvider } from '@emotion/react';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import theme from '@/utils/theme';
+import { Provider } from 'react-redux';
+import store from '../store';
 
 
-// Client-side cache, shared for the whole session of the user in browser. 
+// Client-side cache, shared for the whole session of the user in browser.
 const clientSideEmotionCache = createEmotionCache();
 
 export interface MyAppProps extends AppProps {
@@ -25,7 +27,9 @@ export default function App(props: MyAppProps) {
       <ThemeProvider theme={theme}>
         { /* TODO: Implement Redux Store */ }
         <CssBaseline/>
-        <Component {...pageProps}/>
+        <Provider store={store}>
+          <Component {...pageProps}/>
+        </Provider>
       </ThemeProvider>
     </CacheProvider>
   );
