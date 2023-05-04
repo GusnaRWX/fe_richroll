@@ -26,7 +26,7 @@ export const Image: ImageType = {
   SCHOTERS: '/assets/images/schoters.png',
   SLACK: '/assets/images/slack.png',
   TOKOPEDIA: '/assets/images/tokopedia.png',
-  UDEMY: '/assets/images/udemy.png'
+  UDEMY: '/assets/images/udemy.png',
   EXAMPLE_USER: '/assets/images/example-user.png'
 };
 
