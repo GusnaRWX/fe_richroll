@@ -1,12 +1,14 @@
 import React, { FormEvent, useState } from 'react';
 import { useForm } from '@/hooks/index';
 import { Login } from '@/types/component';
-import { Box, BoxProps, Button, TextField, Typography } from '@mui/material';
+import { Box, BoxProps, Button, TextField, Typography, InputAdornment, IconButton, Alert } from '@mui/material';
 import { Image as ImageType, Icons } from '@/utils/assetsConstant';
 import { styled } from '@mui/material/styles';
 import Image from 'next/image';
 import Link from 'next/link';
 import { checkRegulerExpression } from '@/utils/helper';
+import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
+import { useSelector } from 'react-redux';
 
 const AsteriskComponent = styled('span')(({ theme }) => ({
   color: theme.palette.error.main
@@ -38,6 +40,12 @@ const LoginForm = ({
     email: '',
     password: ''
   });
+
+  const [openPassword, setOpenPassword] = useState(false);
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { responser }: any = useSelector(state => state);
+
 
   const validate = (fieldOfValues = values) => {
     const temp: Login.Form = { ...errors };
@@ -81,13 +89,13 @@ const LoginForm = ({
   };
 
   return (
-    <Box padding='45px 0'>
+    <Box padding={`${![200, 201, 0].includes(responser?.code) ? 35 : 45}px 0`}>
       <Box
         component='form'
         autoComplete='off'
         onSubmit={handleSubmit}
         sx={{
-          padding: '0 24px'
+          padding: '0 40px'
         }}
       >
         <Box component='div' mb='16px'>
@@ -106,6 +114,11 @@ const LoginForm = ({
         >
           Login
         </Typography>
+        {![200, 201, 0].includes(responser?.code) && (
+          <Box mb='17px'>
+            <Alert severity='error'>{responser?.message}</Alert>
+          </Box>
+        )}
         <Box component='div' mb='17px'>
           <Typography>
             Email Address <AsteriskComponent>*</AsteriskComponent>
@@ -117,6 +130,8 @@ const LoginForm = ({
             onChange={handleInputChange}
             placeholder='Input email address'
             size='small'
+            error={errors.email}
+            {...errors.email && ({ error: true, helperText: errors.email })}
           />
         </Box>
         <Box mb='17px'>
@@ -127,10 +142,25 @@ const LoginForm = ({
             fullWidth
             variant='outlined'
             name='password'
-            type='password'
+            type={openPassword ? 'text' : 'password'}
             onChange={handleInputChange}
             placeholder='Input password'
             size='small'
+            error={errors.password}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position='end'>
+                  <IconButton
+                    edge='end'
+                    onClick={() => { setOpenPassword(!openPassword); }}
+                    onMouseDown={(e: React.MouseEvent<HTMLButtonElement>) => { e.preventDefault(); }}
+                  >
+                    {openPassword ? <BsFillEyeFill color='#9CA3AF' /> : <BsFillEyeSlashFill color='#9CA3AF' />}
+                  </IconButton>
+                </InputAdornment>
+              )
+            }}
+            {...errors.password && ({ error: true, helperText: errors.password })}
           />
         </Box>
         <LinkComponent href='/auth/forgot-password'>Forgot Password?</LinkComponent>
@@ -146,7 +176,7 @@ const LoginForm = ({
           Login
         </Button>
       </Box>
-      <Box component='div' mt='17px'>
+      <Box component='div' mt={`${![200, 201, 0].includes(responser?.code) ? 17 : 30}px`}>
         <Typography
           color='grey.400'
           textAlign='center'
