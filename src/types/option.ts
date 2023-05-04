@@ -4,6 +4,6 @@ export declare namespace Option {
   }
   export interface Mapper {
     label: string;
-    value: number | string;
+    value: string;
   }
 }

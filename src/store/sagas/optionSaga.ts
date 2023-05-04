@@ -19,7 +19,6 @@ function* fetchGetCountries() {
     const res:AxiosResponse = yield call(getCountriesItem);
     if (res.status === 200) {
       const { items } = res?.data?.data as Option.CountryPayload;
-      yield delay(2000, true);
       yield put({
         type: countriesSuccess.toString(), payload: {
           items: items

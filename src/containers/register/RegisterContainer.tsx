@@ -3,6 +3,8 @@ import React, { useEffect } from 'react';
 import RegisterComponent from '@/components/register/RegisterComponent';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { countriesRequested } from '@/store/reducers/slice/options/optionSlice';
+import { registerRequested } from '@/store/reducers/slice/auth/registerSlice';
+import { Register } from '@/types/component';
 
 
 function RegisterContainer() {
@@ -16,8 +18,15 @@ function RegisterContainer() {
     });
   }, []);
 
+  const handleRegister = (payload: Register.Form) => {
+    dispatch({
+      type: registerRequested.toString(),
+      payload: payload
+    });
+  };
+
   return (
-    <RegisterComponent/>
+    <RegisterComponent countries={selector} doRegister={handleRegister}/>
   );
 }
 

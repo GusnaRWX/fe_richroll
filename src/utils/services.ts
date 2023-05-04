@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosRequestHeaders, AxiosResponse } from 'axios';
 import { Logger } from '@/utils/logger';
 import { Services } from '@/types/axios';
 import { config } from '@config';
@@ -57,9 +57,10 @@ axios.interceptors.response.use(
  * @param {String} url
  * @param {*} params
  */
-export const get = (url: string, params?: string) => {
+export const get = (url: string, params?: string, headers?: AxiosRequestHeaders) => {
   return service.get(`${url}`, {
-    params
+    params,
+    headers
   });
 };
 
