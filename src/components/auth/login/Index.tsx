@@ -21,11 +21,12 @@ const WrapperAuth = styled(Box)<BoxProps>(({ theme }) => ({
 }));
 
 const WrapperCard = styled(Card)<CardProps>(() => ({
-  position: 'relative',
-  top: '153px',
-  width: '1170px',
-  left: '50%',
-  transform: 'translateX(-50%)'
+  paddingTop: '100px',
+  background: 'none',
+  borderRadius: 'none',
+  boxShadow: 'none',
+  paddingLeft: '135px',
+  paddingRight: '135px'
 }));
 
 const WrapperCardContent = styled(Box)<BoxProps>(() => ({
@@ -73,24 +74,26 @@ const LoginComponent = ({
   doLogin
 }: Login.Component) => {
   return (
-    <WrapperAuth component='div'>
+    <>
       <Navbar />
-      <WrapperCard>
-        <WrapperCardContent>
-          <Box component='div'>
-            <Image
-              src={ImageType.EXAMPLE_LOGIN}
-              alt='login'
-              height={621}
-              width={584}
-            />
-          </Box>
-          <Box width='100%'>
-            <LoginForm doLogin={doLogin} />
-          </Box>
-        </WrapperCardContent>
-      </WrapperCard>
-    </WrapperAuth>
+      <WrapperAuth>
+        <WrapperCard>
+          <WrapperCardContent>
+            <Box component='div'>
+              <Image
+                src={ImageType.EXAMPLE_LOGIN}
+                alt='login'
+                height={621}
+                width={584}
+              />
+            </Box>
+            <Box width='100%' height='621px' sx={{ background: '#FFFFFF' }}>
+              <LoginForm doLogin={doLogin} />
+            </Box>
+          </WrapperCardContent>
+        </WrapperCard>
+      </WrapperAuth>
+    </>
   );
 };
 
