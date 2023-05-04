@@ -8,3 +8,9 @@ export declare namespace Login {
     doLogin: (_payload: Form) => void
   }
 }
+
+export declare namespace Register {
+  export interface Component {
+    countries: [];
+  }
+}

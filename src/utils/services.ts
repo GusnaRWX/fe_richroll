@@ -4,9 +4,9 @@ import { Services } from '@/types/axios';
 import { config } from '@config';
 
 /**
- * Log Responser 
- * 
- * @param {*} res 
+ * Log Responser
+ *
+ * @param {*} res
  * @returns
  */
 export const logResponser = <T>(res: AxiosResponse<Services.ApiResponse<T>>): void => {
@@ -25,7 +25,7 @@ export const logResponser = <T>(res: AxiosResponse<Services.ApiResponse<T>>): vo
 };
 
 /**
- * Axios create default config 
+ * Axios create default config
  */
 const service = axios.create({
   baseURL: config.API_URL || 'http://localhost'
@@ -52,12 +52,12 @@ axios.interceptors.response.use(
 );
 
 /**
- * Func Get 
- * 
- * @param {String} url 
+ * Func Get
+ *
+ * @param {String} url
  * @param {*} params
  */
-export const get = (url: string, params: string) => {
+export const get = (url: string, params?: string) => {
   return service.get(`${url}`, {
     params
   });
@@ -65,9 +65,9 @@ export const get = (url: string, params: string) => {
 
 /**
  * Func Post / Put
- * 
- * @param {String} url 
- * @param {*} body 
+ *
+ * @param {String} url
+ * @param {*} body
  */
 export const post = <T>(url: string, body: T) => {
   return service.post(`${url}`, body);
@@ -78,9 +78,9 @@ export const put = <T>(url: string, body: T) => {
 };
 
 /**
- * Func Delete 
- *  
- * @param {String} url 
+ * Func Delete
+ *
+ * @param {String} url
  * @param {*} params
  */
 export const del = (url: string, params: string) => {

@@ -9,6 +9,8 @@ const store:Store = configureStore({
   reducer: reducers,
   middleware: [sagaMiddleware]
 });
+export type AppDispatch = typeof store.dispatch
+export type RootState = ReturnType<typeof store.getState>
 
 sagaMiddleware.run(rootSaga);
 
