@@ -29,10 +29,10 @@ declare module '@mui/material/Button' {
 }
 
 export const DMSans = DM_Sans({
-  weight:['400','500','700'],
+  weight: ['400', '500', '700'],
   subsets: ['latin'],
   display: 'swap',
-  fallback:['Inter']
+  fallback: ['Inter']
 });
 
 const { palette } = createTheme();

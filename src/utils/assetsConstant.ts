@@ -8,7 +8,8 @@ interface IconsType {
 
 export const Image: ImageType = {
   EXAMPLE_LOGIN: '/assets/images/example-login.png',
-  KAYAROLL_LOGO: '/assets/images/kayaroll-logo.png'
+  KAYAROLL_LOGO: '/assets/images/kayaroll-logo.png',
+  EXAMPLE_USER: '/assets/images/example-user.png'
 };
 
 export const Icons: IconsType = {
