@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  app:
+    container_name: kayaroll-fe-app
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    secrets:
+      - source: app-config
+        target: /app/.env
+    ports:
+      - '127.0.0.1:3000:3000'
+
+secrets:
+  app-config:
+    file: .env

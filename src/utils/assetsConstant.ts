@@ -27,6 +27,7 @@ export const Image: ImageType = {
   SLACK: '/assets/images/slack.png',
   TOKOPEDIA: '/assets/images/tokopedia.png',
   UDEMY: '/assets/images/udemy.png'
+  EXAMPLE_USER: '/assets/images/example-user.png'
 };
 
 export const Icons: IconsType = {
