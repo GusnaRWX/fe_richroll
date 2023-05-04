@@ -718,7 +718,6 @@ const LandingComponent = () => {
         </Box>
       </WrapperContainer>
 
-      {/* FOOTER */}
       <WrapperContainerSpotlight sx={{ justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <Box>
           <Image
