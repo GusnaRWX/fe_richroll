@@ -12,6 +12,7 @@ import { setResponserMessage } from '@/store/reducers/slice/responserSlice';
 import { Services } from '@/types/axios';
 import { AxiosError, AxiosResponse } from 'axios';
 import { Auth } from '@/types/authentication';
+import Router from 'next/router';
 
 /**
  * Fetch Authentication (Login)  
@@ -29,6 +30,7 @@ function* fetchAuthenticationLogin(action: AnyAction) {
           refreshToken: refreshToken
         }
       });
+      Router.push('/dashboard');
     }
   } catch (err) {
     if (err instanceof AxiosError) {
