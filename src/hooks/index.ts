@@ -1,6 +1,11 @@
 import { CustomHooks } from '@/types/hooks';
 import { RefObject, useEffect, useState } from 'react';
+import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../store';
 
+
+export const useAppDispatch: () => AppDispatch = useDispatch;
+export const useAppSelectors: TypedUseSelectorHook<RootState> = useSelector;
 
 export function useForm<T>(
   initialValues: T,

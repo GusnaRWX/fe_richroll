@@ -11,6 +11,23 @@ export declare namespace Login {
   }
 }
 
+export declare namespace Register {
+  export interface Form {
+    email: string;
+    password: string;
+    name: string;
+    countryID: string;
+    companyName: string;
+    numberOfEmployees: string;
+    phoneNumberPrefix: string;
+    phoneNumber: string;
+  }
+
+  export interface Component {
+    countries: [];
+    doRegister: (_payload: Form) => void,
+  }
+}
 export declare namespace CoreLayout {
 
   export interface SidebarItem {
