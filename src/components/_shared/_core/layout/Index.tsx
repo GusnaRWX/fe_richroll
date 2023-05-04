@@ -75,7 +75,7 @@ const Layout = ({
       }}
     >
       <Appbar
-        drawerWidth={drawerWidth}
+        DrawerWidth={drawerWidth}
         handleDrawerToggle={handleDrawerToggle}
       />
       <DrawerCore

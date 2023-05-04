@@ -30,7 +30,7 @@ function* fetchAuthenticationLogin(action: AnyAction) {
           refreshToken: refreshToken
         }
       });
-      Router.push('/dashboard');
+      yield Router.push('/dashboard');
     }
   } catch (err) {
     if (err instanceof AxiosError) {

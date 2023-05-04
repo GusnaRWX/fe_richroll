@@ -15,7 +15,7 @@ interface AppbarProps {
    */
   window?: () => Window;
   handleDrawerToggle: () => void;
-  drawerWidth: number;
+  DrawerWidth: number;
 }
 
 const WrapperNavbarContent = styled(Toolbar)(() => ({
@@ -24,16 +24,16 @@ const WrapperNavbarContent = styled(Toolbar)(() => ({
 }));
 
 const Appbar: FC<AppbarProps> = (props) => {
-  const { drawerWidth } = props;
+  const { DrawerWidth } = props;
   return (
     <AppBar
       position='fixed'
       sx={{
         width: {
-          sm: `calc(100% - ${drawerWidth}px)`
+          sm: `calc(100% - ${DrawerWidth}px)`
         },
         ml: {
-          sm: `${drawerWidth}px`
+          sm: `${DrawerWidth}px`
         },
         background: '#FFFFFF',
         color: 'primary.main',
