@@ -1,7 +1,7 @@
-import axios, { AxiosRequestHeaders, AxiosResponse } from 'axios';
+import axios, { AxiosHeaderValue, AxiosRequestHeaders, AxiosResponse } from 'axios';
 import { Logger } from '@/utils/logger';
-import { Services } from '@/types/axios';
 import { config } from '@config';
+import { getStorage } from './storage';
 
 /**
  * Log Responser
@@ -9,18 +9,16 @@ import { config } from '@config';
  * @param {*} res
  * @returns
  */
-export const logResponser = <T>(res: AxiosResponse<Services.ApiResponse<T>>): void => {
+export const logResponser = (res: AxiosResponse): void => {
   if (!res) return;
-  const { config } = res;
+  const { config: configRes } = res;
   const loadTime = performance.now();
-  const url = config.url?.replace(process.env.NEXT_PUBLIC_API_URL || '', '');
+  const url = configRes.url?.replace(config.API_URL || '', '');
 
   // * Send Response to logger
-  Logger(`${config?.method?.toUpperCase()} ${url}`, {
+  Logger(`${configRes?.method?.toUpperCase()} ${url}`, {
     responseTime: loadTime,
-    status: res.status,
-    statusText: res.statusText,
-    message: res?.data?.message || ''
+    message: res?.data.message || ''
   });
 };
 
@@ -28,25 +26,26 @@ export const logResponser = <T>(res: AxiosResponse<Services.ApiResponse<T>>): vo
  * Axios create default config
  */
 const service = axios.create({
-  baseURL: config.API_URL || 'http://localhost'
+  baseURL: config.API_URL || 'http://localhost',
+  headers: {
+    Authorization: {
+      toString() {
+        return `Bearer ${getStorage('accessToken')}`;
+      }
+    } as AxiosHeaderValue
+  }
 });
 
 
 // Add a response interceptor to handle unauthorized errors
-axios.interceptors.response.use(
+service.interceptors.response.use(
   (response) => {
     if (config.MODE !== 'production')
       logResponser(response);
     return response;
   },
   (error) => {
-    // Handle unauthorized errors
-    if (error.response.status === 401) {
-      // Clear the cookies
-      // Redirect to login page
-      window.location.href = '/login';
-    }
-
+    if (config.MODE !== 'production') logResponser(error);
     return Promise.reject(error);
   }
 );

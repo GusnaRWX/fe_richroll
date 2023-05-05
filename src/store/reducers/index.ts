@@ -4,6 +4,7 @@ import responserSlice from './slice/responserSlice';
 import LoginSlice from './slice/auth/loginSlice';
 import optionSlice from './slice/options/optionSlice';
 import registerSlice from './slice/auth/registerSlice';
+import meSlice from './slice/auth/meSlice';
 
 
 const reducers: Reducer = combineReducers({
@@ -11,7 +12,8 @@ const reducers: Reducer = combineReducers({
   responser: responserSlice,
   login: LoginSlice,
   option: optionSlice,
-  register: registerSlice
+  register: registerSlice,
+  me: meSlice
 });
 
 export default reducers;
