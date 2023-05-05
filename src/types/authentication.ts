@@ -24,4 +24,10 @@ export declare namespace Auth {
     phoneNumberPrefix: string;
     phoneNumber: string;
   }
+
+  export interface Me {
+    name: string;
+    email: string;
+    roles: string[] | null
+  }
 }

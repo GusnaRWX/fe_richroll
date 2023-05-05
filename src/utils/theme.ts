@@ -414,6 +414,26 @@ const theme = createTheme({
     'text-6xl': {
       fontSize: '4rem'
     },
+  },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          textTransform: 'none',
+          boxShadow: 'none',
+        }
+      }
+    },
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          backgroundColor: '#FFF',
+          ' .Mui-disabled': {
+            backgroundColor: palette.grey[100],
+          }
+        },
+      }
+    }
   }
 });
 

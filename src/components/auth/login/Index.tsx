@@ -92,6 +92,7 @@ const LoginComponent = ({
             </Box>
           </WrapperCardContent>
         </WrapperCard>
+
       </WrapperAuth>
     </>
   );

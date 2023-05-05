@@ -1,7 +1,7 @@
 import React, { FormEvent, useState } from 'react';
 import { useForm } from '@/hooks/index';
 import { Login } from '@/types/component';
-import { Box, BoxProps, Button, Typography, InputAdornment, IconButton, Alert } from '@mui/material';
+import { Box, BoxProps, Typography, InputAdornment, IconButton, Alert } from '@mui/material';
 import { Image as ImageType, Icons } from '@/utils/assetsConstant';
 import { styled } from '@mui/material/styles';
 import Image from 'next/image';
@@ -9,7 +9,7 @@ import Link from 'next/link';
 import { checkRegulerExpression } from '@/utils/helper';
 import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
 import { useAppSelectors } from '@/hooks/index';
-import { Input } from '@/components/_shared/form/';
+import { Input, Button } from '@/components/_shared/form/';
 
 const LinkComponent = styled(Link)(({ theme }) => ({
   color: theme.palette.primary.main,
@@ -152,17 +152,13 @@ const LoginForm = ({
         </Box>
         <LinkComponent href='/auth/forgot-password'>Forgot Password?</LinkComponent>
         <Button
-          variant='contained'
+          label='Login'
           color='primary'
+          size='large'
           type='submit'
-          fullWidth
-          sx={{
-            textTransform: 'none',
-          }}
           disabled={login.isLoading}
-        >
-          Login
-        </Button>
+          isLoading={login.isLoading}
+        />
       </Box>
       <Box component='div' mt={`${![200, 201, 0].includes(responser?.code) ? 17 : 30}px`}>
         <Typography
