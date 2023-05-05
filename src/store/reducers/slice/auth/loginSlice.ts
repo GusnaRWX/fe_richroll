@@ -26,6 +26,10 @@ export const loginSlice = createSlice({
         { name: 'refreshToken', value: action.payload.refreshToken }]);
       state.isAuth = true;
       state.isLoading = false;
+    },
+    loginFailured: (state) => {
+      state.isAuth = false;
+      state.isLoading = false;
     }
   },
   extraReducers: {
@@ -38,6 +42,10 @@ export const loginSlice = createSlice({
   }
 });
 
-export const { loginRequested, loginSuccessed } = loginSlice.actions;
+export const {
+  loginRequested,
+  loginSuccessed,
+  loginFailured
+} = loginSlice.actions;
 
 export default loginSlice.reducer;

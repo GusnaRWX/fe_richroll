@@ -1,4 +1,5 @@
 import { IconType } from 'react-icons';
+import { TextFieldProps } from '@mui/material';
 
 export declare namespace Login {
   export interface Form {
@@ -40,5 +41,12 @@ export declare namespace CoreLayout {
       title: string;
       path: string;
     }>
+  }
+}
+
+export declare namespace SharedComponent {
+  export type ComponentInput = TextFieldProps & {
+    customLabel?: string;
+    withAsterisk?: boolean;
   }
 }

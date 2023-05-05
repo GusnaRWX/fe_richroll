@@ -1,18 +1,15 @@
 import React, { FormEvent, useState } from 'react';
 import { useForm } from '@/hooks/index';
 import { Login } from '@/types/component';
-import { Box, BoxProps, Button, TextField, Typography, InputAdornment, IconButton, Alert } from '@mui/material';
+import { Box, BoxProps, Button, Typography, InputAdornment, IconButton, Alert } from '@mui/material';
 import { Image as ImageType, Icons } from '@/utils/assetsConstant';
 import { styled } from '@mui/material/styles';
 import Image from 'next/image';
 import Link from 'next/link';
 import { checkRegulerExpression } from '@/utils/helper';
 import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
-import { useSelector } from 'react-redux';
-
-const AsteriskComponent = styled('span')(({ theme }) => ({
-  color: theme.palette.error.main
-}));
+import { useAppSelectors } from '@/hooks/index';
+import { Input } from '@/components/_shared/form/';
 
 const LinkComponent = styled(Link)(({ theme }) => ({
   color: theme.palette.primary.main,
@@ -43,9 +40,7 @@ const LoginForm = ({
 
   const [openPassword, setOpenPassword] = useState(false);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { responser }: any = useSelector(state => state);
-
+  const { responser, login } = useAppSelectors(state => state);
 
   const validate = (fieldOfValues = values) => {
     const temp: Login.Form = { ...errors };
@@ -120,33 +115,26 @@ const LoginForm = ({
           </Box>
         )}
         <Box component='div' mb='17px'>
-          <Typography>
-            Email Address <AsteriskComponent>*</AsteriskComponent>
-          </Typography>
-          <TextField
-            fullWidth
-            variant='outlined'
+          <Input
+            customLabel='Email'
+            withAsterisk
+            size='small'
+            placeholder='Input email address'
             name='email'
             onChange={handleInputChange}
-            placeholder='Input email address'
-            size='small'
             error={errors.email}
-            {...errors.email && ({ error: true, helperText: errors.email })}
           />
         </Box>
         <Box mb='17px'>
-          <Typography>
-            Password <AsteriskComponent>*</AsteriskComponent>
-          </Typography>
-          <TextField
-            fullWidth
-            variant='outlined'
-            name='password'
-            type={openPassword ? 'text' : 'password'}
-            onChange={handleInputChange}
-            placeholder='Input password'
+          <Input
+            customLabel='Password'
+            withAsterisk
             size='small'
+            name='password'
+            onChange={handleInputChange}
             error={errors.password}
+            type={openPassword ? 'text' : 'password'}
+            placeholder='Input password'
             InputProps={{
               endAdornment: (
                 <InputAdornment position='end'>
@@ -160,7 +148,6 @@ const LoginForm = ({
                 </InputAdornment>
               )
             }}
-            {...errors.password && ({ error: true, helperText: errors.password })}
           />
         </Box>
         <LinkComponent href='/auth/forgot-password'>Forgot Password?</LinkComponent>
@@ -172,6 +159,7 @@ const LoginForm = ({
           sx={{
             textTransform: 'none',
           }}
+          disabled={login.isLoading}
         >
           Login
         </Button>
@@ -203,13 +191,15 @@ const LoginForm = ({
           textAlign='center'
         >
           Do Not Have an Account? &nbsp;
-          <Typography
-            component='span'
-            color='primary.main'
-            fontWeight={500}
-          >
-            Register Now
-          </Typography>
+          <Link href='/register' style={{ textDecoration: 'none' }}>
+            <Typography
+              component='span'
+              color='primary.main'
+              fontWeight={500}
+            >
+              Register Now
+            </Typography>
+          </Link>
         </Typography>
       </Box>
     </Box>
