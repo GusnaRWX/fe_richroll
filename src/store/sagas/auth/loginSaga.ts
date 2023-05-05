@@ -7,7 +7,7 @@
 import { AnyAction } from '@reduxjs/toolkit';
 import { loginService } from '../saga-actions/auth/loginAction';
 import { call, put, takeEvery } from 'redux-saga/effects';
-import { loginRequested, loginSuccessed } from '@/store/reducers/slice/auth/loginSlice';
+import { loginRequested, loginSuccessed, loginFailured } from '@/store/reducers/slice/auth/loginSlice';
 import { setResponserMessage } from '@/store/reducers/slice/responserSlice';
 import { Services } from '@/types/axios';
 import { AxiosError, AxiosResponse } from 'axios';
@@ -42,6 +42,7 @@ function* fetchAuthenticationLogin(action: AnyAction) {
           message: errorMessage?.message,
         }
       });
+      yield put({ type: loginFailured.toString() });
     }
   }
 }

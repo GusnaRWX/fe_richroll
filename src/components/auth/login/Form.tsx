@@ -8,7 +8,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { checkRegulerExpression } from '@/utils/helper';
 import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
-import { useSelector } from 'react-redux';
+import { useAppSelectors } from '@/hooks/index';
 
 const AsteriskComponent = styled('span')(({ theme }) => ({
   color: theme.palette.error.main
@@ -43,9 +43,7 @@ const LoginForm = ({
 
   const [openPassword, setOpenPassword] = useState(false);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { responser }: any = useSelector(state => state);
-
+  const { responser, login } = useAppSelectors(state => state);
 
   const validate = (fieldOfValues = values) => {
     const temp: Login.Form = { ...errors };
@@ -172,6 +170,7 @@ const LoginForm = ({
           sx={{
             textTransform: 'none',
           }}
+          disabled={login.isLoading}
         >
           Login
         </Button>
