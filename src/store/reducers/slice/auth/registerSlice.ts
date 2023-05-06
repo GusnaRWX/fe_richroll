@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { HYDRATE } from 'next-redux-wrapper';
-import { setStorages } from '@/utils/storage';
 
 interface RegisterState {
   loading: boolean
@@ -17,10 +16,7 @@ export const registerSlice = createSlice({
     registerRequested: (state) => {
       state.loading = true;
     },
-    registerSuccess: (state, action) => {
-      setStorages([
-        {name: 'accessToken', value: action.payload.token}
-      ]);
+    registerSuccess: (state) => {
       state.loading = false;
     },
     registerFailed: (state) => {
