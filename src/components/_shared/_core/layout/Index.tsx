@@ -17,8 +17,7 @@ const drawerWidth = 260;
 
 const MainComponent = styled(Box)<BoxProps>(({ theme }) => ({
   flexGrow: 1,
-  backgroundColor: theme.palette.secondary[50],
-  opacity: 0.3,
+  backgroundColor: theme.palette.secondary.light,
   padding: '70px 25px',
   height: 'auto'
 }));
@@ -33,7 +32,7 @@ const Layout = ({
 
   const container = typeof window !== 'undefined' ? () => window.document.body : undefined;
 
-  // Drawer 
+  // Drawer
   const drawer = (
     <Box>
       <Toolbar sx={{
