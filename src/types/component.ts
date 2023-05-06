@@ -1,5 +1,6 @@
 import { IconType } from 'react-icons';
-import { ButtonProps, IconButtonProps, TextFieldProps } from '@mui/material';
+import { ButtonProps, CardProps, IconButtonProps, TextFieldProps } from '@mui/material';
+import { ReactNode } from 'react';
 
 export declare namespace Login {
   export interface Form {
@@ -58,5 +59,9 @@ export declare namespace SharedComponent {
   export type ComponentIconButton = IconButtonProps & {
     parentColor?: string;
     icons: unknown
+  }
+
+  export type ComponentCard = CardProps & {
+    children: ReactNode
   }
 }

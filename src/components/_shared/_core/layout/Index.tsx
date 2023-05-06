@@ -1,4 +1,4 @@
-import { Box, List, Toolbar } from '@mui/material';
+import { Box, Container, List, Toolbar } from '@mui/material';
 import React, { useState } from 'react';
 import Appbar from '@/components/_shared/_core/appbar/Index';
 import DrawerCore from '@/components/_shared/_core/drawer/Index';
@@ -18,8 +18,8 @@ const drawerWidth = 260;
 const MainComponent = styled(Box)<BoxProps>(({ theme }) => ({
   flexGrow: 1,
   backgroundColor: theme.palette.secondary.light,
-  padding: '70px 25px',
-  height: 'auto'
+  overflow: 'auto',
+  height: '100vh'
 }));
 
 const Layout = ({
@@ -70,7 +70,6 @@ const Layout = ({
     <Box
       sx={{
         display: 'flex',
-        height: '100vh'
       }}
     >
       <Appbar
@@ -85,7 +84,18 @@ const Layout = ({
         drawer={drawer}
       />
       <MainComponent component='main' >
-        {children}
+        <Container
+          maxWidth='xl'
+          sx={{
+            paddingTop: '90px',
+            paddingLeft: '35px !important',
+            paddingRight: '35px !important',
+            paddingBottom: '33px'
+          }}
+        >
+          {children}
+        </Container>
+
       </MainComponent>
     </Box>
   );

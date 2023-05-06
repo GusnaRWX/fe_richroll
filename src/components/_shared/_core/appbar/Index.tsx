@@ -41,7 +41,7 @@ const Appbar: FC<AppbarProps> = (props) => {
         },
         background: '#FFFFFF',
         color: 'primary.main',
-        boxShadow: 'none'
+        boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.06), 0px 1px 3px rgba(0, 0, 0, 0.1)',
       }}
     >
       <WrapperNavbarContent>
