@@ -1,5 +1,5 @@
 import React, { FormEvent, useState } from 'react';
-import { useForm } from '@/hooks/index';
+import { useForm, useAppSelectors } from '@/hooks/index';
 import { Login } from '@/types/component';
 import { Box, BoxProps, Typography, InputAdornment, IconButton, Alert } from '@mui/material';
 import { Image as ImageType, Icons } from '@/utils/assetsConstant';
@@ -8,8 +8,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { checkRegulerExpression } from '@/utils/helper';
 import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
-import { useAppSelectors } from '@/hooks/index';
 import { Input, Button } from '@/components/_shared/form/';
+import { WINDOW_SSO } from '@config';
 
 const LinkComponent = styled(Link)(({ theme }) => ({
   color: theme.palette.primary.main,
@@ -47,13 +47,14 @@ const LoginForm = ({
 
     if ('email' in fieldOfValues) {
       const patternEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      temp.email = fieldOfValues.email
-        ? (
-          checkRegulerExpression(patternEmail, fieldOfValues.email)
-            ? ''
-            : 'Email should be valid'
-        )
-        : 'Email is required';
+      const emailValue = fieldOfValues.email || '';
+      let emailErrorMessage = '';
+      if (!emailValue) {
+        emailErrorMessage = 'Email is required';
+      } else if (!checkRegulerExpression(patternEmail, emailValue)) {
+        emailErrorMessage = 'Email should be valid';
+      }
+      temp.email = emailErrorMessage;
     }
 
 
@@ -173,12 +174,15 @@ const LoginForm = ({
             width={40}
             height={40}
             alt='sso-google'
+            style={{ cursor: 'pointer' }}
+            onClick={() => WINDOW_SSO('authentication/google')}
           />
           <Typography fontSize={14}>Or</Typography>
           <Image
             src={Icons.SSO_FACEBOOK}
             width={40}
             height={40}
+            style={{ cursor: 'pointer' }}
             alt='sso-facebook'
           />
         </WrapperSSO>

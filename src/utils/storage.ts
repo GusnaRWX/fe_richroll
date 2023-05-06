@@ -26,7 +26,7 @@ const configureStorage = (name: string, value: string, action: string) => {
  * @param {*} storages
  */
 export const setStorages = (storages: Storage[]) => {
-  storages.map((item) => configureStorage(item.name, item.value, 'set'));
+  storages.forEach((item) => configureStorage(item.name, item.value, 'set'));
 };
 
 /**
@@ -36,7 +36,7 @@ export const setStorages = (storages: Storage[]) => {
  * @param {*} storages
  */
 export const clearStorages = (storages: string[]) => {
-  storages.map((item) => configureStorage(item, '', 'remove'));
+  storages.forEach((item) => configureStorage(item, '', 'remove'));
 };
 
 /**

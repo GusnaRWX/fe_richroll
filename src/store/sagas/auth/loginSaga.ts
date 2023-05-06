@@ -33,7 +33,6 @@ function* fetchAuthenticationLogin(action: AnyAction) {
         }
       });
       const profile = yield call(getMeServices);
-      console.log(profile);
       yield put({
         type: meSuccessed.toString(),
         payload: { ...profile?.data?.data as Auth.Me }
