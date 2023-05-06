@@ -382,6 +382,9 @@ const theme = createTheme({
         main: '#F43F5E'
       }
     }),
+    background: {
+      paper: '#FFFFFF'
+    }
 
   },
   typography: {
@@ -434,6 +437,14 @@ const theme = createTheme({
             backgroundColor: palette.grey[100],
           }
         },
+      }
+    },
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.06), 0px 1px 3px rgba(0, 0, 0, 0.1)',
+          borderRadius: '8px'
+        }
       }
     }
   }

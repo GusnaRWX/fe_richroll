@@ -20,7 +20,7 @@ const SidebarItem = ({
 }: CoreLayout.SidebarItem) => {
 
   const [open, setOpen] = useState(false);
-  const { pathname } = useRouter();
+  const { pathname, push } = useRouter();
 
   const handleOpen = () => setOpen(!open);
   return (
@@ -56,6 +56,7 @@ const SidebarItem = ({
                     key={key}
                     selected={pathname === childMenu.path}
                     sx={{ pl: 6 }}
+                    onClick={() => { push(childMenu.path); }}
                   >
                     <ListItemText primary={childMenu.title} sx={{ fontSize: '14px', color: 'grey.400' }} />
                   </ListItemButton>
