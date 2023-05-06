@@ -28,6 +28,7 @@ export const Image: ImageType = {
   TOKOPEDIA: '/assets/images/tokopedia.png',
   UDEMY: '/assets/images/udemy.png',
   EXAMPLE_USER: '/assets/images/current-user.png',
+  PLACEHOLDER: '/assets/images/image-upload-placeholder.png'
 };
 
 export const Icons: IconsType = {
