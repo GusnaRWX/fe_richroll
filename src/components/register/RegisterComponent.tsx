@@ -13,17 +13,22 @@ import {
   Grid,
   FormControlLabel,
   Checkbox,
-  Button,
   Stack,
-  TextField,
   Typography,
   BoxProps,
   Box,
+  InputAdornment,
+  IconButton,
   Select,
+  FormControl,
+  FormHelperText,
   MenuItem
 } from '@mui/material';
 import { Register } from '@/types/component';
-import { useForm } from '@/hooks/index';
+import { useAppSelectors, useForm } from '@/hooks/index';
+import { Input, Button } from '../_shared/form';
+import Link from 'next/link';
+import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
 
 
 const NavHead = styled.div`
@@ -49,7 +54,7 @@ const Base = styled.div`
  display: flex;
  align-items: center;
  justify-content: center;
- background-color: #F7FFFC;
+ background-color: #F6FFFC;
  padding-top: 5rem;
  width: 100%;
  height: 100%;
@@ -67,17 +72,6 @@ const AsteriskComponent = MuiStyled('span')(({theme}) => ({
   color: theme.palette.error.main
 }));
 
-// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-
-// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-const SubmitButton = styled(Button)(({ theme }) => ({
-  color: '#FFFFFF',
-  backgroundColor: '#8DD0B8',
-  '&:hover': {
-    backgroundColor: '#65f0be',
-  },
-}));
-
 
 function RegisterComponent({ countries, doRegister }: Register.Component) {
 
@@ -88,11 +82,21 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
     countryID: '',
     companyName: '',
     numberOfEmployees: '',
-    phoneNumberPrefix: '+62',
+    phoneNumberPrefix: '',
     phoneNumber: '',
     isAgree: true
   });
 
+  const [checked, setChecked] = useState(false);
+
+  const [openPassword, setOpenPassword] = useState(false);
+
+  const { register } = useAppSelectors(state => state);
+
+
+  const handleCheck = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setChecked(event.target.checked);
+  };
   const validate = (fieldOfValues = values) => {
     const temp: Register.Form = {...errors};
 
@@ -104,11 +108,17 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
             ? ''
             : 'Email should be valid'
         )
-        : 'Email is required';
+        : 'This field is required';
     }
 
-    if ('password' in fieldOfValues)
-      temp.password = fieldOfValues.password ? '' : 'This field is Required';
+    if ('password' in fieldOfValues){
+      const patternPassword = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+      temp.password = fieldOfValues.password ? (
+        checkRegulerExpression(patternPassword, fieldOfValues.password)
+          ? ''
+          : 'Include Uppercase and lowercase, Include at least one number or symbol and be at least 8 character long'
+      ) : 'This field is Required';
+    }
 
     if ('name' in fieldOfValues)
       temp.name = fieldOfValues.name ? '' : 'This field is required';
@@ -148,6 +158,8 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
     });
   };
 
+
+
   const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     if(validate()) {
@@ -185,102 +197,162 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
             <h2>Register</h2>
             <Grid container spacing={2}>
               <Grid item xs={6} md={6} lg={6} xl={6}>
-                <Typography>Email Address<AsteriskComponent>*</AsteriskComponent></Typography>
-                <TextField
-                  fullWidth
-                  variant='outlined'
+                <Input
                   name='email'
                   onChange={handleInputChange}
-                  placeholder='Input email address'
+                  error={errors.email}
+                  customLabel='Email Address'
+                  withAsterisk={true}
                   size='small'
                 />
               </Grid>
               <Grid item xs={6} md={6} lg={6} xl={6}>
-                <Typography>Password<AsteriskComponent>*</AsteriskComponent></Typography>
-                <TextField
-                  fullWidth
-                  variant='outlined'
+                <Input
                   name='password'
                   onChange={handleInputChange}
-                  type='password'
-                  placeholder='Input Password'
+                  error={errors.password}
+                  customLabel='Password'
+                  withAsterisk
                   size='small'
+                  placeholder='Input Password'
+                  type={openPassword ? 'text' : 'password'}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position='end'>
+                        <IconButton
+                          edge='end'
+                          onClick={() => { setOpenPassword(!openPassword); }}
+                          onMouseDown={(e: React.MouseEvent<HTMLButtonElement>) => { e.preventDefault(); }}
+                        >
+                          {openPassword ? <BsFillEyeFill color='#9CA3AF' /> : <BsFillEyeSlashFill color='#9CA3AF' />}
+                        </IconButton>
+                      </InputAdornment>
+                    )
+                  }}
                 />
               </Grid>
               <Grid item xs={6} md={6} lg={6} xl={6}>
-                <Typography>Full Name<AsteriskComponent>*</AsteriskComponent></Typography>
-                <TextField
-                  fullWidth
-                  variant='outlined'
+                <Input
                   name='name'
                   onChange={handleInputChange}
-                  placeholder='Input Full Name'
+                  error={errors.name}
+                  customLabel='Input Full Name'
+                  withAsterisk={true}
                   size='small'
                 />
               </Grid>
               <Grid item xs={6} md={6} lg={6} xl={6}>
-                <Typography>Country<AsteriskComponent>*</AsteriskComponent></Typography>
-                <Select
-                  fullWidth
-                  size='small'
-                  value={values.countryID}
-                  name='countryID'
-                  onChange={handleInputChange}>
-                  {
-                    options().map((item) => (
-                      <MenuItem key={item.label} value={item.value}>{item.label}</MenuItem>
-                    ))
-                  }
-                </Select>
+                <FormControl fullWidth error={errors.countryID ? true : false}>
+                  <Typography>Country<AsteriskComponent>*</AsteriskComponent></Typography>
+                  <Select
+                    fullWidth
+                    variant='outlined'
+                    size='small'
+                    name='countryID'
+                    value={values.countryID}
+                    onChange={handleInputChange}
+                  >
+                    {
+                      options().map((item) => (
+                        <MenuItem key={item.label} value={item.value}>{item.label}</MenuItem>
+                      ))
+                    }
+                  </Select>
+                  <FormHelperText>{errors.countryID}</FormHelperText>
+                </FormControl>
               </Grid>
               <Grid item xs={12} md={12} lg={12} xl={12}>
-                <Typography>Company Name<AsteriskComponent>*</AsteriskComponent></Typography>
-                <TextField
-                  fullWidth
-                  variant='outlined'
+                <Input
                   name='companyName'
                   onChange={handleInputChange}
-                  placeholder='Input company name'
+                  error={errors.companyName}
+                  customLabel='Input Company Name'
+                  withAsterisk={true}
                   size='small'
                 />
               </Grid>
               <Grid item xs={6} md={6} lg={6} xl={6}>
-                <Typography>Employees<AsteriskComponent>*</AsteriskComponent></Typography>
-                <Select
-                  fullWidth
-                  variant='outlined'
-                  size='small'
-                  name='numberOfEmployees'
-                  value={values.numberOfEmployees}
-                  onChange={handleInputChange}>
-                  {
-                    employeeItems.map((item) => (
-                      <MenuItem key={item.label} value={item.value}>{item.label}</MenuItem>
-                    ))
-                  }
-                </Select>
+                <FormControl fullWidth error={errors.numberOfEmployees ? true : false}>
+                  <Typography>Employees<AsteriskComponent>*</AsteriskComponent></Typography>
+                  <Select
+                    fullWidth
+                    variant='outlined'
+                    size='small'
+                    name='numberOfEmployees'
+                    value={values.numberOfEmployees}
+                    onChange={handleInputChange}
+                  >
+                    {
+                      employeeItems.map((item) => (
+                        <MenuItem key={item.label} value={item.value}>{item.label}</MenuItem>
+                      ))
+                    }
+                  </Select>
+                  <FormHelperText>{errors.numberOfEmployees}</FormHelperText>
+                </FormControl>
               </Grid>
               <Grid item xs={6} md={6} lg={6} xl={6}>
-                <Typography>Contact Number<AsteriskComponent>*</AsteriskComponent></Typography>
-                <TextField
-                  fullWidth
-                  variant='outlined'
-                  name='phoneNumber'
-                  onChange={handleInputChange}
-                  placeholder='Input email address'
-                  size='small'
-                />
+                <Typography>Phone Number<AsteriskComponent>*</AsteriskComponent></Typography>
+                <Grid container>
+                  <Grid item xs={1} sm={3} md={3} lg={3} xl={3}>
+                    <Select
+                      variant='outlined'
+                      size='small'
+                      name='phoneNumberPrefix'
+                      value={values.phoneNumberPrefix}
+                      onChange={handleInputChange}
+                      MenuProps={{ disableAutoFocus: true }}
+                      sx={{
+                        backgroundColor: '#D9EFE7',
+                        border: '1px solid #D9EFE7',
+                        borderRadius: '9999px',
+                        padding: 0,
+                      }}
+                    >
+                      <MenuItem value='+62'>+62</MenuItem>
+                      <MenuItem value='+44'>+44</MenuItem>
+                    </Select>
+                  </Grid>
+                  <Grid item xs={9} sm={9} md={9} lg={9} xl={9}>
+                    <Input
+                      name='phoneNumber'
+                      onChange={handleInputChange}
+                      error={errors.phoneNumber}
+                      withAsterisk={true}
+                      size='small'
+                    />
+                  </Grid>
+                </Grid>
               </Grid>
             </Grid>
-            <FormControlLabel
-              sx={{ marginTop: '.5rem', marginBottom: '.5rem' }}
-              value=''
-              label='I have read and agree to the terms of service'
-              control={<Checkbox color='success'/>}
-              labelPlacement='end'
-            />
+            <Box sx={{ display:'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'start' }}>
+              <FormControlLabel
+                sx={{ marginTop: '.5rem', marginBottom: '.5rem' }}
+                value={true}
+                label=''
+                control={
+                  <Checkbox checked={checked} onChange={handleCheck} color='success'/>
+                }
+                labelPlacement='end'
+              />
+              <Typography color='grey.400' textAlign='center'>
+                I have read and agree to the &nbsp;
+                <Link href='/' style={{ textDecoration: 'none' }}>
+                  <Typography component='span' color='primary.main' fontWeight={500}>
+                    term of service
+                  </Typography>
+                </Link>
+              </Typography>
+            </Box>
             <Stack>
-              <SubmitButton type='submit' variant='contained'>Register</SubmitButton>
+              <Button
+                disabled={!checked}
+                type='submit'
+                size='large'
+                color='secondary'
+                label='Register'
+                isLoading={register.loading}
+              />
             </Stack>
             <Box component='div' mt='17px'>
               <Typography color='grey.400' textAlign='center'>You can also Register using</Typography>
