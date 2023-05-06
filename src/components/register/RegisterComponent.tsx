@@ -29,6 +29,7 @@ import { useAppSelectors, useForm } from '@/hooks/index';
 import { Input, Button } from '../_shared/form';
 import Link from 'next/link';
 import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
+import { WINDOW_SSO } from '@config';
 
 
 const NavHead = styled.div`
@@ -68,7 +69,7 @@ const WrapperSSO = styled(Box)<BoxProps>(() => ({
   margin: '14px 0'
 }));
 
-const AsteriskComponent = MuiStyled('span')(({theme}) => ({
+const AsteriskComponent = MuiStyled('span')(({ theme }) => ({
   color: theme.palette.error.main
 }));
 
@@ -97,43 +98,49 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
   const handleCheck = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
   };
+
   const validate = (fieldOfValues = values) => {
-    const temp: Register.Form = {...errors};
+    const temp: Register.Form = { ...errors };
 
     if ('email' in fieldOfValues) {
       const patternEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      temp.email = fieldOfValues.email
-        ? (
-          checkRegulerExpression(patternEmail, fieldOfValues.email)
-            ? ''
-            : 'Email should be valid'
-        )
-        : 'This field is required';
+      const emailValue = fieldOfValues.email || '';
+      let emailErrorMessage = '';
+      if (!emailValue) {
+        emailErrorMessage = 'Email is required';
+      } else if (!checkRegulerExpression(patternEmail, emailValue)) {
+        emailErrorMessage = 'Email should be valid';
+      }
+      temp.email = emailErrorMessage;
     }
 
-    if ('password' in fieldOfValues){
+    if ('password' in fieldOfValues) {
       const patternPassword = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-      temp.password = fieldOfValues.password ? (
-        checkRegulerExpression(patternPassword, fieldOfValues.password)
-          ? ''
-          : 'Include Uppercase and lowercase, Include at least one number or symbol and be at least 8 character long'
-      ) : 'This field is Required';
+      const passwordValue = fieldOfValues.password || '';
+      let passwordErrorMessage = '';
+      if (!passwordValue) {
+        passwordErrorMessage = 'Password is required';
+      } else if (!checkRegulerExpression(patternPassword, passwordValue)) {
+        passwordErrorMessage = 'Include Uppercase and lowercase, Include at least one number or symbol and be at least 8 character long';
+      }
+      temp.password = passwordErrorMessage;
+
     }
 
     if ('name' in fieldOfValues)
-      temp.name = fieldOfValues.name ? '' : 'This field is required';
+      temp.name = fieldOfValues.name ? '' : 'Full Name is required';
 
     if ('countryID' in fieldOfValues)
-      temp.countryID = fieldOfValues.countryID ? '' : 'This field is required';
+      temp.countryID = fieldOfValues.countryID ? '' : 'Country is required';
 
     if ('companyName' in fieldOfValues)
-      temp.companyName = fieldOfValues.companyName ? '' : 'This field is required';
+      temp.companyName = fieldOfValues.companyName ? '' : 'Company name is required';
 
     if ('numberOfEmployees' in fieldOfValues)
-      temp.numberOfEmployees = fieldOfValues.numberOfEmployees ? '' : 'This field is required';
+      temp.numberOfEmployees = fieldOfValues.numberOfEmployees ? '' : 'Employees is required';
 
     if ('phoneNumber' in fieldOfValues)
-      temp.phoneNumber = fieldOfValues.phoneNumber ? '' : 'This field is required';
+      temp.phoneNumber = fieldOfValues.phoneNumber ? '' : 'Phone number is required';
 
     setErrors({
       ...temp
@@ -162,7 +169,7 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    if(validate()) {
+    if (validate()) {
       doRegister({ ...values });
       setInitialValues({
         email: '',
@@ -182,17 +189,17 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
     <Base>
       <NavHead>
         <div>
-          <Image src={kayaroll} alt='logo' height={40} width={150}/>
+          <Image src={kayaroll} alt='logo' height={40} width={150} />
         </div>
         <div>
           <span>EN</span>
         </div>
       </NavHead>
-      <Card sx={{ width: '800px', height:'100%' }}>
+      <Card sx={{ width: '800px', height: '100%' }}>
         <CardContent>
           <Box component='form' autoComplete='off' onSubmit={handleSubmit}>
             <div>
-              <Image src={kayaroll} alt='logo' height={56} width={211}/>
+              <Image src={kayaroll} alt='logo' height={56} width={211} />
             </div>
             <h2>Register</h2>
             <Grid container spacing={2}>
@@ -325,13 +332,13 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
                 </Grid>
               </Grid>
             </Grid>
-            <Box sx={{ display:'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'start' }}>
+            <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'start' }}>
               <FormControlLabel
                 sx={{ marginTop: '.5rem', marginBottom: '.5rem' }}
                 value={true}
                 label=''
                 control={
-                  <Checkbox checked={checked} onChange={handleCheck} color='success'/>
+                  <Checkbox checked={checked} onChange={handleCheck} color='success' />
                 }
                 labelPlacement='end'
               />
@@ -362,6 +369,7 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
                   width={40}
                   height={40}
                   alt='sso-google'
+                  onClick={() => WINDOW_SSO('authentication/google')}
                 />
                 <Typography fontSize={14}>Or</Typography>
                 <Image
@@ -372,14 +380,16 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
                 />
               </WrapperSSO>
               <Typography color='grey.400' textAlign='center'>
-              Already have an account? &nspp;
-                <Typography
-                  component='span'
-                  color='primary.main'
-                  fontWeight={500}
-                >
-                Log in Now
-                </Typography>
+                Already have an account? &nbsp;
+                <Link href='/auth/login' style={{ textDecoration: 'none' }}>
+                  <Typography
+                    component='span'
+                    color='primary.main'
+                    fontWeight={500}
+                  >
+                    Log in Now
+                  </Typography>
+                </Link>
               </Typography>
             </Box>
           </Box>
