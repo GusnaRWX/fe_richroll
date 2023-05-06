@@ -3,10 +3,13 @@ import {
   AppBar,
   Toolbar,
   Box,
+  Divider
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import Image from 'next/image';
-import { Image as ImageType } from '@/utils/assetsConstant';
+import { IconButton } from '@/components/_shared/form';
+import { BsBellFill } from 'react-icons/bs';
+import LocalizationMenu from '@/components/_shared/_core/localization/Index';
+import Profile from './Profile';
 
 interface AppbarProps {
   /**
@@ -20,7 +23,8 @@ interface AppbarProps {
 
 const WrapperNavbarContent = styled(Toolbar)(() => ({
   display: 'flex',
-  justifyContent: 'flex-end'
+  justifyContent: 'flex-end',
+  alignItems: 'center'
 }));
 
 const Appbar: FC<AppbarProps> = (props) => {
@@ -41,13 +45,12 @@ const Appbar: FC<AppbarProps> = (props) => {
       }}
     >
       <WrapperNavbarContent>
-        <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-          <Image
-            src={ImageType.EXAMPLE_USER}
-            alt='example-user'
-            height={48}
-            width={299}
-          />
+        <Box sx={{ display: { xs: 'none', sm: 'flex' }, gap: { sm: 1 } }}>
+          <IconButton icons={<BsBellFill />} parentColor='' size='small' />
+          <Divider sx={{ borderWidth: '0.5px' }} />
+          <LocalizationMenu />
+          <Divider sx={{ borderWidth: '0.5px' }} />
+          <Profile />
         </Box>
       </WrapperNavbarContent>
     </AppBar>

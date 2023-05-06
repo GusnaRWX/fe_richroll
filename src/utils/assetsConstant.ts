@@ -27,7 +27,7 @@ export const Image: ImageType = {
   SLACK: '/assets/images/slack.png',
   TOKOPEDIA: '/assets/images/tokopedia.png',
   UDEMY: '/assets/images/udemy.png',
-  EXAMPLE_USER: '/assets/images/example-user.png'
+  EXAMPLE_USER: '/assets/images/current-user.png',
 };
 
 export const Icons: IconsType = {
@@ -43,5 +43,6 @@ export const Icons: IconsType = {
   FOOTER_INSTAGRAM: '/assets/icons/footer-instagram.png',
   FOOTER_LINKEDIN: '/assets/icons/footer-linkedin.png',
   FOOTER_FACEBOOK: '/assets/icons/footer-facebook.png',
-  CHECK_CIRCLE: '/assets/icons/check-circle.png'
+  CHECK_CIRCLE: '/assets/icons/check-circle.png',
+  ENGLISH_ICON: '/assets/icons/english-icon.svg'
 };

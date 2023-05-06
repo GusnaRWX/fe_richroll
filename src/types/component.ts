@@ -56,7 +56,7 @@ export declare namespace SharedComponent {
   }
 
   export type ComponentIconButton = IconButtonProps & {
-    parentColor: string;
+    parentColor?: string;
     icons: unknown
   }
 }

@@ -6,13 +6,13 @@ import {
   BoxProps,
   AppBar,
   Toolbar,
-  Typography,
   Card,
   CardProps
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import Image from 'next/image';
 import { Image as ImageType } from '@/utils/assetsConstant';
+import LocalizationMenu from '@/components/_shared/_core/localization/Index';
 
 
 const WrapperAuth = styled(Box)<BoxProps>(({ theme }) => ({
@@ -57,13 +57,7 @@ const Navbar = () => {
           />
         </Box>
         <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-          <Typography
-            variant='h6'
-            component='div'
-            sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
-          >
-            English
-          </Typography>
+          <LocalizationMenu />
         </Box>
       </WrapperNavbarContent>
     </AppBar>
