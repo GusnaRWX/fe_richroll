@@ -5,15 +5,15 @@ import { BoxProps } from '@mui/system';
 import { InfoRounded, Add, Download } from '@mui/icons-material';
 import { FaFolderOpen } from 'react-icons/fa';
 import EmployeesTable from './EmployeesTable';
+import { useRouter } from 'next/router';
 
-
-const InfoComponent = styled(Box)<BoxProps>(({theme}) => ({
+const InfoComponent = styled(Box)<BoxProps>(({ theme }) => ({
   backgroundColor: theme.palette.secondary[100],
   padding: '.5rem',
   borderRadius: '6px',
   display: 'flex',
   flexDirection: 'row',
-  alignItems:'center',
+  alignItems: 'center',
   justifyContent: 'flex-start',
   width: '100%',
   gap: '.5rem',
@@ -49,7 +49,7 @@ function TabPanel(props: TabPanelProps) {
     >
       {
         value === index && (
-          <Box sx={{ p:3 }}>
+          <Box sx={{ p: 3 }}>
             {children}
           </Box>
         )
@@ -66,6 +66,7 @@ function a11yProps(index: number) {
 }
 
 function EmployeesComponent() {
+  const router = useRouter();
   const [value, setValue] = useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -79,7 +80,7 @@ function EmployeesComponent() {
         </Grid>
         <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
           <InfoComponent>
-            <InfoRounded color='secondary' sx={{ height: '17px', width: '17px' }}/>
+            <InfoRounded color='secondary' sx={{ height: '17px', width: '17px' }} />
             <Typography component='span' sx={{ fontSize: '12px' }}>Please download the excel template here</Typography>
           </InfoComponent>
         </Grid>
@@ -96,9 +97,9 @@ function EmployeesComponent() {
               color='secondary'
               size='small'
             >
-              <Download fontSize='small' sx={{ color: '#FFFFFF' }}/>
+              <Download fontSize='small' sx={{ color: '#FFFFFF' }} />
               <h4 style={{ color: '#FFFFFF', padding: 0, margin: 0 }}>
-              &nbsp; Download Data
+                &nbsp; Download Data
               </h4>
             </MuiButton>
             <MuiButton
@@ -106,7 +107,8 @@ function EmployeesComponent() {
               variant='contained'
               size='small'
               color='primary'
-            ><Add fontSize='small'/>&nbsp; Add Employee</MuiButton>
+              onClick={() => { router.push('/company-management/employees/create'); }}
+            ><Add fontSize='small' />&nbsp; Add Employee</MuiButton>
           </ButtonWrapper>
         </Grid>
       </Grid>
@@ -114,8 +116,8 @@ function EmployeesComponent() {
         <Box sx={{ width: '100%' }}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <Tabs value={value} onChange={handleChange} aria-label='basic tabs'>
-              <Tab label='Active' {...a11yProps(0)}/>
-              <Tab label='Inactive' {...a11yProps(1)}/>
+              <Tab label='Active' {...a11yProps(0)} />
+              <Tab label='Inactive' {...a11yProps(1)} />
             </Tabs>
           </Box>
           <TabPanel value={value} index={0}>
