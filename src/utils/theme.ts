@@ -97,7 +97,7 @@ export const DMSans = DM_Sans({
 const { palette } = createTheme();
 const { augmentColor } = palette;
 
-// Create a theme instance 
+// Create a theme instance
 const theme = createTheme({
   palette: {
     primary: {
@@ -126,7 +126,8 @@ const theme = createTheme({
       '700': '#5E8B7B',
       '800': '#46685C',
       '900': '#2F453D',
-      main: '#8DD0B8'
+      main: '#8DD0B8',
+      light: '#FCFFFC',
     },
     grey: {
       '50': '#F9FAFB',
@@ -381,6 +382,7 @@ const theme = createTheme({
         main: '#F43F5E'
       }
     }),
+
   },
   typography: {
     fontFamily: DMSans.style.fontFamily,
