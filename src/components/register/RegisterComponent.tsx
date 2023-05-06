@@ -30,6 +30,7 @@ import { Input, Button } from '../_shared/form';
 import Link from 'next/link';
 import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
 import { WINDOW_SSO } from '@config';
+import LocalizationMenu from '../_shared/_core/localization/Index';
 
 
 const NavHead = styled.div`
@@ -192,7 +193,7 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
           <Image src={kayaroll} alt='logo' height={40} width={150} />
         </div>
         <div>
-          <span>EN</span>
+          <LocalizationMenu />
         </div>
       </NavHead>
       <Card sx={{ width: '800px', height: '100%' }}>
