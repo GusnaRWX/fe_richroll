@@ -17,9 +17,9 @@ import { AxiosError, AxiosResponse } from 'axios';
 function* fetchGetEmployee(action: AnyAction) {
   try {
     const res: AxiosResponse = yield call(getEmployee, action?.payload);
-    if (res.status === 200) {
+    if (res.data.code === 200) {
       yield put({
-        type: getEmployeeSuccess.toString,
+        type: getEmployeeSuccess.toString(),
         payload: {
           data: res.data.data
         }
@@ -44,7 +44,7 @@ function* fetchGetEmployee(action: AnyAction) {
 function* fetchPostEmployeeInfo(action: AnyAction) {
   try {
     const res: AxiosResponse = yield call(postEmployeeInfo, action?.payload);
-    if (res.status === 201) {
+    if (res.data.code === 200) {
       yield put({ type: postEmployeeInfoSuccess.toString() });
       yield delay(2000);
       yield put({

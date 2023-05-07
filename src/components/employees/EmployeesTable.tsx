@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Grid,
   Select,
@@ -14,7 +14,10 @@ import Table from '../_shared/form/Table';
 import { IconButton } from '../_shared/form';
 import { HiPencilAlt } from 'react-icons/hi';
 import { BsTrashFill } from 'react-icons/bs';
+import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
+import { useAppDispatch, useAppSelectors } from '@/hooks/index';
+import { getEmployeeRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
 
 const ButtonWrapper = styled.div`
  display: flex;
@@ -42,170 +45,35 @@ const headerItems = [
   { key: 'last_login', label: 'Last Login' },
 ];
 
-const dataItems = [
-  {
-    id: '1',
-    name: 'john',
-    position: 'Cook',
-    department: 'XXX',
-    status: false,
-    created_at: '12/08/2023',
-    last_login: '14/08/2023 17:00',
-    images: 'https://unsplash.com/photos/iJnZwLBOB1I'
-
-  },
-  {
-    id: '2',
-    name: 'john',
-    position: 'Cook',
-    department: 'XXX',
-    status: true,
-    created_at: '12/08/2023',
-    last_login: '14/08/2023 17:00',
-    images: 'https://unsplash.com/photos/iJnZwLB0B1I'
-  },
-  {
-    id: '3',
-    name: 'john',
-    position: 'Cook',
-    department: 'XXX',
-    status: false,
-    created_at: '12/08/2023',
-    last_login: '14/08/2023 17:00',
-    images: 'https://unsplash.com/photos/iJnZwLB0B1I'
-  },
-  {
-    id: '4',
-    name: 'john',
-    position: 'Cook',
-    department: 'XXX',
-    status: true,
-    created_at: '12/08/2023',
-    last_login: '14/08/2023 17:00',
-    images: 'https://unsplash.com/photos/iJnZwLB0B1I'
-  },
-  {
-    id: '5',
-    name: 'john',
-    position: 'Cook',
-    department: 'XXX',
-    status: false,
-    created_at: '12/08/2023',
-    last_login: '14/08/2023 17:00',
-    images: 'https://unsplash.com/photos/iJnZwLB0B1I'
-  },
-  {
-    id: '6',
-    name: 'john',
-    position: 'Cook',
-    department: 'XXX',
-    status: true,
-    created_at: '12/08/2023',
-    last_login: '14/08/2023 17:00',
-    images: 'https://unsplash.com/photos/iJnZwLB0B1I'
-  },
-  {
-    id: '7',
-    name: 'john',
-    position: 'Cook',
-    department: 'XXX',
-    status: false,
-    created_at: '12/08/2023',
-    last_login: '14/08/2023 17:00',
-    images: 'https://unsplash.com/photos/iJnZwLB0B1I'
-  },
-  {
-    id: '7',
-    name: 'john',
-    position: 'Cook',
-    department: 'XXX',
-    status: true,
-    created_at: '12/08/2023',
-    last_login: '14/08/2023 17:00',
-    images: 'https://unsplash.com/photos/iJnZwLB0B1I'
-  },
-  {
-    id: '1',
-    name: 'john',
-    position: 'Cook',
-    department: 'XXX',
-    status: false,
-    created_at: '12/08/2023',
-    last_login: '14/08/2023 17:00',
-    images: 'https://unsplash.com/photos/iJnZwLB0B1I'
-  },
-  {
-    id: '1',
-    name: 'john',
-    position: 'Cook',
-    department: 'XXX',
-    status: false,
-    created_at: '12/08/2023',
-    last_login: '14/08/2023 17:00',
-    images: 'https://unsplash.com/photos/iJnZwLB0B1I'
-  },
-  {
-    id: '1',
-    name: 'john',
-    position: 'Cook',
-    department: 'XXX',
-    status: false,
-    created_at: '12/08/2023',
-    last_login: '14/08/2023 17:00',
-    images: 'https://unsplash.com/photos/iJnZwLB0B1I'
-  },
-  {
-    id: '1',
-    name: 'john',
-    position: 'Cook',
-    department: 'XXX',
-    status: false,
-    created_at: '12/08/2023',
-    last_login: '14/08/2023 17:00',
-    images: 'https://unsplash.com/photos/iJnZwLB0B1I'
-  },
-  {
-    id: '1',
-    name: 'john',
-    position: 'Cook',
-    department: 'XXX',
-    status: false,
-    created_at: '12/08/2023',
-    last_login: '14/08/2023 17:00',
-    images: 'https://unsplash.com/photos/iJnZwLB0B1I'
-  },
-  {
-    id: '1',
-    name: 'john',
-    position: 'Cook',
-    department: 'XXX',
-    status: false,
-    created_at: '12/08/2023',
-    last_login: '14/08/2023 17:00',
-    images: 'https://unsplash.com/photos/iJnZwLB0B1I'
-  },
-  {
-    id: '1',
-    name: 'john',
-    position: 'Cook',
-    department: 'XXX',
-    status: false,
-    created_at: '12/08/2023',
-    last_login: '14/08/2023 17:00',
-    images: 'https://unsplash.com/photos/iJnZwLB0B1I'
-  },
-];
-
 function EmployeesTable() {
+  const dispatch = useAppDispatch();
+  const data = useAppSelectors(state => state.employee.data);
+  const router = useRouter();
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const handleChangePage = () => {
     setPage(page + 1);
   };
   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRowsPerPage(parseInt(event.target.value, 5));
-    setPage(0);
+    setPage(1);
   };
+
+  useEffect(() => {
+    dispatch({
+      type: getEmployeeRequested.toString(),
+      payload: {
+        page: page,
+        itemPerPage: rowsPerPage,
+        sort: '',
+        direction: false,
+        search: '',
+        status: '',
+        companyID: 6
+      }
+    });
+  }, []);
+  console.log(data);
   return (
     <>
       <Grid container spacing={2}>
@@ -235,7 +103,7 @@ function EmployeesTable() {
         </Grid>
       </Grid>
       <Table
-        count={dataItems.length}
+        count={data.items.length}
         rowsPerPageOptions={[5, 10, 15]}
         rowsPerPage={rowsPerPage}
         page={page}
@@ -253,34 +121,35 @@ function EmployeesTable() {
         bodyChildren={
           <>
             {
-              dataItems.map((item, index) => (
+              data?.items.map((item, index) => (
                 <TableRow key={index}>
                   <TableCell>{item.id}</TableCell>
                   <TableCell>
                     <NameWrapper>
                       <Avatar
-                        src={item.images}
-                        alt={item.images}
+                        src={item.user.userInformation.picture}
+                        alt={item.user.userInformation.picture}
                         sx={{
                           width: 24, height: 24
                         }}
                       />
-                    &nbsp;{item.name}
+                    &nbsp;{item.user.name}
                     </NameWrapper>
                   </TableCell>
-                  <TableCell>{item.position}</TableCell>
-                  <TableCell>{item.department}</TableCell>
-                  <TableCell>{item.status ? (
+                  <TableCell>{item.position.name}</TableCell>
+                  <TableCell>{item.department.name}</TableCell>
+                  <TableCell>{item.user.isActive ? (
                     <Chip color='secondary' label='active' />
                   ):(
                     <Chip label='Non Active' sx={{ backgroundColor: '#FEE2E2' }}/>
                   )}</TableCell>
-                  <TableCell>{item.created_at}</TableCell>
-                  <TableCell>{item.last_login}</TableCell>
+                  <TableCell>{item.user.createdAt}</TableCell>
+                  <TableCell>-</TableCell>
                   <TableCell>
                     <ButtonWrapper>
                       <IconButton
                         parentColor='primary.50'
+                        onClick={() => { router.push('/company-management/employees/detail/' + item.id); }}
                         icons={
                           <HiPencilAlt fontSize={20} color='#223567'/>
                         }
