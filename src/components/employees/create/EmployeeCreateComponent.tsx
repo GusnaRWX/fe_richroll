@@ -8,6 +8,7 @@ import EmployeePersonalInformation from './EmployeePersonalInformation';
 import { FiEdit } from 'react-icons/fi';
 import { useRouter } from 'next/router';
 
+import EmergencyContactForm from './EmergencyContactForm';
 const TopWrapper = styled.div`
  display: flex;
  flex-direction: row;
@@ -134,7 +135,7 @@ function EmployeeCreateComponent() {
             <EmployeePersonalInformation />
           </TabPanel>
           <TabPanel value={value} index={2}>
-            EmergencyContact
+            <EmergencyContactForm />
           </TabPanel>
           <TabPanel value={value} index={3}>
             on Development

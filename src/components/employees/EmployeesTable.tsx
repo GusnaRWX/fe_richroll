@@ -273,7 +273,7 @@ function EmployeesTable() {
                   <TableCell>{item.status ? (
                     <Chip color='secondary' label='active' />
                   ):(
-                    <Chip label='Inactive'/>
+                    <Chip label='Non Active' sx={{ backgroundColor: '#FEE2E2' }}/>
                   )}</TableCell>
                   <TableCell>{item.created_at}</TableCell>
                   <TableCell>{item.last_login}</TableCell>
