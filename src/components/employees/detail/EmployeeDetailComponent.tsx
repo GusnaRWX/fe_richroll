@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { IconButton, Button } from '@/components/_shared/form';
-import { Card, Typography, Button as MuiButton, Tab, Tabs, Box } from '@mui/material';
+import { Card, Typography, Tab, Tabs, Box } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import styled from '@emotion/styled';
-import EmployeeInformationForm from './EmployeeInformationForm';
-import EmployeePersonalInformation from './EmployeePersonalInformation';
 import { FiEdit } from 'react-icons/fi';
 import { useRouter } from 'next/router';
+import EmployeePersonalInformation from '../create/EmployeePersonalInformation';
+import EmployeeInformationDetail from './EmployeeInformationDetail';
+import EmergencyContactDetail from './EmergencyContactDetail';
 
-import EmergencyContactForm from './EmergencyContactForm';
 const TopWrapper = styled.div`
  display: flex;
  flex-direction: row;
@@ -75,7 +75,7 @@ function a11yProps(index: number) {
 }
 
 
-function EmployeeCreateComponent() {
+function EmployeeDetailComponent() {
   const [value, setValue] = useState(0);
   const router = useRouter();
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -90,31 +90,23 @@ function EmployeeCreateComponent() {
             icons={
               <ArrowBack sx={{ color: '#FFFFFF' }} />
             }
-            onClick={() => { router.back(); }}
+            onClick={() => { router.push('/company-management/employees'); }}
           />
-          <Typography component='h3' fontWeight='bold'>Add Employee</Typography>
+          <Typography component='h3' fontWeight='bold'>Employee Profile</Typography>
         </BackWrapper>
         <ButtonWrapper>
-          {
-            value !== 1 ? (
-              <>
-                <MuiButton variant='outlined' size='small'>Cancel</MuiButton>
-                <MuiButton variant='contained' size='small' color='primary'>Save</MuiButton>
-              </>
-            ) : (
-              <Button
-                color='secondary'
-                label='Edit'
-                startIcon={
-                  <FiEdit
-                    size={12}
-                    color='#FFF'
-                  />
-                }
-                size='small'
+          <Button
+            color='secondary'
+            label='Edit'
+            onClick={() => { router.push('/company-management/employees/edit/1'); }}
+            startIcon={
+              <FiEdit
+                size={12}
+                color='#FFF'
               />
-            )
-          }
+            }
+            size='small'
+          />
         </ButtonWrapper>
       </TopWrapper>
       <ContentWrapper>
@@ -129,13 +121,13 @@ function EmployeeCreateComponent() {
             </Tabs>
           </Box>
           <TabPanel value={value} index={0}>
-            <EmployeeInformationForm />
+            <EmployeeInformationDetail />
           </TabPanel>
           <TabPanel value={value} index={1}>
             <EmployeePersonalInformation />
           </TabPanel>
           <TabPanel value={value} index={2}>
-            <EmergencyContactForm />
+            <EmergencyContactDetail />
           </TabPanel>
           <TabPanel value={value} index={3}>
             on Development
@@ -149,4 +141,4 @@ function EmployeeCreateComponent() {
   );
 }
 
-export default EmployeeCreateComponent;
+export default EmployeeDetailComponent;

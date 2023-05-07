@@ -6,6 +6,7 @@ export declare namespace Employees {
     direction: boolean;
     search: string;
     status: string;
+    companyID?: number;
   }
 
   interface EmployeeInfoPayload {

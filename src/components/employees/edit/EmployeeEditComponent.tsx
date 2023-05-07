@@ -3,12 +3,11 @@ import { IconButton, Button } from '@/components/_shared/form';
 import { Card, Typography, Button as MuiButton, Tab, Tabs, Box } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import styled from '@emotion/styled';
-import EmployeeInformationForm from './EmployeeInformationForm';
-import EmployeePersonalInformation from './EmployeePersonalInformation';
+import EmployeeInformationEdit from './EmployeeInformationEdit';
+import EmergencyContactEdit from './EmergencyContactEdit';
 import { FiEdit } from 'react-icons/fi';
 import { useRouter } from 'next/router';
 
-import EmergencyContactForm from './EmergencyContactForm';
 const TopWrapper = styled.div`
  display: flex;
  flex-direction: row;
@@ -75,7 +74,7 @@ function a11yProps(index: number) {
 }
 
 
-function EmployeeCreateComponent() {
+function EmployeeEditComponent() {
   const [value, setValue] = useState(0);
   const router = useRouter();
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -92,14 +91,14 @@ function EmployeeCreateComponent() {
             }
             onClick={() => { router.back(); }}
           />
-          <Typography component='h3' fontWeight='bold'>Add Employee</Typography>
+          <Typography component='h3' fontWeight='bold'>Employee Profile</Typography>
         </BackWrapper>
         <ButtonWrapper>
           {
             value !== 1 ? (
               <>
-                <MuiButton variant='outlined' size='small'>Cancel</MuiButton>
-                <MuiButton variant='contained' size='small' color='primary'>Save</MuiButton>
+                <MuiButton variant='outlined' size='small' onClick={() => { router.back(); }}>Cancel</MuiButton>
+                <MuiButton variant='contained' size='small' color='primary' onClick={() => { router.push('/company-management/employees'); }}>Save</MuiButton>
               </>
             ) : (
               <Button
@@ -129,13 +128,13 @@ function EmployeeCreateComponent() {
             </Tabs>
           </Box>
           <TabPanel value={value} index={0}>
-            <EmployeeInformationForm />
+            <EmployeeInformationEdit />
           </TabPanel>
           <TabPanel value={value} index={1}>
-            <EmployeePersonalInformation />
+            on Development
           </TabPanel>
           <TabPanel value={value} index={2}>
-            <EmergencyContactForm />
+            <EmergencyContactEdit />
           </TabPanel>
           <TabPanel value={value} index={3}>
             on Development
@@ -149,4 +148,4 @@ function EmployeeCreateComponent() {
   );
 }
 
-export default EmployeeCreateComponent;
+export default EmployeeEditComponent;
