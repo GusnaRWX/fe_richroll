@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { IconButton, Button } from '@/components/_shared/form';
+import { IconButton } from '@/components/_shared/form';
 import { Card, Typography, Button as MuiButton, Tab, Tabs, Box } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import styled from '@emotion/styled';
 import EmployeeInformationForm from './EmployeeInformationForm';
-import EmployeePersonalInformation from './EmployeePersonalInformation';
-import { FiEdit } from 'react-icons/fi';
+import PersonalInformationCreate from './personal-information/Create';
 import { useRouter } from 'next/router';
 
 import EmergencyContactForm from './EmergencyContactForm';
@@ -90,31 +89,13 @@ function EmployeeCreateComponent() {
             icons={
               <ArrowBack sx={{ color: '#FFFFFF' }} />
             }
-            onClick={() => { router.back(); }}
+            onClick={() => { router.push('/company-management/employees'); }}
           />
           <Typography component='h3' fontWeight='bold'>Add Employee</Typography>
         </BackWrapper>
         <ButtonWrapper>
-          {
-            value !== 1 ? (
-              <>
-                <MuiButton variant='outlined' size='small'>Cancel</MuiButton>
-                <MuiButton variant='contained' size='small' color='primary'>Save</MuiButton>
-              </>
-            ) : (
-              <Button
-                color='secondary'
-                label='Edit'
-                startIcon={
-                  <FiEdit
-                    size={12}
-                    color='#FFF'
-                  />
-                }
-                size='small'
-              />
-            )
-          }
+          <MuiButton variant='outlined' size='small'>Cancel</MuiButton>
+          <MuiButton variant='contained' size='small' color='primary'>Save</MuiButton>
         </ButtonWrapper>
       </TopWrapper>
       <ContentWrapper>
@@ -132,7 +113,7 @@ function EmployeeCreateComponent() {
             <EmployeeInformationForm />
           </TabPanel>
           <TabPanel value={value} index={1}>
-            <EmployeePersonalInformation />
+            <PersonalInformationCreate />
           </TabPanel>
           <TabPanel value={value} index={2}>
             <EmergencyContactForm />

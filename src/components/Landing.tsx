@@ -140,7 +140,7 @@ const Navbar = () => {
             variant='outlined'
             color='primary'
             LinkComponent={Link}
-            href='/auth/login'
+            href='/login'
             sx={{
               textTransform: 'none',
               marginRight: '16px'
@@ -187,7 +187,7 @@ const LandingComponent = () => {
             The Smoother The Better.
           </Typography>
 
-          <Box component='div' sx={{ display: 'flex', alignItems: 'center'}}>
+          <Box component='div' sx={{ display: 'flex', alignItems: 'center' }}>
             <Image
               src={Icons.CHECK_CIRCLE}
               alt='preview'
@@ -196,12 +196,12 @@ const LandingComponent = () => {
             />
             <Typography
               variant='text-lg'
-              sx={{ marginLeft: '8px'}}
+              sx={{ marginLeft: '8px' }}
             >
               Easy Set Up
             </Typography>
           </Box>
-          <Box component='div' sx={{ display: 'flex', alignItems: 'center'}}>
+          <Box component='div' sx={{ display: 'flex', alignItems: 'center' }}>
             <Image
               src={Icons.CHECK_CIRCLE}
               alt='preview'
@@ -210,12 +210,12 @@ const LandingComponent = () => {
             />
             <Typography
               variant='text-lg'
-              sx={{ marginLeft: '8px'}}
+              sx={{ marginLeft: '8px' }}
             >
               Friendly Customer Support
             </Typography>
           </Box>
-          <Box component='div' sx={{ display: 'flex', alignItems: 'center'}}>
+          <Box component='div' sx={{ display: 'flex', alignItems: 'center' }}>
             <Image
               src={Icons.CHECK_CIRCLE}
               alt='preview'
@@ -224,7 +224,7 @@ const LandingComponent = () => {
             />
             <Typography
               variant='text-lg'
-              sx={{ marginLeft: '8px'}}
+              sx={{ marginLeft: '8px' }}
             >
               Cancel Anytime
             </Typography>
@@ -252,13 +252,13 @@ const LandingComponent = () => {
           />
         </Box>
       </WrapperContainer>
-      
+
       <WrapperContainer sx={{ justifyContent: 'center' }}>
         <Box component='div' sx={{ width: '100%' }}>
           <Typography
             variant='text-4xl'
             component='div'
-            sx={{ marginBottom: '24px', fontWeight: 700, textAlign: 'center'}}
+            sx={{ marginBottom: '24px', fontWeight: 700, textAlign: 'center' }}
           >
             We’ve helped 100+ SMEs and Startups
           </Typography>
@@ -361,7 +361,7 @@ const LandingComponent = () => {
             component='div'
             sx={{ marginBottom: '24px', fontWeight: 400, textAlign: 'center' }}
           >
-            A friend to SMEs and Start‑ups, we’re here to help you keep payroll<br/>processes simple, smooth and secure, so that you can focus on what’s<br/>important!
+            A friend to SMEs and Start‑ups, we’re here to help you keep payroll<br />processes simple, smooth and secure, so that you can focus on what’s<br />important!
           </Typography>
 
           <Box
@@ -625,8 +625,8 @@ const LandingComponent = () => {
             </AccordionSummary>
             <AccordionDetails>
               <Typography>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            malesuada lacus ex, sit amet blandit leo lobortis eget.
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+                malesuada lacus ex, sit amet blandit leo lobortis eget.
               </Typography>
             </AccordionDetails>
           </Accordion>
@@ -639,8 +639,8 @@ const LandingComponent = () => {
             </AccordionSummary>
             <AccordionDetails>
               <Typography>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            malesuada lacus ex, sit amet blandit leo lobortis eget.
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+                malesuada lacus ex, sit amet blandit leo lobortis eget.
               </Typography>
             </AccordionDetails>
           </Accordion>
@@ -653,8 +653,8 @@ const LandingComponent = () => {
             </AccordionSummary>
             <AccordionDetails>
               <Typography>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            malesuada lacus ex, sit amet blandit leo lobortis eget.
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+                malesuada lacus ex, sit amet blandit leo lobortis eget.
               </Typography>
             </AccordionDetails>
           </Accordion>
@@ -667,8 +667,8 @@ const LandingComponent = () => {
             </AccordionSummary>
             <AccordionDetails>
               <Typography>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            malesuada lacus ex, sit amet blandit leo lobortis eget.
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+                malesuada lacus ex, sit amet blandit leo lobortis eget.
               </Typography>
             </AccordionDetails>
           </Accordion>
@@ -677,7 +677,7 @@ const LandingComponent = () => {
 
       <WrapperContainer sx={{ justifyContent: 'center' }}>
         <Box component='div' sx={{ display: 'flex', flexDirection: 'column' }}>
-          <Box sx={{ textAlign: 'center'}}>
+          <Box sx={{ textAlign: 'center' }}>
             <Image
               src={ImageType.KAYAROLL_MINI}
               width={64}
@@ -698,10 +698,10 @@ const LandingComponent = () => {
             component='div'
             sx={{ fontWeight: 400, textAlign: 'center' }}
           >
-            Hurry! Register your company today, to be first in line for when our product<br/>hits the ground, and enjoy our solution completely FREE!
+            Hurry! Register your company today, to be first in line for when our product<br />hits the ground, and enjoy our solution completely FREE!
           </Typography>
 
-          <Box sx={{ textAlign: 'center'}}>
+          <Box sx={{ textAlign: 'center' }}>
             <Button
               variant='contained'
               color='primary'
@@ -731,7 +731,7 @@ const LandingComponent = () => {
           <Typography
             variant='text-sm'
             component='div'
-            sx={{ marginBottom: '16px', fontWeight: 700}}
+            sx={{ marginBottom: '16px', fontWeight: 700 }}
           >
             Product
           </Typography>
@@ -743,7 +743,7 @@ const LandingComponent = () => {
           <Typography
             variant='text-sm'
             component='div'
-            sx={{ marginBottom: '16px', fontWeight: 700}}
+            sx={{ marginBottom: '16px', fontWeight: 700 }}
           >
             Solution
           </Typography>
@@ -754,7 +754,7 @@ const LandingComponent = () => {
           <Typography
             variant='text-sm'
             component='div'
-            sx={{ marginBottom: '16px', fontWeight: 700}}
+            sx={{ marginBottom: '16px', fontWeight: 700 }}
           >
             Company
           </Typography>
