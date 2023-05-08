@@ -1,5 +1,5 @@
 import { IconType } from 'react-icons';
-import { ButtonProps, CardProps, IconButtonProps, TextFieldProps } from '@mui/material';
+import { ButtonProps, CardProps, IconButtonProps, TextFieldProps, TextareaAutosizeProps } from '@mui/material';
 import { ReactNode } from 'react';
 
 export declare namespace Login {
@@ -63,5 +63,11 @@ export declare namespace SharedComponent {
 
   export type ComponentCard = CardProps & {
     children: ReactNode
+  }
+
+  export type ComponentTextarea = TextareaAutosizeProps & {
+    customLabel?: string;
+    withAsterisk?: boolean;
+    error?: string;
   }
 }

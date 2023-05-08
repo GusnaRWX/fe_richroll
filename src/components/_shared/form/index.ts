@@ -4,6 +4,7 @@ import IconButton from './IconButton';
 import Form from './Form';
 import DatePicker from './DatePicker';
 import RadioGroup from './RadioGroup';
+import Textarea from './Textarea';
 
 export {
   Input,
@@ -11,5 +12,6 @@ export {
   IconButton,
   Form,
   DatePicker,
-  RadioGroup
+  RadioGroup,
+  Textarea
 };
