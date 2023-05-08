@@ -81,7 +81,7 @@ const RadioGroup = ({
 }) => {
 
   return (
-    <FormControl component='fieldset'>
+    <FormControl component='fieldset' fullWidth>
       <FormLabel component='legend'>
         {label} {withAsterisk && <AsteriskComponent>*</AsteriskComponent>}
       </FormLabel>

@@ -21,7 +21,7 @@ const Button = ({
       disabled={isLoading}
       {...props}
     >
-      <Typography color={isLoading ? 'inherit' : 'white'} fontWeight={500} variant='text-sm'>{label}</Typography> {isLoading && <CircularProgress color='inherit' size={13} sx={{ position: 'relative', left: '10px' }} />}
+      <Typography fontWeight={500} variant='text-sm'>{label}</Typography> {isLoading && <CircularProgress color='inherit' size={13} sx={{ position: 'relative', left: '10px' }} />}
     </MuiButton>
 
   );

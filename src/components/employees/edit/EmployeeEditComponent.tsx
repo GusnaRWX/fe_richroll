@@ -7,6 +7,7 @@ import EmployeeInformationEdit from './EmployeeInformationEdit';
 import EmergencyContactEdit from './EmergencyContactEdit';
 import { FiEdit } from 'react-icons/fi';
 import { useRouter } from 'next/router';
+import PersonalInformationEdit from './PersonalInformationEdit';
 
 const TopWrapper = styled.div`
  display: flex;
@@ -131,7 +132,7 @@ function EmployeeEditComponent() {
             <EmployeeInformationEdit />
           </TabPanel>
           <TabPanel value={value} index={1}>
-            on Development
+            <PersonalInformationEdit />
           </TabPanel>
           <TabPanel value={value} index={2}>
             <EmergencyContactEdit />

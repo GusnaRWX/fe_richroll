@@ -21,7 +21,7 @@ const Input = ({
     <>
       {
         customLabel !== undefined && (
-          <Typography>
+          <Typography mb='6px'>
             {customLabel} {withAsterisk && <AsteriskComponent>*</AsteriskComponent>}
           </Typography>
         )
