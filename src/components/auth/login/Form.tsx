@@ -9,7 +9,7 @@ import Link from 'next/link';
 import { checkRegulerExpression } from '@/utils/helper';
 import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
 import { Input, Button } from '@/components/_shared/form/';
-import { WINDOW_SSO } from '@config';
+import { signIn } from 'next-auth/react';
 
 const LinkComponent = styled(Link)(({ theme }) => ({
   color: theme.palette.primary.main,
@@ -32,7 +32,6 @@ const WrapperSSO = styled(Box)<BoxProps>(() => ({
 const LoginForm = ({
   doLogin
 }: Login.Component) => {
-
   const [initialValues, setInitialValues] = useState({
     email: '',
     password: ''
@@ -81,6 +80,22 @@ const LoginForm = ({
     if (validate()) {
       doLogin({ ...values });
       setInitialValues({ email: '', password: '' });
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    try {
+      await signIn('google');
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleFacebookLogin = async () => {
+    try {
+      await signIn('facebook');
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -175,7 +190,7 @@ const LoginForm = ({
             height={40}
             alt='sso-google'
             style={{ cursor: 'pointer' }}
-            onClick={() => WINDOW_SSO('authentication/google')}
+            onClick={handleGoogleLogin}
           />
           <Typography fontSize={14}>Or</Typography>
           <Image
@@ -184,6 +199,7 @@ const LoginForm = ({
             height={40}
             style={{ cursor: 'pointer' }}
             alt='sso-facebook'
+            onClick={handleFacebookLogin}
           />
         </WrapperSSO>
         <Typography
