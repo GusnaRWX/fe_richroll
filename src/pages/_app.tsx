@@ -8,27 +8,31 @@ import { CssBaseline, ThemeProvider } from '@mui/material';
 import theme from '@/utils/theme';
 import { Provider } from 'react-redux';
 import store from '../store';
+import { SessionProvider } from 'next-auth/react';
+import type { Session } from 'next-auth';
 
 
 // Client-side cache, shared for the whole session of the user in browser.
 const clientSideEmotionCache = createEmotionCache();
 
 export interface MyAppProps extends AppProps {
-  emotionCache?: EmotionCache
+  emotionCache?: EmotionCache;
+  session: Session
 }
 
 export default function App(props: MyAppProps) {
-  const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
+  const { Component, emotionCache = clientSideEmotionCache, pageProps, session } = props;
   return (
     <CacheProvider value={emotionCache}>
       <Head>
         <meta name='viewport' content='initial-scale=1, width=device-width' />
       </Head>
       <ThemeProvider theme={theme}>
-        { /* TODO: Implement Redux Store */ }
-        <CssBaseline/>
+        <CssBaseline />
         <Provider store={store}>
-          <Component {...pageProps}/>
+          <SessionProvider session={session}>
+            <Component {...pageProps} />
+          </SessionProvider>
         </Provider>
       </ThemeProvider>
     </CacheProvider>
