@@ -1,17 +1,21 @@
+/* eslint-disable no-unused-vars */
 import React, { HTMLAttributes, useState } from 'react';
-import { Grid, Button as MuiButton, IconButton, Typography, Modal, Select, Box, MenuItem, FormControlLabel, Checkbox, FormControl } from '@mui/material';
+import { Grid, Button as MuiButton, IconButton, Typography, Modal, Select, Box, MenuItem, FormControlLabel, Checkbox, FormControl, TextFieldProps, TextField } from '@mui/material';
 import { Input, Button } from '@/components/_shared/form';
 import { styled as MuiStyled } from '@mui/material/styles';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { Image as ImageType } from '@/utils/assetsConstant';
+import { DatePicker } from '@mui/x-date-pickers';
 import styled from '@emotion/styled';
 import { Close } from '@mui/icons-material';
 import { BsFileEarmarkPlus } from 'react-icons/bs';
 import { AiOutlineCamera } from 'react-icons/ai';
 import { useForm } from '@/hooks/index';
-
+import { checkRegulerExpression } from '@/utils/helper';
+import dayjs from 'dayjs';
+import { useAppDispatch } from '@/hooks/index';
+import { postEmployeeInfoRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
 const AsteriskComponent = MuiStyled('span')(({ theme }) => ({
   color: theme.palette.error.main
 }));
@@ -84,72 +88,133 @@ const modalStyle = {
   p: 2,
 };
 
-// const convertParams = (name, value) => {
-//   const reader = new FileReader();
-//   reader.readAsDataURL(value || '');
-
-//   const obj = {
-//     target: {
-//       name, value
-//     }
-//   };
-
-//   return obj;
-// };
-
 interface EmployeeProps {
   refProp: React.Ref<HTMLFormElement>;
 }
 
-
 function EmployeeInformationForm ({refProp} :EmployeeProps) {
-  const [checked, setChecked] = useState(false);
-  const [checkedSelf, setCheckedSelf] = useState(false);
   const [open, setOpen] = useState(false);
+  const dispatch = useAppDispatch();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [images, setImages] = useState<string | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [initialValues, setInitialValues] = useState({
-    companyID: null,
+    companyID: 4,
     picture: [],
     fullName: '',
     nickname: '',
     phoneNumberPrefix: '',
     phoneNumber: '',
     email: '',
-    startDate: null,
-    endDate: null,
+    startDate: dayjs(Date.now()),
+    endDate: dayjs(Date.now()),
     isPermanent: false,
     department: '',
     position: '',
     isSelfService: false
   });
 
+  const validate = (fieldOfValues = values) => {
+    const temp = {...errors};
 
-  const handleCheck = () => {
-    setChecked(!checked);
+    if ('picture' in fieldOfValues)
+      temp.picture = fieldOfValues.picture.length !== 0 ? '' : 'This field is required';
+
+    if ('fullName' in fieldOfValues)
+      temp.fullName = fieldOfValues.fullname ? '' : 'This field is required';
+
+    if ('phoneNumber' in fieldOfValues)
+      temp.phoneNumber = fieldOfValues.phoneNumber ? '' : 'This field is required';
+
+    if ('email' in fieldOfValues) {
+      const patternEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const emailValue = fieldOfValues.email || '';
+      let emailErrorMessage = '';
+      if (!emailValue) {
+        emailErrorMessage = 'Email is required';
+      } else if (!checkRegulerExpression(patternEmail, emailValue)) {
+        emailErrorMessage = 'Email should be valid';
+      }
+      temp.email = emailErrorMessage;
+    }
+
+    setErrors({
+      ...temp
+    });
+
+    if (fieldOfValues === values)
+      return Object.values(temp).every(x => x === '');
   };
-  const handleCheckSelf = () => {
-    setCheckedSelf(!checkedSelf);
-  };
+
+  const { values, errors, setErrors, handleInputChange } = useForm(initialValues, true, validate);
+
   const handleOpen = () => {
     setOpen(true);
   };
+
   const handleClose = () => {
     setOpen(false);
   };
-  const uploadImage = (data) => {
-    if(!data) return;
-    const reader = new FileReader();
-    reader.addEventListener('load', () => {
-      if (!reader.result) return;
-      setImages(reader?.result as string);
-    });
-    handleClose();
-    reader.readAsDataURL(data);
+
+  const handleChecked = (event) => {
+    const {name, checked} = event.target;
+
+    const obj = {
+      target: {
+        name, value: checked
+      }
+    };
+    return obj;
   };
+
+  const convertDate = (name, event) => {
+    const obj = {
+      target: {
+        name, value: event.$d
+      }
+    };
+    return obj;
+  };
+
+  const convertParams = (name, value) => {
+    const files = value;
+    const reader = new FileReader();
+    reader.readAsDataURL(value);
+    reader.onloadend = function () {
+      setImages(reader.result as string);
+    };
+    const obj = {
+      target: {
+        name, value: files
+      }
+    };
+    return obj;
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('submited!');
+    const data = {
+      companyID: 4,
+      picture: values.picture,
+      fullName: values.fullName,
+      nickname: values.nickname,
+      phoneNumberPrefix: values.phoneNumberPrefix,
+      phoneNumber: values.phoneNumber,
+      email: values.email,
+      startDate: dayjs(values.startDate).format('DD/MM/YYYY'),
+      endDate: dayjs(values.endDate).format('DD/MM/YYYY'),
+      isPermanent: values.isPermanent,
+      department: values.department,
+      position: values.position,
+      isSelfService: values.isSelfService
+    };
+    console.log(data);
+    dispatch({
+      type: postEmployeeInfoRequested.toString(),
+      payload: data
+    });
   };
+
   return (
     <>
       <Typography component='h3' fontSize={18} color='primary'>Employee Information</Typography>
@@ -158,9 +223,10 @@ function EmployeeInformationForm ({refProp} :EmployeeProps) {
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Input
-              name='fullname'
+              name='fullName'
               customLabel='Full Name'
               withAsterisk={true}
+              onChange={handleInputChange}
               size='small'
               placeholder='Input Full Name'
             />
@@ -170,6 +236,7 @@ function EmployeeInformationForm ({refProp} :EmployeeProps) {
               name='nickname'
               customLabel='Nickname'
               withAsterisk={false}
+              onChange={handleInputChange}
               size='small'
               placeholder='Input Nickname'
             />
@@ -184,7 +251,9 @@ function EmployeeInformationForm ({refProp} :EmployeeProps) {
                   variant='outlined'
                   size='small'
                   fullWidth
+                  onChange={handleInputChange}
                   name='phoneNumberPrefix'
+                  value={values.phoneNumberPrefix}
                   MenuProps={{ disableAutoFocus: true }}
                   sx={{
                     backgroundColor: '#D9EFE7',
@@ -202,6 +271,7 @@ function EmployeeInformationForm ({refProp} :EmployeeProps) {
                   name='phoneNumber'
                   placeholder='Input Correct Number'
                   withAsterisk={true}
+                  onChange={handleInputChange}
                   size='small'
                 />
               </Grid>
@@ -213,6 +283,7 @@ function EmployeeInformationForm ({refProp} :EmployeeProps) {
               customLabel='Personal Email Address'
               withAsterisk={true}
               size='small'
+              onChange={handleInputChange}
               placeholder='Personal Email Address'
             />
           </Grid>
@@ -221,34 +292,45 @@ function EmployeeInformationForm ({refProp} :EmployeeProps) {
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Typography>Start Date</Typography>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker  sx={{
-                '& .MuiOutlinedInput-input': {
-                  padding: '10px 14px',
-                  border: 'none !important'
-                },
-                width: '100%'
-              }}/>
+              <DatePicker
+                format='DD/MM/YYYY'
+                value={values.startDate}
+                onChange={(e) => handleInputChange(convertDate('startDate', e))}
+                slots={{
+                  textField: (textFieldProps: TextFieldProps) => (
+                    <TextField {...textFieldProps} />
+                  )
+                }}
+                sx={{
+                  '& .MuiOutlinedInput-input': {
+                    padding: '10px 14px',
+                    border: 'none !important'
+                  },
+                  width: '100%'
+                }}/>
             </LocalizationProvider>
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Typography>End Date</Typography>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker sx={{
-                '& .MuiOutlinedInput-input': {
-                  padding: '10px 14px',
-                  border: 'none !important'
-                },
-                width: '100%'
-              }}/>
+              <DatePicker
+                value={values.endDate}
+                onChange={(e) => handleInputChange(convertDate('endDate', e))}
+                sx={{
+                  '& .MuiOutlinedInput-input': {
+                    padding: '10px 14px',
+                    border: 'none !important'
+                  },
+                  width: '100%'
+                }}/>
             </LocalizationProvider>
           </Grid>
         </Grid>
         <FormControlLabel
           sx={{ marginTop: '.5rem', marginBottom: '.5rem' }}
-          value={true}
           label={<Typography fontWeight='bold'>Permanent</Typography>}
           control={
-            <Checkbox checked={checked} onChange={handleCheck} color='primary' />
+            <Checkbox name='isPermanent' checked={values.isPermanent} onChange={(e) => handleInputChange(handleChecked(e))} color='primary' />
           }
           labelPlacement='end'
         />
@@ -260,6 +342,8 @@ function EmployeeInformationForm ({refProp} :EmployeeProps) {
                 fullWidth
                 variant='outlined'
                 size='small'
+                value={values.department}
+                onChange={handleInputChange}
                 name='department'
               >
                 <MenuItem value='Marketing'>Marketing</MenuItem>
@@ -275,6 +359,8 @@ function EmployeeInformationForm ({refProp} :EmployeeProps) {
                 fullWidth
                 variant='outlined'
                 size='small'
+                value={values.position}
+                onChange={handleInputChange}
                 name='position'
               >
                 <MenuItem value='Manager'>Manager</MenuItem>
@@ -289,10 +375,9 @@ function EmployeeInformationForm ({refProp} :EmployeeProps) {
             <EmployeeSelfWrapper>
               <FormControlLabel
                 sx={{ marginTop: '.5rem', marginBottom: '.5rem', fontWeight: 'bold' }}
-                value={true}
                 label={ <Typography fontWeight='bold'>Employee Self Service</Typography> }
                 control={
-                  <Checkbox checked={checkedSelf} onChange={handleCheckSelf} color='primary' />
+                  <Checkbox name='isSelfService' checked={values.isSelfService} onChange={(e) => handleInputChange(handleChecked(e))} color='primary' />
                 }
                 labelPlacement='end'
               />
@@ -322,8 +407,7 @@ function EmployeeInformationForm ({refProp} :EmployeeProps) {
           <ModalBtnWrapper>
             <input
               id='input-file'
-              onChange={(e) => uploadImage(!e.target.files ? null : e.target.files[0])}
-              name='images'
+              onChange={(e) => handleInputChange(convertParams('picture', !e.target.files ? null : e.target.files[0]))}
               type='file'
               style={{ display: 'none' }}
               accept='image/'

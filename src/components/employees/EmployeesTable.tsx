@@ -104,7 +104,7 @@ function EmployeesTable() {
         </Grid>
       </Grid>
       <Table
-        count={data?.items.length}
+        count={typeof data?.items !== 'undefined' ? data?.items.length : 0}
         rowsPerPageOptions={[5, 10, 15]}
         rowsPerPage={rowsPerPage}
         page={page}
@@ -168,7 +168,7 @@ function EmployeesTable() {
                 ))
               ): (
                 <TableRow>
-                  <TableCell>Data not found</TableCell>
+                  <TableCell colSpan={12} align='center'>Data not found</TableCell>
                 </TableRow>
               )
             }
