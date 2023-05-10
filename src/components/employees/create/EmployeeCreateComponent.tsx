@@ -78,12 +78,18 @@ function a11yProps(index: number) {
 function EmployeeCreateComponent() {
   const [value, setValue] = useState(0);
   const employeeRef = useRef<HTMLFormElement>(null);
+  const emergencyRef = useRef<HTMLFormElement>(null);
   const router = useRouter();
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
   const handleClick = () => {
-    employeeRef.current?.requestSubmit();
+    if (value === 0){
+      employeeRef.current?.requestSubmit();
+    }else if (value === 2){
+      emergencyRef.current?.requestSubmit();
+    }
+
   };
   return (
     <>
@@ -139,7 +145,7 @@ function EmployeeCreateComponent() {
             onDevelopment
           </TabPanel>
           <TabPanel value={value} index={2}>
-            <EmergencyContactForm />
+            <EmergencyContactForm refProp={emergencyRef}/>
           </TabPanel>
           <TabPanel value={value} index={3}>
             on Development

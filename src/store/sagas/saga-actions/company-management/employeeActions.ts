@@ -7,5 +7,9 @@ export const getEmployee = (payload: Employees.EmployeeParams) => {
 };
 
 export const postEmployeeInfo = (payload: Employees.EmployeeInfoPayload) => {
-  return post('employee/information', payload);
+  return post('employees/information', payload);
+};
+
+export const postEmergency = (payload) => {
+  return post('employees/emergency', payload);
 };

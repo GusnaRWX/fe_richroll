@@ -1,5 +1,5 @@
 import { AnyAction } from '@reduxjs/toolkit';
-import { getEmployee, postEmployeeInfo } from '../saga-actions/company-management/employeeActions';
+import { getEmployee, postEmployeeInfo, postEmergency } from '../saga-actions/company-management/employeeActions';
 import { call, put, takeEvery, delay } from 'redux-saga/effects';
 import {
   getEmployeeRequested,
@@ -7,7 +7,10 @@ import {
   getEmployeeFailed,
   postEmployeeInfoRequested,
   postEmployeeInfoSuccess,
-  postEmployeeInfoFailed
+  postEmployeeInfoFailed,
+  postEmergencyRequested,
+  postEmergencySuccess,
+  postEmergencyFailed
 } from '@/store/reducers/slice/company-management/employees/employeeSlice';
 import { setResponserMessage } from '@/store/reducers/slice/responserSlice';
 import { Services } from '@/types/axios';
@@ -44,13 +47,13 @@ function* fetchGetEmployee(action: AnyAction) {
 function* fetchPostEmployeeInfo(action: AnyAction) {
   try {
     const res: AxiosResponse = yield call(postEmployeeInfo, action?.payload);
-    if (res.data.code === 200) {
-      yield put({ type: postEmployeeInfoSuccess.toString() });
+    if (res.data.code === 201) {
+      yield put({ type: postEmployeeInfoSuccess.toString(), payload: res.data.data });
       yield delay(2000);
       yield put({
         type: setResponserMessage.toString(),
         payload: {
-          code: res.status,
+          code: res.data.code,
           message: res.data.message
         }
       });
@@ -79,9 +82,48 @@ function* fetchPostEmployeeInfo(action: AnyAction) {
   }
 }
 
+function* fetchPostEmergency(action: AnyAction) {
+  try {
+    const res: AxiosResponse = yield call(postEmergency, action?.payload);
+    if (res.data.code === 200 || res.data.code === 201) {
+      yield put({ type: postEmergencySuccess.toString() });
+      yield delay(2000);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: res.data.code,
+          message: res.data.message
+        }
+      });
+      yield delay(2000);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: 0,
+          message: null
+        }
+      });
+    }
+  }catch(err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      yield put({ type: postEmergencyFailed.toString() });
+      yield delay(2000, true);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message,
+        }
+      });
+    }
+  }
+}
+
 function* employeeSaga() {
   yield takeEvery(getEmployeeRequested.toString(), fetchGetEmployee);
   yield takeEvery(postEmployeeInfoRequested.toString(), fetchPostEmployeeInfo);
+  yield takeEvery(postEmergencyRequested.toString(),fetchPostEmergency);
 }
 
 export default employeeSaga;
