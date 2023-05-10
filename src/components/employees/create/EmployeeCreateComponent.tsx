@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { IconButton } from '@/components/_shared/form';
+import { IconButton, Button } from '@/components/_shared/form';
 import { Card, Typography, Button as MuiButton, Tab, Tabs, Box } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import styled from '@emotion/styled';
 import EmployeeInformationForm from './EmployeeInformationForm';
-import PersonalInformationCreate from './personal-information/Create';
 import { useRouter } from 'next/router';
+import { useRef } from 'react';
+import { FiEdit } from 'react-icons/fi';
 
 import EmergencyContactForm from './EmergencyContactForm';
 const TopWrapper = styled.div`
@@ -76,9 +77,13 @@ function a11yProps(index: number) {
 
 function EmployeeCreateComponent() {
   const [value, setValue] = useState(0);
+  const employeeRef = useRef<HTMLFormElement>(null);
   const router = useRouter();
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
+  };
+  const handleClick = () => {
+    employeeRef.current?.requestSubmit();
   };
   return (
     <>
@@ -94,8 +99,26 @@ function EmployeeCreateComponent() {
           <Typography component='h3' fontWeight='bold'>Add Employee</Typography>
         </BackWrapper>
         <ButtonWrapper>
-          <MuiButton variant='outlined' size='small'>Cancel</MuiButton>
-          <MuiButton variant='contained' size='small' color='primary'>Save</MuiButton>
+          {
+            value !== 1 ? (
+              <>
+                <MuiButton variant='outlined' size='small'>Cancel</MuiButton>
+                <MuiButton variant='contained' onClick={handleClick} size='small' color='primary'>Save</MuiButton>
+              </>
+            ) : (
+              <Button
+                color='secondary'
+                label='Edit'
+                startIcon={
+                  <FiEdit
+                    size={12}
+                    color='#FFF'
+                  />
+                }
+                size='small'
+              />
+            )
+          }
         </ButtonWrapper>
       </TopWrapper>
       <ContentWrapper>
@@ -110,10 +133,10 @@ function EmployeeCreateComponent() {
             </Tabs>
           </Box>
           <TabPanel value={value} index={0}>
-            <EmployeeInformationForm />
+            <EmployeeInformationForm refProp={employeeRef}/>
           </TabPanel>
           <TabPanel value={value} index={1}>
-            <PersonalInformationCreate />
+            onDevelopment
           </TabPanel>
           <TabPanel value={value} index={2}>
             <EmergencyContactForm />

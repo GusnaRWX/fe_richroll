@@ -10,6 +10,7 @@ import styled from '@emotion/styled';
 import { Close } from '@mui/icons-material';
 import { BsFileEarmarkPlus } from 'react-icons/bs';
 import { AiOutlineCamera } from 'react-icons/ai';
+import { useForm } from '@/hooks/index';
 
 const AsteriskComponent = MuiStyled('span')(({ theme }) => ({
   color: theme.palette.error.main
@@ -96,13 +97,33 @@ const modalStyle = {
 //   return obj;
 // };
 
+interface EmployeeProps {
+  refProp: React.Ref<HTMLFormElement>;
+}
 
 
-function EmployeeInformationForm() {
+function EmployeeInformationForm ({refProp} :EmployeeProps) {
   const [checked, setChecked] = useState(false);
   const [checkedSelf, setCheckedSelf] = useState(false);
   const [open, setOpen] = useState(false);
   const [images, setImages] = useState<string | null>(null);
+  const [initialValues, setInitialValues] = useState({
+    companyID: null,
+    picture: [],
+    fullName: '',
+    nickname: '',
+    phoneNumberPrefix: '',
+    phoneNumber: '',
+    email: '',
+    startDate: null,
+    endDate: null,
+    isPermanent: false,
+    department: '',
+    position: '',
+    isSelfService: false
+  });
+
+
   const handleCheck = () => {
     setChecked(!checked);
   };
@@ -125,10 +146,14 @@ function EmployeeInformationForm() {
     handleClose();
     reader.readAsDataURL(data);
   };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log('submited!');
+  };
   return (
     <>
       <Typography component='h3' fontSize={18} color='primary'>Employee Information</Typography>
-      <form>
+      <form ref={refProp} onSubmit={(e) => handleSubmit(e)}>
         <ImageReview image={!images ? ImageType.PLACEHOLDER : images} onClick={handleOpen}/>
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
