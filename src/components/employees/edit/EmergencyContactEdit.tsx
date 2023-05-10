@@ -26,7 +26,7 @@ function EmergencyContactEdit() {
                 placeholder='Input Full Name'
               />
             </Grid>
-            <Grid item xs={6} md={6} lg={6} xl={6}>
+            <Grid item xs={6} md={6} lg={6} xl={6} sx={{ marginTop: '.350rem' }}>
               <FormControl fullWidth>
                 <Typography>Relationship</Typography>
                 <Select
@@ -89,7 +89,7 @@ function EmergencyContactEdit() {
                 placeholder='Input Full Name'
               />
             </Grid>
-            <Grid item xs={6} md={6} lg={6} xl={6}>
+            <Grid item xs={6} md={6} lg={6} xl={6} sx={{ marginTop: '.350rem' }}>
               <FormControl fullWidth>
                 <Typography>Relationship</Typography>
                 <Select
