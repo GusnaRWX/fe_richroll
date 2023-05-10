@@ -33,7 +33,7 @@
         ],
         "linebreak-style": [
             "error",
-            "windows"
+            "unix"
         ],
         "jsx-quotes": [
             "error",
