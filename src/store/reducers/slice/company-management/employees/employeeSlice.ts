@@ -4,11 +4,13 @@ import { HYDRATE } from 'next-redux-wrapper';
 interface employeeState {
   isLoading: boolean;
   data: [];
+  employeeID: string | number
 }
 
 const initialState: employeeState = {
   isLoading: false,
-  data: []
+  data: [],
+  employeeID: ''
 };
 
 export const employeeSlice = createSlice({
@@ -28,10 +30,20 @@ export const employeeSlice = createSlice({
     postEmployeeInfoRequested: (state) => {
       state.isLoading = true;
     },
-    postEmployeeInfoSuccess: (state) => {
+    postEmployeeInfoSuccess: (state, action) => {
       state.isLoading = false;
+      state.employeeID = action.payload;
     },
     postEmployeeInfoFailed: (state) => {
+      state.isLoading = false;
+    },
+    postEmergencyRequested: (state) => {
+      state.isLoading = true;
+    },
+    postEmergencySuccess: (state) => {
+      state.isLoading = false;
+    },
+    postEmergencyFailed: (state) => {
       state.isLoading = false;
     }
   },
@@ -51,7 +63,10 @@ export const {
   getEmployeeFailed,
   postEmployeeInfoRequested,
   postEmployeeInfoSuccess,
-  postEmployeeInfoFailed
+  postEmployeeInfoFailed,
+  postEmergencyRequested,
+  postEmergencyFailed,
+  postEmergencySuccess
 } = employeeSlice.actions;
 
 export default employeeSlice.reducer;

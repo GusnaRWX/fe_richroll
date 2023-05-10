@@ -1,6 +1,19 @@
 /* eslint-disable no-unused-vars */
 import React, { HTMLAttributes, useState } from 'react';
-import { Grid, Button as MuiButton, IconButton, Typography, Modal, Select, Box, MenuItem, FormControlLabel, Checkbox, FormControl, TextFieldProps, TextField } from '@mui/material';
+import {
+  Grid,
+  Button as MuiButton,
+  IconButton,
+  Typography,
+  Modal,
+  Select,
+  Box,
+  MenuItem,
+  FormControlLabel,
+  Checkbox,
+  FormControl,
+  TextFieldProps,
+  TextField } from '@mui/material';
 import { Input, Button } from '@/components/_shared/form';
 import { styled as MuiStyled } from '@mui/material/styles';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -16,6 +29,8 @@ import { checkRegulerExpression } from '@/utils/helper';
 import dayjs from 'dayjs';
 import { useAppDispatch } from '@/hooks/index';
 import { postEmployeeInfoRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
+
+
 const AsteriskComponent = MuiStyled('span')(({ theme }) => ({
   color: theme.palette.error.main
 }));
@@ -121,7 +136,7 @@ function EmployeeInformationForm ({refProp} :EmployeeProps) {
       temp.picture = fieldOfValues.picture.length !== 0 ? '' : 'This field is required';
 
     if ('fullName' in fieldOfValues)
-      temp.fullName = fieldOfValues.fullname ? '' : 'This field is required';
+      temp.fullName = fieldOfValues.fullName ? '' : 'This field is required';
 
     if ('phoneNumber' in fieldOfValues)
       temp.phoneNumber = fieldOfValues.phoneNumber ? '' : 'This field is required';
@@ -156,6 +171,8 @@ function EmployeeInformationForm ({refProp} :EmployeeProps) {
     setOpen(false);
   };
 
+  console.log(errors);
+
   const handleChecked = (event) => {
     const {name, checked} = event.target;
 
@@ -185,7 +202,7 @@ function EmployeeInformationForm ({refProp} :EmployeeProps) {
     };
     const obj = {
       target: {
-        name, value: files
+        name, value: [files]
       }
     };
     return obj;
@@ -193,26 +210,42 @@ function EmployeeInformationForm ({refProp} :EmployeeProps) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const data = {
-      companyID: 4,
-      picture: values.picture,
-      fullName: values.fullName,
-      nickname: values.nickname,
-      phoneNumberPrefix: values.phoneNumberPrefix,
-      phoneNumber: values.phoneNumber,
-      email: values.email,
-      startDate: dayjs(values.startDate).format('DD/MM/YYYY'),
-      endDate: dayjs(values.endDate).format('DD/MM/YYYY'),
-      isPermanent: values.isPermanent,
-      department: values.department,
-      position: values.position,
-      isSelfService: values.isSelfService
-    };
-    console.log(data);
-    dispatch({
-      type: postEmployeeInfoRequested.toString(),
-      payload: data
-    });
+    if(validate()) {
+      const inputData = new FormData();
+      inputData.append('companyID', values.companyID);
+      inputData.append('picture', values.picture);
+      inputData.append('fullName', values.fullName);
+      inputData.append('nickname', values.nickname);
+      inputData.append('phoneNumberPrefix', values.phoneNumberPrefix);
+      inputData.append('phoneNumber', values.phoneNumber);
+      inputData.append('email', values.email);
+      inputData.append('startDate', dayjs(values.startDate).format('YYYY-MM-DD'));
+      inputData.append('endDate', dayjs(values.endDate).format('YYY-MM-DD'));
+      inputData.append('isPermanent', values.isPermanent);
+      inputData.append('department', values.department);
+      inputData.append('position', values.position);
+      inputData.append('isSelfService', values.isSelfService);
+      dispatch({
+        type: postEmployeeInfoRequested.toString(),
+        payload: inputData
+      });
+
+      setInitialValues({
+        companyID: 4,
+        picture: [],
+        fullName: '',
+        nickname: '',
+        phoneNumberPrefix: '',
+        phoneNumber: '',
+        email: '',
+        startDate: dayjs(Date.now()),
+        endDate: dayjs(Date.now()),
+        isPermanent: false,
+        department: '',
+        position: '',
+        isSelfService: false
+      });
+    }
   };
 
   return (
@@ -229,6 +262,7 @@ function EmployeeInformationForm ({refProp} :EmployeeProps) {
               onChange={handleInputChange}
               size='small'
               placeholder='Input Full Name'
+              error={errors.fullName}
             />
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
@@ -243,7 +277,7 @@ function EmployeeInformationForm ({refProp} :EmployeeProps) {
           </Grid>
         </Grid>
         <Grid container spacing={2}>
-          <Grid item xs={6} md={6} lg={6} xl={6} sx={{ marginBottom: '1.5rem' }}>
+          <Grid item xs={6} md={6} lg={6} xl={6} sx={{ marginBottom: '1.5rem', marginTop: '.3rem' }}>
             <Typography>Contact Number<AsteriskComponent>*</AsteriskComponent></Typography>
             <Grid container spacing={2}>
               <Grid item xs={1} sm={3} md={2} lg={2} xl={2} spacing={2}>
@@ -269,10 +303,12 @@ function EmployeeInformationForm ({refProp} :EmployeeProps) {
               <Grid item xs={9} sm={9} md={9} lg={9} xl={10} alignSelf='flex-end'>
                 <Input
                   name='phoneNumber'
+                  type='number'
                   placeholder='Input Correct Number'
                   withAsterisk={true}
                   onChange={handleInputChange}
                   size='small'
+                  error={errors.phoneNumber}
                 />
               </Grid>
             </Grid>
@@ -285,6 +321,7 @@ function EmployeeInformationForm ({refProp} :EmployeeProps) {
               size='small'
               onChange={handleInputChange}
               placeholder='Personal Email Address'
+              error={errors.email}
             />
           </Grid>
         </Grid>

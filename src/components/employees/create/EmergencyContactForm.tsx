@@ -1,29 +1,104 @@
-import React from 'react';
-import { Typography, Box, Grid, FormControl, Select, MenuItem } from '@mui/material';
+import React, { useState } from 'react';
+import { Typography, Box, Grid, FormControl, Select, MenuItem} from '@mui/material';
 import { Input } from '@/components/_shared/form';
 import {styled as MuiStyled} from '@mui/material/styles';
+import { useForm } from '@/hooks/index';
+import { useAppDispatch, useAppSelectors } from '@/hooks/index';
+import { postEmergencyRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
 
 const AsteriskComponent = MuiStyled('span')(({ theme }) => ({
   color: theme.palette.error.main
 }));
 
-function EmergencyContactForm() {
+interface EmergencyProps {
+  refProp: React.Ref<HTMLFormElement>
+}
+
+function EmergencyContactForm({refProp} :EmergencyProps) {
+  const dispatch = useAppDispatch();
+  const {employee} = useAppSelectors((state) => state);
+  const [initialValues, setInitialValues] = useState({
+    fullNamePrimary: '',
+    relationPrimary: '',
+    phoneNumberPrefixPrimary: '',
+    phoneNumberPrimary: '',
+    fullNameSecondary: '',
+    relationSecondary: '',
+    phoneNumberPrefixSecondary: '',
+    phoneNumberSecondary: ''
+  });
+
+  const validate = (fieldOfValues = values) => {
+    const temp = {...errors};
+
+    if ('fullNamePrimary' in fieldOfValues)
+      temp.fullNamePrimary = fieldOfValues.fullNamePrimary ? '' : 'This field is required';
+
+    if ('PhoneNumberPrimary' in fieldOfValues)
+      temp.phoneNumberPrimary = fieldOfValues.phoneNumberPrimary ? '' : 'This field is required';
+
+    setErrors({
+      ...temp
+    });
+
+    if (fieldOfValues === false)
+      return Object.values(temp).every(x => x === '');
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (validate){
+      const data = {
+        employeeID: employee.employeeID,
+        primary: {
+          name: values.fullNamePrimary,
+          relationship: values.relationPrimary,
+          phoneNumberPrefix: values.phoneNumberPrefixPrimary,
+          phoneNumber: values.phoneNumberPrimary
+        },
+        secondary: {
+          name: values.fullNameSecondary,
+          relationship: values.relationSecondary,
+          phoneNumberPrefix: values.phoneNumberPrefixSecondary,
+          phoneNumber: values.phoneNumberSecondary
+        }
+      };
+      dispatch({
+        type: postEmergencyRequested.toString(),
+        payload: data
+      });
+      setInitialValues({
+        fullNamePrimary: '',
+        relationPrimary: '',
+        phoneNumberPrefixPrimary: '',
+        phoneNumberPrimary: '',
+        fullNameSecondary: '',
+        relationSecondary: '',
+        phoneNumberPrefixSecondary: '',
+        phoneNumberSecondary: ''
+      });
+    }
+  };
+
+  const { values, errors, setErrors, handleInputChange } = useForm(initialValues, true, validate);
   return (
     <>
       <Box sx={{ marginBottom: '3rem' }}>
         <Typography component='h3' fontSize={18} color='primary'>Emergency Contact</Typography>
       </Box>
-      <form>
+      <form ref={refProp} onSubmit={(e) => handleSubmit(e)}>
         <Box sx={{ marginBottom: '3rem', width:'100%' }}>
           <Typography component='h3' fontSize={18} color='primary'>Primary</Typography>
           <Grid container spacing={2} sx={{ marginBottom: '1.5rem', marginTop: '1rem' }}>
             <Grid item xs={6} md={6} lg={6} xl={6}>
               <Input
-                name='fullnamePrimary'
+                name='fullNamePrimary'
                 customLabel='Full Name'
                 withAsterisk={true}
+                onChange={handleInputChange}
                 size='small'
                 placeholder='Input Full Name'
+                error={errors.fullNamePrimary}
               />
             </Grid>
             <Grid item xs={6} md={6} lg={6} xl={6}>
@@ -33,11 +108,14 @@ function EmergencyContactForm() {
                   fullWidth
                   variant='outlined'
                   size='small'
-                  name='relationPrimay'
+                  onChange={handleInputChange}
+                  value={values.relationPrimary}
+                  name='relationPrimary'
                 >
-                  <MenuItem value='Marketing'>Family</MenuItem>
-                  <MenuItem value='Management'>Friend</MenuItem>
-                  <MenuItem value='Finance'>Parent</MenuItem>
+                  <MenuItem value='1'>Parent</MenuItem>
+                  <MenuItem value='2'>Sibling</MenuItem>
+                  <MenuItem value='3'>Spouse</MenuItem>
+                  <MenuItem value='4'>Others</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
@@ -51,6 +129,8 @@ function EmergencyContactForm() {
                     variant='outlined'
                     size='small'
                     fullWidth
+                    onChange={handleInputChange}
+                    value={values.phoneNumberPrefixPrimary}
                     name='phoneNumberPrefixPrimary'
                     MenuProps={{ disableAutoFocus: true }}
                     sx={{
@@ -70,6 +150,9 @@ function EmergencyContactForm() {
                     placeholder='Input Correct Number'
                     withAsterisk={true}
                     size='small'
+                    type='number'
+                    error={errors.phoneNumberPrimary}
+                    onChange={handleInputChange}
                   />
                 </Grid>
               </Grid>
@@ -82,10 +165,11 @@ function EmergencyContactForm() {
           <Grid  container spacing={2} sx={{ marginBottom: '1.5rem', marginTop: '1rem' }}>
             <Grid item xs={6} md={6} lg={6} xl={6}>
               <Input
-                name='fullnameSecondary'
+                name='fullNameSecondary'
                 customLabel='Full Name'
-                withAsterisk={true}
+                withAsterisk={false}
                 size='small'
+                onChange={handleInputChange}
                 placeholder='Input Full Name'
               />
             </Grid>
@@ -96,24 +180,29 @@ function EmergencyContactForm() {
                   fullWidth
                   variant='outlined'
                   size='small'
+                  onChange={handleInputChange}
+                  value={values.relationSecondary}
                   name='relationSecondary'
                 >
-                  <MenuItem value='Marketing'>Family</MenuItem>
-                  <MenuItem value='Management'>Friend</MenuItem>
-                  <MenuItem value='Finance'>Parent</MenuItem>
+                  <MenuItem value='1'>Parent</MenuItem>
+                  <MenuItem value='2'>Sibling</MenuItem>
+                  <MenuItem value='3'>Spouse</MenuItem>
+                  <MenuItem value='4'>Others</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
           </Grid>
           <Grid container spacing={2}>
             <Grid item xs={6} md={6} lg={6} xl={6} sx={{ marginBottom: '1.5rem' }}>
-              <Typography>Contact Number<AsteriskComponent>*</AsteriskComponent></Typography>
+              <Typography>Contact Number</Typography>
               <Grid container spacing={2} >
                 <Grid item xs={1} sm={3} md={2} lg={2} xl={2} spacing={2}>
                   <Select
                     variant='outlined'
                     size='small'
                     fullWidth
+                    onChange={handleInputChange}
+                    value={values.phoneNumberPrefixSecondary}
                     name='phoneNumberPrefixSecondary'
                     MenuProps={{ disableAutoFocus: true }}
                     sx={{
@@ -133,6 +222,7 @@ function EmergencyContactForm() {
                     placeholder='Input Correct Number'
                     withAsterisk={true}
                     size='small'
+                    onChange={handleInputChange}
                   />
                 </Grid>
               </Grid>

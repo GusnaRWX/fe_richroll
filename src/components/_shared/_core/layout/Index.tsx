@@ -8,6 +8,8 @@ import { styled } from '@mui/material/styles';
 import Image from 'next/image';
 import { Image as ImageType } from '@/utils/assetsConstant';
 import SidebarItem from '../drawer/SidebarItem';
+import Notify from '../../common/Notify';
+import { useAppSelectors } from '@/hooks/index';
 
 export interface Layout {
   children?: React.ReactNode;
@@ -29,6 +31,7 @@ const Layout = ({
   const handleDrawerToggle = () => {
     setMobileOpen((mobile) => !mobile);
   };
+  const { responser } = useAppSelectors((state) => state);
 
   const container = typeof window !== 'undefined' ? () => window.document.body : undefined;
 
@@ -76,6 +79,11 @@ const Layout = ({
         DrawerWidth={drawerWidth}
         handleDrawerToggle={handleDrawerToggle}
       />
+      {
+        [200, 201].includes(responser.code) && (
+          <Notify body={responser.message}/>
+        )
+      }
       <DrawerCore
         drawerWidth={drawerWidth}
         container={container}
