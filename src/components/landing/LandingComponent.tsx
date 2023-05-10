@@ -10,24 +10,37 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
-  IconButton
+  IconButton,
+  ImageList,
+  ImageListItem,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Image as ImageType, Icons } from '@/utils/assetsConstant';
+import { ImageList as ImageListAll } from './ImageList';
 
-const WrapperContainer = styled(Box)<BoxProps>(() => ({
+const WrapperContainer = styled(Box)<BoxProps>(({ theme }) => ({
+  [theme.breakpoints.up('md')]: {
+    padding: '80px 135px',
+  },
+  [theme.breakpoints.down('md')]: {
+    padding: '40px 24px',
+  },
   background: 'white',
-  padding: '80px 135px',
   display: 'flex',
   alignItems: 'center',
 }));
 
-const WrapperContainerSpotlight = styled(Box)<BoxProps>(() => ({
+const WrapperContainerSpotlight = styled(Box)<BoxProps>(({ theme }) => ({
+  [theme.breakpoints.up('md')]: {
+    padding: '80px 135px',
+  },
+  [theme.breakpoints.down('md')]: {
+    padding: '40px 24px',
+  },
   background: '#F9FAFB',
-  padding: '80px 135px',
   display: 'flex',
   alignItems: 'center',
 }));
@@ -85,7 +98,7 @@ const LinkFooter = styled(Link)(() => ({
   textDecoration: 'none',
   fontWeight: 400,
   fontSize: 14,
-  marginBottom: '8px'
+  mb: '8px'
 }));
 
 const Topbar = () => {
@@ -111,31 +124,31 @@ const Navbar = () => {
       <Topbar />
       <WrapperNavbarContent disableGutters>
         <Box sx={{ display: 'flex' }}>
-          <Image
-            src={ImageType.KAYAROLL_LOGO}
-            width={151}
-            height={40}
-            alt='kayaroll'
-            style={{ marginRight: '80px' }}
-          />
+          <Box sx={{ mr: { xs: '10px', lg: '80px' }}}>
+            <Image
+              src={ImageType.KAYAROLL_LOGO}
+              width={151}
+              height={40}
+              alt='kayaroll'
+            />
+          </Box>
           <LinkMenu href='/'>About Us</LinkMenu>
           <LinkMenu href='/'>Solution</LinkMenu>
           <LinkMenu href='/'>Resource</LinkMenu>
           <LinkMenu href='/'>Subscription</LinkMenu>
           <LinkMenu href='/'>Partnership</LinkMenu>
         </Box>
-        <Box sx={{ display: { sm: 'block', md: 'none' } }}>
+        <Box sx={{ display: { xs: 'block', md: 'none' } }}>
           <IconButton
             size='large'
             edge='start'
             color='inherit'
             aria-label='menu'
-            sx={{ mr: 2 }}
           >
             <MenuIcon />
           </IconButton>
         </Box>
-        <Box sx={{ display: { sm: 'none', md: 'block' } }}>
+        <Box sx={{ display: { xs: 'none', md: 'block' } }}>
           <Button
             variant='outlined'
             color='primary'
@@ -170,7 +183,7 @@ const LandingComponent = () => {
     <Box component='div' sx={{ marginTop: '100px' }}>
       <Navbar />
 
-      <WrapperContainer sx={{ justifyContent: 'space-between' }}>
+      <WrapperContainer sx={{ justifyContent: {xs: 'center', md: 'space-between'}, flexDirection: {xs: 'column', md: 'row'} }}>
         <Box component='div'>
           <Typography
             variant='text-lg'
@@ -237,18 +250,20 @@ const LandingComponent = () => {
             href='/register'
             sx={{
               textTransform: 'none',
-              marginTop: '40px'
+              marginTop: '40px',
+              width: {xs: '100%', md: 'auto'}
             }}
           >
             Get a Demo, Try Us!
           </Button>
         </Box>
-        <Box component='div'>
+        <Box component='div' sx={{ position: 'relative', width: { xs: '100%', md: '40%' }, height: '320px', mt: {xs: '32px', md: '0px'} }}>
           <Image
             src={ImageType.PREVIEW_DASHBOARD}
             alt='preview'
-            height={320}
-            width={476}
+            fill
+            sizes='(max-width: 1130px) 100%, 476px'
+            style={{ objectFit: 'contain' }}
           />
         </Box>
       </WrapperContainer>
@@ -262,87 +277,47 @@ const LandingComponent = () => {
           >
             We’ve helped 100+ SMEs and Startups
           </Typography>
-          <Box component='div' sx={{ marginBottom: '40px', display: 'flex', justifyContent: 'space-between', alignContent: 'center' }}>
-            <Image
-              src={ImageType.SAMSUNG}
-              alt='samsung'
-              height={64}
-              width={80}
-            />
-            <Image
-              src={ImageType.GOJEK}
-              alt='samsung'
-              height={64}
-              width={80}
-            />
-            <Image
-              src={ImageType.APPLE}
-              alt='samsung'
-              height={64}
-              width={80}
-            />
-            <Image
-              src={ImageType.SLACK}
-              alt='samsung'
-              height={64}
-              width={80}
-            />
-            <Image
-              src={ImageType.TOKOPEDIA}
-              alt='samsung'
-              height={64}
-              width={80}
-            />
-            <Image
-              src={ImageType.MSGLOW}
-              alt='samsung'
-              height={64}
-              width={80}
-            />
-            <Image
-              src={ImageType.MYDOCTORS}
-              alt='samsung'
-              height={64}
-              width={80}
-            />
+          <Box component='div' sx={{ display: {xs: 'none', md: 'block'}, marginBottom: '40px', justifyContent: 'space-between', alignContent: 'center' }}>
+            <ImageList cols={7} rowHeight={64}>
+              {ImageListAll.slice(0, 7).map((item, id) => (
+                <ImageListItem sx={{ alignItems: 'center' }} key={id}>
+                  <Image
+                    src={item.img}
+                    alt={item.alt}
+                    height={64}
+                    width={80}
+                  />
+                </ImageListItem>
+              ))}
+            </ImageList>
           </Box>
-          <Box component='div' sx={{ display: 'flex', justifyContent: 'space-around', alignContent: 'center' }}>
-            <Image
-              src={ImageType.UDEMY}
-              alt='samsung'
-              height={64}
-              width={80}
-            />
-            <Image
-              src={ImageType.COURSERA}
-              alt='samsung'
-              height={64}
-              width={80}
-            />
-            <Image
-              src={ImageType.RUANGGURU}
-              alt='samsung'
-              height={64}
-              width={80}
-            />
-            <Image
-              src={ImageType.SCHOTERS}
-              alt='samsung'
-              height={64}
-              width={80}
-            />
-            <Image
-              src={ImageType.ADIDAS}
-              alt='samsung'
-              height={64}
-              width={80}
-            />
-            <Image
-              src={ImageType.BASSETT}
-              alt='samsung'
-              height={64}
-              width={80}
-            />
+          <Box component='div' sx={{ display: {xs: 'none', md: 'block'}, justifyContent: 'space-around', alignContent: 'center' }}>
+            <ImageList cols={6} rowHeight={64}>
+              {ImageListAll.slice(-6).map((item, id) => (
+                <ImageListItem sx={{ alignItems: 'center' }} key={id}>
+                  <Image
+                    src={item.img}
+                    alt={item.alt}
+                    height={64}
+                    width={80}
+                  />
+                </ImageListItem>
+              ))}
+            </ImageList>
+          </Box>
+          <Box component='div' sx={{ display: {xs: 'block', md: 'none'}, justifyContent: 'space-between', alignContent: 'center' }}>
+            <ImageList cols={3} rowHeight={64}>
+              {ImageListAll.slice(0, 12).map((item, id) => (
+                <ImageListItem sx={{ alignItems: 'center' }} key={id}>
+                  <Image
+                    src={item.img}
+                    alt={item.alt}
+                    height={64}
+                    width={80}
+                  />
+                </ImageListItem>
+              ))}
+            </ImageList>
           </Box>
         </Box>
       </WrapperContainer>
@@ -370,84 +345,90 @@ const LandingComponent = () => {
               flexWrap: 'wrap',
               '& > :not(style)': {
                 m: 0.5,
-                width: 377,
+                width: {xs: '100%', md: 377},
                 padding: '24px',
                 textAlign: 'center'
               },
             }}
           >
-            <Paper elevation={0}>
+            <Paper sx={{ display: {xs: 'flex', md: 'block'}, flexDirection: {xs: 'row', md: 'column'} }} elevation={0}>
               <Image
                 src={Icons.ABOUT_1}
                 alt='about1'
                 height={80}
                 width={80}
               />
-              <Typography
-                variant='text-lg'
-                component='div'
-                sx={{ fontWeight: 700 }}
-              >
-                Founded in 2020
-              </Typography>
-              <Typography
-                variant='text-base'
-                component='div'
-                sx={{ fontWeight: 400 }}
-              >
-                We’re here to offer a Fresh Approach
-              </Typography>
+              <Box>
+                <Typography
+                  variant='text-lg'
+                  component='div'
+                  sx={{ fontWeight: 700 }}
+                >
+                  Founded in 2020
+                </Typography>
+                <Typography
+                  variant='text-base'
+                  component='div'
+                  sx={{ fontWeight: 400 }}
+                >
+                  We’re here to offer a Fresh Approach
+                </Typography>
+              </Box>
             </Paper>
-            <Paper elevation={0}>
+            <Paper sx={{ display: {xs: 'flex', md: 'block'}, flexDirection: {xs: 'row', md: 'column'} }} elevation={0}>
               <Image
                 src={Icons.ABOUT_2}
                 alt='about2'
                 height={80}
                 width={80}
               />
-              <Typography
-                variant='text-lg'
-                component='div'
-                sx={{ fontWeight: 700 }}
-              >
-                Singaporean Company
-              </Typography>
-              <Typography
-                variant='text-base'
-                component='div'
-                sx={{ fontWeight: 400 }}
-              >
-                We’re fully Homegrown
-              </Typography>
+              <Box>
+                <Typography
+                  variant='text-lg'
+                  component='div'
+                  sx={{ fontWeight: 700 }}
+                >
+                  Singaporean Company
+                </Typography>
+                <Typography
+                  variant='text-base'
+                  component='div'
+                  sx={{ fontWeight: 400 }}
+                >
+                  We’re fully Homegrown
+                </Typography>
+              </Box>
             </Paper>
-            <Paper elevation={0}>
+            <Paper sx={{ display: {xs: 'flex', md: 'block'}, flexDirection: {xs: 'row', md: 'column'} }} elevation={0}>
               <Image
                 src={Icons.ABOUT_3}
                 alt='about3'
                 height={80}
                 width={80}
               />
-              <Typography
-                variant='text-lg'
-                component='div'
-                sx={{ fontWeight: 700 }}
-              >
-                SMEs Friendly
-              </Typography>
-              <Typography
-                variant='text-base'
-                component='div'
-                sx={{ fontWeight: 400 }}
-              >
-                We’re focussed on empowering SMEs and Startups
-              </Typography>
+              <Box>
+                <Typography
+                  variant='text-lg'
+                  component='div'
+                  sx={{ fontWeight: 700 }}
+                >
+                  SMEs Friendly
+                </Typography>
+                <Typography
+                  variant='text-base'
+                  component='div'
+                  sx={{ fontWeight: 400 }}
+                >
+                  We’re focussed on empowering SMEs and Startups
+                </Typography>
+              </Box>
             </Paper>
           </Box>
         </Box>
       </WrapperContainerSpotlight>
 
       <WrapperContainer sx={{ justifyContent: 'space-between' }}>
-        <Box sx={{ width: '50%' }}>
+        <Box sx={{ width: { xs: '70%', md: '50%' } }}>
           <Typography
             variant='text-4xl'
             component='div'
@@ -463,26 +444,28 @@ const LandingComponent = () => {
             Time-consuming payroll calculations and processes that take up critical resources.
           </Typography>
         </Box>
-        <Box>
+        <Box component='div' sx={{ position: 'relative', width: { xs: '30%', md: '50%' }, height: { xs: '90px', md: '275px' } }}>
           <Image
             src={ImageType.LANDING_1}
-            width={410}
-            height={275}
             alt='landing1'
+            fill
+            sizes='(max-width: 1130px) 100%, 410px'
+            style={{ objectFit: 'contain' }}
           />
         </Box>
       </WrapperContainer>
 
       <WrapperContainer sx={{ justifyContent: 'space-between' }}>
-        <Box>
+        <Box component='div' sx={{ position: 'relative', width: { xs: '30%', md: '50%' }, height: { xs: '90px', md: '275px' } }}>
           <Image
             src={ImageType.LANDING_2}
-            width={410}
-            height={275}
             alt='landing2'
+            fill
+            sizes='(max-width: 1130px) 100%, 410px'
+            style={{ objectFit: 'contain' }}
           />
         </Box>
-        <Box sx={{ width: '50%' }}>
+        <Box sx={{ width: { xs: '70%', md: '50%' } }}>
           <Typography
             variant='text-4xl'
             component='div'
@@ -501,7 +484,7 @@ const LandingComponent = () => {
       </WrapperContainer>
 
       <WrapperContainer sx={{ justifyContent: 'space-between' }}>
-        <Box sx={{ width: '50%' }}>
+        <Box sx={{ width: { xs: '70%', md: '50%' } }}>
           <Typography
             variant='text-4xl'
             component='div'
@@ -517,12 +500,13 @@ const LandingComponent = () => {
             Our systems are well attuned to government reporting requirements.
           </Typography>
         </Box>
-        <Box>
+        <Box component='div' sx={{ position: 'relative', width: { xs: '30%', md: '50%' }, height: { xs: '90px', md: '275px' } }}>
           <Image
             src={ImageType.LANDING_3}
-            width={410}
-            height={275}
             alt='landing3'
+            fill
+            sizes='(max-width: 1130px) 100%, 410px'
+            style={{ objectFit: 'contain' }}
           />
         </Box>
       </WrapperContainer>
@@ -543,13 +527,13 @@ const LandingComponent = () => {
               flexWrap: 'wrap',
               '& > :not(style)': {
                 m: 0.5,
-                width: 377,
+                width: {xs: '100%', md: 377},
                 padding: '24px',
                 textAlign: 'center'
               },
             }}
           >
-            <Paper elevation={0}>
+            <Paper sx={{ display: {xs: 'flex', md: 'block'}, flexDirection: {xs: 'row', md: 'column'} }} elevation={0}>
               <Image
                 src={Icons.WHY_1}
                 alt='why1'
@@ -564,7 +548,7 @@ const LandingComponent = () => {
                 Simple and Intuitive User Interface
               </Typography>
             </Paper>
-            <Paper elevation={0}>
+            <Paper sx={{ display: {xs: 'flex', md: 'block'}, flexDirection: {xs: 'row', md: 'column'} }} elevation={0}>
               <Image
                 src={Icons.WHY_2}
                 alt='why2'
@@ -579,7 +563,7 @@ const LandingComponent = () => {
                 RAS Integrated and Compliant
               </Typography>
             </Paper>
-            <Paper elevation={0}>
+            <Paper sx={{ display: {xs: 'flex', md: 'block'}, flexDirection: {xs: 'row', md: 'column'} }} elevation={0}>
               <Image
                 src={Icons.WHY_3}
                 alt='why3'
@@ -598,8 +582,8 @@ const LandingComponent = () => {
         </Box>
       </WrapperContainerSpotlight>
 
-      <WrapperContainer sx={{ justifyContent: 'space-between' }}>
-        <Box sx={{ width: '40%' }}>
+      <WrapperContainer sx={{ justifyContent: {xs: 'center', md: 'space-between'}, flexDirection: {xs: 'column', md: 'row'} }}>
+        <Box sx={{ width: {xs: '100%', md: '40%'} }}>
           <Typography
             variant='text-4xl'
             component='div'
@@ -615,7 +599,7 @@ const LandingComponent = () => {
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum Blandit risus vitae viverra porta. Nam ullamcorper est ac fermentum condimentum.
           </Typography>
         </Box>
-        <Box sx={{ width: '50%' }}>
+        <Box sx={{ width: {xs: '100%', md: '50%'}, mt: {xs: '10px', md: '0'} }}>
           <Accordion>
             <AccordionSummary
               aria-controls='panel1a-content'
@@ -709,7 +693,8 @@ const LandingComponent = () => {
               href='/register'
               sx={{
                 textTransform: 'none',
-                marginTop: '40px'
+                marginTop: '40px',
+                width: {xs: '100%', md: 'auto'}
               }}
             >
               Try for free
@@ -718,8 +703,8 @@ const LandingComponent = () => {
         </Box>
       </WrapperContainer>
 
-      <WrapperContainerSpotlight sx={{ justifyContent: 'space-between', alignItems: 'flex-start' }}>
-        <Box>
+      <WrapperContainerSpotlight sx={{ justifyContent: {xs: 'start', md: 'space-between'}, flexDirection: {xs: 'column', md: 'row'}, alignItems: 'flex-start' }}>
+        <Box sx={{ mb: {xs: '24px', md: '0'} }}>
           <Image
             src={ImageType.KAYAROLL_LOGO}
             width={151}
@@ -727,11 +712,11 @@ const LandingComponent = () => {
             alt='kayaroll'
           />
         </Box>
-        <Box>
+        <Box sx={{ mb: {xs: '16px', md: '0'} }}>
           <Typography
             variant='text-sm'
             component='div'
-            sx={{ marginBottom: '16px', fontWeight: 700 }}
+            sx={{ mb: {xs: '8px', md: '16px'}, fontWeight: 700 }}
           >
             Product
           </Typography>
@@ -739,11 +724,11 @@ const LandingComponent = () => {
           <LinkFooter href='/'>Kayacheck</LinkFooter>
           <LinkFooter href='/'>Kayatest</LinkFooter>
         </Box>
-        <Box>
+        <Box sx={{ mb: {xs: '16px', md: '0'} }}>
           <Typography
             variant='text-sm'
             component='div'
-            sx={{ marginBottom: '16px', fontWeight: 700 }}
+            sx={{ mb: {xs: '8px', md: '16px'}, fontWeight: 700 }}
           >
             Solution
           </Typography>
@@ -754,7 +739,7 @@ const LandingComponent = () => {
           <Typography
             variant='text-sm'
             component='div'
-            sx={{ marginBottom: '16px', fontWeight: 700 }}
+            sx={{ mb: {xs: '8px', md: '16px'}, fontWeight: 700 }}
           >
             Company
           </Typography>
@@ -765,7 +750,7 @@ const LandingComponent = () => {
           <LinkFooter href='/'>Privacy Policy</LinkFooter>
           <LinkFooter href='/'>Blog</LinkFooter>
         </Box>
-        <Box component='div' sx={{ display: 'flex', justifyContent: 'space-between', gap: '16px' }}>
+        <Box component='div' sx={{ display: 'flex', justifyContent: 'space-between', gap: '16px', mt: {xs: '24px', md: '0'} }}>
           <Image
             src={Icons.FOOTER_WHATSAPP}
             width={32}
