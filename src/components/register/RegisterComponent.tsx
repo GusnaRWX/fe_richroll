@@ -29,8 +29,8 @@ import { useAppSelectors, useForm } from '@/hooks/index';
 import { Input, Button } from '../_shared/form';
 import Link from 'next/link';
 import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
-import { WINDOW_SSO } from '@config';
 import LocalizationMenu from '../_shared/_core/localization/Index';
+import { signIn } from 'next-auth/react';
 
 
 const NavHead = styled.div`
@@ -166,7 +166,21 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
     });
   };
 
+  const handleGoogleLogin = async () => {
+    try {
+      await signIn('google', {callbackUrl: '/dashboard'});
+    }  catch(err) {
+      console.log(err);
+    }
+  };
 
+  const handleFacebookLogin = async () => {
+    try {
+      await signIn('facebook', {callbackUrl: '/dashboard'});
+    } catch(err) {
+      console.log(err);
+    }
+  };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
@@ -370,7 +384,7 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
                   width={40}
                   height={40}
                   alt='sso-google'
-                  onClick={() => WINDOW_SSO('authentication/google')}
+                  onClick={handleGoogleLogin}
                 />
                 <Typography fontSize={14}>Or</Typography>
                 <Image
@@ -378,6 +392,7 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
                   width={40}
                   height={40}
                   alt='sso-facebook'
+                  onClick={handleFacebookLogin}
                 />
               </WrapperSSO>
               <Typography color='grey.400' textAlign='center'>
