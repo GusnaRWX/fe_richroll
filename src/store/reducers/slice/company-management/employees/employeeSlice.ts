@@ -4,7 +4,7 @@ import { HYDRATE } from 'next-redux-wrapper';
 interface EmployeeState {
   isLoading: boolean;
   data: [];
-  employeeID: string | number
+  employeeID: string | number;
 }
 
 const initialState: EmployeeState = {
