@@ -55,11 +55,23 @@ function EmployeesTable({
   const dispatch = useAppDispatch();
   const data = useAppSelectors(state => state.employee.data);
   const router = useRouter();
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
   const [search, setSearch] = useState('');
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
+    dispatch({
+      type: getEmployeeRequested.toString(),
+      payload: {
+        page: newPage + 1,
+        itemPerPage: rowsPerPage,
+        sort: '',
+        direction: false,
+        search: search,
+        isActive: tabValue === 0 ? true : false,
+        companyID: 4
+      }
+    });
   };
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 0));
@@ -72,7 +84,7 @@ function EmployeesTable({
         type: getEmployeeRequested.toString(),
         payload: {
           page: page + 1,
-          itemPerPage: 100,
+          itemPerPage: rowsPerPage,
           sort: '',
           direction: false,
           search: e.target.value,
@@ -88,7 +100,7 @@ function EmployeesTable({
       type: getEmployeeRequested.toString(),
       payload: {
         page: page + 1,
-        itemPerPage: 100,
+        itemPerPage: rowsPerPage,
         sort: '',
         direction: false,
         search: search,
@@ -128,7 +140,7 @@ function EmployeesTable({
         </Grid>
       </Grid>
       <Table
-        count={typeof data?.items !== 'undefined' ? data?.items.length : 0}
+        count={data?.itemTotals}
         rowsPerPageOptions={[5, 10, 15]}
         rowsPerPage={rowsPerPage}
         page={page}
