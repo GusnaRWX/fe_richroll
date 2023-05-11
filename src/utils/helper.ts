@@ -6,7 +6,7 @@
  * @returns 
  */
 
-export const checkRegulerExpression = (expression: string | RegExp,value: string | number): boolean => {
+export const checkRegulerExpression = (expression: string | RegExp, value: string | number): boolean => {
   const regex = new RegExp(expression);
   const stringValue = value.toString();
   return regex.test(stringValue);

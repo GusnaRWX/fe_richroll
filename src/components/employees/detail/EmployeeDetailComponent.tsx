@@ -5,7 +5,7 @@ import { ArrowBack } from '@mui/icons-material';
 import styled from '@emotion/styled';
 import { FiEdit } from 'react-icons/fi';
 import { useRouter } from 'next/router';
-import EmployeePersonalInformation from '../create/EmployeePersonalInformation';
+import EmployeePersonalInformation from '../create/EmployeePersonalInformationForm';
 import EmployeeInformationDetail from './EmployeeInformationDetail';
 import EmergencyContactDetail from './EmergencyContactDetail';
 

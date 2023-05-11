@@ -4,8 +4,8 @@ import Image from 'next/image';
 import { styled as MuiStyled } from '@mui/material/styles';
 import kayaroll from '../../../public/images/kayaroll-logo.png';
 import { Icons } from '@/utils/assetsConstant';
-import { Address } from '@/types/address';
-import { Option } from '@/types/option';
+// import { Address } from '@/types/address';
+// import { Option } from '@/types/option';
 import { checkRegulerExpression } from '@/utils/helper';
 import {
   Card,
@@ -160,24 +160,24 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
     { label: '>50', value: 4 }
   ];
 
-  const options = (): Option.Mapper[] => {
-    return countries.map((item: Address.Country): Option.Mapper => {
-      return { label: item.name, value: item.id };
-    });
-  };
+  // const options = (): Option.Mapper[] => {
+  //   return countries.map((item: Address.Country): Option.Mapper => {
+  //     return { label: item.name, value: item.id };
+  //   });
+  // };
 
   const handleGoogleLogin = async () => {
     try {
-      await signIn('google', {callbackUrl: '/dashboard'});
-    }  catch(err) {
+      await signIn('google', { callbackUrl: '/dashboard' });
+    } catch (err) {
       console.log(err);
     }
   };
 
   const handleFacebookLogin = async () => {
     try {
-      await signIn('facebook', {callbackUrl: '/dashboard'});
-    } catch(err) {
+      await signIn('facebook', { callbackUrl: '/dashboard' });
+    } catch (err) {
       console.log(err);
     }
   };
@@ -274,11 +274,9 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
                     value={values.countryID}
                     onChange={handleInputChange}
                   >
-                    {
-                      options().map((item) => (
-                        <MenuItem key={item.label} value={item.value}>{item.label}</MenuItem>
-                      ))
-                    }
+                    {countries?.map(item => (
+                      <MenuItem key={item.label} value={item.value}>{item.label}</MenuItem>
+                    ))}
                   </Select>
                   <FormHelperText>{errors.countryID}</FormHelperText>
                 </FormControl>
