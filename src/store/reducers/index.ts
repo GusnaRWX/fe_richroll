@@ -5,6 +5,7 @@ import optionSlice from './slice/options/optionSlice';
 import registerSlice from './slice/auth/registerSlice';
 import meSlice from './slice/auth/meSlice';
 import employeeSlice from './slice/company-management/employees/employeeSlice';
+import companySlice from './slice/company/companySlice';
 
 
 const reducers: Reducer = combineReducers({
@@ -13,7 +14,8 @@ const reducers: Reducer = combineReducers({
   option: optionSlice,
   register: registerSlice,
   me: meSlice,
-  employee: employeeSlice
+  employee: employeeSlice,
+  company: companySlice
 });
 
 export default reducers;

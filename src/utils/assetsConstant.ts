@@ -28,7 +28,10 @@ export const Image: ImageType = {
   TOKOPEDIA: '/assets/images/tokopedia.png',
   UDEMY: '/assets/images/udemy.png',
   EXAMPLE_USER: '/assets/images/current-user.png',
-  PLACEHOLDER: '/assets/images/image-upload-placeholder.png'
+  PLACEHOLDER: '/assets/images/image-upload-placeholder.png',
+  ESTELER: '/assets/images/es-teler.png',
+  ADD_COMPANY: '/assets/images/add-company.png',
+  PLACEHOLDER_COMPANY: '/assets/images/placeholder-company.svg'
 };
 
 export const Icons: IconsType = {
