@@ -90,7 +90,6 @@ function* fetchPostEmergency(action: AnyAction) {
     const res: AxiosResponse = yield call(postEmergency, action?.payload);
     if (res.data.code === 200 || res.data.code === 201) {
       yield put({ type: postEmergencySuccess.toString() });
-      yield delay(2000);
       yield put({
         type: setResponserMessage.toString(),
         payload: {

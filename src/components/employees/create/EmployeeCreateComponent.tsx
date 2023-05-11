@@ -1,11 +1,13 @@
 import React, { useState, useRef } from 'react';
-import { IconButton } from '@/components/_shared/form';
+import { IconButton, Button } from '@/components/_shared/form';
 import { Card, Typography, Button as MuiButton, Tab, Tabs, Box } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import styled from '@emotion/styled';
 import EmployeeInformationForm from './EmployeeInformationForm';
 import EmployeePersonalInformationForm from './EmployeePersonalInformationForm';
 import { useRouter } from 'next/router';
+import { FiEdit } from 'react-icons/fi';
+import ConfirmationModal from '@/components/_shared/common/ConfirmationModal';
 
 import EmergencyContactForm from './EmergencyContactForm';
 const TopWrapper = styled.div`
@@ -76,6 +78,7 @@ function a11yProps(index: number) {
 
 function EmployeeCreateComponent() {
   const [value, setValue] = useState(0);
+  const [leave, setLeave] = useState(false);
   const employeeRef = useRef<HTMLFormElement>(null);
   const emergencyRef = useRef<HTMLFormElement>(null);
   const personalInformationRef = useRef<HTMLFormElement>(null);
@@ -93,6 +96,14 @@ function EmployeeCreateComponent() {
     }
 
   };
+
+  const handleOpen = () => {
+    setLeave(true);
+  };
+
+  const handleClose = () => {
+    setLeave(false);
+  };
   return (
     <>
       <TopWrapper>
@@ -107,8 +118,26 @@ function EmployeeCreateComponent() {
           <Typography component='h3' fontWeight='bold'>Add Employee</Typography>
         </BackWrapper>
         <ButtonWrapper>
-          <MuiButton variant='outlined' size='small'>Cancel</MuiButton>
-          <MuiButton variant='contained' onClick={handleClick} size='small' color='primary'>Save</MuiButton>
+          {
+            value !== 1 ? (
+              <>
+                <MuiButton variant='outlined' size='small' onClick={() => handleOpen()}>Cancel</MuiButton>
+                <MuiButton variant='contained' onClick={handleClick} size='small' color='primary'>Save</MuiButton>
+              </>
+            ) : (
+              <Button
+                color='secondary'
+                label='Edit'
+                startIcon={
+                  <FiEdit
+                    size={12}
+                    color='#FFF'
+                  />
+                }
+                size='small'
+              />
+            )
+          }
         </ButtonWrapper>
       </TopWrapper>
       <ContentWrapper>
@@ -139,6 +168,12 @@ function EmployeeCreateComponent() {
           </TabPanel>
         </Box>
       </ContentWrapper>
+      <ConfirmationModal
+        open={leave}
+        handleClose={handleClose}
+        title='Are you sure you want to leave?'
+        content='Any unsaved changes will be discarded. This cannot be undone'
+      />
     </>
   );
 }

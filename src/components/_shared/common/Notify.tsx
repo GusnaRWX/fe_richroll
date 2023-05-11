@@ -20,7 +20,7 @@ const CardWrapper = styled.div`
  padding: .5rem;
  z-index: 99999999;
  top: 40px;
- left: 75%;
+ left: 70%;
 
  @keyframes snackbarin {
   from {

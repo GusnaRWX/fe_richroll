@@ -171,8 +171,6 @@ function EmployeeInformationForm ({refProp} :EmployeeProps) {
     setOpen(false);
   };
 
-  console.log(errors);
-
   const handleChecked = (event) => {
     const {name, checked} = event.target;
 
@@ -200,6 +198,7 @@ function EmployeeInformationForm ({refProp} :EmployeeProps) {
     reader.onloadend = function () {
       setImages(reader.result as string);
     };
+    handleClose();
     const obj = {
       target: {
         name, value: [files]
@@ -293,7 +292,8 @@ function EmployeeInformationForm ({refProp} :EmployeeProps) {
                     backgroundColor: '#D9EFE7',
                     border: '1px solid #D9EFE7',
                     borderRadius: '9999px',
-                    marginRight: '12px'
+                    marginRight: '12px',
+                    fontSize: '14px'
                   }}
                 >
                   <MenuItem value='+62'>+62</MenuItem>

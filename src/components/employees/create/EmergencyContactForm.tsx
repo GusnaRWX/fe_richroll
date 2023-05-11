@@ -41,13 +41,14 @@ function EmergencyContactForm({refProp} :EmergencyProps) {
       ...temp
     });
 
-    if (fieldOfValues === false)
+    if (fieldOfValues === values)
       return Object.values(temp).every(x => x === '');
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (validate){
+    if (validate()){
+      console.log('here');
       const data = {
         employeeID: employee.employeeID,
         primary: {
@@ -103,7 +104,7 @@ function EmergencyContactForm({refProp} :EmergencyProps) {
             </Grid>
             <Grid item xs={6} md={6} lg={6} xl={6}>
               <FormControl fullWidth>
-                <Typography>Relationship</Typography>
+                <Typography mb='6px'>Relationship</Typography>
                 <Select
                   fullWidth
                   variant='outlined'
@@ -137,7 +138,8 @@ function EmergencyContactForm({refProp} :EmergencyProps) {
                       backgroundColor: '#D9EFE7',
                       border: '1px solid #D9EFE7',
                       borderRadius: '9999px',
-                      marginRight: '12px'
+                      marginRight: '12px',
+                      fontSize: '14px'
                     }}
                   >
                     <MenuItem value='+62'>+62</MenuItem>
@@ -173,9 +175,9 @@ function EmergencyContactForm({refProp} :EmergencyProps) {
                 placeholder='Input Full Name'
               />
             </Grid>
-            <Grid item xs={6} md={6} lg={6} xl={6}>
+            <Grid item xs={6} md={6} lg={6} xl={6} spacing={2}>
               <FormControl fullWidth>
-                <Typography>Relationship</Typography>
+                <Typography mb='6px'>Relationship</Typography>
                 <Select
                   fullWidth
                   variant='outlined'
@@ -209,7 +211,8 @@ function EmergencyContactForm({refProp} :EmergencyProps) {
                       backgroundColor: '#D9EFE7',
                       border: '1px solid #D9EFE7',
                       borderRadius: '9999px',
-                      marginRight: '12px'
+                      marginRight: '12px',
+                      fontSize: '14px'
                     }}
                   >
                     <MenuItem value='+62'>+62</MenuItem>

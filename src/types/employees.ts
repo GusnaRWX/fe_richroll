@@ -5,7 +5,7 @@ export declare namespace Employees {
     sort: string;
     direction: boolean;
     search: string;
-    status: string;
+    isActive: boolean;
     companyID?: number;
   }
 

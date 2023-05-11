@@ -8,6 +8,7 @@ import EmergencyContactEdit from './EmergencyContactEdit';
 import { FiEdit } from 'react-icons/fi';
 import { useRouter } from 'next/router';
 import PersonalInformationEdit from './PersonalInformationEdit';
+import ConfirmationModal from '@/components/_shared/common/ConfirmationModal';
 
 const TopWrapper = styled.div`
  display: flex;
@@ -77,9 +78,17 @@ function a11yProps(index: number) {
 
 function EmployeeEditComponent() {
   const [value, setValue] = useState(0);
+  const [leave, setLeave] = useState(false);
   const router = useRouter();
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
+  };
+  const handleOpen = () => {
+    setLeave(true);
+  };
+
+  const handleClose = () => {
+    setLeave(false);
   };
   return (
     <>
@@ -98,7 +107,7 @@ function EmployeeEditComponent() {
           {
             value !== 1 ? (
               <>
-                <MuiButton variant='outlined' size='small' onClick={() => { router.back(); }}>Cancel</MuiButton>
+                <MuiButton variant='outlined' size='small' onClick={() => handleOpen()}>Cancel</MuiButton>
                 <MuiButton variant='contained' size='small' color='primary' onClick={() => { router.push('/company-management/employees'); }}>Save</MuiButton>
               </>
             ) : (
@@ -145,6 +154,12 @@ function EmployeeEditComponent() {
           </TabPanel>
         </Box>
       </ContentWrapper>
+      <ConfirmationModal
+        open={leave}
+        handleClose={handleClose}
+        title='Are you sure you want to leave?'
+        content='Any unsaved changes will be discarded. This cannot be undone'
+      />
     </>
   );
 }
