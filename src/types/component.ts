@@ -30,6 +30,22 @@ export declare namespace Register {
     doRegister: (_payload: Form) => void,
   }
 }
+
+export declare namespace Company {
+  export interface Component {
+    companies: [];
+  }
+}
+
+export declare namespace CompanyCreate {
+  export interface Component {
+    companyType: [];
+    companySector: [];
+    bank: [];
+    paymentMethod: [];
+  }
+}
+
 export declare namespace CoreLayout {
 
   export interface SidebarItem {
