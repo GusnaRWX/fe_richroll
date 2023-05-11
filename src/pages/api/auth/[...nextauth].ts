@@ -1,10 +1,10 @@
-import NextAuth from 'next-auth/next';
+import NextAuth, { NextAuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import FacebookProvider from 'next-auth/providers/facebook';
 import { config } from '@config';
 import { post } from '@/utils/services';
 
-export default NextAuth({
+export const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
       clientId: config.GOOGLE_ID as string,
@@ -32,6 +32,15 @@ export default NextAuth({
         }
       }
       return true;
-    }
+    },
+    // async jwt({ token, account, profile }) {
+    //   if (account) {
+    //     token.accessToken = account.access_token;
+    //     token.id = profile?.id;
+    //   }
+    //   return token;
+    // },
   },
-});
+};
+
+export default NextAuth(authOptions);

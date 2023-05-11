@@ -85,7 +85,7 @@ const LoginForm = ({
 
   const handleGoogleLogin = async () => {
     try {
-      await signIn('google');
+      await signIn('google', { callbackUrl: '/dashboard' });
     } catch (err) {
       console.log(err);
     }
@@ -93,7 +93,7 @@ const LoginForm = ({
 
   const handleFacebookLogin = async () => {
     try {
-      await signIn('facebook');
+      await signIn('facebook', { callbackUrl: '/dashboard' });
     } catch (err) {
       console.log(err);
     }
