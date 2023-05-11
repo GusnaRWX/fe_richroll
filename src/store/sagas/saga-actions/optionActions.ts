@@ -14,7 +14,7 @@ export const getAdministrativeSecondLevel = ({ countryId, firstLevelCode }): Pro
 };
 
 export const getAdministrativeThirdLevel = ({ countryId, firstLevelCode, secondLevelCode }): Promise<AxiosResponse<unknown>> => {
-  return get(`/administrative-third?page=1&itemPerPage=1000&country=${countryId}&firstLevelCode=${firstLevelCode}&thirdLevelCode=${secondLevelCode}`);
+  return get(`/administrative-third?page=1&itemPerPage=1000&country=${countryId}&firstLevelCode=${firstLevelCode}&secondLevelCode=${secondLevelCode}`);
 };
 
 export const getBanks = (): Promise<AxiosResponse> => {

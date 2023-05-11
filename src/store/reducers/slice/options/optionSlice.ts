@@ -3,7 +3,7 @@ import { HYDRATE } from 'next-redux-wrapper';
 
 interface OptionState {
   loading: boolean,
-  countries: [],
+  countries: Array<{ label: string; value: string }>,
   administrativeFirst: Array<{ label: string; value: string }>
   administrativeSecond: Array<{ label: string; value: string }>
   administrativeThird: Array<{ label: string; value: string }>,

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from 'react';
 import Document, {
   Html,
@@ -9,8 +10,6 @@ import Document, {
 } from 'next/document';
 import createEmotionCache from '@/utils/createEmotionCache';
 import createEmotionServer from '@emotion/server/create-instance';
-import { AppType } from 'next/app';
-import { MyAppProps } from './_app';
 import theme, { DMSans } from '@/utils/theme';
 
 

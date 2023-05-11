@@ -345,8 +345,6 @@ const EmployeePersonalInformationForm = ({ refProp }: PersonalInformationProps) 
     }
   };
 
-  console.log(values, 'kadiue anjign');
-
   return (
     <form onSubmit={handleSubmit} ref={refProp}>
       <Box

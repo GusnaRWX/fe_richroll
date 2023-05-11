@@ -81,7 +81,7 @@ const Layout = ({
       />
       {
         [200, 201].includes(responser.code) && (
-          <Notify body={responser.message}/>
+          <Notify body={responser.message} />
         )
       }
       <DrawerCore

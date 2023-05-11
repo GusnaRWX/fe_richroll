@@ -26,7 +26,7 @@ export declare namespace Register {
   }
 
   export interface Component {
-    countries: [];
+    countries: Array<{ label: string; value: string }>;
     doRegister: (_payload: Form) => void,
   }
 }
