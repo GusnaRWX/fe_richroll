@@ -395,7 +395,7 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
               </WrapperSSO>
               <Typography color='grey.400' textAlign='center'>
                 Already have an account? &nbsp;
-                <Link href='/auth/login' style={{ textDecoration: 'none' }}>
+                <Link href='/login' style={{ textDecoration: 'none' }}>
                   <Typography
                     component='span'
                     color='primary.main'

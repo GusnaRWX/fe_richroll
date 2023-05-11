@@ -1,12 +1,11 @@
 import React, { useState, useRef } from 'react';
-import { IconButton, Button } from '@/components/_shared/form';
+import { IconButton } from '@/components/_shared/form';
 import { Card, Typography, Button as MuiButton, Tab, Tabs, Box } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import styled from '@emotion/styled';
 import EmployeeInformationForm from './EmployeeInformationForm';
 import EmployeePersonalInformationForm from './EmployeePersonalInformationForm';
 import { useRouter } from 'next/router';
-import { FiEdit } from 'react-icons/fi';
 import ConfirmationModal from '@/components/_shared/common/ConfirmationModal';
 
 import EmergencyContactForm from './EmergencyContactForm';
@@ -118,26 +117,8 @@ function EmployeeCreateComponent() {
           <Typography component='h3' fontWeight='bold'>Add Employee</Typography>
         </BackWrapper>
         <ButtonWrapper>
-          {
-            value !== 1 ? (
-              <>
-                <MuiButton variant='outlined' size='small' onClick={() => handleOpen()}>Cancel</MuiButton>
-                <MuiButton variant='contained' onClick={handleClick} size='small' color='primary'>Save</MuiButton>
-              </>
-            ) : (
-              <Button
-                color='secondary'
-                label='Edit'
-                startIcon={
-                  <FiEdit
-                    size={12}
-                    color='#FFF'
-                  />
-                }
-                size='small'
-              />
-            )
-          }
+          <MuiButton variant='outlined' size='small' onClick={() => handleOpen()}>Cancel</MuiButton>
+          <MuiButton variant='contained' onClick={handleClick} size='small' color='primary'>Save</MuiButton>
         </ButtonWrapper>
       </TopWrapper>
       <ContentWrapper>
