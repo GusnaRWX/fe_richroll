@@ -33,13 +33,23 @@ export const authOptions: NextAuthOptions = {
       }
       return true;
     },
-    // async jwt({ token, account, profile }) {
-    //   if (account) {
-    //     token.accessToken = account.access_token;
-    //     token.id = profile?.id;
-    //   }
-    //   return token;
-    // },
+    async jwt({ token, account, profile }) {
+      if (account) {
+        token.accessToken = account.access_token;
+      } else if (profile?.accessToken) {
+        token.accessToken = profile.accessToken;
+      }
+      return token;
+    },
+    async session({ session, token, user }) {
+      if (session?.user) {
+        session.user = user.id;
+      }
+      return {
+        ...session,
+        accessToken: token.accessToken,
+      };
+    },
   },
 };
 

@@ -40,9 +40,9 @@ const Textarea = ({
         onChange={onChange}
         placeholder={placeholder}
         error={error}
-        aria-label='test'
+        aria-label={customLabel}
         {...props}
-      />;
+      />
     </FormControl>
   );
 

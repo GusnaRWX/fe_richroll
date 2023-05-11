@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
-import { IconButton, Button } from '@/components/_shared/form';
+import React, { useState, useRef } from 'react';
+import { IconButton } from '@/components/_shared/form';
 import { Card, Typography, Button as MuiButton, Tab, Tabs, Box } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import styled from '@emotion/styled';
 import EmployeeInformationForm from './EmployeeInformationForm';
+import EmployeePersonalInformationForm from './EmployeePersonalInformationForm';
 import { useRouter } from 'next/router';
-import { useRef } from 'react';
-import { FiEdit } from 'react-icons/fi';
 
 import EmergencyContactForm from './EmergencyContactForm';
 const TopWrapper = styled.div`
@@ -79,14 +78,17 @@ function EmployeeCreateComponent() {
   const [value, setValue] = useState(0);
   const employeeRef = useRef<HTMLFormElement>(null);
   const emergencyRef = useRef<HTMLFormElement>(null);
+  const personalInformationRef = useRef<HTMLFormElement>(null);
   const router = useRouter();
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
   const handleClick = () => {
-    if (value === 0){
+    if (value === 0) {
       employeeRef.current?.requestSubmit();
-    }else if (value === 2){
+    } else if (value === 1) {
+      personalInformationRef.current?.requestSubmit();
+    } else if (value === 2) {
       emergencyRef.current?.requestSubmit();
     }
 
@@ -105,26 +107,8 @@ function EmployeeCreateComponent() {
           <Typography component='h3' fontWeight='bold'>Add Employee</Typography>
         </BackWrapper>
         <ButtonWrapper>
-          {
-            value !== 1 ? (
-              <>
-                <MuiButton variant='outlined' size='small'>Cancel</MuiButton>
-                <MuiButton variant='contained' onClick={handleClick} size='small' color='primary'>Save</MuiButton>
-              </>
-            ) : (
-              <Button
-                color='secondary'
-                label='Edit'
-                startIcon={
-                  <FiEdit
-                    size={12}
-                    color='#FFF'
-                  />
-                }
-                size='small'
-              />
-            )
-          }
+          <MuiButton variant='outlined' size='small'>Cancel</MuiButton>
+          <MuiButton variant='contained' onClick={handleClick} size='small' color='primary'>Save</MuiButton>
         </ButtonWrapper>
       </TopWrapper>
       <ContentWrapper>
@@ -139,13 +123,13 @@ function EmployeeCreateComponent() {
             </Tabs>
           </Box>
           <TabPanel value={value} index={0}>
-            <EmployeeInformationForm refProp={employeeRef}/>
+            <EmployeeInformationForm refProp={employeeRef} />
           </TabPanel>
           <TabPanel value={value} index={1}>
-            onDevelopment
+            <EmployeePersonalInformationForm refProp={personalInformationRef} />
           </TabPanel>
           <TabPanel value={value} index={2}>
-            <EmergencyContactForm refProp={emergencyRef}/>
+            <EmergencyContactForm refProp={emergencyRef} />
           </TabPanel>
           <TabPanel value={value} index={3}>
             on Development
