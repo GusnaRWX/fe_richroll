@@ -11,7 +11,8 @@ const CustomTextArea = styled(TextareaAutosize)<SharedComponent.ComponentTextare
   borderRadius: '4px',
   '&:focus': {
     outline: `1px solid ${error && theme.palette.error.main}`,
-  }
+  },
+  fontFamily: 'inherit'
 }));
 
 const AsteriskComponent = styled('span')(({ theme }) => ({

@@ -39,6 +39,10 @@ const EmployeePersonalInformationForm = ({ refProp }: PersonalInformationProps) 
     banks
   } = useAppSelectors(state => state.option);
 
+  const {
+    employeeID
+  } = useAppSelectors(state => state.employee);
+
   const [initialValues] = useState({
 
     // Group Personal Information
@@ -151,49 +155,49 @@ const EmployeePersonalInformationForm = ({ refProp }: PersonalInformationProps) 
       temp.useResidentialCitizenAddress = !fieldOfValues.useResidentialCitizenAddress;
 
     // Group Resdential Address
-    if (!values.useResidentialCitizenAddress) {
-      if ('countryResidentialAddress' in fieldOfValues)
-        temp.countryResidentialAddress = fieldOfValues.countryResidentialAddress
-          ? dispatch({
-            type: administrativeFirstLevelRequested.toString(),
-            payload: {
-              countryId: fieldOfValues.countryResidentialAddress
-            }
-          })
-          : 'This field is required';
+    // if (!values.useResidentialCitizenAddress) {
+    if ('countryResidentialAddress' in fieldOfValues)
+      temp.countryResidentialAddress = fieldOfValues.countryResidentialAddress
+        ? dispatch({
+          type: administrativeFirstLevelRequested.toString(),
+          payload: {
+            countryId: fieldOfValues.countryResidentialAddress
+          }
+        })
+        : 'This field is required';
 
-      if ('provinceResidentialAddress' in fieldOfValues)
-        temp.provinceResidentialAddress = fieldOfValues.provinceResidentialAddress
-          ? dispatch({
-            type: administrativeSecondLevelRequested.toString(),
-            payload: {
-              country: values.countryResidentialAddress,
-              firstLevelCode: fieldOfValues.provinceResidentialAddress
-            }
-          })
-          : 'This field is required';
+    if ('provinceResidentialAddress' in fieldOfValues)
+      temp.provinceResidentialAddress = fieldOfValues.provinceResidentialAddress
+        ? dispatch({
+          type: administrativeSecondLevelRequested.toString(),
+          payload: {
+            country: values.countryResidentialAddress,
+            firstLevelCode: fieldOfValues.provinceResidentialAddress
+          }
+        })
+        : 'This field is required';
 
-      if ('cityResidentialAddress' in fieldOfValues)
-        temp.cityResidentialAddress = fieldOfValues.cityResidentialAddress
-          ? dispatch({
-            type: administrativeThirdLevelRequsted.toString(),
-            payload: {
-              countryId: values.countryResidentialAddress,
-              firstLevelCode: values.provinceResidentialAddress,
-              secondLevelCode: fieldOfValues.cityResidentialAddress
-            }
-          })
-          : 'This field is required';
+    if ('cityResidentialAddress' in fieldOfValues)
+      temp.cityResidentialAddress = fieldOfValues.cityResidentialAddress
+        ? dispatch({
+          type: administrativeThirdLevelRequsted.toString(),
+          payload: {
+            countryId: values.countryResidentialAddress,
+            firstLevelCode: values.provinceResidentialAddress,
+            secondLevelCode: fieldOfValues.cityResidentialAddress
+          }
+        })
+        : 'This field is required';
 
-      if ('subDistrictResidentialAddress' in fieldOfValues)
-        temp.subDistrictResidentialAddress = fieldOfValues.subDistrictResidentialAddress ? '' : 'This field is required';
+    if ('subDistrictResidentialAddress' in fieldOfValues)
+      temp.subDistrictResidentialAddress = fieldOfValues.subDistrictResidentialAddress ? '' : 'This field is required';
 
-      if ('addressResidentialAddress' in fieldOfValues)
-        temp.addressResidentialAddress = fieldOfValues.addressResidentialAddress ? '' : 'This field is required';
+    if ('addressResidentialAddress' in fieldOfValues)
+      temp.addressResidentialAddress = fieldOfValues.addressResidentialAddress ? '' : 'This field is required';
 
-      if ('zipCodeResidentialAddress' in fieldOfValues)
-        temp.zipCodeResidentialAddress = fieldOfValues.zipCodeResidentialAddress ? '' : 'This field is required';
-    }
+    if ('zipCodeResidentialAddress' in fieldOfValues)
+      temp.zipCodeResidentialAddress = fieldOfValues.zipCodeResidentialAddress ? '' : 'This field is required';
+    // }
 
     // Group Bank Information
     if ('bankBankInformation' in fieldOfValues)
@@ -280,9 +284,8 @@ const EmployeePersonalInformationForm = ({ refProp }: PersonalInformationProps) 
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // if (validate()) {
     const payload = {
-      employeeID: '4',
+      employeeID: employeeID,
       citizen: {
         countryID: values.countryCitizenAddress,
         firstLevelCode: values.provinceCitizenAddress,
@@ -291,7 +294,7 @@ const EmployeePersonalInformationForm = ({ refProp }: PersonalInformationProps) 
         address: values.addressCitizenAddress,
         zipCode: values.zipCodeCitizenAddress,
         isCitizen: true,
-        isResident: true
+        isResident: values.useResidentialCitizenAddress,
       },
       personal: {
         dateOfBirth: dayjs(values.dateofBirthPersonalInformation).format('YYYY-MM-DD'),
@@ -304,8 +307,8 @@ const EmployeePersonalInformationForm = ({ refProp }: PersonalInformationProps) 
       identity: {
         type: +values.idTypePersonalID,
         number: +values.idNumberPersonalID,
-        // expireAt: dayjs(values.idExpirationDatePersonalID).format('YYYY-MM-DD'),
-        isPermanent: true
+        // expireAt: !values.isPermanentPersonalID && dayjs(values.idExpirationDatePersonalID).format('YYYY-MM-DD'),
+        isPermanent: values.isPermanentPersonalID
       },
       bank: {
         bankID: values.bankBankInformation,
@@ -315,34 +318,22 @@ const EmployeePersonalInformationForm = ({ refProp }: PersonalInformationProps) 
         branchCode: values.branchCodeBankInformation,
         branchName: values.branchNameBankInformation,
         swiftCode: values.swiftCodeBankInformation
+      },
+      residential: {
+        countryID: values.countryResidentialAddress,
+        firstLevelCode: values.provinceResidentialAddress,
+        secondLevelCode: values.cityResidentialAddress,
+        thirdLevelCode: values.subDistrictResidentialAddress,
+        address: values.addressResidentialAddress,
+        zipCode: values.zipCodeResidentialAddress,
+        isCitizen: false,
+        isResident: true
       }
     };
-
-    if (values.useResidentialCitizenAddress) {
-      dispatch({
-        type: postPersonalInformationRequested.toString(),
-        payload: payload
-      });
-      JSON.stringify(payload);
-    } else {
-      const newPayload = Object.assign(payload, {
-        residential: {
-          countryID: values.countryResidentialAddress,
-          firstLevelCode: values.provinceResidentialAddress,
-          secondLevelCode: values.cityResidentialAddress,
-          thirdLevelCode: values.subDistrictResidentialAddress,
-          address: values.addressResidentialAddress,
-          zipCode: values.zipCodeResidentialAddress,
-          isCitizen: true,
-          isResident: true
-        }
-      });
-      dispatch({
-        type: postPersonalInformationRequested.toString(),
-        payload: newPayload
-      });
-      // JSON.stringify(newPayload);
-    }
+    dispatch({
+      type: postPersonalInformationRequested.toString(),
+      payload: payload
+    });
   };
 
   return (
@@ -831,7 +822,7 @@ const EmployeePersonalInformationForm = ({ refProp }: PersonalInformationProps) 
             sm={5.8}
           >
             <Textarea
-              name='addressCitizenAddress'
+              name='addressResidentialAddress'
               maxRows={5}
               minRows={3}
               value={values.addressResidentialAddress}
@@ -849,9 +840,9 @@ const EmployeePersonalInformationForm = ({ refProp }: PersonalInformationProps) 
               withAsterisk
               customLabel='ZIP Code'
               size='small'
-              name='zipCodeCitizenAddress'
+              name='zipCodeResidentialAddress'
               value={values.zipCodeResidentialAddress}
-              onChange={values.zipCodeResidentialAddress}
+              onChange={handleInputChange}
               error={errors.zipCodeResidentialAddress}
             />
           </Grid>
@@ -942,6 +933,25 @@ const EmployeePersonalInformationForm = ({ refProp }: PersonalInformationProps) 
                   width: '100%'
                 }} />
             </LocalizationProvider>
+          </Grid>
+        </Grid>
+        <Grid
+          container
+          wrap='wrap'
+          // justifyContent='c'
+          alignItems='center'
+          mb='16px'
+        >
+          <Grid item sm={5.8}>
+            <FormControlLabel
+              label='Permanent'
+              control={<Checkbox
+                color='primary'
+                name='PersonalIDPersonalID'
+                value={values.isPermanentPersonalID}
+                onChange={(e) => handleInputChange(convertCheckbox('isPermanentPersonalID', e))}
+              />}
+            />
           </Grid>
         </Grid>
       </Box>

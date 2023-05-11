@@ -5,7 +5,7 @@ import { ArrowBack } from '@mui/icons-material';
 import styled from '@emotion/styled';
 import { FiEdit } from 'react-icons/fi';
 import { useRouter } from 'next/router';
-import EmployeePersonalInformation from '../create/EmployeePersonalInformationForm';
+import EmployeePersonalInformationDetail from './EmployeePersonalInformationDetail';
 import EmployeeInformationDetail from './EmployeeInformationDetail';
 import EmergencyContactDetail from './EmergencyContactDetail';
 
@@ -124,7 +124,7 @@ function EmployeeDetailComponent() {
             <EmployeeInformationDetail />
           </TabPanel>
           <TabPanel value={value} index={1}>
-            <EmployeePersonalInformation />
+            <EmployeePersonalInformationDetail />
           </TabPanel>
           <TabPanel value={value} index={2}>
             <EmergencyContactDetail />

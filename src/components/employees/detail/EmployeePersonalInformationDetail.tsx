@@ -2,7 +2,7 @@ import React from 'react';
 import { Text } from '@/components/_shared/common';
 import { Grid } from '@mui/material';
 
-const EmployeePersonalInformation = () => {
+const EmployeePersonalInformationDetail = () => {
   return (
     <>
       <Grid
@@ -612,4 +612,4 @@ const EmployeePersonalInformation = () => {
   );
 };
 
-export default EmployeePersonalInformation;
+export default EmployeePersonalInformationDetail;
