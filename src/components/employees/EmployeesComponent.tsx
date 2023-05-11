@@ -90,12 +90,14 @@ function EmployeesComponent() {
               fullWidth
               variant='outlined'
               size='small'
+              disabled
             ><FaFolderOpen />&nbsp;Import</MuiButton>
             <MuiButton
               fullWidth
               variant='contained'
               color='secondary'
               size='small'
+              disabled
             >
               <Download fontSize='small' sx={{ color: '#FFFFFF' }} />
               <h4 style={{ color: '#FFFFFF', padding: 0, margin: 0 }}>
@@ -121,10 +123,10 @@ function EmployeesComponent() {
             </Tabs>
           </Box>
           <TabPanel value={value} index={0}>
-            <EmployeesTable />
+            <EmployeesTable tabValue={value}/>
           </TabPanel>
           <TabPanel value={value} index={1}>
-            <EmployeesTable />
+            <EmployeesTable tabValue={value}/>
           </TabPanel>
         </Box>
       </ContentWrapper>

@@ -14,7 +14,7 @@ interface TableProps {
   count: number,
   page: number,
   rowsPerPage: number,
-  onChangePage: () => void,
+  onChangePage: any,
   onRowsPerPagesChange?: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>
 }
 
@@ -30,6 +30,7 @@ function Table({
 }: TableProps) {
   const HeadComponent = headChildren;
   const BodyComponent = bodyChildren;
+  console.log(count);
   return (
     <>
       <TableContainer>
