@@ -5,7 +5,7 @@
 #RUN npm run build
 #CMD [ "npm", "run","start" ]
 
-FROM node:16-alpine
+FROM node:18-alpine
 WORKDIR /app
 COPY package*.json ./
 RUN npm install --only=production
