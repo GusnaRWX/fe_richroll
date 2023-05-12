@@ -6,20 +6,14 @@ import {
   Select,
   Box,
   MenuItem,
-  FormControlLabel,
-  Checkbox,
-  FormControl,
-  TextFieldProps,
-  TextField } from '@mui/material';
+  FormControl } from '@mui/material';
 import { Input, Button } from '@/components/_shared/form';
 import { styled as MuiStyled } from '@mui/material/styles';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DatePicker } from '@mui/x-date-pickers';
 import { useForm } from '@/hooks/index';
 import { checkRegulerExpression } from '@/utils/helper';
 import dayjs from 'dayjs';
 import { useAppDispatch } from '@/hooks/index';
+import { useRouter } from 'next/router';
 import { postEmployeeInfoRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
 
 
@@ -43,6 +37,7 @@ interface EmployeeProps {
 }
 
 function CompanyInformationForm ({refProp, bank, paymentMethod} :EmployeeProps) {
+  const router = useRouter();
   const dispatch = useAppDispatch();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [images, setImages] = useState<string | null>(null);
@@ -99,26 +94,6 @@ function CompanyInformationForm ({refProp, bank, paymentMethod} :EmployeeProps) 
 
   console.log(errors);
 
-  const handleChecked = (event) => {
-    const {name, checked} = event.target;
-
-    const obj = {
-      target: {
-        name, value: checked
-      }
-    };
-    return obj;
-  };
-
-  const convertDate = (name, event) => {
-    const obj = {
-      target: {
-        name, value: event.$d
-      }
-    };
-    return obj;
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     if(validate()) {
@@ -163,10 +138,10 @@ function CompanyInformationForm ({refProp, bank, paymentMethod} :EmployeeProps) 
     <>
       <Typography component='h3' fontSize={18} color='primary'>Bank Information</Typography>
       <form ref={refProp} onSubmit={(e) => handleSubmit(e)}>
-        <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
+        <Grid container spacing={2} sx={{ marginTop: '1.5rem', marginBottom: '1.5rem' }}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <FormControl fullWidth>
-              <Typography sx={{ mb: '6px' }}>Company Type<AsteriskComponent>*</AsteriskComponent></Typography>
+              <Typography sx={{ mb: '6px' }}>Bank<AsteriskComponent>*</AsteriskComponent></Typography>
               <Select
                 fullWidth
                 variant='outlined'
@@ -174,7 +149,7 @@ function CompanyInformationForm ({refProp, bank, paymentMethod} :EmployeeProps) 
                 value={values.department}
                 onChange={handleInputChange}
                 name='companyType'
-                placeholder='Select Company Type'
+                placeholder='Select Bank'
               >
                 {bank.map((val, idx) => (
                   <MenuItem key={idx} value={val?.['name']}>{val?.['name']}</MenuItem>
@@ -185,11 +160,70 @@ function CompanyInformationForm ({refProp, bank, paymentMethod} :EmployeeProps) 
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Input
               name='fullName'
-              customLabel='Company Name'
+              customLabel='Bank Account Holder’s Name'
               withAsterisk={true}
               onChange={handleInputChange}
               size='small'
-              placeholder='Input Company Name'
+              placeholder='Input Bank Account Holder’s Name'
+              error={errors.fullName}
+            />
+          </Grid>
+        </Grid>
+        <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
+          <Grid item xs={6} md={6} lg={6} xl={6}>
+            <Input
+              name='fullName'
+              customLabel='Bank Account No'
+              withAsterisk={true}
+              onChange={handleInputChange}
+              size='small'
+              placeholder='Input Bank Account No'
+              error={errors.fullName}
+            />
+          </Grid>
+          <Grid item xs={3} md={3} lg={3} xl={3}>
+            <Input
+              name='fullName'
+              customLabel='Bank Code'
+              withAsterisk={true}
+              onChange={handleInputChange}
+              size='small'
+              placeholder='Input Bank Code'
+              error={errors.fullName}
+            />
+          </Grid>
+          <Grid item xs={3} md={3} lg={3} xl={3}>
+            <Input
+              name='fullName'
+              customLabel='Branch Code'
+              withAsterisk={true}
+              onChange={handleInputChange}
+              size='small'
+              placeholder='Input Branch Code'
+              error={errors.fullName}
+            />
+          </Grid>
+        </Grid>
+        <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
+          <Grid item xs={6} md={6} lg={6} xl={6}>
+            <Input
+              name='fullName'
+              customLabel='Branch Name'
+              withAsterisk={true}
+              onChange={handleInputChange}
+              size='small'
+              placeholder='Input Branch Name'
+              error={errors.fullName}
+            />
+          </Grid>
+          <Grid item xs={6} md={6} lg={6} xl={6}>
+            <Input
+              name='fullName'
+              customLabel='Swift Code'
+              withAsterisk={true}
+              onChange={handleInputChange}
+              size='small'
+              placeholder='Input Swift Code'
               error={errors.fullName}
             />
           </Grid>
@@ -224,90 +258,13 @@ function CompanyInformationForm ({refProp, bank, paymentMethod} :EmployeeProps) 
             </FormControl>
           </Grid>
         </Grid>
-        <Grid container spacing={2}>
+        <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
-            <Typography>Start Date</Typography>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
-                format='DD/MM/YYYY'
-                value={values.startDate}
-                onChange={(e) => handleInputChange(convertDate('startDate', e))}
-                slots={{
-                  textField: (textFieldProps: TextFieldProps) => (
-                    <TextField {...textFieldProps} />
-                  )
-                }}
-                sx={{
-                  '& .MuiOutlinedInput-input': {
-                    padding: '10px 14px',
-                    border: 'none !important'
-                  },
-                  width: '100%'
-                }}/>
-            </LocalizationProvider>
-          </Grid>
-          <Grid item xs={6} md={6} lg={6} xl={6}>
-            <Typography>End Date</Typography>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
-                value={values.endDate}
-                onChange={(e) => handleInputChange(convertDate('endDate', e))}
-                sx={{
-                  '& .MuiOutlinedInput-input': {
-                    padding: '10px 14px',
-                    border: 'none !important'
-                  },
-                  width: '100%'
-                }}/>
-            </LocalizationProvider>
-          </Grid>
-        </Grid>
-        <FormControlLabel
-          sx={{ marginTop: '.5rem', marginBottom: '.5rem' }}
-          label={<Typography fontWeight='bold'>Permanent</Typography>}
-          control={
-            <Checkbox name='isPermanent' checked={values.isPermanent} onChange={(e) => handleInputChange(handleChecked(e))} color='primary' />
-          }
-          labelPlacement='end'
-        />
-        <Grid container spacing={2}>
-          <Grid item xs={6} md={6} lg={6} xl={6}>
-            <FormControl fullWidth>
-              <Typography>Department<AsteriskComponent>*</AsteriskComponent></Typography>
-              <Select
-                fullWidth
-                variant='outlined'
-                size='small'
-                value={values.department}
-                onChange={handleInputChange}
-                name='department'
-              >
-                <MenuItem value='Marketing'>Marketing</MenuItem>
-                <MenuItem value='Management'>Management</MenuItem>
-                <MenuItem value='Finance'>Finance</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid item xs={6} md={6} lg={6} xl={6}>
-            <FormControl fullWidth>
-              <Typography>Position<AsteriskComponent>*</AsteriskComponent></Typography>
-              <Select
-                fullWidth
-                variant='outlined'
-                size='small'
-                value={values.position}
-                onChange={handleInputChange}
-                name='position'
-              >
-                <MenuItem value='Manager'>Manager</MenuItem>
-                <MenuItem value='Assistance'>Assstance</MenuItem>
-                <MenuItem value='Finance'>Finance</MenuItem>
-              </Select>
-            </FormControl>
+            <Typography component='h3' fontSize={18} color='primary'>Payroll information</Typography>
           </Grid>
         </Grid>
         <NextBtnWrapper>
-          <Button fullWidth={false} size='small' label='Cancel' variant='outlined' sx={{ mr: '12px' }} color='primary'/>
+          <Button onClick={() => { router.push('/company');}} fullWidth={false} size='small' label='Cancel' variant='outlined' sx={{ mr: '12px' }} color='primary'/>
           <Button fullWidth={false} size='small' label='Save' color='primary'/>
         </NextBtnWrapper>
       </form>
