@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Grid, Menu, MenuItem, Typography } from '@mui/material';
 import Image from 'next/image';
 import { Image as ImageType } from '@/utils/assetsConstant';
@@ -9,9 +9,9 @@ import { signOut } from 'next-auth/react';
 import { clearStorages } from '@/utils/storage';
 
 const Profile = () => {
-  const router = useRouter()
+  const router = useRouter();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl)
+  const open = Boolean(anchorEl);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -21,11 +21,11 @@ const Profile = () => {
   };
 
   const handleRemoveToken = async () => {
-    clearStorages(['accessToken', 'refreshToken', 'user'])
-    signOut({ callbackUrl: '/login' })
-    setAnchorEl(null)
-    router.push('/login')
-  }
+    clearStorages(['accessToken', 'refreshToken', 'user']);
+    signOut({ callbackUrl: '/login' });
+    setAnchorEl(null);
+    router.push('/login');
+  };
 
   return (
     <Grid
@@ -68,9 +68,9 @@ const Profile = () => {
           icons={
             open ? <ExpandLess /> : <ExpandMore />
           }
-          id="menu-button"
+          id='menu-button'
           aria-controls={open ? 'basic-menu' : undefined}
-          aria-haspopup="true"
+          aria-haspopup='true'
           aria-expanded={open ? 'true' : undefined}
           onClick={handleClick}
         />

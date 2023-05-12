@@ -96,9 +96,12 @@ const modalStyle = {
 //   return obj;
 // };
 
+interface EmployeeInformationProps {
+  nextTab: (_val: number) => void
+}
 
 
-function EmployeeInformationEdit() {
+function EmployeeInformationEdit({ nextTab }: EmployeeInformationProps) {
   const [checked, setChecked] = useState(false);
   const [checkedSelf, setCheckedSelf] = useState(false);
   const [open, setOpen] = useState(false);
@@ -276,7 +279,7 @@ function EmployeeInformationEdit() {
           </Grid>
         </Grid>
         <NextBtnWrapper>
-          <Button fullWidth={false} size='small' label='Next' color='primary'/>
+          <Button fullWidth={false} onClick={() => nextTab(1)} size='small' label='Next' color='primary'/>
         </NextBtnWrapper>
       </form>
       <Modal

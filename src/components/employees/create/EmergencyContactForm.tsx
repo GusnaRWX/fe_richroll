@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Typography, Box, Grid, FormControl, Select, MenuItem} from '@mui/material';
-import { Input } from '@/components/_shared/form';
+import { Input, Button } from '@/components/_shared/form';
 import {styled as MuiStyled} from '@mui/material/styles';
 import { useForm } from '@/hooks/index';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
@@ -12,9 +12,10 @@ const AsteriskComponent = MuiStyled('span')(({ theme }) => ({
 
 interface EmergencyProps {
   refProp: React.Ref<HTMLFormElement>
+  nextPage: (_val: number) => void;
 }
 
-function EmergencyContactForm({refProp} :EmergencyProps) {
+function EmergencyContactForm({refProp, nextPage} :EmergencyProps) {
   const dispatch = useAppDispatch();
   const {employee} = useAppSelectors((state) => state);
   const [initialValues, setInitialValues] = useState({
@@ -232,7 +233,19 @@ function EmergencyContactForm({refProp} :EmergencyProps) {
             </Grid>
           </Grid>
         </Box>
-
+        <Grid
+          container
+          justifyContent='flex-end'
+          alignItems='end'
+          gap={2}
+        >
+          <Grid item>
+            <Button onClick={() => nextPage(1)} label='Back' variant='outlined' />
+          </Grid>
+          <Grid item>
+            <Button onClick={() => nextPage(3)} label='Next' />
+          </Grid>
+        </Grid>
       </form>
     </>
   );

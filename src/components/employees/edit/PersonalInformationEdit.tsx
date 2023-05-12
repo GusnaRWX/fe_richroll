@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Text } from '@/components/_shared/common';
-import { Form, DatePicker, RadioGroup, Input } from '@/components/_shared/form';
+import { Form, DatePicker, RadioGroup, Input, Button } from '@/components/_shared/form';
 import { Box, Checkbox, FormControl, FormControlLabel, Grid, MenuItem, Select } from '@mui/material';
 import { useForm } from '@/hooks/index';
 import { styled } from '@mui/material/styles';
@@ -9,8 +9,11 @@ const AsteriskComponent = styled('span')(({ theme }) => ({
   color: theme.palette.error.main
 }));
 
+interface PersonalInformationProps {
+  nextTab: (_val: number) => void
+}
 
-const PersonalInformationEdit = () => {
+const PersonalInformationEdit = ({nextTab}: PersonalInformationProps) => {
   const [initialValues] = useState({
     genderPersonalInformation: '',
     maritialStatusPersonalInformation: '',
@@ -58,503 +61,518 @@ const PersonalInformationEdit = () => {
   ];
 
   return (
-    <Form>
-      <Box
-        component='div'
-        id='personal-information-field'
-        mb='16px'
-      >
-        <Text
-          variant='text-lg'
-          title='Personal Informaton'
-          fontWeight={700}
-          color='primary.500'
-        />
-        <Grid
-          container
-          wrap='wrap'
-          justifyContent='space-between'
-          alignItems='center'
+    <>
+      <Form>
+        <Box
+          component='div'
+          id='personal-information-field'
           mb='16px'
         >
+          <Text
+            variant='text-lg'
+            title='Personal Informaton'
+            fontWeight={700}
+            color='primary.500'
+          />
           <Grid
-            item
-            sm={5.8}
+            container
+            wrap='wrap'
+            justifyContent='space-between'
+            alignItems='center'
+            mb='16px'
           >
-            <DatePicker
-              customLabel='Date of Birth'
-              withAsterisk
-              name='date'
-            />
+            <Grid
+              item
+              sm={5.8}
+            >
+              <DatePicker
+                customLabel='Date of Birth'
+                withAsterisk
+                name='date'
+              />
+            </Grid>
+            <Grid
+              item
+              sm={5.8}
+            >
+              <RadioGroup
+                withAsterisk
+                label='Gender'
+                name='genderPersonalInformation'
+                options={[
+                  { label: 'Male', value: 'male' },
+                  { label: 'Female', value: 'female' }
+                ]}
+                value={values.genderPersonalInformation}
+                onChange={handleInputChange}
+                row
+              />
+            </Grid>
           </Grid>
           <Grid
-            item
-            sm={5.8}
+            container
+            wrap='wrap'
+            justifyContent='space-between'
+            alignItems='center'
+            mb='16px'
           >
-            <RadioGroup
-              withAsterisk
-              label='Gender'
-              name='genderPersonalInformation'
-              options={[
-                { label: 'Male', value: 'male' },
-                { label: 'Female', value: 'female' }
-              ]}
-              value={values.genderPersonalInformation}
-              onChange={handleInputChange}
-              row
-            />
+            <Grid
+              item
+              sm={5.8}
+            >
+              <FormControl fullWidth>
+                <Text
+                  title='Marital Status'
+                >
+                  <AsteriskComponent>*</AsteriskComponent>
+                </Text>
+                <Select
+                  variant='outlined'
+                  size='small'
+                  name='maritialStatusPersonalInformation'
+                  onChange={handleInputChange}
+                  value={values.maritialStatusPersonalInformation}
+                >
+                  <MenuItem value='single'>Single</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid
+              item
+              sm={5.8}
+            >
+              <FormControl fullWidth>
+                <Text
+                  title='Number of Dependants'
+                >
+                  <AsteriskComponent>*</AsteriskComponent>
+                </Text>
+                <Select
+                  variant='outlined'
+                  size='small'
+                  name='numberOfDependantsPersonalInformation'
+                  onChange={handleInputChange}
+                  value={values.numberOfDependantsPersonalInformation}
+                >
+                  {
+                    employeeItems.map(item => (
+                      <MenuItem key={item.label} value={item.value}>{item.label}</MenuItem>
+                    ))
+                  }
+                </Select>
+              </FormControl>
+            </Grid>
           </Grid>
-        </Grid>
-        <Grid
-          container
-          wrap='wrap'
-          justifyContent='space-between'
-          alignItems='center'
+          <Grid
+            container
+            wrap='wrap'
+            justifyContent='space-between'
+            alignItems='center'
+            mb='16px'
+          >
+            <Grid
+              item
+              sm={5.8}
+            >
+              <FormControl fullWidth>
+                <Text
+                  title='Nationality'
+                >
+                  <AsteriskComponent>*</AsteriskComponent>
+                </Text>
+                <Select
+                  variant='outlined'
+                  size='small'
+                >
+                  <MenuItem value='single'>Indonesian</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid
+              item
+              sm={5.8}
+            >
+              <FormControl fullWidth>
+                <Text
+                  title='Religion'
+                >
+                  <AsteriskComponent>*</AsteriskComponent>
+                </Text>
+                <Select
+                  variant='outlined'
+                  size='small'
+                >
+                  <MenuItem value='single'>Islamic</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+          </Grid>
+        </Box>
+        <Box
+          component='div'
+          id='citizen-address'
           mb='16px'
         >
+          <Text
+            variant='text-base'
+            title='Citizen Address'
+            color='primary.500'
+            fontWeight={700}
+          />
           <Grid
-            item
-            sm={5.8}
+            container
+            wrap='wrap'
+            justifyContent='space-between'
+            alignItems='center'
+            mb='16px'
           >
-            <FormControl fullWidth>
-              <Text
-                title='Marital Status'
-              >
-                <AsteriskComponent>*</AsteriskComponent>
-              </Text>
-              <Select
-                variant='outlined'
-                size='small'
-                name='maritialStatusPersonalInformation'
-                onChange={handleInputChange}
-                value={values.maritialStatusPersonalInformation}
-              >
-                <MenuItem value='single'>Single</MenuItem>
-              </Select>
-            </FormControl>
+            <Grid
+              item
+              sm={5.8}
+            >
+              <FormControl fullWidth>
+                <Text
+                  title='Country'
+                >
+                  <AsteriskComponent>*</AsteriskComponent>
+                </Text>
+                <Select
+                  variant='outlined'
+                  size='small'
+                >
+                  <MenuItem value='single'>Single</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid
+              item
+              sm={5.8}
+            >
+              <FormControl fullWidth>
+                <Text
+                  title='Province'
+                >
+                  <AsteriskComponent>*</AsteriskComponent>
+                </Text>
+                <Select
+                  variant='outlined'
+                  size='small'
+                >
+                  <MenuItem value='single'>Single</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
           </Grid>
           <Grid
-            item
-            sm={5.8}
+            container
+            wrap='wrap'
+            justifyContent='space-between'
+            alignItems='center'
+            mb='16px'
           >
-            <FormControl fullWidth>
-              <Text
-                title='Number of Dependants'
-              >
-                <AsteriskComponent>*</AsteriskComponent>
-              </Text>
-              <Select
-                variant='outlined'
+            <Grid
+              item
+              sm={5.8}
+            >
+              <FormControl fullWidth>
+                <Text
+                  title='City'
+                >
+                  <AsteriskComponent>*</AsteriskComponent>
+                </Text>
+                <Select
+                  variant='outlined'
+                  size='small'
+                >
+                  <MenuItem value='single'>Single</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid
+              item
+              sm={5.8}
+            >
+              <FormControl fullWidth>
+                <Text
+                  title='Sub-District'
+                >
+                  <AsteriskComponent>*</AsteriskComponent>
+                </Text>
+                <Select
+                  variant='outlined'
+                  size='small'
+                >
+                  <MenuItem value='single'>Single</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+          </Grid>
+          <Grid
+            container
+            wrap='wrap'
+            justifyContent='space-between'
+            alignItems='center'
+            mb='16px'
+          >
+            <Grid
+              item
+              sm={5.8}
+            >
+              <Input
+                withAsterisk
+                customLabel='Citizen ID  Street Name, Building Name'
+              />
+            </Grid>
+            <Grid
+              item
+              sm={5.8}
+            >
+              <Input
+                withAsterisk
+                customLabel='ZIP Code'
                 size='small'
-                name='numberOfDependantsPersonalInformation'
-                onChange={handleInputChange}
-                value={values.numberOfDependantsPersonalInformation}
-              >
-                {
-                  employeeItems.map(item => (
-                    <MenuItem key={item.label} value={item.value}>{item.label}</MenuItem>
-                  ))
+              />
+            </Grid>
+          </Grid>
+          <Grid
+            container
+            wrap='wrap'
+            justifyContent='space-between'
+            alignItems='center'
+            mb='16px'
+          >
+            <Grid
+              item
+              sm={5.8}
+            >
+              <FormControlLabel
+                label='Use as residential address'
+                control={
+                  <Checkbox color='primary' />
                 }
-              </Select>
-            </FormControl>
+              />
+            </Grid>
           </Grid>
-        </Grid>
-        <Grid
-          container
-          wrap='wrap'
-          justifyContent='space-between'
-          alignItems='center'
+        </Box>
+        <Box
+          component='div'
+          id='residential-address'
           mb='16px'
         >
+          <Text
+            variant='text-base'
+            title='Residential Address'
+            color='primary.500'
+            fontWeight={700}
+          />
           <Grid
-            item
-            sm={5.8}
+            container
+            wrap='wrap'
+            justifyContent='space-between'
+            alignItems='center'
+            mb='16px'
           >
-            <FormControl fullWidth>
-              <Text
-                title='Nationality'
-              >
-                <AsteriskComponent>*</AsteriskComponent>
-              </Text>
-              <Select
-                variant='outlined'
-                size='small'
-              >
-                <MenuItem value='single'>Indonesian</MenuItem>
-              </Select>
-            </FormControl>
+            <Grid
+              item
+              sm={5.8}
+            >
+              <FormControl fullWidth>
+                <Text
+                  title='Country'
+                >
+                  <AsteriskComponent>*</AsteriskComponent>
+                </Text>
+                <Select
+                  variant='outlined'
+                  size='small'
+                >
+                  <MenuItem value='single'>Single</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid
+              item
+              sm={5.8}
+            >
+              <FormControl fullWidth>
+                <Text
+                  title='Province'
+                >
+                  <AsteriskComponent>*</AsteriskComponent>
+                </Text>
+                <Select
+                  variant='outlined'
+                  size='small'
+                >
+                  <MenuItem value='single'>Single</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
           </Grid>
           <Grid
-            item
-            sm={5.8}
+            container
+            wrap='wrap'
+            justifyContent='space-between'
+            alignItems='center'
+            mb='16px'
           >
-            <FormControl fullWidth>
-              <Text
-                title='Religion'
-              >
-                <AsteriskComponent>*</AsteriskComponent>
-              </Text>
-              <Select
-                variant='outlined'
-                size='small'
-              >
-                <MenuItem value='single'>Islamic</MenuItem>
-              </Select>
-            </FormControl>
+            <Grid
+              item
+              sm={5.8}
+            >
+              <FormControl fullWidth>
+                <Text
+                  title='City'
+                >
+                  <AsteriskComponent>*</AsteriskComponent>
+                </Text>
+                <Select
+                  variant='outlined'
+                  size='small'
+                >
+                  <MenuItem value='single'>Single</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid
+              item
+              sm={5.8}
+            >
+              <FormControl fullWidth>
+                <Text
+                  title='Sub-District'
+                >
+                  <AsteriskComponent>*</AsteriskComponent>
+                </Text>
+                <Select
+                  variant='outlined'
+                  size='small'
+                >
+                  <MenuItem value='single'>Single</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
           </Grid>
-        </Grid>
-      </Box>
-      <Box
-        component='div'
-        id='citizen-address'
-        mb='16px'
+          <Grid
+            container
+            wrap='wrap'
+            justifyContent='space-between'
+            alignItems='center'
+            mb='16px'
+          >
+            <Grid
+              item
+              sm={5.8}
+            >
+              <Input
+                withAsterisk
+                customLabel='Citizen ID  Street Name, Building Name'
+              />
+            </Grid>
+            <Grid
+              item
+              sm={5.8}
+            >
+              <Input
+                withAsterisk
+                customLabel='ZIP Code'
+                size='small'
+              />
+            </Grid>
+          </Grid>
+        </Box>
+        <Box
+          component='div'
+          id='personal-id'
+          mb='16px'
+        >
+          <Text
+            variant='text-lg'
+            title='Personal ID'
+            fontWeight={700}
+            color='primary.500'
+          />
+          <Grid
+            container
+            wrap='wrap'
+            justifyContent='space-between'
+            alignItems='center'
+            mb='16px'
+          >
+            <Grid
+              item
+              sm={5.8}
+            >
+              <FormControl fullWidth>
+                <Text
+                  title='ID Type'
+                >
+                  <AsteriskComponent>*</AsteriskComponent>
+                </Text>
+                <Select
+                  variant='outlined'
+                  size='small'
+                >
+                  <MenuItem value='ktp'>KTP</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid
+              item
+              sm={5.8}
+            >
+              <Input
+                withAsterisk
+                customLabel='ID Number'
+                size='small'
+              />
+            </Grid>
+          </Grid>
+          <Grid
+            container
+            wrap='wrap'
+            justifyContent='space-between'
+            alignItems='center'
+            mb='16px'
+          >
+            <Grid
+              item
+              sm={5.8}
+            >
+              <DatePicker
+                customLabel='Date of Birth'
+                withAsterisk
+                name='date'
+              />
+            </Grid>
+          </Grid>
+        </Box>
+        <Box
+          component='div'
+          id='Bank Information'
+        >
+          <Text
+            variant='text-lg'
+            title='Bank Information'
+            fontWeight={700}
+            color='primary.500'
+          />
+        </Box>
+      </Form>
+      <Grid
+        container
+        justifyContent='flex-end'
+        alignItems='end'
+        gap={2}
       >
-        <Text
-          variant='text-base'
-          title='Citizen Address'
-          color='primary.500'
-          fontWeight={700}
-        />
-        <Grid
-          container
-          wrap='wrap'
-          justifyContent='space-between'
-          alignItems='center'
-          mb='16px'
-        >
-          <Grid
-            item
-            sm={5.8}
-          >
-            <FormControl fullWidth>
-              <Text
-                title='Country'
-              >
-                <AsteriskComponent>*</AsteriskComponent>
-              </Text>
-              <Select
-                variant='outlined'
-                size='small'
-              >
-                <MenuItem value='single'>Single</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid
-            item
-            sm={5.8}
-          >
-            <FormControl fullWidth>
-              <Text
-                title='Province'
-              >
-                <AsteriskComponent>*</AsteriskComponent>
-              </Text>
-              <Select
-                variant='outlined'
-                size='small'
-              >
-                <MenuItem value='single'>Single</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
+        <Grid item>
+          <Button onClick={() => nextTab(0)} label='Back' variant='outlined' />
         </Grid>
-        <Grid
-          container
-          wrap='wrap'
-          justifyContent='space-between'
-          alignItems='center'
-          mb='16px'
-        >
-          <Grid
-            item
-            sm={5.8}
-          >
-            <FormControl fullWidth>
-              <Text
-                title='City'
-              >
-                <AsteriskComponent>*</AsteriskComponent>
-              </Text>
-              <Select
-                variant='outlined'
-                size='small'
-              >
-                <MenuItem value='single'>Single</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid
-            item
-            sm={5.8}
-          >
-            <FormControl fullWidth>
-              <Text
-                title='Sub-District'
-              >
-                <AsteriskComponent>*</AsteriskComponent>
-              </Text>
-              <Select
-                variant='outlined'
-                size='small'
-              >
-                <MenuItem value='single'>Single</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
+        <Grid item>
+          <Button onClick={() => nextTab(2)} label='Next' />
         </Grid>
-        <Grid
-          container
-          wrap='wrap'
-          justifyContent='space-between'
-          alignItems='center'
-          mb='16px'
-        >
-          <Grid
-            item
-            sm={5.8}
-          >
-            <Input
-              withAsterisk
-              customLabel='Citizen ID  Street Name, Building Name'
-            />
-          </Grid>
-          <Grid
-            item
-            sm={5.8}
-          >
-            <Input
-              withAsterisk
-              customLabel='ZIP Code'
-              size='small'
-            />
-          </Grid>
-        </Grid>
-        <Grid
-          container
-          wrap='wrap'
-          justifyContent='space-between'
-          alignItems='center'
-          mb='16px'
-        >
-          <Grid
-            item
-            sm={5.8}
-          >
-            <FormControlLabel
-              label='Use as residential address'
-              control={
-                <Checkbox color='primary' />
-              }
-            />
-          </Grid>
-        </Grid>
-      </Box>
-      <Box
-        component='div'
-        id='residential-address'
-        mb='16px'
-      >
-        <Text
-          variant='text-base'
-          title='Residential Address'
-          color='primary.500'
-          fontWeight={700}
-        />
-        <Grid
-          container
-          wrap='wrap'
-          justifyContent='space-between'
-          alignItems='center'
-          mb='16px'
-        >
-          <Grid
-            item
-            sm={5.8}
-          >
-            <FormControl fullWidth>
-              <Text
-                title='Country'
-              >
-                <AsteriskComponent>*</AsteriskComponent>
-              </Text>
-              <Select
-                variant='outlined'
-                size='small'
-              >
-                <MenuItem value='single'>Single</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid
-            item
-            sm={5.8}
-          >
-            <FormControl fullWidth>
-              <Text
-                title='Province'
-              >
-                <AsteriskComponent>*</AsteriskComponent>
-              </Text>
-              <Select
-                variant='outlined'
-                size='small'
-              >
-                <MenuItem value='single'>Single</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-        </Grid>
-        <Grid
-          container
-          wrap='wrap'
-          justifyContent='space-between'
-          alignItems='center'
-          mb='16px'
-        >
-          <Grid
-            item
-            sm={5.8}
-          >
-            <FormControl fullWidth>
-              <Text
-                title='City'
-              >
-                <AsteriskComponent>*</AsteriskComponent>
-              </Text>
-              <Select
-                variant='outlined'
-                size='small'
-              >
-                <MenuItem value='single'>Single</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid
-            item
-            sm={5.8}
-          >
-            <FormControl fullWidth>
-              <Text
-                title='Sub-District'
-              >
-                <AsteriskComponent>*</AsteriskComponent>
-              </Text>
-              <Select
-                variant='outlined'
-                size='small'
-              >
-                <MenuItem value='single'>Single</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-        </Grid>
-        <Grid
-          container
-          wrap='wrap'
-          justifyContent='space-between'
-          alignItems='center'
-          mb='16px'
-        >
-          <Grid
-            item
-            sm={5.8}
-          >
-            <Input
-              withAsterisk
-              customLabel='Citizen ID  Street Name, Building Name'
-            />
-          </Grid>
-          <Grid
-            item
-            sm={5.8}
-          >
-            <Input
-              withAsterisk
-              customLabel='ZIP Code'
-              size='small'
-            />
-          </Grid>
-        </Grid>
-      </Box>
-      <Box
-        component='div'
-        id='personal-id'
-        mb='16px'
-      >
-        <Text
-          variant='text-lg'
-          title='Personal ID'
-          fontWeight={700}
-          color='primary.500'
-        />
-        <Grid
-          container
-          wrap='wrap'
-          justifyContent='space-between'
-          alignItems='center'
-          mb='16px'
-        >
-          <Grid
-            item
-            sm={5.8}
-          >
-            <FormControl fullWidth>
-              <Text
-                title='ID Type'
-              >
-                <AsteriskComponent>*</AsteriskComponent>
-              </Text>
-              <Select
-                variant='outlined'
-                size='small'
-              >
-                <MenuItem value='ktp'>KTP</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid
-            item
-            sm={5.8}
-          >
-            <Input
-              withAsterisk
-              customLabel='ID Number'
-              size='small'
-            />
-          </Grid>
-        </Grid>
-        <Grid
-          container
-          wrap='wrap'
-          justifyContent='space-between'
-          alignItems='center'
-          mb='16px'
-        >
-          <Grid
-            item
-            sm={5.8}
-          >
-            <DatePicker
-              customLabel='Date of Birth'
-              withAsterisk
-              name='date'
-            />
-          </Grid>
-        </Grid>
-      </Box>
-      <Box
-        component='div'
-        id='Bank Information'
-      >
-        <Text
-          variant='text-lg'
-          title='Bank Information'
-          fontWeight={700}
-          color='primary.500'
-        />
-      </Box>
-    </Form>
+      </Grid>
+    </>
   );
 };
 
