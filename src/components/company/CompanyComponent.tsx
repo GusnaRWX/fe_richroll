@@ -19,6 +19,7 @@ import { IconButton } from '@/components/_shared/form';
 import { BsBellFill } from 'react-icons/bs';
 import LocalizationMenu from '@/components/_shared/_core/localization/Index';
 import Profile from '@/components/_shared/_core/appbar/Profile';
+import { setStorages } from '@/utils/storage';
 
 
 const WrapperAuth = styled(Box)<BoxProps>(({ theme }) => ({
@@ -134,6 +135,12 @@ const CardAdd = () => {
 
 const CompanyComponent = ({ companies }: Company.Component) => {
   const router = useRouter();
+  const handleClick = (val, path) => {
+    setStorages([
+      {name: 'companyID', value: val.id}
+    ]);
+    router.push(path);
+  };
   return (
     <>
       <Navbar />
@@ -157,7 +164,7 @@ const CompanyComponent = ({ companies }: Company.Component) => {
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: '12px', mt: '16px', height: '221px' }}>
               {companies.map((val, idx) => (
                 // <WrapperCardItem key={idx} onClick={() => { router.push(`/company/${val?.['id']}`);}}>
-                <WrapperCardItem key={idx} onClick={() => { router.push(`/dashboard`);}}>
+                <WrapperCardItem key={idx} onClick={() => { handleClick(val, '/dashboard');}}>
                   <Image
                     src={ImageType.PLACEHOLDER_COMPANY}
                     width={178}
