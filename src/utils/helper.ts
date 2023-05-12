@@ -1,10 +1,11 @@
 /**
- * Write our own expression 
- * 
- * @param expression 
- * @param value 
- * @returns 
+ * Write our own expression
+ *
+ * @param expression
+ * @param value
+ * @returns
  */
+import { getStorage } from './storage';
 
 export const checkRegulerExpression = (expression: string | RegExp, value: string | number): boolean => {
   const regex = new RegExp(expression);
@@ -13,10 +14,10 @@ export const checkRegulerExpression = (expression: string | RegExp, value: strin
 };
 
 /**
- * Read File 
- * 
- * @param file 
- * @returns 
+ * Read File
+ *
+ * @param file
+ * @returns
  */
 export const readFile = (file: File): Promise<string> => new Promise((resolve, reject) => {
   const reader = new FileReader();
@@ -34,4 +35,13 @@ export const readFile = (file: File): Promise<string> => new Promise((resolve, r
  */
 export const getFileExtension = (filename: string): string => {
   return filename.substring(filename.lastIndexOf('.') + 1).toLowerCase();
+};
+
+export const getCompanyID = () => {
+  if (typeof window !== 'undefined') {
+    const id = getStorage('companyID');
+
+    return id;
+  }
+  return null;
 };
