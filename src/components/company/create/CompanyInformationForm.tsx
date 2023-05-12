@@ -21,6 +21,7 @@ import { useForm } from '@/hooks/index';
 import { checkRegulerExpression } from '@/utils/helper';
 import dayjs from 'dayjs';
 import { useAppDispatch } from '@/hooks/index';
+import { useRouter } from 'next/router';
 import { postEmployeeInfoRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
 
 
@@ -93,6 +94,7 @@ interface EmployeeProps {
 }
 
 function CompanyInformationForm ({refProp, companyType, companySector} :EmployeeProps) {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const dispatch = useAppDispatch();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -315,7 +317,7 @@ function CompanyInformationForm ({refProp, companyType, companySector} :Employee
                   <MenuItem value='+44'>+44</MenuItem>
                 </Select>
               </Grid>
-              <Grid item xs={9} sm={9} md={9} lg={9} xl={10} alignSelf='flex-end'>
+              <Grid item xs={9} sm={9} md={9} lg={9} xl={9} alignSelf='flex-end'>
                 <Input
                   name='phoneNumber'
                   type='number'
@@ -329,13 +331,85 @@ function CompanyInformationForm ({refProp, companyType, companySector} :Employee
             </Grid>
           </Grid>
         </Grid>
-        <Grid container spacing={2}>
+        <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Typography component='h3' fontSize={18} color='primary'>Company Address</Typography>
           </Grid>
         </Grid>
+        <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
+          <Grid item xs={6} md={6} lg={6} xl={6}>
+            <Input
+              name='fullName'
+              customLabel='Country'
+              withAsterisk={true}
+              onChange={handleInputChange}
+              size='small'
+              placeholder='Input Country'
+              error={errors.fullName}
+            />
+          </Grid>
+          <Grid item xs={6} md={6} lg={6} xl={6}>
+            <Input
+              name='fullName'
+              customLabel='Province'
+              withAsterisk={true}
+              onChange={handleInputChange}
+              size='small'
+              placeholder='Input Province'
+              error={errors.fullName}
+            />
+          </Grid>
+        </Grid>
+        <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
+          <Grid item xs={6} md={6} lg={6} xl={6}>
+            <Input
+              name='fullName'
+              customLabel='City'
+              withAsterisk={true}
+              onChange={handleInputChange}
+              size='small'
+              placeholder='Input City'
+              error={errors.fullName}
+            />
+          </Grid>
+          <Grid item xs={6} md={6} lg={6} xl={6}>
+            <Input
+              name='fullName'
+              customLabel='Sub-District'
+              withAsterisk={true}
+              onChange={handleInputChange}
+              size='small'
+              placeholder='Input Sub-District'
+              error={errors.fullName}
+            />
+          </Grid>
+        </Grid>
+        <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
+          <Grid item xs={6} md={6} lg={6} xl={6}>
+            <Input
+              name='fullName'
+              customLabel='Street Name, Building Name'
+              withAsterisk={true}
+              onChange={handleInputChange}
+              size='small'
+              placeholder='Input Street Name, Building Name'
+              error={errors.fullName}
+            />
+          </Grid>
+          <Grid item xs={6} md={6} lg={6} xl={6}>
+            <Input
+              name='fullName'
+              customLabel='ZIP Code'
+              withAsterisk={true}
+              onChange={handleInputChange}
+              size='small'
+              placeholder='Input ZIP Code'
+              error={errors.fullName}
+            />
+          </Grid>
+        </Grid>
         <NextBtnWrapper>
-          <Button fullWidth={false} size='small' label='Cancel' variant='outlined' sx={{ mr: '12px' }} color='primary'/>
+          <Button onClick={() => { router.push('/company');}} fullWidth={false} size='small' label='Cancel' variant='outlined' sx={{ mr: '12px' }} color='primary'/>
           <Button fullWidth={false} size='small' label='Next' color='primary'/>
         </NextBtnWrapper>
       </form>

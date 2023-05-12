@@ -37,7 +37,7 @@ function* fetchAuthenticationLogin(action: AnyAction) {
         type: meSuccessed.toString(),
         payload: { ...profile?.data?.data as Auth.Me }
       });
-      yield Router.push('/dashboard');
+      yield Router.push('/company');
       yield delay(1000);
     }
   } catch (err) {
