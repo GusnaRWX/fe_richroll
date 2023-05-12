@@ -4,11 +4,12 @@ import Image from 'next/image';
 import { Image as ImageType } from '@/utils/assetsConstant';
 import { IconButton } from '@/components/_shared/form';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
-
+import { useRouter } from 'next/router';
 import { signOut } from 'next-auth/react';
 import { clearStorages } from '@/utils/storage';
 
 const Profile = () => {
+  const router = useRouter()
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl)
 
@@ -23,6 +24,7 @@ const Profile = () => {
     clearStorages(['accessToken', 'refreshToken', 'user'])
     signOut({ callbackUrl: '/login' })
     setAnchorEl(null)
+    router.push('/login')
   }
 
   return (

@@ -156,7 +156,8 @@ const CompanyComponent = ({ companies }: Company.Component) => {
             </Typography>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: '12px', mt: '16px', height: '221px' }}>
               {companies.map((val, idx) => (
-                <WrapperCardItem key={idx} onClick={() => { router.push(`/company/${val?.['id']}`);}}>
+                // <WrapperCardItem key={idx} onClick={() => { router.push(`/company/${val?.['id']}`);}}>
+                <WrapperCardItem key={idx} onClick={() => { router.push(`/dashboard`);}}>
                   <Image
                     src={ImageType.PLACEHOLDER_COMPANY}
                     width={178}
