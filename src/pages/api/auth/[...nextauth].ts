@@ -63,7 +63,6 @@ export const authOptions: NextAuthOptions = {
     //   console.log(token, 'token dari mana ini');
     //   console.log(account, 'account');
     //   console.log(profile, 'profile');
-    //   console.log(user, 'user anjing');
     //   // return { ...token, ...user };
     // },
     // async session({ session, token, user }) {

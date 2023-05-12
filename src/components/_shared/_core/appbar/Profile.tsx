@@ -1,26 +1,31 @@
-import React from 'react';
-import {Grid, Menu, MenuItem, Typography} from '@mui/material';
+import React, { useState } from 'react';
+import { Grid, Menu, MenuItem, Typography } from '@mui/material';
 import Image from 'next/image';
 import { Image as ImageType } from '@/utils/assetsConstant';
 import { IconButton } from '@/components/_shared/form';
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import {useRouter} from 'next/router';
+import { ExpandLess, ExpandMore } from '@mui/icons-material';
+import { useRouter } from 'next/router';
+import { signOut } from 'next-auth/react';
+import { clearStorages } from '@/utils/storage';
 
 const Profile = () => {
-  const router = useRouter();
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+  const router = useRouter()
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl)
 
-  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElUser(event.currentTarget);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
   };
 
-  const handleCloseUserMenu = () => {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    localStorage.removeItem('user');
-    router.push('/login');
-    setAnchorElUser(null);
-  };
+  const handleRemoveToken = async () => {
+    clearStorages(['accessToken', 'refreshToken', 'user'])
+    signOut({ callbackUrl: '/login' })
+    setAnchorEl(null)
+    router.push('/login')
+  }
 
   return (
     <Grid
@@ -59,28 +64,28 @@ const Profile = () => {
         </Grid>
       </Grid>
       <Grid item>
-        <IconButton icons={<ExpandLess />} onClick={handleOpenUserMenu} />
-        <Menu
-          sx={{ mt: '45px' }}
-          id='menu-appbar'
-          anchorEl={anchorElUser}
-          anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-          }}
-          keepMounted
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-          }}
-          open={Boolean(anchorElUser)}
-          onClose={handleCloseUserMenu}
-        >
-          <MenuItem onClick={handleCloseUserMenu}>
-            <Typography textAlign='center'>logout</Typography>
-          </MenuItem>
-        </Menu>
+        <IconButton
+          icons={
+            open ? <ExpandLess /> : <ExpandMore />
+          }
+          id="menu-button"
+          aria-controls={open ? 'basic-menu' : undefined}
+          aria-haspopup="true"
+          aria-expanded={open ? 'true' : undefined}
+          onClick={handleClick}
+        />
       </Grid>
+      <Menu
+        id='menu-basic'
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          'aria-labelledby': 'menu-button',
+        }}
+      >
+        <MenuItem onClick={handleRemoveToken}>Log out</MenuItem>
+      </Menu>
     </Grid>
   );
 };
