@@ -105,9 +105,10 @@ const modalStyle = {
 
 interface EmployeeProps {
   refProp: React.Ref<HTMLFormElement>;
+  nextPage: (_val: number) => void;
 }
 
-function EmployeeInformationForm ({refProp} :EmployeeProps) {
+function EmployeeInformationForm ({refProp, nextPage} :EmployeeProps) {
   const [open, setOpen] = useState(false);
   const dispatch = useAppDispatch();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -423,7 +424,7 @@ function EmployeeInformationForm ({refProp} :EmployeeProps) {
           </Grid>
         </Grid>
         <NextBtnWrapper>
-          <Button fullWidth={false} size='small' label='Next' color='primary'/>
+          <Button fullWidth={false} size='small' label='Next' color='primary' onClick={() => nextPage(1)}/>
         </NextBtnWrapper>
       </form>
       <Modal

@@ -121,13 +121,13 @@ function EmployeeDetailComponent() {
             </Tabs>
           </Box>
           <TabPanel value={value} index={0}>
-            <EmployeeInformationDetail />
+            <EmployeeInformationDetail/>
           </TabPanel>
           <TabPanel value={value} index={1}>
-            <EmployeePersonalInformationDetail />
+            <EmployeePersonalInformationDetail/>
           </TabPanel>
           <TabPanel value={value} index={2}>
-            <EmergencyContactDetail />
+            <EmergencyContactDetail/>
           </TabPanel>
           <TabPanel value={value} index={3}>
             on Development

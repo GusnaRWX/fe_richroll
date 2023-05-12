@@ -90,6 +90,9 @@ function EmployeeEditComponent() {
   const handleClose = () => {
     setLeave(false);
   };
+  const handleNext = (val) => {
+    setValue(val);
+  };
   return (
     <>
       <TopWrapper>
@@ -138,13 +141,13 @@ function EmployeeEditComponent() {
             </Tabs>
           </Box>
           <TabPanel value={value} index={0}>
-            <EmployeeInformationEdit />
+            <EmployeeInformationEdit nextTab={handleNext}/>
           </TabPanel>
           <TabPanel value={value} index={1}>
-            <PersonalInformationEdit />
+            <PersonalInformationEdit nextTab={handleNext}/>
           </TabPanel>
           <TabPanel value={value} index={2}>
-            <EmergencyContactEdit />
+            <EmergencyContactEdit nextTab={handleNext}/>
           </TabPanel>
           <TabPanel value={value} index={3}>
             on Development

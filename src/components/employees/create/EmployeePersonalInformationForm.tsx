@@ -25,10 +25,11 @@ const AsteriskComponent = styled('span')(({ theme }) => ({
 
 interface PersonalInformationProps {
   refProp: React.Ref<HTMLFormElement>
+  nextPage: (_val: number) => void;
 }
 
 
-const EmployeePersonalInformationForm = ({ refProp }: PersonalInformationProps) => {
+const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformationProps) => {
   const dispatch = useAppDispatch();
 
   const {
@@ -62,7 +63,7 @@ const EmployeePersonalInformationForm = ({ refProp }: PersonalInformationProps) 
     zipCodeCitizenAddress: '',
     useResidentialCitizenAddress: false,
 
-    // Group Residential Address 
+    // Group Residential Address
     countryResidentialAddress: '',
     provinceResidentialAddress: '',
     cityResidentialAddress: '',
@@ -80,7 +81,7 @@ const EmployeePersonalInformationForm = ({ refProp }: PersonalInformationProps) 
     branchNameBankInformation: '',
     swiftCodeBankInformation: '',
 
-    // Group Personal ID 
+    // Group Personal ID
     idTypePersonalID: '',
     idNumberPersonalID: '',
     idExpirationDatePersonalID: dayjs(Date.now()),
@@ -222,7 +223,7 @@ const EmployeePersonalInformationForm = ({ refProp }: PersonalInformationProps) 
       temp.swiftCodeBankInformation = fieldOfValues.swiftCodeBankInformation;
 
 
-    // Group Personal ID 
+    // Group Personal ID
     if ('idTypePersonalID' in fieldOfValues)
       temp.idTypePersonalID = fieldOfValues.idTypePersonalID ? '' : 'This field is required';
 
@@ -1091,10 +1092,10 @@ const EmployeePersonalInformationForm = ({ refProp }: PersonalInformationProps) 
         gap={2}
       >
         <Grid item>
-          <Button label='Back' variant='outlined' />
+          <Button onClick={() => nextPage(0)} label='Back' variant='outlined' />
         </Grid>
         <Grid item>
-          <Button label='Next' />
+          <Button onClick={() => nextPage(2)} label='Next' />
         </Grid>
       </Grid>
     </form>
