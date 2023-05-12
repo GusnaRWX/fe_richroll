@@ -168,7 +168,7 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
 
   const handleGoogleLogin = async () => {
     try {
-      await signIn('google', { callbackUrl: '/dashboard' });
+      await signIn('google', { callbackUrl: '/company' });
     } catch (err) {
       console.log(err);
     }
@@ -176,7 +176,7 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
 
   const handleFacebookLogin = async () => {
     try {
-      await signIn('facebook', { callbackUrl: '/dashboard' });
+      await signIn('facebook', { callbackUrl: '/company' });
     } catch (err) {
       console.log(err);
     }
