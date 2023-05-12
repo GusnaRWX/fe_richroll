@@ -1,13 +1,17 @@
 import React from 'react';
 import { Typography, Box, Grid, FormControl, Select, MenuItem } from '@mui/material';
-import { Input } from '@/components/_shared/form';
+import { Input, Button } from '@/components/_shared/form';
 import {styled as MuiStyled} from '@mui/material/styles';
 
 const AsteriskComponent = MuiStyled('span')(({ theme }) => ({
   color: theme.palette.error.main
 }));
 
-function EmergencyContactEdit() {
+interface EmergencyContactProps {
+  nextTab: (_val: number) => void
+}
+
+function EmergencyContactEdit({nextTab}: EmergencyContactProps) {
   return (
     <>
       <Box sx={{ marginBottom: '3rem' }}>
@@ -139,8 +143,20 @@ function EmergencyContactEdit() {
             </Grid>
           </Grid>
         </Box>
-
       </form>
+      <Grid
+        container
+        justifyContent='flex-end'
+        alignItems='end'
+        gap={2}
+      >
+        <Grid item>
+          <Button onClick={() => nextTab(2)} label='Back' variant='outlined' />
+        </Grid>
+        <Grid item>
+          <Button onClick={() => nextTab(3)} label='Next' />
+        </Grid>
+      </Grid>
     </>
   );
 }

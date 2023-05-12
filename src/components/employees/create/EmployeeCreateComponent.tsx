@@ -103,6 +103,10 @@ function EmployeeCreateComponent() {
   const handleClose = () => {
     setLeave(false);
   };
+
+  const handleNext = (val) => {
+    setValue(val);
+  };
   return (
     <>
       <TopWrapper>
@@ -132,14 +136,14 @@ function EmployeeCreateComponent() {
               <Tab sx={{ textTransform: 'none' }} label='Work Scedhule' {...a11yProps(4)} />
             </Tabs>
           </Box>
-          <TabPanel value={value} index={0}>
-            <EmployeeInformationForm refProp={employeeRef} />
+          <TabPanel value={value}  index={0}>
+            <EmployeeInformationForm nextPage={handleNext} refProp={employeeRef} />
           </TabPanel>
           <TabPanel value={value} index={1}>
-            <EmployeePersonalInformationForm refProp={personalInformationRef} />
+            <EmployeePersonalInformationForm nextPage={handleNext} refProp={personalInformationRef} />
           </TabPanel>
           <TabPanel value={value} index={2}>
-            <EmergencyContactForm refProp={emergencyRef} />
+            <EmergencyContactForm nextPage={setValue} refProp={emergencyRef} />
           </TabPanel>
           <TabPanel value={value} index={3}>
             on Development
