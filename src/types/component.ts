@@ -1,3 +1,7 @@
+import { IconType } from 'react-icons';
+import { ButtonProps, CardProps, IconButtonProps, TextFieldProps, TextareaAutosizeProps } from '@mui/material';
+import { ReactNode } from 'react';
+
 export declare namespace Login {
   export interface Form {
     email: string;
@@ -10,7 +14,76 @@ export declare namespace Login {
 }
 
 export declare namespace Register {
+  export interface Form {
+    email: string;
+    password: string;
+    name: string;
+    countryID: string;
+    companyName: string;
+    numberOfEmployees: string;
+    phoneNumberPrefix: string;
+    phoneNumber: string;
+  }
+
   export interface Component {
-    countries: [];
+    countries: Array<{ label: string; value: string }>;
+    doRegister: (_payload: Form) => void,
+  }
+}
+
+export declare namespace Company {
+  export interface Component {
+    companies: [];
+  }
+}
+
+export declare namespace CompanyCreate {
+  export interface Component {
+    companyType: [];
+    companySector: [];
+    bank: [];
+    paymentMethod: [];
+  }
+}
+
+export declare namespace CoreLayout {
+
+  export interface SidebarItem {
+    key: string;
+    title: string;
+    path: string;
+    icons: IconType;
+    hasChild?: boolean;
+    child?: Array<{
+      title: string;
+      path: string;
+    }>
+  }
+}
+
+export declare namespace SharedComponent {
+  export type ComponentInput = TextFieldProps & {
+    customLabel?: string;
+    withAsterisk?: boolean;
+  }
+
+  export type ComponentButton = ButtonProps & {
+    label: string;
+    isLoading?: boolean;
+  }
+
+  export type ComponentIconButton = IconButtonProps & {
+    parentColor?: string;
+    icons: unknown
+  }
+
+  export type ComponentCard = CardProps & {
+    children: ReactNode
+  }
+
+  export type ComponentTextarea = TextareaAutosizeProps & {
+    customLabel?: string;
+    withAsterisk?: boolean;
+    error?: string;
   }
 }

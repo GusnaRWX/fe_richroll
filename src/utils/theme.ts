@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { PaletteColor, createTheme } from '@mui/material';
 import { DM_Sans } from 'next/font/google';
 
@@ -20,25 +21,83 @@ declare module '@mui/material/styles' {
     pink: PaletteColor;
     rose: PaletteColor;
   }
+  interface TypographyVariants {
+    'text-xs': React.CSSProperties;
+    'text-sm': React.CSSProperties;
+    'text-base': React.CSSProperties;
+    'text-lg': React.CSSProperties;
+    'text-xl': React.CSSProperties;
+    'text-2xl': React.CSSProperties;
+    'text-3xl': React.CSSProperties;
+    'text-4xl': React.CSSProperties;
+    'text-5xl': React.CSSProperties;
+    'text-6xl': React.CSSProperties;
+  }
+
+  // allow configuration using `createTheme`
+  interface TypographyVariantsOptions {
+    'text-xs'?: React.CSSProperties;
+    'text-sm'?: React.CSSProperties;
+    'text-base'?: React.CSSProperties;
+    'text-lg'?: React.CSSProperties;
+    'text-xl'?: React.CSSProperties;
+    'text-2xl'?: React.CSSProperties;
+    'text-3xl'?: React.CSSProperties;
+    'text-4xl'?: React.CSSProperties;
+    'text-5xl'?: React.CSSProperties;
+    'text-6xl'?: React.CSSProperties;
+  }
 }
 
+// Update the Button's color prop options
 declare module '@mui/material/Button' {
   interface ButtonPropsColorOverrides {
+    red: true;
+    orange: true;
+    amber: true;
+    yellow: true;
+    lime: true;
+    green: true;
+    emerald: true;
+    teal: true;
+    cyan: true;
+    lightBlue: true;
+    indigo: true;
+    violet: true;
+    purple: true;
+    fuchsia: true;
+    pink: true;
     rose: true;
   }
 }
 
+// Update the Typography's variant prop options
+declare module '@mui/material/Typography' {
+  interface TypographyPropsVariantOverrides {
+    'text-xs': true;
+    'text-sm': true;
+    'text-base': true;
+    'text-lg': true;
+    'text-xl': true;
+    'text-2xl': true;
+    'text-3xl': true;
+    'text-4xl': true;
+    'text-5xl': true;
+    'text-6xl': true;
+  }
+}
+
 export const DMSans = DM_Sans({
-  weight:['400','500','700'],
+  weight: ['400', '500', '700'],
   subsets: ['latin'],
   display: 'swap',
-  fallback:['Inter']
+  fallback: ['Inter']
 });
 
 const { palette } = createTheme();
 const { augmentColor } = palette;
 
-// Create a theme instance 
+// Create a theme instance
 const theme = createTheme({
   palette: {
     primary: {
@@ -52,7 +111,9 @@ const theme = createTheme({
       '700': '#172345',
       '800': '#111A33',
       '900': '#0B1222',
-      main: '#223567'
+      main: '#223567',
+      dark: '#000000',
+      light: '#FFFFFF'
     },
     secondary: {
       '50': '#E8F6F1',
@@ -65,7 +126,8 @@ const theme = createTheme({
       '700': '#5E8B7B',
       '800': '#46685C',
       '900': '#2F453D',
-      main: '#8DD0B8'
+      main: '#8DD0B8',
+      light: '#FCFFFC',
     },
     grey: {
       '50': '#F9FAFB',
@@ -136,7 +198,7 @@ const theme = createTheme({
         '600': '#CA8A04',
         '700': '#A16207',
         '800': '#854D0E',
-        '900': '#701A75',
+        '900': '#713F12',
         main: '#EAB308'
       }
     }),
@@ -320,9 +382,71 @@ const theme = createTheme({
         main: '#F43F5E'
       }
     }),
+    background: {
+      paper: '#FFFFFF'
+    }
+
   },
   typography: {
-    fontFamily: DMSans.style.fontFamily
+    fontFamily: DMSans.style.fontFamily,
+    'text-xs': {
+      fontSize: '0.75rem'
+    },
+    'text-sm': {
+      fontSize: '0.85rem'
+    },
+    'text-base': {
+      fontSize: '1rem'
+    },
+    'text-lg': {
+      fontSize: '1.125rem'
+    },
+    'text-xl': {
+      fontSize: '1.25rem'
+    },
+    'text-2xl': {
+      fontSize: '1.5rem'
+    },
+    'text-3xl': {
+      fontSize: '1.875rem'
+    },
+    'text-4xl': {
+      fontSize: '2.25rem'
+    },
+    'text-5xl': {
+      fontSize: '3rem'
+    },
+    'text-6xl': {
+      fontSize: '4rem'
+    },
+  },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          textTransform: 'none',
+          boxShadow: 'none',
+        }
+      }
+    },
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          backgroundColor: '#FFF',
+          ' .Mui-disabled': {
+            backgroundColor: palette.grey[100],
+          }
+        },
+      }
+    },
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.06), 0px 1px 3px rgba(0, 0, 0, 0.1)',
+          borderRadius: '8px'
+        }
+      }
+    }
   }
 });
 

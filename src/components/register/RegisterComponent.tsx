@@ -1,24 +1,36 @@
-import React from 'react';
+import React, { useState, FormEvent } from 'react';
 import styled from '@emotion/styled';
 import Image from 'next/image';
 import { styled as MuiStyled } from '@mui/material/styles';
 import kayaroll from '../../../public/images/kayaroll-logo.png';
 import { Icons } from '@/utils/assetsConstant';
+// import { Address } from '@/types/address';
+// import { Option } from '@/types/option';
+import { checkRegulerExpression } from '@/utils/helper';
 import {
   Card,
   CardContent,
-  FormControl,
   Grid,
   FormControlLabel,
   Checkbox,
-  Button,
   Stack,
-  Autocomplete,
-  TextField,
   Typography,
   BoxProps,
-  Box
+  Box,
+  InputAdornment,
+  IconButton,
+  Select,
+  FormControl,
+  FormHelperText,
+  MenuItem
 } from '@mui/material';
+import { Register } from '@/types/component';
+import { useAppSelectors, useForm } from '@/hooks/index';
+import { Input, Button } from '../_shared/form';
+import Link from 'next/link';
+import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
+import LocalizationMenu from '../_shared/_core/localization/Index';
+import { signIn } from 'next-auth/react';
 
 
 const NavHead = styled.div`
@@ -44,7 +56,7 @@ const Base = styled.div`
  display: flex;
  align-items: center;
  justify-content: center;
- background-color: #F7FFFC;
+ background-color: #F6FFFC;
  padding-top: 5rem;
  width: 100%;
  height: 100%;
@@ -58,27 +70,89 @@ const WrapperSSO = styled(Box)<BoxProps>(() => ({
   margin: '14px 0'
 }));
 
-const AsteriskComponent = MuiStyled('span')(({theme}) => ({
+const AsteriskComponent = MuiStyled('span')(({ theme }) => ({
   color: theme.palette.error.main
 }));
 
-// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
 
-// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-const SubmitButton = styled(Button)(({ theme }) => ({
-  color: '#FFFFFF',
-  backgroundColor: '#8DD0B8',
-  '&:hover': {
-    backgroundColor: '#65f0be',
-  },
-}));
+function RegisterComponent({ countries, doRegister }: Register.Component) {
+
+  const [initialValues, setInitialValues] = useState({
+    email: '',
+    password: '',
+    name: '',
+    countryID: '',
+    companyName: '',
+    numberOfEmployees: '',
+    phoneNumberPrefix: '',
+    phoneNumber: '',
+    isAgree: true
+  });
+
+  const [checked, setChecked] = useState(false);
+
+  const [openPassword, setOpenPassword] = useState(false);
+
+  const { register } = useAppSelectors(state => state);
 
 
-function RegisterComponent() {
-  const countryItems = [
-    { label: 'Test 1', value: 1 },
-    { label: 'Test 2', value: 2 }
-  ];
+  const handleCheck = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setChecked(event.target.checked);
+  };
+
+  const validate = (fieldOfValues = values) => {
+    const temp: Register.Form = { ...errors };
+
+    if ('email' in fieldOfValues) {
+      const patternEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const emailValue = fieldOfValues.email || '';
+      let emailErrorMessage = '';
+      if (!emailValue) {
+        emailErrorMessage = 'Email is required';
+      } else if (!checkRegulerExpression(patternEmail, emailValue)) {
+        emailErrorMessage = 'Email should be valid';
+      }
+      temp.email = emailErrorMessage;
+    }
+
+    if ('password' in fieldOfValues) {
+      const patternPassword = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+      const passwordValue = fieldOfValues.password || '';
+      let passwordErrorMessage = '';
+      if (!passwordValue) {
+        passwordErrorMessage = 'Password is required';
+      } else if (!checkRegulerExpression(patternPassword, passwordValue)) {
+        passwordErrorMessage = 'Include Uppercase and lowercase, Include at least one number or symbol and be at least 8 character long';
+      }
+      temp.password = passwordErrorMessage;
+
+    }
+
+    if ('name' in fieldOfValues)
+      temp.name = fieldOfValues.name ? '' : 'Full Name is required';
+
+    if ('countryID' in fieldOfValues)
+      temp.countryID = fieldOfValues.countryID ? '' : 'Country is required';
+
+    if ('companyName' in fieldOfValues)
+      temp.companyName = fieldOfValues.companyName ? '' : 'Company name is required';
+
+    if ('numberOfEmployees' in fieldOfValues)
+      temp.numberOfEmployees = fieldOfValues.numberOfEmployees ? '' : 'Employees is required';
+
+    if ('phoneNumber' in fieldOfValues)
+      temp.phoneNumber = fieldOfValues.phoneNumber ? '' : 'Phone number is required';
+
+    setErrors({
+      ...temp
+    });
+
+    if (fieldOfValues === values)
+      return Object.values(temp).every(x => x === '');
+  };
+
+  const { values, errors, setErrors, handleInputChange } = useForm(initialValues, true, validate);
+
   const employeeItems = [
     { label: '<10', value: 1 },
     { label: '<25', value: 2 },
@@ -86,128 +160,252 @@ function RegisterComponent() {
     { label: '>50', value: 4 }
   ];
 
+  // const options = (): Option.Mapper[] => {
+  //   return countries.map((item: Address.Country): Option.Mapper => {
+  //     return { label: item.name, value: item.id };
+  //   });
+  // };
+
+  const handleGoogleLogin = async () => {
+    try {
+      await signIn('google', { callbackUrl: '/dashboard' });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleFacebookLogin = async () => {
+    try {
+      await signIn('facebook', { callbackUrl: '/dashboard' });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
+    e.preventDefault();
+    if (validate()) {
+      doRegister({ ...values });
+      setInitialValues({
+        email: '',
+        password: '',
+        name: '',
+        countryID: '',
+        companyName: '',
+        numberOfEmployees: '',
+        phoneNumberPrefix: '+62',
+        phoneNumber: '',
+        isAgree: true
+      });
+    }
+  };
+
   return (
     <Base>
       <NavHead>
         <div>
-          <Image src={kayaroll} alt='logo' height={40} width={150}/>
+          <Image src={kayaroll} alt='logo' height={40} width={150} />
         </div>
         <div>
-          <span>EN</span>
+          <LocalizationMenu />
         </div>
       </NavHead>
-      <Card sx={{ width: '800px', height:'100%' }}>
+      <Card sx={{ width: '800px', height: '100%' }}>
         <CardContent>
-          <div>
-            <Image src={kayaroll} alt='logo' height={56} width={211}/>
-          </div>
-          <h2>Register</h2>
-          <Grid container spacing={2}>
-            <Grid item xs={6} md={6} lg={6} xl={6}>
-              <Typography>Email Address<AsteriskComponent>*</AsteriskComponent></Typography>
-              <TextField
-                fullWidth
-                variant='outlined'
-                name='email'
-                placeholder='Input email address'
-                size='small'
-              />
+          <Box component='form' autoComplete='off' onSubmit={handleSubmit}>
+            <div>
+              <Image src={kayaroll} alt='logo' height={56} width={211} />
+            </div>
+            <h2>Register</h2>
+            <Grid container spacing={2}>
+              <Grid item xs={6} md={6} lg={6} xl={6}>
+                <Input
+                  name='email'
+                  onChange={handleInputChange}
+                  error={errors.email}
+                  customLabel='Email Address'
+                  withAsterisk={true}
+                  size='small'
+                />
+              </Grid>
+              <Grid item xs={6} md={6} lg={6} xl={6}>
+                <Input
+                  name='password'
+                  onChange={handleInputChange}
+                  error={errors.password}
+                  customLabel='Password'
+                  withAsterisk
+                  size='small'
+                  placeholder='Input Password'
+                  type={openPassword ? 'text' : 'password'}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position='end'>
+                        <IconButton
+                          edge='end'
+                          onClick={() => { setOpenPassword(!openPassword); }}
+                          onMouseDown={(e: React.MouseEvent<HTMLButtonElement>) => { e.preventDefault(); }}
+                        >
+                          {openPassword ? <BsFillEyeFill color='#9CA3AF' /> : <BsFillEyeSlashFill color='#9CA3AF' />}
+                        </IconButton>
+                      </InputAdornment>
+                    )
+                  }}
+                />
+              </Grid>
+              <Grid item xs={6} md={6} lg={6} xl={6}>
+                <Input
+                  name='name'
+                  onChange={handleInputChange}
+                  error={errors.name}
+                  customLabel='Input Full Name'
+                  withAsterisk={true}
+                  size='small'
+                />
+              </Grid>
+              <Grid item xs={6} md={6} lg={6} xl={6}>
+                <FormControl fullWidth error={errors.countryID ? true : false}>
+                  <Typography>Country<AsteriskComponent>*</AsteriskComponent></Typography>
+                  <Select
+                    fullWidth
+                    variant='outlined'
+                    size='small'
+                    name='countryID'
+                    value={values.countryID}
+                    onChange={handleInputChange}
+                  >
+                    {countries?.map(item => (
+                      <MenuItem key={item.label} value={item.value}>{item.label}</MenuItem>
+                    ))}
+                  </Select>
+                  <FormHelperText>{errors.countryID}</FormHelperText>
+                </FormControl>
+              </Grid>
+              <Grid item xs={12} md={12} lg={12} xl={12}>
+                <Input
+                  name='companyName'
+                  onChange={handleInputChange}
+                  error={errors.companyName}
+                  customLabel='Input Company Name'
+                  withAsterisk={true}
+                  size='small'
+                />
+              </Grid>
+              <Grid item xs={6} md={6} lg={6} xl={6}>
+                <FormControl fullWidth error={errors.numberOfEmployees ? true : false}>
+                  <Typography>Employees<AsteriskComponent>*</AsteriskComponent></Typography>
+                  <Select
+                    fullWidth
+                    variant='outlined'
+                    size='small'
+                    name='numberOfEmployees'
+                    value={values.numberOfEmployees}
+                    onChange={handleInputChange}
+                  >
+                    {
+                      employeeItems.map((item) => (
+                        <MenuItem key={item.label} value={item.value}>{item.label}</MenuItem>
+                      ))
+                    }
+                  </Select>
+                  <FormHelperText>{errors.numberOfEmployees}</FormHelperText>
+                </FormControl>
+              </Grid>
+              <Grid item xs={6} md={6} lg={6} xl={6}>
+                <Typography>Phone Number<AsteriskComponent>*</AsteriskComponent></Typography>
+                <Grid container>
+                  <Grid item xs={1} sm={3} md={3} lg={3} xl={3}>
+                    <Select
+                      variant='outlined'
+                      size='small'
+                      name='phoneNumberPrefix'
+                      value={values.phoneNumberPrefix}
+                      onChange={handleInputChange}
+                      MenuProps={{ disableAutoFocus: true }}
+                      sx={{
+                        backgroundColor: '#D9EFE7',
+                        border: '1px solid #D9EFE7',
+                        borderRadius: '9999px',
+                        padding: 0,
+                      }}
+                    >
+                      <MenuItem value='+62'>+62</MenuItem>
+                      <MenuItem value='+44'>+44</MenuItem>
+                    </Select>
+                  </Grid>
+                  <Grid item xs={9} sm={9} md={9} lg={9} xl={9}>
+                    <Input
+                      name='phoneNumber'
+                      onChange={handleInputChange}
+                      error={errors.phoneNumber}
+                      withAsterisk={true}
+                      size='small'
+                    />
+                  </Grid>
+                </Grid>
+              </Grid>
             </Grid>
-            <Grid item xs={6} md={6} lg={6} xl={6}>
-              <Typography>Password<AsteriskComponent>*</AsteriskComponent></Typography>
-              <TextField
-                fullWidth
-                variant='outlined'
-                name='password'
-                type='password'
-                placeholder='Input Password'
-                size='small'
+            <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'start' }}>
+              <FormControlLabel
+                sx={{ marginTop: '.5rem', marginBottom: '.5rem' }}
+                value={true}
+                label=''
+                control={
+                  <Checkbox checked={checked} onChange={handleCheck} color='success' />
+                }
+                labelPlacement='end'
               />
-            </Grid>
-            <Grid item xs={6} md={6} lg={6} xl={6}>
-              <Typography>Full Name<AsteriskComponent>*</AsteriskComponent></Typography>
-              <TextField
-                fullWidth
-                variant='outlined'
-                name='fullname'
-                placeholder='Input Full Name'
-                size='small'
-              />
-            </Grid>
-            <Grid item xs={6} md={6} lg={6} xl={6}>
-              <FormControl variant='standard' sx={{ width: '100%' }}>
-                <Typography>Country<AsteriskComponent>*</AsteriskComponent></Typography>
-                <Autocomplete options={countryItems} renderInput={(params) => (
-                  <TextField {...params} size='small' name='country' placeholder='Select Country'  id='email'/>
-                )}/>
-              </FormControl>
-            </Grid>
-            <Grid item xs={12} md={12} lg={12} xl={12}>
-              <Typography>Company Name<AsteriskComponent>*</AsteriskComponent></Typography>
-              <TextField
-                fullWidth
-                variant='outlined'
-                name='company'
-                placeholder='Input company name'
-                size='small'
-              />
-            </Grid>
-            <Grid item xs={6} md={6} lg={6} xl={6}>
-              <FormControl variant='standard' sx={{ width: '100%' }}>
-                <Typography>Employees<AsteriskComponent>*</AsteriskComponent></Typography>
-                <Autocomplete options={employeeItems} renderInput={(params) => (
-                  <TextField {...params} size='small' name='employee'  id='email'/>
-                )}/>
-              </FormControl>
-            </Grid>
-            <Grid item xs={6} md={6} lg={6} xl={6}>
-              <Typography>Contact Number<AsteriskComponent>*</AsteriskComponent></Typography>
-              <TextField
-                fullWidth
-                variant='outlined'
-                name='phoneNumber'
-                placeholder='Input email address'
-                size='small'
-              />
-            </Grid>
-          </Grid>
-          <FormControlLabel
-            sx={{ marginTop: '.5rem', marginBottom: '.5rem' }}
-            value=''
-            label='I have read and agree to the terms of service'
-            control={<Checkbox color='success'/>}
-            labelPlacement='end'
-          />
-          <Stack>
-            <SubmitButton variant='contained'>Register</SubmitButton>
-          </Stack>
-          <Box component='div' mt='17px'>
-            <Typography color='grey.400' textAlign='center'>You can also Register using</Typography>
-            <WrapperSSO component='div'>
-              <Image
-                src={Icons.SSO_GOOGLE}
-                width={40}
-                height={40}
-                alt='sso-google'
-              />
-              <Typography fontSize={14}>Or</Typography>
-              <Image
-                src={Icons.SSO_FACEBOOK}
-                width={40}
-                height={40}
-                alt='sso-facebook'
-              />
-            </WrapperSSO>
-            <Typography color='grey.400' textAlign='center'>
-              Already have an account? &nspp;
-              <Typography
-                component='span'
-                color='primary.main'
-                fontWeight={500}
-              >
-                Log in Now
+              <Typography color='grey.400' textAlign='center'>
+                I have read and agree to the &nbsp;
+                <Link href='/' style={{ textDecoration: 'none' }}>
+                  <Typography component='span' color='primary.main' fontWeight={500}>
+                    term of service
+                  </Typography>
+                </Link>
               </Typography>
-            </Typography>
+            </Box>
+            <Stack>
+              <Button
+                disabled={!checked}
+                type='submit'
+                size='large'
+                color='secondary'
+                label='Register'
+                isLoading={register.loading}
+              />
+            </Stack>
+            <Box component='div' mt='17px'>
+              <Typography color='grey.400' textAlign='center'>You can also Register using</Typography>
+              <WrapperSSO component='div'>
+                <Image
+                  src={Icons.SSO_GOOGLE}
+                  width={40}
+                  height={40}
+                  alt='sso-google'
+                  onClick={handleGoogleLogin}
+                />
+                <Typography fontSize={14}>Or</Typography>
+                <Image
+                  src={Icons.SSO_FACEBOOK}
+                  width={40}
+                  height={40}
+                  alt='sso-facebook'
+                  onClick={handleFacebookLogin}
+                />
+              </WrapperSSO>
+              <Typography color='grey.400' textAlign='center'>
+                Already have an account? &nbsp;
+                <Link href='/login' style={{ textDecoration: 'none' }}>
+                  <Typography
+                    component='span'
+                    color='primary.main'
+                    fontWeight={500}
+                  >
+                    Log in Now
+                  </Typography>
+                </Link>
+              </Typography>
+            </Box>
           </Box>
         </CardContent>
       </Card>

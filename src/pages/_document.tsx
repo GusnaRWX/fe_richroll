@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from 'react';
 import Document, {
   Html,
@@ -9,8 +10,6 @@ import Document, {
 } from 'next/document';
 import createEmotionCache from '@/utils/createEmotionCache';
 import createEmotionServer from '@emotion/server/create-instance';
-import { AppType } from 'next/app';
-import { MyAppProps } from './_app';
 import theme, { DMSans } from '@/utils/theme';
 
 
@@ -23,7 +22,7 @@ export default function MyDocument({ emotionStyleTags }: MyDocumentProps) {
     <Html lang='en' className={DMSans.className} >
       <Head>
         {/* PWA primary color */}
-        <meta name='theme-color' content={theme.palette.primary[100]}  />
+        <meta name='theme-color' content={theme.palette.primary.main} />
         <link rel='shortcut icon' href='/favicon.ico' />
         <meta name='emotion-insertion-point' content='' />
         {emotionStyleTags}
@@ -70,7 +69,8 @@ MyDocument.getInitialProps = async (ctx: DocumentContext) => {
 
   ctx.renderPage = () =>
     originalRenderPage({
-      enhanceApp: (App: React.ComponentType<React.ComponentProps<AppType> & MyAppProps>) =>
+      enhanceApp: (App: any) =>
+        // eslint-disable-next-line react/function-component-definition
         function EnhanceApp(props) {
           return <App emotionCache={cache} {...props} />;
         },

@@ -1,16 +1,15 @@
 import React, { FormEvent, useState } from 'react';
-import { useForm } from '@/hooks/index';
+import { useForm, useAppSelectors } from '@/hooks/index';
 import { Login } from '@/types/component';
-import { Box, BoxProps, Button, TextField, Typography } from '@mui/material';
+import { Box, BoxProps, Typography, InputAdornment, IconButton, Alert } from '@mui/material';
 import { Image as ImageType, Icons } from '@/utils/assetsConstant';
 import { styled } from '@mui/material/styles';
 import Image from 'next/image';
 import Link from 'next/link';
 import { checkRegulerExpression } from '@/utils/helper';
-
-const AsteriskComponent = styled('span')(({ theme }) => ({
-  color: theme.palette.error.main
-}));
+import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
+import { Input, Button } from '@/components/_shared/form/';
+import { signIn } from 'next-auth/react';
 
 const LinkComponent = styled(Link)(({ theme }) => ({
   color: theme.palette.primary.main,
@@ -33,24 +32,28 @@ const WrapperSSO = styled(Box)<BoxProps>(() => ({
 const LoginForm = ({
   doLogin
 }: Login.Component) => {
-
   const [initialValues, setInitialValues] = useState({
     email: '',
     password: ''
   });
+
+  const [openPassword, setOpenPassword] = useState(false);
+
+  const { responser, login } = useAppSelectors(state => state);
 
   const validate = (fieldOfValues = values) => {
     const temp: Login.Form = { ...errors };
 
     if ('email' in fieldOfValues) {
       const patternEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      temp.email = fieldOfValues.email
-        ? (
-          checkRegulerExpression(patternEmail, fieldOfValues.email)
-            ? ''
-            : 'Email should be valid'
-        )
-        : 'Email is required';
+      const emailValue = fieldOfValues.email || '';
+      let emailErrorMessage = '';
+      if (!emailValue) {
+        emailErrorMessage = 'Email is required';
+      } else if (!checkRegulerExpression(patternEmail, emailValue)) {
+        emailErrorMessage = 'Email should be valid';
+      }
+      temp.email = emailErrorMessage;
     }
 
 
@@ -80,14 +83,30 @@ const LoginForm = ({
     }
   };
 
+  const handleGoogleLogin = async () => {
+    try {
+      await signIn('google', { callbackUrl: '/dashboard' });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleFacebookLogin = async () => {
+    try {
+      await signIn('facebook', { callbackUrl: '/dashboard' });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
-    <Box padding='45px 0'>
+    <Box padding={`${![200, 201, 0].includes(responser?.code) ? 35 : 45}px 0`}>
       <Box
         component='form'
         autoComplete='off'
         onSubmit={handleSubmit}
         sx={{
-          padding: '0 24px'
+          padding: '0 40px'
         }}
       >
         <Box component='div' mb='16px'>
@@ -106,47 +125,58 @@ const LoginForm = ({
         >
           Login
         </Typography>
+        {![200, 201, 0].includes(responser?.code) && (
+          <Box mb='17px'>
+            <Alert severity='error'>{responser?.message}</Alert>
+          </Box>
+        )}
         <Box component='div' mb='17px'>
-          <Typography>
-            Email Address <AsteriskComponent>*</AsteriskComponent>
-          </Typography>
-          <TextField
-            fullWidth
-            variant='outlined'
+          <Input
+            customLabel='Email'
+            withAsterisk
+            size='small'
+            placeholder='Input email address'
             name='email'
             onChange={handleInputChange}
-            placeholder='Input email address'
-            size='small'
+            error={errors.email}
           />
         </Box>
         <Box mb='17px'>
-          <Typography>
-            Password <AsteriskComponent>*</AsteriskComponent>
-          </Typography>
-          <TextField
-            fullWidth
-            variant='outlined'
-            name='password'
-            type='password'
-            onChange={handleInputChange}
-            placeholder='Input password'
+          <Input
+            customLabel='Password'
+            withAsterisk
             size='small'
+            name='password'
+            onChange={handleInputChange}
+            error={errors.password}
+            type={openPassword ? 'text' : 'password'}
+            placeholder='Input password'
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position='end'>
+                  <IconButton
+                    edge='end'
+                    onClick={() => { setOpenPassword(!openPassword); }}
+                    onMouseDown={(e: React.MouseEvent<HTMLButtonElement>) => { e.preventDefault(); }}
+                  >
+                    {openPassword ? <BsFillEyeFill color='#9CA3AF' /> : <BsFillEyeSlashFill color='#9CA3AF' />}
+                  </IconButton>
+                </InputAdornment>
+              )
+            }}
           />
         </Box>
         <LinkComponent href='/auth/forgot-password'>Forgot Password?</LinkComponent>
         <Button
-          variant='contained'
+          label='Login'
           color='primary'
+          size='large'
           type='submit'
-          fullWidth
-          sx={{
-            textTransform: 'none',
-          }}
-        >
-          Login
-        </Button>
+          disabled={login.isLoading}
+          isLoading={login.isLoading}
+        />
       </Box>
-      <Box component='div' mt='17px'>
+      <Box component='div' mt={`${![200, 201, 0].includes(responser?.code) ? 17 : 30}px`}>
         <Typography
           color='grey.400'
           textAlign='center'
@@ -159,13 +189,17 @@ const LoginForm = ({
             width={40}
             height={40}
             alt='sso-google'
+            style={{ cursor: 'pointer' }}
+            onClick={handleGoogleLogin}
           />
           <Typography fontSize={14}>Or</Typography>
           <Image
             src={Icons.SSO_FACEBOOK}
             width={40}
             height={40}
+            style={{ cursor: 'pointer' }}
             alt='sso-facebook'
+            onClick={handleFacebookLogin}
           />
         </WrapperSSO>
         <Typography
@@ -173,13 +207,15 @@ const LoginForm = ({
           textAlign='center'
         >
           Do Not Have an Account? &nbsp;
-          <Typography
-            component='span'
-            color='primary.main'
-            fontWeight={500}
-          >
-            Register Now
-          </Typography>
+          <Link href='/register' style={{ textDecoration: 'none' }}>
+            <Typography
+              component='span'
+              color='primary.main'
+              fontWeight={500}
+            >
+              Register Now
+            </Typography>
+          </Link>
         </Typography>
       </Box>
     </Box>

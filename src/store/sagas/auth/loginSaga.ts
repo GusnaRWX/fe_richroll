@@ -6,12 +6,15 @@
 
 import { AnyAction } from '@reduxjs/toolkit';
 import { loginService } from '../saga-actions/auth/loginAction';
-import { call, put, takeEvery } from 'redux-saga/effects';
-import { loginRequested, loginSuccessed } from '@/store/reducers/slice/auth/loginSlice';
+import { call, delay, put, takeEvery } from 'redux-saga/effects';
+import { loginRequested, loginSuccessed, loginFailured } from '@/store/reducers/slice/auth/loginSlice';
 import { setResponserMessage } from '@/store/reducers/slice/responserSlice';
 import { Services } from '@/types/axios';
 import { AxiosError, AxiosResponse } from 'axios';
 import { Auth } from '@/types/authentication';
+import Router from 'next/router';
+import { getMeServices } from '../saga-actions/auth/meAction';
+import { meSuccessed } from '@/store/reducers/slice/auth/meSlice';
 
 /**
  * Fetch Authentication (Login)  
@@ -29,6 +32,13 @@ function* fetchAuthenticationLogin(action: AnyAction) {
           refreshToken: refreshToken
         }
       });
+      const profile = yield call(getMeServices);
+      yield put({
+        type: meSuccessed.toString(),
+        payload: { ...profile?.data?.data as Auth.Me }
+      });
+      yield Router.push('/dashboard');
+      yield delay(1000);
     }
   } catch (err) {
     if (err instanceof AxiosError) {
@@ -40,6 +50,7 @@ function* fetchAuthenticationLogin(action: AnyAction) {
           message: errorMessage?.message,
         }
       });
+      yield put({ type: loginFailured.toString() });
     }
   }
 }

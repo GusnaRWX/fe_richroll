@@ -6,13 +6,13 @@ import {
   BoxProps,
   AppBar,
   Toolbar,
-  Typography,
   Card,
   CardProps
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import Image from 'next/image';
 import { Image as ImageType } from '@/utils/assetsConstant';
+import LocalizationMenu from '@/components/_shared/_core/localization/Index';
 
 
 const WrapperAuth = styled(Box)<BoxProps>(({ theme }) => ({
@@ -21,11 +21,12 @@ const WrapperAuth = styled(Box)<BoxProps>(({ theme }) => ({
 }));
 
 const WrapperCard = styled(Card)<CardProps>(() => ({
-  position: 'relative',
-  top: '153px',
-  width: '1170px',
-  left: '50%',
-  transform: 'translateX(-50%)'
+  paddingTop: '100px',
+  background: 'none',
+  borderRadius: 'none',
+  boxShadow: 'none',
+  paddingLeft: '135px',
+  paddingRight: '135px'
 }));
 
 const WrapperCardContent = styled(Box)<BoxProps>(() => ({
@@ -56,13 +57,7 @@ const Navbar = () => {
           />
         </Box>
         <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-          <Typography
-            variant='h6'
-            component='div'
-            sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
-          >
-            English
-          </Typography>
+          <LocalizationMenu />
         </Box>
       </WrapperNavbarContent>
     </AppBar>
@@ -73,24 +68,27 @@ const LoginComponent = ({
   doLogin
 }: Login.Component) => {
   return (
-    <WrapperAuth component='div'>
+    <>
       <Navbar />
-      <WrapperCard>
-        <WrapperCardContent>
-          <Box component='div'>
-            <Image
-              src={ImageType.EXAMPLE_LOGIN}
-              alt='login'
-              height={621}
-              width={584}
-            />
-          </Box>
-          <Box width='100%'>
-            <LoginForm doLogin={doLogin} />
-          </Box>
-        </WrapperCardContent>
-      </WrapperCard>
-    </WrapperAuth>
+      <WrapperAuth>
+        <WrapperCard>
+          <WrapperCardContent>
+            <Box component='div'>
+              <Image
+                src={ImageType.EXAMPLE_LOGIN}
+                alt='login'
+                height={621}
+                width={584}
+              />
+            </Box>
+            <Box width='100%' height='621px' sx={{ background: '#FFFFFF' }}>
+              <LoginForm doLogin={doLogin} />
+            </Box>
+          </WrapperCardContent>
+        </WrapperCard>
+
+      </WrapperAuth>
+    </>
   );
 };
 

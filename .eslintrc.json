@@ -33,7 +33,7 @@
         ],
         "linebreak-style": [
             "error",
-            "windows"
+            "unix"
         ],
         "jsx-quotes": [
             "error",
@@ -66,10 +66,10 @@
             "always"
         ],
         "@typescript-eslint/no-namespace": [
-          "error",
-          {
-            "allowDeclarations": true
-          }
+            "error",
+            {
+                "allowDeclarations": true
+            }
         ]
     }
 }
