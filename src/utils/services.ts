@@ -11,14 +11,14 @@ import { getStorage } from './storage';
  */
 export const logResponser = (res: AxiosResponse): void => {
   if (!res) return;
-  const { config: configRes } = res;
+  const { config: requestConfig, data, } = res;
   const loadTime = performance.now();
-  const url = configRes.url?.replace(config.API_URL || '', '');
+  const url = requestConfig.url?.replace(config.API_URL || '', '');
 
-  // * Send Response to logger
-  Logger(`${configRes?.method?.toUpperCase()} ${url}`, {
+  // Send Response to logger
+  Logger(`${requestConfig.method?.toUpperCase()} ${url}`, {
     responseTime: loadTime,
-    message: res?.data.message || ''
+    message: data?.message || ''
   });
 };
 
