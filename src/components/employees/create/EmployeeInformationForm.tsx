@@ -25,7 +25,7 @@ import { Close } from '@mui/icons-material';
 import { BsFileEarmarkPlus } from 'react-icons/bs';
 import { AiOutlineCamera } from 'react-icons/ai';
 import { useForm } from '@/hooks/index';
-import { checkRegulerExpression } from '@/utils/helper';
+import { checkRegulerExpression, getCompanyID } from '@/utils/helper';
 import dayjs from 'dayjs';
 import { useAppDispatch } from '@/hooks/index';
 import { postEmployeeInfoRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
@@ -111,11 +111,13 @@ interface EmployeeProps {
 function EmployeeInformationForm ({refProp, nextPage} :EmployeeProps) {
   const [open, setOpen] = useState(false);
   const dispatch = useAppDispatch();
+  const id = getCompanyID();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [images, setImages] = useState<string | null>(null);
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [initialValues, setInitialValues] = useState({
-    companyID: 4,
+    companyID: id,
     picture: [],
     fullName: '',
     nickname: '',

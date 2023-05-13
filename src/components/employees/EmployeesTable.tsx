@@ -18,6 +18,7 @@ import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { getEmployeeRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
+import { getCompanyID } from '@/utils/helper';
 
 const ButtonWrapper = styled.div`
  display: flex;
@@ -58,6 +59,7 @@ function EmployeesTable({
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
   const [search, setSearch] = useState('');
+  const companyID = getCompanyID();
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
     dispatch({
@@ -69,7 +71,7 @@ function EmployeesTable({
         direction: false,
         search: search,
         isActive: tabValue === 0 ? true : false,
-        companyID: 4
+        companyID: companyID
       }
     });
   };
@@ -89,7 +91,7 @@ function EmployeesTable({
           direction: false,
           search: e.target.value,
           isActive: tabValue === 0 ? true : false,
-          companyID: 4
+          companyID: companyID
         }
       });
     }
@@ -105,7 +107,7 @@ function EmployeesTable({
         direction: false,
         search: search,
         isActive: tabValue === 0 ? true : false,
-        companyID: 4
+        companyID: companyID
       }
     });
   }, [rowsPerPage, page, tabValue]);
