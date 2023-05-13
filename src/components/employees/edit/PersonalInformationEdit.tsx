@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Text } from '@/components/_shared/common';
-import { Form, DatePicker, RadioGroup, Input, Button } from '@/components/_shared/form';
+import { Form, RadioGroup, Input, Button } from '@/components/_shared/form';
 import { Box, Checkbox, FormControl, FormControlLabel, Grid, MenuItem, Select } from '@mui/material';
 import { useForm } from '@/hooks/index';
 import { styled } from '@mui/material/styles';
@@ -13,7 +13,7 @@ interface PersonalInformationProps {
   nextTab: (_val: number) => void
 }
 
-const PersonalInformationEdit = ({nextTab}: PersonalInformationProps) => {
+const PersonalInformationEdit = ({ nextTab }: PersonalInformationProps) => {
   const [initialValues] = useState({
     genderPersonalInformation: '',
     maritialStatusPersonalInformation: '',
@@ -85,11 +85,11 @@ const PersonalInformationEdit = ({nextTab}: PersonalInformationProps) => {
               item
               sm={5.8}
             >
-              <DatePicker
+              {/* <DatePicker
                 customLabel='Date of Birth'
                 withAsterisk
                 name='date'
-              />
+              /> */}
             </Grid>
             <Grid
               item
@@ -539,11 +539,11 @@ const PersonalInformationEdit = ({nextTab}: PersonalInformationProps) => {
               item
               sm={5.8}
             >
-              <DatePicker
+              {/* <DatePicker
                 customLabel='Date of Birth'
                 withAsterisk
                 name='date'
-              />
+              /> */}
             </Grid>
           </Grid>
         </Box>
