@@ -30,7 +30,14 @@ const DrawerCore = ({
   return (
     <Box
       component='nav'
-      sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+      sx={{
+        width: {
+          md: drawerWidth
+        },
+        flexShrink: {
+          sm: 0
+        }
+      }}
       aria-label='mailbox folders'
     >
       <CustomDrawer
@@ -45,8 +52,8 @@ const DrawerCore = ({
         sx={{
           display: {
             xs: 'block',
-            sm: 'none'
-          },
+            md: 'none'
+          }
         }}
       >
         {drawer as React.ReactNode}
@@ -55,7 +62,7 @@ const DrawerCore = ({
         drawerWidth={drawerWidth}
         variant='permanent'
         sx={{
-          display: { xs: 'none', sm: 'block' },
+          display: { xs: 'none', md: 'block' }
         }}
       >
         {drawer as React.ReactNode}
