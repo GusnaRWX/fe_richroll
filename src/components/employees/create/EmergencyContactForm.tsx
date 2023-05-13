@@ -17,7 +17,7 @@ interface EmergencyProps {
 
 function EmergencyContactForm({refProp, nextPage} :EmergencyProps) {
   const dispatch = useAppDispatch();
-  const {employee} = useAppSelectors((state) => state);
+  const {employeeID} = useAppSelectors((state) => state.employee);
   const [initialValues, setInitialValues] = useState({
     fullNamePrimary: '',
     relationPrimary: '',
@@ -51,7 +51,7 @@ function EmergencyContactForm({refProp, nextPage} :EmergencyProps) {
     if (validate()){
       console.log('here');
       const data = {
-        employeeID: employee.employeeID,
+        employeeID: employeeID,
         primary: {
           name: values.fullNamePrimary,
           relationship: values.relationPrimary,

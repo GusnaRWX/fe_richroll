@@ -5,6 +5,9 @@ import Form from './Form';
 import DatePicker from './DatePicker';
 import RadioGroup from './RadioGroup';
 import Textarea from './Textarea';
+import Select from './Select';
+import CheckBox from './CheckBox';
+import FileUploadModal from './FileUploadModal';
 
 export {
   Input,
@@ -13,5 +16,8 @@ export {
   Form,
   DatePicker,
   RadioGroup,
-  Textarea
+  Textarea,
+  Select,
+  CheckBox,
+  FileUploadModal
 };

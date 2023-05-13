@@ -19,4 +19,12 @@ export const getAdministrativeThirdLevel = ({ countryId, firstLevelCode, secondL
 
 export const getBanks = (): Promise<AxiosResponse> => {
   return get('/banks');
-}; 
+};
+
+export const getListDepartment = (): Promise<AxiosResponse> => {
+  return get('/departments?page=1&itemPerPage=10000');
+};
+
+export const getListPosition = (): Promise<AxiosResponse> => {
+  return get('/positions?page=1&itemPerPage=10000');
+};

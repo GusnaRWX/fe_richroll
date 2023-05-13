@@ -3,33 +3,27 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { DatePickerProps } from '@mui/x-date-pickers/DatePicker';
-import { TextField, TextFieldProps, Typography, styled } from '@mui/material';
+import { Typography, styled } from '@mui/material';
 
 const AsteriskComponent = styled('span')(({ theme }) => ({
   color: theme.palette.error.main
 }));
 
 type DatePickerType = DatePickerProps<Date> & {
-  name?: string;
   customLabel: string;
   withAsterisk?: boolean;
-  HandleInputChange?: React.Dispatch<Date | null>
+  value: Date;
+  onChange?: React.Dispatch<Date | null>
 }
 
 const BasicDatePicker = ({
   customLabel,
-  name = '',
+  onChange,
   value,
-  HandleInputChange,
   withAsterisk,
   ...props
 }: DatePickerType) => {
 
-  const convertParams = (date: Date | null) => {
-    if (HandleInputChange) {
-      HandleInputChange(date as Date);
-    }
-  };
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -42,13 +36,15 @@ const BasicDatePicker = ({
       }
       <DatePicker
         format='DD/MM/YYYY'
-        onChange={convertParams}
         value={value}
+        onChange={onChange}
         {...props}
-        slots={{
-          textField: (textFieldProps: TextFieldProps) => (
-            <TextField {...textFieldProps} name={name as string} fullWidth size='small' />
-          )
+        sx={{
+          '& .MuiOutlinedInput-input': {
+            padding: '10px 14px',
+            border: 'none !important'
+          },
+          width: '100%'
         }}
       />
     </LocalizationProvider>

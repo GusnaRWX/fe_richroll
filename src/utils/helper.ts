@@ -45,3 +45,49 @@ export const getCompanyID = () => {
   }
   return null;
 };
+
+export const convertValue = (name, event) => {
+  const obj = {
+    target: {
+      name, value: event.target.value
+    }
+  };
+  return obj;
+};
+
+export const convertChecked = (event) => {
+  const {name, checked} = event.target;
+
+  const obj = {
+    target: {
+      name, value: checked
+    }
+  };
+  return obj;
+};
+
+export const convertDateValue = (name, event) => {
+  console.log('helpers', event);
+  const obj = {
+    target: {
+      name, value: event.$d
+    }
+  };
+  return obj;
+};
+
+export const convertImageParams = (name, value, callback, onClose) => {
+  const files = value;
+  const reader = new FileReader();
+  reader.readAsDataURL(value);
+  reader.onloadend = function () {
+    callback(reader.result as string);
+  };
+  onClose();
+  const obj = {
+    target: {
+      name, value: [files]
+    }
+  };
+  return obj;
+};

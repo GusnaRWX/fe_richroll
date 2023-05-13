@@ -19,6 +19,7 @@ import styled from '@emotion/styled';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { getEmployeeRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
 import { getCompanyID } from '@/utils/helper';
+import dayjs from 'dayjs';
 
 const ButtonWrapper = styled.div`
  display: flex;
@@ -62,38 +63,14 @@ function EmployeesTable({
   const companyID = getCompanyID();
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
-    dispatch({
-      type: getEmployeeRequested.toString(),
-      payload: {
-        page: newPage + 1,
-        itemPerPage: rowsPerPage,
-        sort: '',
-        direction: false,
-        search: search,
-        isActive: tabValue === 0 ? true : false,
-        companyID: companyID
-      }
-    });
   };
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 0));
     setPage(0);
   };
   const handleSearch = (e) => {
-    setSearch(e.target.value);
     if (e.key === 'Enter') {
-      dispatch({
-        type: getEmployeeRequested.toString(),
-        payload: {
-          page: page + 1,
-          itemPerPage: rowsPerPage,
-          sort: '',
-          direction: false,
-          search: e.target.value,
-          isActive: tabValue === 0 ? true : false,
-          companyID: companyID
-        }
-      });
+      setSearch(e.target.value);
     }
   };
 
@@ -103,14 +80,14 @@ function EmployeesTable({
       payload: {
         page: page + 1,
         itemPerPage: rowsPerPage,
-        sort: '',
+        sort: 'id',
         direction: false,
         search: search,
-        isActive: tabValue === 0 ? true : false,
+        isActive: tabValue === 0 ? false : true,
         companyID: companyID
       }
     });
-  }, [rowsPerPage, page, tabValue]);
+  }, [rowsPerPage, page, tabValue, search]);
   return (
     <>
       <Grid container spacing={2}>
@@ -160,51 +137,57 @@ function EmployeesTable({
         bodyChildren={
           <>
             {
-              typeof data?.items !== 'undefined' ? (
-                data?.items.map((item, index) => (
-                  <TableRow key={index}>
-                    <TableCell>{item.id}</TableCell>
-                    <TableCell>
-                      <NameWrapper>
-                        <Avatar
-                          src={item.user.userInformation.picture}
-                          alt={item.user.userInformation.picture}
-                          sx={{
-                            width: 24, height: 24
-                          }}
-                        />
-                    &nbsp;{item.user.name}
-                      </NameWrapper>
-                    </TableCell>
-                    <TableCell>{item.position.name}</TableCell>
-                    <TableCell>{item.department.name}</TableCell>
-                    <TableCell>{item.user.isActive ? (
-                      <Chip color='secondary' label='active' />
-                    ):(
-                      <Chip label='Non Active' sx={{ backgroundColor: '#FEE2E2' }}/>
-                    )}</TableCell>
-                    <TableCell>{item.user.createdAt}</TableCell>
-                    <TableCell>-</TableCell>
-                    <TableCell>
-                      <ButtonWrapper>
-                        <IconButton
-                          parentColor='primary.50'
-                          onClick={() => { router.push('/company-management/employees/detail/' + item.id); }}
-                          icons={
-                            <HiPencilAlt fontSize={20} color='#223567'/>
-                          }
-                        />
-                        <IconButton
-                          parentColor='grey.100'
-                          disabled
-                          icons={
-                            <BsTrashFill fontSize={20} color='#D1D5DB'/>
-                          }
-                        />
-                      </ButtonWrapper>
-                    </TableCell>
+              typeof data?.items !== 'undefined'  ? (
+                data?.items.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={12} align='center'>Data not found</TableCell>
                   </TableRow>
-                ))
+                ) : (
+                  data?.items.map((item, index) => (
+                    <TableRow key={index}>
+                      <TableCell>{item.id}</TableCell>
+                      <TableCell>
+                        <NameWrapper>
+                          <Avatar
+                            src={item.user.userInformation.picture}
+                            alt={item.user.userInformation.picture}
+                            sx={{
+                              width: 24, height: 24
+                            }}
+                          />
+                    &nbsp;{item.user.name}
+                        </NameWrapper>
+                      </TableCell>
+                      <TableCell>{item.position.name}</TableCell>
+                      <TableCell>{item.department.name}</TableCell>
+                      <TableCell>{item.user.isActive ? (
+                        <Chip color='secondary' label='active' />
+                      ):(
+                        <Chip label='Non Active' sx={{ backgroundColor: '#FEE2E2' }}/>
+                      )}</TableCell>
+                      <TableCell>{dayjs(item.user.createdAt).format('YYYY-MM-DD H:m:s')}</TableCell>
+                      <TableCell>-</TableCell>
+                      <TableCell>
+                        <ButtonWrapper>
+                          <IconButton
+                            parentColor='primary.50'
+                            onClick={() => { router.push('/company-management/employees/detail/' + item.id); }}
+                            icons={
+                              <HiPencilAlt fontSize={20} color='#223567'/>
+                            }
+                          />
+                          <IconButton
+                            parentColor='grey.100'
+                            disabled
+                            icons={
+                              <BsTrashFill fontSize={20} color='#D1D5DB'/>
+                            }
+                          />
+                        </ButtonWrapper>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )
               ): (
                 <TableRow>
                   <TableCell colSpan={12} align='center'>Data not found</TableCell>
