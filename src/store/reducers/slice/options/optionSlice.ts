@@ -8,6 +8,8 @@ interface OptionState {
   administrativeSecond: Array<{ label: string; value: string }>
   administrativeThird: Array<{ label: string; value: string }>,
   banks: Array<{ label: string, value: string }>
+  listDepartment: Array<{ label: string, value: string }>
+  listPosition: Array<{ label: string, value: string }>
 }
 
 const initialState: OptionState = {
@@ -16,7 +18,9 @@ const initialState: OptionState = {
   administrativeFirst: [],
   administrativeSecond: [],
   administrativeThird: [],
-  banks: []
+  banks: [],
+  listDepartment: [],
+  listPosition: [],
 };
 
 export const optionSlice = createSlice({
@@ -97,6 +101,36 @@ export const optionSlice = createSlice({
     },
     getBanksFailed: (state) => {
       state.loading = false;
+    },
+    getListDepartmentRequested: (state) => {
+      state.loading = true;
+    },
+    getListDepartmentSuccess: (state, action) => {
+      state.loading = false;
+      state.listDepartment = action?.payload?.items.map(item => {
+        return {
+          label: item.name,
+          value: item.id
+        };
+      });
+    },
+    getListDepartmentFailed: (state) => {
+      state.loading = false;
+    },
+    getListPositionRequested: (state) => {
+      state.loading = true;
+    },
+    getListPositionSuccess: (state, action) => {
+      state.loading = false;
+      state.listPosition = action?.payload.items.map(item => {
+        return {
+          label: item.name,
+          value: item.id
+        };
+      });
+    },
+    getListPositionFailed: (state) => {
+      state.loading = false;
     }
   },
   extraReducers: {
@@ -124,7 +158,13 @@ export const {
   administrativeThirdLevelFailed,
   getBanksRequested,
   getBanksSuccess,
-  getBanksFailed
+  getBanksFailed,
+  getListDepartmentRequested,
+  getListDepartmentSuccess,
+  getListDepartmentFailed,
+  getListPositionRequested,
+  getListPositionSuccess,
+  getListPositionFailed
 } = optionSlice.actions;
 
 export default optionSlice.reducer;

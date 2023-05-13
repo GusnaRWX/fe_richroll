@@ -11,6 +11,14 @@ export declare namespace Option {
     items: Array<{ id: string, alias: string }>
   }
 
+  export interface Department {
+    items: Array<{id:  string, name: string}>
+  }
+
+  export interface position {
+    items: Array<{id:  string, name: string}>
+  }
+
   export interface Mapper {
     label: string;
     value: string;
