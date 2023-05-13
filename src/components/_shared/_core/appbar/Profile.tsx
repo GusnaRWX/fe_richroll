@@ -7,9 +7,11 @@ import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import { signOut } from 'next-auth/react';
 import { clearStorages } from '@/utils/storage';
+import { useAppSelectors } from '@/hooks/index';
 
 const Profile = () => {
   const router = useRouter();
+  const { profile } = useAppSelectors(state => state.me)
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -51,14 +53,14 @@ const Profile = () => {
               fontSize={14}
               fontWeight={700}
             >
-              Hi, Budi
+              Hi, {profile ? profile?.name : ''}
             </Typography>
           </Grid>
           <Grid item>
             <Typography
               fontSize={12}
             >
-              HR Admin
+              {/* {profile && profile?.roles[0]} */}
             </Typography>
           </Grid>
         </Grid>

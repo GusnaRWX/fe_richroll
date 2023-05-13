@@ -22,8 +22,8 @@ export const authOptions: NextAuthOptions = {
   ],
   secret: config.NEXTAUTH_SECRET,
   callbacks: {
-    signIn: async function ({account, user}) {
-      const {name, email} = user;
+    signIn: async function ({ account, user }) {
+      const { name, email } = user;
       const response = await fetch(`${config.API_URL}authentication/callback`, {
         method: 'POST',
         headers: {
