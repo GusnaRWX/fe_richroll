@@ -1,5 +1,5 @@
 import { Box, Container, List, Toolbar } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Appbar from '@/components/_shared/_core/appbar/Index';
 import DrawerCore from '@/components/_shared/_core/drawer/Index';
 import { Menus } from '@/components/_shared/_core/drawer/menu';
@@ -9,7 +9,9 @@ import Image from 'next/image';
 import { Image as ImageType } from '@/utils/assetsConstant';
 import SidebarItem from '../drawer/SidebarItem';
 import Notify from '../../common/Notify';
-import { useAppSelectors } from '@/hooks/index';
+import { useAppDispatch, useAppSelectors } from '@/hooks/index';
+import { getStorage } from '@/utils/storage';
+import { meSuccessed } from '@/store/reducers/slice/auth/meSlice';
 
 export interface Layout {
   children?: React.ReactNode;
@@ -28,10 +30,22 @@ const Layout = ({
   children,
 }: Layout) => {
   const [mobileOpen, setMobileOpen] = useState<boolean>(false);
+  const dispatch = useAppDispatch()
   const handleDrawerToggle = () => {
     setMobileOpen((mobile) => !mobile);
   };
   const { responser } = useAppSelectors((state) => state);
+
+  useEffect(() => {
+    const getUserProfile = getStorage('user')
+
+    if (getUserProfile) {
+      dispatch({
+        type: meSuccessed.toString(),
+        payload: { ...JSON.parse(getUserProfile as string) }
+      })
+    }
+  }, [])
 
   const container = typeof window !== 'undefined' ? () => window.document.body : undefined;
 
