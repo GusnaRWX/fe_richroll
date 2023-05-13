@@ -1,17 +1,21 @@
 import React from 'react';
-import { Grid, Menu, MenuItem, Typography } from '@mui/material';
+import { Divider, Grid, Menu, MenuItem, Typography } from '@mui/material';
 import Image from 'next/image';
 import { Image as ImageType } from '@/utils/assetsConstant';
 import { IconButton } from '@/components/_shared/form';
-import { ExpandLess, ExpandMore } from '@mui/icons-material';
+import { ExpandLess, ExpandMore, } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import { signOut } from 'next-auth/react';
 import { clearStorages } from '@/utils/storage';
 import { useAppSelectors } from '@/hooks/index';
+import { HiOutlineLogout } from 'react-icons/hi';
+import { HiBuildingOffice } from 'react-icons/hi2';
+import { Text } from '../../common';
+import PersonIcon from '@mui/icons-material/Person';
 
 const Profile = () => {
   const router = useRouter();
-  const { profile } = useAppSelectors(state => state.me)
+  const { profile } = useAppSelectors(state => state.me);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -22,12 +26,25 @@ const Profile = () => {
     setAnchorEl(null);
   };
 
-  const handleRemoveToken = async () => {
-    clearStorages(['accessToken', 'refreshToken', 'user']);
-    signOut({ callbackUrl: '/login' });
-    setAnchorEl(null);
-    router.push('/login');
+  const handleRemoveToken = async (type: string) => {
+    switch (type) {
+      case 'logout':
+        clearStorages(['accessToken', 'refreshToken', 'user']);
+        signOut({ callbackUrl: '/login' });
+        setAnchorEl(null);
+        router.push('/login');
+        break;
+      case 'profile':
+        router.push('/profile');
+        setAnchorEl(null);
+        break;
+      case 'company':
+        router.push('/company');
+        setAnchorEl(null);
+        break;
+    }
   };
+
 
   return (
     <Grid
@@ -86,7 +103,20 @@ const Profile = () => {
           'aria-labelledby': 'menu-button',
         }}
       >
-        <MenuItem onClick={handleRemoveToken}>Log out</MenuItem>
+        <MenuItem onClick={() => { handleRemoveToken('profile'); }}>
+          <PersonIcon width={20} fontSize='small' />
+          <Text variant='text-sm' title='Profile' ml='10px' />
+        </MenuItem>
+        <Divider />
+        <MenuItem onClick={() => { handleRemoveToken('company'); }}>
+          <HiBuildingOffice />
+          <Text variant='text-sm' title='Change Company' ml='10px' />
+        </MenuItem>
+        <Divider />
+        <MenuItem onClick={() => { handleRemoveToken('logout'); }} >
+          <HiOutlineLogout color='#DC2626' fontSize={20} />
+          <Text variant='text-sm' title='Logout' color='red.600' ml='10px' />
+        </MenuItem>
       </Menu>
     </Grid>
   );

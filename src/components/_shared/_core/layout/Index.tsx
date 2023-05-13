@@ -13,7 +13,7 @@ import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { getStorage } from '@/utils/storage';
 import { meSuccessed } from '@/store/reducers/slice/auth/meSlice';
 
-export interface Layout {
+export interface LayoutProps {
   children?: React.ReactNode;
 }
 
@@ -28,24 +28,24 @@ const MainComponent = styled(Box)<BoxProps>(({ theme }) => ({
 
 const Layout = ({
   children,
-}: Layout) => {
+}: LayoutProps) => {
   const [mobileOpen, setMobileOpen] = useState<boolean>(false);
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
   const handleDrawerToggle = () => {
     setMobileOpen((mobile) => !mobile);
   };
   const { responser } = useAppSelectors((state) => state);
 
   useEffect(() => {
-    const getUserProfile = getStorage('user')
+    const getUserProfile = getStorage('user');
 
     if (getUserProfile) {
       dispatch({
         type: meSuccessed.toString(),
         payload: { ...JSON.parse(getUserProfile as string) }
-      })
+      });
     }
-  }, [])
+  }, []);
 
   const container = typeof window !== 'undefined' ? () => window.document.body : undefined;
 

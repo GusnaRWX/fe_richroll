@@ -435,7 +435,10 @@ const theme = createTheme({
           backgroundColor: '#FFF',
           ' .Mui-disabled': {
             backgroundColor: palette.grey[100],
-          }
+          },
+          '& .MuiInputBase-root': {
+            color: palette.grey[500],
+          },
         },
       }
     },
