@@ -437,7 +437,7 @@ const theme = createTheme({
             backgroundColor: palette.grey[100],
           },
           '& .MuiInputBase-root': {
-            color: palette.grey[500],
+            color: palette.grey[600],
           },
         },
       }
