@@ -1,7 +1,7 @@
 import React from 'react';
 import { styled } from '@mui/material/styles';
 import { SharedComponent } from '@/types/component';
-import { FormControl, TextareaAutosize } from '@mui/material';
+import { FormControl, FormHelperText, TextareaAutosize } from '@mui/material';
 import { Text } from '../common';
 
 const CustomTextArea = styled(TextareaAutosize)<SharedComponent.ComponentTextarea>(({ theme, error }) => ({
@@ -12,7 +12,9 @@ const CustomTextArea = styled(TextareaAutosize)<SharedComponent.ComponentTextare
   '&:focus': {
     outline: `1px solid ${error && theme.palette.error.main}`,
   },
-  fontFamily: 'inherit'
+  color: theme.palette.grey[500],
+  fontFamily: 'inherit',
+  fontSize: '1rem'
 }));
 
 const AsteriskComponent = styled('span')(({ theme }) => ({
@@ -44,6 +46,9 @@ const Textarea = ({
         aria-label={customLabel}
         {...props}
       />
+      {error && (
+        <FormHelperText sx={{ color: '#EF4444' }}>{error}</FormHelperText>
+      )}
     </FormControl>
   );
 

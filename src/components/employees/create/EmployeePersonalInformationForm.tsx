@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Text } from '@/components/_shared/common';
-import { RadioGroup, Input, Button, Textarea } from '@/components/_shared/form';
-import { Box, Checkbox, FormControl, FormControlLabel, Grid, MenuItem, Select, TextField, TextFieldProps } from '@mui/material';
+import { Alert, Text } from '@/components/_shared/common';
+import { RadioGroup, Input, Button, Textarea, DatePicker, CheckBox, Select } from '@/components/_shared/form';
+import { Box, Grid } from '@mui/material';
 import { useForm, useAppDispatch, useAppSelectors } from '@/hooks/index';
-import { styled } from '@mui/material/styles';
-import { maritialStatus, religions, IDTypes } from '@/utils/options';
+import { maritialStatus, religions, IDTypes, employeeItems } from '@/utils/options';
 import {
   administrativeFirstLevelRequested,
   administrativeSecondLevelRequested,
@@ -12,16 +11,11 @@ import {
   countriesRequested,
   getBanksRequested
 } from '@/store/reducers/slice/options/optionSlice';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 import { postPersonalInformationRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
-
-
-const AsteriskComponent = styled('span')(({ theme }) => ({
-  color: theme.palette.error.main
-}));
+import { convertDateValue, convertValue } from '@/utils/helper';
+import { Employees } from '@/types/employees';
+import CancelIcon from '@mui/icons-material/Cancel';
 
 interface PersonalInformationProps {
   refProp: React.Ref<HTMLFormElement>
@@ -44,10 +38,13 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
     employeeID
   } = useAppSelectors(state => state.employee);
 
+  const [useResidentialAddress, setUseResidentialAddress] = useState(false);
+  const [isPermanentPersonalID, setIsPermanentPersonalID] = useState(false);
+
   const [initialValues] = useState({
 
     // Group Personal Information
-    dateofBirthPersonalInformation: dayjs(Date.now()),
+    dateofBirthPersonalInformation: null,
     genderPersonalInformation: '',
     maritialStatusPersonalInformation: '',
     numberOfDependantsPersonalInformation: '',
@@ -61,7 +58,6 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
     subDistrictCitizenAddress: '',
     addressCitizenAddress: '',
     zipCodeCitizenAddress: '',
-    useResidentialCitizenAddress: false,
 
     // Group Residential Address
     countryResidentialAddress: '',
@@ -84,14 +80,18 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
     // Group Personal ID
     idTypePersonalID: '',
     idNumberPersonalID: '',
-    idExpirationDatePersonalID: dayjs(Date.now()),
-    isPermanentPersonalID: false
+    idExpirationDatePersonalID: null,
   });
+
+  const [errorFields, setErrorFields] = useState(false);
 
   const validate = (fieldOfValues = values) => {
     const temp = { ...errors };
 
     // Group Personal Information
+
+    if ('dateofBirthPersonalInformation' in fieldOfValues)
+      temp.dateofBirthPersonalInformation = fieldOfValues.dateofBirthPersonalInformation ? '' : 'This field is required';
 
     if ('genderPersonalInformation' in fieldOfValues)
       temp.genderPersonalInformation = fieldOfValues.genderPersonalInformation ? '' : 'This is required';
@@ -106,42 +106,18 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
       temp.nationalityPersonalInformation = fieldOfValues.nationalityPersonalInformation ? '' : 'This field is required';
 
     if ('religionPersonalInformation' in fieldOfValues)
-      temp.religionPersonalInformation = fieldOfValues.religionPersonalInformation;
+      temp.religionPersonalInformation = fieldOfValues.religionPersonalInformation ? '' : '';
 
     // Group Citizen Address
 
     if ('countryCitizenAddress' in fieldOfValues)
-      temp.countryCitizenAddress = fieldOfValues.countryCitizenAddress
-        ? dispatch({
-          type: administrativeFirstLevelRequested.toString(),
-          payload: {
-            countryId: fieldOfValues.countryCitizenAddress
-          }
-        })
-        : 'This field is required';
+      temp.countryCitizenAddress = fieldOfValues.countryCitizenAddress ? '' : 'This field is required';
 
     if ('provinceCitizenAddress' in fieldOfValues)
-      temp.provinceCitizenAddress = fieldOfValues.provinceCitizenAddress
-        ? dispatch({
-          type: administrativeSecondLevelRequested.toString(),
-          payload: {
-            countryId: values.countryCitizenAddress,
-            firstLevelCode: fieldOfValues.provinceCitizenAddress
-          }
-        })
-        : 'This field is required';
+      temp.provinceCitizenAddress = fieldOfValues.provinceCitizenAddress ? '' : 'This field is required';
 
     if ('cityCitizenAddress' in fieldOfValues)
-      temp.cityCitizenAddress = fieldOfValues.cityCitizenAddress
-        ? dispatch({
-          type: administrativeThirdLevelRequsted.toString(),
-          payload: {
-            countryId: values.countryCitizenAddress,
-            firstLevelCode: values.provinceCitizenAddress,
-            secondLevelCode: fieldOfValues.cityCitizenAddress
-          }
-        })
-        : 'This field is required';
+      temp.cityCitizenAddress = fieldOfValues.cityCitizenAddress ? '' : 'This field is required';
 
     if ('subDistrictCitizenAddress' in fieldOfValues)
       temp.subDistrictCitizenAddress = fieldOfValues.subDistrictCitizenAddress ? '' : 'This field is required';
@@ -152,53 +128,37 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
     if ('zipCodeCitizenAddress' in fieldOfValues)
       temp.zipCodeCitizenAddress = fieldOfValues.zipCodeCitizenAddress ? '' : 'This field is required';
 
-    if ('useResidentialCitizenAddress' in fieldOfValues)
-      temp.useResidentialCitizenAddress = !fieldOfValues.useResidentialCitizenAddress;
-
     // Group Resdential Address
-    // if (!values.useResidentialCitizenAddress) {
     if ('countryResidentialAddress' in fieldOfValues)
       temp.countryResidentialAddress = fieldOfValues.countryResidentialAddress
-        ? dispatch({
-          type: administrativeFirstLevelRequested.toString(),
-          payload: {
-            countryId: fieldOfValues.countryResidentialAddress
-          }
-        })
-        : 'This field is required';
+        ? ''
+        : useResidentialAddress ? '' : 'This field is required';
+
 
     if ('provinceResidentialAddress' in fieldOfValues)
       temp.provinceResidentialAddress = fieldOfValues.provinceResidentialAddress
-        ? dispatch({
-          type: administrativeSecondLevelRequested.toString(),
-          payload: {
-            country: values.countryResidentialAddress,
-            firstLevelCode: fieldOfValues.provinceResidentialAddress
-          }
-        })
-        : 'This field is required';
+        ? ''
+        : useResidentialAddress ? '' : 'This field is required';
 
     if ('cityResidentialAddress' in fieldOfValues)
       temp.cityResidentialAddress = fieldOfValues.cityResidentialAddress
-        ? dispatch({
-          type: administrativeThirdLevelRequsted.toString(),
-          payload: {
-            countryId: values.countryResidentialAddress,
-            firstLevelCode: values.provinceResidentialAddress,
-            secondLevelCode: fieldOfValues.cityResidentialAddress
-          }
-        })
-        : 'This field is required';
+        ? ''
+        : useResidentialAddress ? '' : 'This field is required';
 
     if ('subDistrictResidentialAddress' in fieldOfValues)
-      temp.subDistrictResidentialAddress = fieldOfValues.subDistrictResidentialAddress ? '' : 'This field is required';
+      temp.subDistrictResidentialAddress = fieldOfValues.subDistrictResidentialAddress
+        ? ''
+        : useResidentialAddress ? '' : 'This field is required';
 
     if ('addressResidentialAddress' in fieldOfValues)
-      temp.addressResidentialAddress = fieldOfValues.addressResidentialAddress ? '' : 'This field is required';
+      temp.addressResidentialAddress = fieldOfValues.addressResidentialAddress
+        ? ''
+        : useResidentialAddress ? '' : 'This field is required';
 
     if ('zipCodeResidentialAddress' in fieldOfValues)
-      temp.zipCodeResidentialAddress = fieldOfValues.zipCodeResidentialAddress ? '' : 'This field is required';
-    // }
+      temp.zipCodeResidentialAddress = fieldOfValues.zipCodeResidentialAddress
+        ? ''
+        : useResidentialAddress ? '' : 'This field is required';
 
     // Group Bank Information
     if ('bankBankInformation' in fieldOfValues)
@@ -233,9 +193,6 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
     if ('idExpirationDatePersonalID' in fieldOfValues)
       temp.idExpirationDatePersonalID = fieldOfValues.idExpirationDatePersonalID ? '' : 'This field is required';
 
-    if ('isPermanentPersonalID' in fieldOfValues)
-      temp.isPermanentPersonalID = !fieldOfValues.isPermanentPersonalID;
-
     setErrors({ ...temp });
 
     if (fieldOfValues === values) {
@@ -249,12 +206,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
     handleInputChange
   } = useForm(initialValues, true, validate);
 
-  const employeeItems = [
-    { label: '< 10', value: 1 },
-    { label: '< 25', value: 2 },
-    { label: '< 50', value: 3 },
-    { label: '> 50', value: 4 }
-  ];
+  console.log(errors);
 
   useEffect(() => {
     dispatch({
@@ -265,27 +217,57 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
     });
   }, []);
 
-  const convertDate = (name, event) => {
-    const obj = {
-      target: {
-        name, value: event.$d
-      }
-    };
-    return obj;
-  };
+  useEffect(() => {
+    function hitCountries() {
+      if (!values.countryCitizenAddress || !values.countryResidentialAddress) return;
+      else dispatch({
+        type: administrativeFirstLevelRequested.toString(),
+        payload: {
+          countryId: values.countryCitizenAddress || values.countryResidentialAddress
+        }
+      });
+    }
+    hitCountries();
 
-  const convertCheckbox = (name, event) => {
-    const obj = {
-      target: {
-        name, value: event?.target?.checked
-      }
-    };
-    return obj;
-  };
+    return () => hitCountries();
+  }, [values.countryCitizenAddress, values.countryResidentialAddress]);
+
+  useEffect(() => {
+    function hitAdministrativeFirstLevel() {
+      if (!values.provinceCitizenAddress || !values.provinceResidentialAddress) return;
+      else dispatch({
+        type: administrativeSecondLevelRequested.toString(),
+        payload: {
+          countryId: values.countryCitizenAddress || values.countryResidentialAddress,
+          firstLevelCode: values.provinceCitizenAddress || values.provinceResidentialAddress
+        }
+      });
+    }
+    hitAdministrativeFirstLevel();
+    return () => hitAdministrativeFirstLevel();
+  }, [values.provinceCitizenAddress, values.provinceResidentialAddress]);
+
+  useEffect(() => {
+    function hitAdministrativeThirdLevel() {
+      if (!values.cityCitizenAddress || !values.cityResidentialAddress) return;
+      else dispatch({
+        type: administrativeThirdLevelRequsted.toString(),
+        payload: {
+          countryId: values.countryCitizenAddress || values.countryResidentialAddress,
+          firstLevelCode: values.provinceCitizenAddress || values.provinceResidentialAddress,
+          secondLevelCode: values.cityCitizenAddress || values.cityResidentialAddress
+        }
+      });
+    }
+    hitAdministrativeThirdLevel();
+    return () => hitAdministrativeThirdLevel();
+  }, [values.cityCitizenAddress, values.cityResidentialAddress]);
+
+  // console.log(values.useResidentialCitizenAddress);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const payload = {
+    const payload: Employees.PersonalInformationPayload = {
       employeeID: employeeID,
       citizen: {
         countryID: values.countryCitizenAddress,
@@ -295,7 +277,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
         address: values.addressCitizenAddress,
         zipCode: values.zipCodeCitizenAddress,
         isCitizen: true,
-        isResident: values.useResidentialCitizenAddress,
+        isResident: useResidentialAddress,
       },
       personal: {
         dateOfBirth: dayjs(values.dateofBirthPersonalInformation).format('YYYY-MM-DD'),
@@ -308,8 +290,8 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
       identity: {
         type: +values.idTypePersonalID,
         number: +values.idNumberPersonalID,
-        // expireAt: !values.isPermanentPersonalID && dayjs(values.idExpirationDatePersonalID).format('YYYY-MM-DD'),
-        isPermanent: values.isPermanentPersonalID
+        expireAt: dayjs(values.idExpirationDatePersonalID).format('YYYY-MM-DD'),
+        isPermanent: isPermanentPersonalID
       },
       bank: {
         bankID: values.bankBankInformation,
@@ -331,14 +313,48 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
         isResident: true
       }
     };
-    dispatch({
-      type: postPersonalInformationRequested.toString(),
-      payload: payload
-    });
+    if (useResidentialAddress) {
+      if (validate()) {
+        delete payload.residential;
+        setErrorFields(false);
+        dispatch({
+          type: postPersonalInformationRequested.toString(),
+          payload: payload
+        });
+      } else {
+        setErrorFields(true);
+      }
+    } else {
+      if (validate()) {
+        if (isPermanentPersonalID) {
+          setErrorFields(false);
+          delete payload.identity?.expireAt;
+          dispatch({
+            type: postPersonalInformationRequested.toString(),
+            payload: payload
+          });
+        } else {
+          setErrorFields(false);
+          dispatch({
+            type: postPersonalInformationRequested.toString(),
+            payload: payload
+          });
+        }
+      } else {
+        setErrorFields(true);
+      }
+    }
   };
 
   return (
     <form onSubmit={handleSubmit} ref={refProp}>
+      {errorFields && (
+        <Alert
+          severity={'error'}
+          content='Please fill in all the mandatory fields'
+          icon={<CancelIcon />}
+        />
+      )}
       <Box
         component='div'
         id='personal-information-field'
@@ -346,10 +362,9 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
       >
         <Text
           variant='text-lg'
-          title='Personal Informaton'
+          title='Personal Information'
           fontWeight={700}
           color='primary.500'
-
         />
         <Grid
           container
@@ -357,29 +372,19 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
           justifyContent='space-between'
           alignItems='center'
           mb='16px'
+          mt='16px'
         >
           <Grid
             item
             sm={5.8}
           >
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
-                format='DD/MM/YYYY'
-                value={values.dateofBirthPersonalInformation}
-                onChange={(e) => handleInputChange(convertDate('dateofBirthPersonalInformation', e))}
-                slots={{
-                  textField: (textFieldProps: TextFieldProps) => (
-                    <TextField {...textFieldProps} />
-                  )
-                }}
-                sx={{
-                  '& .MuiOutlinedInput-input': {
-                    padding: '10px 14px',
-                    border: 'none !important'
-                  },
-                  width: '100%'
-                }} />
-            </LocalizationProvider>
+            <DatePicker
+              customLabel='Date of Birth'
+              value={values.dateofBirthPersonalInformation}
+              onChange={(e: unknown) => handleInputChange(convertDateValue('dateofBirthPersonalInformation', e))}
+              withAsterisk
+              error={errors.dateofBirthPersonalInformation}
+            />
           </Grid>
           <Grid
             item
@@ -395,6 +400,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
               ]}
               value={values.genderPersonalInformation}
               onChange={handleInputChange}
+              error={errors.genderPersonalInformation}
               row
             />
           </Grid>
@@ -410,49 +416,33 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
             item
             sm={5.8}
           >
-            <FormControl fullWidth>
-              <Text
-                title='Marital Status'
-              >
-                <AsteriskComponent>*</AsteriskComponent>
-              </Text>
-              <Select
-                variant='outlined'
-                size='small'
-                name='maritialStatusPersonalInformation'
-                onChange={handleInputChange}
-                value={values.maritialStatusPersonalInformation}
-              >
-                {maritialStatus.map(item => (
-                  <MenuItem key={item.label} value={item.value} >{item.label}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            <Select
+              variant='outlined'
+              size='small'
+              fullWidth
+              onChange={(e: unknown) => handleInputChange(convertValue('maritialStatusPersonalInformation', e))}
+              options={maritialStatus}
+              value={values.maritialStatusPersonalInformation}
+              customLabel='Maritial Status'
+              withAsterisk
+              error={errors.maritialStatusPersonalInformation}
+            />
           </Grid>
           <Grid
             item
             sm={5.8}
           >
-            <FormControl fullWidth>
-              <Text
-                title='Number of Dependants'
-              >
-                <AsteriskComponent>*</AsteriskComponent>
-              </Text>
-              <Select
-                variant='outlined'
-                size='small'
-                name='numberOfDependantsPersonalInformation'
-                onChange={handleInputChange}
-                value={values.numberOfDependantsPersonalInformation}
-              >
-                {
-                  employeeItems.map(item => (
-                    <MenuItem key={item.label} value={item.value}>{item.label}</MenuItem>
-                  ))
-                }
-              </Select>
-            </FormControl>
+            <Select
+              customLabel='Number of Dependants'
+              withAsterisk
+              size='small'
+              variant='outlined'
+              options={employeeItems}
+              fullWidth
+              onChange={(e: unknown) => handleInputChange(convertValue('numberOfDependantsPersonalInformation', e))}
+              value={values.numberOfDependantsPersonalInformation}
+              error={errors.numberOfDependantsPersonalInformation}
+            />
           </Grid>
         </Grid>
         <Grid
@@ -466,47 +456,33 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
             item
             sm={5.8}
           >
-            <FormControl fullWidth>
-              <Text
-                title='Nationality'
-              >
-                <AsteriskComponent>*</AsteriskComponent>
-              </Text>
-              <Select
-                variant='outlined'
-                size='small'
-                name='nationalityPersonalInformation'
-                value={values.nationalityPersonalInformation}
-                onChange={handleInputChange}
-              >
-                {countries?.map(item => (
-                  <MenuItem key={item.label} value={item.value}>{item.label}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            <Select
+              fullWidth
+              customLabel='Nationality'
+              withAsterisk
+              variant='outlined'
+              size='small'
+              name='nationalityPersonalInformation'
+              value={values.nationalityPersonalInformation}
+              onChange={(e: unknown) => handleInputChange(convertValue('nationalityPersonalInformation', e))}
+              options={countries}
+              error={errors.nationalityPersonalInformation}
+            />
           </Grid>
           <Grid
             item
             sm={5.8}
           >
-            <FormControl fullWidth>
-              <Text
-                title='Religion'
-              >
-                <AsteriskComponent>*</AsteriskComponent>
-              </Text>
-              <Select
-                variant='outlined'
-                size='small'
-                name='religionPersonalInformation'
-                value={values.religionPersonalInformation}
-                onChange={handleInputChange}
-              >
-                {religions.map(item => (
-                  <MenuItem key={item.label} value={item.value}>{item.label}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            <Select
+              fullWidth
+              customLabel='Religion'
+              variant='outlined'
+              size='small'
+              name='religionPersonalInformation'
+              value={values.religionPersonalInformation}
+              onChange={(e: unknown) => handleInputChange(convertValue('religionPersonalInformation', e))}
+              options={religions}
+            />
           </Grid>
         </Grid>
       </Box>
@@ -527,52 +503,41 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
           justifyContent='space-between'
           alignItems='center'
           mb='16px'
+          mt='16px'
         >
           <Grid
             item
             sm={5.8}
           >
-            <FormControl fullWidth>
-              <Text
-                title='Country'
-              >
-                <AsteriskComponent>*</AsteriskComponent>
-              </Text>
-              <Select
-                variant='outlined'
-                size='small'
-                name='countryCitizenAddress'
-                value={values.countryCitizenAddress}
-                onChange={handleInputChange}
-              >
-                {countries?.map(item => (
-                  <MenuItem key={item.label} value={item.value}>{item.label}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            <Select
+              fullWidth
+              customLabel='Country'
+              withAsterisk
+              variant='outlined'
+              size='small'
+              name='countryCitizenAddress'
+              value={values.countryCitizenAddress}
+              onChange={(e: unknown) => handleInputChange(convertValue('countryCitizenAddress', e))}
+              options={countries}
+              error={errors.countryCitizenAddress}
+            />
           </Grid>
           <Grid
             item
             sm={5.8}
           >
-            <FormControl fullWidth>
-              <Text
-                title='Province'
-              >
-                <AsteriskComponent>*</AsteriskComponent>
-              </Text>
-              <Select
-                variant='outlined'
-                size='small'
-                name='provinceCitizenAddress'
-                value={values.provinceCitizenAddress}
-                onChange={handleInputChange}
-              >
-                {administrativeFirst.map(item => (
-                  <MenuItem key={item.label} value={item.value}>{item.label}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            <Select
+              fullWidth
+              customLabel='Province'
+              withAsterisk
+              variant='outlined'
+              size='small'
+              name='provinceCitizenAddress'
+              value={values.provinceCitizenAddress}
+              onChange={(e: unknown) => handleInputChange(convertValue('provinceCitizenAddress', e))}
+              options={administrativeFirst}
+              error={errors.provinceCitizenAddress}
+            />
           </Grid>
         </Grid>
         <Grid
@@ -586,47 +551,35 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
             item
             sm={5.8}
           >
-            <FormControl fullWidth>
-              <Text
-                title='City'
-              >
-                <AsteriskComponent>*</AsteriskComponent>
-              </Text>
-              <Select
-                variant='outlined'
-                size='small'
-                name='cityCitizenAddress'
-                value={values.cityCitizenAddress}
-                onChange={handleInputChange}
-              >
-                {administrativeSecond?.map(item => (
-                  <MenuItem key={item.label} value={item.value}>{item.label}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            <Select
+              fullWidth
+              customLabel='City'
+              withAsterisk
+              variant='outlined'
+              size='small'
+              name='cityCitizenAddress'
+              value={values.cityCitizenAddress}
+              onChange={(e: unknown) => handleInputChange(convertValue('cityCitizenAddress', e))}
+              options={administrativeSecond}
+              error={errors.cityCitizenAddress}
+            />
           </Grid>
           <Grid
             item
             sm={5.8}
           >
-            <FormControl fullWidth>
-              <Text
-                title='Sub-District'
-              >
-                <AsteriskComponent>*</AsteriskComponent>
-              </Text>
-              <Select
-                variant='outlined'
-                size='small'
-                name='subDistrictCitizenAddress'
-                value={values.subDistrictCitizenAddress}
-                onChange={handleInputChange}
-              >
-                {administrativeThird?.map(item => (
-                  <MenuItem key={item.label} value={item.value}>{item.label}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            <Select
+              fullWidth
+              customLabel='Sub-District'
+              withAsterisk
+              variant='outlined'
+              size='small'
+              name='subDistrictCitizenAddress'
+              value={values.subDistrictCitizenAddress}
+              onChange={(e: unknown) => handleInputChange(convertValue('subDistrictCitizenAddress', e))}
+              options={administrativeThird}
+              error={errors.subDistrictCitizenAddress}
+            />
           </Grid>
         </Grid>
         <Grid
@@ -677,16 +630,11 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
             item
             sm={5.8}
           >
-            <FormControlLabel
-              label='Use as residential address'
-              control={
-                <Checkbox
-                  color='primary'
-                  name='useResidentialCitizenAddress'
-                  value={values.useResidentialCitizenAddress}
-                  onChange={(e) => handleInputChange(convertCheckbox('useResidentialCitizenAddress', e))}
-                />
-              }
+            <CheckBox
+              customLabel='Use as residential address'
+              name='useResidentialCitizenAddress'
+              checked={useResidentialAddress}
+              onChange={() => setUseResidentialAddress(prev => !prev)}
             />
           </Grid>
         </Grid>
@@ -709,52 +657,41 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
           justifyContent='space-between'
           alignItems='center'
           mb='16px'
+          mt='16px'
         >
           <Grid
             item
             sm={5.8}
           >
-            <FormControl fullWidth>
-              <Text
-                title='Country'
-              >
-                <AsteriskComponent>*</AsteriskComponent>
-              </Text>
-              <Select
-                variant='outlined'
-                size='small'
-                name='countryResidentialAddress'
-                value={values.countryResidentialAddress}
-                onChange={handleInputChange}
-              >
-                {countries?.map(item => (
-                  <MenuItem key={item.label} value={item.value}>{item.label}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            <Select
+              fullWidth
+              customLabel='Country'
+              withAsterisk
+              variant='outlined'
+              size='small'
+              name='countryResidentialAddress'
+              value={values.countryResidentialAddress}
+              onChange={(e: unknown) => handleInputChange(convertValue('countryResidentialAddress', e))}
+              options={countries}
+              error={useResidentialAddress ? '' : errors.countryResidentialAddress}
+            />
           </Grid>
           <Grid
             item
             sm={5.8}
           >
-            <FormControl fullWidth>
-              <Text
-                title='Province'
-              >
-                <AsteriskComponent>*</AsteriskComponent>
-              </Text>
-              <Select
-                variant='outlined'
-                size='small'
-                name='provinceResidentialAddress'
-                value={values.provinceResidentialAddress}
-                onChange={handleInputChange}
-              >
-                {administrativeFirst.map(item => (
-                  <MenuItem key={item.label} value={item.value}>{item.label}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            <Select
+              fullWidth
+              customLabel='Province'
+              withAsterisk
+              variant='outlined'
+              size='small'
+              name='provinceResidentialAddress'
+              value={values.provinceResidentialAddress}
+              onChange={(e: unknown) => handleInputChange(convertValue('provinceResidentialAddress', e))}
+              options={administrativeFirst}
+              error={useResidentialAddress ? '' : errors.provinceResidentialAddress}
+            />
           </Grid>
         </Grid>
         <Grid
@@ -768,47 +705,35 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
             item
             sm={5.8}
           >
-            <FormControl fullWidth>
-              <Text
-                title='City'
-              >
-                <AsteriskComponent>*</AsteriskComponent>
-              </Text>
-              <Select
-                variant='outlined'
-                size='small'
-                name='cityResidentialAddress'
-                value={values.cityResidentialAddress}
-                onChange={handleInputChange}
-              >
-                {administrativeSecond?.map(item => (
-                  <MenuItem key={item.label} value={item.value}>{item.label}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            <Select
+              fullWidth
+              customLabel='City'
+              withAsterisk
+              variant='outlined'
+              size='small'
+              name='cityResidentialAddress'
+              value={values.cityResidentialAddress}
+              onChange={(e: unknown) => handleInputChange(convertValue('cityResidentialAddress', e))}
+              options={administrativeSecond}
+              error={useResidentialAddress ? '' : errors.cityResidentialAddress}
+            />
           </Grid>
           <Grid
             item
             sm={5.8}
           >
-            <FormControl fullWidth>
-              <Text
-                title='Sub-District'
-              >
-                <AsteriskComponent>*</AsteriskComponent>
-              </Text>
-              <Select
-                variant='outlined'
-                size='small'
-                name='subDistrictResidentialAddress'
-                value={values.subDistrictResidentialAddress}
-                onChange={handleInputChange}
-              >
-                {administrativeThird?.map(item => (
-                  <MenuItem key={item.label} value={item.value}>{item.label}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            <Select
+              fullWidth
+              customLabel='Sub-District'
+              withAsterisk
+              variant='outlined'
+              size='small'
+              name='subDistrictResidentialAddress'
+              value={values.subDistrictResidentialAddress}
+              onChange={(e: unknown) => handleInputChange(convertValue('subDistrictResidentialAddress', e))}
+              options={administrativeThird}
+              error={useResidentialAddress ? '' : errors.subDistrictResidentialAddress}
+            />
           </Grid>
         </Grid>
         <Grid
@@ -828,7 +753,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
               minRows={3}
               value={values.addressResidentialAddress}
               onChange={handleInputChange}
-              error={errors.addressResidentialAddress}
+              error={useResidentialAddress ? '' : errors.addressResidentialAddress}
               withAsterisk
               customLabel='Citizen ID Street Name, Building Name'
             />
@@ -844,7 +769,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
               name='zipCodeResidentialAddress'
               value={values.zipCodeResidentialAddress}
               onChange={handleInputChange}
-              error={errors.zipCodeResidentialAddress}
+              error={useResidentialAddress ? '' : errors.zipCodeResidentialAddress}
             />
           </Grid>
         </Grid>
@@ -866,29 +791,24 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
           justifyContent='space-between'
           alignItems='center'
           mb='16px'
+          mt='16px'
         >
           <Grid
             item
             sm={5.8}
           >
-            <FormControl fullWidth>
-              <Text
-                title='ID Type'
-              >
-                <AsteriskComponent>*</AsteriskComponent>
-              </Text>
-              <Select
-                variant='outlined'
-                size='small'
-                name='idTypePersonalID'
-                value={values.idTypePersonalID}
-                onChange={handleInputChange}
-              >
-                {IDTypes.map(item => (
-                  <MenuItem key={item.label} value={item.value}>{item.label}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            <Select
+              fullWidth
+              customLabel='ID Type'
+              withAsterisk
+              variant='outlined'
+              size='small'
+              name='idTypePersonalID'
+              value={values.idTypePersonalID}
+              onChange={(e: unknown) => handleInputChange(convertValue('idTypePersonalID', e))}
+              options={IDTypes}
+              error={errors.idTypePersonalID}
+            />
           </Grid>
           <Grid
             item
@@ -916,42 +836,29 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
             item
             sm={5.8}
           >
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
-                format='DD/MM/YYYY'
-                value={values.idExpirationDatePersonalID}
-                onChange={(e) => handleInputChange(convertDate('idExpirationDatePersonalID', e))}
-                slots={{
-                  textField: (textFieldProps: TextFieldProps) => (
-                    <TextField {...textFieldProps} />
-                  )
-                }}
-                sx={{
-                  '& .MuiOutlinedInput-input': {
-                    padding: '10px 14px',
-                    border: 'none !important'
-                  },
-                  width: '100%'
-                }} />
-            </LocalizationProvider>
+            <DatePicker
+              customLabel='ID Expiration Date'
+              withAsterisk
+              value={values.idExpirationDatePersonalID}
+              onChange={(e: unknown) => handleInputChange(convertDateValue('idExpirationDatePersonalID', e))}
+              error={values.PersonalIDPersonalID ? '' : errors.idExpirationDatePersonalID}
+              disabled={values.PersonalIDPersonalID}
+            />
           </Grid>
         </Grid>
         <Grid
           container
           wrap='wrap'
-          // justifyContent='c'
           alignItems='center'
           mb='16px'
         >
           <Grid item sm={5.8}>
-            <FormControlLabel
-              label='Permanent'
-              control={<Checkbox
-                color='primary'
-                name='PersonalIDPersonalID'
-                value={values.isPermanentPersonalID}
-                onChange={(e) => handleInputChange(convertCheckbox('isPermanentPersonalID', e))}
-              />}
+            <CheckBox
+              customLabel='Permanent'
+              color='primary'
+              name='PersonalIDPersonalID'
+              checked={values.PersonalIDPersonalID}
+              onChange={() => setIsPermanentPersonalID(prev => !prev)}
             />
           </Grid>
         </Grid>
@@ -972,27 +879,22 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
           justifyContent='space-between'
           alignItems='center'
           mb='16px'
+          mt='16px'
         >
           <Grid
             item
             sm={5.8}
           >
-            <FormControl fullWidth>
-              <Text
-                title='Bank'
-              />
-              <Select
-                variant='outlined'
-                size='small'
-                name='bankBankInformation'
-                value={values.bankBankInformation}
-                onChange={handleInputChange}
-              >
-                {banks?.map(item => (
-                  <MenuItem key={item.label} value={item.value}>{item.label}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            <Select
+              fullWidth
+              customLabel='Bank'
+              variant='outlined'
+              size='small'
+              name='bankBankInformation'
+              value={values.bankBankInformation}
+              onChange={(e: unknown) => handleInputChange(convertValue('bankBankInformation', e))}
+              options={banks}
+            />
           </Grid>
           <Grid
             item

@@ -24,3 +24,10 @@ export const IDTypes: Array<Option.Mapper> = [
   { label: 'Nomor wajib pajak', value: '1' },
   { label: 'Passport', value: '2' }
 ];
+
+export const employeeItems: Array<Option.Mapper> = [
+  { label: '< 10', value: '1' },
+  { label: '< 25', value: '2' },
+  { label: '< 50', value: '3' },
+  { label: '> 50', value: '4' }
+];
