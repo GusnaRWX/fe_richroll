@@ -10,6 +10,7 @@ import {
   RadioProps
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { Text } from '../common';
 
 type RadioOption = {
   label: string;
@@ -82,8 +83,8 @@ const RadioGroup = ({
 
   return (
     <FormControl component='fieldset' fullWidth>
-      <FormLabel component='legend'>
-        {label} {withAsterisk && <AsteriskComponent>*</AsteriskComponent>}
+      <FormLabel component='legend' sx={{ display: 'flex' }}>
+        <Text title={label} color='grey.700' /> {withAsterisk && <AsteriskComponent>*</AsteriskComponent>}
       </FormLabel>
       <MuiRadioGroup
         aria-label={label}

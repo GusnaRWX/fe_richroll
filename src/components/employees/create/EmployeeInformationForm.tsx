@@ -3,22 +3,22 @@ import React, { HTMLAttributes, useState } from 'react';
 import {
   Grid,
   Typography,
-  Box } from '@mui/material';
-import { Input, Button, Select as CustomSelect, CheckBox, DatePicker, FileUploadModal} from '@/components/_shared/form';
+  Box
+} from '@mui/material';
+import { Input, Button, Select as CustomSelect, CheckBox, DatePicker, FileUploadModal } from '@/components/_shared/form';
 import { styled as MuiStyled } from '@mui/material/styles';
 import { Image as ImageType } from '@/utils/assetsConstant';
 import styled from '@emotion/styled';
-import { useForm } from '@/hooks/index';
+import { useForm, useAppDispatch, useAppSelectors } from '@/hooks/index';
 import {
   checkRegulerExpression,
   getCompanyID,
   convertValue,
   convertChecked,
-  convertDateValue ,
+  convertDateValue,
   convertImageParams
 } from '@/utils/helper';
 import dayjs from 'dayjs';
-import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { postEmployeeInfoRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
 
 
@@ -50,7 +50,7 @@ interface ImagePriviewProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 const ImageReview = styled.div`
-  background-image: url(${({image}: ImagePriviewProps) => image});
+  background-image: url(${({ image }: ImagePriviewProps) => image});
   background-repeat: no-repeat;
   width: 102px;
   height: 102px;
@@ -65,7 +65,7 @@ interface EmployeeProps {
   nextPage: (_val: number) => void;
 }
 
-function EmployeeInformationForm ({refProp, nextPage} :EmployeeProps) {
+function EmployeeInformationForm({ refProp, nextPage }: EmployeeProps) {
   const [open, setOpen] = useState(false);
   const dispatch = useAppDispatch();
   const id = getCompanyID();
@@ -92,7 +92,7 @@ function EmployeeInformationForm ({refProp, nextPage} :EmployeeProps) {
   });
 
   const validate = (fieldOfValues = values) => {
-    const temp = {...errors};
+    const temp = { ...errors };
 
     if ('picture' in fieldOfValues)
       temp.picture = fieldOfValues.picture.length !== 0 ? '' : 'This field is required';
@@ -145,9 +145,8 @@ function EmployeeInformationForm ({refProp, nextPage} :EmployeeProps) {
   ];
 
   const handleSubmit = (e) => {
-    console.log(values.position2);
     e.preventDefault();
-    if(validate()) {
+    if (validate()) {
       const inputData = new FormData();
       inputData.append('companyID', values.companyID);
       inputData.append('picture', values.picture[0]);
@@ -190,7 +189,7 @@ function EmployeeInformationForm ({refProp, nextPage} :EmployeeProps) {
     <>
       <Typography component='h3' fontSize={18} color='primary'>Employee Information</Typography>
       <form ref={refProp} onSubmit={(e) => handleSubmit(e)}>
-        <ImageReview image={!images ? ImageType.PLACEHOLDER : images} onClick={handleOpen}/>
+        <ImageReview image={!images ? ImageType.PLACEHOLDER : images} onClick={handleOpen} />
         {
           errors.picture && (
             <Typography component='span' fontSize='12px' color='red.500'>This field is required</Typography>
@@ -333,7 +332,7 @@ function EmployeeInformationForm ({refProp, nextPage} :EmployeeProps) {
           </Grid>
         </Grid>
         <NextBtnWrapper>
-          <Button fullWidth={false} size='small' label='Next' color='primary' onClick={() => nextPage(1)}/>
+          <Button fullWidth={false} size='small' label='Next' color='primary' onClick={() => nextPage(1)} />
         </NextBtnWrapper>
       </form>
       <FileUploadModal

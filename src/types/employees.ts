@@ -26,49 +26,49 @@ export declare namespace Employees {
   interface PersonalInformationPayload {
     employeeID: string;
     personal: {
-      dateOfBirth: string;
-      gender: number;
-      maritialStatus: number;
-      numberOfChildren: number;
-      countryID: string;
-      religion: number
+      dateOfBirth?: string | Date;
+      gender?: number;
+      maritalStatus?: number;
+      numberOfChildren?: number;
+      countryID?: string;
+      religion?: number
     };
     citizen: {
-      countryID: string,
-      firstLevelCode: string,
-      secondLevelCode: string,
-      thirdLevelCode: string,
-      fourthLevelCode: string,
-      address: string,
-      zipCode: string,
-      isCitizen: true,
-      isResident: true
+      countryID?: string,
+      firstLevelCode?: string,
+      secondLevelCode?: string,
+      thirdLevelCode?: string,
+      // fourthLevelCode?: string,
+      address?: string,
+      zipCode?: string,
+      isCitizen?: boolean,
+      isResident?: boolean
     },
-    residential: {
-      countryID: string,
-      firstLevelCode: string,
-      secondLevelCode: string,
-      thirdLevelCode: string,
-      fourthLevelCode: string,
-      address: string,
-      zipCode: string,
-      isCitizen: true,
-      isResident: true
+    residential?: {
+      countryID?: string,
+      firstLevelCode?: string,
+      secondLevelCode?: string,
+      thirdLevelCode?: string,
+      // fourthLevelCode?: string,
+      address?: string,
+      zipCode?: string,
+      isCitizen?: boolean,
+      isResident?: boolean
     },
-    identity: {
-      type: 0,
-      number: 0,
-      expiredAt: string,
-      isPermanent: true
+    identity?: {
+      type?: number,
+      number?: number,
+      expireAt?: string | Date,
+      isPermanent?: boolean
     },
-    bank: {
-      bankID: string,
-      holder: string,
-      accountNumber: string,
-      bankCode: string,
-      branchCode: string,
-      branchName: string,
-      swiftCode: string
+    bank?: {
+      bankID?: string,
+      holder?: string,
+      accountNumber?: string,
+      bankCode?: string,
+      branchCode?: string,
+      branchName?: string,
+      swiftCode?: string
     }
   }
 }
