@@ -102,6 +102,13 @@ export default function CreateCompanyProfileComponent() {
     supplementType[]
   >([]);
 
+  const [BaseCompensation, setBaseCompensation] = React.useState<Object>({
+    compensation: "",
+    tax: "",
+    amount: "",
+    per: "",
+  });
+
   const options = [
     { label: "Bonus", value: "bonus" },
     { label: "Overtime", value: "overtime" },
@@ -141,6 +148,9 @@ export default function CreateCompanyProfileComponent() {
   React.useEffect(() => {
     console.log(supplementaryList);
   }, [supplementaryList]);
+  React.useEffect(() => {
+    console.log(BaseCompensation);
+  }, [BaseCompensation]);
 
   const deleteSuplementary = (i: number) => {
     // let items = [...supplementaryList];
@@ -191,7 +201,7 @@ export default function CreateCompanyProfileComponent() {
       >
         <Form style={{ marginBottom: "32px" }}>
           <Typography>
-            Input
+            Profile Name
             <span style={{ color: "red" }}>*</span>
           </Typography>
           <div
@@ -202,7 +212,141 @@ export default function CreateCompanyProfileComponent() {
               maxWidth: "50%",
             }}
           >
-            <TextField fullWidth />
+            <TextField fullWidth placeholder="Sales" />
+          </div>
+          <Typography
+            style={{
+              marginBottom: "17px",
+              marginTop: "31px",
+              fontSize: "18px",
+              fontWeight: "700",
+              color: "#223567",
+            }}
+          >
+            Compensation
+          </Typography>
+          <Typography
+            style={{
+              marginBottom: "17px",
+              fontSize: "16px",
+              fontWeight: "700",
+              color: "#223567",
+            }}
+          >
+            Base
+          </Typography>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              marginBottom: "33px",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                gap: "24px",
+              }}
+            >
+              <div id="right" style={{ width: "100%", maxWidth: "511px" }}>
+                <div style={{ marginBottom: "16px" }}>
+                  <Typography style={{ fontSize: "14px" }}>
+                    Compensation Component
+                    <span style={{ color: "red" }}>*</span>
+                  </Typography>
+                  <Select
+                    fullWidth
+                    onChange={(e) =>
+                      setBaseCompensation({
+                        ...BaseCompensation,
+                        compensation: e.target.value,
+                      })
+                    }
+                  >
+                    {options.map((option, i) => (
+                      <MenuItem key={i} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </div>
+              </div>
+              <div id="center" style={{ maxWidth: "388px", width: "100%" }}>
+                <Typography style={{ fontSize: "14px" }}>
+                  Tax Status<span style={{ color: "red" }}>*</span>
+                </Typography>
+                <RadioGroup
+                  row
+                  onChange={(e) =>
+                    setBaseCompensation({
+                      ...BaseCompensation,
+                      tax: e.target.value,
+                    })
+                  }
+                >
+                  <FormControlLabel
+                    value="taxable"
+                    control={
+                      <Radio size="small" checkedIcon={<BpCheckedIcon />} />
+                    }
+                    label="Taxable"
+                  />
+                  <FormControlLabel
+                    value="non-taxable"
+                    control={
+                      <Radio size="small" checkedIcon={<BpCheckedIcon />} />
+                    }
+                    label="Non-Taxable"
+                  />
+                </RadioGroup>
+              </div>
+            </div>
+            <div>
+              <Typography>
+                {BaseCompensation?.compensation === "wage" ? "Rate" : "Amount"}
+                <span style={{ color: "red" }}>*</span>
+              </Typography>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  gap: "24px",
+                  maxWidth: "511px",
+                }}
+              >
+                <TextField
+                  fullWidth
+                  onChange={(e) =>
+                    setBaseCompensation({
+                      ...BaseCompensation,
+                      amount: e.target.value,
+                    })
+                  }
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">Rp</InputAdornment>
+                    ),
+                    endAdornment: (
+                      <InputAdornment position="start">IDR</InputAdornment>
+                    ),
+                  }}
+                />
+                <Select
+                  fullWidth
+                  onChange={(e) =>
+                    setBaseCompensation({
+                      ...BaseCompensation,
+                      per: e.target.value,
+                    })
+                  }
+                >
+                  <MenuItem value="hour">per Hour</MenuItem>
+                  <MenuItem value="month">per Month</MenuItem>
+                </Select>
+              </div>
+            </div>
           </div>
         </Form>
         <div>
