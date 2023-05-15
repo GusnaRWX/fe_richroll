@@ -103,7 +103,14 @@ export default function CreateCompanyProfileComponent() {
     supplementType[]
   >([]);
 
-  const [BaseCompensation, setBaseCompensation] = React.useState<Object>({
+  interface baseCompType {
+    compensation: string;
+    tax: string;
+    amount: string;
+    per: string;
+  }
+
+  const [BaseCompensation, setBaseCompensation] = React.useState<baseCompType>({
     compensation: "",
     tax: "",
     amount: "",
@@ -264,7 +271,7 @@ export default function CreateCompanyProfileComponent() {
                     onChange={(e) =>
                       setBaseCompensation({
                         ...BaseCompensation,
-                        compensation: e.target.value,
+                        compensation: e.target.value as string,
                       })
                     }
                   >
@@ -341,7 +348,7 @@ export default function CreateCompanyProfileComponent() {
                   onChange={(e) =>
                     setBaseCompensation({
                       ...BaseCompensation,
-                      per: e.target.value,
+                      per: e.target.value as string,
                     })
                   }
                 >
