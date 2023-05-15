@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Input, Select } from '@/components/_shared/form';
 import { Button as MuiButton, Grid, InputAdornment, Typography } from '@mui/material';
 import { Add } from '@mui/icons-material';
-// import { Scheduler } from '@aldabil/react-scheduler';
+import { Scheduler } from '@aldabil/react-scheduler';
 import CustomModal from '@/components/_shared/common/CustomModal';
 import { RadioGroup, CheckBox } from '@/components/_shared/form';
 import { styled } from '@mui/material/styles';
@@ -10,77 +10,6 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 
-
-// const eventsData = [
-//   {
-//     event_id: 1,
-//     title: 'Event 1',
-//     start: new Date(new Date(new Date().setHours(9)).setMinutes(0)),
-//     end: new Date(new Date(new Date().setHours(10)).setMinutes(0)),
-//     disabled: true,
-//     admin_id: [1, 2, 3, 4]
-//   },
-//   {
-//     event_id: 2,
-//     title: 'Event 2',
-//     start: new Date(new Date(new Date().setHours(10)).setMinutes(0)),
-//     end: new Date(new Date(new Date().setHours(12)).setMinutes(0)),
-//     admin_id: 2,
-//     color: '#50b500'
-//   },
-//   {
-//     event_id: 3,
-//     title: 'Event 3',
-//     start: new Date(new Date(new Date().setHours(11)).setMinutes(0)),
-//     end: new Date(new Date(new Date().setHours(12)).setMinutes(0)),
-//     admin_id: 1,
-//     editable: false,
-//     deletable: false
-//   },
-//   {
-//     event_id: 4,
-//     title: 'Event 4',
-//     start: new Date(
-//       new Date(new Date(new Date().setHours(9)).setMinutes(30)).setDate(
-//         new Date().getDate() - 2
-//       )
-//     ),
-//     end: new Date(
-//       new Date(new Date(new Date().setHours(11)).setMinutes(0)).setDate(
-//         new Date().getDate() - 2
-//       )
-//     ),
-//     admin_id: 2,
-//     color: '#900000'
-//   },
-//   {
-//     event_id: 5,
-//     title: 'Event 5',
-//     start: new Date(
-//       new Date(new Date(new Date().setHours(10)).setMinutes(30)).setDate(
-//         new Date().getDate() - 2
-//       )
-//     ),
-//     end: new Date(
-//       new Date(new Date(new Date().setHours(14)).setMinutes(0)).setDate(
-//         new Date().getDate() - 2
-//       )
-//     ),
-//     admin_id: 2,
-//     editable: true
-//   },
-//   {
-//     event_id: 6,
-//     title: 'Event 6',
-//     start: new Date(
-//       new Date(new Date(new Date().setHours(10)).setMinutes(30)).setDate(
-//         new Date().getDate() - 4
-//       )
-//     ),
-//     end: new Date(new Date(new Date().setHours(14)).setMinutes(0)),
-//     admin_id: 2
-//   }
-// ];
 
 const AsteriskComponent = styled('span')(({ theme }) => ({
   color: theme.palette.error.main
@@ -94,9 +23,71 @@ const FlexBoxRow = styled('div')(() => ({
   gap: '1rem'
 }));
 
+interface EventDataType {
+  event_id: number;
+  title: string;
+  start: Date;
+  end: Date;
+  editable?: boolean;
+  disabled?: boolean;
+  color?: string;
+}
+
 function WorkScheduleCreateForm() {
+  const eventsData = [
+    {
+      event_id: 1,
+      title: 'Work Hour',
+      start: new Date(new Date(new Date().setHours(9)).setMinutes(0)),
+      end: new Date(new Date(new Date().setHours(12)).setMinutes(0)),
+      disabled: false,
+      editeable: false
+    },
+    {
+      event_id: 1,
+      title: 'lunch break',
+      start: new Date(new Date(new Date().setHours(12)).setMinutes(0)),
+      end: new Date(new Date(new Date().setHours(13)).setMinutes(0)),
+      editable: false,
+      color: '#75AD99'
+    },
+    {
+      event_id: 1,
+      title: 'Work Hour',
+      start: new Date(new Date(new Date().setHours(13)).setMinutes(0)),
+      end: new Date(new Date(new Date().setHours(17)).setMinutes(0)),
+      disabled: false,
+      editeable: false
+    },
+    {
+      event_id: 2,
+      title: 'Work Hour',
+      start: new Date (new Date(new Date(new Date().setHours(9)).setMinutes(0)).setDate(new Date().getDate() + 1)),
+      end: new Date(new Date(new Date(new Date().setHours(12)).setMinutes(0)).setDate(new Date().getDate() + 1)),
+      disabled: false,
+      editeable: false
+    },
+    {
+      event_id: 2,
+      title: 'lunch break',
+      start: new Date (new Date(new Date(new Date().setHours(12)).setMinutes(0)).setDate(new Date().getDate() + 1)),
+      end: new Date(new Date(new Date(new Date().setHours(13)).setMinutes(0)).setDate(new Date().getDate() + 1)),
+      editable: false,
+      color: '#75AD99'
+    },
+    {
+      event_id: 2,
+      title: 'Work Hour',
+      start: new Date (new Date(new Date(new Date().setHours(13)).setMinutes(0)).setDate(new Date().getDate() + 1)),
+      end: new Date(new Date(new Date(new Date().setHours(17)).setMinutes(0)).setDate(new Date().getDate() + 1)),
+      disabled: false,
+      editeable: false
+    },
+  ];
   const [profileName, setProfileName] = useState('');
   const [openForm, setOPenForm] = useState(false);
+  const [dataForEvent, setDataForEvent] = useState<Array<EventDataType>>([]);
+  const [fetchData, setFetchData] = useState(false);
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   const [initialValues, setInitialValues] = useState({
     type: '',
@@ -115,12 +106,22 @@ function WorkScheduleCreateForm() {
   };
 
   const handleFormClose = () => {
+    console.log('here');
     setOPenForm(false);
+    setFetchData(true);
   };
 
   const handleInput = (e) => {
     setProfileName(e.target.value);
   };
+
+  useEffect(() => {
+    function checkData() {
+      setDataForEvent(eventsData);
+    }
+    checkData();
+    console.log(dataForEvent);
+  }, [fetchData]);
   return (
     <>
       <Grid container spacing={4} mb='1rem' alignItems='flex-end'>
@@ -175,7 +176,9 @@ function WorkScheduleCreateForm() {
           />
         </Grid>
       </Grid>
-      {/* <Scheduler events={eventsData}/> */}
+      <Scheduler
+        events={dataForEvent}
+      />
       <CustomModal
         open={openForm}
         handleClose={handleFormClose}

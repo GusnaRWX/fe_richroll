@@ -5,11 +5,13 @@ import { setStorages } from '@/utils/storage';
 interface LoginState {
   isLoading: boolean;
   isAuth: boolean;
+  isError: boolean;
 }
 
 const initialState: LoginState = {
   isLoading: false,
-  isAuth: false
+  isAuth: false,
+  isError: false,
 };
 
 export const loginSlice = createSlice({
@@ -39,6 +41,26 @@ export const loginSlice = createSlice({
     },
     employeeSetNewPasswordFailed: (state) => {
       state.isLoading = false;
+    },
+    forgotPasswordRequested: (state) => {
+      state.isLoading = true;
+    },
+    forgotPasswordSuccess: (state, action) => {
+      state.isLoading = false;
+      state.isError = action.payload.isError;
+    },
+    forgotPasswordFailed: (state, action) => {
+      state.isLoading = false;
+      state.isError = action.payload.isError;
+    },
+    resetPasswordRequested: (state) => {
+      state.isLoading = true;
+    },
+    resetPasswordSuccess: (state) => {
+      state.isLoading = false;
+    },
+    resetPasswordFailed: (state) => {
+      state.isLoading = false;
     }
   },
   extraReducers: {
@@ -57,7 +79,13 @@ export const {
   loginFailured,
   employeeSetNewPasswordRequested,
   employeeSetNewPasswordSuccessed,
-  employeeSetNewPasswordFailed
+  employeeSetNewPasswordFailed,
+  forgotPasswordRequested,
+  forgotPasswordFailed,
+  forgotPasswordSuccess,
+  resetPasswordRequested,
+  resetPasswordFailed,
+  resetPasswordSuccess
 } = loginSlice.actions;
 
 export default loginSlice.reducer;

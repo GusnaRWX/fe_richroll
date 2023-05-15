@@ -31,12 +31,12 @@ const NavHead = styled.div`
 
 const Base = styled.div`
  display: flex;
- align-items: center;
+ align-items: flext-start;
  justify-content: center;
  background-color: #F7FFFC;
- padding-top: 5rem;
+ padding-top: 6rem;
  width: 100%;
- height: 100%;
+ height: 100vh;
 `;
 
 function SendEmailComponent() {
@@ -50,7 +50,7 @@ function SendEmailComponent() {
           <span>EN</span>
         </div>
       </NavHead>
-      <Card sx={{ width: '500px', height: '100%' }}>
+      <Card sx={{ width: '500px', height: '50%' }}>
         <CardContent>
           <div>
             <Image src={kayaroll} alt='logo' height={56} width={211}/>
