@@ -270,7 +270,7 @@ export default function CreateCompanyProfileComponent() {
                         </div>
                         <div
                           id="center"
-                          style={{ maxWidth: "388px", width: "100%" }}
+                          style={{ maxWidth: "388px", flexGrow: "1" }}
                         >
                           <Typography style={{ fontSize: "14px" }}>
                             Tax Status<span style={{ color: "red" }}>*</span>
