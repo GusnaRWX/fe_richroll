@@ -46,7 +46,7 @@ export const clearStorages = (storages: string[]) => {
  * @param {*} storage
  * @returns
  */
-export const getStorage = (storage: string): unknown => {
+export const getStorage = (storage: string): string|null => {
   const store = window.localStorage.getItem(storage);
 
   if (typeof storage !== 'undefined') {

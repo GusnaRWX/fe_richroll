@@ -12,7 +12,7 @@ import styled from '@emotion/styled';
 import { useForm, useAppDispatch, useAppSelectors } from '@/hooks/index';
 import {
   checkRegulerExpression,
-  getCompanyID,
+  getCompanyData,
   convertValue,
   convertChecked,
   convertDateValue,
@@ -68,14 +68,14 @@ interface EmployeeProps {
 function EmployeeInformationForm({ refProp, nextPage }: EmployeeProps) {
   const [open, setOpen] = useState(false);
   const dispatch = useAppDispatch();
-  const id = getCompanyID();
+  const companyData = getCompanyData();
   const { listDepartment, listPosition } = useAppSelectors(state => state.option);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [images, setImages] = useState<string | null>(null);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [initialValues, setInitialValues] = useState({
-    companyID: id,
+    companyID: companyData?.id,
     picture: [],
     fullName: '',
     nickname: '',
@@ -167,7 +167,7 @@ function EmployeeInformationForm({ refProp, nextPage }: EmployeeProps) {
       });
 
       setInitialValues({
-        companyID: 4,
+        companyID: companyData?.id,
         picture: [],
         fullName: '',
         nickname: '',

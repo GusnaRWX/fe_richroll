@@ -21,7 +21,7 @@ import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { getEmployeeRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
-import { getCompanyID } from '@/utils/helper';
+import { getCompanyData } from '@/utils/helper';
 import dayjs from 'dayjs';
 import { visuallyHidden } from '@mui/utils';
 
@@ -69,7 +69,7 @@ function EmployeesTable({
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
   const [hydrated, setHaydrated] = useState(false);
-  const companyID = getCompanyID();
+  const companyData = getCompanyData();
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
@@ -90,6 +90,8 @@ function EmployeesTable({
   };
 
   useEffect(() => {
+    console.log(companyData);
+    
     dispatch({
       type: getEmployeeRequested.toString(),
       payload: {
@@ -99,7 +101,7 @@ function EmployeesTable({
         direction: direction.toUpperCase(),
         search: search,
         isActive: tabValue === 0 ? false : true,
-        companyID: companyID
+        companyID: companyData?.id
       }
     });
   }, [rowsPerPage, page, tabValue, search, sort, direction]);
