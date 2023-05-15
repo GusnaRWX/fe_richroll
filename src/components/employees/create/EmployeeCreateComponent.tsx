@@ -1,14 +1,23 @@
 import React, { useState, useRef } from 'react';
+import dynamic from 'next/dynamic';
 import { IconButton } from '@/components/_shared/form';
 import { Card, Typography, Button as MuiButton, Tab, Tabs, Box } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import styled from '@emotion/styled';
-import EmployeeInformationForm from './EmployeeInformationForm';
-import EmployeePersonalInformationForm from './EmployeePersonalInformationForm';
-import { useRouter } from 'next/router';
 import ConfirmationModal from '@/components/_shared/common/ConfirmationModal';
 
-import EmergencyContactForm from './EmergencyContactForm';
+const EmployeeInformationFormClient = dynamic(() => import('./EmployeeInformationForm'), {
+  ssr: false
+});
+const EmployeePersonalInformationFormClient = dynamic(() => import('./EmployeePersonalInformationForm'), {
+  ssr: false
+});
+const EmergencyContactFormClient = dynamic(() => import('./EmergencyContactForm'), {
+  ssr: false
+});
+
+import { clearStorages } from '@/utils/storage';
+
 const TopWrapper = styled.div`
  display: flex;
  flex-direction: row;
@@ -81,8 +90,7 @@ function EmployeeCreateComponent() {
   const employeeRef = useRef<HTMLFormElement>(null);
   const emergencyRef = useRef<HTMLFormElement>(null);
   const personalInformationRef = useRef<HTMLFormElement>(null);
-  const router = useRouter();
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
   const handleClick = () => {
@@ -104,9 +112,18 @@ function EmployeeCreateComponent() {
     setLeave(false);
   };
 
+  const handleBack = () => {
+    setLeave(true);
+  };
+
   const handleNext = (val) => {
     setValue(val);
   };
+
+  const deleteExistStorage = () => {
+    clearStorages(['emp-information', 'emp-personal-information', 'emp-emergency-contact']);
+  };
+
   return (
     <>
       <TopWrapper>
@@ -116,7 +133,7 @@ function EmployeeCreateComponent() {
             icons={
               <ArrowBack sx={{ color: '#FFFFFF' }} />
             }
-            onClick={() => { router.push('/company-management/employees'); }}
+            onClick={handleBack}
           />
           <Typography component='h3' fontWeight='bold'>Add Employee</Typography>
         </BackWrapper>
@@ -136,14 +153,14 @@ function EmployeeCreateComponent() {
               <Tab sx={{ textTransform: 'none' }} label='Work Scedhule' {...a11yProps(4)} />
             </Tabs>
           </Box>
-          <TabPanel value={value}  index={0}>
-            <EmployeeInformationForm nextPage={handleNext} refProp={employeeRef} />
+          <TabPanel value={value} index={0}>
+            <EmployeeInformationFormClient nextPage={handleNext} refProp={employeeRef} />
           </TabPanel>
           <TabPanel value={value} index={1}>
-            <EmployeePersonalInformationForm nextPage={handleNext} refProp={personalInformationRef} />
+            <EmployeePersonalInformationFormClient nextPage={handleNext} refProp={personalInformationRef} />
           </TabPanel>
           <TabPanel value={value} index={2}>
-            <EmergencyContactForm nextPage={setValue} refProp={emergencyRef} />
+            <EmergencyContactFormClient nextPage={setValue} refProp={emergencyRef} />
           </TabPanel>
           <TabPanel value={value} index={3}>
             on Development
@@ -158,6 +175,8 @@ function EmployeeCreateComponent() {
         handleClose={handleClose}
         title='Are you sure you want to leave?'
         content='Any unsaved changes will be discarded. This cannot be undone'
+        withCallback
+        callback={deleteExistStorage}
       />
     </>
   );

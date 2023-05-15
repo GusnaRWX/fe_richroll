@@ -25,6 +25,7 @@ export declare namespace Employees {
 
   interface PersonalInformationPayload {
     employeeID: string;
+    companyID: string;
     personal: {
       dateOfBirth?: string | Date;
       gender?: number;
