@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, Form } from "@/components/_shared/form";
 import AddIcon from "@mui/icons-material/Add";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { styled } from "@mui/material/styles";
 import {
   Typography,
@@ -120,7 +121,10 @@ export default function CreateCompanyProfileComponent() {
   }, [supplementaryList]);
 
   const deleteSuplementary = (i: number) => {
-    supplementaryList.splice(i, 1);
+    // let items = [...supplementaryList];
+    // let search = items.filter((item) => {
+    //   return item !== i;
+    // });
   };
 
   return (
@@ -160,7 +164,7 @@ export default function CreateCompanyProfileComponent() {
                     >
                       <div
                         id="right"
-                        style={{ width: "50%", maxWidth: "511px" }}
+                        style={{ width: "100%", maxWidth: "511px" }}
                       >
                         <div style={{ marginBottom: "16px" }}>
                           <Typography style={{ fontSize: "14px" }}>
@@ -185,7 +189,10 @@ export default function CreateCompanyProfileComponent() {
                           </Select>
                         </div>
                       </div>
-                      <div id="left">
+                      <div
+                        id="center"
+                        style={{ maxWidth: "388px", width: "100%" }}
+                      >
                         <Typography style={{ fontSize: "14px" }}>
                           Tax Status<span style={{ color: "red" }}>*</span>
                         </Typography>
@@ -216,6 +223,14 @@ export default function CreateCompanyProfileComponent() {
                             label="Non-Taxable"
                           />
                         </RadioGroup>
+                      </div>
+                      <div>
+                        <Button
+                          color="red"
+                          startIcon={<DeleteIcon />}
+                          label="Delete"
+                          onClick={() => deleteSuplementary(i)}
+                        />
                       </div>
                     </div>
                     <div>
