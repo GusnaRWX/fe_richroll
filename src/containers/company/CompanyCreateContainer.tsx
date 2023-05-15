@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import CompanyCreateComponent from '@/components/company/create/CompanyCreateComponent';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { companyTypeRequested, companySectorRequested, bankRequested, paymentMethodRequested } from '@/store/reducers/slice/company/companySlice';
+import { countriesRequested } from '@/store/reducers/slice/options/optionSlice';
 
 const CompanyContainer = () => {
   const dispatch = useAppDispatch();
@@ -10,6 +11,7 @@ const CompanyContainer = () => {
   const companySector = useAppSelectors(state => state.company.companySector);
   const bank = useAppSelectors(state => state.company.bank);
   const paymentMethod = useAppSelectors(state => state.company.paymentMethod);
+  const { countries } = useAppSelectors(state => state.option);
 
   useEffect(() => {
     dispatch({
@@ -24,9 +26,12 @@ const CompanyContainer = () => {
     dispatch({
       type: paymentMethodRequested.toString()
     });
+    dispatch({
+      type: countriesRequested.toString()
+    });
   }, []);
 
-  return <CompanyCreateComponent companyType={companyType} companySector={companySector} bank={bank} paymentMethod={paymentMethod} />;
+  return <CompanyCreateComponent companyType={companyType} companySector={companySector} bank={bank} paymentMethod={paymentMethod} countries={countries} />;
 };
 
 export default CompanyContainer;

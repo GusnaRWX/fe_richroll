@@ -43,6 +43,7 @@ export declare namespace CompanyCreate {
     companySector: [];
     bank: [];
     paymentMethod: [];
+    countries: [];
   }
 }
 

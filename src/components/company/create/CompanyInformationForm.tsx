@@ -10,19 +10,15 @@ import {
   Box,
   MenuItem,
   FormControl } from '@mui/material';
-import { Input, Button } from '@/components/_shared/form';
+import { Input, Button, Textarea } from '@/components/_shared/form';
 import { styled as MuiStyled } from '@mui/material/styles';
 import { Image as ImageType } from '@/utils/assetsConstant';
+import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
 import { Close } from '@mui/icons-material';
 import { BsFileEarmarkPlus } from 'react-icons/bs';
 import { AiOutlineCamera } from 'react-icons/ai';
-import { useForm } from '@/hooks/index';
-import { checkRegulerExpression } from '@/utils/helper';
-import dayjs from 'dayjs';
-import { useAppDispatch } from '@/hooks/index';
-import { useRouter } from 'next/router';
-import { postEmployeeInfoRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
+import { CustomHooks } from '@/types/hooks';
 
 
 const AsteriskComponent = MuiStyled('span')(({ theme }) => ({
@@ -87,68 +83,35 @@ const modalStyle = {
   p: 2,
 };
 
-interface EmployeeProps {
-  refProp: React.Ref<HTMLFormElement>;
+interface CompanyInfoProps {
+  nextPage: (_val: number) => void;
+  values;
+  errors;
+  handleInputChange: (_e: CustomHooks.HandleInput) => CustomHooks.HandleInput;
   companyType: [];
   companySector: [];
+  countries: [];
+  administrativeFirst: [];
+  administrativeSecond: [];
+  administrativeThird: [];
 }
 
-function CompanyInformationForm ({refProp, companyType, companySector} :EmployeeProps) {
-  const router = useRouter();
+function CompanyInformationForm ({
+  nextPage,
+  values,
+  errors,
+  handleInputChange,
+  companyType,
+  companySector,
+  countries,
+  administrativeFirst,
+  administrativeSecond,
+  administrativeThird
+}:CompanyInfoProps) {
   const [open, setOpen] = useState(false);
-  const dispatch = useAppDispatch();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [images, setImages] = useState<string | null>(null);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [initialValues, setInitialValues] = useState({
-    companyID: 4,
-    picture: [],
-    fullName: '',
-    nickname: '',
-    phoneNumberPrefix: '',
-    phoneNumber: '',
-    email: '',
-    startDate: dayjs(Date.now()),
-    endDate: dayjs(Date.now()),
-    isPermanent: false,
-    department: '',
-    position: '',
-    isSelfService: false
-  });
-
-  const validate = (fieldOfValues = values) => {
-    const temp = {...errors};
-
-    if ('picture' in fieldOfValues)
-      temp.picture = fieldOfValues.picture.length !== 0 ? '' : 'This field is required';
-
-    if ('fullName' in fieldOfValues)
-      temp.fullName = fieldOfValues.fullName ? '' : 'This field is required';
-
-    if ('phoneNumber' in fieldOfValues)
-      temp.phoneNumber = fieldOfValues.phoneNumber ? '' : 'This field is required';
-
-    if ('email' in fieldOfValues) {
-      const patternEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      const emailValue = fieldOfValues.email || '';
-      let emailErrorMessage = '';
-      if (!emailValue) {
-        emailErrorMessage = 'Email is required';
-      } else if (!checkRegulerExpression(patternEmail, emailValue)) {
-        emailErrorMessage = 'Email should be valid';
-      }
-      temp.email = emailErrorMessage;
-    }
-
-    setErrors({
-      ...temp
-    });
-
-    if (fieldOfValues === values)
-      return Object.values(temp).every(x => x === '');
-  };
-
-  const { values, errors, setErrors, handleInputChange } = useForm(initialValues, true, validate);
+  const router = useRouter();
 
   const handleOpen = () => {
     setOpen(true);
@@ -157,8 +120,6 @@ function CompanyInformationForm ({refProp, companyType, companySector} :Employee
   const handleClose = () => {
     setOpen(false);
   };
-
-  console.log(errors);
 
   const convertParams = (name, value) => {
     const files = value;
@@ -175,50 +136,10 @@ function CompanyInformationForm ({refProp, companyType, companySector} :Employee
     return obj;
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if(validate()) {
-      const inputData = new FormData();
-      inputData.append('companyID', values.companyID);
-      inputData.append('picture', values.picture);
-      inputData.append('fullName', values.fullName);
-      inputData.append('nickname', values.nickname);
-      inputData.append('phoneNumberPrefix', values.phoneNumberPrefix);
-      inputData.append('phoneNumber', values.phoneNumber);
-      inputData.append('email', values.email);
-      inputData.append('startDate', dayjs(values.startDate).format('YYYY-MM-DD'));
-      inputData.append('endDate', dayjs(values.endDate).format('YYY-MM-DD'));
-      inputData.append('isPermanent', values.isPermanent);
-      inputData.append('department', values.department);
-      inputData.append('position', values.position);
-      inputData.append('isSelfService', values.isSelfService);
-      dispatch({
-        type: postEmployeeInfoRequested.toString(),
-        payload: inputData
-      });
-
-      setInitialValues({
-        companyID: 4,
-        picture: [],
-        fullName: '',
-        nickname: '',
-        phoneNumberPrefix: '',
-        phoneNumber: '',
-        email: '',
-        startDate: dayjs(Date.now()),
-        endDate: dayjs(Date.now()),
-        isPermanent: false,
-        department: '',
-        position: '',
-        isSelfService: false
-      });
-    }
-  };
-
   return (
     <>
       <Typography component='h3' fontSize={18} color='primary'>Company Information</Typography>
-      <form ref={refProp} onSubmit={(e) => handleSubmit(e)}>
+      <form>
         <Typography variant='text-sm' component='div' color='primary' sx={{ mt: '16px' }}>Company Logo</Typography>
         <ImageReview image={!images ? ImageType.PLACEHOLDER : images} onClick={handleOpen}/>
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
@@ -229,39 +150,41 @@ function CompanyInformationForm ({refProp, companyType, companySector} :Employee
                 fullWidth
                 variant='outlined'
                 size='small'
-                value={values.department}
+                value={values.companyType}
                 onChange={handleInputChange}
                 name='companyType'
                 placeholder='Select Company Type'
               >
                 {companyType.map((val, idx) => (
-                  <MenuItem key={idx} value={val?.['name']}>{val?.['name']}</MenuItem>
+                  <MenuItem key={idx} value={val?.['id']}>{val?.['name']}</MenuItem>
                 ))}
               </Select>
             </FormControl>
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Input
-              name='fullName'
+              name='companyName'
               customLabel='Company Name'
               withAsterisk={true}
               onChange={handleInputChange}
               size='small'
               placeholder='Input Company Name'
-              error={errors.fullName}
+              value={values.companyName}
+              error={errors.companyName}
             />
           </Grid>
         </Grid>
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Input
-              name='fullName'
+              name='companyNPWP'
               customLabel='Company NPWP'
               withAsterisk={true}
               onChange={handleInputChange}
               size='small'
               placeholder='Input Company NPWP'
-              error={errors.fullName}
+              value={values.companyNPWP}
+              error={errors.companyNPWP}
             />
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
@@ -271,12 +194,12 @@ function CompanyInformationForm ({refProp, companyType, companySector} :Employee
                 fullWidth
                 variant='outlined'
                 size='small'
-                value={values.department}
+                value={values.companySector}
                 onChange={handleInputChange}
                 name='companySector'
               >
                 {companySector.map((val, idx) => (
-                  <MenuItem key={idx} value={val?.['name']}>{val?.['name']}</MenuItem>
+                  <MenuItem key={idx} value={val?.['id']}>{val?.['name']}</MenuItem>
                 ))}
               </Select>
             </FormControl>
@@ -285,13 +208,14 @@ function CompanyInformationForm ({refProp, companyType, companySector} :Employee
         <Grid container spacing={2}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Input
-              name='email'
+              name='companyEmail'
               customLabel='Company Email Address'
               withAsterisk={true}
               size='small'
               onChange={handleInputChange}
               placeholder='Company Email Address'
-              error={errors.email}
+              value={values.companyEmail}
+              error={errors.companyEmail}
             />
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6} sx={{ marginBottom: '1.5rem', marginTop: '.3rem' }}>
@@ -325,6 +249,7 @@ function CompanyInformationForm ({refProp, companyType, companySector} :Employee
                   withAsterisk={true}
                   onChange={handleInputChange}
                   size='small'
+                  value={values.phoneNumber}
                   error={errors.phoneNumber}
                 />
               </Grid>
@@ -338,79 +263,101 @@ function CompanyInformationForm ({refProp, companyType, companySector} :Employee
         </Grid>
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
-            <Input
-              name='fullName'
-              customLabel='Country'
-              withAsterisk={true}
-              onChange={handleInputChange}
-              size='small'
-              placeholder='Input Country'
-              error={errors.fullName}
-            />
+            <FormControl fullWidth>
+              <Typography sx={{ mb: '6px' }}>Country<AsteriskComponent>*</AsteriskComponent></Typography>
+              <Select
+                variant='outlined'
+                size='small'
+                name='countryCompanyAddress'
+                value={values.countryCompanyAddress}
+                onChange={handleInputChange}
+              >
+                {countries?.map(item => (
+                  <MenuItem key={item?.['label']} value={item?.['value']}>{item?.['label']}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
-            <Input
-              name='fullName'
-              customLabel='Province'
-              withAsterisk={true}
-              onChange={handleInputChange}
-              size='small'
-              placeholder='Input Province'
-              error={errors.fullName}
-            />
-          </Grid>
-        </Grid>
-        <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
-          <Grid item xs={6} md={6} lg={6} xl={6}>
-            <Input
-              name='fullName'
-              customLabel='City'
-              withAsterisk={true}
-              onChange={handleInputChange}
-              size='small'
-              placeholder='Input City'
-              error={errors.fullName}
-            />
-          </Grid>
-          <Grid item xs={6} md={6} lg={6} xl={6}>
-            <Input
-              name='fullName'
-              customLabel='Sub-District'
-              withAsterisk={true}
-              onChange={handleInputChange}
-              size='small'
-              placeholder='Input Sub-District'
-              error={errors.fullName}
-            />
+            <FormControl fullWidth>
+              <Typography sx={{ mb: '6px' }}>Province<AsteriskComponent>*</AsteriskComponent></Typography>
+              <Select
+                variant='outlined'
+                size='small'
+                name='provinceCompanyAddress'
+                value={values.provinceCompanyAddress}
+                onChange={handleInputChange}
+              >
+                {administrativeFirst.map(item => (
+                  <MenuItem key={item?.['label']} value={item?.['value']}>{item?.['label']}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </Grid>
         </Grid>
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
-            <Input
-              name='fullName'
+            <FormControl fullWidth>
+              <Typography sx={{ mb: '6px' }}>City<AsteriskComponent>*</AsteriskComponent></Typography>
+              <Select
+                variant='outlined'
+                size='small'
+                name='cityCompanyAddress'
+                value={values.cityCompanyAddress}
+                onChange={handleInputChange}
+              >
+                {administrativeSecond?.map(item => (
+                  <MenuItem key={item?.['label']} value={item?.['value']}>{item?.['label']}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={6} md={6} lg={6} xl={6}>
+            <FormControl fullWidth>
+              <Typography sx={{ mb: '6px' }}>Sub-District<AsteriskComponent>*</AsteriskComponent></Typography>
+              <Select
+                variant='outlined'
+                size='small'
+                name='subDistrictCompanyAddress'
+                value={values.subDistrictCompanyAddress}
+                onChange={handleInputChange}
+              >
+                {administrativeThird?.map(item => (
+                  <MenuItem key={item?.['label']} value={item?.['value']}>{item?.['label']}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+        </Grid>
+        <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
+          <Grid item xs={6} md={6} lg={6} xl={6}>
+            <Textarea
+              name='addressCompanyAddress'
+              maxRows={5}
+              minRows={3}
+              value={values.addressCompanyAddress}
+              onChange={handleInputChange}
+              error={errors.addressCompanyAddress}
+              withAsterisk
               customLabel='Street Name, Building Name'
-              withAsterisk={true}
-              onChange={handleInputChange}
-              size='small'
-              placeholder='Input Street Name, Building Name'
-              error={errors.fullName}
             />
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Input
-              name='fullName'
+              name='zipCodeCompanyAddress'
+              value={values.zipCodeCompanyAddress}
               customLabel='ZIP Code'
               withAsterisk={true}
               onChange={handleInputChange}
               size='small'
               placeholder='Input ZIP Code'
-              error={errors.fullName}
+              error={errors.zipCodeCompanyAddress}
             />
           </Grid>
         </Grid>
         <NextBtnWrapper>
           <Button onClick={() => { router.push('/company');}} fullWidth={false} size='small' label='Cancel' variant='outlined' sx={{ mr: '12px' }} color='primary'/>
-          <Button fullWidth={false} size='small' label='Next' color='primary'/>
+          <Button onClick={() => nextPage(1)} fullWidth={false} size='small' label='Next' color='primary'/>
         </NextBtnWrapper>
       </form>
       <Modal
