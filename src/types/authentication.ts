@@ -14,6 +14,12 @@ export declare namespace Auth {
     password: string;
   }
 
+  export interface ResetPasswordPayload {
+    newPassword: string;
+    confirmPassword: string;
+    token: string;
+  }
+
   export interface RegisterPayload {
     email: string;
     password: string;

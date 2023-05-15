@@ -124,7 +124,7 @@ function* fetchPostEmergency(action: AnyAction) {
 
 /**
  * Fetch Post Personal Information
- * 
+ *
  * @param action
  */
 function* fetchPostPersonalInformation(action: AnyAction) {
@@ -151,7 +151,7 @@ function* fetchPostPersonalInformation(action: AnyAction) {
       });
     }
   } catch (err) {
-    
+
     if (err instanceof AxiosError<Services.ValidationResponse>) {
       console.log(err, 'error');
       const errorMessage = err?.response?.data as Services.ErrorResponse;

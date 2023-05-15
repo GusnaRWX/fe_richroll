@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Input, Select } from '@/components/_shared/form';
 import { Button as MuiButton, Grid, InputAdornment, Typography } from '@mui/material';
 import { Add } from '@mui/icons-material';
@@ -11,6 +11,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 
 
+<<<<<<< Updated upstream
 // const eventsData = [
 //   {
 //     event_id: 1,
@@ -82,6 +83,8 @@ import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 //   }
 // ];
 
+=======
+>>>>>>> Stashed changes
 const AsteriskComponent = styled('span')(({ theme }) => ({
   color: theme.palette.error.main
 }));
@@ -94,9 +97,71 @@ const FlexBoxRow = styled('div')(() => ({
   gap: '1rem'
 }));
 
+interface EventDataType {
+  event_id: number;
+  title: string;
+  start: Date;
+  end: Date;
+  editable?: boolean;
+  disabled?: boolean;
+  color?: string;
+}
+
 function WorkScheduleCreateForm() {
+  const eventsData = [
+    {
+      event_id: 1,
+      title: 'Work Hour',
+      start: new Date(new Date(new Date().setHours(9)).setMinutes(0)),
+      end: new Date(new Date(new Date().setHours(12)).setMinutes(0)),
+      disabled: false,
+      editeable: false
+    },
+    {
+      event_id: 1,
+      title: 'lunch break',
+      start: new Date(new Date(new Date().setHours(12)).setMinutes(0)),
+      end: new Date(new Date(new Date().setHours(13)).setMinutes(0)),
+      editable: false,
+      color: '#75AD99'
+    },
+    {
+      event_id: 1,
+      title: 'Work Hour',
+      start: new Date(new Date(new Date().setHours(13)).setMinutes(0)),
+      end: new Date(new Date(new Date().setHours(17)).setMinutes(0)),
+      disabled: false,
+      editeable: false
+    },
+    {
+      event_id: 2,
+      title: 'Work Hour',
+      start: new Date (new Date(new Date(new Date().setHours(9)).setMinutes(0)).setDate(new Date().getDate() + 1)),
+      end: new Date(new Date(new Date(new Date().setHours(12)).setMinutes(0)).setDate(new Date().getDate() + 1)),
+      disabled: false,
+      editeable: false
+    },
+    {
+      event_id: 2,
+      title: 'lunch break',
+      start: new Date (new Date(new Date(new Date().setHours(12)).setMinutes(0)).setDate(new Date().getDate() + 1)),
+      end: new Date(new Date(new Date(new Date().setHours(13)).setMinutes(0)).setDate(new Date().getDate() + 1)),
+      editable: false,
+      color: '#75AD99'
+    },
+    {
+      event_id: 2,
+      title: 'Work Hour',
+      start: new Date (new Date(new Date(new Date().setHours(13)).setMinutes(0)).setDate(new Date().getDate() + 1)),
+      end: new Date(new Date(new Date(new Date().setHours(17)).setMinutes(0)).setDate(new Date().getDate() + 1)),
+      disabled: false,
+      editeable: false
+    },
+  ];
   const [profileName, setProfileName] = useState('');
   const [openForm, setOPenForm] = useState(false);
+  const [dataForEvent, setDataForEvent] = useState<Array<EventDataType>>([]);
+  const [fetchData, setFetchData] = useState(false);
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   const [initialValues, setInitialValues] = useState({
     type: '',
@@ -115,12 +180,22 @@ function WorkScheduleCreateForm() {
   };
 
   const handleFormClose = () => {
+    console.log('here');
     setOPenForm(false);
+    setFetchData(true);
   };
 
   const handleInput = (e) => {
     setProfileName(e.target.value);
   };
+
+  useEffect(() => {
+    function checkData() {
+      setDataForEvent(eventsData);
+    }
+    checkData();
+    console.log(dataForEvent);
+  }, [fetchData]);
   return (
     <>
       <Grid container spacing={4} mb='1rem' alignItems='flex-end'>
@@ -175,7 +250,13 @@ function WorkScheduleCreateForm() {
           />
         </Grid>
       </Grid>
+<<<<<<< Updated upstream
       {/* <Scheduler events={eventsData}/> */}
+=======
+      <Scheduler
+        events={dataForEvent}
+      />
+>>>>>>> Stashed changes
       <CustomModal
         open={openForm}
         handleClose={handleFormClose}
