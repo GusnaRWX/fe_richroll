@@ -92,6 +92,7 @@ export default function CreateCompanyProfileComponent() {
   });
 
   interface supplementType {
+    id: number;
     compensation: string;
     amount: number;
     taxStatus: string;
@@ -121,6 +122,7 @@ export default function CreateCompanyProfileComponent() {
 
   const addSuplementary = () => {
     const newData = {
+      id: Math.floor(Math.random() * 100 + 1),
       compensation: "",
       amount: 0,
       taxStatus: "",
@@ -153,10 +155,11 @@ export default function CreateCompanyProfileComponent() {
   }, [BaseCompensation]);
 
   const deleteSuplementary = (i: number) => {
-    // let items = [...supplementaryList];
-    // let search = items.filter((item) => {
-    //   return item !== i;
-    // });
+    let items = [...supplementaryList];
+    let search = items.filter((item) => {
+      return item.id !== i;
+    });
+    setSupplementaryList(search);
   };
 
   return (
@@ -392,6 +395,7 @@ export default function CreateCompanyProfileComponent() {
                             </Typography>
                             <Select
                               fullWidth
+                              value={supplementaryList[i].compensation}
                               onChange={(e) =>
                                 selectChange(
                                   i,
@@ -410,13 +414,14 @@ export default function CreateCompanyProfileComponent() {
                         </div>
                         <div
                           id="center"
-                          style={{ maxWidth: "388px", width: "100%" }}
+                          style={{ maxWidth: "388px", flexGrow: "1" }}
                         >
                           <Typography style={{ fontSize: "14px" }}>
                             Tax Status<span style={{ color: "red" }}>*</span>
                           </Typography>
                           <RadioGroup
                             row
+                            value={supplementaryList[i].taxStatus}
                             onChange={(e) =>
                               selectChange(i, e.target.value as string, "tax")
                             }
@@ -448,7 +453,7 @@ export default function CreateCompanyProfileComponent() {
                             color="red"
                             startIcon={<DeleteIcon />}
                             label="Delete"
-                            onClick={() => deleteSuplementary(i)}
+                            onClick={() => deleteSuplementary(suplement.id)}
                           />
                         </div>
                       </div>
@@ -469,6 +474,7 @@ export default function CreateCompanyProfileComponent() {
                         >
                           <TextField
                             fullWidth
+                            value={supplementaryList[i].amount}
                             onChange={(e) =>
                               selectChange(
                                 i,
@@ -491,6 +497,7 @@ export default function CreateCompanyProfileComponent() {
                           />
                           <Select
                             fullWidth
+                            value={supplementaryList[i].per}
                             onChange={(e) =>
                               selectChange(i, e.target.value as string, "per")
                             }
