@@ -269,7 +269,7 @@ export default function EnhancedTable() {
       <Paper sx={{ width: "100%", mb: 2 }}>
         <SearchTable
           id="search-table"
-          label="Search"
+          placeholder="Search"
           variant="outlined"
           fullWidth
           InputProps={{

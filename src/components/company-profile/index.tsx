@@ -4,8 +4,10 @@ import { Typography } from "@mui/material";
 import styled from "@emotion/styled";
 import { Button } from "../_shared/form";
 import AddIcon from "@mui/icons-material/Add";
+import Router, { useRouter } from "next/router";
 
 const CompanyProfileComponent = () => {
+  const router = useRouter()
   const TitleWrapper = styled.div`
     display: flex;
     flex-direction: row;
@@ -18,7 +20,7 @@ const CompanyProfileComponent = () => {
       <TitleWrapper>
         <Typography variant="h5">Compensation and Benefits</Typography>
         <div>
-          <Button startIcon={<AddIcon />} label="Add Profile" />
+          <Button onClick={() => router.push('/company-profile/create')} startIcon={<AddIcon />} label="Add Profile" />
         </div>
       </TitleWrapper>
       <EnhancedTable />
