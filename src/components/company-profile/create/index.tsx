@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Form } from "@/components/_shared/form";
+import { Button, Form, IconButton } from "@/components/_shared/form";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { styled } from "@mui/material/styles";
@@ -13,12 +13,34 @@ import {
   Radio,
   FormControlLabel,
 } from "@mui/material";
+import { ArrowBack } from "@mui/icons-material";
+import { useRouter } from "next/router";
 
 export default function CreateCompanyProfileComponent() {
+  const router = useRouter();
+
   const AddButton = styled(Button)({
     color: "white",
     maxWidth: "245px",
     padding: "8px 10px",
+    ".MuiTypography-root": {
+      fontSize: "12px",
+    },
+  });
+
+  const SaveButton = styled(Button)({
+    color: "white",
+    maxWidth: "245px",
+    padding: "8px 16px",
+    ".MuiTypography-root": {
+      fontSize: "12px",
+    },
+  });
+
+  const CancelButton = styled(Button)({
+    color: "#223567",
+    maxWidth: "245px",
+    padding: "8px 16px",
     ".MuiTypography-root": {
       fontSize: "12px",
     },
@@ -129,164 +151,224 @@ export default function CreateCompanyProfileComponent() {
 
   return (
     <div>
-      Form Here
-      <div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: "32px",
+        }}
+      >
+        <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
+          <IconButton
+            parentColor="primary.500"
+            icons={<ArrowBack sx={{ color: "#FFFFFF" }} />}
+            onClick={() => {
+              router.push("/");
+            }}
+          />
+          <Typography
+            style={{
+              color: "#223567",
+              fontSize: "20px",
+              fontWeight: "700",
+            }}
+          >
+            Create New CnB Profile
+          </Typography>
+        </div>
+        <div style={{ display: "flex", gap: "16px" }}>
+          <CancelButton color="primary" label="Cancel" />
+          <SaveButton color="primary" label="Save" />
+        </div>
+      </div>
+      <div
+        style={{
+          padding: "20px 32px",
+          boxShadow:
+            "0px 1px 2px rgba(0, 0, 0, 0.06), 0px 1px 3px rgba(0, 0, 0, 0.1)",
+        }}
+      >
+        <Form style={{ marginBottom: "32px" }}>
+          <Typography>
+            Input
+            <span style={{ color: "red" }}>*</span>
+          </Typography>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              gap: "24px",
+              maxWidth: "50%",
+            }}
+          >
+            <TextField fullWidth />
+          </div>
+        </Form>
         <div>
-          {supplementaryList.length > 0 && (
-            <>
-              <Typography
-                style={{
-                  marginBottom: "17px",
-                  fontSize: "16px",
-                  fontWeight: "700",
-                  color: "#223567",
-                }}
-              >
-                Suplementary
-              </Typography>
-              <Form>
-                {supplementaryList.map((suplement, i) => (
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      marginBottom: "33px",
-                    }}
-                    key={i}
-                  >
+          <div>
+            {supplementaryList.length > 0 && (
+              <>
+                <Typography
+                  style={{
+                    marginBottom: "17px",
+                    fontSize: "16px",
+                    fontWeight: "700",
+                    color: "#223567",
+                  }}
+                >
+                  Suplementary
+                </Typography>
+                <Form>
+                  {supplementaryList.map((suplement, i) => (
                     <div
                       style={{
                         display: "flex",
-                        flexDirection: "row",
-                        alignItems: "center",
-                        gap: "24px",
+                        flexDirection: "column",
+                        marginBottom: "33px",
                       }}
+                      key={i}
                     >
-                      <div
-                        id="right"
-                        style={{ width: "100%", maxWidth: "511px" }}
-                      >
-                        <div style={{ marginBottom: "16px" }}>
-                          <Typography style={{ fontSize: "14px" }}>
-                            Compensation Component {i + 1}
-                            <span style={{ color: "red" }}>*</span>
-                          </Typography>
-                          <Select
-                            fullWidth
-                            onChange={(e) =>
-                              selectChange(
-                                i,
-                                e.target.value as string,
-                                "compensation"
-                              )
-                            }
-                          >
-                            {options.map((option, i) => (
-                              <MenuItem key={i} value={option.value}>
-                                {option.label}
-                              </MenuItem>
-                            ))}
-                          </Select>
-                        </div>
-                      </div>
-                      <div
-                        id="center"
-                        style={{ maxWidth: "388px", width: "100%" }}
-                      >
-                        <Typography style={{ fontSize: "14px" }}>
-                          Tax Status<span style={{ color: "red" }}>*</span>
-                        </Typography>
-                        <RadioGroup
-                          row
-                          onChange={(e) =>
-                            selectChange(i, e.target.value as string, "tax")
-                          }
-                        >
-                          <FormControlLabel
-                            value="taxable"
-                            control={
-                              <Radio
-                                size="small"
-                                checkedIcon={<BpCheckedIcon />}
-                              />
-                            }
-                            label="Taxable"
-                          />
-                          <FormControlLabel
-                            value="non-taxable"
-                            control={
-                              <Radio
-                                size="small"
-                                checkedIcon={<BpCheckedIcon />}
-                              />
-                            }
-                            label="Non-Taxable"
-                          />
-                        </RadioGroup>
-                      </div>
-                      <div>
-                        <Button
-                          color="red"
-                          startIcon={<DeleteIcon />}
-                          label="Delete"
-                          onClick={() => deleteSuplementary(i)}
-                        />
-                      </div>
-                    </div>
-                    <div>
-                      <Typography>
-                        {suplement.compensation === "wage" ? "Rate" : "Amount"}
-                        <span style={{ color: "red" }}>*</span>
-                      </Typography>
                       <div
                         style={{
                           display: "flex",
                           flexDirection: "row",
+                          alignItems: "center",
                           gap: "24px",
-                          maxWidth: "511px",
                         }}
                       >
-                        <TextField
-                          fullWidth
-                          onChange={(e) =>
-                            selectChange(i, e.target.value as unknown, "amount")
-                          }
-                          InputProps={{
-                            startAdornment: (
-                              <InputAdornment position="start">
-                                Rp
-                              </InputAdornment>
-                            ),
-                            endAdornment: (
-                              <InputAdornment position="start">
-                                IDR
-                              </InputAdornment>
-                            ),
-                          }}
-                        />
-                        <Select
-                          fullWidth
-                          onChange={(e) =>
-                            selectChange(i, e.target.value as string, "per")
-                          }
+                        <div
+                          id="right"
+                          style={{ width: "100%", maxWidth: "511px" }}
                         >
-                          <MenuItem value="hour">per Hour</MenuItem>
-                          <MenuItem value="month">per Month</MenuItem>
-                        </Select>
+                          <div style={{ marginBottom: "16px" }}>
+                            <Typography style={{ fontSize: "14px" }}>
+                              Compensation Component {i + 1}
+                              <span style={{ color: "red" }}>*</span>
+                            </Typography>
+                            <Select
+                              fullWidth
+                              onChange={(e) =>
+                                selectChange(
+                                  i,
+                                  e.target.value as string,
+                                  "compensation"
+                                )
+                              }
+                            >
+                              {options.map((option, i) => (
+                                <MenuItem key={i} value={option.value}>
+                                  {option.label}
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          </div>
+                        </div>
+                        <div
+                          id="center"
+                          style={{ maxWidth: "388px", width: "100%" }}
+                        >
+                          <Typography style={{ fontSize: "14px" }}>
+                            Tax Status<span style={{ color: "red" }}>*</span>
+                          </Typography>
+                          <RadioGroup
+                            row
+                            onChange={(e) =>
+                              selectChange(i, e.target.value as string, "tax")
+                            }
+                          >
+                            <FormControlLabel
+                              value="taxable"
+                              control={
+                                <Radio
+                                  size="small"
+                                  checkedIcon={<BpCheckedIcon />}
+                                />
+                              }
+                              label="Taxable"
+                            />
+                            <FormControlLabel
+                              value="non-taxable"
+                              control={
+                                <Radio
+                                  size="small"
+                                  checkedIcon={<BpCheckedIcon />}
+                                />
+                              }
+                              label="Non-Taxable"
+                            />
+                          </RadioGroup>
+                        </div>
+                        <div>
+                          <Button
+                            color="red"
+                            startIcon={<DeleteIcon />}
+                            label="Delete"
+                            onClick={() => deleteSuplementary(i)}
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <Typography>
+                          {suplement.compensation === "wage"
+                            ? "Rate"
+                            : "Amount"}
+                          <span style={{ color: "red" }}>*</span>
+                        </Typography>
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            gap: "24px",
+                            maxWidth: "511px",
+                          }}
+                        >
+                          <TextField
+                            fullWidth
+                            onChange={(e) =>
+                              selectChange(
+                                i,
+                                e.target.value as unknown,
+                                "amount"
+                              )
+                            }
+                            InputProps={{
+                              startAdornment: (
+                                <InputAdornment position="start">
+                                  Rp
+                                </InputAdornment>
+                              ),
+                              endAdornment: (
+                                <InputAdornment position="start">
+                                  IDR
+                                </InputAdornment>
+                              ),
+                            }}
+                          />
+                          <Select
+                            fullWidth
+                            onChange={(e) =>
+                              selectChange(i, e.target.value as string, "per")
+                            }
+                          >
+                            <MenuItem value="hour">per Hour</MenuItem>
+                            <MenuItem value="month">per Month</MenuItem>
+                          </Select>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
-              </Form>
-            </>
-          )}
+                  ))}
+                </Form>
+              </>
+            )}
+          </div>
+          <AddButton
+            color="secondary"
+            startIcon={<AddIcon />}
+            label="Add Supplementary Compensation"
+            onClick={() => addSuplementary()}
+          />
         </div>
-        <AddButton
-          color="secondary"
-          startIcon={<AddIcon />}
-          label="Add Supplementary Compensation"
-          onClick={() => addSuplementary()}
-        />
       </div>
     </div>
   );
