@@ -37,11 +37,23 @@ export const getFileExtension = (filename: string): string => {
   return filename.substring(filename.lastIndexOf('.') + 1).toLowerCase();
 };
 
-export const getCompanyID = () => {
-  if (typeof window !== 'undefined') {
-    const id = getStorage('companyID');
+interface CompanyDataParse {
+  id: string|null;
+  imageUrl: string|null;
+  name: string|null;
+  sector: string|null;
+}
 
-    return id;
+export const getCompanyData = () => {
+  if (typeof window !== 'undefined') {
+    const id = getStorage('kaya_company');
+    let parse:CompanyDataParse;
+    if (id) {
+      parse = JSON.parse(id);
+      return parse;
+    } else {
+      return null;
+    }
   }
   return null;
 };
