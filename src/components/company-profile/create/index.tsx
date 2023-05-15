@@ -8,6 +8,9 @@ import {
   MenuItem,
   TextField,
   InputAdornment,
+  RadioGroup,
+  Radio,
+  FormControlLabel,
 } from "@mui/material";
 
 export default function CreateCompanyProfileComponent() {
@@ -20,10 +23,56 @@ export default function CreateCompanyProfileComponent() {
     },
   });
 
+  const BpIcon = styled("span")(({ theme }) => ({
+    borderRadius: "50%",
+    width: 16,
+    height: 16,
+    boxShadow:
+      theme.palette.mode === "dark"
+        ? "0 0 0 1px rgb(16 22 26 / 40%)"
+        : "inset 0 0 0 1px rgba(16,22,26,.2), inset 0 -1px 0 rgba(16,22,26,.1)",
+    backgroundColor: theme.palette.mode === "dark" ? "#394b59" : "#f5f8fa",
+    backgroundImage:
+      theme.palette.mode === "dark"
+        ? "linear-gradient(180deg,hsla(0,0%,100%,.05),hsla(0,0%,100%,0))"
+        : "linear-gradient(180deg,hsla(0,0%,100%,.8),hsla(0,0%,100%,0))",
+    ".Mui-focusVisible &": {
+      outline: "2px auto rgba(19,124,189,.6)",
+      outlineOffset: 2,
+    },
+    "input:hover ~ &": {
+      backgroundColor: theme.palette.mode === "dark" ? "#30404d" : "#ebf1f5",
+    },
+    "input:disabled ~ &": {
+      boxShadow: "none",
+      background:
+        theme.palette.mode === "dark"
+          ? "rgba(57,75,89,.5)"
+          : "rgba(206,217,224,.5)",
+    },
+  }));
+
+  const BpCheckedIcon = styled(BpIcon)({
+    backgroundColor: "#137cbd",
+    backgroundImage:
+      "linear-gradient(180deg,hsla(0,0%,100%,.1),hsla(0,0%,100%,0))",
+    "&:before": {
+      display: "block",
+      width: 16,
+      height: 16,
+      backgroundImage: "radial-gradient(#fff,#fff 28%,transparent 32%)",
+      content: '""',
+    },
+    "input:hover ~ &": {
+      backgroundColor: "#106ba3",
+    },
+  });
+
   interface supplementType {
     compensation: string;
     amount: number;
     taxStatus: string;
+    per: string;
   }
 
   const [supplementaryList, setSupplementaryList] = React.useState<
@@ -45,17 +94,30 @@ export default function CreateCompanyProfileComponent() {
       compensation: "",
       amount: 0,
       taxStatus: "",
+      per: "",
     };
     setSupplementaryList((prev) => [...prev, newData]);
   };
 
-  const compensationChange = (index, newItem) => {
+  const selectChange = (index: number, newItem: unknown, type: string) => {
     let items = [...supplementaryList];
     let item = { ...items[index] };
-    item.compensation = newItem;
+    if (type === "compensation") {
+      item.compensation = newItem as string;
+    } else if (type === "amount") {
+      item.amount = newItem as number;
+    } else if (type === "tax") {
+      item.taxStatus = newItem as string;
+    } else if (type === "per") {
+      item.per = newItem as string;
+    }
     items[index] = item;
     setSupplementaryList(items);
   };
+
+  React.useEffect(() => {
+    console.log(supplementaryList);
+  }, [supplementaryList]);
 
   const deleteSuplementary = (i: number) => {
     supplementaryList.splice(i, 1);
@@ -86,13 +148,14 @@ export default function CreateCompanyProfileComponent() {
                       flexDirection: "column",
                       marginBottom: "33px",
                     }}
+                    key={i}
                   >
                     <div
-                      key={i}
                       style={{
                         display: "flex",
                         flexDirection: "row",
                         alignItems: "center",
+                        gap: "24px",
                       }}
                     >
                       <div
@@ -107,7 +170,11 @@ export default function CreateCompanyProfileComponent() {
                           <Select
                             fullWidth
                             onChange={(e) =>
-                              compensationChange(i, e.target.value as string)
+                              selectChange(
+                                i,
+                                e.target.value as string,
+                                "compensation"
+                              )
                             }
                           >
                             {options.map((option, i) => (
@@ -118,7 +185,38 @@ export default function CreateCompanyProfileComponent() {
                           </Select>
                         </div>
                       </div>
-                      <div id="left">asd</div>
+                      <div id="left">
+                        <Typography style={{ fontSize: "14px" }}>
+                          Tax Status<span style={{ color: "red" }}>*</span>
+                        </Typography>
+                        <RadioGroup
+                          row
+                          onChange={(e) =>
+                            selectChange(i, e.target.value as string, "tax")
+                          }
+                        >
+                          <FormControlLabel
+                            value="taxable"
+                            control={
+                              <Radio
+                                size="small"
+                                checkedIcon={<BpCheckedIcon />}
+                              />
+                            }
+                            label="Taxable"
+                          />
+                          <FormControlLabel
+                            value="non-taxable"
+                            control={
+                              <Radio
+                                size="small"
+                                checkedIcon={<BpCheckedIcon />}
+                              />
+                            }
+                            label="Non-Taxable"
+                          />
+                        </RadioGroup>
+                      </div>
                     </div>
                     <div>
                       <Typography>
@@ -135,6 +233,9 @@ export default function CreateCompanyProfileComponent() {
                       >
                         <TextField
                           fullWidth
+                          onChange={(e) =>
+                            selectChange(i, e.target.value as unknown, "amount")
+                          }
                           InputProps={{
                             startAdornment: (
                               <InputAdornment position="start">
@@ -148,7 +249,12 @@ export default function CreateCompanyProfileComponent() {
                             ),
                           }}
                         />
-                        <Select fullWidth label="select">
+                        <Select
+                          fullWidth
+                          onChange={(e) =>
+                            selectChange(i, e.target.value as string, "per")
+                          }
+                        >
                           <MenuItem value="hour">per Hour</MenuItem>
                           <MenuItem value="month">per Month</MenuItem>
                         </Select>
