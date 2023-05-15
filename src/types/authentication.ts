@@ -30,4 +30,11 @@ export declare namespace Auth {
     email: string;
     roles: string[] | null
   }
+
+  export interface EmployeeSetNewPassword {
+    email: string;
+    password: string;
+    confirmationPassword: string;
+    token: string
+  }
 }

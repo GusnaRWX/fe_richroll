@@ -6,15 +6,18 @@ import LoginContainer from '@/containers/auth/LoginContainer';
 import SetNewPasswordComponent from '@/components/set-new-password/SetNewPasswordComponent';
 
 const EmployeeLogin = () => {
-  const { query: { path } } = useRouter();
-  const checkPath = Array.isArray(path) ? path.join('') : '';
-
+  const { query } = useRouter();
+  const checkPath = Array.isArray(query.path) ? query.path.join('') : '';
+  console.log(query, 'query');
   switch (checkPath) {
     case 'have-an-account':
       return (
         <>
           <MetaHead title='Kayaroll - Have an account ?' />
-          <HaveAccount />
+          <HaveAccount
+            email={query.email as string}
+            token={query.token as string}
+          />
         </>
       );
     case 'login':
@@ -28,7 +31,10 @@ const EmployeeLogin = () => {
       return (
         <>
           <MetaHead title='Kayarol - Set new password' />
-          <SetNewPasswordComponent />
+          <SetNewPasswordComponent
+            email={query.email as string}
+            token={query.token as string}
+          />
         </>
       );
     default:

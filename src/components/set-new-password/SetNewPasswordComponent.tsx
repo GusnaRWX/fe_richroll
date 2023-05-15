@@ -6,9 +6,11 @@ import { styled } from '@mui/material/styles';
 import LocalizationMenu from '@/components/_shared/_core/localization/Index';
 import { Text } from '@/components/_shared/common/';
 import { Button, Input } from '@/components/_shared/form';
-import { useForm } from '@/hooks/index';
+import { useForm, useAppDispatch } from '@/hooks/index';
 import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
 import { signIn } from 'next-auth/react';
+import { AuthEmployee } from '@/types/component';
+import { employeeSetNewPasswordRequested } from '@/store/reducers/slice/auth/loginSlice';
 
 const WrapperNavbarContent = styled(Toolbar)(() => ({
   display: 'flex',
@@ -76,10 +78,14 @@ const WrapperCardContent = styled(Box)(() => ({
   boxShadow: '0px 6px 20px rgba(0, 0, 0, 0.05)'
 }));
 
-const SetNewPasswordComponent = () => {
+const SetNewPasswordComponent = ({
+  token,
+  email
+}: AuthEmployee.SetNewPassword) => {
 
   const [openNewPassword, setOpenNewPassword] = useState(false);
   const [openRepeatNewPassword, setOpenRepeatNewPassword] = useState(false);
+  const dispatch = useAppDispatch();
 
   const [initialValues] = useState({
     newPassword: '',
@@ -131,6 +137,21 @@ const SetNewPasswordComponent = () => {
     handleInputChange
   } = useForm(initialValues, true, validate);
 
+  const handleSubmit = () => {
+    if (validate()) {
+      const payload = {
+        email: email,
+        password: values.newPassword,
+        confirmationPassword: values.repeatNewPassword,
+        token: token
+      };
+      dispatch({
+        type: employeeSetNewPasswordRequested.toString(),
+        payload: payload
+      });
+    }
+  };
+
   return (
     <>
       <Navbar />
@@ -171,7 +192,7 @@ const SetNewPasswordComponent = () => {
               >
                 <Input
                   size='small'
-                  value={'sumanto@test.com'}
+                  value={email}
                   disabled
                 />
               </Grid>
@@ -241,7 +262,7 @@ const SetNewPasswordComponent = () => {
               >
                 <Button
                   label='Update Password'
-
+                  onClick={handleSubmit}
                 />
               </Grid>
             </Grid>

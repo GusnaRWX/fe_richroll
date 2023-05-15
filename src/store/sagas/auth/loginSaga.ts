@@ -5,9 +5,16 @@
  */
 
 import { AnyAction } from '@reduxjs/toolkit';
-import { loginService } from '../saga-actions/auth/loginAction';
+import { loginService, setNewPasswordEmployee } from '../saga-actions/auth/loginAction';
 import { call, delay, put, takeEvery } from 'redux-saga/effects';
-import { loginRequested, loginSuccessed, loginFailured } from '@/store/reducers/slice/auth/loginSlice';
+import {
+  loginRequested,
+  loginSuccessed,
+  loginFailured,
+  employeeSetNewPasswordRequested,
+  employeeSetNewPasswordSuccessed,
+  employeeSetNewPasswordFailed
+} from '@/store/reducers/slice/auth/loginSlice';
 import { setResponserMessage } from '@/store/reducers/slice/responserSlice';
 import { Services } from '@/types/axios';
 import { AxiosError, AxiosResponse } from 'axios';
@@ -55,8 +62,32 @@ function* fetchAuthenticationLogin(action: AnyAction) {
   }
 }
 
+function* fetchSetNewPasswordEmployee(action: AnyAction) {
+  try {
+    const res: AxiosResponse = yield call(setNewPasswordEmployee, action?.payload);
+    if (res.status === 200) {
+      yield put({
+        type: employeeSetNewPasswordSuccessed.toString(),
+      });
+    }
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message,
+        }
+      });
+      yield put({ type: employeeSetNewPasswordFailed.toString() });
+    }
+  }
+}
+
 function* authSaga() {
   yield takeEvery(loginRequested.toString(), fetchAuthenticationLogin);
+  yield takeEvery(employeeSetNewPasswordRequested.toString(), fetchSetNewPasswordEmployee);
 }
 
 export default authSaga;

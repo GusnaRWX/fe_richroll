@@ -449,6 +449,14 @@ const theme = createTheme({
           borderRadius: '8px'
         }
       }
+    },
+    MuiFormHelperText: {
+      styleOverrides: {
+        root: {
+          margin: '5px 0',
+          fontSize: '.8rem'
+        }
+      }
     }
   }
 });

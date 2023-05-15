@@ -30,6 +30,15 @@ export const loginSlice = createSlice({
     loginFailured: (state) => {
       state.isAuth = false;
       state.isLoading = false;
+    },
+    employeeSetNewPasswordRequested: (state) => {
+      state.isLoading = true;
+    },
+    employeeSetNewPasswordSuccessed: (state) => {
+      state.isLoading = false;
+    },
+    employeeSetNewPasswordFailed: (state) => {
+      state.isLoading = false;
     }
   },
   extraReducers: {
@@ -46,6 +55,9 @@ export const {
   loginRequested,
   loginSuccessed,
   loginFailured,
+  employeeSetNewPasswordRequested,
+  employeeSetNewPasswordSuccessed,
+  employeeSetNewPasswordFailed
 } = loginSlice.actions;
 
 export default loginSlice.reducer;

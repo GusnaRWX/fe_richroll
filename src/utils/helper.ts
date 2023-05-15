@@ -38,16 +38,16 @@ export const getFileExtension = (filename: string): string => {
 };
 
 interface CompanyDataParse {
-  id: string|null;
-  imageUrl: string|null;
-  name: string|null;
-  sector: string|null;
+  id: string | null;
+  imageUrl: string | null;
+  name: string | null;
+  sector: string | null;
 }
 
 export const getCompanyData = () => {
   if (typeof window !== 'undefined') {
     const id = getStorage('kaya_company');
-    let parse:CompanyDataParse;
+    let parse: CompanyDataParse;
     if (id) {
       parse = JSON.parse(id);
       return parse;
@@ -68,7 +68,7 @@ export const convertValue = (name, event) => {
 };
 
 export const convertChecked = (event) => {
-  const {name, checked} = event.target;
+  const { name, checked } = event.target;
 
   const obj = {
     target: {
@@ -102,4 +102,26 @@ export const convertImageParams = (name, value, callback, onClose) => {
     }
   };
   return obj;
+};
+
+export const base64ToFile = (base64String: string | undefined, fileName: string): File | null => {
+  if (!base64String) {
+    return null;
+  }
+
+  const mimeType = base64String?.split(';')[0].split(':')[1];
+
+  // Remove the data URL prefix
+  const encodedData = base64String?.split(',')[1];
+
+  // Convert base64 to binary
+  const buffer = Buffer?.from(encodedData, 'base64');
+
+  // Create a Blob from the Buffer
+  const blob = new Blob([buffer as BlobPart], { type: mimeType });
+
+  // Create a File from the Blob
+  const file = new File([blob], fileName);
+
+  return file;
 };
