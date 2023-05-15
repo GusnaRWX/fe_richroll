@@ -4,7 +4,7 @@ import { Typography } from "@mui/material";
 import styled from "@emotion/styled";
 import { Button } from "../_shared/form";
 import AddIcon from "@mui/icons-material/Add";
-import Router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 
 const CompanyProfileComponent = () => {
   const router = useRouter()
