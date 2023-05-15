@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Grid,
   Typography,
@@ -7,14 +7,10 @@ import {
   Box,
   MenuItem,
   FormControl } from '@mui/material';
-import { Input, Button } from '@/components/_shared/form';
+import { Input, Button, CheckBox} from '@/components/_shared/form';
 import { styled as MuiStyled } from '@mui/material/styles';
-import { useForm } from '@/hooks/index';
-import { checkRegulerExpression } from '@/utils/helper';
-import dayjs from 'dayjs';
-import { useAppDispatch } from '@/hooks/index';
 import { useRouter } from 'next/router';
-import { postEmployeeInfoRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
+import { CustomHooks } from '@/types/hooks';
 
 
 const AsteriskComponent = MuiStyled('span')(({ theme }) => ({
@@ -30,115 +26,35 @@ const NextBtnWrapper = MuiStyled(Box)(({
   marginTop: '2rem'
 }));
 
-interface EmployeeProps {
-  refProp: React.Ref<HTMLFormElement>;
+interface CompanyBankProps {
   bank: [];
   paymentMethod: [];
+  handleInputChange: (_e: CustomHooks.HandleInput) => CustomHooks.HandleInput;
+  values;
+  errors;
+  handleSubmit: (e) => void;
 }
 
-function CompanyInformationForm ({refProp, bank, paymentMethod} :EmployeeProps) {
+function CompanyInformationForm ({bank, paymentMethod, handleInputChange, values, errors, handleSubmit} :CompanyBankProps) {
   const router = useRouter();
-  const dispatch = useAppDispatch();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [images, setImages] = useState<string | null>(null);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [initialValues, setInitialValues] = useState({
-    companyID: 4,
-    picture: [],
-    fullName: '',
-    nickname: '',
-    phoneNumberPrefix: '',
-    phoneNumber: '',
-    email: '',
-    startDate: dayjs(Date.now()),
-    endDate: dayjs(Date.now()),
-    isPermanent: false,
-    department: '',
-    position: '',
-    isSelfService: false
-  });
-
-  const validate = (fieldOfValues = values) => {
-    const temp = {...errors};
-
-    if ('picture' in fieldOfValues)
-      temp.picture = fieldOfValues.picture.length !== 0 ? '' : 'This field is required';
-
-    if ('fullName' in fieldOfValues)
-      temp.fullName = fieldOfValues.fullName ? '' : 'This field is required';
-
-    if ('phoneNumber' in fieldOfValues)
-      temp.phoneNumber = fieldOfValues.phoneNumber ? '' : 'This field is required';
-
-    if ('email' in fieldOfValues) {
-      const patternEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      const emailValue = fieldOfValues.email || '';
-      let emailErrorMessage = '';
-      if (!emailValue) {
-        emailErrorMessage = 'Email is required';
-      } else if (!checkRegulerExpression(patternEmail, emailValue)) {
-        emailErrorMessage = 'Email should be valid';
+  const convertCheckbox = (name, event) => {
+    const obj = {
+      target: {
+        name, value: event?.target?.checked
       }
-      temp.email = emailErrorMessage;
-    }
-
-    setErrors({
-      ...temp
-    });
-
-    if (fieldOfValues === values)
-      return Object.values(temp).every(x => x === '');
-  };
-
-  const { values, errors, setErrors, handleInputChange } = useForm(initialValues, true, validate);
-
-  console.log(errors);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if(validate()) {
-      const inputData = new FormData();
-      inputData.append('companyID', values.companyID);
-      inputData.append('picture', values.picture);
-      inputData.append('fullName', values.fullName);
-      inputData.append('nickname', values.nickname);
-      inputData.append('phoneNumberPrefix', values.phoneNumberPrefix);
-      inputData.append('phoneNumber', values.phoneNumber);
-      inputData.append('email', values.email);
-      inputData.append('startDate', dayjs(values.startDate).format('YYYY-MM-DD'));
-      inputData.append('endDate', dayjs(values.endDate).format('YYY-MM-DD'));
-      inputData.append('isPermanent', values.isPermanent);
-      inputData.append('department', values.department);
-      inputData.append('position', values.position);
-      inputData.append('isSelfService', values.isSelfService);
-      dispatch({
-        type: postEmployeeInfoRequested.toString(),
-        payload: inputData
-      });
-
-      setInitialValues({
-        companyID: 4,
-        picture: [],
-        fullName: '',
-        nickname: '',
-        phoneNumberPrefix: '',
-        phoneNumber: '',
-        email: '',
-        startDate: dayjs(Date.now()),
-        endDate: dayjs(Date.now()),
-        isPermanent: false,
-        department: '',
-        position: '',
-        isSelfService: false
-      });
-    }
+    };
+    return obj;
   };
 
   return (
     <>
-      <Typography component='h3' fontSize={18} color='primary'>Bank Information</Typography>
-      <form ref={refProp} onSubmit={(e) => handleSubmit(e)}>
-        <Grid container spacing={2} sx={{ marginTop: '1.5rem', marginBottom: '1.5rem' }}>
+      <form>
+        <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
+          <Grid item xs={6} md={6} lg={6} xl={6}>
+            <Typography component='h3' fontSize={18} color='primary'>Bank Information</Typography>
+          </Grid>
+        </Grid>
+        <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <FormControl fullWidth>
               <Typography sx={{ mb: '6px' }}>Bank<AsteriskComponent>*</AsteriskComponent></Typography>
@@ -146,126 +62,286 @@ function CompanyInformationForm ({refProp, bank, paymentMethod} :EmployeeProps) 
                 fullWidth
                 variant='outlined'
                 size='small'
-                value={values.department}
+                value={values.bankBankInformation}
                 onChange={handleInputChange}
-                name='companyType'
+                name='bankBankInformation'
                 placeholder='Select Bank'
               >
                 {bank.map((val, idx) => (
-                  <MenuItem key={idx} value={val?.['name']}>{val?.['name']}</MenuItem>
+                  <MenuItem key={idx} value={val?.['id']}>{val?.['name']}</MenuItem>
                 ))}
               </Select>
             </FormControl>
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Input
-              name='fullName'
+              name='bankAccountHolderNameBankInformation'
               customLabel='Bank Account Holder’s Name'
               withAsterisk={true}
               onChange={handleInputChange}
               size='small'
               placeholder='Input Bank Account Holder’s Name'
-              error={errors.fullName}
+              value={values.bankAccountHolderNameBankInformation}
+              error={errors.bankAccountHolderNameBankInformation}
             />
           </Grid>
         </Grid>
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Input
-              name='fullName'
+              name='bankAccoutNoBankInformation'
               customLabel='Bank Account No'
               withAsterisk={true}
               onChange={handleInputChange}
               size='small'
               placeholder='Input Bank Account No'
-              error={errors.fullName}
+              value={values.bankAccoutNoBankInformation}
+              error={errors.bankAccoutNoBankInformation}
             />
           </Grid>
           <Grid item xs={3} md={3} lg={3} xl={3}>
             <Input
-              name='fullName'
+              name='bankCodeBankInformation'
               customLabel='Bank Code'
               withAsterisk={true}
               onChange={handleInputChange}
               size='small'
               placeholder='Input Bank Code'
-              error={errors.fullName}
+              value={values.bankCodeBankInformation}
+              error={errors.bankCodeBankInformation}
             />
           </Grid>
           <Grid item xs={3} md={3} lg={3} xl={3}>
             <Input
-              name='fullName'
+              name='branchCodeBankInformation'
               customLabel='Branch Code'
               withAsterisk={true}
               onChange={handleInputChange}
               size='small'
               placeholder='Input Branch Code'
-              error={errors.fullName}
+              value={values.branchCodeBankInformation}
+              error={errors.branchCodeBankInformation}
             />
           </Grid>
         </Grid>
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Input
-              name='fullName'
+              name='branchNameBankInformation'
               customLabel='Branch Name'
               withAsterisk={true}
               onChange={handleInputChange}
               size='small'
               placeholder='Input Branch Name'
-              error={errors.fullName}
+              value={values.branchNameBankInformation}
+              error={errors.branchNameBankInformation}
             />
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Input
-              name='fullName'
+              name='swiftCodeBankInformation'
               customLabel='Swift Code'
               withAsterisk={true}
               onChange={handleInputChange}
               size='small'
               placeholder='Input Swift Code'
-              error={errors.fullName}
+              value={values.swiftCodeBankInformation}
+              error={errors.swiftCodeBankInformation}
             />
           </Grid>
         </Grid>
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
-            <Input
-              name='fullName'
-              customLabel='Company NPWP'
-              withAsterisk={true}
-              onChange={handleInputChange}
-              size='small'
-              placeholder='Input Company NPWP'
-              error={errors.fullName}
-            />
-          </Grid>
-          <Grid item xs={6} md={6} lg={6} xl={6}>
-            <FormControl fullWidth>
-              <Typography sx={{ mb: '6px' }}>Company Sector<AsteriskComponent>*</AsteriskComponent></Typography>
-              <Select
-                fullWidth
-                variant='outlined'
-                size='small'
-                value={values.department}
-                onChange={handleInputChange}
-                name='companySector'
-              >
-                {paymentMethod.map((val, idx) => (
-                  <MenuItem key={idx} value={val?.['name']}>{val?.['name']}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            <Typography component='h3' fontSize={18} color='primary'>Payroll Information</Typography>
           </Grid>
         </Grid>
-        <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
+        <Grid container spacing={2}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
-            <Typography component='h3' fontSize={18} color='primary'>Payroll information</Typography>
+            <Typography component='div' variant='text-base'>Schedule Type<AsteriskComponent>*</AsteriskComponent></Typography>
+            <Box>
+              <CheckBox
+                customLabel='Monthly'
+                name='isMonthly'
+                checked={values.isMonthly}
+                onChange={(e) => handleInputChange(convertCheckbox('isMonthly', e))}
+              />
+              <CheckBox
+                customLabel='Weekly'
+                name='isWeekly'
+                checked={values.isWeekly}
+                onChange={(e) => handleInputChange(convertCheckbox('isWeekly', e))}
+              />
+              <CheckBox
+                customLabel='Bi Weekly'
+                name='isBiWeekly'
+                checked={values.isBiWeekly}
+                onChange={(e) => handleInputChange(convertCheckbox('isBiWeekly', e))}
+              />
+            </Box>
           </Grid>
         </Grid>
+        {!!values.isMonthly && (
+          <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
+            <Grid item xs={6} md={6} lg={6} xl={6}>
+              <Box component='div' sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
+                <Box component='div' sx={{ mr: '14px' }}>
+                  <Typography component='div' variant='text-base' sx={{ mb: '6px' }}>Monthly Pay Period (includes overtime)<AsteriskComponent>*</AsteriskComponent></Typography>
+                  <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px' }}>
+                    <Input
+                      name='monthlyPeriodStart'
+                      withAsterisk={true}
+                      onChange={handleInputChange}
+                      size='small'
+                      placeholder='Day 1'
+                      value={values.monthlyPeriodStart}
+                      error={errors.monthlyPeriodStart}
+                    />
+                    <Typography component='div' variant='text-base'> - </Typography>
+                    <Input
+                      name='monthlyPeriodEnd'
+                      withAsterisk={true}
+                      onChange={handleInputChange}
+                      size='small'
+                      placeholder='Day 31'
+                      value={values.monthlyPeriodEnd}
+                      error={errors.monthlyPeriodEnd}
+                    />
+                  </Box>
+                </Box>
+                <Box component='div'>
+                  <Input
+                    name='monthlyPayrollDate'
+                    customLabel='Payroll Date'
+                    withAsterisk={true}
+                    onChange={handleInputChange}
+                    size='small'
+                    placeholder='Input Date'
+                    value={values.monthlyPayrollDate}
+                    error={errors.monthlyPayrollDate}
+                  />
+                </Box>
+              </Box>
+            </Grid>
+            <Grid item xs={6} md={6} lg={6} xl={6}>
+              <FormControl fullWidth>
+                <Typography sx={{ mb: '6px' }}>Default Payment Method<AsteriskComponent>*</AsteriskComponent></Typography>
+                <Select
+                  fullWidth
+                  variant='outlined'
+                  size='small'
+                  value={values.monthlyMethod}
+                  onChange={handleInputChange}
+                  name='monthlyMethod'
+                >
+                  {paymentMethod.map((val, idx) => (
+                    <MenuItem key={idx} value={val?.['id']}>{val?.['name']}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+          </Grid>
+        )}
+        {!!values.isWeekly && (
+          <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
+            <Grid item xs={6} md={6} lg={6} xl={6}>
+              <FormControl fullWidth>
+                <Typography sx={{ mb: '6px' }}>Weekly Pay Period (includes overtime)<AsteriskComponent>*</AsteriskComponent></Typography>
+                <Select
+                  fullWidth
+                  variant='outlined'
+                  size='small'
+                  value={values.weeklyPeriod}
+                  onChange={handleInputChange}
+                  name='weeklyPeriod'
+                >
+                  <MenuItem value='Sunday'>Sunday</MenuItem>
+                  <MenuItem value='Monday'>Monday</MenuItem>
+                  <MenuItem value='Thursday'>Thursday</MenuItem>
+                  <MenuItem value='Wednesday'>Wednesday</MenuItem>
+                  <MenuItem value='Friday'>Friday</MenuItem>
+                  <MenuItem value='Saturday'>Saturday</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={6} md={6} lg={6} xl={6}>
+              <FormControl fullWidth>
+                <Typography sx={{ mb: '6px' }}>Default Payment Method<AsteriskComponent>*</AsteriskComponent></Typography>
+                <Select
+                  fullWidth
+                  variant='outlined'
+                  size='small'
+                  value={values.weeklyMethod}
+                  onChange={handleInputChange}
+                  name='weeklyMethod'
+                >
+                  {paymentMethod.map((val, idx) => (
+                    <MenuItem key={idx} value={val?.['id']}>{val?.['name']}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+          </Grid>
+        )}
+        {!!values.isBiWeekly && (
+          <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
+            <Grid item xs={6} md={6} lg={6} xl={6}>
+              <Typography component='div' variant='text-base' sx={{ mb: '6px' }}>Bi Weekly Pay Period (includes overtime)<AsteriskComponent>*</AsteriskComponent></Typography>
+              <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px' }}>
+                <FormControl fullWidth>
+                  <Select
+                    fullWidth
+                    variant='outlined'
+                    size='small'
+                    value={values.biWeeklyPeriod}
+                    onChange={handleInputChange}
+                    name='biWeeklyPeriod'
+                  >
+                    <MenuItem value='Sunday'>Sunday</MenuItem>
+                    <MenuItem value='Monday'>Monday</MenuItem>
+                    <MenuItem value='Thursday'>Thursday</MenuItem>
+                    <MenuItem value='Wednesday'>Wednesday</MenuItem>
+                    <MenuItem value='Friday'>Friday</MenuItem>
+                    <MenuItem value='Saturday'>Saturday</MenuItem>
+                  </Select>
+                </FormControl>
+                <Typography component='div' variant='text-base'> - </Typography>
+                <FormControl fullWidth>
+                  <Select
+                    fullWidth
+                    variant='outlined'
+                    size='small'
+                    value={values.biWeeklyPeriodWeek}
+                    onChange={handleInputChange}
+                    name='biWeeklyPeriodWeek'
+                  >
+                    <MenuItem value='First Week'>First Week</MenuItem>
+                    <MenuItem value='Second Week'>Second Week</MenuItem>
+                  </Select>
+                </FormControl>
+              </Box>
+            </Grid>
+            <Grid item xs={6} md={6} lg={6} xl={6}>
+              <FormControl fullWidth>
+                <Typography sx={{ mb: '6px' }}>Default Payment Method<AsteriskComponent>*</AsteriskComponent></Typography>
+                <Select
+                  fullWidth
+                  variant='outlined'
+                  size='small'
+                  value={values.biWeeklyMethod}
+                  onChange={handleInputChange}
+                  name='biWeeklyMethod'
+                >
+                  {paymentMethod.map((val, idx) => (
+                    <MenuItem key={idx} value={val?.['id']}>{val?.['name']}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+          </Grid>
+        )}
         <NextBtnWrapper>
           <Button onClick={() => { router.push('/company');}} fullWidth={false} size='small' label='Cancel' variant='outlined' sx={{ mr: '12px' }} color='primary'/>
-          <Button fullWidth={false} size='small' label='Save' color='primary'/>
+          <Button onClick={(e) => { handleSubmit(e); }} fullWidth={false} size='small' label='Save' color='primary'/>
         </NextBtnWrapper>
       </form>
     </>

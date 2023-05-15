@@ -73,6 +73,33 @@ export const companySlice = createSlice({
     paymentMethodFailed: (state) => {
       state.loading = false;
     },
+    postCompanyDetailRequested: (state) => {
+      state.loading = true;
+    },
+    postCompanyDetailSuccess: (state) => {
+      state.loading = false;
+    },
+    postCompanyDetailFailed: (state) => {
+      state.loading = false;
+    },
+    postCompanyProfileRequested: (state) => {
+      state.loading = true;
+    },
+    postCompanyProfileSuccess: (state) => {
+      state.loading = false;
+    },
+    postCompanyProfileFailed: (state) => {
+      state.loading = false;
+    },
+    patchCompanyProfileRequested: (state) => {
+      state.loading = true;
+    },
+    patchCompanyProfileSuccess: (state) => {
+      state.loading = false;
+    },
+    patchCompanyProfileFailed: (state) => {
+      state.loading = false;
+    }
   },
   extraReducers: {
     [HYDRATE]: (state, action) => {
@@ -99,7 +126,16 @@ export const {
   bankFailed,
   paymentMethodRequested,
   paymentMethodSuccess,
-  paymentMethodFailed
+  paymentMethodFailed,
+  postCompanyDetailRequested,
+  postCompanyDetailSuccess,
+  postCompanyDetailFailed,
+  postCompanyProfileRequested,
+  postCompanyProfileSuccess,
+  postCompanyProfileFailed,
+  patchCompanyProfileRequested,
+  patchCompanyProfileSuccess,
+  patchCompanyProfileFailed
 } = companySlice.actions;
 
 export default companySlice.reducer;
