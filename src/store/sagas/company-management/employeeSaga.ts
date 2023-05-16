@@ -80,6 +80,17 @@ function* fetchPostEmployeeInfo(action: AnyAction) {
         };
         yield call(fetchPostPersonalInformation, body);
       }
+
+      if (action?.payload?.isEmergencyValid) {
+        const body = {
+          type: postEmergencyRequested.toString(),
+          payload: {
+            employeeID: res.data.data,
+            data: action?.payload?.emergencyContactValue
+          }
+        };
+        yield call(fetchPostEmergency, body);
+      }
     }
   } catch (err) {
     if (err instanceof AxiosError) {
@@ -100,7 +111,22 @@ function* fetchPostEmployeeInfo(action: AnyAction) {
 
 function* fetchPostEmergency(action: AnyAction) {
   try {
-    const res: AxiosResponse = yield call(postEmergency, action?.payload);
+    const payload = {
+      employeeID: String(getCompanyData()?.id),
+      primary: {
+        name: action?.payload?.data?.fullNamePrimary,
+        relationship: action?.payload?.data.relationPrimary,
+        phoneNumberPrefix: action?.payload.data.phoneNumberPrefixPrimary,
+        phoneNumber: action?.payload.data.phoneNumberPrimary
+      },
+      secondary: {
+        name: action?.payload?.data?.fullNameSecondary,
+        relationship: action?.payload?.data.relationSecondary,
+        phoneNumberPrefix: action?.payload.data.phoneNumberPrefixSecondary,
+        phoneNumber: action?.payload.data.phoneNumberSecondary
+      }
+    };
+    const res: AxiosResponse = yield call(postEmergency, payload);
     if (res.data.code === 200 || res.data.code === 201) {
       yield put({ type: postEmergencySuccess.toString() });
       yield put({
@@ -166,8 +192,7 @@ function* fetchPostPersonalInformation(action: AnyAction) {
       identity: {
         type: +action?.payload?.data.idTypePersonalID,
         number: +action?.payload?.data.idNumberPersonalID,
-        ...(!action?.payload?.data.isPermanentPersonalID && { expireAt: dayjs(action?.payload?.data.idExpirationDatePersonalID).format('YYYY-MM-DD') }),
-        isPermanent: action?.payload?.data.isPermanentPersonalID ? true : false
+        isPermanent: true
       },
       bank: {
         bankID: action?.payload?.data.bankBankInformation,

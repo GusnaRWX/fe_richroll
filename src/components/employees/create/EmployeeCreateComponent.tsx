@@ -161,6 +161,7 @@ function EmployeeCreateComponent() {
   });
   const [isInformationValid, setIsInformationValid] = useState(false);
   const [isPersonalInformationValid, setIsPersonalInformationValid] = useState(false);
+  const [isEmergencyValid, setIsEmergencyValid] = useState(false);
   const dispatch = useAppDispatch();
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -190,7 +191,7 @@ function EmployeeCreateComponent() {
 
     dispatch({
       type: postEmployeeInfoRequested.toString(),
-      payload: { employeeInformation: inputData, isPersonalInformationValid, personalValue: personalInformationValue }
+      payload: { employeeInformation: inputData, isPersonalInformationValid, personalValue: personalInformationValue, isEmergencyValid, emergencyContactValue: emergencyValue }
     });
 
 
@@ -254,7 +255,7 @@ function EmployeeCreateComponent() {
             />
           </TabPanel>
           <TabPanel value={value} index={2}>
-            <EmergencyContactFormClient nextPage={setValue} refProp={emergencyRef} setValues={setEmergencyValue} emergencyValues={emergencyValue} />
+            <EmergencyContactFormClient nextPage={setValue} refProp={emergencyRef} setValues={setEmergencyValue} emergencyValues={emergencyValue} setIsEmergencyValid={setIsEmergencyValid}/>
           </TabPanel>
           <TabPanel value={value} index={3}>
             on Development

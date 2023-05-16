@@ -150,7 +150,7 @@ const CompanyComponent = ({ companies }: Company.Component) => {
       {
         [200, 201].includes(responser.code) && (
           <Box display={'flex'}>
-            <Notify body={responser.message || 'aaaa'} />
+            <Notify error={false} body={responser.message || 'aaaa'} />
           </Box>
         )
       }

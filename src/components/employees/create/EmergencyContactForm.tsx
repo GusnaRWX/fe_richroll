@@ -16,9 +16,10 @@ interface EmergencyProps {
   nextPage: (_val: number) => void;
   setValues: React.Dispatch<React.SetStateAction<Employees.EmergencyContactValues>>;
   emergencyValues: Employees.EmergencyContactValues;
+  setIsEmergencyValid: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-function EmergencyContactForm({ refProp, nextPage, setValues, emergencyValues }: EmergencyProps) {
+function EmergencyContactForm({ refProp, nextPage, setValues, emergencyValues, setIsEmergencyValid }: EmergencyProps) {
   const { employeeID } = useAppSelectors((state) => state.employee);
   const [errorFields, setErrorFields] = useState(false);
   const [initialValues] = useState({
@@ -55,16 +56,25 @@ function EmergencyContactForm({ refProp, nextPage, setValues, emergencyValues }:
     if (validate()) {
       setValues({ ...values });
       nextPage(3);
+      setIsEmergencyValid(true);
       setErrorFields(false);
     } else {
       setErrorFields(true);
+      setIsEmergencyValid(false);
     }
   };
 
   const handleBack = (e) => {
     e.preventDefault();
-    setValues({ ...values });
-    nextPage(1);
+    if (validate()) {
+      setValues({ ...values });
+      nextPage(1);
+      setIsEmergencyValid(true);
+      setErrorFields(false);
+    } else {
+      setErrorFields(true);
+      setIsEmergencyValid(false);
+    }
 
   };
 
