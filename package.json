@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@aldabil/react-scheduler": "^2.7.9",
     "@emotion/cache": "^11.10.8",
     "@emotion/react": "^11.10.8",
     "@emotion/server": "^11.10.0",

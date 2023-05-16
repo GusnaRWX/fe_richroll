@@ -14,7 +14,7 @@ const modalStyle = {
   border: '1px solid #E5E7EB',
   borderRadius: '8px',
   paddingTop: '10px',
-  p:2
+  p: 2
 };
 
 const ModalHeader = styled.div`
@@ -44,14 +44,19 @@ interface ConfirmationModalProp {
   handleClose: () => void;
   title: string;
   content: string;
+  withCallback?: boolean;
+  callback?: () => void;
 }
 
 
-function ConfirmationModal({open, handleClose, title, content}: ConfirmationModalProp) {
+function ConfirmationModal({ open, handleClose, title, content, withCallback, callback }: ConfirmationModalProp) {
   const router = useRouter();
   const handleClick = () => {
     handleClose();
     router.back();
+    if (withCallback && callback) {
+      callback();
+    }
   };
   return (
     <Modal
@@ -67,7 +72,7 @@ function ConfirmationModal({open, handleClose, title, content}: ConfirmationModa
             onClick={handleClose}
           ><Close /></IconButton>
         </ModalHeader>
-        <div style={{ paddingBottom: '1rem', paddingTop: '1rem',  }}>
+        <div style={{ paddingBottom: '1rem', paddingTop: '1rem', }}>
           <Typography component='span' fontSize='14px' color='#4B5563'>{content}</Typography>
         </div>
         <ModalFooter>

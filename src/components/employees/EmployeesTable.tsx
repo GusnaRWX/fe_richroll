@@ -6,7 +6,10 @@ import {
   TableCell,
   TableRow,
   Avatar,
-  Chip
+  Chip,
+  Box,
+  TableSortLabel,
+  Typography
 } from '@mui/material';
 import { Input } from '../_shared/form';
 import { Search  } from '@mui/icons-material';
@@ -18,8 +21,9 @@ import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { getEmployeeRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
-import { getCompanyID } from '@/utils/helper';
+import { getCompanyData } from '@/utils/helper';
 import dayjs from 'dayjs';
+import { visuallyHidden } from '@mui/utils';
 
 const ButtonWrapper = styled.div`
  display: flex;
@@ -38,18 +42,20 @@ const NameWrapper = styled.div`
 
 
 const headerItems = [
-  { key: 'id', label: 'ID' },
-  { key: 'name', label: 'Name' },
-  { key: 'position', label: 'Position' },
-  { key: 'department', label: 'Department' },
-  { key: 'status', label: 'Status' },
-  { key: 'created_at', label: 'Created on' },
-  { key: 'last_login', label: 'Last Login' },
+  { id: 'id', label: 'ID' },
+  { id: 'user.name', label: 'Name' },
+  { id: 'position.name', label: 'Position' },
+  { id: 'department.name', label: 'Department' },
+  { id: 'user.isActive', label: 'Status' },
+  { id: 'user.createdAt', label: 'Created on' },
+  { id: 'user.createdAt', label: 'Last Login' },
 ];
 
 interface EmployeeTableProps {
   tabValue: number
 }
+
+type Order = 'asc' | 'desc'
 
 function EmployeesTable({
   tabValue
@@ -60,7 +66,10 @@ function EmployeesTable({
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
   const [search, setSearch] = useState('');
-  const companyID = getCompanyID();
+  const [direction, setDirection] = useState<Order>('desc');
+  const [sort, setSort] = useState('');
+  const [hydrated, setHaydrated] = useState(false);
+  const companyData = getCompanyData();
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
@@ -74,20 +83,36 @@ function EmployeesTable({
     }
   };
 
+  const handleRequestSort = (event: React.MouseEvent<unknown>, headId: string) => {
+    const isAsc = sort === headId && direction === 'asc';
+    setDirection(isAsc ? 'desc' : 'asc');
+    setSort(headId);
+  };
+
   useEffect(() => {
+    console.log(companyData);
+    
     dispatch({
       type: getEmployeeRequested.toString(),
       payload: {
         page: page + 1,
         itemPerPage: rowsPerPage,
-        sort: 'id',
-        direction: false,
+        sort: sort,
+        direction: direction.toUpperCase(),
         search: search,
         isActive: tabValue === 0 ? false : true,
-        companyID: companyID
+        companyID: companyData?.id
       }
     });
-  }, [rowsPerPage, page, tabValue, search]);
+  }, [rowsPerPage, page, tabValue, search, sort, direction]);
+
+  useEffect(() => {
+    setHaydrated(true);
+  }, []);
+
+  if (!hydrated) {
+    return null;
+  }
   return (
     <>
       <Grid container spacing={2}>
@@ -128,8 +153,21 @@ function EmployeesTable({
         headChildren={
           <TableRow>
             {
-              headerItems.map((item, index) => (
-                <TableCell key={index}>{item.label}</TableCell>
+              headerItems.map((item) => (
+                <TableCell key={item.id} sortDirection={sort === item.id ? direction : false}>
+                  <TableSortLabel
+                    active={sort === item.id}
+                    direction={sort === item.id ? direction : 'asc'}
+                    onClick={(e) => handleRequestSort(e, item.id)}
+                  >
+                    {item.label}
+                    {sort === item.id ? (
+                      <Box component='span' sx={visuallyHidden}>
+                        {direction === 'asc' ? 'sorted descending' : 'sorted ascending'}
+                      </Box>
+                    ): null}
+                  </TableSortLabel>
+                </TableCell>
               ))
             }
           </TableRow>
@@ -140,7 +178,7 @@ function EmployeesTable({
               typeof data?.items !== 'undefined'  ? (
                 data?.items.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={12} align='center'>Data not found</TableCell>
+                    <TableCell colSpan={12} align='center'><Typography>Data not found</Typography></TableCell>
                   </TableRow>
                 ) : (
                   data?.items.map((item, index) => (
@@ -149,8 +187,8 @@ function EmployeesTable({
                       <TableCell>
                         <NameWrapper>
                           <Avatar
-                            src={item.user.userInformation.picture}
-                            alt={item.user.userInformation.picture}
+                            src={item?.user?.userInformation !== null ? item?.user?.userInformation.picture : item.user.name}
+                            alt={item?.user?.userInformation !== null ? item?.user?.userInformation.picture : item.user.name}
                             sx={{
                               width: 24, height: 24
                             }}
@@ -190,7 +228,7 @@ function EmployeesTable({
                 )
               ): (
                 <TableRow>
-                  <TableCell colSpan={12} align='center'>Data not found</TableCell>
+                  <TableCell colSpan={12} align='center'><Typography>Data not found</Typography></TableCell>
                 </TableRow>
               )
             }

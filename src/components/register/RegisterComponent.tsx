@@ -85,8 +85,7 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
     companyName: '',
     numberOfEmployees: '',
     phoneNumberPrefix: '',
-    phoneNumber: '',
-    isAgree: true
+    phoneNumber: ''
   });
 
   const [checked, setChecked] = useState(false);
@@ -194,8 +193,7 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
         companyName: '',
         numberOfEmployees: '',
         phoneNumberPrefix: '+62',
-        phoneNumber: '',
-        isAgree: true
+        phoneNumber: ''
       });
     }
   };

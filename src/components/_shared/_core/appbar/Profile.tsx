@@ -33,6 +33,7 @@ const Profile = () => {
         signOut({ callbackUrl: '/login' });
         setAnchorEl(null);
         router.push('/login');
+        clearStorages(['emp-information', 'emp-personal-information', 'emp-emergency-contact']);
         break;
       case 'profile':
         router.push('/profile');
@@ -77,7 +78,6 @@ const Profile = () => {
             <Typography
               fontSize={12}
             >
-              {/* {profile && profile?.roles[0]} */}
             </Typography>
           </Grid>
         </Grid>
