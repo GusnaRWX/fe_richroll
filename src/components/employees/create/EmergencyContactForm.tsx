@@ -121,6 +121,7 @@ function EmergencyContactForm({ refProp, nextPage }: EmergencyProps) {
                 withAsterisk={true}
                 onChange={handleInputChange}
                 size='small'
+                value={values.fullNamePrimary}
                 placeholder='Input Full Name'
                 error={errors.fullNamePrimary}
               />
@@ -178,6 +179,7 @@ function EmergencyContactForm({ refProp, nextPage }: EmergencyProps) {
                     type='number'
                     error={errors.phoneNumberPrimary}
                     onChange={handleInputChange}
+                    value={values.phoneNumberPrimary}
                   />
                 </Grid>
               </Grid>
@@ -196,6 +198,7 @@ function EmergencyContactForm({ refProp, nextPage }: EmergencyProps) {
                 size='small'
                 onChange={handleInputChange}
                 placeholder='Input Full Name'
+                value={values.fullNameSecondary}
               />
             </Grid>
             <Grid item xs={6} md={6} lg={6} xl={6} spacing={2}>
@@ -249,6 +252,7 @@ function EmergencyContactForm({ refProp, nextPage }: EmergencyProps) {
                     withAsterisk={true}
                     size='small'
                     onChange={handleInputChange}
+                    value={values.phoneNumberSecondary}
                   />
                 </Grid>
               </Grid>
@@ -262,7 +266,12 @@ function EmergencyContactForm({ refProp, nextPage }: EmergencyProps) {
           gap={2}
         >
           <Grid item>
-            <Button onClick={() => nextPage(1)} label='Back' variant='outlined' />
+            <Button onClick={() => {
+              nextPage(1);
+              if (Object.values(values).some(value => value === '')) {
+                setStorages([{ name: 'emp-emergency-contact', value: JSON.stringify({ ...values }) }]);
+              }
+            }} label='Back' variant='outlined' />
           </Grid>
           <Grid item>
             <Button onClick={() => {
