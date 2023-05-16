@@ -140,7 +140,7 @@ const CompanyComponent = ({ companies }: Company.Component) => {
   const router = useRouter();
   const handleClick = (val, path) => {
     setStorages([
-      {name: 'kaya_company', value: JSON.stringify({id: val.id, imageUrl: val.information?.imageUrl || '', name: val.information?.name, sector: val.information?.sector?.name || '-'})}
+      {name: 'kaya_company', value: JSON.stringify({id: val?.id, imageUrl: val?.imageUrl || '', name: val?.name, sector: val?.sector || '-'})}
     ]);
     router.push(path);
   };
@@ -171,29 +171,31 @@ const CompanyComponent = ({ companies }: Company.Component) => {
             >
               Choose the company you want to manage. You can add a maximum of 5 companies
             </Typography>
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: '12px', mt: '16px', height: '221px' }}>
-              {companies.map((val, idx) => (
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: '25px', mt: '16px', height: '221px' }}>
+              {companies.map((val:object, idx) => (
                 // <WrapperCardItem key={idx} onClick={() => { router.push(`/company/${val?.['id']}`);}}>
                 <WrapperCardItem key={idx} onClick={() => { handleClick(val, '/dashboard');}}>
-                  <Image
-                    src={ImageType.PLACEHOLDER_COMPANY}
-                    width={178}
-                    height={142}
-                    alt={val?.['information']?.['name']}
-                  />
+                  <Box component='div' sx={{ position: 'relative', width: '178px', height: '142px' }}>
+                    <Image
+                      src={val?.['imageUrl'].includes('http') ? val?.['imageUrl'] : ImageType.PLACEHOLDER_COMPANY}
+                      fill={true}
+                      style={{ objectFit: 'contain' }}
+                      alt={val?.['name']}
+                    />
+                  </Box>
                   <Typography
                     variant='text-lg'
                     component='div'
                     sx={{ fontWeight: 700, mb: '4px', mt: '8px', width: '100%' }}
                   >
-                    {val?.['information']?.['name']}
+                    {val?.['name']}
                   </Typography>
                   <Typography
                     variant='text-xs'
                     component='div'
                     sx={{ fontWeight: 500, width: '100%' }}
                   >
-                    {val?.['information']?.['sector']?.['name']}
+                    {val?.['sector']}
                   </Typography>
                 </WrapperCardItem>
               ))}

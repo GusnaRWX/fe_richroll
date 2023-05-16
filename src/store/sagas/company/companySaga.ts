@@ -1,5 +1,5 @@
 import { AnyAction } from '@reduxjs/toolkit';
-import { getCompaniesItem, getCompanyTypeItem, getCompanySectorItem, getBankItem, getPaymentMethodItem, postCompanyProfile, postCompanyDetail, patchCompanyProfile } from '../saga-actions/company/companyActions';
+import { getCompaniesItem, getCompanyTypeItem, getCompanySectorItem, getBankItem, getPaymentMethodItem, postCompanyProfile, getCompanyDetail, patchCompanyProfile } from '../saga-actions/company/companyActions';
 import { takeEvery, call, put, delay } from 'redux-saga/effects';
 import { Company } from '@/types/company';
 import { 
@@ -21,9 +21,9 @@ import {
   postCompanyProfileRequested,
   postCompanyProfileSuccess,
   postCompanyProfileFailed,
-  postCompanyDetailRequested,
-  postCompanyDetailSuccess,
-  postCompanyDetailFailed,
+  getCompanyDetailRequested,
+  getCompanyDetailSuccess,
+  getCompanyDetailFailed,
   patchCompanyProfileRequested,
   patchCompanyProfileSuccess,
   patchCompanyProfileFailed
@@ -247,16 +247,16 @@ function* fetchPostCompanyProfile(action: AnyAction) {
   }
 }
 
-function* fetchPostCompanyDetail(action: AnyAction) {
+function* fetchGetCompanyDetail(action: AnyAction) {
   try {
-    const res: AxiosResponse = yield call(postCompanyDetail, action?.payload);
+    const res: AxiosResponse = yield call(getCompanyDetail, action?.payload);
     if (res.data.code === 200) {
-      yield put({ type: postCompanyDetailSuccess.toString(), payload: res.data.data });
+      yield put({ type: getCompanyDetailSuccess.toString(), payload: res.data.data });
     }
   } catch (err) {
     if (err instanceof AxiosError) {
       const errorMessage = err?.response?.data as Services.ErrorResponse;
-      yield put({ type: postCompanyDetailFailed.toString() });
+      yield put({ type: getCompanyDetailFailed.toString() });
       yield delay(2000, true);
       yield put({
         type: setResponserMessage.toString(),
@@ -314,7 +314,7 @@ function* companySaga() {
   yield takeEvery(bankRequested.toString(), fetchGetBank);
   yield takeEvery(paymentMethodRequested.toString(), fetchGetPaymentMethod);
   yield takeEvery(postCompanyProfileRequested.toString(), fetchPostCompanyProfile);
-  yield takeEvery(postCompanyDetailRequested.toString(), fetchPostCompanyDetail);
+  yield takeEvery(getCompanyDetailRequested.toString(), fetchGetCompanyDetail);
   yield takeEvery(patchCompanyProfileRequested.toString(), fetchPatchCompanyProfile);
 }
 
