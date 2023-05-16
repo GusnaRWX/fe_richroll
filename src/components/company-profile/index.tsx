@@ -7,7 +7,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { useRouter } from "next/router";
 
 const CompanyProfileComponent = () => {
-  const router = useRouter()
+  const router = useRouter();
   const TitleWrapper = styled.div`
     display: flex;
     flex-direction: row;
@@ -20,7 +20,11 @@ const CompanyProfileComponent = () => {
       <TitleWrapper>
         <Typography variant="h5">Compensation and Benefits</Typography>
         <div>
-          <Button onClick={() => router.push('/company-profile/create')} startIcon={<AddIcon />} label="Add Profile" />
+          <Button
+            onClick={() => router.push("/cnb/create")}
+            startIcon={<AddIcon />}
+            label="Add Profile"
+          />
         </div>
       </TitleWrapper>
       <EnhancedTable />
