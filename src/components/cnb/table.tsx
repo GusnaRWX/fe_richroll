@@ -222,7 +222,7 @@ export default function EnhancedTable(rows: any) {
               onRequestSort={handleRequestSort}
             />
             <TableBody>
-              {rows?.length &&
+              {rows?.rows?.items.length !== 0 &&
                 visibleRows?.map((row, index) => {
                   const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -243,9 +243,11 @@ export default function EnhancedTable(rows: any) {
                     </TableRow>
                   );
                 })}
-              {!rows.length && (
+              {rows?.rows?.items.length === undefined && (
                 <TableRow>
-                  <TableCell>No Data</TableCell>
+                  <TableCell rowSpan={5} colSpan={5} align="center">
+                    No Data
+                  </TableCell>
                 </TableRow>
               )}
               {emptyRows > 0 && (
