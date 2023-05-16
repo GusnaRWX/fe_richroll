@@ -17,9 +17,21 @@ import {
 } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
 import { useRouter } from "next/router";
+import { getCompensationComponentOptionRequested } from "@/store/reducers/slice/cnb/compensationSlice";
+import { useAppDispatch, useAppSelectors } from "@/hooks/index";
 
 export default function CreateCNBComponent() {
   const router = useRouter();
+  const dispatch = useAppDispatch();
+  const compensationComponentOption = useAppSelectors(
+    (state) => state.compensation?.compensationComponentOption?.data?.items
+  );
+
+  React.useEffect(() => {
+    dispatch({
+      type: getCompensationComponentOptionRequested.toString(),
+    });
+  }, []);
 
   const AddButton = styled(Button)({
     color: "white",
@@ -276,9 +288,9 @@ export default function CreateCNBComponent() {
                       })
                     }
                   >
-                    {options.map((option, i) => (
-                      <MenuItem key={i} value={option.value}>
-                        {option.label}
+                    {compensationComponentOption?.map((Option, i) => (
+                      <MenuItem key={i} value={Option.id}>
+                        {Option.name}
                       </MenuItem>
                     ))}
                   </Select>
@@ -316,7 +328,7 @@ export default function CreateCNBComponent() {
             </div>
             <div>
               <Typography>
-                {BaseCompensation?.compensation === "Wage" ? "Rate" : "Amount"}
+                {BaseCompensation?.compensation === "1" ? "Rate" : "Amount"}
                 <span style={{ color: "red" }}>*</span>
               </Typography>
               <div
@@ -412,9 +424,9 @@ export default function CreateCNBComponent() {
                                 )
                               }
                             >
-                              {options.map((option, i) => (
-                                <MenuItem key={i} value={option.value}>
-                                  {option.label}
+                              {compensationComponentOption?.map((Option, i) => (
+                                <MenuItem key={i} value={Option.id}>
+                                  {Option.name}
                                 </MenuItem>
                               ))}
                             </Select>
@@ -467,9 +479,7 @@ export default function CreateCNBComponent() {
                       </div>
                       <div>
                         <Typography>
-                          {suplement.compensation === "Wage"
-                            ? "Rate"
-                            : "Amount"}
+                          {suplement.compensation === "1" ? "Rate" : "Amount"}
                           <span style={{ color: "red" }}>*</span>
                         </Typography>
                         <div
