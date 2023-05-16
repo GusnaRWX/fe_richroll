@@ -155,7 +155,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
   );
 }
 
-export default function EnhancedTable(rows) {
+export default function EnhancedTable(rows: any) {
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<keyof Data>("name");
   const [page, setPage] = React.useState(0);
@@ -196,6 +196,8 @@ export default function EnhancedTable(rows) {
     [order, orderBy, page, rowsPerPage]
   );
 
+  console.log(rows.length);
+
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
@@ -220,26 +222,32 @@ export default function EnhancedTable(rows) {
               onRequestSort={handleRequestSort}
             />
             <TableBody>
-              {visibleRows?.map((row, index) => {
-                const labelId = `enhanced-table-checkbox-${index}`;
+              {rows?.length &&
+                visibleRows?.map((row, index) => {
+                  const labelId = `enhanced-table-checkbox-${index}`;
 
-                return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={index}>
-                    <TableCell
-                      component="th"
-                      id={labelId}
-                      scope="row"
-                      padding="normal"
-                    >
-                      {row.name}
-                    </TableCell>
-                    {/* <TableCell align="right">{row.baseCompensation}</TableCell>
+                  return (
+                    <TableRow hover role="checkbox" tabIndex={-1} key={index}>
+                      <TableCell
+                        component="th"
+                        id={labelId}
+                        scope="row"
+                        padding="normal"
+                      >
+                        {row.name}
+                      </TableCell>
+                      {/* <TableCell align="right">{row.baseCompensation}</TableCell>
                     <TableCell align="right">{row.suppCompensation}</TableCell>
                     <TableCell align="right">{row.date}</TableCell>
                     <TableCell align="right">{row.lastUpdate}</TableCell> */}
-                  </TableRow>
-                );
-              })}
+                    </TableRow>
+                  );
+                })}
+              {!rows.length && (
+                <TableRow>
+                  <TableCell>No Data</TableCell>
+                </TableRow>
+              )}
               {emptyRows > 0 && (
                 <TableRow
                   style={{

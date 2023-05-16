@@ -1,6 +1,6 @@
 import React from "react";
 import EnhancedTable from "./table";
-import { Typography } from "@mui/material";
+import { Typography, Skeleton } from "@mui/material";
 import styled from "@emotion/styled";
 import { Button } from "../_shared/form";
 import AddIcon from "@mui/icons-material/Add";
@@ -46,7 +46,7 @@ const CNBComponent = () => {
       {!loading ? 
       <EnhancedTable rows={dataTable} />
       :
-      <></>
+      <Skeleton variant="rounded" height={100} />
       }
     </>
   );
