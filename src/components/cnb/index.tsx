@@ -6,11 +6,13 @@ import { Button } from "../_shared/form";
 import AddIcon from "@mui/icons-material/Add";
 import { useRouter } from "next/router";
 import { getTableRequested } from "@/store/reducers/slice/cnb/compensationSlice";
-import { useAppDispatch, useAppSelectors } from '@/hooks/index';
+import { useAppDispatch, useAppSelectors } from "@/hooks/index";
 
 const CNBComponent = () => {
-  const dispatch = useAppDispatch()
-  const dataTable = useAppSelectors(state => state.compensation?.dataTable?.data)
+  const dispatch = useAppDispatch();
+  const dataTable = useAppSelectors(
+    (state) => state.compensation?.dataTable?.data
+  );
   const router = useRouter();
   const TitleWrapper = styled.div`
     display: flex;
@@ -22,9 +24,9 @@ const CNBComponent = () => {
   React.useEffect(() => {
     dispatch({
       type: getTableRequested.toString(),
-      payload: 4
-    })
-  }, [])
+      payload: 4,
+    });
+  }, []);
 
   return (
     <>

@@ -116,12 +116,12 @@ interface EnhancedTableProps {
 const SearchTable = styled(TextField)<TextFieldProps>(({ theme }) => ({
   marginTop: "16px",
   marginLeft: "16px",
-  [theme.breakpoints.down('md')]: {
-    maxWidth: '200px'
+  [theme.breakpoints.down("md")]: {
+    maxWidth: "200px",
   },
-  [theme.breakpoints.up('md')]: {
-    maxWidth: '300px'
-  }
+  [theme.breakpoints.up("md")]: {
+    maxWidth: "300px",
+  },
 }));
 
 function EnhancedTableHead(props: EnhancedTableProps) {
@@ -156,8 +156,6 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 }
 
 export default function EnhancedTable(rows) {
-  console.log(rows.rows.items);
-  
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<keyof Data>("name");
   const [page, setPage] = React.useState(0);
@@ -185,8 +183,9 @@ export default function EnhancedTable(rows) {
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows?.rows?.items.length) : 0;
-  
+    page > 0
+      ? Math.max(0, (1 + page) * rowsPerPage - rows?.rows?.items.length)
+      : 0;
 
   const visibleRows = React.useMemo(
     () =>
@@ -225,12 +224,7 @@ export default function EnhancedTable(rows) {
                 const labelId = `enhanced-table-checkbox-${index}`;
 
                 return (
-                  <TableRow
-                    hover
-                    role="checkbox"
-                    tabIndex={-1}
-                    key={index}
-                  >
+                  <TableRow hover role="checkbox" tabIndex={-1} key={index}>
                     <TableCell
                       component="th"
                       id={labelId}
