@@ -17,7 +17,7 @@ export const registerSlice = createSlice({
       state.loading = true;
     },
     registerSuccess: (state) => {
-      state.loading = false;
+      state.loading = true;
     },
     registerFailed: (state) => {
       state.loading = false;

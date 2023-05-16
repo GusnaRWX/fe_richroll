@@ -48,7 +48,6 @@ function* fetchAuthenticationLogin(action: AnyAction) {
         payload: { ...profile?.data?.data as Auth.Me }
       });
       yield Router.push('/company');
-      yield delay(1000);
     }
   } catch (err) {
     if (err instanceof AxiosError) {
@@ -137,7 +136,6 @@ function* fetchResetPassword(action: AnyAction) {
           message: null
         }
       });
-      yield delay(1000);
       Router.push('/login');
     }
   } catch (err) {

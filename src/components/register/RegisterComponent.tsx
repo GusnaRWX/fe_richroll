@@ -31,6 +31,7 @@ import Link from 'next/link';
 import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
 import LocalizationMenu from '../_shared/_core/localization/Index';
 import { signIn } from 'next-auth/react';
+import { OverlayLoading } from '../_shared/common';
 
 
 const NavHead = styled.div`
@@ -200,6 +201,7 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
 
   return (
     <Base>
+      <OverlayLoading open={register.loading}/>
       <NavHead>
         <div>
           <Image src={kayaroll} alt='logo' height={40} width={150} />
@@ -263,7 +265,7 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
               </Grid>
               <Grid item xs={6} md={6} lg={6} xl={6}>
                 <FormControl fullWidth error={errors.countryID ? true : false}>
-                  <Typography>Country<AsteriskComponent>*</AsteriskComponent></Typography>
+                  <Typography mb='.35rem'>Country<AsteriskComponent>*</AsteriskComponent></Typography>
                   <Select
                     fullWidth
                     variant='outlined'
@@ -311,7 +313,7 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
               </Grid>
               <Grid item xs={6} md={6} lg={6} xl={6}>
                 <Typography>Phone Number<AsteriskComponent>*</AsteriskComponent></Typography>
-                <Grid container>
+                <Grid container spacing={2}>
                   <Grid item xs={1} sm={3} md={3} lg={3} xl={3}>
                     <Select
                       variant='outlined'
@@ -324,7 +326,9 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
                         backgroundColor: '#D9EFE7',
                         border: '1px solid #D9EFE7',
                         borderRadius: '9999px',
-                        padding: 0,
+                        marginRight: '12px',
+                        fontSize: '14px',
+                        width: '100%'
                       }}
                     >
                       <MenuItem value='+62'>+62</MenuItem>
@@ -369,7 +373,6 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
                 size='large'
                 color='secondary'
                 label='Register'
-                isLoading={register.loading}
               />
             </Stack>
             <Box component='div' mt='17px'>

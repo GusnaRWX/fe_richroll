@@ -12,6 +12,7 @@ import { useAppSelectors, useAppDispatch } from '@/hooks/index';
 import Notify from '@/components/_shared/common/Notify';
 import { resetPasswordRequested } from '@/store/reducers/slice/auth/loginSlice';
 import { useRouter } from 'next/router';
+import { OverlayLoading } from '@/components/_shared/common';
 
 const NavHead = styled.div`
  height: 64px;
@@ -43,7 +44,7 @@ height: 100vh;
 `;
 
 function ResetPasswordComponent() {
-  const { responser } = useAppSelectors((state) => state);
+  const { responser, login } = useAppSelectors((state) => state);
   const [openNewPassword, setOpenNewPassword] = useState(false);
   const [openConfirmPassword, setOpenConfirmPassword] = useState(false);
   const dispatch = useAppDispatch();
@@ -113,6 +114,7 @@ function ResetPasswordComponent() {
           <LocalizationMenu />
         </div>
       </NavHead>
+      <OverlayLoading open={login.isLoading}/>
       {
         [200, 201].includes(responser.code) && (
           <Notify body={responser.message}/>
