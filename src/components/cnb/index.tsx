@@ -10,7 +10,7 @@ import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 
 const CNBComponent = () => {
   const dispatch = useAppDispatch()
-  const dataTable = useAppSelectors(state => state.compensation?.data)
+  const dataTable = useAppSelectors(state => state.compensation?.dataTable?.data)
   const router = useRouter();
   const TitleWrapper = styled.div`
     display: flex;
@@ -26,7 +26,7 @@ const CNBComponent = () => {
     })
   }, [])
 
-  console.log(dataTable)
+  console.log(dataTable);
 
   return (
     <>
@@ -40,7 +40,7 @@ const CNBComponent = () => {
           />
         </div>
       </TitleWrapper>
-      <EnhancedTable />
+      {/* <EnhancedTable rows={dataTable} /> */}
     </>
   );
 };

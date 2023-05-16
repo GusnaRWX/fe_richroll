@@ -18,79 +18,12 @@ import { TextFieldProps } from "@mui/material/";
 import SearchIcon from "@mui/icons-material/Search";
 
 interface Data {
-  profileName: string;
+  name: string;
   baseCompensation: string;
   suppCompensation: string;
   date: string;
   lastUpdate: string;
 }
-
-function createData(
-  profileName: string,
-  baseCompensation: string,
-  suppCompensation: string,
-  date: string,
-  lastUpdate: string
-): Data {
-  return {
-    profileName,
-    baseCompensation,
-    suppCompensation,
-    date,
-    lastUpdate,
-  };
-}
-
-const rows = [
-  createData(
-    "Prep-Cook",
-    "Salary",
-    "Encashment",
-    "01/02/23",
-    "03/02/23, 12:00"
-  ),
-  createData("General Manager", "Salary", "-", "01/02/23", "03/02/23, 12:00"),
-  createData("Assistant Manager", "Wage", "-", "01/02/23", "03/02/23, 12:00"),
-  createData("Part-Time Cook", "Wage", "Bonus", "01/02/23", "03/02/23, 12:00"),
-  createData(
-    "Sales",
-    "Commission ",
-    "Encashment",
-    "01/02/23",
-    "03/02/23, 12:00"
-  ),
-  createData(
-    "Cashier",
-    "Commission",
-    "Encashment",
-    "01/02/23",
-    "03/02/23, 12:00"
-  ),
-  createData(
-    "Prep-Cook2",
-    "Salary",
-    "Encashment",
-    "01/02/23",
-    "03/02/23, 12:00"
-  ),
-  createData("General Manager2", "Salary", "-", "01/02/23", "03/02/23, 12:00"),
-  createData("Assistant Manager2", "Wage", "-", "01/02/23", "03/02/23, 12:00"),
-  createData("Part-Time Cook2", "Wage", "Bonus", "01/02/23", "03/02/23, 12:00"),
-  createData(
-    "Sales2",
-    "Commission ",
-    "Encashment",
-    "01/02/23",
-    "03/02/23, 12:00"
-  ),
-  createData(
-    "Cashier2",
-    "Commission",
-    "Encashment",
-    "01/02/23",
-    "03/02/23, 12:00"
-  ),
-];
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -140,7 +73,7 @@ interface HeadCell {
 
 const headCells: readonly HeadCell[] = [
   {
-    id: "profileName",
+    id: "name",
     numeric: false,
     disablePadding: false,
     label: "Profile Name",
@@ -222,10 +155,9 @@ function EnhancedTableHead(props: EnhancedTableProps) {
   );
 }
 
-export default function EnhancedTable() {
+export default function EnhancedTable(rows) {
   const [order, setOrder] = React.useState<Order>("asc");
-  const [orderBy, setOrderBy] = React.useState<keyof Data>("profileName");
-  const [selected] = React.useState<readonly string[]>([]);
+  const [orderBy, setOrderBy] = React.useState<keyof Data>("name");
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -249,15 +181,16 @@ export default function EnhancedTable() {
     setPage(0);
   };
 
-  const isSelected = (name: string) => selected.indexOf(name) !== -1;
-
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows?.data?.items.length) : 0;
+
+  console.log('rows', rows.items);
+  
 
   const visibleRows = React.useMemo(
     () =>
-      stableSort(rows, getComparator(order, orderBy)).slice(
+      stableSort(rows?.data?.items, getComparator(order, orderBy)).slice(
         page * rowsPerPage,
         page * rowsPerPage + rowsPerPage
       ),
@@ -289,7 +222,6 @@ export default function EnhancedTable() {
             />
             <TableBody>
               {visibleRows.map((row, index) => {
-                const isItemSelected = isSelected(row.profileName);
                 const labelId = `enhanced-table-checkbox-${index}`;
 
                 return (
@@ -298,7 +230,6 @@ export default function EnhancedTable() {
                     role="checkbox"
                     tabIndex={-1}
                     key={index}
-                    selected={isItemSelected}
                   >
                     <TableCell
                       component="th"
@@ -306,7 +237,7 @@ export default function EnhancedTable() {
                       scope="row"
                       padding="normal"
                     >
-                      {row.profileName}
+                      {row.name}
                     </TableCell>
                     <TableCell align="right">{row.baseCompensation}</TableCell>
                     <TableCell align="right">{row.suppCompensation}</TableCell>
@@ -330,7 +261,7 @@ export default function EnhancedTable() {
         <TablePagination
           rowsPerPageOptions={[5, 10]}
           component="div"
-          count={rows.length}
+          count={rows?.data?.items.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
