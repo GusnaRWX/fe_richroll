@@ -11,7 +11,10 @@ const nextConfig = {
         pathname: '/sagara-staging/kayaroll-staging/**',
       },
     ],
+    domains: [
+      'placehold.co'
+    ],
   },
-};
+}
 
-module.exports = nextConfig;
+module.exports = nextConfig
