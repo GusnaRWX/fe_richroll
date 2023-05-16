@@ -259,7 +259,7 @@ function EmployeeInformationForm({ refProp, nextPage }: EmployeeProps) {
               withAsterisk={true}
               onChange={handleInputChange}
               size='small'
-              value={values.fullName || persistInformation?.fullName}
+              value={values.fullName}
               placeholder='Input Full Name'
               error={errors.fullName}
             />
@@ -271,7 +271,7 @@ function EmployeeInformationForm({ refProp, nextPage }: EmployeeProps) {
               withAsterisk={false}
               onChange={handleInputChange}
               size='small'
-              value={values.nickname || persistInformation?.nickname}
+              value={values.nickname}
               placeholder='Input Nickname'
             />
           </Grid>
