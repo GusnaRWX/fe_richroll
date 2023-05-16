@@ -21,7 +21,8 @@ import {
 import dayjs from 'dayjs';
 import { Alert, Text } from '@/components/_shared/common';
 import CancelIcon from '@mui/icons-material/Cancel';
-import { setStorages, getStorage } from '@/utils/storage';
+import { getStorage } from '@/utils/storage';
+import {Employees} from '@/types/employees';
 
 
 const AsteriskComponent = MuiStyled('span')(({ theme }) => ({
@@ -65,7 +66,8 @@ const ImageReview = styled.div`
 interface EmployeeProps {
   refProp: React.Ref<HTMLFormElement>;
   nextPage: (_val: number) => void;
-  setValues: (_val: any) => void
+  setValues:  React.Dispatch<React.SetStateAction<Employees.InformationValues>>
+  infoValues: Employees.InformationValues
 }
 
 function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues }: EmployeeProps) {
@@ -91,7 +93,6 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues }: E
     department: infoValues?.department,
     position: infoValues?.position,
     isSelfService: infoValues?.isSelfService,
-    position2: ''
   });
 
   const validate = (fieldOfValues = values) => {

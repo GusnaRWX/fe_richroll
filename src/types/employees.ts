@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+
 export declare namespace Employees {
   interface EmployeeParams {
     page: number;
@@ -71,5 +73,21 @@ export declare namespace Employees {
       branchName?: string,
       swiftCode?: string
     }
+  }
+
+  interface InformationValues {
+    images: string
+    picture: []
+    fullName: string
+    nickname: string
+    phoneNumberPrefix: string
+    phoneNumber: string
+    email: string
+    startDate: dayjs.Dayjs | null | string
+    endDate: dayjs.Dayjs | null | string
+    isPermanent: boolean
+    department: string
+    position: string
+    isSelfService: boolean
   }
 }

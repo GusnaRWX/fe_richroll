@@ -17,6 +17,7 @@ const EmergencyContactFormClient = dynamic(() => import('./EmergencyContactForm'
 });
 
 import { clearStorages } from '@/utils/storage';
+import {Employees} from '@/types/employees';
 
 const TopWrapper = styled.div`
  display: flex;
@@ -90,7 +91,21 @@ function EmployeeCreateComponent() {
   const employeeRef = useRef<HTMLFormElement>(null);
   const emergencyRef = useRef<HTMLFormElement>(null);
   const personalInformationRef = useRef<HTMLFormElement>(null);
-  const [informationValue, setInformationValue] = useState<any>({});
+  const [informationValue, setInformationValue] = useState<Employees.InformationValues>({
+    department: '',
+    email: '',
+    endDate: '',
+    fullName: '',
+    images: '',
+    isPermanent: false,
+    isSelfService: false,
+    nickname: '',
+    phoneNumber: '',
+    phoneNumberPrefix: '',
+    picture: [],
+    position: '',
+    startDate: ''
+  });
   const [personalInformationValue, setPersonalInformationValue] = useState<any>({});
   const [emergencyValue, setEmergencyValue] = useState<any>({});
 
