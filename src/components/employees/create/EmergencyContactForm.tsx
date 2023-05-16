@@ -5,6 +5,7 @@ import { styled as MuiStyled } from '@mui/material/styles';
 import { useForm, useAppSelectors } from '@/hooks/index';
 import { Alert, Text } from '@/components/_shared/common';
 import CancelIcon from '@mui/icons-material/Cancel';
+import { Employees } from '@/types/employees';
 
 const AsteriskComponent = MuiStyled('span')(({ theme }) => ({
   color: theme.palette.error.main
@@ -13,8 +14,8 @@ const AsteriskComponent = MuiStyled('span')(({ theme }) => ({
 interface EmergencyProps {
   refProp: React.Ref<HTMLFormElement>
   nextPage: (_val: number) => void;
-  setValues: (_val: any) => void;
-  emergencyValues: any;
+  setValues: React.Dispatch<React.SetStateAction<Employees.EmergencyContactValues>>;
+  emergencyValues: Employees.EmergencyContactValues;
 }
 
 function EmergencyContactForm({ refProp, nextPage, setValues, emergencyValues }: EmergencyProps) {

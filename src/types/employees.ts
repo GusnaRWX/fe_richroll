@@ -90,4 +90,16 @@ export declare namespace Employees {
     position: string
     isSelfService: boolean
   }
+
+  interface EmergencyContactValues{
+    employeeID: string;
+    fullNamePrimary: string;
+    relationPrimary: string;
+    phoneNumberPrefixPrimary: string;
+    phoneNumberPrimary: string;
+    fullNameSecondary: string;
+    relationSecondary: string;
+    phoneNumberPrefixSecondary: string;
+    phoneNumberSecondary: string;
+  }
 }

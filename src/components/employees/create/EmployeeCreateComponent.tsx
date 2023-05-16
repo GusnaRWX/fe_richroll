@@ -107,7 +107,17 @@ function EmployeeCreateComponent() {
     startDate: ''
   });
   const [personalInformationValue, setPersonalInformationValue] = useState<any>({});
-  const [emergencyValue, setEmergencyValue] = useState<any>({});
+  const [emergencyValue, setEmergencyValue] = useState<Employees.EmergencyContactValues>({
+    employeeID: '',
+    fullNamePrimary: '',
+    relationPrimary: '',
+    phoneNumberPrefixPrimary: '',
+    phoneNumberPrimary: '',
+    fullNameSecondary: '',
+    relationSecondary: '',
+    phoneNumberPrefixSecondary: '',
+    phoneNumberSecondary: ''
+  });
 
   useEffect(() => {
     console.log(personalInformationValue, 'here fuck');
