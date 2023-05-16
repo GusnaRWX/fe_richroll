@@ -26,8 +26,6 @@ const CNBComponent = () => {
     })
   }, [])
 
-  console.log(dataTable);
-
   return (
     <>
       <TitleWrapper>
@@ -40,7 +38,7 @@ const CNBComponent = () => {
           />
         </div>
       </TitleWrapper>
-      {/* <EnhancedTable rows={dataTable} /> */}
+      <EnhancedTable rows={dataTable} />
     </>
   );
 };

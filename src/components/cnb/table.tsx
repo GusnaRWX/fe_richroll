@@ -156,6 +156,8 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 }
 
 export default function EnhancedTable(rows) {
+  console.log(rows.rows.items);
+  
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<keyof Data>("name");
   const [page, setPage] = React.useState(0);
@@ -183,14 +185,12 @@ export default function EnhancedTable(rows) {
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows?.data?.items.length) : 0;
-
-  console.log('rows', rows.items);
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows?.rows?.items.length) : 0;
   
 
   const visibleRows = React.useMemo(
     () =>
-      stableSort(rows?.data?.items, getComparator(order, orderBy)).slice(
+      stableSort(rows?.rows?.items, getComparator(order, orderBy)).slice(
         page * rowsPerPage,
         page * rowsPerPage + rowsPerPage
       ),
@@ -239,10 +239,10 @@ export default function EnhancedTable(rows) {
                     >
                       {row.name}
                     </TableCell>
-                    <TableCell align="right">{row.baseCompensation}</TableCell>
+                    {/* <TableCell align="right">{row.baseCompensation}</TableCell>
                     <TableCell align="right">{row.suppCompensation}</TableCell>
                     <TableCell align="right">{row.date}</TableCell>
-                    <TableCell align="right">{row.lastUpdate}</TableCell>
+                    <TableCell align="right">{row.lastUpdate}</TableCell> */}
                   </TableRow>
                 );
               })}
@@ -261,7 +261,7 @@ export default function EnhancedTable(rows) {
         <TablePagination
           rowsPerPageOptions={[5, 10]}
           component="div"
-          count={rows?.data?.items.length}
+          count={rows?.rows?.items.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
