@@ -92,6 +92,7 @@ function EmployeeCreateComponent() {
   const personalInformationRef = useRef<HTMLFormElement>(null);
   const [informationValue, setInformationValue] = useState<any>({});
   const [personalInformationValue, setPersonalInformationValue] = useState<any>({});
+  const [emergencyValue, setEmergencyValue] = useState<any>({});
 
   useEffect(() => {
     console.log(personalInformationValue, 'here fuck');
@@ -167,7 +168,7 @@ function EmployeeCreateComponent() {
             <EmployeePersonalInformationFormClient nextPage={handleNext} refProp={personalInformationRef} setValues={setPersonalInformationValue} personalValues={personalInformationValue} />
           </TabPanel>
           <TabPanel value={value} index={2}>
-            <EmergencyContactFormClient nextPage={setValue} refProp={emergencyRef} />
+            <EmergencyContactFormClient nextPage={setValue} refProp={emergencyRef} setValues={setEmergencyValue} emergencyValues={emergencyValue}/>
           </TabPanel>
           <TabPanel value={value} index={3}>
             on Development
