@@ -9,7 +9,7 @@ import { Input, Button, Select as CustomSelect, CheckBox, DatePicker, FileUpload
 import { styled as MuiStyled } from '@mui/material/styles';
 import { Image as ImageType } from '@/utils/assetsConstant';
 import styled from '@emotion/styled';
-import { useForm, useAppDispatch, useAppSelectors } from '@/hooks/index';
+import { useForm, useAppSelectors } from '@/hooks/index';
 import {
   checkRegulerExpression,
   getCompanyData,
@@ -17,10 +17,8 @@ import {
   convertChecked,
   convertDateValue,
   convertImageParams,
-  base64ToFile
 } from '@/utils/helper';
 import dayjs from 'dayjs';
-import { postEmployeeInfoRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
 import { Alert, Text } from '@/components/_shared/common';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { setStorages, getStorage } from '@/utils/storage';
@@ -67,37 +65,34 @@ const ImageReview = styled.div`
 interface EmployeeProps {
   refProp: React.Ref<HTMLFormElement>;
   nextPage: (_val: number) => void;
+  setValues: (_val: any) => void
 }
 
-function EmployeeInformationForm({ refProp, nextPage }: EmployeeProps) {
+function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues }: EmployeeProps) {
   const [open, setOpen] = useState(false);
-  const dispatch = useAppDispatch();
   const companyData = getCompanyData();
   const persistInformation = getStorage('emp-information') ? JSON.parse(getStorage('emp-information') as string) : null;
   const { listDepartment, listPosition } = useAppSelectors(state => state.option);
-  const [images, setImages] = useState<string | null>(null || persistInformation?.images);
+  const [images, setImages] = useState<string | null>(infoValues?.images);
   const [errorFields, setErrorFields] = useState<boolean>(false);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [initialValues, setInitialValues] = useState({
     companyID: companyData?.id,
     picture: [],
-    fullName: persistInformation?.fullName !== undefined ? persistInformation?.fullName : '',
-    nickname: persistInformation?.nickname !== undefined ? persistInformation?.nickname : '',
-    phoneNumberPrefix: persistInformation?.phoneNumberPrefix !== undefined ? persistInformation?.phoneNumberPrefix : '',
-    phoneNumber: persistInformation?.phoneNumber !== undefined ? persistInformation?.phoneNumber : '',
-    email: persistInformation?.email !== undefined ? persistInformation?.email : '',
-    startDate: persistInformation?.startDate !== undefined ? dayjs(persistInformation?.startDate) : null,
-    endDate: persistInformation?.endDate !== undefined ? dayjs(persistInformation?.endDate) : null,
-    isPermanent: persistInformation?.isPermanent !== undefined ? persistInformation?.isPermanent : false,
-    department: persistInformation?.department !== undefined ? persistInformation?.department : '',
-    position: persistInformation?.position !== undefined ? persistInformation?.position : '',
-    isSelfService: persistInformation?.isSelfService !== undefined ? persistInformation?.isSelfService : false,
+    fullName: infoValues?.fullName,
+    nickname: infoValues?.nickname,
+    phoneNumberPrefix:infoValues.phoneNumberPrefix,
+    phoneNumber: infoValues?.phoneNumber,
+    email: infoValues?.email,
+    startDate: dayjs(infoValues?.startDate),
+    endDate: dayjs(infoValues?.endDate),
+    isPermanent: infoValues?.isPermanent,
+    department: infoValues?.department,
+    position: infoValues?.position,
+    isSelfService: infoValues?.isSelfService,
     position2: ''
   });
-
-
-
 
   const validate = (fieldOfValues = values) => {
     const temp = { ...errors };
@@ -171,47 +166,9 @@ function EmployeeInformationForm({ refProp, nextPage }: EmployeeProps) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const convertToBase64 = base64ToFile(images as string, 'example.png');
     if (validate()) {
-      const inputData = new FormData();
-      inputData.append('companyID', values.companyID);
-      inputData.append('picture', values.picture[0] || convertToBase64);
-      inputData.append('fullName', values.fullName);
-      inputData.append('nickname', values.nickname);
-      inputData.append('phoneNumberPrefix', values.phoneNumberPrefix);
-      inputData.append('phoneNumber', values.phoneNumber);
-      inputData.append('email', values.email);
-      inputData.append('startDate', dayjs(values.startDate).format('YYYY-MM-DD'));
-      inputData.append('endDate', dayjs(values.endDate).format('YYYY-MM-DD'));
-      inputData.append('isPermanent', values.isPermanent);
-      if (values.department !== '') {
-        inputData.append('department', values.department);
-      }
-      if (values.position !== '') {
-        inputData.append('position', values.position);
-      }
-      inputData.append('isSelfService', values.isSelfService);
-      dispatch({
-        type: postEmployeeInfoRequested.toString(),
-        payload: inputData
-      });
-
-      setInitialValues({
-        companyID: companyData?.id,
-        picture: [],
-        fullName: '',
-        nickname: '',
-        phoneNumberPrefix: '',
-        phoneNumber: '',
-        email: '',
-        startDate: dayjs(null),
-        endDate: dayjs(null),
-        isPermanent: false,
-        department: '',
-        position: '',
-        isSelfService: false,
-        position2: ''
-      });
+      setValues({...values, images: images});
+      nextPage(1);
       setErrorFields(false);
     } else {
       setErrorFields(true);
@@ -394,10 +351,7 @@ function EmployeeInformationForm({ refProp, nextPage }: EmployeeProps) {
           </Grid>
         </Grid>
         <NextBtnWrapper>
-          <Button fullWidth={false} size='small' label='Next' color='primary' onClick={() => {
-            nextPage(1);
-            setStorages([{ name: 'emp-information', value: JSON.stringify({ ...values, images }) }]);
-          }} />
+          <Button fullWidth={false} size='small' label='Next' color='primary' type={'submit'}/>
         </NextBtnWrapper>
       </form>
       <FileUploadModal
