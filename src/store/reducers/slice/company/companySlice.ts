@@ -7,7 +7,8 @@ interface CompanyState {
   companyType: [],
   companySector: [],
   bank: [],
-  paymentMethod: []
+  paymentMethod: [],
+  detail: object
 }
 
 const initialState:CompanyState = {
@@ -16,7 +17,8 @@ const initialState:CompanyState = {
   companyType: [],
   companySector: [],
   bank: [],
-  paymentMethod: []
+  paymentMethod: [],
+  detail: {}
 };
 
 export const companySlice = createSlice({
@@ -76,8 +78,9 @@ export const companySlice = createSlice({
     postCompanyDetailRequested: (state) => {
       state.loading = true;
     },
-    postCompanyDetailSuccess: (state) => {
+    postCompanyDetailSuccess: (state, action) => {
       state.loading = false;
+      state.detail = action?.payload;
     },
     postCompanyDetailFailed: (state) => {
       state.loading = false;

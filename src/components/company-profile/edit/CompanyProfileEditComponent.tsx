@@ -1,24 +1,17 @@
 import React, {useState} from 'react';
 import {
   Box,
-  BoxProps,
-  AppBar,
-  Toolbar,
+  Grid,
+  Button as MuiButton,
   Card,
-  CardProps,
-  Divider,
   Typography,
   Tab,
   Tabs
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import Image from 'next/image';
+// import Image from 'next/image';
+// import { Image as ImageType } from '@/utils/assetsConstant';
 import { CompanyCreate } from '@/types/component';
-import { Image as ImageType } from '@/utils/assetsConstant';
-import { IconButton } from '@/components/_shared/form';
-import { BsBellFill } from 'react-icons/bs';
-import LocalizationMenu from '@/components/_shared/_core/localization/Index';
-import Profile from '@/components/_shared/_core/appbar/Profile';
 import CompanyInformationForm from './CompanyProfileInformationForm';
 import CompanyBankForm from './CompanyProfileBankForm';
 import { useForm, useAppDispatch, useAppSelectors } from '@/hooks/index';
@@ -28,31 +21,20 @@ import {
   administrativeThirdLevelRequsted
 } from '@/store/reducers/slice/options/optionSlice';
 import { postCompanyProfileRequested } from '@/store/reducers/slice/company/companySlice';
+import { useRouter } from 'next/router';
+import { getCompanyData } from '@/utils/helper';
 
-const WrapperAuth = styled(Box)<BoxProps>(({ theme }) => ({
-  background: theme.palette.secondary[100],
-  minHeight: '100vh'
-}));
-
-const WrapperCard = styled(Card)<CardProps>(() => ({
-  paddingTop: '100px',
-  background: 'none',
-  borderRadius: 'none',
-  boxShadow: 'none',
-  paddingLeft: '135px',
-  paddingRight: '135px'
-}));
-
-const WrapperCardContent = styled(Box)<BoxProps>(() => ({
-  borderRadius: '8px',
-  boxShadow: '0px 6px 20px rgba(0, 0, 0, 0.05)',
-  background: 'white',
-  padding: '24px'
-}));
-
-const WrapperNavbarContent = styled(Toolbar)(() => ({
+const ButtonWrapper = styled(Box)(({
   display: 'flex',
-  justifyContent: 'space-between'
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'flex-end',
+  gap: '1rem',
+  marginTop: '.1rem'
+}));
+
+const ContentWrapper = styled(Card)(({
+  padding: '1rem'
 }));
 
 interface TabPanelProps {
@@ -89,38 +71,10 @@ function a11yProps(index: number) {
   };
 }
 
-const Navbar = () => {
-  return (
-    <AppBar
-      component='nav'
-      sx={{
-        background: '#FFFFFF',
-        color: 'primary.main',
-      }}
-    >
-      <WrapperNavbarContent>
-        <Box>
-          <Image
-            src={ImageType.KAYAROLL_LOGO}
-            width={151}
-            height={40}
-            alt='kayaroll'
-          />
-        </Box>
-        <Box sx={{ display: { xs: 'none', sm: 'flex' }, gap: { sm: 1 } }}>
-          <IconButton icons={<BsBellFill />} parentColor='' size='small' />
-          <Divider sx={{ borderWidth: '0.5px' }} />
-          <LocalizationMenu />
-          <Divider sx={{ borderWidth: '0.5px' }} />
-          <Profile />
-        </Box>
-      </WrapperNavbarContent>
-    </AppBar>
-  );
-};
-
 const CompanyCreateComponent = ({ companyType, companySector, bank, paymentMethod, countries }: CompanyCreate.Component) => {
   const [tabSelected, setTabSelected] = useState(0);
+  const companyData = getCompanyData();
+  const router = useRouter();
   const dispatch = useAppDispatch();
 
   const {
@@ -377,53 +331,63 @@ const CompanyCreateComponent = ({ companyType, companySector, bank, paymentMetho
 
   return (
     <>
-      <Navbar />
-      <WrapperAuth>
-        <WrapperCard>
-          <Typography
-            variant='text-lg'
-            component='div'
-            sx={{ fontWeight: 700, mb: '24px' }}
-          >
-            Create Company Profile
-          </Typography>
-          <WrapperCardContent>
-            <Box sx={{ width: '100%' }}>
-              <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                <Tabs value={tabSelected} onChange={handleChange} aria-label='basic tabs'>
-                  <Tab sx={{ textTransform: 'none' }} label='Company Information' {...a11yProps(0)} />
-                  <Tab sx={{ textTransform: 'none' }} label='Bank and Payroll Information' {...a11yProps(1)} />
-                </Tabs>
-              </Box>
-              <TabPanel value={tabSelected} index={0}>
-                <CompanyInformationForm
-                  nextPage={handleNext}
-                  companyType={companyType}
-                  companySector={companySector}
-                  countries={countries}
-                  administrativeFirst={administrativeFirst}
-                  administrativeSecond={administrativeSecond}
-                  administrativeThird={administrativeThird}
-                  values={values}
-                  errors={errors}
-                  handleInputChange={handleInputChange}
-                />
-              </TabPanel>
-              <TabPanel value={tabSelected} index={1}>
-                <CompanyBankForm
-                  handleSubmit={handleSubmit}
-                  values={values}
-                  errors={errors}
-                  handleInputChange={handleInputChange}
-                  bank={bank}
-                  paymentMethod={paymentMethod}
-                />
-              </TabPanel>
-            </Box>
-          </WrapperCardContent>
-        </WrapperCard>
-
-      </WrapperAuth>
+      <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
+        <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+          <Typography variant='h5' color='primary.main'>Company Profile</Typography>
+          <Typography variant='text-base' color='#4B5563'>{companyData?.name}</Typography>
+        </Grid>
+        <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+          <ButtonWrapper>
+            <MuiButton
+              variant='outlined'
+              size='small'
+              color='primary'
+              onClick={() => { router.push('/company-management/company-profile'); }}
+            >Cancel</MuiButton>
+            <MuiButton
+              variant='contained'
+              size='small'
+              color='primary'
+              sx={{ color: 'white' }}
+              onClick={() => { router.push('/company-management/company-profile'); }}
+            >Save</MuiButton>
+          </ButtonWrapper>
+        </Grid>
+      </Grid>
+      <ContentWrapper>
+        <Box sx={{ width: '100%' }}>
+          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            <Tabs value={tabSelected} onChange={handleChange} aria-label='basic tabs'>
+              <Tab sx={{ textTransform: 'none' }} label='Company Information' {...a11yProps(0)} />
+              <Tab sx={{ textTransform: 'none' }} label='Payment Information' {...a11yProps(1)} />
+            </Tabs>
+          </Box>
+          <TabPanel value={tabSelected} index={0}>
+            <CompanyInformationForm
+              nextPage={handleNext}
+              companyType={companyType}
+              companySector={companySector}
+              countries={countries}
+              administrativeFirst={administrativeFirst}
+              administrativeSecond={administrativeSecond}
+              administrativeThird={administrativeThird}
+              values={values}
+              errors={errors}
+              handleInputChange={handleInputChange}
+            />
+          </TabPanel>
+          <TabPanel value={tabSelected} index={1}>
+            <CompanyBankForm
+              handleSubmit={handleSubmit}
+              values={values}
+              errors={errors}
+              handleInputChange={handleInputChange}
+              bank={bank}
+              paymentMethod={paymentMethod}
+            />
+          </TabPanel>
+        </Box>
+      </ContentWrapper>
     </>
   );
 };

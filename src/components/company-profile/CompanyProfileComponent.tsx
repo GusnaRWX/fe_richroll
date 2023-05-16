@@ -1,201 +1,311 @@
-import React from 'react';
-import {
-  Box,
-  BoxProps,
-  ButtonBase,
-  AppBar,
-  Toolbar,
-  Card,
-  CardProps,
-  Divider,
-  Typography
-} from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { Typography, Card, Grid, Box, Button as MuiButton, Tab, Tabs } from '@mui/material';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { useRouter } from 'next/router';
 import { Image as ImageType } from '@/utils/assetsConstant';
-import { Company } from '@/types/component';
-import { IconButton } from '@/components/_shared/form';
-import { BsBellFill } from 'react-icons/bs';
-import LocalizationMenu from '@/components/_shared/_core/localization/Index';
-import Profile from '@/components/_shared/_core/appbar/Profile';
-import { setStorages } from '@/utils/storage';
+import { styled } from '@mui/material/styles';
+import { Edit } from '@mui/icons-material';
+import { useRouter } from 'next/router';
+import { useAppDispatch, useAppSelectors } from '@/hooks/index';
+import { postCompanyDetailRequested } from '@/store/reducers/slice/company/companySlice';
+import { getCompanyData } from '@/utils/helper';
 
-
-const WrapperAuth = styled(Box)<BoxProps>(({ theme }) => ({
-  background: theme.palette.secondary[100],
-  minHeight: '100vh'
-}));
-
-const WrapperCard = styled(Card)<CardProps>(() => ({
-  paddingTop: '100px',
-  background: 'none',
-  borderRadius: 'none',
-  boxShadow: 'none',
-  paddingLeft: '135px',
-  paddingRight: '135px'
-}));
-
-const WrapperCardContent = styled(Box)<BoxProps>(() => ({
-  borderRadius: '8px',
-  boxShadow: '0px 6px 20px rgba(0, 0, 0, 0.05)',
-  background: 'white',
-  padding: '24px'
-}));
-
-const WrapperCardItem = styled(ButtonBase)(() => ({
-  borderRadius: '12px',
-  boxShadow: '0px 6px 20px rgba(0, 0, 0, 0.05)',
-  background: 'white',
-  border: '1px solid #E5E7EB',
-  padding: '12px',
+const ButtonWrapper = styled(Box)(({
   display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
+  flexDirection: 'row',
   alignItems: 'center',
-  textAlign: 'left',
-  height: '100%'
+  justifyContent: 'flex-end',
+  gap: '1rem',
+  marginTop: '.1rem'
 }));
 
-const WrapperCardAdd = styled(ButtonBase)(() => ({
-  borderRadius: '12px',
-  boxShadow: '0px 6px 20px rgba(0, 0, 0, 0.05)',
-  background: '#C6E7DB',
-  border: '1px solid #E5E7EB',
-  padding: '12px',
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'center',
-  textAlign: 'center'
+const ContentWrapper = styled(Card)(({
+  padding: '1rem'
 }));
 
-const WrapperNavbarContent = styled(Toolbar)(() => ({
-  display: 'flex',
-  justifyContent: 'space-between'
-}));
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number
+}
 
-const Navbar = () => {
+function TabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
+
   return (
-    <AppBar
-      component='nav'
-      sx={{
-        background: '#FFFFFF',
-        color: 'primary.main',
-      }}
+    <div
+      role='tabpanel'
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      {...other}
     >
-      <WrapperNavbarContent>
-        <Box>
-          <Image
-            src={ImageType.KAYAROLL_LOGO}
-            width={151}
-            height={40}
-            alt='kayaroll'
-          />
-        </Box>
-        <Box sx={{ display: { xs: 'none', sm: 'flex' }, gap: { sm: 1 } }}>
-          <IconButton icons={<BsBellFill />} parentColor='' size='small' />
-          <Divider sx={{ borderWidth: '0.5px' }} />
-          <LocalizationMenu />
-          <Divider sx={{ borderWidth: '0.5px' }} />
-          <Profile />
-        </Box>
-      </WrapperNavbarContent>
-    </AppBar>
+      {
+        value === index && (
+          <Box sx={{ p: 3 }}>
+            {children}
+          </Box>
+        )
+      }
+    </div>
   );
-};
+}
 
-const CardAdd = () => {
-  const router = useRouter();
-  return (
-    <WrapperCardAdd onClick={() => { router.push('/company/create');}}>
-      <Image
-        src={ImageType.ADD_COMPANY}
-        width={178}
-        height={142}
-        alt='add company'
-      />
-      <Typography
-        variant='text-lg'
-        component='div'
-        sx={{ fontWeight: 700, mb: '4px' }}
-      >
-        Create New
-      </Typography>
-      <Typography
-        variant='text-xs'
-        component='div'
-        sx={{ fontWeight: 500 }}
-      >
-        You can add a maximum of<br/>5 companies
-      </Typography>
-    </WrapperCardAdd>
-  );
-};
+function a11yProps(index: number) {
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`
+  };
+}
 
-const CompanyComponent = ({ companies }: Company.Component) => {
+function CompanyProfileComponent() {
+  const dispatch = useAppDispatch();
+  const data = useAppSelectors(state => state.company.detail);
   const router = useRouter();
-  const handleClick = (val, path) => {
-    setStorages([
-      {name: 'companyID', value: val.id},
-      {name: 'kaya_company', value: JSON.stringify({id: val.id, imageUrl: val.information?.imageUrl || '', name: val.information?.name, sector: val.information?.sector?.name || '-'})}
-    ]);
-    router.push(path);
+  const [value, setValue] = useState(0);
+  const companyData = getCompanyData();
+
+  useEffect(() => {
+    console.log(data);
+    
+    dispatch({
+      type: postCompanyDetailRequested.toString(),
+      payload: {
+        id: companyData?.id
+      }
+    });
+  }, []);
+
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue);
   };
   return (
     <>
-      <Navbar />
-      <WrapperAuth>
-        <WrapperCard>
-          <WrapperCardContent>
-            <Typography
-              variant='text-2xl'
-              component='div'
-              sx={{ fontWeight: 700, mb: '4px' }}
-            >
-              Your Company
-            </Typography>
-            <Typography
-              variant='text-base'
-              component='div'
-              sx={{ fontWeight: 400 }}
-            >
-              Choose the company you want to manage. You can add a maximum of 5 companies
-            </Typography>
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: '12px', mt: '16px', height: '221px' }}>
-              {companies.map((val, idx) => (
-                // <WrapperCardItem key={idx} onClick={() => { router.push(`/company/${val?.['id']}`);}}>
-                <WrapperCardItem key={idx} onClick={() => { handleClick(val, '/dashboard');}}>
+      <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
+        <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+          <Typography variant='h5' color='primary.main'>Company Profile</Typography>
+          <Typography variant='text-base' color='#4B5563'>{companyData?.name}</Typography>
+        </Grid>
+        <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+          <ButtonWrapper>
+            <MuiButton
+              variant='contained'
+              size='small'
+              color='secondary'
+              sx={{ color: 'white' }}
+              onClick={() => { router.push('/company-management/company-profile/edit'); }}
+            ><Edit fontSize='small' />&nbsp; Edit</MuiButton>
+          </ButtonWrapper>
+        </Grid>
+      </Grid>
+      <ContentWrapper>
+        <Box sx={{ width: '100%' }}>
+          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            <Tabs value={value} onChange={handleChange} aria-label='basic tabs'>
+              <Tab sx={{ textTransform: 'none' }} label='Company Information' {...a11yProps(0)} />
+              <Tab sx={{ textTransform: 'none' }} label='Payment Information' {...a11yProps(1)} />
+            </Tabs>
+          </Box>
+          <TabPanel value={value} index={0}>
+            <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
+              <Grid item xs={12} md={12} lg={12} xl={12}>
+                <Typography component='h3' fontSize={18} color='primary'>Company Information</Typography>
+              </Grid>
+            </Grid>
+            <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
+              <Grid item xs={12} md={12} lg={12} xl={12}>
+                <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Company Logo</Typography>
+                <Box component='div' sx={{ position: 'relative', width: '100px', height: '100px', border: '1px solid #E5E7EB', padding: '8px' }}>
                   <Image
                     src={ImageType.PLACEHOLDER_COMPANY}
-                    width={178}
-                    height={142}
-                    alt={val?.['information']?.['name']}
+                    fill={true}
+                    style={{ objectFit: 'contain' }}
+                    alt={companyData?.name || 'image'}
                   />
-                  <Typography
-                    variant='text-lg'
-                    component='div'
-                    sx={{ fontWeight: 700, mb: '4px', mt: '8px', width: '100%' }}
-                  >
-                    {val?.['information']?.['name']}
-                  </Typography>
-                  <Typography
-                    variant='text-xs'
-                    component='div'
-                    sx={{ fontWeight: 500, width: '100%' }}
-                  >
-                    {val?.['information']?.['sector']?.['name']}
-                  </Typography>
-                </WrapperCardItem>
-              ))}
-              {companies.length < 5 && <CardAdd />}
-            </Box>
-          </WrapperCardContent>
-        </WrapperCard>
-
-      </WrapperAuth>
+                </Box>
+              </Grid>
+            </Grid>
+            <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
+              <Grid item xs={6} md={6} lg={6} xl={6}>
+                <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Company Type</Typography>
+                <Typography component='div' variant='text-sm' color='#4B5563'>{data?.information?.type?.name || '-'}</Typography>
+              </Grid>
+              <Grid item xs={6} md={6} lg={6} xl={6}>
+                <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Company Name</Typography>
+                <Typography component='div' variant='text-sm' color='#4B5563'>{data?.information?.name || '-'}</Typography>
+              </Grid>
+            </Grid>
+            <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
+              <Grid item xs={6} md={6} lg={6} xl={6}>
+                <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Company NPWP</Typography>
+                <Typography component='div' variant='text-sm' color='#4B5563'>{data?.information?.npwp || '-'}</Typography>
+              </Grid>
+              <Grid item xs={6} md={6} lg={6} xl={6}>
+                <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Company Sector</Typography>
+                <Typography component='div' variant='text-sm' color='#4B5563'>{data?.information?.sector?.name || '-'}</Typography>
+              </Grid>
+            </Grid>
+            <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
+              <Grid item xs={6} md={6} lg={6} xl={6}>
+                <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Company Email</Typography>
+                <Typography component='div' variant='text-sm' color='#4B5563'>{data?.information?.email || '-'}</Typography>
+              </Grid>
+              <Grid item xs={6} md={6} lg={6} xl={6}>
+                <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Contact Number</Typography>
+                <Typography component='div' variant='text-sm' color='#4B5563'>{data?.information?.contact || '-'}</Typography>
+              </Grid>
+            </Grid>
+            <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
+              <Grid item xs={12} md={12} lg={12} xl={12}>
+                <Typography component='h3' fontSize={18} color='primary'>Company Address</Typography>
+              </Grid>
+            </Grid>
+            <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
+              <Grid item xs={6} md={6} lg={6} xl={6}>
+                <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Country</Typography>
+                <Typography component='div' variant='text-sm' color='#4B5563'>{data?.address?.country?.name || '-'}</Typography>
+              </Grid>
+              <Grid item xs={6} md={6} lg={6} xl={6}>
+                <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Province</Typography>
+                <Typography component='div' variant='text-sm' color='#4B5563'>{data?.address?.firstLevelCode || '-'}</Typography>
+              </Grid>
+            </Grid>
+            <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
+              <Grid item xs={6} md={6} lg={6} xl={6}>
+                <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>City</Typography>
+                <Typography component='div' variant='text-sm' color='#4B5563'>{data?.address?.secondLevelCode || '-'}</Typography>
+              </Grid>
+              <Grid item xs={6} md={6} lg={6} xl={6}>
+                <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Sub-district</Typography>
+                <Typography component='div' variant='text-sm' color='#4B5563'>{data?.address?.thirdLevelCode || '-'}</Typography>
+              </Grid>
+            </Grid>
+            <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
+              <Grid item xs={6} md={6} lg={6} xl={6}>
+                <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Street Name, Building Name</Typography>
+                <Typography component='div' variant='text-sm' color='#4B5563'>{data?.address?.address || '-'}</Typography>
+              </Grid>
+              <Grid item xs={6} md={6} lg={6} xl={6}>
+                <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Zip Code</Typography>
+                <Typography component='div' variant='text-sm' color='#4B5563'>{data?.address?.zipCode || '-'}</Typography>
+              </Grid>
+            </Grid>
+          </TabPanel>
+          <TabPanel value={value} index={1}>
+            <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
+              <Grid item xs={12} md={12} lg={12} xl={12}>
+                <Typography component='h3' fontSize={18} color='primary'>Bank Information</Typography>
+              </Grid>
+            </Grid>
+            <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
+              <Grid item xs={6} md={6} lg={6} xl={6}>
+                <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Bank</Typography>
+                <Typography component='div' variant='text-sm' color='#4B5563'>{data?.bank?.bank?.name || '-'}</Typography>
+              </Grid>
+              <Grid item xs={6} md={6} lg={6} xl={6}>
+                <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Bank Account Holder&apos;s Name</Typography>
+                <Typography component='div' variant='text-sm' color='#4B5563'>{data?.bank?.accountName || '-'}</Typography>
+              </Grid>
+            </Grid>
+            <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
+              <Grid item xs={6} md={6} lg={6} xl={6}>
+                <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Bank Account No</Typography>
+                <Typography component='div' variant='text-sm' color='#4B5563'>{data?.bank?.accountNumber || '-'}</Typography>
+              </Grid>
+              <Grid item xs={3} md={3} lg={3} xl={3}>
+                <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Bank Code</Typography>
+                <Typography component='div' variant='text-sm' color='#4B5533'>{data?.bank?.bankCode || '-'}</Typography>
+              </Grid>
+              <Grid item xs={3} md={3} lg={3} xl={3}>
+                <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Branch Code</Typography>
+                <Typography component='div' variant='text-sm' color='#4B5563'>{data?.bank?.branchCode || '-'}</Typography>
+              </Grid>
+            </Grid>
+            <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
+              <Grid item xs={6} md={6} lg={6} xl={6}>
+                <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Branch Name</Typography>
+                <Typography component='div' variant='text-sm' color='#4B5563'>{data?.bank?.branchName || '-'}</Typography>
+              </Grid>
+              <Grid item xs={6} md={6} lg={6} xl={6}>
+                <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Swift Code</Typography>
+                <Typography component='div' variant='text-sm' color='#4B5563'>{data?.bank?.swiftCode || '-'}</Typography>
+              </Grid>
+            </Grid>
+            <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
+              <Grid item xs={12} md={12} lg={12} xl={12}>
+                <Typography component='h3' fontSize={18} color='primary'>Payment Information</Typography>
+              </Grid>
+            </Grid>
+            {!data?.payroll?.monthly && !data?.payroll?.weekly && !data?.payroll?.biweekly && (
+              <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
+                <Grid item xs={12} md={12} lg={12} xl={12}>
+                  <Typography component='div' variant='text-sm' color='#4B5563'>Mont-hly</Typography>
+                </Grid>
+              </Grid>
+            )}
+            {!!data?.payroll?.monthly && (
+              <>
+                <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
+                  <Grid item xs={12} md={12} lg={12} xl={12}>
+                    <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Schedule Type</Typography>
+                    <Typography variant='text-sm' color='#1F2937' sx={{ padding: '3px 12px', background: '#E5E7EB', borderRadius: '4px' }} >Monthly</Typography>
+                  </Grid>
+                </Grid>
+                <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
+                  <Grid item xs={6} md={6} lg={6} xl={6}>
+                    <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Pay Period (includes overtime)</Typography>
+                    <Typography component='div' variant='text-sm' color='#4B5563'>{data?.payroll?.monthly?.periodStart || '-'} to {data?.payroll?.monthly?.periodEnd || '-'}</Typography>
+                  </Grid>
+                  <Grid item xs={6} md={6} lg={6} xl={6}>
+                    <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Default Payment Mode</Typography>
+                    <Typography component='div' variant='text-sm' color='#4B5563'>{data?.payroll?.monthly?.method?.name || '-'}</Typography>
+                  </Grid>
+                </Grid>
+              </>
+            )}
+            {!!data?.payroll?.weekly && (
+              <>
+                <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
+                  <Grid item xs={12} md={12} lg={12} xl={12}>
+                    <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Schedule Type</Typography>
+                    <Typography variant='text-sm' color='#1F2937' sx={{ padding: '3px 12px', background: '#E5E7EB', borderRadius: '4px' }} >Weekly</Typography>
+                  </Grid>
+                </Grid>
+                <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
+                  <Grid item xs={6} md={6} lg={6} xl={6}>
+                    <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Pay Period (includes overtime)</Typography>
+                    <Typography component='div' variant='text-sm' color='#4B5563'>{data?.payroll?.weekly?.period || '-'}</Typography>
+                  </Grid>
+                  <Grid item xs={6} md={6} lg={6} xl={6}>
+                    <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Default Payment Mode</Typography>
+                    <Typography component='div' variant='text-sm' color='#4B5563'>{data?.payroll?.weekly?.method?.name || '-'}</Typography>
+                  </Grid>
+                </Grid>
+              </>
+            )}
+            {!!data?.payroll?.biWeekly && (
+              <>
+                <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
+                  <Grid item xs={12} md={12} lg={12} xl={12}>
+                    <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Schedule Type</Typography>
+                    <Typography variant='text-sm' color='#1F2937' sx={{ padding: '3px 12px', background: '#E5E7EB', borderRadius: '4px' }} >Bi-Weekly</Typography>
+                  </Grid>
+                </Grid>
+                <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
+                  <Grid item xs={6} md={6} lg={6} xl={6}>
+                    <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Pay Period (includes overtime)</Typography>
+                    <Typography component='div' variant='text-sm' color='#4B5563'>{data?.payroll?.biWeekly?.period || '-'} on {data?.payroll?.biWeekly?.periodWeek || '-'}</Typography>
+                  </Grid>
+                  <Grid item xs={6} md={6} lg={6} xl={6}>
+                    <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Default Payment Mode</Typography>
+                    <Typography component='div' variant='text-sm' color='#4B5563'>{data?.payroll?.biWeekly?.method?.name || '-'}</Typography>
+                  </Grid>
+                </Grid>
+              </>
+            )}
+          </TabPanel>
+        </Box>
+      </ContentWrapper>
     </>
   );
-};
+}
 
-export default CompanyComponent;
+export default CompanyProfileComponent;
