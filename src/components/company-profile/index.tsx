@@ -21,7 +21,7 @@ const CompanyProfileComponent = () => {
         <Typography variant="h5">Compensation and Benefits</Typography>
         <div>
           <Button
-            onClick={() => router.push("/cnb/create")}
+            onClick={() => router.push("/compensation-benefits/create")}
             startIcon={<AddIcon />}
             label="Add Profile"
           />

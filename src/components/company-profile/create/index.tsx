@@ -1,4 +1,5 @@
 import React from "react";
+import { styled as MuiStyled } from "@mui/material/styles";
 import { Button, Form, IconButton } from "@/components/_shared/form";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -12,6 +13,7 @@ import {
   RadioGroup,
   Radio,
   FormControlLabel,
+  Box,
 } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
 import { useRouter } from "next/router";
@@ -28,22 +30,12 @@ export default function CreateCompanyProfileComponent() {
     },
   });
 
-  const SaveButton = styled(Button)({
-    color: "white",
-    maxWidth: "245px",
-    padding: "8px 16px",
-    ".MuiTypography-root": {
-      fontSize: "12px",
-    },
-  });
-
-  const CancelButton = styled(Button)({
-    color: "#223567",
-    maxWidth: "245px",
-    padding: "8px 16px",
-    ".MuiTypography-root": {
-      fontSize: "12px",
-    },
+  const NextBtnWrapper = MuiStyled(Box)({
+    width: "100%",
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-end",
   });
 
   const BpIcon = styled("span")(({ theme }) => ({
@@ -192,21 +184,30 @@ export default function CreateCompanyProfileComponent() {
               color: "#223567",
               fontSize: "20px",
               fontWeight: "700",
+              width: "250px",
             }}
           >
             Create New CnB Profile
           </Typography>
         </div>
-        <div style={{ display: "flex", gap: "16px" }}>
-          <CancelButton color="primary" label="Cancel" />
-          <SaveButton color="primary" label="Save" />
-        </div>
+        <NextBtnWrapper>
+          <Button
+            fullWidth={false}
+            size="small"
+            label="Cancel"
+            variant="outlined"
+            sx={{ mr: "12px" }}
+            color="primary"
+          />
+          <Button fullWidth={false} size="small" label="Save" color="primary" />
+        </NextBtnWrapper>
       </div>
       <div
         style={{
           padding: "20px 32px",
           boxShadow:
             "0px 1px 2px rgba(0, 0, 0, 0.06), 0px 1px 3px rgba(0, 0, 0, 0.1)",
+          backgroundColor: "#fff",
         }}
       >
         <Form style={{ marginBottom: "32px" }}>
