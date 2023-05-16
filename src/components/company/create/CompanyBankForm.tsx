@@ -6,11 +6,13 @@ import {
   Select,
   Box,
   MenuItem,
+  Alert,
   FormControl } from '@mui/material';
 import { Input, Button, CheckBox} from '@/components/_shared/form';
 import { styled as MuiStyled } from '@mui/material/styles';
 import { useRouter } from 'next/router';
 import { CustomHooks } from '@/types/hooks';
+import { useAppSelectors } from '@/hooks/index';
 
 
 const AsteriskComponent = MuiStyled('span')(({ theme }) => ({
@@ -36,6 +38,7 @@ interface CompanyBankProps {
 }
 
 function CompanyInformationForm ({bank, paymentMethod, handleInputChange, values, errors, handleSubmit} :CompanyBankProps) {
+  const { responser } = useAppSelectors(state => state);
   const router = useRouter();
   const convertCheckbox = (name, event) => {
     const obj = {
@@ -336,6 +339,14 @@ function CompanyInformationForm ({bank, paymentMethod, handleInputChange, values
                   ))}
                 </Select>
               </FormControl>
+            </Grid>
+          </Grid>
+        )}
+        {![200, 201, 0].includes(responser?.code) && (
+          <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
+            <Grid item xs={6} md={6} lg={6} xl={6}></Grid>
+            <Grid item xs={6} md={6} lg={6} xl={6}>
+              <Alert severity='error'>{responser?.message}</Alert>
             </Grid>
           </Grid>
         )}

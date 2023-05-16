@@ -20,6 +20,8 @@ import { BsBellFill } from 'react-icons/bs';
 import LocalizationMenu from '@/components/_shared/_core/localization/Index';
 import Profile from '@/components/_shared/_core/appbar/Profile';
 import { setStorages } from '@/utils/storage';
+import Notify from '@/components/_shared/common/Notify';
+import { useAppSelectors } from '@/hooks/index';
 
 
 const WrapperAuth = styled(Box)<BoxProps>(({ theme }) => ({
@@ -134,6 +136,7 @@ const CardAdd = () => {
 };
 
 const CompanyComponent = ({ companies }: Company.Component) => {
+  const { responser } = useAppSelectors((state) => state);
   const router = useRouter();
   const handleClick = (val, path) => {
     setStorages([
@@ -144,6 +147,13 @@ const CompanyComponent = ({ companies }: Company.Component) => {
   return (
     <>
       <Navbar />
+      {
+        [200, 201].includes(responser.code) && (
+          <Box display={'flex'}>
+            <Notify body={responser.message || 'aaaa'} />
+          </Box>
+        )
+      }
       <WrapperAuth>
         <WrapperCard>
           <WrapperCardContent>
