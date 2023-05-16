@@ -6,7 +6,7 @@ import { Button } from "../_shared/form";
 import AddIcon from "@mui/icons-material/Add";
 import { useRouter } from "next/router";
 
-const CompanyProfileComponent = () => {
+const CNBComponent = () => {
   const router = useRouter();
   const TitleWrapper = styled.div`
     display: flex;
@@ -21,7 +21,7 @@ const CompanyProfileComponent = () => {
         <Typography variant="h5">Compensation and Benefits</Typography>
         <div>
           <Button
-            onClick={() => router.push("/compensation-benefits/create")}
+            onClick={() => router.push("/cnb/create")}
             startIcon={<AddIcon />}
             label="Add Profile"
           />
@@ -32,4 +32,4 @@ const CompanyProfileComponent = () => {
   );
 };
 
-export default CompanyProfileComponent;
+export default CNBComponent;

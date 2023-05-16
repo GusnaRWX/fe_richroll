@@ -18,7 +18,7 @@ import {
 import { ArrowBack } from "@mui/icons-material";
 import { useRouter } from "next/router";
 
-export default function CreateCompanyProfileComponent() {
+export default function CreateCNBComponent() {
   const router = useRouter();
 
   const AddButton = styled(Button)({

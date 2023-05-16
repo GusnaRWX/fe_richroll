@@ -1,5 +1,5 @@
 import React from "react";
-import CompanyProfileContainer from "@/containers/company-profile/CompanyProfileContainer";
+import CompanyProfileContainer from "@/containers/cnb/CNBContainer";
 import MetaHead from "@/components/_shared/_core/layout/MetaHead";
 
 export default function Index() {
