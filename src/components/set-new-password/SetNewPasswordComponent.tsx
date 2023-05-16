@@ -6,11 +6,12 @@ import { styled } from '@mui/material/styles';
 import LocalizationMenu from '@/components/_shared/_core/localization/Index';
 import { Text } from '@/components/_shared/common/';
 import { Button, Input } from '@/components/_shared/form';
-import { useForm, useAppDispatch } from '@/hooks/index';
+import { useForm, useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
 import { signIn } from 'next-auth/react';
 import { AuthEmployee } from '@/types/component';
 import { employeeSetNewPasswordRequested } from '@/store/reducers/slice/auth/loginSlice';
+import Notify from '../_shared/common/Notify';
 
 const WrapperNavbarContent = styled(Toolbar)(() => ({
   display: 'flex',
@@ -85,6 +86,7 @@ const SetNewPasswordComponent = ({
 
   const [openNewPassword, setOpenNewPassword] = useState(false);
   const [openRepeatNewPassword, setOpenRepeatNewPassword] = useState(false);
+  const {responser} = useAppSelectors((state) => state);
   const dispatch = useAppDispatch();
 
   const [initialValues] = useState({
@@ -157,6 +159,11 @@ const SetNewPasswordComponent = ({
       <Navbar />
       <WrapperAuth>
         <WrapperCard>
+          {
+            [200, 201].includes(responser.code) && (
+              <Notify error={false} body={responser.message}/>
+            )
+          }
           <WrapperCardContent>
             <Image
               src={ImageType.KAYAROLL_LOGO}
