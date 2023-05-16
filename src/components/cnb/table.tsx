@@ -53,15 +53,15 @@ function stableSort<T>(
   array: readonly T[],
   comparator: (a: T, b: T) => number
 ) {
-  const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
-  stabilizedThis.sort((a, b) => {
+  const stabilizedThis = array?.map((el, index) => [el, index] as [T, number]);
+  stabilizedThis?.sort((a, b) => {
     const order = comparator(a[0], b[0]);
     if (order !== 0) {
       return order;
     }
     return a[1] - b[1];
   });
-  return stabilizedThis.map((el) => el[0]);
+  return stabilizedThis?.map((el) => el[0]);
 }
 
 interface HeadCell {
@@ -189,7 +189,7 @@ export default function EnhancedTable(rows) {
 
   const visibleRows = React.useMemo(
     () =>
-      stableSort(rows?.rows?.items, getComparator(order, orderBy)).slice(
+      stableSort(rows?.rows?.items, getComparator(order, orderBy))?.slice(
         page * rowsPerPage,
         page * rowsPerPage + rowsPerPage
       ),
@@ -220,7 +220,7 @@ export default function EnhancedTable(rows) {
               onRequestSort={handleRequestSort}
             />
             <TableBody>
-              {visibleRows.map((row, index) => {
+              {visibleRows?.map((row, index) => {
                 const labelId = `enhanced-table-checkbox-${index}`;
 
                 return (

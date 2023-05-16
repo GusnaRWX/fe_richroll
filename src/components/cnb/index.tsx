@@ -13,6 +13,9 @@ const CNBComponent = () => {
   const dataTable = useAppSelectors(
     (state) => state.compensation?.dataTable?.data
   );
+  const loading = useAppSelectors(
+    (state) => state.compensation?.loading
+  );
   const router = useRouter();
   const TitleWrapper = styled.div`
     display: flex;
@@ -27,7 +30,7 @@ const CNBComponent = () => {
       payload: 4,
     });
   }, []);
-
+  
   return (
     <>
       <TitleWrapper>
@@ -40,7 +43,11 @@ const CNBComponent = () => {
           />
         </div>
       </TitleWrapper>
+      {!loading ? 
       <EnhancedTable rows={dataTable} />
+      :
+      <></>
+      }
     </>
   );
 };
