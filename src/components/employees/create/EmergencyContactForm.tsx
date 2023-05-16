@@ -53,7 +53,7 @@ function EmergencyContactForm({ refProp, nextPage, setValues, emergencyValues }:
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validate()) {
-      setValues({...values});
+      setValues({ ...values });
       nextPage(3);
       setErrorFields(false);
     } else {
@@ -63,7 +63,7 @@ function EmergencyContactForm({ refProp, nextPage, setValues, emergencyValues }:
 
   const handleBack = (e) => {
     e.preventDefault();
-    setValues({...values});
+    setValues({ ...values });
     nextPage(1);
 
   };

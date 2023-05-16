@@ -1,10 +1,16 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import { IconButton } from '@/components/_shared/form';
 import { Card, Typography, Button as MuiButton, Tab, Tabs, Box } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import styled from '@emotion/styled';
 import ConfirmationModal from '@/components/_shared/common/ConfirmationModal';
+import { useRouter } from 'next/router';
+import { Employees } from '@/types/employees';
+import { useAppDispatch } from '@/hooks/index';
+import dayjs from 'dayjs';
+import { postEmployeeInfoRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
+import { getCompanyData } from '@/utils/helper';
 
 const EmployeeInformationFormClient = dynamic(() => import('./EmployeeInformationForm'), {
   ssr: false
@@ -15,9 +21,6 @@ const EmployeePersonalInformationFormClient = dynamic(() => import('./EmployeePe
 const EmergencyContactFormClient = dynamic(() => import('./EmergencyContactForm'), {
   ssr: false
 });
-
-import { clearStorages } from '@/utils/storage';
-import {Employees} from '@/types/employees';
 
 const TopWrapper = styled.div`
  display: flex;
@@ -86,12 +89,14 @@ function a11yProps(index: number) {
 
 
 function EmployeeCreateComponent() {
+  const router = useRouter();
   const [value, setValue] = useState(0);
   const [leave, setLeave] = useState(false);
   const employeeRef = useRef<HTMLFormElement>(null);
   const emergencyRef = useRef<HTMLFormElement>(null);
   const personalInformationRef = useRef<HTMLFormElement>(null);
   const [informationValue, setInformationValue] = useState<Employees.InformationValues>({
+    companyID: '',
     department: '',
     email: '',
     endDate: '',
@@ -106,7 +111,6 @@ function EmployeeCreateComponent() {
     position: '',
     startDate: ''
   });
-  const [personalInformationValue, setPersonalInformationValue] = useState<any>({});
   const [emergencyValue, setEmergencyValue] = useState<Employees.EmergencyContactValues>({
     employeeID: '',
     fullNamePrimary: '',
@@ -118,22 +122,77 @@ function EmployeeCreateComponent() {
     phoneNumberPrefixSecondary: '',
     phoneNumberSecondary: ''
   });
+  const [personalInformationValue, setPersonalInformationValue] = useState<Employees.PersonalValues>({
+    dateofBirthPersonalInformation: null,
+    genderPersonalInformation: 0,
+    maritialStatusPersonalInformation: 0,
+    numberOfDependantsPersonalInformation: 0,
+    nationalityPersonalInformation: '',
+    religionPersonalInformation: 0,
 
-  useEffect(() => {
-    console.log(personalInformationValue, 'here fuck');
-  }, [personalInformationValue]);
+    countryCitizenAddress: '',
+    provinceCitizenAddress: '',
+    cityCitizenAddress: '',
+    subDistrictCitizenAddress: '',
+    addressCitizenAddress: '',
+    zipCodeCitizenAddress: '',
 
+    countryResidentialAddress: '',
+    provinceResidentialAddress: '',
+    cityResidentialAddress: '',
+    subDistrictResidentialAddress: '',
+    addressResidentialAddress: '',
+    zipCodeResidentialAddress: '',
+
+    bankBankInformation: '',
+    bankAccountHolderNameBankInformation: '',
+    bankAccoutNoBankInformation: '',
+    bankCodeBankInformation: '',
+    branchCodeBankInformation: '',
+    branchNameBankInformation: '',
+    swiftCodeBankInformation: '',
+
+    useResidentialAddress: false,
+    isPermanentPersonalID: false,
+
+    idExpirationDatePersonalID: '',
+    idNumberPersonalID: '',
+    idTypePersonalID: ''
+  });
+  const [isInformationValid, setIsInformationValid] = useState(false);
+  const [isPersonalInformationValid, setIsPersonalInformationValid] = useState(false);
+  const dispatch = useAppDispatch();
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
-  const handleClick = () => {
-    if (value === 0) {
-      employeeRef.current?.requestSubmit();
-    } else if (value === 1) {
-      personalInformationRef.current?.requestSubmit();
-    } else if (value === 2) {
-      emergencyRef.current?.requestSubmit();
+  const handleClick = async () => {
+    const inputData = new FormData();
+    inputData.append('companyID', getCompanyData()?.id as string);
+    if (informationValue.picture && informationValue.picture.length > 0) {
+      inputData.append('picture', (informationValue.picture as unknown as File)[0]);
     }
+    inputData.append('fullName', informationValue.fullName);
+    inputData.append('nickname', informationValue.nickname);
+    inputData.append('phoneNumberPrefix', informationValue.phoneNumberPrefix);
+    inputData.append('phoneNumber', informationValue.phoneNumber);
+    inputData.append('email', informationValue.email);
+    inputData.append('startDate', dayjs(informationValue.startDate).format('YYYY-MM-DD'));
+    inputData.append('endDate', dayjs(informationValue.endDate).format('YYYY-MM-DD'));
+    inputData.append('isPermanent', informationValue.isPermanent ? 'true' : 'false');
+    if (informationValue.department !== '') {
+      inputData.append('department', informationValue.department);
+    }
+    if (informationValue.position !== '') {
+      inputData.append('position', informationValue.position);
+    }
+    inputData.append('isSelfService', informationValue.isSelfService ? 'true' : 'false');
+
+
+    dispatch({
+      type: postEmployeeInfoRequested.toString(),
+      payload: { employeeInformation: inputData, isPersonalInformationValid, personalValue: personalInformationValue }
+    });
+
 
   };
 
@@ -153,10 +212,6 @@ function EmployeeCreateComponent() {
     setValue(val);
   };
 
-  const deleteExistStorage = () => {
-    clearStorages(['emp-information', 'emp-personal-information', 'emp-emergency-contact']);
-  };
-
   return (
     <>
       <TopWrapper>
@@ -172,7 +227,7 @@ function EmployeeCreateComponent() {
         </BackWrapper>
         <ButtonWrapper>
           <MuiButton variant='outlined' size='small' onClick={() => handleOpen()}>Cancel</MuiButton>
-          <MuiButton variant='contained' onClick={handleClick} size='small' color='primary'>Save</MuiButton>
+          <MuiButton variant='contained' onClick={handleClick} size='small' color='primary' disabled={!isInformationValid}>Save</MuiButton>
         </ButtonWrapper>
       </TopWrapper>
       <ContentWrapper>
@@ -187,13 +242,19 @@ function EmployeeCreateComponent() {
             </Tabs>
           </Box>
           <TabPanel value={value} index={0}>
-            <EmployeeInformationFormClient nextPage={handleNext} refProp={employeeRef} setValues={setInformationValue} infoValues={informationValue} />
+            <EmployeeInformationFormClient nextPage={handleNext} refProp={employeeRef} setValues={setInformationValue} infoValues={informationValue} setIsInformationValid={setIsInformationValid} />
           </TabPanel>
           <TabPanel value={value} index={1}>
-            <EmployeePersonalInformationFormClient nextPage={handleNext} refProp={personalInformationRef} setValues={setPersonalInformationValue} personalValues={personalInformationValue} />
+            <EmployeePersonalInformationFormClient
+              nextPage={handleNext}
+              refProp={personalInformationRef}
+              setValues={setPersonalInformationValue}
+              personalValues={personalInformationValue}
+              setIsPersonalInformationValid={setIsPersonalInformationValid}
+            />
           </TabPanel>
           <TabPanel value={value} index={2}>
-            <EmergencyContactFormClient nextPage={setValue} refProp={emergencyRef} setValues={setEmergencyValue} emergencyValues={emergencyValue}/>
+            <EmergencyContactFormClient nextPage={setValue} refProp={emergencyRef} setValues={setEmergencyValue} emergencyValues={emergencyValue} />
           </TabPanel>
           <TabPanel value={value} index={3}>
             on Development
@@ -209,7 +270,9 @@ function EmployeeCreateComponent() {
         title='Are you sure you want to leave?'
         content='Any unsaved changes will be discarded. This cannot be undone'
         withCallback
-        callback={deleteExistStorage}
+        callback={() => {
+          router.push('/company-management/employees');
+        }}
       />
     </>
   );

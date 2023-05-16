@@ -15,16 +15,18 @@ import {
 import dayjs from 'dayjs';
 import { convertDateValue, convertValue } from '@/utils/helper';
 import CancelIcon from '@mui/icons-material/Cancel';
+import { Employees } from '@/types/employees';
 
 interface PersonalInformationProps {
   refProp: React.Ref<HTMLFormElement>
   nextPage: (_val: number) => void;
-  setValues: (_val: any) => void;
-  personalValues: any
+  setValues: React.Dispatch<React.SetStateAction<Employees.PersonalValues>>;
+  personalValues: Employees.PersonalValues,
+  setIsPersonalInformationValid: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 
-const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, personalValues }: PersonalInformationProps) => {
+const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, personalValues, setIsPersonalInformationValid }: PersonalInformationProps) => {
   const dispatch = useAppDispatch();
 
   const {
@@ -35,9 +37,6 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
     banks
   } = useAppSelectors(state => state.option);
 
-  const {
-    employeeID
-  } = useAppSelectors(state => state.employee);
 
   const [useResidentialAddress, setUseResidentialAddress] = useState(personalValues?.useResidentialAddress);
   const [isPermanentPersonalID, setIsPermanentPersonalID] = useState(personalValues?.isPermanentPersonalID);
@@ -159,7 +158,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
         payload: {
           countryId: fieldOfValues.countryResidentialAddress
         }
-      }) ? '' : useResidentialAddress ? '' : 'This field is required';
+      }) ? '' : 'This field is required';
     }
 
     if ('provinceResidentialAddress' in fieldOfValues) {
@@ -169,7 +168,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
           countryId: values.countryResidentialAddress,
           firstLevelCode: fieldOfValues.provinceResidentialAddress
         }
-      }) ? '' : useResidentialAddress ? '' : 'This field is required';
+      }) ? '' : 'This field is required';
     }
 
     if ('cityResidentialAddress' in fieldOfValues) {
@@ -180,23 +179,23 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
           firstLevelCode: values.provinceResidentialAddress,
           secondLevelCode: fieldOfValues.cityResidentialAddress
         }
-      }) ? '' : useResidentialAddress ? '' : 'This field is required';
+      }) ? '' : 'This field is required';
     }
 
     if ('subDistrictResidentialAddress' in fieldOfValues)
       temp.subDistrictResidentialAddress = fieldOfValues.subDistrictResidentialAddress
         ? ''
-        : useResidentialAddress ? '' : 'This field is required';
+        : 'This field is required';
 
     if ('addressResidentialAddress' in fieldOfValues)
       temp.addressResidentialAddress = fieldOfValues.addressResidentialAddress
         ? ''
-        : useResidentialAddress ? '' : 'This field is required';
+        : 'This field is required';
 
     if ('zipCodeResidentialAddress' in fieldOfValues)
       temp.zipCodeResidentialAddress = fieldOfValues.zipCodeResidentialAddress
         ? ''
-        : useResidentialAddress ? '' : 'This field is required';
+        : 'This field is required';
 
     // Group Bank Information
     if ('bankBankInformation' in fieldOfValues)
@@ -259,107 +258,12 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
     if (validate()) {
       setErrorFields(false);
       nextPage(2);
+      setIsPersonalInformationValid(true);
       setValues({ ...values, useResidentialAddress, isPermanentPersonalID });
     } else {
       setErrorFields(true);
+      setIsPersonalInformationValid(false);
     }
-
-    // const payload: Employees.PersonalInformationPayload = {
-    //   employeeID: employeeID,
-    //   companyID: companyData?.id as string,
-    //   citizen: {
-    //     countryID: values.countryCitizenAddress,
-    //     firstLevelCode: values.provinceCitizenAddress,
-    //     secondLevelCode: values.cityCitizenAddress,
-    //     thirdLevelCode: values.subDistrictCitizenAddress,
-    //     address: values.addressCitizenAddress,
-    //     zipCode: values.zipCodeCitizenAddress,
-    //     isCitizen: true,
-    //     isResident: useResidentialAddress ? true : false,
-    //   },
-    //   personal: {
-    //     dateOfBirth: dayjs(values.dateofBirthPersonalInformation).format('YYYY-MM-DD'),
-    //     gender: values.genderPersonalInformation === 'male' ? 1 : 2,
-    //     maritalStatus: +values.maritialStatusPersonalInformation,
-    //     numberOfChildren: +values.numberOfDependantsPersonalInformation,
-    //     countryID: values.nationalityPersonalInformation,
-    //     religion: +values.religionPersonalInformation
-    //   },
-    //   identity: {
-    //     type: +values.idTypePersonalID,
-    //     number: +values.idNumberPersonalID,
-    //     ...(isPermanentPersonalID && { expireAt: dayjs(values.idExpirationDatePersonalID).format('YYYY-MM-DD') }),
-    //     isPermanent: isPermanentPersonalID ? true : false
-    //   },
-    //   bank: {
-    //     bankID: values.bankBankInformation,
-    //     holder: values.bankAccountHolderNameBankInformation,
-    //     accountNumber: values.bankAccoutNoBankInformation,
-    //     bankCode: values.bankCodeBankInformation,
-    //     branchCode: values.branchCodeBankInformation,
-    //     branchName: values.branchNameBankInformation,
-    //     swiftCode: values.swiftCodeBankInformation
-    //   },
-    //   residential: {
-    //     countryID: values.countryResidentialAddress,
-    //     firstLevelCode: values.provinceResidentialAddress,
-    //     secondLevelCode: values.cityResidentialAddress,
-    //     thirdLevelCode: values.subDistrictResidentialAddress,
-    //     address: values.addressResidentialAddress,
-    //     zipCode: values.zipCodeResidentialAddress,
-    //     isCitizen: false,
-    //     isResident: useResidentialAddress ? true : false
-    //   }
-    // };
-
-    // if (useResidentialAddress && isPermanentPersonalID) {
-    //   // eslint-disable-next-line no-unused-vars
-    //   const { residential, ...rest } = payload;
-    //   if (validate()) {
-    //     setErrorFields(false);
-    //     dispatch({
-    //       type: postPersonalInformationRequested.toString(),
-    //       payload: rest
-    //     });
-    //   } else {
-    //     setErrorFields(true);
-    //   }
-
-    // } else if (useResidentialAddress) {
-    //   // eslint-disable-next-line no-unused-vars
-    //   const { residential, ...rest } = payload;
-    //   if (validate()) {
-    //     setErrorFields(false);
-    //     dispatch({
-    //       type: postPersonalInformationRequested.toString(),
-    //       payload: rest
-    //     });
-    //   } else {
-    //     setErrorFields(true);
-    //   }
-    // } else if (isPermanentPersonalID) {
-    //   const { identity, ...rest } = payload;
-    //   delete identity?.expireAt;
-    //   if (validate()) {
-    //     setErrorFields(false);
-    //     dispatch({
-    //       type: postPersonalInformationRequested.toString(),
-    //       payload: rest
-    //     });
-    //   } else {
-    //     setErrorFields(true);
-    //   }
-    // } else {
-    //   if (validate()) {
-    //     setErrorFields(false);
-    //     dispatch({
-    //       type: postPersonalInformationRequested.toString(),
-    //       payload: payload
-    //     });
-    //   } else {
-    //     setErrorFields(true);
-    //   }
-    // }
   };
 
   return (
@@ -686,7 +590,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               variant='outlined'
               size='small'
               name='countryResidentialAddress'
-              value={useResidentialAddress ? values.countryCitizenAddress : values.countryResidentialAddress}
+              value={values.countryResidentialAddress}
               onChange={(e: unknown) => handleInputChange(convertValue('countryResidentialAddress', e))}
               options={countries}
               error={useResidentialAddress ? '' : errors.countryResidentialAddress}
@@ -703,7 +607,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               variant='outlined'
               size='small'
               name='provinceResidentialAddress'
-              value={useResidentialAddress ? values.provinceCitizenAddress : values.provinceResidentialAddress}
+              value={values.provinceResidentialAddress}
               onChange={(e: unknown) => handleInputChange(convertValue('provinceResidentialAddress', e))}
               options={administrativeFirst}
               error={useResidentialAddress ? '' : errors.provinceResidentialAddress}
@@ -728,7 +632,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               variant='outlined'
               size='small'
               name='cityResidentialAddress'
-              value={useResidentialAddress ? values.cityCitizenAddress : values.cityResidentialAddress}
+              value={values.cityResidentialAddress}
               onChange={(e: unknown) => handleInputChange(convertValue('cityResidentialAddress', e))}
               options={administrativeSecond}
               error={useResidentialAddress ? '' : errors.cityResidentialAddress}
@@ -745,7 +649,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               variant='outlined'
               size='small'
               name='subDistrictResidentialAddress'
-              value={useResidentialAddress ? values.subDistrictCitizenAddress : values.subDistrictResidentialAddress}
+              value={values.subDistrictResidentialAddress}
               onChange={(e: unknown) => handleInputChange(convertValue('subDistrictResidentialAddress', e))}
               options={administrativeThird}
               error={useResidentialAddress ? '' : errors.subDistrictResidentialAddress}
@@ -767,7 +671,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               name='addressResidentialAddress'
               maxRows={5}
               minRows={3}
-              value={useResidentialAddress ? values.addressCitizenAddress : values.addressResidentialAddress}
+              value={values.addressResidentialAddress}
               onChange={handleInputChange}
               error={useResidentialAddress ? '' : errors.addressResidentialAddress}
               withAsterisk
@@ -783,7 +687,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               customLabel='ZIP Code'
               size='small'
               name='zipCodeResidentialAddress'
-              value={useResidentialAddress ? values.zipCodeCitizenAddress : values.zipCodeResidentialAddress}
+              value={values.zipCodeResidentialAddress}
               onChange={handleInputChange}
               error={useResidentialAddress ? '' : errors.zipCodeResidentialAddress}
             />
@@ -1012,6 +916,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
         <Grid item>
           <Button onClick={() => {
             nextPage(0);
+            setValues({ ...values, useResidentialAddress, isPermanentPersonalID });
           }} label='Back' variant='outlined' />
         </Grid>
         <Grid item>

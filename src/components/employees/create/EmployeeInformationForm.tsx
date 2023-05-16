@@ -12,7 +12,6 @@ import styled from '@emotion/styled';
 import { useForm, useAppSelectors } from '@/hooks/index';
 import {
   checkRegulerExpression,
-  getCompanyData,
   convertValue,
   convertChecked,
   convertDateValue,
@@ -21,8 +20,7 @@ import {
 import dayjs from 'dayjs';
 import { Alert, Text } from '@/components/_shared/common';
 import CancelIcon from '@mui/icons-material/Cancel';
-import { getStorage } from '@/utils/storage';
-import {Employees} from '@/types/employees';
+import { Employees } from '@/types/employees';
 
 
 const AsteriskComponent = MuiStyled('span')(({ theme }) => ({
@@ -66,25 +64,22 @@ const ImageReview = styled.div`
 interface EmployeeProps {
   refProp: React.Ref<HTMLFormElement>;
   nextPage: (_val: number) => void;
-  setValues:  React.Dispatch<React.SetStateAction<Employees.InformationValues>>
-  infoValues: Employees.InformationValues
+  setValues: React.Dispatch<React.SetStateAction<Employees.InformationValues>>
+  infoValues: Employees.InformationValues,
+  setIsInformationValid: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues }: EmployeeProps) {
+function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, setIsInformationValid }: EmployeeProps) {
   const [open, setOpen] = useState(false);
-  const companyData = getCompanyData();
-  const persistInformation = getStorage('emp-information') ? JSON.parse(getStorage('emp-information') as string) : null;
   const { listDepartment, listPosition } = useAppSelectors(state => state.option);
   const [images, setImages] = useState<string | null>(infoValues?.images);
   const [errorFields, setErrorFields] = useState<boolean>(false);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [initialValues, setInitialValues] = useState({
-    companyID: companyData?.id,
+  const [initialValues] = useState({
     picture: [],
     fullName: infoValues?.fullName,
     nickname: infoValues?.nickname,
-    phoneNumberPrefix:infoValues.phoneNumberPrefix,
+    phoneNumberPrefix: infoValues.phoneNumberPrefix,
     phoneNumber: infoValues?.phoneNumber,
     email: infoValues?.email,
     startDate: dayjs(infoValues?.startDate),
@@ -99,7 +94,7 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues }: E
     const temp = { ...errors };
 
     if ('picture' in fieldOfValues)
-      temp.picture = fieldOfValues.picture.length !== 0 || persistInformation?.images !== null
+      temp.picture = fieldOfValues.picture.length !== 0 || infoValues?.images
         ? ''
         : 'This field is required';
 
@@ -163,16 +158,16 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues }: E
     }
   ];
 
-  console.log(values, 'here');
-
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validate()) {
-      setValues({...values, images: images});
+      setValues({ ...values, images: images });
       nextPage(1);
       setErrorFields(false);
+      setIsInformationValid(true);
     } else {
       setErrorFields(true);
+      setIsInformationValid(false);
     }
   };
 
@@ -352,7 +347,7 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues }: E
           </Grid>
         </Grid>
         <NextBtnWrapper>
-          <Button fullWidth={false} size='small' label='Next' color='primary' type={'submit'}/>
+          <Button fullWidth={false} size='small' label='Next' color='primary' type={'submit'} />
         </NextBtnWrapper>
       </form>
       <FileUploadModal
