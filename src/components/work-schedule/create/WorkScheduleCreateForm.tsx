@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Input, Select } from '@/components/_shared/form';
 import { Button as MuiButton, Grid, InputAdornment, Typography } from '@mui/material';
 import { Add } from '@mui/icons-material';
-import { Scheduler } from '@aldabil/react-scheduler';
+// import { Scheduler } from '@aldabil/react-scheduler';
 import CustomModal from '@/components/_shared/common/CustomModal';
 import { RadioGroup, CheckBox } from '@/components/_shared/form';
 import { styled } from '@mui/material/styles';
@@ -62,7 +62,7 @@ function WorkScheduleCreateForm() {
     {
       event_id: 2,
       title: 'Work Hour',
-      start: new Date (new Date(new Date(new Date().setHours(9)).setMinutes(0)).setDate(new Date().getDate() + 1)),
+      start: new Date(new Date(new Date(new Date().setHours(9)).setMinutes(0)).setDate(new Date().getDate() + 1)),
       end: new Date(new Date(new Date(new Date().setHours(12)).setMinutes(0)).setDate(new Date().getDate() + 1)),
       disabled: false,
       editeable: false
@@ -70,7 +70,7 @@ function WorkScheduleCreateForm() {
     {
       event_id: 2,
       title: 'lunch break',
-      start: new Date (new Date(new Date(new Date().setHours(12)).setMinutes(0)).setDate(new Date().getDate() + 1)),
+      start: new Date(new Date(new Date(new Date().setHours(12)).setMinutes(0)).setDate(new Date().getDate() + 1)),
       end: new Date(new Date(new Date(new Date().setHours(13)).setMinutes(0)).setDate(new Date().getDate() + 1)),
       editable: false,
       color: '#75AD99'
@@ -78,7 +78,7 @@ function WorkScheduleCreateForm() {
     {
       event_id: 2,
       title: 'Work Hour',
-      start: new Date (new Date(new Date(new Date().setHours(13)).setMinutes(0)).setDate(new Date().getDate() + 1)),
+      start: new Date(new Date(new Date(new Date().setHours(13)).setMinutes(0)).setDate(new Date().getDate() + 1)),
       end: new Date(new Date(new Date(new Date().setHours(17)).setMinutes(0)).setDate(new Date().getDate() + 1)),
       disabled: false,
       editeable: false
@@ -176,9 +176,9 @@ function WorkScheduleCreateForm() {
           />
         </Grid>
       </Grid>
-      <Scheduler
+      {/* <Scheduler
         events={dataForEvent}
-      />
+      /> */}
       <CustomModal
         open={openForm}
         handleClose={handleFormClose}
