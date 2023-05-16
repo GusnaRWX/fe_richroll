@@ -40,6 +40,17 @@ export const cnbSlice = createSlice({
     getCompensationComponentOptionFailed: (state) => {
       state.loading = false;
     },
+
+    // Create New CNB Profile
+    postNewCnbProfileRequested: (state) => {
+      state.loading = true;
+    },
+    postNewCnbProfileSuccess: (state, action) => {
+      state.loading = false;
+    },
+    postNewCnbProfileFailed: (state) => {
+      state.loading = false;
+    },
   },
   extraReducers: {
     [HYDRATE]: (state, action) => {
@@ -58,6 +69,9 @@ export const {
   getCompensationComponentOptionRequested,
   getCompensationComponentOptionSuccess,
   getCompensationComponentOptionFailed,
+  postNewCnbProfileRequested,
+  postNewCnbProfileSuccess,
+  postNewCnbProfileFailed,
 } = cnbSlice.actions;
 
 export default cnbSlice.reducer;

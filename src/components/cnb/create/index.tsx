@@ -17,7 +17,10 @@ import {
 } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
 import { useRouter } from "next/router";
-import { getCompensationComponentOptionRequested } from "@/store/reducers/slice/cnb/compensationSlice";
+import {
+  getCompensationComponentOptionRequested,
+  postNewCnbProfileRequested,
+} from "@/store/reducers/slice/cnb/compensationSlice";
 import { useAppDispatch, useAppSelectors } from "@/hooks/index";
 
 export default function CreateCNBComponent() {
@@ -121,16 +124,6 @@ export default function CreateCNBComponent() {
     per: "",
   });
 
-  const options = [
-    { label: "Bonus", value: "bonus" },
-    { label: "Overtime", value: "overtime" },
-    { label: "Allowances", value: "allowances" },
-    { label: "Commission", value: "commission" },
-    { label: "Piece Rate", value: "pieceRate" },
-    { label: "Wage", value: "wage" },
-    { label: "Salary", value: "salary" },
-  ];
-
   const addSuplementary = () => {
     const newData = {
       id: Math.floor(Math.random() * 100 + 1),
@@ -158,13 +151,6 @@ export default function CreateCNBComponent() {
     setSupplementaryList(items);
   };
 
-  React.useEffect(() => {
-    console.log(supplementaryList);
-  }, [supplementaryList]);
-  React.useEffect(() => {
-    console.log(BaseCompensation);
-  }, [BaseCompensation]);
-
   const deleteSuplementary = (i: number) => {
     let items = [...supplementaryList];
     let search = items.filter((item) => {
@@ -172,6 +158,18 @@ export default function CreateCNBComponent() {
     });
     setSupplementaryList(search);
   };
+
+  function CreateNewCnbProfile() {
+    dispatch({
+      type: postNewCnbProfileRequested.toString(),
+      Payload: {
+        companyId: 5,
+        name: "Testing",
+        baseCompensation: BaseCompensation,
+        supplementaryCompensations: supplementaryList,
+      },
+    });
+  }
 
   return (
     <div>
@@ -211,7 +209,13 @@ export default function CreateCNBComponent() {
             sx={{ mr: "12px" }}
             color="primary"
           />
-          <Button fullWidth={false} size="small" label="Save" color="primary" />
+          <Button
+            fullWidth={false}
+            size="small"
+            label="Save"
+            color="primary"
+            onClick={() => CreateNewCnbProfile()}
+          />
         </NextBtnWrapper>
       </div>
       <div
@@ -309,6 +313,7 @@ export default function CreateCNBComponent() {
                     })
                   }
                 >
+                  Save
                   <FormControlLabel
                     value="taxable"
                     control={
