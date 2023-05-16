@@ -2,6 +2,7 @@ import React from 'react';
 import styled from '@emotion/styled';
 import Image from 'next/image';
 import kayaroll from '../../../public/images/kayaroll-logo.png';
+import { OverlayLoading } from '../_shared/common';
 import {
   Card,
   CardContent,
@@ -9,6 +10,7 @@ import {
   Typography,
   Button
 } from '@mui/material';
+import { useAppSelectors } from '@/hooks/index';
 
 const NavHead = styled.div`
  height: 64px;
@@ -40,8 +42,10 @@ const Base = styled.div`
 `;
 
 function SendEmailComponent() {
+  const { register } = useAppSelectors((state) => state);
   return (
     <Base>
+      <OverlayLoading open={register.loading}/>
       <NavHead>
         <div>
           <Image src={kayaroll} alt='logo' height={40} width={150}/>

@@ -25,7 +25,6 @@ function* fetchPostRegister(action: AnyAction) {
         payload: accessToken
       };
       yield call(fetchSendEmail, body);
-      yield delay(2000, true);
       Router.push('/send-email-verification');
     }
   }catch(err) {

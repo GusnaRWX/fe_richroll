@@ -15,6 +15,7 @@ import Notify from '@/components/_shared/common/Notify';
 import { Alert } from '@/components/_shared/common';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { forgotPasswordRequested } from '@/store/reducers/slice/auth/loginSlice';
+import {OverlayLoading} from '@/components/_shared/common';
 
 const LinkComponent = MuiStyled(Link)(({ theme }) => ({
   color: theme.palette.primary.main,
@@ -95,6 +96,7 @@ function ForgotPasswordComponent() {
   };
   return (
     <Base>
+      <OverlayLoading open={login.isLoading} />
       <NavHead>
         <div>
           <Image src={kayaroll} alt='logo' height={40} width={150}/>
