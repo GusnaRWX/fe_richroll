@@ -27,10 +27,11 @@ import {
   patchCompanyProfileRequested,
   patchCompanyProfileSuccess,
   patchCompanyProfileFailed
-} from '../../reducers/slice/company/companySlice';
+} from '@/store/reducers/slice/company/companySlice';
 import { Services } from '@/types/axios';
-import { setResponserMessage } from '../../reducers/slice/responserSlice';
+import { setResponserMessage } from '@/store/reducers/slice/responserSlice';
 import { AxiosError, AxiosResponse } from 'axios';
+import Router from 'next/router';
 
 
 /**
@@ -213,7 +214,7 @@ function* fetchPostCompanyProfile(action: AnyAction) {
     const res: AxiosResponse = yield call(postCompanyProfile, action?.payload);
     if (res.data.code === 201) {
       yield put({ type: postCompanyProfileSuccess.toString(), payload: res.data.data });
-      yield delay(2000);
+      Router.push('/company');
       yield put({
         type: setResponserMessage.toString(),
         payload: {

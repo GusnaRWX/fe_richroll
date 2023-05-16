@@ -26,7 +26,7 @@ const SidebarItem = ({
   return (
     <>
       <ListItemButton
-        onClick={handleOpen}
+        onClick={hasChild ? () => handleOpen() : () => push(path)}
         selected={pathname === path}
       >
         <ListItemIcon sx={{ minWidth: '30px' }}>
