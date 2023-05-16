@@ -9,7 +9,7 @@ import { Close } from '@mui/icons-material';
 
 const CardWrapper = styled.div`
  visibility: hidden;
- width: 30%;
+ width: auto;
  margin: 0 auto;
  background-color: #FFFFFF;
  color: #18181B;
@@ -73,7 +73,7 @@ function Notify({body}: NotifyProps) {
           setOpen(false);
           setMounted(true);
           dispatch({ type: setResponserMessage.toString(), payload: { code: 0, message: null } });
-        }, 3000);
+        }, 5000);
       }
     }
     watchNotify();

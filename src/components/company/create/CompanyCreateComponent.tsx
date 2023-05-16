@@ -333,7 +333,7 @@ const CompanyCreateComponent = ({ companyType, companySector, bank, paymentMetho
     }
     const payload = {
       information: {
-        imageUrl: 'image.com/image123',
+        imageUrl: 'image',
         typeId: values.companyType,
         name: values.companyName,
         npwp: values.companyNPWP,
@@ -346,7 +346,7 @@ const CompanyCreateComponent = ({ companyType, companySector, bank, paymentMetho
         firstLevelCode: values.provinceCompanyAddress,
         secondLevelCode: values.cityCompanyAddress,
         thirdLevelCode: values.subDistrictCompanyAddress,
-        fourthLevelCode: 'kosong',
+        fourthLevelCode: null,
         address: values.addressCompanyAddress,
         zipCode: values.zipCodeCompanyAddress,
       },
