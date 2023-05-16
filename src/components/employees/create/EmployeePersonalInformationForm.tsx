@@ -645,7 +645,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
               customLabel='Use as residential address'
               name='useResidentialCitizenAddress'
               checked={useResidentialAddress}
-              onChange={() => setUseResidentialAddress(prev => !prev)}
+              onChange={() => setUseResidentialAddress((prev: boolean) => !prev)}
             />
           </Grid>
         </Grid>
@@ -681,7 +681,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
               variant='outlined'
               size='small'
               name='countryResidentialAddress'
-              value={values.countryResidentialAddress}
+              value={useResidentialAddress ? values.countryCitizenAddress : values.countryResidentialAddress}
               onChange={(e: unknown) => handleInputChange(convertValue('countryResidentialAddress', e))}
               options={countries}
               error={useResidentialAddress ? '' : errors.countryResidentialAddress}
@@ -698,7 +698,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
               variant='outlined'
               size='small'
               name='provinceResidentialAddress'
-              value={values.provinceResidentialAddress}
+              value={useResidentialAddress ? values.provinceCitizenAddress : values.provinceResidentialAddress}
               onChange={(e: unknown) => handleInputChange(convertValue('provinceResidentialAddress', e))}
               options={administrativeFirst}
               error={useResidentialAddress ? '' : errors.provinceResidentialAddress}
@@ -723,7 +723,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
               variant='outlined'
               size='small'
               name='cityResidentialAddress'
-              value={values.cityResidentialAddress}
+              value={useResidentialAddress ? values.cityCitizenAddress : values.cityResidentialAddress}
               onChange={(e: unknown) => handleInputChange(convertValue('cityResidentialAddress', e))}
               options={administrativeSecond}
               error={useResidentialAddress ? '' : errors.cityResidentialAddress}
@@ -740,7 +740,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
               variant='outlined'
               size='small'
               name='subDistrictResidentialAddress'
-              value={values.subDistrictResidentialAddress}
+              value={useResidentialAddress ? values.subDistrictCitizenAddress : values.subDistrictResidentialAddress}
               onChange={(e: unknown) => handleInputChange(convertValue('subDistrictResidentialAddress', e))}
               options={administrativeThird}
               error={useResidentialAddress ? '' : errors.subDistrictResidentialAddress}
@@ -762,7 +762,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
               name='addressResidentialAddress'
               maxRows={5}
               minRows={3}
-              value={values.addressResidentialAddress}
+              value={useResidentialAddress ? values.addressCitizenAddress : values.addressResidentialAddress}
               onChange={handleInputChange}
               error={useResidentialAddress ? '' : errors.addressResidentialAddress}
               withAsterisk
@@ -778,7 +778,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
               customLabel='ZIP Code'
               size='small'
               name='zipCodeResidentialAddress'
-              value={values.zipCodeResidentialAddress}
+              value={useResidentialAddress ? values.zipCodeCitizenAddress : values.zipCodeResidentialAddress}
               onChange={handleInputChange}
               error={useResidentialAddress ? '' : errors.zipCodeResidentialAddress}
             />
@@ -869,7 +869,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
               color='primary'
               name='PersonalIDPersonalID'
               checked={values.PersonalIDPersonalID}
-              onChange={() => setIsPermanentPersonalID(prev => !prev)}
+              onChange={() => setIsPermanentPersonalID((prev: boolean) => !prev)}
             />
           </Grid>
         </Grid>
@@ -1005,7 +1005,12 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
         gap={2}
       >
         <Grid item>
-          <Button onClick={() => nextPage(0)} label='Back' variant='outlined' />
+          <Button onClick={() => {
+            nextPage(0);
+            if (Object.values(values).some(value => value === '') || useResidentialAddress || isPermanentPersonalID) {
+              setStorages([{ name: 'emp-personal-information', value: JSON.stringify({ ...values, useResidentialAddress, isPermanentPersonalID }) }]);
+            }
+          }} label='Back' variant='outlined' />
         </Grid>
         <Grid item>
           <Button onClick={() => {
