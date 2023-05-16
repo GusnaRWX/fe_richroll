@@ -94,7 +94,7 @@ export default function CreateCompanyProfileComponent() {
   interface supplementType {
     id: number;
     compensation: string;
-    amount: number;
+    amount: number | null;
     taxStatus: string;
     per: string;
   }
@@ -131,7 +131,7 @@ export default function CreateCompanyProfileComponent() {
     const newData = {
       id: Math.floor(Math.random() * 100 + 1),
       compensation: "",
-      amount: 0,
+      amount: null,
       taxStatus: "",
       per: "",
     };
@@ -184,7 +184,7 @@ export default function CreateCompanyProfileComponent() {
             parentColor="primary.500"
             icons={<ArrowBack sx={{ color: "#FFFFFF" }} />}
             onClick={() => {
-              router.push("/");
+              router.push("/cnb");
             }}
           />
           <Typography
