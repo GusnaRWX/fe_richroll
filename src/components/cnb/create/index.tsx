@@ -316,7 +316,7 @@ export default function CreateCNBComponent() {
             </div>
             <div>
               <Typography>
-                {BaseCompensation?.compensation === "wage" ? "Rate" : "Amount"}
+                {BaseCompensation?.compensation === "Wage" ? "Rate" : "Amount"}
                 <span style={{ color: "red" }}>*</span>
               </Typography>
               <div
@@ -467,7 +467,7 @@ export default function CreateCNBComponent() {
                       </div>
                       <div>
                         <Typography>
-                          {suplement.compensation === "wage"
+                          {suplement.compensation === "Wage"
                             ? "Rate"
                             : "Amount"}
                           <span style={{ color: "red" }}>*</span>
