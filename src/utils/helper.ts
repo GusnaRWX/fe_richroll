@@ -37,11 +37,91 @@ export const getFileExtension = (filename: string): string => {
   return filename.substring(filename.lastIndexOf('.') + 1).toLowerCase();
 };
 
-export const getCompanyID = () => {
-  if (typeof window !== 'undefined') {
-    const id = getStorage('companyID');
+interface CompanyDataParse {
+  id: string | null;
+  imageUrl: string | null;
+  name: string | null;
+  sector: string | null;
+}
 
-    return id;
+export const getCompanyData = () => {
+  if (typeof window !== 'undefined') {
+    const id = getStorage('kaya_company');
+    let parse: CompanyDataParse;
+    if (id) {
+      parse = JSON.parse(id);
+      return parse;
+    } else {
+      return null;
+    }
   }
   return null;
+};
+
+export const convertValue = (name, event) => {
+  const obj = {
+    target: {
+      name, value: event.target.value
+    }
+  };
+  return obj;
+};
+
+export const convertChecked = (event) => {
+  const { name, checked } = event.target;
+
+  const obj = {
+    target: {
+      name, value: checked
+    }
+  };
+  return obj;
+};
+
+export const convertDateValue = (name, event) => {
+  console.log('helpers', event);
+  const obj = {
+    target: {
+      name, value: event.$d
+    }
+  };
+  return obj;
+};
+
+export const convertImageParams = (name, value, callback, onClose) => {
+  const files = value;
+  const reader = new FileReader();
+  reader.readAsDataURL(value);
+  reader.onloadend = function () {
+    callback(reader.result as string);
+  };
+  onClose();
+  const obj = {
+    target: {
+      name, value: [files]
+    }
+  };
+  return obj;
+};
+
+export const base64ToFile = (base64String: string | undefined, fileName: string): File | null => {
+  if (!base64String) {
+    return null;
+  }
+
+  const mimeType = base64String?.split(';')[0].split(':')[1];
+
+  // Remove the data URL prefix
+  const encodedData = base64String?.split(',')[1];
+
+  // Convert base64 to binary
+  const buffer = Buffer?.from(encodedData, 'base64');
+
+  // Create a Blob from the Buffer
+  const blob = new Blob([buffer as BlobPart], { type: mimeType });
+
+  // Create a File from the Blob
+  const file = new File([blob], fileName);
+
+  return file;
 };

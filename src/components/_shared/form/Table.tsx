@@ -1,10 +1,11 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode} from 'react';
 import {
   Table as MuiTable,
   TableBody,
   TableContainer,
   TableHead,
-  TablePagination
+  TablePagination,
+  Box
 } from '@mui/material';
 
 interface TableProps {
@@ -30,7 +31,6 @@ function Table({
 }: TableProps) {
   const HeadComponent = headChildren;
   const BodyComponent = bodyChildren;
-  console.log(count);
   return (
     <>
       <TableContainer>
@@ -43,15 +43,17 @@ function Table({
           </TableBody>
         </MuiTable>
       </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={rowsPerPageOptions}
-        component='div'
-        count={count}
-        page={page}
-        rowsPerPage={rowsPerPage}
-        onPageChange={onChangePage}
-        onRowsPerPageChange={onRowsPerPagesChange}
-      />
+      <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
+        <TablePagination
+          rowsPerPageOptions={rowsPerPageOptions}
+          count={count}
+          page={page}
+          rowsPerPage={rowsPerPage}
+          onPageChange={onChangePage}
+          onRowsPerPageChange={onRowsPerPagesChange}
+          sx={{ borderBottom: 'none' }}
+        />
+      </Box>
     </>
 
   );

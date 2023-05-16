@@ -14,6 +14,12 @@ export declare namespace Auth {
     password: string;
   }
 
+  export interface ResetPasswordPayload {
+    newPassword: string;
+    confirmPassword: string;
+    token: string;
+  }
+
   export interface RegisterPayload {
     email: string;
     password: string;
@@ -29,5 +35,12 @@ export declare namespace Auth {
     name: string;
     email: string;
     roles: string[] | null
+  }
+
+  export interface EmployeeSetNewPassword {
+    email: string;
+    password: string;
+    confirmationPassword: string;
+    token: string
   }
 }

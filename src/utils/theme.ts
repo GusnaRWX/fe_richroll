@@ -435,7 +435,10 @@ const theme = createTheme({
           backgroundColor: '#FFF',
           ' .Mui-disabled': {
             backgroundColor: palette.grey[100],
-          }
+          },
+          '& .MuiInputBase-root': {
+            color: palette.grey[600],
+          },
         },
       }
     },
@@ -444,6 +447,14 @@ const theme = createTheme({
         root: {
           boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.06), 0px 1px 3px rgba(0, 0, 0, 0.1)',
           borderRadius: '8px'
+        }
+      }
+    },
+    MuiFormHelperText: {
+      styleOverrides: {
+        root: {
+          margin: '5px 0',
+          fontSize: '.8rem'
         }
       }
     }

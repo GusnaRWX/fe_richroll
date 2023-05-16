@@ -137,7 +137,7 @@ const CompanyComponent = ({ companies }: Company.Component) => {
   const router = useRouter();
   const handleClick = (val, path) => {
     setStorages([
-      {name: 'companyID', value: val.id}
+      {name: 'kaya_company', value: JSON.stringify({id: val.id, imageUrl: val.information?.imageUrl || '', name: val.information?.name, sector: val.information?.sector?.name || '-'})}
     ]);
     router.push(path);
   };

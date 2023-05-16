@@ -6,7 +6,10 @@ import {
   TableCell,
   TableRow,
   Avatar,
-  Chip
+  Chip,
+  Box,
+  TableSortLabel,
+  Typography
 } from '@mui/material';
 import { Input } from '../_shared/form';
 import { Search  } from '@mui/icons-material';
@@ -18,7 +21,9 @@ import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { getEmployeeRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
-import { getCompanyID } from '@/utils/helper';
+import { getCompanyData } from '@/utils/helper';
+import dayjs from 'dayjs';
+import { visuallyHidden } from '@mui/utils';
 
 const ButtonWrapper = styled.div`
  display: flex;
@@ -37,18 +42,20 @@ const NameWrapper = styled.div`
 
 
 const headerItems = [
-  { key: 'id', label: 'ID' },
-  { key: 'name', label: 'Name' },
-  { key: 'position', label: 'Position' },
-  { key: 'department', label: 'Department' },
-  { key: 'status', label: 'Status' },
-  { key: 'created_at', label: 'Created on' },
-  { key: 'last_login', label: 'Last Login' },
+  { id: 'id', label: 'ID' },
+  { id: 'user.name', label: 'Name' },
+  { id: 'position.name', label: 'Position' },
+  { id: 'department.name', label: 'Department' },
+  { id: 'user.isActive', label: 'Status' },
+  { id: 'user.createdAt', label: 'Created on' },
+  { id: 'user.createdAt', label: 'Last Login' },
 ];
 
 interface EmployeeTableProps {
   tabValue: number
 }
+
+type Order = 'asc' | 'desc'
 
 function EmployeesTable({
   tabValue
@@ -59,58 +66,53 @@ function EmployeesTable({
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
   const [search, setSearch] = useState('');
-  const companyID = getCompanyID();
+  const [direction, setDirection] = useState<Order>('desc');
+  const [sort, setSort] = useState('');
+  const [hydrated, setHaydrated] = useState(false);
+  const companyData = getCompanyData();
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
-    dispatch({
-      type: getEmployeeRequested.toString(),
-      payload: {
-        page: newPage + 1,
-        itemPerPage: rowsPerPage,
-        sort: '',
-        direction: false,
-        search: search,
-        isActive: tabValue === 0 ? true : false,
-        companyID: companyID
-      }
-    });
   };
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 0));
     setPage(0);
   };
   const handleSearch = (e) => {
-    setSearch(e.target.value);
     if (e.key === 'Enter') {
-      dispatch({
-        type: getEmployeeRequested.toString(),
-        payload: {
-          page: page + 1,
-          itemPerPage: rowsPerPage,
-          sort: '',
-          direction: false,
-          search: e.target.value,
-          isActive: tabValue === 0 ? true : false,
-          companyID: companyID
-        }
-      });
+      setSearch(e.target.value);
     }
   };
 
+  const handleRequestSort = (event: React.MouseEvent<unknown>, headId: string) => {
+    const isAsc = sort === headId && direction === 'asc';
+    setDirection(isAsc ? 'desc' : 'asc');
+    setSort(headId);
+  };
+
   useEffect(() => {
+    console.log(companyData);
+    
     dispatch({
       type: getEmployeeRequested.toString(),
       payload: {
         page: page + 1,
         itemPerPage: rowsPerPage,
-        sort: '',
-        direction: false,
+        sort: sort,
+        direction: direction.toUpperCase(),
         search: search,
-        isActive: tabValue === 0 ? true : false,
-        companyID: companyID
+        isActive: tabValue === 0 ? false : true,
+        companyID: companyData?.id
       }
     });
-  }, [rowsPerPage, page, tabValue]);
+  }, [rowsPerPage, page, tabValue, search, sort, direction]);
+
+  useEffect(() => {
+    setHaydrated(true);
+  }, []);
+
+  if (!hydrated) {
+    return null;
+  }
   return (
     <>
       <Grid container spacing={2}>
@@ -151,8 +153,21 @@ function EmployeesTable({
         headChildren={
           <TableRow>
             {
-              headerItems.map((item, index) => (
-                <TableCell key={index}>{item.label}</TableCell>
+              headerItems.map((item) => (
+                <TableCell key={item.id} sortDirection={sort === item.id ? direction : false}>
+                  <TableSortLabel
+                    active={sort === item.id}
+                    direction={sort === item.id ? direction : 'asc'}
+                    onClick={(e) => handleRequestSort(e, item.id)}
+                  >
+                    {item.label}
+                    {sort === item.id ? (
+                      <Box component='span' sx={visuallyHidden}>
+                        {direction === 'asc' ? 'sorted descending' : 'sorted ascending'}
+                      </Box>
+                    ): null}
+                  </TableSortLabel>
+                </TableCell>
               ))
             }
           </TableRow>
@@ -160,54 +175,60 @@ function EmployeesTable({
         bodyChildren={
           <>
             {
-              typeof data?.items !== 'undefined' ? (
-                data?.items.map((item, index) => (
-                  <TableRow key={index}>
-                    <TableCell>{item.id}</TableCell>
-                    <TableCell>
-                      <NameWrapper>
-                        <Avatar
-                          src={item.user.userInformation.picture}
-                          alt={item.user.userInformation.picture}
-                          sx={{
-                            width: 24, height: 24
-                          }}
-                        />
-                    &nbsp;{item.user.name}
-                      </NameWrapper>
-                    </TableCell>
-                    <TableCell>{item.position.name}</TableCell>
-                    <TableCell>{item.department.name}</TableCell>
-                    <TableCell>{item.user.isActive ? (
-                      <Chip color='secondary' label='active' />
-                    ):(
-                      <Chip label='Non Active' sx={{ backgroundColor: '#FEE2E2' }}/>
-                    )}</TableCell>
-                    <TableCell>{item.user.createdAt}</TableCell>
-                    <TableCell>-</TableCell>
-                    <TableCell>
-                      <ButtonWrapper>
-                        <IconButton
-                          parentColor='primary.50'
-                          onClick={() => { router.push('/company-management/employees/detail/' + item.id); }}
-                          icons={
-                            <HiPencilAlt fontSize={20} color='#223567'/>
-                          }
-                        />
-                        <IconButton
-                          parentColor='grey.100'
-                          disabled
-                          icons={
-                            <BsTrashFill fontSize={20} color='#D1D5DB'/>
-                          }
-                        />
-                      </ButtonWrapper>
-                    </TableCell>
+              typeof data?.items !== 'undefined'  ? (
+                data?.items.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={12} align='center'><Typography>Data not found</Typography></TableCell>
                   </TableRow>
-                ))
+                ) : (
+                  data?.items.map((item, index) => (
+                    <TableRow key={index}>
+                      <TableCell>{item.id}</TableCell>
+                      <TableCell>
+                        <NameWrapper>
+                          <Avatar
+                            src={item?.user?.userInformation !== null ? item?.user?.userInformation.picture : item.user.name}
+                            alt={item?.user?.userInformation !== null ? item?.user?.userInformation.picture : item.user.name}
+                            sx={{
+                              width: 24, height: 24
+                            }}
+                          />
+                    &nbsp;{item.user.name}
+                        </NameWrapper>
+                      </TableCell>
+                      <TableCell>{item.position.name}</TableCell>
+                      <TableCell>{item.department.name}</TableCell>
+                      <TableCell>{item.user.isActive ? (
+                        <Chip color='secondary' label='active' />
+                      ):(
+                        <Chip label='Non Active' sx={{ backgroundColor: '#FEE2E2' }}/>
+                      )}</TableCell>
+                      <TableCell>{dayjs(item.user.createdAt).format('YYYY-MM-DD H:m:s')}</TableCell>
+                      <TableCell>-</TableCell>
+                      <TableCell>
+                        <ButtonWrapper>
+                          <IconButton
+                            parentColor='primary.50'
+                            onClick={() => { router.push('/company-management/employees/detail/' + item.id); }}
+                            icons={
+                              <HiPencilAlt fontSize={20} color='#223567'/>
+                            }
+                          />
+                          <IconButton
+                            parentColor='grey.100'
+                            disabled
+                            icons={
+                              <BsTrashFill fontSize={20} color='#D1D5DB'/>
+                            }
+                          />
+                        </ButtonWrapper>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )
               ): (
                 <TableRow>
-                  <TableCell colSpan={12} align='center'>Data not found</TableCell>
+                  <TableCell colSpan={12} align='center'><Typography>Data not found</Typography></TableCell>
                 </TableRow>
               )
             }

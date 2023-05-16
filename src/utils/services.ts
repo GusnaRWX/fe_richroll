@@ -64,7 +64,7 @@ export const get = (url: string, params?: string, headers?: AxiosRequestHeaders)
 };
 
 /**
- * Func Post / Put
+ * Func Post / Put / patch
  *
  * @param {String} url
  * @param {*} body
@@ -75,6 +75,10 @@ export const post = <T>(url: string, body: T) => {
 
 export const put = <T>(url: string, body: T) => {
   return service.put(`${url}`, body);
+};
+
+export const patch = <T>(url: string, body: T) => {
+  return service.patch(`${url}`, body);
 };
 
 /**

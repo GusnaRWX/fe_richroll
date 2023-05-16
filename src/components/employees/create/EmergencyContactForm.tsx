@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { Typography, Box, Grid, FormControl, Select, MenuItem} from '@mui/material';
+import { Typography, Box, Grid, FormControl, Select, MenuItem } from '@mui/material';
 import { Input, Button } from '@/components/_shared/form';
-import {styled as MuiStyled} from '@mui/material/styles';
-import { useForm } from '@/hooks/index';
-import { useAppDispatch, useAppSelectors } from '@/hooks/index';
+import { styled as MuiStyled } from '@mui/material/styles';
+import { useForm, useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { postEmergencyRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
+import { Alert, Text } from '@/components/_shared/common';
+import CancelIcon from '@mui/icons-material/Cancel';
+import { getStorage, setStorages } from '@/utils/storage';
 
 const AsteriskComponent = MuiStyled('span')(({ theme }) => ({
   color: theme.palette.error.main
@@ -15,22 +17,24 @@ interface EmergencyProps {
   nextPage: (_val: number) => void;
 }
 
-function EmergencyContactForm({refProp, nextPage} :EmergencyProps) {
+function EmergencyContactForm({ refProp, nextPage }: EmergencyProps) {
   const dispatch = useAppDispatch();
-  const {employee} = useAppSelectors((state) => state);
+  const { employeeID } = useAppSelectors((state) => state.employee);
+  const [errorFields, setErrorFields] = useState(false);
+  const persistInformation = getStorage('emp-emergency-contact') ? JSON.parse(getStorage('emp-emergency-contact') as string) : null;
   const [initialValues, setInitialValues] = useState({
-    fullNamePrimary: '',
-    relationPrimary: '',
-    phoneNumberPrefixPrimary: '',
-    phoneNumberPrimary: '',
-    fullNameSecondary: '',
-    relationSecondary: '',
-    phoneNumberPrefixSecondary: '',
-    phoneNumberSecondary: ''
+    fullNamePrimary: persistInformation?.fullNamePrimary !== undefined ? persistInformation?.fullNamePrimary : '',
+    relationPrimary: persistInformation?.relationPrimary !== undefined ? persistInformation?.relationPrimary : '',
+    phoneNumberPrefixPrimary: persistInformation?.phoneNumberPrefixPrimary !== undefined ? persistInformation?.phoneNumberPrefixPrimary : '',
+    phoneNumberPrimary: persistInformation?.phoneNumberPrimary !== undefined ? persistInformation?.phoneNumberPrimary : '',
+    fullNameSecondary: persistInformation?.fullNameSecondary !== undefined ? persistInformation?.fullNameSecondary : '',
+    relationSecondary: persistInformation?.relationSecondary !== undefined ? persistInformation?.relationSecondary : '',
+    phoneNumberPrefixSecondary: persistInformation?.phoneNumberPrefixSecondary !== undefined ? persistInformation?.phoneNumberPrefixSecondary : '',
+    phoneNumberSecondary: persistInformation?.phoneNumberSecondary !== undefined ? persistInformation?.phoneNumberSecondary : ''
   });
 
   const validate = (fieldOfValues = values) => {
-    const temp = {...errors};
+    const temp = { ...errors };
 
     if ('fullNamePrimary' in fieldOfValues)
       temp.fullNamePrimary = fieldOfValues.fullNamePrimary ? '' : 'This field is required';
@@ -48,10 +52,10 @@ function EmergencyContactForm({refProp, nextPage} :EmergencyProps) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (validate()){
-      console.log('here');
+    if (validate()) {
+      setErrorFields(false);
       const data = {
-        employeeID: employee.employeeID,
+        employeeID: employeeID,
         primary: {
           name: values.fullNamePrimary,
           relationship: values.relationPrimary,
@@ -79,17 +83,35 @@ function EmergencyContactForm({refProp, nextPage} :EmergencyProps) {
         phoneNumberPrefixSecondary: '',
         phoneNumberSecondary: ''
       });
+    } else {
+      setErrorFields(true);
     }
   };
 
   const { values, errors, setErrors, handleInputChange } = useForm(initialValues, true, validate);
   return (
     <>
-      <Box sx={{ marginBottom: '3rem' }}>
-        <Typography component='h3' fontSize={18} color='primary'>Emergency Contact</Typography>
+      {
+        errorFields && (
+          <Alert
+            severity='error'
+            content='Please fill in all the mandatory fields'
+            icon={<CancelIcon />}
+          />
+        )
+      }
+      <Box>
+        <Text
+          component='h3'
+          variant='text-lg'
+          fontWeight={700}
+          color='primary.500'
+          title='Emergency Contact'
+          mb='16px'
+        />
       </Box>
       <form ref={refProp} onSubmit={(e) => handleSubmit(e)}>
-        <Box sx={{ marginBottom: '3rem', width:'100%' }}>
+        <Box sx={{ marginBottom: '3rem', width: '100%' }}>
           <Typography component='h3' fontSize={18} color='primary'>Primary</Typography>
           <Grid container spacing={2} sx={{ marginBottom: '1.5rem', marginTop: '1rem' }}>
             <Grid item xs={6} md={6} lg={6} xl={6}>
@@ -163,9 +185,9 @@ function EmergencyContactForm({refProp, nextPage} :EmergencyProps) {
           </Grid>
         </Box>
 
-        <Box sx={{  marginBottom: '3rem', width:'100%' }}>
+        <Box sx={{ marginBottom: '3rem', width: '100%' }}>
           <Typography component='h3' fontSize={18} color='primary'>Secondary</Typography>
-          <Grid  container spacing={2} sx={{ marginBottom: '1.5rem', marginTop: '1rem' }}>
+          <Grid container spacing={2} sx={{ marginBottom: '1.5rem', marginTop: '1rem' }}>
             <Grid item xs={6} md={6} lg={6} xl={6}>
               <Input
                 name='fullNameSecondary'
@@ -243,7 +265,10 @@ function EmergencyContactForm({refProp, nextPage} :EmergencyProps) {
             <Button onClick={() => nextPage(1)} label='Back' variant='outlined' />
           </Grid>
           <Grid item>
-            <Button onClick={() => nextPage(3)} label='Next' />
+            <Button onClick={() => {
+              nextPage(3);
+              setStorages([{ name: 'emp-emergency-contact', value: JSON.stringify({ ...values }) }]);
+            }} label='Next' />
           </Grid>
         </Grid>
       </form>

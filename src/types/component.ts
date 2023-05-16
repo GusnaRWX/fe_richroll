@@ -1,5 +1,5 @@
 import { IconType } from 'react-icons';
-import { ButtonProps, CardProps, IconButtonProps, TextFieldProps, TextareaAutosizeProps } from '@mui/material';
+import { ButtonProps, CardProps, CheckboxProps, IconButtonProps, SelectProps, TextFieldProps, TextareaAutosizeProps } from '@mui/material';
 import { ReactNode } from 'react';
 
 export declare namespace Login {
@@ -43,6 +43,7 @@ export declare namespace CompanyCreate {
     companySector: [];
     bank: [];
     paymentMethod: [];
+    countries: [];
   }
 }
 
@@ -67,9 +68,19 @@ export declare namespace SharedComponent {
     withAsterisk?: boolean;
   }
 
+  export type SelectInput = SelectProps & {
+    customLabel?: string;
+    options?: Array<{ label: string, value: string }> | undefined;
+    withAsterisk?: boolean;
+  }
+
   export type ComponentButton = ButtonProps & {
     label: string;
     isLoading?: boolean;
+  }
+
+  export type CheckboxInput = CheckboxProps & {
+    customLabel: string;
   }
 
   export type ComponentIconButton = IconButtonProps & {
@@ -85,5 +96,17 @@ export declare namespace SharedComponent {
     customLabel?: string;
     withAsterisk?: boolean;
     error?: string;
+  }
+}
+
+export declare namespace AuthEmployee {
+  export interface SetNewPassword {
+    email: string;
+    token: string
+  }
+
+  export interface HaveAccount {
+    email: string;
+    token: string
   }
 }
