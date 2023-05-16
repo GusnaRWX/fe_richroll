@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { IconButton } from '@/components/_shared/form';
 import { Card, Typography, Button as MuiButton, Tab, Tabs, Box } from '@mui/material';
@@ -90,11 +90,12 @@ function EmployeeCreateComponent() {
   const employeeRef = useRef<HTMLFormElement>(null);
   const emergencyRef = useRef<HTMLFormElement>(null);
   const personalInformationRef = useRef<HTMLFormElement>(null);
-  const [informationValue, setInformationValue] = useState<any>({})
+  const [informationValue, setInformationValue] = useState<any>({});
+  const [personalInformationValue, setPersonalInformationValue] = useState<any>({});
 
   useEffect(() => {
-    console.log(informationValue, 'here fuck');
-  }, [informationValue]);
+    console.log(personalInformationValue, 'here fuck');
+  }, [personalInformationValue]);
 
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -163,7 +164,7 @@ function EmployeeCreateComponent() {
             <EmployeeInformationFormClient nextPage={handleNext} refProp={employeeRef} setValues={setInformationValue} infoValues={informationValue} />
           </TabPanel>
           <TabPanel value={value} index={1}>
-            <EmployeePersonalInformationFormClient nextPage={handleNext} refProp={personalInformationRef} />
+            <EmployeePersonalInformationFormClient nextPage={handleNext} refProp={personalInformationRef} setValues={setPersonalInformationValue} personalValues={personalInformationValue} />
           </TabPanel>
           <TabPanel value={value} index={2}>
             <EmergencyContactFormClient nextPage={setValue} refProp={emergencyRef} />
