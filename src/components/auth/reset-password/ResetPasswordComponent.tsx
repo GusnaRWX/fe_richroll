@@ -117,7 +117,12 @@ function ResetPasswordComponent() {
       <OverlayLoading open={login.isLoading}/>
       {
         [200, 201].includes(responser.code) && (
-          <Notify body={responser.message}/>
+          <Notify error={false} body={responser.message}/>
+        )
+      }
+      {
+        [400, 401].includes(responser.code) && (
+          <Notify error={true} body='Please check your input or check your authorization'/>
         )
       }
       <Card sx={{ width: '585px', height: '75%' }}>

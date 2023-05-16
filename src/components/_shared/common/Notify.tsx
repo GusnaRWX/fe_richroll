@@ -5,7 +5,7 @@ import { setResponserMessage } from '@/store/reducers/slice/responserSlice';
 import { BsCheckCircle } from 'react-icons/bs';
 import { IconButton, Typography } from '@mui/material';
 import { Close } from '@mui/icons-material';
-
+import { ErrorOutlineOutlined } from '@mui/icons-material';
 
 const CardWrapper = styled.div`
  visibility: hidden;
@@ -58,9 +58,10 @@ const MessageWrapper = styled.div`
 
 interface NotifyProps {
   body: string;
+  error: boolean
 }
 
-function Notify({body}: NotifyProps) {
+function Notify({body, error}: NotifyProps) {
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const dispatch = useAppDispatch();
@@ -80,16 +81,36 @@ function Notify({body}: NotifyProps) {
   }, [open]);
 
   return (
-    <CardWrapper className={open ? 'open' : ''}>
-      <ContentWrapaper>
-        <BsCheckCircle fontSize={20} style={{ color: '#4ADE80' }}/>
-        <MessageWrapper>
-          <Typography fontWeight='bold'>Successfully Saved!</Typography>
-          <Typography color='grey'>{body}</Typography>
-        </MessageWrapper>
-        <IconButton sx={{ margin: 0 }} onClick={() => setOpen(false)}><Close /></IconButton>
-      </ContentWrapaper>
-    </CardWrapper>
+    <>
+      {
+        !error && (
+          <CardWrapper className={open ? 'open' : ''}>
+            <ContentWrapaper>
+              <BsCheckCircle fontSize={20} style={{ color: '#4ADE80' }}/>
+              <MessageWrapper>
+                <Typography fontWeight='bold'>Successfully Saved!</Typography>
+                <Typography color='grey'>{body}</Typography>
+              </MessageWrapper>
+              <IconButton sx={{ margin: 0 }} onClick={() => setOpen(false)}><Close /></IconButton>
+            </ContentWrapaper>
+          </CardWrapper>
+        )
+      }
+      {
+        error && (
+          <CardWrapper className={open ? 'open' : ''}>
+            <ContentWrapaper>
+              <ErrorOutlineOutlined sx={{ color: '#ff3333' }}/>
+              <MessageWrapper>
+                <Typography fontWeight='bold'>Request Failed!</Typography>
+                <Typography color='grey'>{body}</Typography>
+              </MessageWrapper>
+              <IconButton sx={{ margin: 0 }} onClick={() => setOpen(false)}><Close /></IconButton>
+            </ContentWrapaper>
+          </CardWrapper>
+        )
+      }
+    </>
   );
 }
 
