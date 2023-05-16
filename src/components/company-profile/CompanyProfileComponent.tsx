@@ -6,7 +6,7 @@ import { styled } from '@mui/material/styles';
 import { Edit } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
-import { postCompanyDetailRequested } from '@/store/reducers/slice/company/companySlice';
+import { getCompanyDetailRequested } from '@/store/reducers/slice/company/companySlice';
 import { getCompanyData } from '@/utils/helper';
 
 const ButtonWrapper = styled(Box)(({
@@ -67,7 +67,7 @@ function CompanyProfileComponent() {
     console.log(data);
     
     dispatch({
-      type: postCompanyDetailRequested.toString(),
+      type: getCompanyDetailRequested.toString(),
       payload: {
         id: companyData?.id
       }
@@ -115,7 +115,7 @@ function CompanyProfileComponent() {
                 <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Company Logo</Typography>
                 <Box component='div' sx={{ position: 'relative', width: '100px', height: '100px', border: '1px solid #E5E7EB', padding: '8px' }}>
                   <Image
-                    src={ImageType.PLACEHOLDER_COMPANY}
+                    src={data?.information?.imageUrl && data?.information?.imageUrl.includes('http') ? data?.information?.imageUrl : ImageType.PLACEHOLDER_COMPANY}
                     fill={true}
                     style={{ objectFit: 'contain' }}
                     alt={companyData?.name || 'image'}
@@ -165,17 +165,17 @@ function CompanyProfileComponent() {
               </Grid>
               <Grid item xs={6} md={6} lg={6} xl={6}>
                 <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Province</Typography>
-                <Typography component='div' variant='text-sm' color='#4B5563'>{data?.address?.firstLevelCode || '-'}</Typography>
+                <Typography component='div' variant='text-sm' color='#4B5563'>{data?.address?.firstLevel?.name || '-'}</Typography>
               </Grid>
             </Grid>
             <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
               <Grid item xs={6} md={6} lg={6} xl={6}>
                 <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>City</Typography>
-                <Typography component='div' variant='text-sm' color='#4B5563'>{data?.address?.secondLevelCode || '-'}</Typography>
+                <Typography component='div' variant='text-sm' color='#4B5563'>{data?.address?.secondLevel?.name || '-'}</Typography>
               </Grid>
               <Grid item xs={6} md={6} lg={6} xl={6}>
                 <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Sub-district</Typography>
-                <Typography component='div' variant='text-sm' color='#4B5563'>{data?.address?.thirdLevelCode || '-'}</Typography>
+                <Typography component='div' variant='text-sm' color='#4B5563'>{data?.address?.thirdLevel?.name || '-'}</Typography>
               </Grid>
             </Grid>
             <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>

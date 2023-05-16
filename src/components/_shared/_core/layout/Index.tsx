@@ -72,7 +72,7 @@ const Layout = ({
       <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', px: '16px', gap: '12px' }}>
         <Box component='div' sx={{ position: 'relative', width: '60px', height: '60px' }}>
           <Image
-            src={ImageType.PLACEHOLDER_COMPANY}
+            src={companyData?.imageUrl && companyData?.imageUrl.includes('http') ? companyData?.imageUrl : ImageType.PLACEHOLDER_COMPANY}
             fill={true}
             style={{ objectFit: 'contain' }}
             alt={companyData?.name || 'image'}

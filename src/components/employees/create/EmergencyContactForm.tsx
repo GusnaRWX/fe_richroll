@@ -2,11 +2,9 @@ import React, { useState } from 'react';
 import { Typography, Box, Grid, FormControl, Select, MenuItem } from '@mui/material';
 import { Input, Button } from '@/components/_shared/form';
 import { styled as MuiStyled } from '@mui/material/styles';
-import { useForm, useAppDispatch, useAppSelectors } from '@/hooks/index';
-import { postEmergencyRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
+import { useForm, useAppSelectors } from '@/hooks/index';
 import { Alert, Text } from '@/components/_shared/common';
 import CancelIcon from '@mui/icons-material/Cancel';
-import { getStorage, setStorages } from '@/utils/storage';
 
 const AsteriskComponent = MuiStyled('span')(({ theme }) => ({
   color: theme.palette.error.main
@@ -15,22 +13,23 @@ const AsteriskComponent = MuiStyled('span')(({ theme }) => ({
 interface EmergencyProps {
   refProp: React.Ref<HTMLFormElement>
   nextPage: (_val: number) => void;
+  setValues: (_val: any) => void;
+  emergencyValues: any;
 }
 
-function EmergencyContactForm({ refProp, nextPage }: EmergencyProps) {
-  const dispatch = useAppDispatch();
+function EmergencyContactForm({ refProp, nextPage, setValues, emergencyValues }: EmergencyProps) {
   const { employeeID } = useAppSelectors((state) => state.employee);
   const [errorFields, setErrorFields] = useState(false);
-  const persistInformation = getStorage('emp-emergency-contact') ? JSON.parse(getStorage('emp-emergency-contact') as string) : null;
-  const [initialValues, setInitialValues] = useState({
-    fullNamePrimary: persistInformation?.fullNamePrimary !== undefined ? persistInformation?.fullNamePrimary : '',
-    relationPrimary: persistInformation?.relationPrimary !== undefined ? persistInformation?.relationPrimary : '',
-    phoneNumberPrefixPrimary: persistInformation?.phoneNumberPrefixPrimary !== undefined ? persistInformation?.phoneNumberPrefixPrimary : '',
-    phoneNumberPrimary: persistInformation?.phoneNumberPrimary !== undefined ? persistInformation?.phoneNumberPrimary : '',
-    fullNameSecondary: persistInformation?.fullNameSecondary !== undefined ? persistInformation?.fullNameSecondary : '',
-    relationSecondary: persistInformation?.relationSecondary !== undefined ? persistInformation?.relationSecondary : '',
-    phoneNumberPrefixSecondary: persistInformation?.phoneNumberPrefixSecondary !== undefined ? persistInformation?.phoneNumberPrefixSecondary : '',
-    phoneNumberSecondary: persistInformation?.phoneNumberSecondary !== undefined ? persistInformation?.phoneNumberSecondary : ''
+  const [initialValues] = useState({
+    employeeID: employeeID,
+    fullNamePrimary: emergencyValues?.fullNamePrimary,
+    relationPrimary: emergencyValues?.relationPrimary,
+    phoneNumberPrefixPrimary: emergencyValues?.phoneNumberPrefixPrimary,
+    phoneNumberPrimary: emergencyValues?.phoneNumberPrimary,
+    fullNameSecondary: emergencyValues?.fullNameSecondary,
+    relationSecondary: emergencyValues?.relationSecondary,
+    phoneNumberPrefixSecondary: emergencyValues?.phoneNumberPrefixSecondary,
+    phoneNumberSecondary: emergencyValues?.phoneNumberSecondary
   });
 
   const validate = (fieldOfValues = values) => {
@@ -53,39 +52,19 @@ function EmergencyContactForm({ refProp, nextPage }: EmergencyProps) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validate()) {
+      setValues({...values});
+      nextPage(3);
       setErrorFields(false);
-      const data = {
-        employeeID: employeeID,
-        primary: {
-          name: values.fullNamePrimary,
-          relationship: values.relationPrimary,
-          phoneNumberPrefix: values.phoneNumberPrefixPrimary,
-          phoneNumber: values.phoneNumberPrimary
-        },
-        secondary: {
-          name: values.fullNameSecondary,
-          relationship: values.relationSecondary,
-          phoneNumberPrefix: values.phoneNumberPrefixSecondary,
-          phoneNumber: values.phoneNumberSecondary
-        }
-      };
-      dispatch({
-        type: postEmergencyRequested.toString(),
-        payload: data
-      });
-      setInitialValues({
-        fullNamePrimary: '',
-        relationPrimary: '',
-        phoneNumberPrefixPrimary: '',
-        phoneNumberPrimary: '',
-        fullNameSecondary: '',
-        relationSecondary: '',
-        phoneNumberPrefixSecondary: '',
-        phoneNumberSecondary: ''
-      });
     } else {
       setErrorFields(true);
     }
+  };
+
+  const handleBack = (e) => {
+    e.preventDefault();
+    setValues({...values});
+    nextPage(1);
+
   };
 
   const { values, errors, setErrors, handleInputChange } = useForm(initialValues, true, validate);
@@ -266,18 +245,10 @@ function EmergencyContactForm({ refProp, nextPage }: EmergencyProps) {
           gap={2}
         >
           <Grid item>
-            <Button onClick={() => {
-              nextPage(1);
-              if (Object.values(values).some(value => value === '')) {
-                setStorages([{ name: 'emp-emergency-contact', value: JSON.stringify({ ...values }) }]);
-              }
-            }} label='Back' variant='outlined' />
+            <Button onClick={handleBack} label='Back' variant='outlined' />
           </Grid>
           <Grid item>
-            <Button onClick={() => {
-              nextPage(3);
-              setStorages([{ name: 'emp-emergency-contact', value: JSON.stringify({ ...values }) }]);
-            }} label='Next' />
+            <Button fullWidth={false} size='small' color='primary' type='submit' label='Next' />
           </Grid>
         </Grid>
       </form>
