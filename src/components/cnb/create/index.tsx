@@ -22,9 +22,11 @@ import {
   postNewCnbProfileRequested,
 } from "@/store/reducers/slice/cnb/compensationSlice";
 import { useAppDispatch, useAppSelectors } from "@/hooks/index";
+import { getCompanyData } from "@/utils/helper";
 
 export default function CreateCNBComponent() {
   const router = useRouter();
+  const companyData = getCompanyData();
   const dispatch = useAppDispatch();
   const compensationComponentOption = useAppSelectors(
     (state) => state.compensation?.compensationComponentOption?.data?.items
@@ -165,14 +167,18 @@ export default function CreateCNBComponent() {
     setSupplementaryList(search);
   };
 
+  console.log(companyData);
+
   function CreateNewCnbProfile() {
     dispatch({
       type: postNewCnbProfileRequested.toString(),
       Payload: {
-        companyId: 4,
+        companyId: companyData?.id,
         name: BaseCompensation.name,
         baseCompensation: {
-          compensationComponentId: BaseCompensation.compensationComponentId,
+          compensationComponentId: parseInt(
+            BaseCompensation.compensationComponentId
+          ),
           taxStatus: BaseCompensation.taxStatus,
           amount:
             BaseCompensation.compensationComponentId === "1"
@@ -185,7 +191,7 @@ export default function CreateCNBComponent() {
           period: BaseCompensation.period,
         },
         supplementaryCompensations: supplementaryList.map((item) => ({
-          compensationComponentId: item.data.compensationComponentId,
+          compensationComponentId: parseInt(item.data.compensationComponentId),
           taxStatus: item.data.taxStatus,
           amount:
             item.data.compensationComponentId === "1"
@@ -352,16 +358,15 @@ export default function CreateCNBComponent() {
                     })
                   }
                 >
-                  Save
                   <FormControlLabel
-                    value="taxable"
+                    value="true"
                     control={
                       <Radio size="small" checkedIcon={<BpCheckedIcon />} />
                     }
                     label="Taxable"
                   />
                   <FormControlLabel
-                    value="non-taxable"
+                    value="false"
                     control={
                       <Radio size="small" checkedIcon={<BpCheckedIcon />} />
                     }
@@ -411,8 +416,9 @@ export default function CreateCNBComponent() {
                     })
                   }
                 >
-                  <MenuItem value="hour">per Hour</MenuItem>
-                  <MenuItem value="month">per Month</MenuItem>
+                  <MenuItem value="Per Week">per Week</MenuItem>
+                  <MenuItem value="Per Month">per Month</MenuItem>
+                  <MenuItem value="Per Year">per Year</MenuItem>
                 </Select>
               </div>
             </div>
@@ -496,7 +502,7 @@ export default function CreateCNBComponent() {
                             }
                           >
                             <FormControlLabel
-                              value="taxable"
+                              value="true"
                               control={
                                 <Radio
                                   size="small"
@@ -506,7 +512,7 @@ export default function CreateCNBComponent() {
                               label="Taxable"
                             />
                             <FormControlLabel
-                              value="non-taxable"
+                              value="false"
                               control={
                                 <Radio
                                   size="small"
@@ -571,8 +577,9 @@ export default function CreateCNBComponent() {
                               selectChange(i, e.target.value as string, "per")
                             }
                           >
-                            <MenuItem value="hour">per Hour</MenuItem>
-                            <MenuItem value="month">per Month</MenuItem>
+                            <MenuItem value="Per Week">per Week</MenuItem>
+                            <MenuItem value="Per Month">per Month</MenuItem>
+                            <MenuItem value="Per Year">per Year</MenuItem>
                           </Select>
                         </div>
                       </div>
