@@ -5,12 +5,14 @@ interface CnbState {
   loading: boolean;
   dataTable: [];
   compensationComponentOption: [];
+  rerender: boolean;
 }
 
 const initialState: CnbState = {
   loading: false,
   dataTable: [],
   compensationComponentOption: [],
+  rerender: false
 };
 
 export const cnbSlice = createSlice({
@@ -51,6 +53,19 @@ export const cnbSlice = createSlice({
     postNewCnbProfileFailed: (state) => {
       state.loading = false;
     },
+
+    // Create New CNB Profile
+    deleteCompensationRequested: (state) => {
+      state.loading = true;
+    },
+    deleteCompensationSuccess: (state) => {
+      state.loading = false;
+      state.rerender = !state.rerender
+    },
+    deleteCompensationFailed: (state) => {
+      state.loading = false;
+      state.rerender = !state.rerender
+    },
   },
   extraReducers: {
     [HYDRATE]: (state, action) => {
@@ -72,6 +87,9 @@ export const {
   postNewCnbProfileRequested,
   postNewCnbProfileSuccess,
   postNewCnbProfileFailed,
+  deleteCompensationRequested,
+  deleteCompensationSuccess,
+  deleteCompensationFailed,
 } = cnbSlice.actions;
 
 export default cnbSlice.reducer;
