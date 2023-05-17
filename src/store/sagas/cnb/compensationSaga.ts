@@ -36,7 +36,6 @@ function* fetchGetTable(action: AnyAction) {
     if (err instanceof AxiosError) {
       const errorMessage = err?.response?.data as Services.ErrorResponse;
       yield put({ type: getTableFailed.toString() });
-      yield delay(2000, true);
       yield put({
         type: setResponserMessage.toString(),
         payload: {

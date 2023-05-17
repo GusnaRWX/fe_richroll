@@ -47,12 +47,59 @@ export default function CreateCNBComponent() {
     },
   });
 
+  const Header = styled(Box)({
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: "32px",
+  });
+
+  const HeaderPageTitle = styled(Box)({
+    display: "flex",
+    gap: "16px",
+    alignItems: "center",
+  });
+
   const NextBtnWrapper = MuiStyled(Box)({
     width: "100%",
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-end",
+  });
+
+  const FormWrapper = styled(Box)({
+    padding: "20px 30px",
+    boxShadow:
+      "0px 1px 2px rgba(0, 0, 0, 0.06), 0px 1px 3px rgba(0, 0, 0, 0.1)",
+    backgroundColor: "#fff",
+  });
+
+  const TextFieldWrapper = styled(Box)({
+    display: "flex",
+    flexDirection: "row",
+    maxWidth: "50%",
+  });
+
+  const BaseCompensationWrapper = styled(Box)({
+    display: "flex",
+    flexDirection: "column",
+    marginBottom: "33px",
+  });
+
+  const HalfWidthInputWrapper = styled(Box)({
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: "24px",
+  });
+
+  const FullWidthInputWrapper = styled(Box)({
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: "24px",
+    maxWidth: "511px",
   });
 
   const BpIcon = styled("span")(({ theme }) => ({
@@ -207,15 +254,8 @@ export default function CreateCNBComponent() {
 
   return (
     <div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: "32px",
-        }}
-      >
-        <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
+      <Header>
+        <HeaderPageTitle>
           <IconButton
             parentColor="primary.500"
             icons={<ArrowBack sx={{ color: "#FFFFFF" }} />}
@@ -233,7 +273,7 @@ export default function CreateCNBComponent() {
           >
             Create New CnB Profile
           </Typography>
-        </div>
+        </HeaderPageTitle>
         <NextBtnWrapper>
           <Button
             fullWidth={false}
@@ -251,21 +291,14 @@ export default function CreateCNBComponent() {
             onClick={() => CreateNewCnbProfile()}
           />
         </NextBtnWrapper>
-      </div>
-      <div
-        style={{
-          padding: "20px 32px",
-          boxShadow:
-            "0px 1px 2px rgba(0, 0, 0, 0.06), 0px 1px 3px rgba(0, 0, 0, 0.1)",
-          backgroundColor: "#fff",
-        }}
-      >
+      </Header>
+      <FormWrapper>
         <Form style={{ marginBottom: "32px" }}>
           <Typography>
             Profile Name
             <span style={{ color: "red" }}>*</span>
           </Typography>
-          <div
+          <TextFieldWrapper
             style={{
               display: "flex",
               flexDirection: "row",
@@ -283,7 +316,7 @@ export default function CreateCNBComponent() {
                 })
               }
             />
-          </div>
+          </TextFieldWrapper>
           <Typography
             style={{
               marginBottom: "17px",
@@ -305,21 +338,8 @@ export default function CreateCNBComponent() {
           >
             Base
           </Typography>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              marginBottom: "33px",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                gap: "24px",
-              }}
-            >
+          <BaseCompensationWrapper>
+            <HalfWidthInputWrapper>
               <div id="right" style={{ width: "100%", maxWidth: "511px" }}>
                 <div style={{ marginBottom: "16px" }}>
                   <Typography style={{ fontSize: "14px" }}>
@@ -372,7 +392,7 @@ export default function CreateCNBComponent() {
                   />
                 </RadioGroup>
               </div>
-            </div>
+            </HalfWidthInputWrapper>
             <div>
               <Typography>
                 {BaseCompensation?.compensationComponentId === "1"
@@ -380,14 +400,7 @@ export default function CreateCNBComponent() {
                   : "Amount"}
                 <span style={{ color: "red" }}>*</span>
               </Typography>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  gap: "24px",
-                  maxWidth: "511px",
-                }}
-              >
+              <FullWidthInputWrapper>
                 <TextField
                   fullWidth
                   onChange={(e) =>
@@ -418,9 +431,9 @@ export default function CreateCNBComponent() {
                   <MenuItem value="Per Month">per Month</MenuItem>
                   <MenuItem value="Per Year">per Year</MenuItem>
                 </Select>
-              </div>
+              </FullWidthInputWrapper>
             </div>
-          </div>
+          </BaseCompensationWrapper>
         </Form>
         <div>
           <div>
@@ -594,7 +607,7 @@ export default function CreateCNBComponent() {
             onClick={() => addSuplementary()}
           />
         </div>
-      </div>
+      </FormWrapper>
     </div>
   );
 }

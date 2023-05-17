@@ -16,6 +16,10 @@ import {
 import { styled } from "@mui/material/styles";
 import { TextFieldProps } from "@mui/material/";
 import SearchIcon from "@mui/icons-material/Search";
+import { IconButton } from "../_shared/form";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import DeleteIcon from "@mui/icons-material/Delete";
+import BorderColorIcon from "@mui/icons-material/BorderColor";
 
 interface Data {
   name: string;
@@ -150,6 +154,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             </TableSortLabel>
           </TableCell>
         ))}
+        <TableCell />
       </TableRow>
     </TableHead>
   );
@@ -236,10 +241,24 @@ export default function EnhancedTable(rows: any) {
                       >
                         {row.name}
                       </TableCell>
-                      {/* <TableCell align="right">{row.baseCompensation}</TableCell>
-                    <TableCell align="right">{row.suppCompensation}</TableCell>
-                    <TableCell align="right">{row.date}</TableCell>
-                    <TableCell align="right">{row.lastUpdate}</TableCell> */}
+                      <TableCell align="right">{row.name}</TableCell>
+                      <TableCell align="right">{row.name}</TableCell>
+                      <TableCell align="right">{row.name}</TableCell>
+                      <TableCell align="right">{row.name}</TableCell>
+                      <TableCell style={{ display: "flex", gap: "8px" }}>
+                        <IconButton
+                          parentColor="primary.50"
+                          icons={<VisibilityIcon sx={{ color: "#223567" }} />}
+                        />
+                        <IconButton
+                          parentColor="primary.50"
+                          icons={<BorderColorIcon sx={{ color: "#223567" }} />}
+                        />
+                        <IconButton
+                          parentColor="red.100"
+                          icons={<DeleteIcon sx={{ color: "#EF4444" }} />}
+                        />
+                      </TableCell>
                     </TableRow>
                   );
                 })}
