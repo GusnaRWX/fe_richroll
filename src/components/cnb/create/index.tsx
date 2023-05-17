@@ -220,7 +220,7 @@ export default function CreateCNBComponent() {
             parentColor="primary.500"
             icons={<ArrowBack sx={{ color: "#FFFFFF" }} />}
             onClick={() => {
-              router.push("/cnb");
+              router.push("/compensation-benefits");
             }}
           />
           <Typography
