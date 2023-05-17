@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+
 export declare namespace Employees {
   interface EmployeeParams {
     page: number;
@@ -71,5 +73,82 @@ export declare namespace Employees {
       branchName?: string,
       swiftCode?: string
     }
+  }
+
+  interface PersonalValues {
+    useResidentialAddress: boolean;
+    isPermanentPersonalID: boolean;
+    dateofBirthPersonalInformation: dayjs.Dayjs | null | string;
+    genderPersonalInformation: number;
+    maritialStatusPersonalInformation: number;
+    numberOfDependantsPersonalInformation: number;
+    nationalityPersonalInformation: string;
+    religionPersonalInformation: number
+
+    countryCitizenAddress: string;
+    provinceCitizenAddress: string;
+    cityCitizenAddress: string;
+    subDistrictCitizenAddress: string;
+    addressCitizenAddress: string;
+    zipCodeCitizenAddress: string;
+
+    countryResidentialAddress: string;
+    provinceResidentialAddress: string;
+    cityResidentialAddress: string;
+    subDistrictResidentialAddress: string;
+    addressResidentialAddress: string;
+    zipCodeResidentialAddress: string;
+
+    bankBankInformation: string;
+    bankAccountHolderNameBankInformation: string
+    bankAccoutNoBankInformation: string;
+    bankCodeBankInformation: string;
+    branchCodeBankInformation: string;
+    branchNameBankInformation: string;
+    swiftCodeBankInformation: string,
+
+    idTypePersonalID: string;
+    idNumberPersonalID: string;
+    idExpirationDatePersonalID: dayjs.Dayjs | null | string
+  }
+
+  interface InformationValues {
+    companyID: string;
+    images: string
+    picture: []
+    fullName: string
+    nickname: string
+    phoneNumberPrefix: string
+    phoneNumber: string
+    email: string
+    startDate: dayjs.Dayjs | null | string
+    endDate: dayjs.Dayjs | null | string
+    isPermanent: boolean
+    department: string
+    position: string
+    isSelfService: boolean
+  }
+
+  interface EmergencyContactValues {
+    employeeID: string;
+    fullNamePrimary: string;
+    relationPrimary: string;
+    phoneNumberPrefixPrimary: string;
+    phoneNumberPrimary: string;
+    fullNameSecondary: string;
+    relationSecondary: string;
+    phoneNumberPrefixSecondary: string;
+    phoneNumberSecondary: string;
+  }
+  interface EmergencyContactPayload {
+    employeeID: string;
+    fullNamePrimary?: string;
+    relationPrimary?: string;
+    phoneNumberPrefixPrimary?: string;
+    phoneNumberPrimary?: string;
+    fullNameSecondary?: string;
+    relationSecondary?: string;
+    phoneNumberPrefixSecondary?: string;
+    phoneNumberSecondary?: string;
   }
 }

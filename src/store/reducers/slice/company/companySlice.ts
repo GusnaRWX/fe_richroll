@@ -75,14 +75,14 @@ export const companySlice = createSlice({
     paymentMethodFailed: (state) => {
       state.loading = false;
     },
-    postCompanyDetailRequested: (state) => {
+    getCompanyDetailRequested: (state) => {
       state.loading = true;
     },
-    postCompanyDetailSuccess: (state, action) => {
+    getCompanyDetailSuccess: (state, action) => {
       state.loading = false;
       state.detail = action?.payload;
     },
-    postCompanyDetailFailed: (state) => {
+    getCompanyDetailFailed: (state) => {
       state.loading = false;
     },
     postCompanyProfileRequested: (state) => {
@@ -130,9 +130,9 @@ export const {
   paymentMethodRequested,
   paymentMethodSuccess,
   paymentMethodFailed,
-  postCompanyDetailRequested,
-  postCompanyDetailSuccess,
-  postCompanyDetailFailed,
+  getCompanyDetailRequested,
+  getCompanyDetailSuccess,
+  getCompanyDetailFailed,
   postCompanyProfileRequested,
   postCompanyProfileSuccess,
   postCompanyProfileFailed,
