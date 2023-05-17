@@ -100,10 +100,12 @@ export default function CreateCNBComponent() {
 
   interface supplementType {
     id: number;
-    compensation: string;
-    amount: number | null;
-    taxStatus: string;
-    per: string;
+    data: {
+      compensationComponentId: string;
+      taxStatus: string;
+      rateOrAmount: number | null;
+      period: string;
+    };
   }
 
   const [supplementaryList, setSupplementaryList] = React.useState<
@@ -111,26 +113,30 @@ export default function CreateCNBComponent() {
   >([]);
 
   interface baseCompType {
-    compensation: string;
-    tax: string;
-    amount: string;
-    per: string;
+    name: string;
+    compensationComponentId: string;
+    taxStatus: string;
+    rateOrAmount: string;
+    period: string;
   }
 
   const [BaseCompensation, setBaseCompensation] = React.useState<baseCompType>({
-    compensation: "",
-    tax: "",
-    amount: "",
-    per: "",
+    name: "",
+    compensationComponentId: "",
+    taxStatus: "",
+    rateOrAmount: "",
+    period: "",
   });
 
   const addSuplementary = () => {
     const newData = {
       id: Math.floor(Math.random() * 100 + 1),
-      compensation: "",
-      amount: null,
-      taxStatus: "",
-      per: "",
+      data: {
+        compensationComponentId: "",
+        taxStatus: "",
+        rateOrAmount: null,
+        period: "",
+      },
     };
     setSupplementaryList((prev) => [...prev, newData]);
   };
@@ -139,13 +145,13 @@ export default function CreateCNBComponent() {
     let items = [...supplementaryList];
     let item = { ...items[index] };
     if (type === "compensation") {
-      item.compensation = newItem as string;
+      item.data.compensationComponentId = newItem as string;
     } else if (type === "amount") {
-      item.amount = newItem as number;
+      item.data.rateOrAmount = newItem as number;
     } else if (type === "tax") {
-      item.taxStatus = newItem as string;
+      item.data.taxStatus = newItem as string;
     } else if (type === "per") {
-      item.per = newItem as string;
+      item.data.period = newItem as string;
     }
     items[index] = item;
     setSupplementaryList(items);
@@ -163,10 +169,34 @@ export default function CreateCNBComponent() {
     dispatch({
       type: postNewCnbProfileRequested.toString(),
       Payload: {
-        companyId: 5,
-        name: "Testing",
-        baseCompensation: BaseCompensation,
-        supplementaryCompensations: supplementaryList,
+        companyId: 4,
+        name: BaseCompensation.name,
+        baseCompensation: {
+          compensationComponentId: BaseCompensation.compensationComponentId,
+          taxStatus: BaseCompensation.taxStatus,
+          amount:
+            BaseCompensation.compensationComponentId === "1"
+              ? 0
+              : BaseCompensation.rateOrAmount,
+          rate:
+            BaseCompensation.compensationComponentId === "1"
+              ? BaseCompensation.rateOrAmount
+              : 0,
+          period: BaseCompensation.period,
+        },
+        supplementaryCompensations: supplementaryList.map((item) => ({
+          compensationComponentId: item.data.compensationComponentId,
+          taxStatus: item.data.taxStatus,
+          amount:
+            item.data.compensationComponentId === "1"
+              ? 0
+              : item.data.rateOrAmount,
+          rate:
+            item.data.compensationComponentId === "1"
+              ? item.data.rateOrAmount
+              : 0,
+          period: item.data.period,
+        })),
       },
     });
   }
@@ -239,7 +269,16 @@ export default function CreateCNBComponent() {
               maxWidth: "50%",
             }}
           >
-            <TextField fullWidth placeholder="Sales" />
+            <TextField
+              fullWidth
+              placeholder="Sales"
+              onChange={(e) =>
+                setBaseCompensation({
+                  ...BaseCompensation,
+                  name: e.target.value as string,
+                })
+              }
+            />
           </div>
           <Typography
             style={{
@@ -288,7 +327,7 @@ export default function CreateCNBComponent() {
                     onChange={(e) =>
                       setBaseCompensation({
                         ...BaseCompensation,
-                        compensation: e.target.value as string,
+                        compensationComponentId: e.target.value as string,
                       })
                     }
                   >
@@ -309,7 +348,7 @@ export default function CreateCNBComponent() {
                   onChange={(e) =>
                     setBaseCompensation({
                       ...BaseCompensation,
-                      tax: e.target.value,
+                      taxStatus: e.target.value,
                     })
                   }
                 >
@@ -333,7 +372,9 @@ export default function CreateCNBComponent() {
             </div>
             <div>
               <Typography>
-                {BaseCompensation?.compensation === "1" ? "Rate" : "Amount"}
+                {BaseCompensation?.compensationComponentId === "1"
+                  ? "Rate"
+                  : "Amount"}
                 <span style={{ color: "red" }}>*</span>
               </Typography>
               <div
@@ -349,7 +390,7 @@ export default function CreateCNBComponent() {
                   onChange={(e) =>
                     setBaseCompensation({
                       ...BaseCompensation,
-                      amount: e.target.value,
+                      rateOrAmount: e.target.value,
                     })
                   }
                   InputProps={{
@@ -366,7 +407,7 @@ export default function CreateCNBComponent() {
                   onChange={(e) =>
                     setBaseCompensation({
                       ...BaseCompensation,
-                      per: e.target.value as string,
+                      period: e.target.value as string,
                     })
                   }
                 >
@@ -420,7 +461,10 @@ export default function CreateCNBComponent() {
                             </Typography>
                             <Select
                               fullWidth
-                              value={supplementaryList[i].compensation}
+                              value={
+                                supplementaryList[i].data
+                                  .compensationComponentId
+                              }
                               onChange={(e) =>
                                 selectChange(
                                   i,
@@ -446,7 +490,7 @@ export default function CreateCNBComponent() {
                           </Typography>
                           <RadioGroup
                             row
-                            value={supplementaryList[i].taxStatus}
+                            value={supplementaryList[i].data.taxStatus}
                             onChange={(e) =>
                               selectChange(i, e.target.value as string, "tax")
                             }
@@ -484,7 +528,9 @@ export default function CreateCNBComponent() {
                       </div>
                       <div>
                         <Typography>
-                          {suplement.compensation === "1" ? "Rate" : "Amount"}
+                          {suplement.data.compensationComponentId === "1"
+                            ? "Rate"
+                            : "Amount"}
                           <span style={{ color: "red" }}>*</span>
                         </Typography>
                         <div
@@ -497,7 +543,7 @@ export default function CreateCNBComponent() {
                         >
                           <TextField
                             fullWidth
-                            value={supplementaryList[i].amount}
+                            value={supplementaryList[i].data.rateOrAmount}
                             onChange={(e) =>
                               selectChange(
                                 i,
@@ -520,7 +566,7 @@ export default function CreateCNBComponent() {
                           />
                           <Select
                             fullWidth
-                            value={supplementaryList[i].per}
+                            value={supplementaryList[i].data.period}
                             onChange={(e) =>
                               selectChange(i, e.target.value as string, "per")
                             }
