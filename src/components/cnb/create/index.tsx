@@ -167,8 +167,6 @@ export default function CreateCNBComponent() {
     setSupplementaryList(search);
   };
 
-  console.log(companyData);
-
   function CreateNewCnbProfile() {
     dispatch({
       type: postNewCnbProfileRequested.toString(),
