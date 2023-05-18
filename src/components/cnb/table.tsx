@@ -13,13 +13,16 @@ import {
   TextField,
   InputAdornment,
 } from "@mui/material/";
-import { styled } from "@mui/material/styles";
-import { TextFieldProps } from "@mui/material/";
 import SearchIcon from "@mui/icons-material/Search";
-import { IconButton } from "../_shared/form";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import DeleteIcon from "@mui/icons-material/Delete";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
+
+import { styled } from "@mui/material/styles";
+import { TextFieldProps } from "@mui/material/";
+import { IconButton } from "../_shared/form";
+import { useAppDispatch } from "@/hooks/index";
+import { deleteCompensationRequested } from "@/store/reducers/slice/cnb/compensationSlice";
 
 interface Data {
   name: string;

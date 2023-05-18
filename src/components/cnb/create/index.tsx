@@ -81,25 +81,17 @@ export default function CreateCNBComponent() {
     maxWidth: "50%",
   });
 
-  const BaseCompensationWrapper = styled(Box)({
+  const SectionInputWrapper = styled(Box)({
     display: "flex",
     flexDirection: "column",
     marginBottom: "33px",
   });
 
-  const HalfWidthInputWrapper = styled(Box)({
+  const InputWrapper = styled(Box)({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
     gap: "24px",
-  });
-
-  const FullWidthInputWrapper = styled(Box)({
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    gap: "24px",
-    maxWidth: "511px",
   });
 
   const BpIcon = styled("span")(({ theme }) => ({
@@ -338,8 +330,8 @@ export default function CreateCNBComponent() {
           >
             Base
           </Typography>
-          <BaseCompensationWrapper>
-            <HalfWidthInputWrapper>
+          <SectionInputWrapper>
+            <InputWrapper>
               <div id="right" style={{ width: "100%", maxWidth: "511px" }}>
                 <div style={{ marginBottom: "16px" }}>
                   <Typography style={{ fontSize: "14px" }}>
@@ -392,7 +384,7 @@ export default function CreateCNBComponent() {
                   />
                 </RadioGroup>
               </div>
-            </HalfWidthInputWrapper>
+            </InputWrapper>
             <div>
               <Typography>
                 {BaseCompensation?.compensationComponentId === "1"
@@ -400,7 +392,7 @@ export default function CreateCNBComponent() {
                   : "Amount"}
                 <span style={{ color: "red" }}>*</span>
               </Typography>
-              <FullWidthInputWrapper>
+              <InputWrapper style={{ maxWidth: "511px" }}>
                 <TextField
                   fullWidth
                   onChange={(e) =>
@@ -431,9 +423,9 @@ export default function CreateCNBComponent() {
                   <MenuItem value="Per Month">per Month</MenuItem>
                   <MenuItem value="Per Year">per Year</MenuItem>
                 </Select>
-              </FullWidthInputWrapper>
+              </InputWrapper>
             </div>
-          </BaseCompensationWrapper>
+          </SectionInputWrapper>
         </Form>
         <div>
           <div>
@@ -451,22 +443,8 @@ export default function CreateCNBComponent() {
                 </Typography>
                 <Form>
                   {supplementaryList.map((suplement, i) => (
-                    <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        marginBottom: "33px",
-                      }}
-                      key={i}
-                    >
-                      <div
-                        style={{
-                          display: "flex",
-                          flexDirection: "row",
-                          alignItems: "center",
-                          gap: "24px",
-                        }}
-                      >
+                    <SectionInputWrapper key={i}>
+                      <InputWrapper>
                         <div
                           id="right"
                           style={{ width: "100%", maxWidth: "511px" }}
@@ -542,7 +520,7 @@ export default function CreateCNBComponent() {
                             onClick={() => deleteSuplementary(suplement.id)}
                           />
                         </div>
-                      </div>
+                      </InputWrapper>
                       <div>
                         <Typography>
                           {suplement.data.compensationComponentId === "1"
@@ -550,14 +528,7 @@ export default function CreateCNBComponent() {
                             : "Amount"}
                           <span style={{ color: "red" }}>*</span>
                         </Typography>
-                        <div
-                          style={{
-                            display: "flex",
-                            flexDirection: "row",
-                            gap: "24px",
-                            maxWidth: "511px",
-                          }}
-                        >
+                        <InputWrapper style={{ maxWidth: "511px" }}>
                           <TextField
                             fullWidth
                             value={supplementaryList[i].data.rateOrAmount}
@@ -592,9 +563,9 @@ export default function CreateCNBComponent() {
                             <MenuItem value="Per Month">per Month</MenuItem>
                             <MenuItem value="Per Year">per Year</MenuItem>
                           </Select>
-                        </div>
+                        </InputWrapper>
                       </div>
-                    </div>
+                    </SectionInputWrapper>
                   ))}
                 </Form>
               </>
