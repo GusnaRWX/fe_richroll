@@ -10,6 +10,7 @@ import { checkRegulerExpression } from '@/utils/helper';
 import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
 import { Input, Button } from '@/components/_shared/form/';
 import { signIn } from 'next-auth/react';
+import { Text } from '@/components/_shared/common';
 
 const LinkComponent = styled(Link)(({ theme }) => ({
   color: theme.palette.primary.main,
@@ -127,7 +128,12 @@ const LoginForm = ({
         </Typography>
         {![200, 201, 0].includes(responser?.code) && (
           <Box mb='17px'>
-            <Alert severity='error'>{responser?.message}</Alert>
+            <Alert severity='error'>
+              <Text
+                title={responser?.message}
+                fontWeight={500}
+              />
+            </Alert>
           </Box>
         )}
         <Box component='div' mb='17px'>
