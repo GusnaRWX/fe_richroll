@@ -1,14 +1,25 @@
-import React, { useState } from 'react';
-import { IconButton, Button } from '@/components/_shared/form';
+import React, { useState, useRef } from 'react';
+import dynamic from 'next/dynamic';
+import { IconButton } from '@/components/_shared/form';
 import { Card, Typography, Button as MuiButton, Tab, Tabs, Box } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import styled from '@emotion/styled';
-import EmployeeInformationEdit from './EmployeeInformationEdit';
-import EmergencyContactEdit from './EmergencyContactEdit';
-import { FiEdit } from 'react-icons/fi';
 import { useRouter } from 'next/router';
-import PersonalInformationEdit from './PersonalInformationEdit';
 import ConfirmationModal from '@/components/_shared/common/ConfirmationModal';
+import { Employees } from '@/types/employees';
+import dayjs from 'dayjs';
+import { getCompanyData } from '@/utils/helper';
+import { useAppSelectors } from '@/hooks/index';
+
+const EmployeeInformationEdit = dynamic(() => import('./EmployeeInformationEdit'), {
+  ssr: false
+});
+const PersonalInformationEdit = dynamic(() => import('./PersonalInformationEdit'), {
+  ssr: false
+});
+const EmergencyContactEdit = dynamic(() => import('./EmergencyContactEdit'), {
+  ssr: false
+});
 
 const TopWrapper = styled.div`
  display: flex;
@@ -79,7 +90,71 @@ function a11yProps(index: number) {
 function EmployeeEditComponent() {
   const [value, setValue] = useState(0);
   const [leave, setLeave] = useState(false);
+  const employeeRef = useRef<HTMLFormElement>(null);
+  const [isInformationValid, setIsInformationValid] = useState(false);
+  const personalInformationRef = useRef<HTMLFormElement>(null);
+  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+  const [isPersonalInformationValid, setIsPersonalInformationValid] = useState(false);
   const router = useRouter();
+  const { employee } = useAppSelectors((state) => state);
+  const dataEmployeeInformation = employee.employeeInformationDetail;
+  const dataPersonalInformation = employee.personalInformationDetail;
+  const phoneNumberPrefix = typeof dataEmployeeInformation.phoneNumber !== 'undefined' ?  dataEmployeeInformation.phoneNumber.split('').slice(0, 3).join('') : '';
+  const phoneNumber = typeof dataEmployeeInformation.phoneNumber !== 'undefined' ? dataEmployeeInformation.phoneNumber.slice(3) : '';
+
+  const [informationValue, setInformationValue] = useState<Employees.InformationValues>({
+    companyID: getCompanyData()?.id as string,
+    department: dataEmployeeInformation?.department,
+    email:dataEmployeeInformation?.email,
+    endDate: dataEmployeeInformation?.endDate !== null ? dayjs(dataEmployeeInformation?.endDate).format('YYYY/MM/DD') : null,
+    fullName: dataEmployeeInformation?.fullName,
+    images: dataEmployeeInformation?.picture !== null ? dataEmployeeInformation?.picture : '',
+    isPermanent: dataEmployeeInformation?.isPermanent,
+    isSelfService: dataEmployeeInformation?.isSelfService,
+    nickname: dataEmployeeInformation?.nickname,
+    phoneNumber: phoneNumber,
+    phoneNumberPrefix: phoneNumberPrefix,
+    picture: dataEmployeeInformation?.picture !== null ? dataEmployeeInformation?.picture : [],
+    position: dataEmployeeInformation?.position,
+    startDate: dataEmployeeInformation?.startDate !== null ? dayjs(dataEmployeeInformation?.startDate).format('YYYY/MM/DD') : null
+  });
+  const [personalInformationValue, setPersonalInformationValue] = useState<Employees.PersonalValues>({
+    dateofBirthPersonalInformation: dataPersonalInformation?.personal?.dateOfBirth !== null ? dayjs(dataPersonalInformation?.personal?.dateOfBirth).format('YYYY/MM/DD') : null,
+    genderPersonalInformation: dataPersonalInformation?.personal?.gender,
+    maritialStatusPersonalInformation: dataPersonalInformation?.personal?.maritalStatus,
+    numberOfDependantsPersonalInformation: dataPersonalInformation?.personal?.numberOfChildren,
+    nationalityPersonalInformation: dataPersonalInformation?.personal?.countryID,
+    religionPersonalInformation: dataPersonalInformation?.personal?.religion,
+
+    provinceCitizenAddress: dataPersonalInformation?.citizen?.firstLevelCode,
+    countryCitizenAddress: dataPersonalInformation?.citizen?.countryID,
+    cityCitizenAddress: dataPersonalInformation?.citizen?.secondLevelCode,
+    subDistrictCitizenAddress: dataPersonalInformation?.citizen?.thirdLevelCode,
+    addressCitizenAddress: dataPersonalInformation?.citizen?.address,
+    zipCodeCitizenAddress: dataPersonalInformation?.citizen?.zipCode,
+
+    countryResidentialAddress: dataPersonalInformation?.citizen?.countryID,
+    provinceResidentialAddress: dataPersonalInformation?.citizen?.firstLevelCode,
+    cityResidentialAddress: dataPersonalInformation?.citizen?.secondLevelCode,
+    subDistrictResidentialAddress: dataPersonalInformation?.citizen?.thirdLevelCode,
+    addressResidentialAddress: dataPersonalInformation?.citizen?.address,
+    zipCodeResidentialAddress: dataPersonalInformation?.citizen?.zipCode,
+
+    bankBankInformation: dataPersonalInformation?.bank?.bankID,
+    bankAccountHolderNameBankInformation: dataPersonalInformation?.bank?.holder,
+    bankAccoutNoBankInformation: dataPersonalInformation?.bank?.accountNumber,
+    bankCodeBankInformation: dataPersonalInformation?.bank?.bankCode,
+    branchCodeBankInformation: dataPersonalInformation?.bank?.branchCode,
+    branchNameBankInformation: dataPersonalInformation?.bank?.branchName,
+    swiftCodeBankInformation: dataPersonalInformation?.bank?.swiftCode,
+
+    useResidentialAddress: dataPersonalInformation?.citizen?.isResident,
+    isPermanentPersonalID: dataPersonalInformation?.citizen?.isPermanent,
+
+    idExpirationDatePersonalID: dataPersonalInformation?.identity?.expiredAt,
+    idNumberPersonalID: dataPersonalInformation?.identity?.number,
+    idTypePersonalID: dataPersonalInformation?.identity?.type
+  });
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
@@ -93,6 +168,30 @@ function EmployeeEditComponent() {
   const handleNext = (val) => {
     setValue(val);
   };
+
+  const handleClick = async () => {
+    const inputData = new FormData();
+    inputData.append('companyID', getCompanyData()?.id as string);
+    if (informationValue.picture && informationValue.picture.length > 0) {
+      inputData.append('picture', (informationValue.picture as unknown as File)[0]);
+    }
+    inputData.append('fullName', informationValue.fullName);
+    inputData.append('nickname', informationValue.nickname);
+    inputData.append('phoneNumberPrefix', informationValue.phoneNumberPrefix);
+    inputData.append('phoneNumber', informationValue.phoneNumber);
+    inputData.append('email', informationValue.email);
+    inputData.append('startDate', dayjs(informationValue.startDate).format('YYYY-MM-DD'));
+    inputData.append('endDate', dayjs(informationValue.endDate).format('YYYY-MM-DD'));
+    inputData.append('isPermanent', informationValue.isPermanent ? 'true' : 'false');
+    if (informationValue.department !== '') {
+      inputData.append('department', informationValue.department);
+    }
+    if (informationValue.position !== '') {
+      inputData.append('position', informationValue.position);
+    }
+    inputData.append('isSelfService', informationValue.isSelfService ? 'true' : 'false');
+  };
+
   return (
     <>
       <TopWrapper>
@@ -107,26 +206,8 @@ function EmployeeEditComponent() {
           <Typography component='h3' fontWeight='bold'>Employee Profile</Typography>
         </BackWrapper>
         <ButtonWrapper>
-          {
-            value !== 1 ? (
-              <>
-                <MuiButton variant='outlined' size='small' onClick={() => handleOpen()}>Cancel</MuiButton>
-                <MuiButton variant='contained' size='small' color='primary' onClick={() => { router.push('/company-management/employees'); }}>Save</MuiButton>
-              </>
-            ) : (
-              <Button
-                color='secondary'
-                label='Edit'
-                startIcon={
-                  <FiEdit
-                    size={12}
-                    color='#FFF'
-                  />
-                }
-                size='small'
-              />
-            )
-          }
+          <MuiButton variant='outlined' size='small' onClick={() => handleOpen()}>Cancel</MuiButton>
+          <MuiButton variant='contained' onClick={handleClick} size='small' color='primary' disabled={!isInformationValid}>Save</MuiButton>
         </ButtonWrapper>
       </TopWrapper>
       <ContentWrapper>
@@ -141,10 +222,22 @@ function EmployeeEditComponent() {
             </Tabs>
           </Box>
           <TabPanel value={value} index={0}>
-            <EmployeeInformationEdit nextTab={handleNext}/>
+            <EmployeeInformationEdit
+              nextPage={handleNext}
+              refProp={employeeRef}
+              setValues={setInformationValue}
+              infoValues={informationValue}
+              setIsInformationValid={setIsInformationValid}
+            />
           </TabPanel>
           <TabPanel value={value} index={1}>
-            <PersonalInformationEdit nextTab={handleNext}/>
+            <PersonalInformationEdit
+              nextPage={handleNext}
+              refProp={personalInformationRef}
+              setValues={setPersonalInformationValue}
+              personalValues={personalInformationValue}
+              setIsPersonalInformationValid={setIsPersonalInformationValid}
+            />
           </TabPanel>
           <TabPanel value={value} index={2}>
             <EmergencyContactEdit nextTab={handleNext}/>
@@ -162,6 +255,10 @@ function EmployeeEditComponent() {
         handleClose={handleClose}
         title='Are you sure you want to leave?'
         content='Any unsaved changes will be discarded. This cannot be undone'
+        withCallback
+        callback={() => {
+          router.push('/company-management/employees');
+        }}
       />
     </>
   );

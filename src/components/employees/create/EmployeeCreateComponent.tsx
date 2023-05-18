@@ -243,7 +243,12 @@ function EmployeeCreateComponent() {
             </Tabs>
           </Box>
           <TabPanel value={value} index={0}>
-            <EmployeeInformationFormClient nextPage={handleNext} refProp={employeeRef} setValues={setInformationValue} infoValues={informationValue} setIsInformationValid={setIsInformationValid} />
+            <EmployeeInformationFormClient
+              nextPage={handleNext}
+              refProp={employeeRef}
+              setValues={setInformationValue}
+              infoValues={informationValue}
+              setIsInformationValid={setIsInformationValid} />
           </TabPanel>
           <TabPanel value={value} index={1}>
             <EmployeePersonalInformationFormClient
@@ -255,7 +260,12 @@ function EmployeeCreateComponent() {
             />
           </TabPanel>
           <TabPanel value={value} index={2}>
-            <EmergencyContactFormClient nextPage={setValue} refProp={emergencyRef} setValues={setEmergencyValue} emergencyValues={emergencyValue} setIsEmergencyValid={setIsEmergencyValid}/>
+            <EmergencyContactFormClient
+              nextPage={setValue}
+              refProp={emergencyRef}
+              setValues={setEmergencyValue}
+              emergencyValues={emergencyValue}
+              setIsEmergencyValid={setIsEmergencyValid}/>
           </TabPanel>
           <TabPanel value={value} index={3}>
             on Development
