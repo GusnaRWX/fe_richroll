@@ -28,7 +28,7 @@ interface PersonalInformationDetailProps {
       type: number | null;
       number: number | null;
       expiredAt: string | null;
-      esPermanent: boolean;
+      isPermanent: boolean;
     },
     bank: {
       bankID: string | null;
