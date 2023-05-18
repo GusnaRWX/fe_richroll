@@ -12,7 +12,7 @@ const AsteriskComponent = styled('span')(({ theme }) => ({
 type DatePickerType = DatePickerProps<Date> & {
   customLabel: string;
   withAsterisk?: boolean;
-  value: Date;
+  value?: Date;
   onChange?: React.Dispatch<Date | null>,
   error?: string;
 }
