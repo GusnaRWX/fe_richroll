@@ -171,7 +171,7 @@ export default function EnhancedTable(rows: any) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
-  const deleteCnb = (Id: string) => {
+  const deleteCnb = (Id: string | number) => {
     dispatch({
       type: deleteCompensationRequested.toString(),
       Id: Id,
@@ -267,6 +267,7 @@ export default function EnhancedTable(rows: any) {
                         <IconButton
                           parentColor="red.100"
                           icons={<DeleteIcon sx={{ color: "#EF4444" }} />}
+                          onClick={() => deleteCnb(row.id)}
                         />
                       </TableCell>
                     </TableRow>
