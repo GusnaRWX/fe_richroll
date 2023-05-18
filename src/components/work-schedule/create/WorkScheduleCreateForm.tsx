@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Input, Select } from '@/components/_shared/form';
 import { Button as MuiButton, Grid, InputAdornment, Typography } from '@mui/material';
 import { Add } from '@mui/icons-material';
-// import { Scheduler } from '@aldabil/react-scheduler';
+import { Scheduler } from '@aldabil/react-scheduler';
 import CustomModal from '@/components/_shared/common/CustomModal';
 import { RadioGroup, CheckBox } from '@/components/_shared/form';
 import { styled } from '@mui/material/styles';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import type { SchedulerRef } from '@aldabil/react-scheduler/types';
 
 
 const AsteriskComponent = styled('span')(({ theme }) => ({
@@ -23,71 +24,22 @@ const FlexBoxRow = styled('div')(() => ({
   gap: '1rem'
 }));
 
-interface EventDataType {
-  event_id: number;
-  title: string;
-  start: Date;
-  end: Date;
-  editable?: boolean;
-  disabled?: boolean;
-  color?: string;
-}
+// interface EventDataType {
+//   event_id: number;
+//   title: string;
+//   start: Date;
+//   end: Date;
+//   editable?: boolean;
+//   disabled?: boolean;
+//   color?: string;
+// }
 
 function WorkScheduleCreateForm() {
-  const eventsData = [
-    {
-      event_id: 1,
-      title: 'Work Hour',
-      start: new Date(new Date(new Date().setHours(9)).setMinutes(0)),
-      end: new Date(new Date(new Date().setHours(12)).setMinutes(0)),
-      disabled: false,
-      editeable: false
-    },
-    {
-      event_id: 1,
-      title: 'lunch break',
-      start: new Date(new Date(new Date().setHours(12)).setMinutes(0)),
-      end: new Date(new Date(new Date().setHours(13)).setMinutes(0)),
-      editable: false,
-      color: '#75AD99'
-    },
-    {
-      event_id: 1,
-      title: 'Work Hour',
-      start: new Date(new Date(new Date().setHours(13)).setMinutes(0)),
-      end: new Date(new Date(new Date().setHours(17)).setMinutes(0)),
-      disabled: false,
-      editeable: false
-    },
-    {
-      event_id: 2,
-      title: 'Work Hour',
-      start: new Date(new Date(new Date(new Date().setHours(9)).setMinutes(0)).setDate(new Date().getDate() + 1)),
-      end: new Date(new Date(new Date(new Date().setHours(12)).setMinutes(0)).setDate(new Date().getDate() + 1)),
-      disabled: false,
-      editeable: false
-    },
-    {
-      event_id: 2,
-      title: 'lunch break',
-      start: new Date(new Date(new Date(new Date().setHours(12)).setMinutes(0)).setDate(new Date().getDate() + 1)),
-      end: new Date(new Date(new Date(new Date().setHours(13)).setMinutes(0)).setDate(new Date().getDate() + 1)),
-      editable: false,
-      color: '#75AD99'
-    },
-    {
-      event_id: 2,
-      title: 'Work Hour',
-      start: new Date(new Date(new Date(new Date().setHours(13)).setMinutes(0)).setDate(new Date().getDate() + 1)),
-      end: new Date(new Date(new Date(new Date().setHours(17)).setMinutes(0)).setDate(new Date().getDate() + 1)),
-      disabled: false,
-      editeable: false
-    },
-  ];
+  const calendarRef = useRef<SchedulerRef>(null);
   const [profileName, setProfileName] = useState('');
   const [openForm, setOPenForm] = useState(false);
-  const [dataForEvent, setDataForEvent] = useState<Array<EventDataType>>([]);
-  const [fetchData, setFetchData] = useState(false);
+  // const [dataForEvent, setDataForEvent] = useState<Array<EventDataType>>([]);
+  const [hydrated, setHaydrated] = useState(false);
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   const [initialValues, setInitialValues] = useState({
     type: '',
@@ -106,9 +58,7 @@ function WorkScheduleCreateForm() {
   };
 
   const handleFormClose = () => {
-    console.log('here');
     setOPenForm(false);
-    setFetchData(true);
   };
 
   const handleInput = (e) => {
@@ -116,12 +66,12 @@ function WorkScheduleCreateForm() {
   };
 
   useEffect(() => {
-    function checkData() {
-      setDataForEvent(eventsData);
-    }
-    checkData();
-    console.log(dataForEvent);
-  }, [fetchData]);
+    setHaydrated(true);
+  }, []);
+
+  if (!hydrated) {
+    return null;
+  }
   return (
     <>
       <Grid container spacing={4} mb='1rem' alignItems='flex-end'>
@@ -176,14 +126,18 @@ function WorkScheduleCreateForm() {
           />
         </Grid>
       </Grid>
-      {/* <Scheduler
-        events={dataForEvent}
-      /> */}
+      <Scheduler
+        view='week'
+        disableViewNavigator={true}
+        ref={calendarRef}
+        events={[]}
+      />
       <CustomModal
         open={openForm}
         handleClose={handleFormClose}
         title='Work Schedule Form'
         width='774px'
+        handleConfirm={handleFormClose}
       >
         <Grid container mt='1rem' mb='1rem'>
           <Grid item sm={5.8}>
