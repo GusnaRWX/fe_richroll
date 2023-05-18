@@ -48,7 +48,7 @@ const headerItems = [
   { id: 'department.name', label: 'Department' },
   { id: 'user.isActive', label: 'Status' },
   { id: 'user.createdAt', label: 'Created on' },
-  { id: 'user.createdAt', label: 'Last Login' },
+  { id: 'user.lastLogin', label: 'Last Login' },
 ];
 
 interface EmployeeTableProps {
@@ -91,7 +91,7 @@ function EmployeesTable({
 
   useEffect(() => {
     console.log(companyData);
-    
+
     dispatch({
       type: getEmployeeRequested.toString(),
       payload: {

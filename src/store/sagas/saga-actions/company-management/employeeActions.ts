@@ -17,3 +17,11 @@ export const postEmergency = (payload) => {
 export const postPersonalInformation = (payload: Employees.PersonalInformationPayload) => {
   return post('employees/personal', payload);
 };
+
+export const getDetailEmployeeInformation = (payload: number | string) => {
+  return get('employees/information/' + payload);
+};
+
+export const getDetailPersonalInformation = (payload: number | string) => {
+  return get('employees/personal/' + payload);
+};

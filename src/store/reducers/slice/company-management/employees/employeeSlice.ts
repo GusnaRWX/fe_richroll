@@ -5,12 +5,16 @@ interface EmployeeState {
   isLoading: boolean;
   data: [];
   employeeID: string | number;
+  employeeInformationDetail: object;
+  personalInformationDetail: object;
 }
 
 const initialState: EmployeeState = {
   isLoading: false,
   data: [],
-  employeeID: ''
+  employeeID: '',
+  employeeInformationDetail: {},
+  personalInformationDetail: {}
 };
 
 export const employeeSlice = createSlice({
@@ -54,6 +58,26 @@ export const employeeSlice = createSlice({
     },
     postPersonalInformationFailed: (state) => {
       state.isLoading = false;
+    },
+    employeeInfoDetailRequested: (state) => {
+      state.isLoading = true;
+    },
+    employeeInfoDetailSuccess: (state, action) => {
+      state.isLoading = false;
+      state.employeeInformationDetail = action?.payload?.data;
+    },
+    employeeInfoDetailFailed: (state) => {
+      state.isLoading = false;
+    },
+    personalInfoDetailRequested: (state) => {
+      state.isLoading = true;
+    },
+    personalInfoDetailSuccess: (state, action) => {
+      state.isLoading = false;
+      state.personalInformationDetail = action?.payload?.data;
+    },
+    personalInfoDetailFailed: (state) => {
+      state.isLoading = false;
     }
   },
   extraReducers: {
@@ -78,7 +102,13 @@ export const {
   postEmergencySuccess,
   postPersonalInformationRequested,
   postPersonalInformationSuccess,
-  postPersonalInformationFailed
+  postPersonalInformationFailed,
+  employeeInfoDetailRequested,
+  employeeInfoDetailFailed,
+  employeeInfoDetailSuccess,
+  personalInfoDetailRequested,
+  personalInfoDetailFailed,
+  personalInfoDetailSuccess
 } = employeeSlice.actions;
 
 export default employeeSlice.reducer;
