@@ -7,8 +7,10 @@ import AddIcon from "@mui/icons-material/Add";
 import { useRouter } from "next/router";
 import { getTableRequested } from "@/store/reducers/slice/cnb/compensationSlice";
 import { useAppDispatch, useAppSelectors } from "@/hooks/index";
+import { getCompanyData } from "@/utils/helper";
 
 const CNBComponent = () => {
+  const companyData = getCompanyData();
   const dispatch = useAppDispatch();
   const dataTable = useAppSelectors(
     (state) => state.compensation?.dataTable?.data
@@ -16,6 +18,7 @@ const CNBComponent = () => {
   const loading = useAppSelectors(
     (state) => state.compensation?.loading
   );
+  const rerender = useAppSelectors((state) => state.compensation.rerender)
   const router = useRouter();
   const TitleWrapper = styled.div`
     display: flex;
@@ -27,9 +30,9 @@ const CNBComponent = () => {
   React.useEffect(() => {
     dispatch({
       type: getTableRequested.toString(),
-      payload: 4,
+      payload: companyData?.id,
     });
-  }, []);
+  }, [rerender]);
   
   return (
     <>

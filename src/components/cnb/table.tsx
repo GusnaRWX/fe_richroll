@@ -27,6 +27,7 @@ interface Data {
   suppCompensation: string;
   date: string;
   lastUpdate: string;
+  id: string;
 }
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
@@ -161,10 +162,18 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 }
 
 export default function EnhancedTable(rows: any) {
+  const dispatch = useAppDispatch();
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<keyof Data>("name");
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+  const deleteCnb = (Id: string) => {
+    dispatch({
+      type: deleteCompensationRequested.toString(),
+      Id: Id,
+    });
+  };
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -200,8 +209,6 @@ export default function EnhancedTable(rows: any) {
       ),
     [order, orderBy, page, rowsPerPage]
   );
-
-  console.log(rows.length);
 
   return (
     <Box sx={{ width: "100%" }}>

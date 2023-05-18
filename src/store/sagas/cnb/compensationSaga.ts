@@ -3,6 +3,7 @@ import {
   getDataTable,
   getCompensationComponentOption,
   postNewCnbProfile,
+  deleteCnbProfile,
 } from "../saga-actions/cnb/compensationActions";
 import { call, put, takeEvery, delay } from "redux-saga/effects";
 import {
@@ -15,6 +16,9 @@ import {
   postNewCnbProfileRequested,
   postNewCnbProfileSuccess,
   postNewCnbProfileFailed,
+  deleteCompensationRequested,
+  deleteCompensationSuccess,
+  deleteCompensationFailed,
 } from "@/store/reducers/slice/cnb/compensationSlice";
 import { setResponserMessage } from "@/store/reducers/slice/responserSlice";
 import { Services } from "@/types/axios";
@@ -75,6 +79,34 @@ function* fetchGetCompensationComponentOption() {
   }
 }
 
+// delete compensation benefit
+function* deleteCnb(action: AnyAction) {
+  try {
+    const res: AxiosResponse = yield call(deleteCnbProfile, action?.Id);
+    if (res.data.code === 200) {
+      yield put({
+        type: deleteCompensationSuccess.toString(),
+        payload: {
+          data: res.data.data,
+        },
+      });
+    }
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      yield put({ type: deleteCompensationFailed.toString() });
+      yield delay(2000, true);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message,
+        },
+      });
+    }
+  }
+}
+
 function* fetchPostNewCnbProfile(action: AnyAction) {
   try {
     const res: AxiosResponse = yield call(postNewCnbProfile, action?.Payload);
@@ -112,6 +144,7 @@ function* cnbSaga() {
     postNewCnbProfileRequested.toString(),
     fetchPostNewCnbProfile
   );
+  yield takeEvery(deleteCompensationRequested.toString(), deleteCnb)
 }
 
 export default cnbSaga;
