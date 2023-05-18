@@ -25,6 +25,20 @@ export declare namespace Employees {
     isSelfService: boolean;
   }
 
+  interface EmployeeInfoDetailPayload {
+    picture: string;
+    fullName: string;
+    nickname: string;
+    phoneNumber: string;
+    email: string;
+    startDate: string;
+    endDate: string | null;
+    isPermanent: boolean;
+    department: string;
+    position: string;
+    isSelfService: boolean;
+  }
+
   interface PersonalInformationPayload {
     employeeID: string;
     companyID: string;

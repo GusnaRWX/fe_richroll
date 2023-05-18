@@ -1,5 +1,12 @@
 import { AnyAction } from '@reduxjs/toolkit';
-import { getEmployee, postEmployeeInfo, postEmergency, postPersonalInformation } from '../saga-actions/company-management/employeeActions';
+import {
+  getEmployee,
+  postEmployeeInfo,
+  postEmergency,
+  postPersonalInformation,
+  getDetailEmployeeInformation,
+  getDetailPersonalInformation
+} from '../saga-actions/company-management/employeeActions';
 import { call, put, takeEvery, delay } from 'redux-saga/effects';
 import {
   getEmployeeRequested,
@@ -13,7 +20,13 @@ import {
   postEmergencyFailed,
   postPersonalInformationRequested,
   postPersonalInformationSuccess,
-  postPersonalInformationFailed
+  postPersonalInformationFailed,
+  employeeInfoDetailFailed,
+  employeeInfoDetailRequested,
+  employeeInfoDetailSuccess,
+  personalInfoDetailFailed,
+  personalInfoDetailRequested,
+  personalInfoDetailSuccess
 } from '@/store/reducers/slice/company-management/employees/employeeSlice';
 import { setResponserMessage } from '@/store/reducers/slice/responserSlice';
 import { Services } from '@/types/axios';
@@ -253,11 +266,67 @@ function* fetchPostPersonalInformation(action: AnyAction) {
   }
 }
 
+function* fetchGetEmployeeInformation(action: AnyAction) {
+  try{
+    const res: AxiosResponse = yield call(getDetailEmployeeInformation, action?.payload);
+    if (res.data.code === 200) {
+      yield put({
+        type: employeeInfoDetailSuccess.toString(),
+        payload: {
+          data: res?.data?.data
+        }
+      });
+    }
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      yield put({ type: employeeInfoDetailFailed.toString() });
+      yield delay(2000, true);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message,
+        }
+      });
+    }
+  }
+}
+
+function* fetchGetPersonalInformationDetail(action: AnyAction) {
+  try{
+    const res: AxiosResponse = yield call(getDetailPersonalInformation, action?.payload);
+    if (res.data.code === 200) {
+      yield put({
+        type: personalInfoDetailSuccess.toString(),
+        payload: {
+          data: res?.data?.data
+        }
+      });
+    }
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      yield put({ type: personalInfoDetailFailed.toString() });
+      yield delay(2000, true);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message,
+        }
+      });
+    }
+  }
+}
+
 function* employeeSaga() {
   yield takeEvery(getEmployeeRequested.toString(), fetchGetEmployee);
   yield takeEvery(postEmployeeInfoRequested.toString(), fetchPostEmployeeInfo);
   yield takeEvery(postEmergencyRequested.toString(), fetchPostEmergency);
   yield takeEvery(postPersonalInformationRequested.toString(), fetchPostPersonalInformation);
+  yield takeEvery(employeeInfoDetailRequested.toString(), fetchGetEmployeeInformation);
+  yield takeEvery(personalInfoDetailRequested.toString(), fetchGetPersonalInformationDetail);
 }
 
 export default employeeSaga;

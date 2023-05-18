@@ -8,6 +8,7 @@ import { useRouter } from 'next/router';
 import EmployeePersonalInformationDetail from './EmployeePersonalInformationDetail';
 import EmployeeInformationDetail from './EmployeeInformationDetail';
 import EmergencyContactDetail from './EmergencyContactDetail';
+import { useAppSelectors } from '@/hooks/index';
 
 const TopWrapper = styled.div`
  display: flex;
@@ -77,6 +78,7 @@ function a11yProps(index: number) {
 
 function EmployeeDetailComponent() {
   const [value, setValue] = useState(0);
+  const { employee } = useAppSelectors((state) => state);
   const router = useRouter();
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -98,7 +100,7 @@ function EmployeeDetailComponent() {
           <Button
             color='secondary'
             label='Edit'
-            onClick={() => { router.push('/company-management/employees/edit/1'); }}
+            onClick={() => { router.push('/company-management/employees/edit/'+ router.query.id); }}
             startIcon={
               <FiEdit
                 size={12}
@@ -121,10 +123,10 @@ function EmployeeDetailComponent() {
             </Tabs>
           </Box>
           <TabPanel value={value} index={0}>
-            <EmployeeInformationDetail/>
+            <EmployeeInformationDetail data={employee.employeeInformationDetail}/>
           </TabPanel>
           <TabPanel value={value} index={1}>
-            <EmployeePersonalInformationDetail/>
+            <EmployeePersonalInformationDetail data={employee.personalInformationDetail}/>
           </TabPanel>
           <TabPanel value={value} index={2}>
             <EmergencyContactDetail/>
