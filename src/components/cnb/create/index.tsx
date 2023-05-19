@@ -176,7 +176,7 @@ export default function CreateCNBComponent() {
       data: {
         compensationComponentId: "",
         taxStatus: "",
-        rateOrAmount: null,
+        rateOrAmount: 0,
         period: "",
       },
     };
@@ -295,6 +295,7 @@ export default function CreateCNBComponent() {
             <TextField
               fullWidth
               placeholder="Sales"
+              value={BaseCompensation.name}
               onChange={(e) =>
                 setBaseCompensation({
                   ...BaseCompensation,
@@ -528,6 +529,7 @@ export default function CreateCNBComponent() {
                         <InputWrapper style={{ maxWidth: "511px" }}>
                           <TextField
                             fullWidth
+                            type="number"
                             value={supplementaryList[i].data.rateOrAmount}
                             onChange={(e) => {
                               selectChange(
@@ -544,7 +546,7 @@ export default function CreateCNBComponent() {
                                 </InputAdornment>
                               ),
                               endAdornment: (
-                                <InputAdornment position="start">
+                                <InputAdornment position="end">
                                   IDR
                                 </InputAdornment>
                               ),
