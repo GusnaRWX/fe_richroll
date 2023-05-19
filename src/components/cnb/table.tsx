@@ -13,6 +13,7 @@ import {
   TextField,
   InputAdornment,
 } from "@mui/material/";
+import ConfirmationModal from "../_shared/common/ConfirmationModal";
 import SearchIcon from "@mui/icons-material/Search";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -213,6 +214,15 @@ export default function EnhancedTable(rows: any) {
     [order, orderBy, page, rowsPerPage]
   );
 
+  const [DeleteConfirmation, setDeleteConfirmation] =
+    React.useState<boolean>(false);
+  const handleOpen = () => {
+    setDeleteConfirmation(true);
+  };
+  const handleClose = () => {
+    setDeleteConfirmation(false);
+  };
+
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
@@ -267,9 +277,17 @@ export default function EnhancedTable(rows: any) {
                         <IconButton
                           parentColor="red.100"
                           icons={<DeleteIcon sx={{ color: "#EF4444" }} />}
-                          onClick={() => deleteCnb(row.id)}
+                          onClick={() => handleOpen()}
                         />
                       </TableCell>
+                      <ConfirmationModal
+                        open={DeleteConfirmation}
+                        handleClose={handleClose}
+                        title="Are you sure you want to delete this record?"
+                        content="Any unsaved changes will be discarded. This cannot be undone"
+                        withCallback
+                        callback={() => deleteCnb(row.id)}
+                      />
                     </TableRow>
                   );
                 })}

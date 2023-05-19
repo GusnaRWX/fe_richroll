@@ -47,14 +47,14 @@ export default function CreateCNBComponent() {
     },
   });
 
-  const Header = styled(Box)({
+  const Header = styled("div")({
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: "32px",
   });
 
-  const HeaderPageTitle = styled(Box)({
+  const HeaderPageTitle = styled("div")({
     display: "flex",
     gap: "16px",
     alignItems: "center",
@@ -68,26 +68,27 @@ export default function CreateCNBComponent() {
     justifyContent: "flex-end",
   });
 
-  const FormWrapper = styled(Box)({
+  const FormWrapper = styled("div")({
     padding: "20px 30px",
     boxShadow:
       "0px 1px 2px rgba(0, 0, 0, 0.06), 0px 1px 3px rgba(0, 0, 0, 0.1)",
     backgroundColor: "#fff",
   });
 
-  const TextFieldWrapper = styled(Box)({
+  const TextFieldWrapper = styled("div")({
     display: "flex",
     flexDirection: "row",
     maxWidth: "50%",
+    gap: "24px",
   });
 
-  const SectionInputWrapper = styled(Box)({
+  const SectionInputWrapper = styled("div")({
     display: "flex",
     flexDirection: "column",
     marginBottom: "33px",
   });
 
-  const InputWrapper = styled(Box)({
+  const InputWrapper = styled("div")({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
@@ -290,14 +291,7 @@ export default function CreateCNBComponent() {
             Profile Name
             <span style={{ color: "red" }}>*</span>
           </Typography>
-          <TextFieldWrapper
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              gap: "24px",
-              maxWidth: "50%",
-            }}
-          >
+          <TextFieldWrapper>
             <TextField
               fullWidth
               placeholder="Sales"
@@ -340,6 +334,7 @@ export default function CreateCNBComponent() {
                   </Typography>
                   <Select
                     fullWidth
+                    value={BaseCompensation.compensationComponentId}
                     onChange={(e) =>
                       setBaseCompensation({
                         ...BaseCompensation,
@@ -361,6 +356,7 @@ export default function CreateCNBComponent() {
                 </Typography>
                 <RadioGroup
                   row
+                  value={BaseCompensation.taxStatus}
                   onChange={(e) =>
                     setBaseCompensation({
                       ...BaseCompensation,
@@ -412,6 +408,7 @@ export default function CreateCNBComponent() {
                 />
                 <Select
                   fullWidth
+                  value={BaseCompensation.period}
                   onChange={(e) =>
                     setBaseCompensation({
                       ...BaseCompensation,
@@ -532,13 +529,14 @@ export default function CreateCNBComponent() {
                           <TextField
                             fullWidth
                             value={supplementaryList[i].data.rateOrAmount}
-                            onChange={(e) =>
+                            onChange={(e) => {
                               selectChange(
                                 i,
                                 e.target.value as unknown,
                                 "amount"
-                              )
-                            }
+                              );
+                              console.log(supplementaryList[i]);
+                            }}
                             InputProps={{
                               startAdornment: (
                                 <InputAdornment position="start">
