@@ -4,8 +4,6 @@ import Image from 'next/image';
 import { styled as MuiStyled } from '@mui/material/styles';
 import kayaroll from '../../../public/images/kayaroll-logo.png';
 import { Icons } from '@/utils/assetsConstant';
-// import { Address } from '@/types/address';
-// import { Option } from '@/types/option';
 import { checkRegulerExpression } from '@/utils/helper';
 import {
   Card,
@@ -31,7 +29,7 @@ import Link from 'next/link';
 import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
 import LocalizationMenu from '../_shared/_core/localization/Index';
 import { signIn } from 'next-auth/react';
-import { OverlayLoading } from '../_shared/common';
+import { Alert, OverlayLoading, Text } from '../_shared/common';
 
 
 const NavHead = styled.div`
@@ -94,7 +92,7 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
   const [openPassword, setOpenPassword] = useState(false);
 
   const { register } = useAppSelectors(state => state);
-
+  const { responser } = useAppSelectors(state => state);
 
   const handleCheck = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
@@ -160,12 +158,6 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
     { label: '>50', value: 4 }
   ];
 
-  // const options = (): Option.Mapper[] => {
-  //   return countries.map((item: Address.Country): Option.Mapper => {
-  //     return { label: item.name, value: item.id };
-  //   });
-  // };
-
   const handleGoogleLogin = async () => {
     try {
       await signIn('google', { callbackUrl: '/company' });
@@ -201,7 +193,7 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
 
   return (
     <Base>
-      <OverlayLoading open={register.loading}/>
+      <OverlayLoading open={register.loading} />
       <NavHead>
         <div>
           <Image src={kayaroll} alt='logo' height={40} width={150} />
@@ -217,6 +209,14 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
               <Image src={kayaroll} alt='logo' height={56} width={211} />
             </div>
             <h2>Register</h2>
+            {![200, 201, 0].includes(responser?.code) && (
+              <Box mb='17px'>
+                <Alert
+                  severity='error'
+                  content={responser?.message}
+                />
+              </Box>
+            )}
             <Grid container spacing={2}>
               <Grid item xs={6} md={6} lg={6} xl={6}>
                 <Input
@@ -226,6 +226,7 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
                   customLabel='Email Address'
                   withAsterisk={true}
                   size='small'
+                  placeholder='Input Email Address'
                 />
               </Grid>
               <Grid item xs={6} md={6} lg={6} xl={6}>
@@ -258,9 +259,10 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
                   name='name'
                   onChange={handleInputChange}
                   error={errors.name}
-                  customLabel='Input Full Name'
+                  customLabel='Full Name'
                   withAsterisk={true}
                   size='small'
+                  placeholder='Input Full Name'
                 />
               </Grid>
               <Grid item xs={6} md={6} lg={6} xl={6}>
@@ -268,11 +270,22 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
                   <Typography mb='.35rem'>Country<AsteriskComponent>*</AsteriskComponent></Typography>
                   <Select
                     fullWidth
+                    displayEmpty
                     variant='outlined'
                     size='small'
                     name='countryID'
                     value={values.countryID}
                     onChange={handleInputChange}
+                    renderValue={(value: string) => {
+                      if (value.length === 0) {
+                        return <Text title='Select Country' color='grey.400' />;
+                      }
+                      const selectedCountry = countries.find(country => country.value === value);
+                      if (selectedCountry) {
+                        return `${selectedCountry.label}`;
+                      }
+                      return null;
+                    }}
                   >
                     {countries?.map(item => (
                       <MenuItem key={item.label} value={item.value}>{item.label}</MenuItem>
@@ -286,9 +299,10 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
                   name='companyName'
                   onChange={handleInputChange}
                   error={errors.companyName}
-                  customLabel='Input Company Name'
+                  placeholder='Input Company Name'
                   withAsterisk={true}
                   size='small'
+                  customLabel='Input Company Name'
                 />
               </Grid>
               <Grid item xs={6} md={6} lg={6} xl={6}>
@@ -342,6 +356,7 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
                       error={errors.phoneNumber}
                       withAsterisk={true}
                       size='small'
+                      placeholder='Input Contact Number'
                     />
                   </Grid>
                 </Grid>
