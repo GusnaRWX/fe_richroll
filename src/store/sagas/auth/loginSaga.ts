@@ -28,6 +28,7 @@ import { Auth } from '@/types/authentication';
 import Router from 'next/router';
 import { getMeServices } from '../saga-actions/auth/meAction';
 import { meSuccessed } from '@/store/reducers/slice/auth/meSlice';
+import { readValidationResponse } from '@/utils/helper';
 
 /**
  * Fetch Authentication (Login)
@@ -55,11 +56,14 @@ function* fetchAuthenticationLogin(action: AnyAction) {
   } catch (err) {
     if (err instanceof AxiosError) {
       const errorMessage = err?.response?.data as Services.ErrorResponse;
+      const errorValidationMessage = err?.response?.data as Services.ValidationResponse;
       yield put({
         type: setResponserMessage.toString(),
         payload: {
-          code: errorMessage?.code,
-          message: errorMessage.message === 'Invalid email and password' ? 'Incorrect email address or password' :  errorMessage?.message,
+          code: errorMessage?.code || errorValidationMessage?.code,
+          message: errorMessage.message === 'Invalid email and password' ?
+            'Incorrect email address or password' :
+            readValidationResponse(errorValidationMessage.error).map(errorMessage => errorMessage.replace(/"/g, ''))
         }
       });
       yield put({ type: loginFailured.toString() });
@@ -73,7 +77,7 @@ function* fetchAuthenticationLogin(action: AnyAction) {
  * @param action
  */
 
-function* fetchForgotPassword(action: AnyAction){
+function* fetchForgotPassword(action: AnyAction) {
   try {
     const res: AxiosResponse = yield call(postForgotPassword, action?.payload);
     if (res.status === 200 || res.status === 201) {
@@ -158,7 +162,7 @@ function* fetchResetPassword(action: AnyAction) {
 }
 
 function* fetchSetNewPassword(action: AnyAction) {
-  try{
+  try {
     const res: AxiosResponse = yield call(setNewPasswordEmployee, action?.payload);
     if (res.status === 200 || res.status === 201) {
       yield put({ type: employeeSetNewPasswordSuccessed.toString() });
@@ -179,7 +183,7 @@ function* fetchSetNewPassword(action: AnyAction) {
       });
       Router.push('/login');
     }
-  }catch (err) {
+  } catch (err) {
     if (err instanceof AxiosError) {
       const errorMessage = err?.response?.data as Services.ErrorResponse;
       yield put({ type: employeeSetNewPasswordFailed.toString() });

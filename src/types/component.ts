@@ -25,6 +25,17 @@ export declare namespace Register {
     phoneNumber: string;
   }
 
+  export interface InitialValuesRegister {
+    email: string;
+    password: string;
+    name: string;
+    countryID: string;
+    companyName: string;
+    numberOfEmployees: string;
+    phoneNumberPrefix: string;
+    phoneNumber: string;
+  }
+
   export interface Component {
     countries: Array<{ label: string; value: string }>;
     doRegister: (_payload: Form) => void,

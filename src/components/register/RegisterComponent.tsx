@@ -1,10 +1,9 @@
-import React, { useState, FormEvent } from 'react';
+import React, { useState } from 'react';
 import styled from '@emotion/styled';
 import Image from 'next/image';
 import { styled as MuiStyled } from '@mui/material/styles';
 import kayaroll from '../../../public/images/kayaroll-logo.png';
 import { Icons } from '@/utils/assetsConstant';
-import { checkRegulerExpression } from '@/utils/helper';
 import {
   Card,
   CardContent,
@@ -23,14 +22,15 @@ import {
   MenuItem
 } from '@mui/material';
 import { Register } from '@/types/component';
-import { useAppSelectors, useForm } from '@/hooks/index';
+import { useAppSelectors } from '@/hooks/index';
 import { Input, Button } from '../_shared/form';
 import Link from 'next/link';
 import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
 import LocalizationMenu from '../_shared/_core/localization/Index';
 import { signIn } from 'next-auth/react';
 import { Alert, OverlayLoading, Text } from '../_shared/common';
-
+import { useFormik } from 'formik';
+import { validationSchemeRegister } from './validate';
 
 const NavHead = styled.div`
  height: 64px;
@@ -76,15 +76,21 @@ const AsteriskComponent = MuiStyled('span')(({ theme }) => ({
 
 function RegisterComponent({ countries, doRegister }: Register.Component) {
 
-  const [initialValues, setInitialValues] = useState({
-    email: '',
-    password: '',
-    name: '',
-    countryID: '',
-    companyName: '',
-    numberOfEmployees: '',
-    phoneNumberPrefix: '',
-    phoneNumber: ''
+  const formik = useFormik({
+    initialValues: {
+      email: '',
+      password: '',
+      name: '',
+      countryID: '',
+      companyName: '',
+      numberOfEmployees: '',
+      phoneNumberPrefix: '',
+      phoneNumber: ''
+    } as Register.InitialValuesRegister,
+    validationSchema: validationSchemeRegister,
+    onSubmit: (values) => {
+      doRegister({ ...values });
+    }
   });
 
   const [checked, setChecked] = useState(false);
@@ -97,59 +103,6 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
   const handleCheck = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
   };
-
-  const validate = (fieldOfValues = values) => {
-    const temp: Register.Form = { ...errors };
-
-    if ('email' in fieldOfValues) {
-      const patternEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      const emailValue = fieldOfValues.email || '';
-      let emailErrorMessage = '';
-      if (!emailValue) {
-        emailErrorMessage = 'Email is required';
-      } else if (!checkRegulerExpression(patternEmail, emailValue)) {
-        emailErrorMessage = 'Email should be valid';
-      }
-      temp.email = emailErrorMessage;
-    }
-
-    if ('password' in fieldOfValues) {
-      const patternPassword = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-      const passwordValue = fieldOfValues.password || '';
-      let passwordErrorMessage = '';
-      if (!passwordValue) {
-        passwordErrorMessage = 'Password is required';
-      } else if (!checkRegulerExpression(patternPassword, passwordValue)) {
-        passwordErrorMessage = 'Include Uppercase and lowercase, Include at least one number or symbol and be at least 8 character long';
-      }
-      temp.password = passwordErrorMessage;
-
-    }
-
-    if ('name' in fieldOfValues)
-      temp.name = fieldOfValues.name ? '' : 'Full Name is required';
-
-    if ('countryID' in fieldOfValues)
-      temp.countryID = fieldOfValues.countryID ? '' : 'Country is required';
-
-    if ('companyName' in fieldOfValues)
-      temp.companyName = fieldOfValues.companyName ? '' : 'Company name is required';
-
-    if ('numberOfEmployees' in fieldOfValues)
-      temp.numberOfEmployees = fieldOfValues.numberOfEmployees ? '' : 'Employees is required';
-
-    if ('phoneNumber' in fieldOfValues)
-      temp.phoneNumber = fieldOfValues.phoneNumber ? '' : 'Phone number is required';
-
-    setErrors({
-      ...temp
-    });
-
-    if (fieldOfValues === values)
-      return Object.values(temp).every(x => x === '');
-  };
-
-  const { values, errors, setErrors, handleInputChange } = useForm(initialValues, true, validate);
 
   const employeeItems = [
     { label: '<10', value: 1 },
@@ -174,23 +127,6 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
     }
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
-    e.preventDefault();
-    if (validate()) {
-      doRegister({ ...values });
-      setInitialValues({
-        email: '',
-        password: '',
-        name: '',
-        countryID: '',
-        companyName: '',
-        numberOfEmployees: '',
-        phoneNumberPrefix: '+62',
-        phoneNumber: ''
-      });
-    }
-  };
-
   return (
     <Base>
       <OverlayLoading open={register.loading} />
@@ -204,7 +140,7 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
       </NavHead>
       <Card sx={{ width: '800px', height: '100%' }}>
         <CardContent>
-          <Box component='form' autoComplete='off' onSubmit={handleSubmit}>
+          <Box component='form' autoComplete='off' onSubmit={formik.handleSubmit}>
             <div>
               <Image src={kayaroll} alt='logo' height={56} width={211} />
             </div>
@@ -221,22 +157,28 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
               <Grid item xs={6} md={6} lg={6} xl={6}>
                 <Input
                   name='email'
-                  onChange={handleInputChange}
-                  error={errors.email}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={formik.touched.email && Boolean(formik.errors.email)}
+                  helperText={formik.touched.email && formik.errors.email}
                   customLabel='Email Address'
                   withAsterisk={true}
                   size='small'
+                  value={formik.values.email}
                   placeholder='Input Email Address'
                 />
               </Grid>
               <Grid item xs={6} md={6} lg={6} xl={6}>
                 <Input
                   name='password'
-                  onChange={handleInputChange}
-                  error={errors.password}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={formik.touched.password && Boolean(formik.errors.password)}
+                  helperText={formik.touched.password && formik.errors.password}
                   customLabel='Password'
                   withAsterisk
                   size='small'
+                  value={formik.values.password}
                   placeholder='Input Password'
                   type={openPassword ? 'text' : 'password'}
                   InputProps={{
@@ -257,8 +199,10 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
               <Grid item xs={6} md={6} lg={6} xl={6}>
                 <Input
                   name='name'
-                  onChange={handleInputChange}
-                  error={errors.name}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={formik.touched.name && Boolean(formik.errors.name)}
+                  helperText={formik.touched.name && formik.errors.name}
                   customLabel='Full Name'
                   withAsterisk={true}
                   size='small'
@@ -266,7 +210,7 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
                 />
               </Grid>
               <Grid item xs={6} md={6} lg={6} xl={6}>
-                <FormControl fullWidth error={errors.countryID ? true : false}>
+                <FormControl fullWidth error={formik.touched.countryID && Boolean(formik.errors.countryID)}>
                   <Typography mb='.35rem'>Country<AsteriskComponent>*</AsteriskComponent></Typography>
                   <Select
                     fullWidth
@@ -274,8 +218,9 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
                     variant='outlined'
                     size='small'
                     name='countryID'
-                    value={values.countryID}
-                    onChange={handleInputChange}
+                    value={formik.values.countryID}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                     renderValue={(value: string) => {
                       if (value.length === 0) {
                         return <Text title='Select Country' color='grey.400' />;
@@ -291,30 +236,34 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
                       <MenuItem key={item.label} value={item.value}>{item.label}</MenuItem>
                     ))}
                   </Select>
-                  <FormHelperText>{errors.countryID}</FormHelperText>
+                  <FormHelperText>{formik.touched.countryID && formik.errors.countryID}</FormHelperText>
                 </FormControl>
               </Grid>
               <Grid item xs={12} md={12} lg={12} xl={12}>
                 <Input
                   name='companyName'
-                  onChange={handleInputChange}
-                  error={errors.companyName}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={formik.touched.companyName && Boolean(formik.errors.companyName)}
+                  helperText={formik.touched.companyName && formik.errors.companyName}
                   placeholder='Input Company Name'
                   withAsterisk={true}
                   size='small'
                   customLabel='Input Company Name'
+                  value={formik.values.companyName}
                 />
               </Grid>
               <Grid item xs={6} md={6} lg={6} xl={6}>
-                <FormControl fullWidth error={errors.numberOfEmployees ? true : false}>
+                <FormControl fullWidth error={formik.touched.numberOfEmployees && Boolean(formik.errors.numberOfEmployees)}>
                   <Typography>Employees<AsteriskComponent>*</AsteriskComponent></Typography>
                   <Select
                     fullWidth
                     variant='outlined'
                     size='small'
                     name='numberOfEmployees'
-                    value={values.numberOfEmployees}
-                    onChange={handleInputChange}
+                    value={formik.values.numberOfEmployees}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                   >
                     {
                       employeeItems.map((item) => (
@@ -322,7 +271,7 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
                       ))
                     }
                   </Select>
-                  <FormHelperText>{errors.numberOfEmployees}</FormHelperText>
+                  <FormHelperText>{formik.touched.numberOfEmployees && formik.errors.numberOfEmployees}</FormHelperText>
                 </FormControl>
               </Grid>
               <Grid item xs={6} md={6} lg={6} xl={6}>
@@ -333,8 +282,9 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
                       variant='outlined'
                       size='small'
                       name='phoneNumberPrefix'
-                      value={values.phoneNumberPrefix}
-                      onChange={handleInputChange}
+                      value={formik.values.phoneNumberPrefix}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
                       MenuProps={{ disableAutoFocus: true }}
                       sx={{
                         backgroundColor: '#D9EFE7',
@@ -352,8 +302,11 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
                   <Grid item xs={9} sm={9} md={9} lg={9} xl={9}>
                     <Input
                       name='phoneNumber'
-                      onChange={handleInputChange}
-                      error={errors.phoneNumber}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.phoneNumber}
+                      error={formik.touched.phoneNumber && Boolean(formik.errors.phoneNumber)}
+                      helperText={formik.touched.phoneNumber && formik.errors.phoneNumber}
                       withAsterisk={true}
                       size='small'
                       placeholder='Input Contact Number'
