@@ -23,12 +23,13 @@ import {
 import { setResponserMessage } from "@/store/reducers/slice/responserSlice";
 import { Services } from "@/types/axios";
 import { AxiosError, AxiosResponse } from "axios";
+import Router from "next/router";
 
 // Get Data Table
 function* fetchGetTable(action: AnyAction) {
   try {
     const res: AxiosResponse = yield call(getDataTable, action?.payload);
-    if (res.data.code === 200) {
+    if (res.status === 200) {
       yield put({
         type: getTableSuccess.toString(),
         payload: {
@@ -55,7 +56,7 @@ function* fetchGetTable(action: AnyAction) {
 function* fetchGetCompensationComponentOption() {
   try {
     const res: AxiosResponse = yield call(getCompensationComponentOption);
-    if (res.data.code === 200) {
+    if (res.status === 200) {
       yield put({
         type: getCompensationComponentOptionSuccess.toString(),
         payload: {
@@ -83,7 +84,7 @@ function* fetchGetCompensationComponentOption() {
 function* deleteCnb(action: AnyAction) {
   try {
     const res: AxiosResponse = yield call(deleteCnbProfile, action?.Id);
-    if (res.data.code === 200) {
+    if (res.status === 200) {
       yield put({
         type: deleteCompensationSuccess.toString(),
         payload: {
@@ -110,13 +111,15 @@ function* deleteCnb(action: AnyAction) {
 function* fetchPostNewCnbProfile(action: AnyAction) {
   try {
     const res: AxiosResponse = yield call(postNewCnbProfile, action?.Payload);
-    if (res.data.code === 200) {
+    if (res.status === 200) {
       yield put({
         type: postNewCnbProfileSuccess.toString(),
         payload: {
           data: res.data.data,
         },
       });
+      yield Router.push('/compensation-benefits');
+      yield delay(1000);
     }
   } catch (err) {
     if (err instanceof AxiosError) {
@@ -144,7 +147,7 @@ function* cnbSaga() {
     postNewCnbProfileRequested.toString(),
     fetchPostNewCnbProfile
   );
-  yield takeEvery(deleteCompensationRequested.toString(), deleteCnb)
+  yield takeEvery(deleteCompensationRequested.toString(), deleteCnb);
 }
 
 export default cnbSaga;

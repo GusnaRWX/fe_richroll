@@ -392,6 +392,7 @@ export default function CreateCNBComponent() {
               <InputWrapper style={{ maxWidth: "511px" }}>
                 <TextField
                   fullWidth
+                  value={BaseCompensation.rateOrAmount}
                   onChange={(e) =>
                     setBaseCompensation({
                       ...BaseCompensation,
@@ -403,7 +404,7 @@ export default function CreateCNBComponent() {
                       <InputAdornment position="start">Rp</InputAdornment>
                     ),
                     endAdornment: (
-                      <InputAdornment position="start">IDR</InputAdornment>
+                      <InputAdornment position="end">IDR</InputAdornment>
                     ),
                   }}
                 />
