@@ -4,8 +4,7 @@ import { useAppDispatch } from '@/hooks/index';
 import { setResponserMessage } from '@/store/reducers/slice/responserSlice';
 import { BsCheckCircle } from 'react-icons/bs';
 import { IconButton, Typography } from '@mui/material';
-import { Close } from '@mui/icons-material';
-import { ErrorOutlineOutlined } from '@mui/icons-material';
+import { Close, ErrorOutlineOutlined } from '@mui/icons-material';
 
 const CardWrapper = styled.div`
  visibility: hidden;
@@ -45,7 +44,7 @@ const ContentWrapaper = styled.div`
  flex-direction: row;
  flex-wrap: nowrap;
  align-items: center;
- justfiy-content: flex-start;
+ justify-content: flex-start;
  gap: 1rem;
 `;
 

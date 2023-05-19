@@ -5,7 +5,7 @@
  */
 
 import { AnyAction } from '@reduxjs/toolkit';
-import { loginService, postForgotPassword, postResetPassword } from '../saga-actions/auth/loginAction';
+import { loginService, postForgotPassword, postResetPassword, setNewPasswordEmployee } from '../saga-actions/auth/loginAction';
 import { call, delay, put, takeEvery } from 'redux-saga/effects';
 import {
   loginRequested,
@@ -28,7 +28,6 @@ import { Auth } from '@/types/authentication';
 import Router from 'next/router';
 import { getMeServices } from '../saga-actions/auth/meAction';
 import { meSuccessed } from '@/store/reducers/slice/auth/meSlice';
-import { setNewPasswordEmployee } from '../saga-actions/auth/loginAction';
 
 /**
  * Fetch Authentication (Login)

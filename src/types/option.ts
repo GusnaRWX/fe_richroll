@@ -15,7 +15,7 @@ export declare namespace Option {
     items: Array<{id:  string, name: string}>
   }
 
-  export interface position {
+  export interface Position {
     items: Array<{id:  string, name: string}>
   }
 
