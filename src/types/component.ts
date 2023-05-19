@@ -47,6 +47,17 @@ export declare namespace CompanyCreate {
   }
 }
 
+export declare namespace CompanyEdit {
+  export interface Component {
+    companyType: [];
+    companySector: [];
+    bank: [];
+    paymentMethod: [];
+    countries: [];
+    detail;
+  }
+}
+
 export declare namespace CoreLayout {
 
   export interface SidebarItem {

@@ -75,7 +75,7 @@ const Layout = ({
             src={companyData?.imageUrl && companyData?.imageUrl.includes('http') ? companyData?.imageUrl : ImageType.PLACEHOLDER_COMPANY}
             fill={true}
             style={{ objectFit: 'contain' }}
-            alt={companyData?.name || 'image'}
+            alt={'company-logo'}
           />
         </Box>
         <Box component='div'>

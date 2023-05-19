@@ -6,24 +6,16 @@ import {
   Select,
   Box,
   MenuItem,
+  Alert,
   FormControl } from '@mui/material';
-import { Input, Button, CheckBox} from '@/components/_shared/form';
+import { Input, CheckBox} from '@/components/_shared/form';
 import { styled as MuiStyled } from '@mui/material/styles';
-import { useRouter } from 'next/router';
 import { CustomHooks } from '@/types/hooks';
+import { useAppSelectors } from '@/hooks/index';
 
 
 const AsteriskComponent = MuiStyled('span')(({ theme }) => ({
   color: theme.palette.error.main
-}));
-
-const NextBtnWrapper = MuiStyled(Box)(({
-  width: '100%',
-  display: 'flex',
-  flexDirection: 'row',
-  alignItems: 'center',
-  justifyContent: 'flex-end',
-  marginTop: '2rem'
 }));
 
 interface CompanyBankProps {
@@ -32,11 +24,10 @@ interface CompanyBankProps {
   handleInputChange: (_e: CustomHooks.HandleInput) => CustomHooks.HandleInput;
   values;
   errors;
-  handleSubmit: (e) => void;
 }
 
-function CompanyInformationForm ({bank, paymentMethod, handleInputChange, values, errors, handleSubmit} :CompanyBankProps) {
-  const router = useRouter();
+function CompanyProfileBankForm ({bank, paymentMethod, handleInputChange, values, errors} :CompanyBankProps) {
+  const { responser } = useAppSelectors(state => state);
   const convertCheckbox = (name, event) => {
     const obj = {
       target: {
@@ -339,13 +330,17 @@ function CompanyInformationForm ({bank, paymentMethod, handleInputChange, values
             </Grid>
           </Grid>
         )}
-        <NextBtnWrapper>
-          <Button onClick={() => { router.push('/company');}} fullWidth={false} size='small' label='Cancel' variant='outlined' sx={{ mr: '12px' }} color='primary'/>
-          <Button onClick={(e) => { handleSubmit(e); }} fullWidth={false} size='small' label='Save' color='primary'/>
-        </NextBtnWrapper>
+        {![200, 201, 0].includes(responser?.code) && (
+          <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
+            <Grid item xs={6} md={6} lg={6} xl={6}></Grid>
+            <Grid item xs={6} md={6} lg={6} xl={6}>
+              <Alert severity='error'>{responser?.message}</Alert>
+            </Grid>
+          </Grid>
+        )}
       </form>
     </>
   );
 }
 
-export default CompanyInformationForm;
+export default CompanyProfileBankForm;

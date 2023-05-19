@@ -9,9 +9,7 @@ import {
   Tabs
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-// import Image from 'next/image';
-// import { Image as ImageType } from '@/utils/assetsConstant';
-import { CompanyCreate } from '@/types/component';
+import { CompanyEdit } from '@/types/component';
 import CompanyInformationForm from './CompanyProfileInformationForm';
 import CompanyBankForm from './CompanyProfileBankForm';
 import { useForm, useAppDispatch, useAppSelectors } from '@/hooks/index';
@@ -20,7 +18,8 @@ import {
   administrativeSecondLevelRequested,
   administrativeThirdLevelRequsted
 } from '@/store/reducers/slice/options/optionSlice';
-import { postCompanyProfileRequested } from '@/store/reducers/slice/company/companySlice';
+import { patchCompanyProfileRequested } from '@/store/reducers/slice/company/companySlice';
+import { base64ToFile } from '@/utils/helper';
 import { useRouter } from 'next/router';
 import { getCompanyData } from '@/utils/helper';
 
@@ -71,8 +70,10 @@ function a11yProps(index: number) {
   };
 }
 
-const CompanyCreateComponent = ({ companyType, companySector, bank, paymentMethod, countries }: CompanyCreate.Component) => {
+const CompanyEditComponent = ({ detail, companyType, companySector, bank, paymentMethod, countries }: CompanyEdit.Component) => {
   const [tabSelected, setTabSelected] = useState(0);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [images, setImages] = useState<string | null>(detail?.information?.imageUrl);
   const companyData = getCompanyData();
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -86,44 +87,44 @@ const CompanyCreateComponent = ({ companyType, companySector, bank, paymentMetho
   const [initialValues] = useState({
 
     // Group Company Information
-    companyType: '',
-    companyName: '',
-    companyNPWP: '',
-    companySector: '',
-    companyEmail: '',
-    phoneNumberPrefix: '',
-    phoneNumber: '',
+    companyType: detail?.information?.type?.id,
+    companyName: detail?.information?.name,
+    companyNPWP: detail?.information?.npwp,
+    companySector: detail?.information?.sector?.id,
+    companyEmail: detail?.information?.email,
+    phoneNumberPrefix: detail?.information?.contact.slice(0,3),
+    phoneNumber: detail?.information?.contact,
 
     // Group Company Address
-    countryCompanyAddress: '',
-    provinceCompanyAddress: '',
-    cityCompanyAddress: '',
-    subDistrictCompanyAddress: '',
-    addressCompanyAddress: '',
-    zipCodeCompanyAddress: '',
+    countryCompanyAddress: detail?.address?.country?.code,
+    provinceCompanyAddress: detail?.address?.firstLevel?.code,
+    cityCompanyAddress: detail?.address?.secondLevel?.code,
+    subDistrictCompanyAddress: detail?.address?.thirdLevel?.code,
+    addressCompanyAddress: detail?.address?.address,
+    zipCodeCompanyAddress: detail?.address?.zipCode,
 
     // Group Bank Information
-    bankBankInformation: '',
-    bankAccountHolderNameBankInformation: '',
-    bankAccoutNoBankInformation: '',
-    bankCodeBankInformation: '',
-    branchCodeBankInformation: '',
-    branchNameBankInformation: '',
-    swiftCodeBankInformation: '',
+    bankBankInformation: detail?.bank?.bank?.id,
+    bankAccountHolderNameBankInformation: detail?.bank?.accountName,
+    bankAccoutNoBankInformation: detail?.bank?.accountNumber,
+    bankCodeBankInformation: detail?.bank?.bankCode,
+    branchCodeBankInformation: detail?.bank?.branchCode,
+    branchNameBankInformation: detail?.bank?.branchName,
+    swiftCodeBankInformation: detail?.bank?.swiftCode,
 
     // Group Payroll Information
-    isMonthly: true,
-    isWeekly: false,
-    isBiWeekly: false,
-    monthlyPeriodStart: '',
-    monthlyPeriodEnd: '',
-    monthlyPayrollDate: '',
-    monthlyMethod: '',
-    weeklyPeriod: '',
-    weeklyMethod: '',
-    biWeeklyPeriod: '',
-    biWeeklyPeriodWeek: '',
-    biWeeklyMethod: ''
+    isMonthly: !!detail?.payroll?.monthly,
+    isWeekly: !!detail?.payroll?.weekly,
+    isBiWeekly: !!detail?.payroll?.biWeekly,
+    monthlyPeriodStart: detail?.payroll?.monthly?.periodStart,
+    monthlyPeriodEnd: detail?.payroll?.monthly?.periodEnd,
+    monthlyPayrollDate: detail?.payroll?.monthly?.payrollDate,
+    monthlyMethod: detail?.payroll?.monthly?.method?.id,
+    weeklyPeriod: detail?.payroll?.weekly?.period,
+    weeklyMethod: detail?.payroll?.weekly?.method?.id,
+    biWeeklyPeriod: detail?.payroll?.biWeekly?.period,
+    biWeeklyPeriodWeek: detail?.payroll?.biWeekly?.periodWeek,
+    biWeeklyMethod: detail?.payroll?.biWeekly?.method?.id
   });
 
   const validate = (fieldOfValues = values) => {
@@ -263,9 +264,40 @@ const CompanyCreateComponent = ({ companyType, companySector, bank, paymentMetho
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    let payrollCheck = {};
+    const convertToBase64 = base64ToFile(images as string, 'example.png');
+
+    const informationData = {
+      typeId: values.companyType,
+      name: values.companyName,
+      npwp: values.companyNPWP,
+      sectorId: values.companySector,
+      email: values.companyEmail,
+      contact: values.phoneNumberPrefix + values.phoneNumber,
+    };
+
+    const addressData = {
+      countryId: values.countryCompanyAddress,
+      firstLevelCode: values.provinceCompanyAddress,
+      secondLevelCode: values.cityCompanyAddress,
+      thirdLevelCode: values.subDistrictCompanyAddress,
+      fourthLevelCode: null,
+      address: values.addressCompanyAddress,
+      zipCode: values.zipCodeCompanyAddress,
+    };
+
+    const bankData = {
+      bankId: values.bankBankInformation,
+      accountName: values.bankAccountHolderNameBankInformation,
+      accountNumber: values.bankAccoutNoBankInformation,
+      bankCode: values.bankCodeBankInformation,
+      branchCode: values.branchCodeBankInformation,
+      branchName: values.branchNameBankInformation,
+      swiftCode: values.swiftCodeBankInformation
+    };
+
+    let payrollData = {};
     if (values.isMonthly) {
-      payrollCheck = {...payrollCheck, ...{monthly: {
+      payrollData = {...payrollData, ...{monthly: {
         periodStart: values.monthlyPeriodStart,
         periodEnd: values.monthlyPeriodEnd,
         payrollDate: values.monthlyPayrollDate,
@@ -273,60 +305,34 @@ const CompanyCreateComponent = ({ companyType, companySector, bank, paymentMetho
       }}};
     }
     if (values.isWeekly) {
-      payrollCheck = {...payrollCheck, ...{weekly: {
+      payrollData = {...payrollData, ...{weekly: {
         period: values.weeklyPeriod,
         methodId: values.weeklyMethod,
       }}};
     }
     if (values.isBiWeekly) {
-      payrollCheck = {...payrollCheck, ...{biWeekly: {
+      payrollData = {...payrollData, ...{biWeekly: {
         period: values.biWeeklyPeriod,
         periodWeek: values.biWeeklyPeriodWeek,
         methodId: values.biWeeklyMethod,
       }}};
     }
-    const payload = {
-      information: {
-        imageUrl: 'image.com/image123',
-        typeId: values.companyType,
-        name: values.companyName,
-        npwp: values.companyNPWP,
-        sectorId: values.companySector,
-        email: values.companyEmail,
-        contact: values.phoneNumberPrefix + values.phoneNumber,
-      },
-      address: {
-        countryId: values.countryCompanyAddress,
-        firstLevelCode: values.provinceCompanyAddress,
-        secondLevelCode: values.cityCompanyAddress,
-        thirdLevelCode: values.subDistrictCompanyAddress,
-        fourthLevelCode: 'kosong',
-        address: values.addressCompanyAddress,
-        zipCode: values.zipCodeCompanyAddress,
-      },
-      bank: {
-        bankId: values.bankBankInformation,
-        accountName: values.bankAccountHolderNameBankInformation,
-        accountNumber: values.bankAccoutNoBankInformation,
-        bankCode: values.bankCodeBankInformation,
-        branchCode: values.branchCodeBankInformation,
-        branchName: values.branchNameBankInformation,
-        swiftCode: values.swiftCodeBankInformation
-      },
-      payroll: payrollCheck
-    };
+
+    const inputData = new FormData();
+    inputData.append('picture', values.picture[0] || convertToBase64);
+    inputData.append('information', JSON.stringify(informationData));
+    inputData.append('address', JSON.stringify(addressData));
+    inputData.append('bank', JSON.stringify(bankData));
+    inputData.append('payroll', JSON.stringify(payrollData));
     
     dispatch({
-      type: postCompanyProfileRequested.toString(),
-      payload: payload
+      type: patchCompanyProfileRequested.toString(),
+      payload: {id: detail.id, data: inputData}
     });
   };
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabSelected(newValue);
-  };
-  const handleNext = (val: number) => {
-    setTabSelected(val);
   };
 
   return (
@@ -349,7 +355,7 @@ const CompanyCreateComponent = ({ companyType, companySector, bank, paymentMetho
               size='small'
               color='primary'
               sx={{ color: 'white' }}
-              onClick={() => { router.push('/company-management/company-profile'); }}
+              onClick={(e) => { handleSubmit(e); }}
             >Save</MuiButton>
           </ButtonWrapper>
         </Grid>
@@ -364,7 +370,6 @@ const CompanyCreateComponent = ({ companyType, companySector, bank, paymentMetho
           </Box>
           <TabPanel value={tabSelected} index={0}>
             <CompanyInformationForm
-              nextPage={handleNext}
               companyType={companyType}
               companySector={companySector}
               countries={countries}
@@ -374,11 +379,12 @@ const CompanyCreateComponent = ({ companyType, companySector, bank, paymentMetho
               values={values}
               errors={errors}
               handleInputChange={handleInputChange}
+              images={images}
+              setImages={setImages}
             />
           </TabPanel>
           <TabPanel value={tabSelected} index={1}>
             <CompanyBankForm
-              handleSubmit={handleSubmit}
               values={values}
               errors={errors}
               handleInputChange={handleInputChange}
@@ -392,4 +398,4 @@ const CompanyCreateComponent = ({ companyType, companySector, bank, paymentMetho
   );
 };
 
-export default CompanyCreateComponent;
+export default CompanyEditComponent;
