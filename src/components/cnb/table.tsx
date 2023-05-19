@@ -24,13 +24,14 @@ import { TextFieldProps } from "@mui/material/";
 import { IconButton } from "../_shared/form";
 import { useAppDispatch } from "@/hooks/index";
 import { deleteCompensationRequested } from "@/store/reducers/slice/cnb/compensationSlice";
+import dayjs from 'dayjs'
 
 interface Data {
   name: string;
-  baseCompensation: string;
-  suppCompensation: string;
-  date: string;
-  lastUpdate: string;
+  baseCompensation: string | string[];
+  supplementaryCompensation: string | string[];
+  createdAt: string;
+  updatedAt: string;
   id: string;
 }
 
@@ -94,19 +95,19 @@ const headCells: readonly HeadCell[] = [
     label: "Base Compensation",
   },
   {
-    id: "suppCompensation",
+    id: "supplementaryCompensation",
     numeric: false,
     disablePadding: false,
     label: "Supplement Compensation",
   },
   {
-    id: "date",
+    id: "createdAt",
     numeric: false,
     disablePadding: false,
     label: "Date Created",
   },
   {
-    id: "lastUpdate",
+    id: "updatedAt",
     numeric: false,
     disablePadding: false,
     label: "Last Updated",
@@ -168,7 +169,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 export default function EnhancedTable(rows: any) {
   const dispatch = useAppDispatch();
   const [order, setOrder] = React.useState<Order>("asc");
-  const [orderBy, setOrderBy] = React.useState<keyof Data>("name");
+  const [orderBy, setOrderBy] = React.useState<keyof Data>("createdAt");
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -261,10 +262,14 @@ export default function EnhancedTable(rows: any) {
                       >
                         {row.name}
                       </TableCell>
-                      <TableCell align="right">{row.name}</TableCell>
-                      <TableCell align="right">{row.name}</TableCell>
-                      <TableCell align="right">{row.name}</TableCell>
-                      <TableCell align="right">{row.name}</TableCell>
+                      <TableCell>{row.baseCompensation[0]}</TableCell>
+                      <TableCell>
+                        {row.supplementaryCompensation.map((item: string, i: number) => (
+                          <div key={i}>{item}</div>
+                        ))}
+                      </TableCell>
+                      <TableCell>{dayjs(row.createdAt).format('DD/MM/YY')}</TableCell>
+                      <TableCell>{dayjs(row.updatedAt).format('DD/MM/YY')}</TableCell>
                       <TableCell style={{ display: "flex", gap: "8px" }}>
                         <IconButton
                           parentColor="primary.50"
