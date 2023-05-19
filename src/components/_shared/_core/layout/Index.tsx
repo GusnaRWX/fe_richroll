@@ -45,7 +45,7 @@ const Layout = ({
     if (getUserProfile) {
       dispatch({
         type: meSuccessed.toString(),
-        payload: { ...JSON.parse(getUserProfile as string) }
+        payload: { ...JSON.parse(getUserProfile) }
       });
     }
   }, []);

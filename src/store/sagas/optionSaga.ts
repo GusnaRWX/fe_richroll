@@ -245,7 +245,7 @@ function* fetchGetListPosition() {
   try {
     const res: AxiosResponse = yield call(getListPosition);
     if (res.status === 200) {
-      const { items } = res?.data?.data as Option.position;
+      const { items } = res?.data?.data as Option.Position;
 
       yield put({
         type: getListPositionSuccess.toString(),
