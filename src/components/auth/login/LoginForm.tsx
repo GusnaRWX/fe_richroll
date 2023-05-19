@@ -10,8 +10,9 @@ import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
 import { Input, Button } from '@/components/_shared/form/';
 import { signIn } from 'next-auth/react';
 import { Text } from '@/components/_shared/common';
-import { validationSchemeLogin, initialValues } from './validate';
+import { validationSchemeLogin } from './validate';
 import { useFormik } from 'formik';
+import { Auth } from '@/types/authentication';
 
 const LinkComponent = styled(Link)(({ theme }) => ({
   color: theme.palette.primary.main,
@@ -39,7 +40,10 @@ const LoginForm = ({
   const { responser, login } = useAppSelectors(state => state);
 
   const formik = useFormik({
-    initialValues: initialValues,
+    initialValues: {
+      email: '',
+      password: ''
+    } as Auth.InitialValuesLogin,
     validationSchema: validationSchemeLogin,
     onSubmit: (values) => {
       doLogin(values);
