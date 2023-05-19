@@ -320,7 +320,7 @@ const CompanyCreateComponent = ({ companyType, companySector, bank, paymentMetho
     e.preventDefault();
     const convertToBase64 = base64ToFile(images as string, 'example.png');
 
-    const information = {
+    const informationData = {
       typeId: values.companyType,
       name: values.companyName,
       npwp: values.companyNPWP,
@@ -329,7 +329,7 @@ const CompanyCreateComponent = ({ companyType, companySector, bank, paymentMetho
       contact: values.phoneNumberPrefix + values.phoneNumber,
     };
 
-    const address = {
+    const addressData = {
       countryId: values.countryCompanyAddress,
       firstLevelCode: values.provinceCompanyAddress,
       secondLevelCode: values.cityCompanyAddress,
@@ -339,7 +339,7 @@ const CompanyCreateComponent = ({ companyType, companySector, bank, paymentMetho
       zipCode: values.zipCodeCompanyAddress,
     };
 
-    const bank = {
+    const bankData = {
       bankId: values.bankBankInformation,
       accountName: values.bankAccountHolderNameBankInformation,
       accountNumber: values.bankAccoutNoBankInformation,
@@ -349,9 +349,9 @@ const CompanyCreateComponent = ({ companyType, companySector, bank, paymentMetho
       swiftCode: values.swiftCodeBankInformation
     };
 
-    let payroll = {};
+    let payrollData = {};
     if (values.isMonthly) {
-      payroll = {...payroll, ...{monthly: {
+      payrollData = {...payrollData, ...{monthly: {
         periodStart: values.monthlyPeriodStart,
         periodEnd: values.monthlyPeriodEnd,
         payrollDate: values.monthlyPayrollDate,
@@ -359,13 +359,13 @@ const CompanyCreateComponent = ({ companyType, companySector, bank, paymentMetho
       }}};
     }
     if (values.isWeekly) {
-      payroll = {...payroll, ...{weekly: {
+      payrollData = {...payrollData, ...{weekly: {
         period: values.weeklyPeriod,
         methodId: values.weeklyMethod,
       }}};
     }
     if (values.isBiWeekly) {
-      payroll = {...payroll, ...{biWeekly: {
+      payrollData = {...payrollData, ...{biWeekly: {
         period: values.biWeeklyPeriod,
         periodWeek: values.biWeeklyPeriodWeek,
         methodId: values.biWeeklyMethod,
@@ -374,10 +374,10 @@ const CompanyCreateComponent = ({ companyType, companySector, bank, paymentMetho
 
     const inputData = new FormData();
     inputData.append('picture', values.picture[0] || convertToBase64);
-    inputData.append('information', JSON.stringify(information));
-    inputData.append('address', JSON.stringify(address));
-    inputData.append('bank', JSON.stringify(bank));
-    inputData.append('payroll', JSON.stringify(payroll));
+    inputData.append('information', JSON.stringify(informationData));
+    inputData.append('address', JSON.stringify(addressData));
+    inputData.append('bank', JSON.stringify(bankData));
+    inputData.append('payroll', JSON.stringify(payrollData));
     
     dispatch({
       type: postCompanyProfileRequested.toString(),
