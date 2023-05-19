@@ -1,5 +1,5 @@
 import React from 'react';
-import LoginForm from '@/components/auth/login/Form';
+import LoginForm from '@/components/auth/login/LoginForm';
 import { Login } from '@/types/component';
 import {
   Box,

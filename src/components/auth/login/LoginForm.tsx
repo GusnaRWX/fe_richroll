@@ -1,16 +1,18 @@
-import React, { FormEvent, useState } from 'react';
-import { useForm, useAppSelectors } from '@/hooks/index';
+import React, { useState } from 'react';
+import { useAppSelectors } from '@/hooks/index';
 import { Login } from '@/types/component';
 import { Box, BoxProps, Typography, InputAdornment, IconButton, Alert } from '@mui/material';
 import { Image as ImageType, Icons } from '@/utils/assetsConstant';
 import { styled } from '@mui/material/styles';
 import Image from 'next/image';
 import Link from 'next/link';
-import { checkRegulerExpression } from '@/utils/helper';
 import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
 import { Input, Button } from '@/components/_shared/form/';
 import { signIn } from 'next-auth/react';
 import { Text } from '@/components/_shared/common';
+import { validationSchemeLogin } from './validate';
+import { useFormik } from 'formik';
+import { Auth } from '@/types/authentication';
 
 const LinkComponent = styled(Link)(({ theme }) => ({
   color: theme.palette.primary.main,
@@ -33,56 +35,20 @@ const WrapperSSO = styled(Box)<BoxProps>(() => ({
 const LoginForm = ({
   doLogin
 }: Login.Component) => {
-  const [initialValues, setInitialValues] = useState({
-    email: '',
-    password: ''
-  });
-
   const [openPassword, setOpenPassword] = useState(false);
 
   const { responser, login } = useAppSelectors(state => state);
 
-  const validate = (fieldOfValues = values) => {
-    const temp: Login.Form = { ...errors };
-
-    if ('email' in fieldOfValues) {
-      const patternEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      const emailValue = fieldOfValues.email || '';
-      let emailErrorMessage = '';
-      if (!emailValue) {
-        emailErrorMessage = 'Email is required';
-      } else if (!checkRegulerExpression(patternEmail, emailValue)) {
-        emailErrorMessage = 'Email should be valid';
-      }
-      temp.email = emailErrorMessage;
+  const formik = useFormik({
+    initialValues: {
+      email: '',
+      password: ''
+    } as Auth.InitialValuesLogin,
+    validationSchema: validationSchemeLogin,
+    onSubmit: (values) => {
+      doLogin(values);
     }
-
-
-    if ('password' in fieldOfValues)
-      temp.password = fieldOfValues.password ? '' : 'Password is required';
-
-    setErrors({
-      ...temp
-    });
-
-    if (fieldOfValues === values)
-      return Object.values(temp).every(x => x === '');
-  };
-
-  const {
-    values,
-    errors,
-    setErrors,
-    handleInputChange
-  } = useForm(initialValues, true, validate);
-
-  const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
-    e.preventDefault();
-    if (validate()) {
-      doLogin({ ...values });
-      setInitialValues({ email: '', password: '' });
-    }
-  };
+  });
 
   const handleGoogleLogin = async () => {
     try {
@@ -105,7 +71,7 @@ const LoginForm = ({
       <Box
         component='form'
         autoComplete='off'
-        onSubmit={handleSubmit}
+        onSubmit={formik.handleSubmit}
         sx={{
           padding: '0 40px'
         }}
@@ -143,8 +109,11 @@ const LoginForm = ({
             size='small'
             placeholder='Input email address'
             name='email'
-            onChange={handleInputChange}
-            error={errors.email}
+            value={formik.values.email}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={formik.touched.email && Boolean(formik.errors.email)}
+            helperText={formik.touched.email && formik.errors.email}
           />
         </Box>
         <Box mb='17px'>
@@ -153,8 +122,11 @@ const LoginForm = ({
             withAsterisk
             size='small'
             name='password'
-            onChange={handleInputChange}
-            error={errors.password}
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={formik.touched.password && Boolean(formik.errors.password)}
+            helperText={formik.touched.password && formik.errors.password}
             type={openPassword ? 'text' : 'password'}
             placeholder='Input password'
             InputProps={{
