@@ -1,5 +1,5 @@
 import React from 'react';
-import LoginComponent from '@/components/auth/login/Index';
+import LoginComponent from '@/components/auth/login/LoginComponent';
 import { useDispatch } from 'react-redux';
 import { loginRequested } from '@/store/reducers/slice/auth/loginSlice';
 import { Login } from '@/types/component';
