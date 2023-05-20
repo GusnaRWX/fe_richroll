@@ -29,12 +29,11 @@ interface CompanyBankProps {
 function CompanyProfileBankForm ({bank, paymentMethod, handleInputChange, values, errors} :CompanyBankProps) {
   const { responser } = useAppSelectors(state => state);
   const convertCheckbox = (name, event) => {
-    const obj = {
+    return {
       target: {
         name, value: event?.target?.checked
       }
     };
-    return obj;
   };
 
   return (

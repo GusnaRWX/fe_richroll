@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import CompanyProfileEditComponent from '@/components/company-profile/edit/CompanyProfileEditComponent';
+import CompanyEditComponent from '@/components/company-profile/edit/CompanyEditComponent';
 import Layout from '@/components/_shared/_core/layout/Index';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { companyTypeRequested, companySectorRequested, bankRequested, paymentMethodRequested, getCompanyDetailRequested } from '@/store/reducers/slice/company/companySlice';
@@ -42,7 +42,7 @@ function CompanyProfileEditContainer() {
   }, []);
   return (
     <Layout>
-      <CompanyProfileEditComponent detail={data} companyType={companyType} companySector={companySector} bank={bank} paymentMethod={paymentMethod} countries={countries} />
+      <CompanyEditComponent detail={data} companyType={companyType} companySector={companySector} bank={bank} paymentMethod={paymentMethod} countries={countries} />
     </Layout>
   );
 }

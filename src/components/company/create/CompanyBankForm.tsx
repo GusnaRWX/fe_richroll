@@ -37,16 +37,15 @@ interface CompanyBankProps {
   handleSubmit: (e) => void;
 }
 
-function CompanyInformationForm ({bank, paymentMethod, handleInputChange, values, errors, handleSubmit} :CompanyBankProps) {
+function CompanyBankForm ({bank, paymentMethod, handleInputChange, values, errors, handleSubmit} :CompanyBankProps) {
   const { responser } = useAppSelectors(state => state);
   const router = useRouter();
   const convertCheckbox = (name, event) => {
-    const obj = {
+    return {
       target: {
         name, value: event?.target?.checked
       }
     };
-    return obj;
   };
 
   return (
@@ -359,4 +358,4 @@ function CompanyInformationForm ({bank, paymentMethod, handleInputChange, values
   );
 }
 
-export default CompanyInformationForm;
+export default CompanyBankForm;
