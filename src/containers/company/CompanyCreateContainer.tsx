@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { companyTypeRequested, companySectorRequested, bankRequested, paymentMethodRequested } from '@/store/reducers/slice/company/companySlice';
 import { countriesRequested } from '@/store/reducers/slice/options/optionSlice';
 
-const CompanyContainer = () => {
+const CompanyCreateContainer = () => {
   const dispatch = useAppDispatch();
 
   const companyType = useAppSelectors(state => state.company.companyType);
@@ -34,4 +34,4 @@ const CompanyContainer = () => {
   return <CompanyCreateComponent companyType={companyType} companySector={companySector} bank={bank} paymentMethod={paymentMethod} countries={countries} />;
 };
 
-export default CompanyContainer;
+export default CompanyCreateContainer;

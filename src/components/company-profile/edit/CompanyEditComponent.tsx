@@ -19,7 +19,6 @@ import {
   administrativeThirdLevelRequsted
 } from '@/store/reducers/slice/options/optionSlice';
 import { patchCompanyProfileRequested } from '@/store/reducers/slice/company/companySlice';
-import { base64ToFile } from '@/utils/helper';
 import { useRouter } from 'next/router';
 import { getCompanyData } from '@/utils/helper';
 
@@ -264,7 +263,6 @@ const CompanyEditComponent = ({ detail, companyType, companySector, bank, paymen
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const convertToBase64 = base64ToFile(images as string, 'example.png');
 
     const informationData = {
       typeId: values.companyType,
@@ -319,7 +317,7 @@ const CompanyEditComponent = ({ detail, companyType, companySector, bank, paymen
     }
 
     const inputData = new FormData();
-    inputData.append('picture', values.picture[0] || convertToBase64);
+    inputData.append('picture', values?.picture[0] || detail?.information?.imageUrl);
     inputData.append('information', JSON.stringify(informationData));
     inputData.append('address', JSON.stringify(addressData));
     inputData.append('bank', JSON.stringify(bankData));
