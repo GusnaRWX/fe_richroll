@@ -16,7 +16,7 @@ export declare namespace Services {
     code: number;
     status: string;
     message: string;
-    errors: string[]
+    error: string[]
   }
 
   export interface LoggingResponse {

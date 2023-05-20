@@ -7,8 +7,7 @@ import { Services } from '@/types/axios';
 import { AxiosError, AxiosResponse } from 'axios';
 import { Auth } from '@/types/authentication';
 import Router from 'next/router';
-
-
+import { readValidationResponse } from '@/utils/helper';
 
 function* fetchPostRegister(action: AnyAction) {
   try {
@@ -30,13 +29,14 @@ function* fetchPostRegister(action: AnyAction) {
   } catch (err) {
     if (err instanceof AxiosError) {
       const errorMessage = err?.response?.data as Services.ErrorResponse;
+      const errorValidationMessage = err?.response?.data as Services.ValidationResponse;
       yield put({ type: registerFailed.toString() });
       yield delay(2000, true);
       yield put({
         type: setResponserMessage.toString(),
         payload: {
           code: errorMessage?.code,
-          message: errorMessage?.message,
+          message: errorValidationMessage.error.length > 0 ? readValidationResponse(errorValidationMessage.error).map(errorMessage => errorMessage.replace(/"/g, '')) : errorMessage?.message,
         }
       });
     }

@@ -125,3 +125,14 @@ export const base64ToFile = (base64String: string | undefined, fileName: string)
 
   return file;
 };
+
+
+/**
+ * Handle for read message from Validation response 
+ * 
+ */
+export const readValidationResponse = (validationResponse: Array<string>) => {
+  return validationResponse.flatMap(value => {
+    return Object.keys(value).length > 0 ? Object.values(value).join('') : [];
+  });
+};
