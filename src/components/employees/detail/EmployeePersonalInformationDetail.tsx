@@ -9,16 +9,34 @@ interface PersonalInformationDetailProps {
       dateOfBirth: string | null;
       gender: number | null;
       maritalStatus: number | null;
-      countryID: string | null;
+      country: {
+        id: string | number;
+        name: string;
+      };
       numberOfChildren: number | null;
       religion: number | null;
     },
     citizen:{
-      countryID: string | null;
-      firstLevelCode: string | null;
-      secondLevelCode: string | null;
-      thirdLevelCode: string | null;
-      fourthLevelCode: string | null;
+      country: {
+        code: string | number;
+        name: string;
+      };
+      firstLevel: {
+        code: string | number;
+        name: string;
+      };
+      secondLevel: {
+        code: string | number;
+        name: string;
+      };
+      thirdLevel: {
+        code: string | number;
+        name: string;
+      };
+      fourthLevel: {
+        code: string | number | null;
+        name: string | null;
+      };
       address: string | null;
       zipCode: string | null;
       isCitizen: boolean;
@@ -31,7 +49,10 @@ interface PersonalInformationDetailProps {
       isPermanent: boolean;
     },
     bank: {
-      bankID: string | null;
+      bank: {
+        id: string | number;
+        name: string;
+      };
       holder: string | null;
       accountNumber: string | null;
       bankCode: string | null;
@@ -93,7 +114,7 @@ const EmployeePersonalInformationDetail = ({data}: PersonalInformationDetailProp
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            {data?.personal?.gender === 1 ? 'Male' : 'Female'}
+            {data?.personal?.gender}
           </Typography>
         </Grid>
         <Grid
@@ -109,19 +130,7 @@ const EmployeePersonalInformationDetail = ({data}: PersonalInformationDetailProp
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            {data?.personal?.maritalStatus === 1 ? 'Single' : (
-              data?.personal.maritalStatus === 2 ? 'Maried' : (
-                data?.personal.maritalStatus === 3 ? 'Divorced' : (
-                  data?.personal.maritalStatus === 4 ? 'Separated' : (
-                    data?.personal.maritalStatus === 5 ? 'Widowed' : (
-                      data?.personal.maritalStatus === 6 ? 'Domestic Partnership' : (
-                        data?.personal.maritalStatus === 7 ? 'Civil Union' : 'Annuled'
-                      )
-                    )
-                  )
-                )
-              )
-            )}
+            {data?.personal?.maritalStatus}
           </Typography>
         </Grid>
         <Grid
@@ -137,11 +146,7 @@ const EmployeePersonalInformationDetail = ({data}: PersonalInformationDetailProp
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            {data?.personal?.numberOfChildren === 1 ? '< 10' : (
-              data?.personal?.numberOfChildren === 2 ? '< 25' : (
-                data?.personal?.numberOfChildren === 3 ? '< 50' : '> 50'
-              )
-            )}
+            {data?.personal?.numberOfChildren}
           </Typography>
         </Grid>
         <Grid
@@ -157,7 +162,7 @@ const EmployeePersonalInformationDetail = ({data}: PersonalInformationDetailProp
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            {data.personal.countryID}
+            {data.personal.country.name}
           </Typography>
         </Grid>
         <Grid
@@ -173,13 +178,7 @@ const EmployeePersonalInformationDetail = ({data}: PersonalInformationDetailProp
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            {data?.personal?.religion === 1 ? 'Islamic' : (
-              data?.personal?.religion === 2 ? 'Chirstian' : (
-                data?.personal?.religion === 3 ? 'Buddhist' : (
-                  data?.personal?.religion === 4 ? 'Hindu' : 'Catholic'
-                )
-              )
-            )}
+            {data?.personal?.religion}
           </Typography>
         </Grid>
       </Grid>
@@ -213,7 +212,7 @@ const EmployeePersonalInformationDetail = ({data}: PersonalInformationDetailProp
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            {data.citizen.countryID}
+            {data.citizen.country.name}
           </Typography>
         </Grid>
         <Grid
@@ -229,7 +228,7 @@ const EmployeePersonalInformationDetail = ({data}: PersonalInformationDetailProp
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            {data.citizen.firstLevelCode}
+            {data.citizen.firstLevel.name}
           </Typography>
         </Grid>
         <Grid
@@ -245,7 +244,7 @@ const EmployeePersonalInformationDetail = ({data}: PersonalInformationDetailProp
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            {data.citizen.secondLevelCode}
+            {data.citizen.secondLevel.name}
           </Typography>
         </Grid>
         <Grid
@@ -261,7 +260,7 @@ const EmployeePersonalInformationDetail = ({data}: PersonalInformationDetailProp
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            {data.citizen.thirdLevelCode}
+            {data.citizen.thirdLevel.name}
           </Typography>
         </Grid>
         <Grid
@@ -277,7 +276,7 @@ const EmployeePersonalInformationDetail = ({data}: PersonalInformationDetailProp
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            {data.citizen.fourthLevelCode}
+            {data.citizen.address}
           </Typography>
         </Grid>
         <Grid
@@ -327,7 +326,7 @@ const EmployeePersonalInformationDetail = ({data}: PersonalInformationDetailProp
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            {data.citizen.firstLevelCode}
+            {data.citizen.firstLevel.name}
           </Typography>
         </Grid>
         <Grid
@@ -343,7 +342,7 @@ const EmployeePersonalInformationDetail = ({data}: PersonalInformationDetailProp
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            {data.citizen.firstLevelCode}
+            {data.citizen.firstLevel.name}
           </Typography>
         </Grid>
         <Grid
@@ -359,7 +358,7 @@ const EmployeePersonalInformationDetail = ({data}: PersonalInformationDetailProp
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            {data.citizen.secondLevelCode}
+            {data.citizen.secondLevel.name}
           </Typography>
         </Grid>
         <Grid
@@ -375,7 +374,7 @@ const EmployeePersonalInformationDetail = ({data}: PersonalInformationDetailProp
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            {data.citizen.thirdLevelCode}
+            {data.citizen.thirdLevel.name}
           </Typography>
         </Grid>
         <Grid
@@ -391,7 +390,7 @@ const EmployeePersonalInformationDetail = ({data}: PersonalInformationDetailProp
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            {data.citizen.fourthLevelCode}
+            {data.citizen.address}
           </Typography>
         </Grid>
         <Grid
@@ -513,7 +512,7 @@ const EmployeePersonalInformationDetail = ({data}: PersonalInformationDetailProp
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            {data.bank.bankID}
+            {data.bank.bank.name}
           </Typography>
         </Grid>
         <Grid
