@@ -21,6 +21,11 @@ const EmployeePersonalInformationFormClient = dynamic(() => import('./EmployeePe
 const EmergencyContactFormClient = dynamic(() => import('./EmergencyContactForm'), {
   ssr: false
 });
+const CnbCreateForm = dynamic(() => import('./CnbCreateForm'), {
+  ssr: false
+});
+
+const WorkScheduleCreateForm = dynamic(() => import('@/components/work-schedule/create/WorkScheduleCreateForm'));
 
 const TopWrapper = styled.div`
  display: flex;
@@ -268,10 +273,10 @@ function EmployeeCreateComponent() {
               setIsEmergencyValid={setIsEmergencyValid}/>
           </TabPanel>
           <TabPanel value={value} index={3}>
-            on Development
+            <CnbCreateForm />
           </TabPanel>
           <TabPanel value={value} index={4}>
-            on Development
+            <WorkScheduleCreateForm />
           </TabPanel>
         </Box>
       </ContentWrapper>
