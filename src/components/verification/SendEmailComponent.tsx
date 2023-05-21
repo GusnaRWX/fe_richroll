@@ -11,6 +11,7 @@ import {
   Button
 } from '@mui/material';
 import { useAppSelectors } from '@/hooks/index';
+import { useRouter } from 'next/router';
 
 const NavHead = styled.div`
  height: 64px;
@@ -43,12 +44,13 @@ const Base = styled.div`
 
 function SendEmailComponent() {
   const { register } = useAppSelectors((state) => state);
+  const router = useRouter();
   return (
     <Base>
-      <OverlayLoading open={register.loading}/>
+      <OverlayLoading open={register.loading} />
       <NavHead>
         <div>
-          <Image src={kayaroll} alt='logo' height={40} width={150}/>
+          <Image src={kayaroll} alt='logo' height={40} width={150} />
         </div>
         <div>
           <span>EN</span>
@@ -57,13 +59,15 @@ function SendEmailComponent() {
       <Card sx={{ width: '500px', height: '50%' }}>
         <CardContent>
           <div>
-            <Image src={kayaroll} alt='logo' height={56} width={211}/>
+            <Image src={kayaroll} alt='logo' height={56} width={211} />
           </div>
           <div>
             <h2 color='primary'>Email sent successfully!</h2>
           </div>
           <div style={{ marginBottom: '1rem' }}>
-            <Typography color='grey.400'>We already sent an email verification instruction to budi@gmail.com. Please check your email. Thanks!</Typography>
+            <Typography color='grey.400'>We already sent an email verification instruction to {
+              router.isReady && router.query.email
+            }. Please check your email. Thanks!</Typography>
           </div>
           <Stack>
             <Button variant='contained' target='_blank' href='https://mail.google.com/' color='primary' type='button' fullWidth>Check Email</Button>
