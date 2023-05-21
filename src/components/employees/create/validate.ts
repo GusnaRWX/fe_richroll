@@ -24,3 +24,17 @@ export const validationSchemeEmployeeInformation = Yup.object({
   position: Yup.string().notRequired(),
   isSelfService: Yup.bool().notRequired()
 });
+
+export const validationSchemeEmployeeEmergencyContact = Yup.object({
+  employeeID: Yup.string().notRequired(),
+  fullNamePrimary: Yup.string().required('This field is required'),
+  relationPrimary: Yup.string().notRequired(),
+  phoneNumberPrefixPrimary: Yup.string().notRequired(),
+  phoneNumberPrimary: Yup.string().matches(/^\d{12,13}$/, 'Phone number should have 12 or 13 digits')
+    .required('Phone number is required')
+    .typeError('Phone number should be a number'),
+  fullNameSecondary: Yup.string().notRequired(),
+  relationSecondary: Yup.string().notRequired(),
+  phoneNumberPrefixSecondary: Yup.string().notRequired(),
+  phoneNumberSecondary: Yup.string().notRequired()
+});
