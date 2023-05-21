@@ -24,7 +24,10 @@ function* fetchPostRegister(action: AnyAction) {
         payload: accessToken
       };
       yield call(fetchSendEmail, body);
-      Router.push({ pathname: '/send-email-verification', query: { email: action?.payload?.email } });
+      Router.push({
+        pathname: '/send-email-verification',
+        query: { email: action?.payload?.email }
+      }, '/send-email-verification');
     }
   } catch (err) {
     if (err instanceof AxiosError) {
