@@ -108,7 +108,7 @@ function WorksScheduleCreateComponent() {
         <Box sx={{ width: '100%' }}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <Tabs value={value} onChange={handleChange} aria-label='basic tabs'>
-              <Tab sx={{ textTransform: 'none' }} label='Employee Information' {...a11yProps(0)} />
+              <Tab sx={{ textTransform: 'none' }} label='Schedule Profile' {...a11yProps(0)} />
             </Tabs>
           </Box>
           <TabPanel value={value}  index={0}>
