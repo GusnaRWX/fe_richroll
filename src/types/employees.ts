@@ -129,7 +129,7 @@ export declare namespace Employees {
   interface InformationValues {
     companyID: string;
     images: string
-    picture: []
+    picture: unknown
     fullName: string
     nickname: string
     phoneNumberPrefix: string

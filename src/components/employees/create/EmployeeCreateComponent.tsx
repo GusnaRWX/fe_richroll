@@ -169,7 +169,7 @@ function EmployeeCreateComponent() {
   const handleClick = async () => {
     const inputData = new FormData();
     inputData.append('companyID', getCompanyData()?.id as string);
-    if (informationValue.picture && informationValue.picture.length > 0) {
+    if (informationValue.picture && (informationValue.picture as []).length > 0) {
       inputData.append('picture', (informationValue.picture as unknown as File)[0]);
     }
     inputData.append('fullName', informationValue.fullName);
@@ -265,7 +265,7 @@ function EmployeeCreateComponent() {
               refProp={emergencyRef}
               setValues={setEmergencyValue}
               emergencyValues={emergencyValue}
-              setIsEmergencyValid={setIsEmergencyValid}/>
+              setIsEmergencyValid={setIsEmergencyValid} />
           </TabPanel>
           <TabPanel value={value} index={3}>
             on Development
