@@ -371,6 +371,7 @@ export default function CreateCNBComponent() {
                 <Grid item xs={3} md={3} lg={3} xl={3}>
                   <TextField
                     fullWidth
+                    type="number"
                     value={BaseCompensation.rateOrAmount}
                     onChange={(e) =>
                       setBaseCompensation({
@@ -426,7 +427,6 @@ export default function CreateCNBComponent() {
                   {supplementaryList.map((suplement, i) => (
                     <div key={i} style={{ marginBottom: "33px" }}>
                       <Grid container spacing={2}>
-                        {" "}
                         <Grid item xs={6} md={6} lg={6} xl={6}>
                           <div style={{ marginBottom: "16px" }}>
                             <Typography style={{ fontSize: "14px" }}>
@@ -518,14 +518,13 @@ export default function CreateCNBComponent() {
                             fullWidth
                             type="number"
                             value={supplementaryList[i].data.rateOrAmount}
-                            onChange={(e) => {
+                            onChange={(e) =>
                               selectChange(
                                 i,
                                 e.target.value as unknown,
                                 "amount"
-                              );
-                              console.log(supplementaryList[i]);
-                            }}
+                              )
+                            }
                             InputProps={{
                               startAdornment: (
                                 <InputAdornment position="start">
