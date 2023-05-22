@@ -88,14 +88,17 @@ export const convertDateValue = (name, event) => {
   return obj;
 };
 
-export const convertImageParams = (name, value, callback, onClose) => {
+export const convertImageParams = (name, value, callback?, onClose?) => {
   const files = value;
   const reader = new FileReader();
   reader.readAsDataURL(value);
   reader.onloadend = function () {
     callback(reader.result as string);
   };
-  onClose();
+  if (onClose) {
+    onClose();
+  }
+
   const obj = {
     target: {
       name, value: [files]
