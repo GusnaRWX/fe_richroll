@@ -38,7 +38,11 @@ function EmergencyContactForm({ refProp, nextPage, setValues, emergencyValues, s
     },
     validationSchema: validationSchemeEmployeeEmergencyContact,
     onSubmit: (values, { setErrors }) => {
-      setValues({ ...values });
+      const emergencyLastValue = {
+        ...formik.values,
+        phoneNumberPrimary: String(formik.values.phoneNumberPrefixPrimary)
+      };
+      setValues(emergencyLastValue);
       nextPage(3);
       setIsEmergencyValid(true);
       setErrors({});

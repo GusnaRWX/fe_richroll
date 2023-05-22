@@ -9,6 +9,9 @@ import {
   administrativeSecondLevelRequested,
   administrativeThirdLevelRequsted,
   countriesRequested,
+  getSecondAdministrativeFirstLevelRequested,
+  getSecondAdministrativeSecondLevelRequested,
+  getSecondAdministrativeThirdLevelRequested,
   getBanksRequested
 } from '@/store/reducers/slice/options/optionSlice';
 import dayjs from 'dayjs';
@@ -34,6 +37,9 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
     administrativeFirst,
     administrativeSecond,
     administrativeThird,
+    secondAdministrativeFirst,
+    secondAdministrativeSecond,
+    secondAdministrativeThird,
     banks
   } = useAppSelectors(state => state.option);
 
@@ -99,8 +105,6 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
     });
   }, []);
 
-  console.log(formik.errors);
-
   return (
     <form onSubmit={formik.handleSubmit} ref={refProp}>
       {Object.keys(formik.errors).length > 0 && (
@@ -165,7 +169,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
           container
           wrap='wrap'
           justifyContent='space-between'
-          alignItems='center'
+          alignItems='baseline'
           mb='16px'
         >
           <Grid
@@ -184,6 +188,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               customLabel='Maritial Status'
               withAsterisk
               error={formik.touched.maritialStatusPersonalInformation && Boolean(formik.errors.maritialStatusPersonalInformation)}
+              helperText={formik.touched.maritialStatusPersonalInformation && formik.errors.maritialStatusPersonalInformation ? formik.errors.maritialStatusPersonalInformation : ''}
             />
           </Grid>
           <Grid
@@ -202,6 +207,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               onChange={formik.handleChange}
               value={formik.values.numberOfDependantsPersonalInformation}
               error={formik.touched.numberOfDependantsPersonalInformation && Boolean(formik.errors.numberOfDependantsPersonalInformation)}
+              helperText={formik.touched.numberOfDependantsPersonalInformation && formik.errors.numberOfDependantsPersonalInformation ? formik.errors.numberOfDependantsPersonalInformation : ''}
             />
           </Grid>
         </Grid>
@@ -209,7 +215,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
           container
           wrap='wrap'
           justifyContent='space-between'
-          alignItems='center'
+          alignItems='baseline'
           mb='16px'
         >
           <Grid
@@ -228,7 +234,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               onBlur={formik.handleBlur}
               options={countries}
               error={formik.touched.nationalityPersonalInformation && Boolean(formik.errors.nationalityPersonalInformation)}
-
+              helperText={formik.touched.nationalityPersonalInformation && formik.errors.nationalityPersonalInformation ? formik.errors.nationalityPersonalInformation : ''}
             />
           </Grid>
           <Grid
@@ -264,7 +270,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
           container
           wrap='wrap'
           justifyContent='space-between'
-          alignItems='center'
+          alignItems='baseline'
           mb='16px'
           mt='16px'
         >
@@ -292,6 +298,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               }}
               options={countries}
               error={formik.touched.countryCitizenAddress && Boolean(formik.errors.countryCitizenAddress)}
+              helperText={formik.touched.countryCitizenAddress && formik.errors.countryCitizenAddress ? formik.errors.countryCitizenAddress : ''}
             />
           </Grid>
           <Grid
@@ -319,6 +326,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               onBlur={formik.handleBlur}
               options={administrativeFirst}
               error={formik.touched.provinceCitizenAddress && Boolean(formik.errors.provinceCitizenAddress)}
+              helperText={formik.touched.provinceCitizenAddress && formik.errors.provinceCitizenAddress ? formik.errors.provinceCitizenAddress : ''}
             />
           </Grid>
         </Grid>
@@ -326,7 +334,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
           container
           wrap='wrap'
           justifyContent='space-between'
-          alignItems='center'
+          alignItems='baseline'
           mb='16px'
         >
           <Grid
@@ -355,6 +363,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               }}
               options={administrativeSecond}
               error={formik.touched.cityCitizenAddress && Boolean(formik.errors.cityCitizenAddress)}
+              helperText={formik.touched.cityCitizenAddress && formik.errors.cityCitizenAddress ? formik.errors.cityCitizenAddress : ''}
             />
           </Grid>
           <Grid
@@ -373,6 +382,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               onBlur={formik.handleBlur}
               options={administrativeThird}
               error={formik.touched.subDistrictCitizenAddress && Boolean(formik.errors.subDistrictCitizenAddress)}
+              helperText={formik.touched.subDistrictCitizenAddress && formik.errors.subDistrictCitizenAddress ? formik.errors.subDistrictCitizenAddress : ''}
             />
           </Grid>
         </Grid>
@@ -380,7 +390,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
           container
           wrap='wrap'
           justifyContent='space-between'
-          alignItems='center'
+          alignItems='baseline'
           mb='16px'
         >
           <Grid
@@ -451,7 +461,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
           container
           wrap='wrap'
           justifyContent='space-between'
-          alignItems='center'
+          alignItems='baseline'
           mb='16px'
           mt='16px'
         >
@@ -471,7 +481,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               onChange={(e: unknown) => {
                 formik.handleChange(e);
                 dispatch({
-                  type: administrativeFirstLevelRequested.toString(),
+                  type: getSecondAdministrativeFirstLevelRequested.toString(),
                   payload: {
                     countryId: (e as SelectChangeEvent).target.value
                   }
@@ -479,6 +489,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               }}
               options={countries}
               error={formik.touched.countryResidentialAddress && Boolean(formik.errors.countryResidentialAddress)}
+              helperText={formik.touched.countryResidentialAddress && formik.errors.countryResidentialAddress ? formik.errors.countryResidentialAddress : ''}
             />
           </Grid>
           <Grid
@@ -496,7 +507,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               onChange={(e: unknown) => {
                 formik.handleChange(e);
                 dispatch({
-                  type: administrativeSecondLevelRequested.toString(),
+                  type: getSecondAdministrativeSecondLevelRequested.toString(),
                   payload: {
                     countryId: formik.values.countryResidentialAddress,
                     firstLevelCode: (e as SelectChangeEvent).target.value
@@ -504,8 +515,9 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
                 });
               }}
               onBlur={formik.handleBlur}
-              options={administrativeFirst}
+              options={secondAdministrativeFirst}
               error={formik.touched.provinceResidentialAddress && Boolean(formik.errors.provinceResidentialAddress)}
+              helperText={formik.touched.provinceResidentialAddress && formik.errors.provinceResidentialAddress ? formik.errors.provinceResidentialAddress : ''}
             />
           </Grid>
         </Grid>
@@ -513,7 +525,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
           container
           wrap='wrap'
           justifyContent='space-between'
-          alignItems='center'
+          alignItems='baseline'
           mb='16px'
         >
           <Grid
@@ -531,7 +543,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               onChange={(e: unknown) => {
                 formik.handleChange(e);
                 dispatch({
-                  type: administrativeThirdLevelRequsted.toString(),
+                  type: getSecondAdministrativeThirdLevelRequested.toString(),
                   payload: {
                     countryId: formik.values.countryResidentialAddress,
                     firstLevelCode: formik.values.provinceResidentialAddress,
@@ -540,8 +552,9 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
                 });
               }}
               onBlur={formik.handleBlur}
-              options={administrativeSecond}
+              options={secondAdministrativeSecond}
               error={formik.touched.cityResidentialAddress && Boolean(formik.errors.cityResidentialAddress)}
+              helperText={formik.touched.cityResidentialAddress && formik.errors.cityResidentialAddress ? formik.errors.cityResidentialAddress : ''}
             />
           </Grid>
           <Grid
@@ -558,8 +571,9 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               value={formik.values.subDistrictResidentialAddress}
               onBlur={formik.handleBlur}
               onChange={formik.handleChange}
-              options={administrativeThird}
+              options={secondAdministrativeThird}
               error={formik.touched.subDistrictResidentialAddress && Boolean(formik.errors.subDistrictResidentialAddress)}
+              helperText={formik.touched.subDistrictResidentialAddress && formik.errors.subDistrictResidentialAddress ? formik.errors.subDistrictResidentialAddress : ''}
             />
           </Grid>
         </Grid>
@@ -567,7 +581,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
           container
           wrap='wrap'
           justifyContent='space-between'
-          alignItems='center'
+          alignItems='baseline'
           mb='16px'
         >
           <Grid
@@ -639,6 +653,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               onBlur={formik.handleBlur}
               options={IDTypes}
               error={formik.touched.idTypePersonalID && Boolean(formik.errors.idTypePersonalID)}
+              helperText={formik.touched.idTypePersonalID && formik.errors.idTypePersonalID ? formik.errors.idTypePersonalID : ''}
             />
           </Grid>
           <Grid
@@ -674,6 +689,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               value={formik.values.idExpirationDatePersonalID as unknown as Date}
               onChange={(date: unknown) => formik.setFieldValue('idExpirationDatePersonalID', date)}
               withAsterisk
+              // error={formik.touched.idExpirationDatePersonalID && formik.errors.idExpirationDatePersonalID ? String(formik.errors.idExpirationDatePersonalID) : ''}
               error={formik.touched.idExpirationDatePersonalID && formik.errors.idExpirationDatePersonalID ? String(formik.errors.idExpirationDatePersonalID) : ''}
             />
           </Grid>

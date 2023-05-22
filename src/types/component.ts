@@ -94,6 +94,7 @@ export declare namespace SharedComponent {
     customLabel?: string;
     options?: Array<{ label: string, value: string }> | undefined;
     withAsterisk?: boolean;
+    helperText?: string;
   }
 
   export type ComponentButton = ButtonProps & {

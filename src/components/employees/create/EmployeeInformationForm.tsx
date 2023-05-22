@@ -252,10 +252,8 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, set
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <DatePicker
               customLabel='End Date'
-              withAsterisk
               value={formik.values.endDate as unknown as Date}
               onChange={(date: unknown) => formik.setFieldValue('endDate', date)}
-              error={formik.errors.endDate ? String(formik.errors.endDate) : ''}
             />
           </Grid>
         </Grid>

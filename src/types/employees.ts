@@ -132,7 +132,7 @@ export declare namespace Employees {
     baseTax: string;
     baseRate: string;
     basePeriod: string;
-    suplementary: Array<{compensation: string; tax: string; rate: string; period:string}>
+    suplementary: Array<{ compensation: string; tax: string; rate: string; period: string }>
   }
 
   interface InformationValues {
