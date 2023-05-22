@@ -291,6 +291,7 @@ export default function EnhancedTable(rows: any) {
                         title="Are you sure you want to delete this record?"
                         content="Any unsaved changes will be discarded. This cannot be undone"
                         withCallback
+                        noChange={true}
                         callback={() => deleteCnb(row.id)}
                       />
                     </TableRow>
