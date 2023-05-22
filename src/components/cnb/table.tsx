@@ -249,7 +249,7 @@ export default function EnhancedTable(rows: any) {
             />
             <TableBody>
               {rows?.rows?.items.length !== 0 &&
-                visibleRows?.map((row, index) => {
+                visibleRows?.map((row: any, index) => {
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
@@ -298,7 +298,7 @@ export default function EnhancedTable(rows: any) {
                 })}
               {rows?.rows?.items.length === undefined && (
                 <TableRow>
-                  <TableCell rowSpan={5} colSpan={5} align="center">
+                  <TableCell colSpan={5} align="center">
                     No Data
                   </TableCell>
                 </TableRow>
@@ -315,6 +315,7 @@ export default function EnhancedTable(rows: any) {
             </TableBody>
           </Table>
         </TableContainer>
+        {rows?.rows?.items.length !== undefined && 
         <TablePagination
           rowsPerPageOptions={[5, 10]}
           component="div"
@@ -348,6 +349,7 @@ export default function EnhancedTable(rows: any) {
             },
           }}
         />
+        }
       </Paper>
     </Box>
   );
