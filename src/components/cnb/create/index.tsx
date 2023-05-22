@@ -305,7 +305,7 @@ export default function CreateCNBComponent() {
                 onChange={(e) =>
                   setBaseCompensation({
                     ...BaseCompensation,
-                    name: e.target.value as string,
+                    name: e.target.value.replace(/[^a-z]/gi, "") as string,
                   })
                 }
               />
