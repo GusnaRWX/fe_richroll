@@ -3,13 +3,14 @@ import React, { HTMLAttributes, useState } from 'react';
 import {
   Grid,
   Typography,
-  Box
+  Box,
+  SelectChangeEvent
 } from '@mui/material';
 import { Input, Button, Select as CustomSelect, CheckBox, DatePicker, FileUploadModal } from '@/components/_shared/form';
 import { styled as MuiStyled } from '@mui/material/styles';
 import { Image as ImageType } from '@/utils/assetsConstant';
 import styled from '@emotion/styled';
-import { useAppSelectors } from '@/hooks/index';
+import { useAppSelectors, useAppDispatch } from '@/hooks/index';
 import dayjs from 'dayjs';
 import { Alert, Text } from '@/components/_shared/common';
 import CancelIcon from '@mui/icons-material/Cancel';
@@ -17,6 +18,7 @@ import { Employees } from '@/types/employees';
 import { validationSchemeEmployeeInformation } from './validate';
 import { useFormik } from 'formik';
 import { convertImageParams, getCompanyData } from '@/utils/helper';
+import { getListPositionRequested } from '@/store/reducers/slice/options/optionSlice';
 
 
 const AsteriskComponent = MuiStyled('span')(({ theme }) => ({
@@ -66,6 +68,7 @@ interface EmployeeProps {
 }
 
 function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, setIsInformationValid }: EmployeeProps) {
+  const dispatch = useAppDispatch();
   const [open, setOpen] = useState(false);
   const { listDepartment, listPosition } = useAppSelectors(state => state.option);
   const [images, setImages] = useState<string | null>(infoValues?.images);
@@ -98,8 +101,6 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, set
       setErrors({});
     }
   });
-
-  console.log(formik.errors);
 
   const handleOpen = () => {
     setOpen(true);
@@ -272,7 +273,15 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, set
               withAsterisk={false}
               variant='outlined'
               value={formik.values.department}
-              onChange={formik.handleChange}
+              onChange={(e: unknown) => {
+                formik.handleChange(e);
+                dispatch({
+                  type: getListPositionRequested.toString(),
+                  payload: {
+                    departmentID: (e as SelectChangeEvent).target.value
+                  }
+                });
+              }}
               onBlur={formik.handleBlur}
               fullWidth={true}
               name='department'

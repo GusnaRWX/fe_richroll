@@ -241,9 +241,9 @@ function* fetchGetListDepartment() {
   }
 }
 
-function* fetchGetListPosition() {
+function* fetchGetListPosition(action: AnyAction) {
   try {
-    const res: AxiosResponse = yield call(getListPosition);
+    const res: AxiosResponse = yield call(getListPosition, action?.payload);
     if (res.status === 200) {
       const { items } = res?.data?.data as Option.Position;
 
