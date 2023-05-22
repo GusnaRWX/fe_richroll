@@ -183,41 +183,70 @@ export default function CreateCNBComponent() {
   };
 
   function CreateNewCnbProfile() {
-    dispatch({
-      type: postNewCnbProfileRequested.toString(),
-      Payload: {
-        companyId: companyData?.id,
-        name: BaseCompensation.name,
-        baseCompensation: {
-          compensationComponentId: parseInt(
-            BaseCompensation.compensationComponentId
-          ),
-          taxStatus: BaseCompensation.taxStatus,
-          amount:
-            BaseCompensation.compensationComponentId === "1"
-              ? 0
-              : BaseCompensation.rateOrAmount,
-          rate:
-            BaseCompensation.compensationComponentId === "1"
-              ? BaseCompensation.rateOrAmount
-              : 0,
-          period: BaseCompensation.period,
-        },
-        supplementaryCompensations: supplementaryList.map((item) => ({
-          compensationComponentId: parseInt(item.data.compensationComponentId),
-          taxStatus: item.data.taxStatus,
-          amount:
-            item.data.compensationComponentId === "1"
-              ? 0
-              : item.data.rateOrAmount,
-          rate:
-            item.data.compensationComponentId === "1"
-              ? item.data.rateOrAmount
-              : 0,
-          period: item.data.period,
-        })),
-      },
+    let supplement = true;
+    supplementaryList.map((item) => {
+      if (supplementaryList.length === 0) {
+        return false;
+      }
+      if (
+        item.data.compensationComponentId &&
+        item.data.period &&
+        item.data.rateOrAmount &&
+        item.data.taxStatus !== ""
+      ) {
+        supplement = true;
+      } else {
+        supplement = false;
+      }
     });
+    if (
+      BaseCompensation.name &&
+      BaseCompensation.compensationComponentId &&
+      BaseCompensation.period &&
+      BaseCompensation.rateOrAmount &&
+      BaseCompensation.taxStatus !== "" &&
+      supplement
+    ) {
+      dispatch({
+        type: postNewCnbProfileRequested.toString(),
+        Payload: {
+          companyId: companyData?.id,
+          name: BaseCompensation.name,
+          baseCompensation: {
+            compensationComponentId: parseInt(
+              BaseCompensation.compensationComponentId
+            ),
+            taxStatus: BaseCompensation.taxStatus,
+            amount:
+              BaseCompensation.compensationComponentId === "1"
+                ? 0
+                : BaseCompensation.rateOrAmount,
+            rate:
+              BaseCompensation.compensationComponentId === "1"
+                ? BaseCompensation.rateOrAmount
+                : 0,
+            period: BaseCompensation.period,
+          },
+          supplementaryCompensations: supplementaryList.map((item) => ({
+            compensationComponentId: parseInt(
+              item.data.compensationComponentId
+            ),
+            taxStatus: item.data.taxStatus,
+            amount:
+              item.data.compensationComponentId === "1"
+                ? 0
+                : item.data.rateOrAmount,
+            rate:
+              item.data.compensationComponentId === "1"
+                ? item.data.rateOrAmount
+                : 0,
+            period: item.data.period,
+          })),
+        },
+      });
+    } else {
+      alert("mohon isi seluruh field");
+    }
   }
 
   return (
@@ -270,6 +299,7 @@ export default function CreateCNBComponent() {
             <Grid item xs={6} md={6} lg={6} xl={6}>
               <TextField
                 fullWidth
+                inputProps={{ pattern: "[a-z]" }}
                 placeholder="Sales"
                 value={BaseCompensation.name}
                 onChange={(e) =>
