@@ -91,6 +91,7 @@ function EmployeeEditComponent() {
   const [value, setValue] = useState(0);
   const [leave, setLeave] = useState(false);
   const employeeRef = useRef<HTMLFormElement>(null);
+  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   const [isInformationValid, setIsInformationValid] = useState(false);
   const personalInformationRef = useRef<HTMLFormElement>(null);
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
@@ -207,7 +208,7 @@ function EmployeeEditComponent() {
         </BackWrapper>
         <ButtonWrapper>
           <MuiButton variant='outlined' size='small' onClick={() => handleOpen()}>Cancel</MuiButton>
-          <MuiButton variant='contained' onClick={handleClick} size='small' color='primary' disabled={!isInformationValid}>Save</MuiButton>
+          <MuiButton variant='contained' onClick={handleClick} size='small' color='primary'>Save</MuiButton>
         </ButtonWrapper>
       </TopWrapper>
       <ContentWrapper>

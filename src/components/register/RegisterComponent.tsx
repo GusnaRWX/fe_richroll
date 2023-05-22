@@ -31,6 +31,7 @@ import { signIn } from 'next-auth/react';
 import { Alert, OverlayLoading, Text } from '../_shared/common';
 import { useFormik } from 'formik';
 import { validationSchemeRegister } from './validate';
+import Notify from '../_shared/common/Notify';
 
 const NavHead = styled.div`
  height: 64px;
@@ -138,6 +139,11 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
           <LocalizationMenu />
         </div>
       </NavHead>
+      {
+        ![200, 201, 0].includes(responser?.code) && (
+          <Notify error={true} body={responser?.message}/>
+        )
+      }
       <Card sx={{ width: '800px', height: '100%' }}>
         <CardContent>
           <Box component='form' autoComplete='off' onSubmit={formik.handleSubmit}>

@@ -100,7 +100,7 @@ function EmployeesTable({
         sort: sort,
         direction: direction.toUpperCase(),
         search: search,
-        isActive: tabValue === 0 ? false : true,
+        isActive: tabValue === 0 ? true : false,
         companyID: companyData?.id
       }
     });

@@ -1,4 +1,4 @@
-import React, { HTMLAttributes, useState } from 'react';
+import React, { HTMLAttributes, useState, useEffect } from 'react';
 import {
   Grid,
   Typography,
@@ -8,7 +8,7 @@ import { Input, Button, Select as CustomSelect, CheckBox, DatePicker, FileUpload
 import { styled as MuiStyled } from '@mui/material/styles';
 import { Image as ImageType } from '@/utils/assetsConstant';
 import styled from '@emotion/styled';
-import { useForm, useAppSelectors } from '@/hooks/index';
+import { useForm, useAppSelectors, useAppDispatch } from '@/hooks/index';
 import {
   checkRegulerExpression,
   convertValue,
@@ -20,6 +20,7 @@ import dayjs from 'dayjs';
 import { Alert, Text } from '@/components/_shared/common';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { Employees } from '@/types/employees';
+import { getListPositionRequested } from '@/store/reducers/slice/options/optionSlice';
 
 const AsteriskComponent = MuiStyled('span')(({ theme }) => ({
   color: theme.palette.error.main
@@ -74,6 +75,7 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
   const [open, setOpen] = useState(false);
   const [images, setImages] = useState<string | null>(infoValues?.images);
   const [errorFields, setErrorFields] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
 
   const [initialValues] = useState({
     picture: [],
@@ -125,8 +127,14 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
     if ('department' in fieldOfValues)
       temp.department = fieldOfValues.department ? '' : '';
 
-    if ('position' in fieldOfValues)
-      temp.position = fieldOfValues.position ? '' : '';
+    if ('position' in fieldOfValues){
+      temp.position = dispatch({
+        type: getListPositionRequested.toString(),
+        payload: {
+          departmentID: values.department
+        }
+      }) ? '' : 'This field is required';
+    }
 
 
     setErrors({
@@ -170,6 +178,15 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
       setIsInformationValid(false);
     }
   };
+
+  useEffect(() => {
+    dispatch({
+      type: getListPositionRequested.toString(),
+      payload: {
+        departmentID: infoValues?.department
+      }
+    });
+  }, []);
 
   return (
     <>
