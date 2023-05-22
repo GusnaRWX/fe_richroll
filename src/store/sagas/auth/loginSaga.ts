@@ -92,7 +92,8 @@ function* fetchForgotPassword(action: AnyAction) {
         type: setResponserMessage.toString(),
         payload: {
           code: res.data.code,
-          message: res.data.message
+          message: 'Email sent successfully',
+          footerMessage: 'Please check your email to reset password'
         }
       });
       yield delay(2000);

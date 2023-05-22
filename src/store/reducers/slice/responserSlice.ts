@@ -4,11 +4,13 @@ import { HYDRATE } from 'next-redux-wrapper';
 interface ResponseType {
   code: number;
   message: string | null;
+  footerMessage?: string;
 }
 
 const initialState: ResponseType = {
   code: 0,
   message: null,
+  footerMessage: ''
 };
 
 export const responseSlice = createSlice({
@@ -18,6 +20,7 @@ export const responseSlice = createSlice({
     setResponserMessage(state, action) {
       state.code = action?.payload?.code;
       state.message = action?.payload?.message;
+      state.footerMessage = action?.payload?.footerMessage;
     },
   },
   extraReducers: {

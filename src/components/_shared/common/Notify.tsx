@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import { useAppDispatch } from '@/hooks/index';
 import { setResponserMessage } from '@/store/reducers/slice/responserSlice';
@@ -57,10 +57,11 @@ const MessageWrapper = styled.div`
 
 interface NotifyProps {
   body: string;
-  error: boolean
+  error: boolean,
+  footerMessage?: string;
 }
 
-function Notify({body, error}: NotifyProps) {
+function Notify({ body, error, footerMessage }: NotifyProps) {
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const dispatch = useAppDispatch();
@@ -85,10 +86,10 @@ function Notify({body, error}: NotifyProps) {
         !error && (
           <CardWrapper className={open ? 'open' : ''}>
             <ContentWrapaper>
-              <BsCheckCircle fontSize={20} style={{ color: '#4ADE80' }}/>
+              <BsCheckCircle fontSize={20} style={{ color: '#4ADE80' }} />
               <MessageWrapper>
-                <Typography fontWeight='bold'>Successfully Saved!</Typography>
-                <Typography color='grey'>{body}</Typography>
+                <Typography fontWeight='bold'>{footerMessage ? body : `Successfully Saved!`}</Typography>
+                <Typography color='grey'>{footerMessage ? footerMessage : body}</Typography>
               </MessageWrapper>
               <IconButton sx={{ margin: 0 }} onClick={() => setOpen(false)}><Close /></IconButton>
             </ContentWrapaper>
@@ -99,7 +100,7 @@ function Notify({body, error}: NotifyProps) {
         error && (
           <CardWrapper className={open ? 'open' : ''}>
             <ContentWrapaper>
-              <ErrorOutlineOutlined sx={{ color: '#ff3333' }}/>
+              <ErrorOutlineOutlined sx={{ color: '#ff3333' }} />
               <MessageWrapper>
                 <Typography fontWeight='bold'>Request Failed!</Typography>
                 <Typography color='grey'>{body}</Typography>
