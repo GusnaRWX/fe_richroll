@@ -1,5 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { HYDRATE } from "next-redux-wrapper";
+import { createSlice } from '@reduxjs/toolkit';
+import { HYDRATE } from 'next-redux-wrapper';
 
 interface CnbState {
   loading: boolean;
@@ -16,7 +16,7 @@ const initialState: CnbState = {
 };
 
 export const cnbSlice = createSlice({
-  name: "cnbTable",
+  name: 'cnbTable',
   initialState,
   reducers: {
     // Get Table Item
@@ -47,7 +47,7 @@ export const cnbSlice = createSlice({
     postNewCnbProfileRequested: (state) => {
       state.loading = true;
     },
-    postNewCnbProfileSuccess: (state, action) => {
+    postNewCnbProfileSuccess: (state, _action) => {
       state.loading = false;
     },
     postNewCnbProfileFailed: (state) => {
@@ -60,11 +60,11 @@ export const cnbSlice = createSlice({
     },
     deleteCompensationSuccess: (state) => {
       state.loading = false;
-      state.rerender = !state.rerender
+      state.rerender = !state.rerender;
     },
     deleteCompensationFailed: (state) => {
       state.loading = false;
-      state.rerender = !state.rerender
+      state.rerender = !state.rerender;
     },
   },
   extraReducers: {

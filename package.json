@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "lint-fix": "eslint --fix --ext .ts,.tsx ."
   },
   "dependencies": {
     "@aldabil/react-scheduler": "^2.7.9",
