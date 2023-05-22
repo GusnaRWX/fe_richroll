@@ -18,6 +18,7 @@ function Select(
     name,
     fullWidth,
     error,
+    helperText,
     ...props
   }: SharedComponent.SelectInput) {
   return (
@@ -47,8 +48,11 @@ function Select(
           )
         }
       </MuiSelect>
-      {error && (
+      {/* {error && (
         <FormHelperText sx={{ color: '#EF4444' }}>{error}</FormHelperText>
+      )} */}
+      {error && (
+        <FormHelperText sx={{ color: '#EF4444' }}>{helperText}</FormHelperText>
       )}
     </FormControl>
   );

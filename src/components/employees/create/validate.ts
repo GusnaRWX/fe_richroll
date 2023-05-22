@@ -18,19 +18,19 @@ export const validationSchemeEmployeeInformation = Yup.object({
     .typeError('Phone number should be a number'),
   email: Yup.string().email('Email should be valid').required('Email is required'),
   startDate: Yup.date().typeError('This field is required').required(),
-  endDate: Yup.date().typeError('This field is required').required(),
+  endDate: Yup.date().notRequired(),
   isPermanent: Yup.bool().notRequired(),
   department: Yup.string().notRequired(),
   position: Yup.string().notRequired(),
   isSelfService: Yup.bool().notRequired()
 });
 
-export const validationSchemePersonalInformation = Yup.object({
+export const validationSchemePersonalInformation = Yup.object().shape({
   // Group Personal Information 
   dateofBirthPersonalInformation: Yup.date().typeError('This field is required').required(),
   genderPersonalInformation: Yup.string().required('This field is required').oneOf(['male', 'female'], 'This field is required'),
-  maritialStatusPersonalInformation: Yup.string().required('This field is required'),
-  numberOfDependantsPersonalInformation: Yup.string().required('This field is required'),
+  maritialStatusPersonalInformation: Yup.number().min(1, 'This field is required').required('This field is required'),
+  numberOfDependantsPersonalInformation: Yup.number().min(1, 'This field is required').required('This field is required'),
   nationalityPersonalInformation: Yup.string().required('This field is required'),
   religionPersonalInformation: Yup.string().notRequired(),
 
@@ -62,7 +62,7 @@ export const validationSchemePersonalInformation = Yup.object({
   // Group Personal ID
   idTypePersonalID: Yup.string().required('This field is required'),
   idNumberPersonalID: Yup.string().required('This field is required'),
-  idExpirationDatePersonalID: Yup.string().required('This field is required')
+  idExpirationDatePersonalID: Yup.date().typeError('This field is required').required()
 });
 
 export const validationSchemeEmployeeEmergencyContact = Yup.object({
