@@ -99,13 +99,13 @@ function EmployeeEditComponent() {
   const { employee } = useAppSelectors((state) => state);
   const dataEmployeeInformation = employee.employeeInformationDetail;
   const dataPersonalInformation = employee.personalInformationDetail;
-  const phoneNumberPrefix = typeof dataEmployeeInformation.phoneNumber !== 'undefined' ?  dataEmployeeInformation.phoneNumber.split('').slice(0, 3).join('') : '';
+  const phoneNumberPrefix = typeof dataEmployeeInformation.phoneNumber !== 'undefined' ? dataEmployeeInformation.phoneNumber.split('').slice(0, 3).join('') : '';
   const phoneNumber = typeof dataEmployeeInformation.phoneNumber !== 'undefined' ? dataEmployeeInformation.phoneNumber.slice(3) : '';
 
   const [informationValue, setInformationValue] = useState<Employees.InformationValues>({
     companyID: getCompanyData()?.id as string,
     department: dataEmployeeInformation?.department,
-    email:dataEmployeeInformation?.email,
+    email: dataEmployeeInformation?.email,
     endDate: dataEmployeeInformation?.endDate !== null ? dayjs(dataEmployeeInformation?.endDate).format('YYYY/MM/DD') : null,
     fullName: dataEmployeeInformation?.fullName,
     images: dataEmployeeInformation?.picture !== null ? dataEmployeeInformation?.picture : '',
@@ -172,7 +172,7 @@ function EmployeeEditComponent() {
   const handleClick = async () => {
     const inputData = new FormData();
     inputData.append('companyID', getCompanyData()?.id as string);
-    if (informationValue.picture && informationValue.picture.length > 0) {
+    if (informationValue.picture && (informationValue.picture as []).length > 0) {
       inputData.append('picture', (informationValue.picture as unknown as File)[0]);
     }
     inputData.append('fullName', informationValue.fullName);
@@ -240,7 +240,7 @@ function EmployeeEditComponent() {
             />
           </TabPanel>
           <TabPanel value={value} index={2}>
-            <EmergencyContactEdit nextTab={handleNext}/>
+            <EmergencyContactEdit nextTab={handleNext} />
           </TabPanel>
           <TabPanel value={value} index={3}>
             on Development
