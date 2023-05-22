@@ -14,6 +14,8 @@ import {
   Radio,
   FormControlLabel,
   Box,
+  Grid,
+  Paper,
 } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
 import { useRouter } from "next/router";
@@ -66,33 +68,6 @@ export default function CreateCNBComponent() {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-end",
-  });
-
-  const FormWrapper = styled("div")({
-    padding: "20px 30px",
-    boxShadow:
-      "0px 1px 2px rgba(0, 0, 0, 0.06), 0px 1px 3px rgba(0, 0, 0, 0.1)",
-    backgroundColor: "#fff",
-  });
-
-  const TextFieldWrapper = styled("div")({
-    display: "flex",
-    flexDirection: "row",
-    maxWidth: "50%",
-    gap: "24px",
-  });
-
-  const SectionInputWrapper = styled("div")({
-    display: "flex",
-    flexDirection: "column",
-    marginBottom: "33px",
-  });
-
-  const InputWrapper = styled("div")({
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    gap: "24px",
   });
 
   const BpIcon = styled("span")(({ theme }) => ({
@@ -166,7 +141,7 @@ export default function CreateCNBComponent() {
     name: "",
     compensationComponentId: "",
     taxStatus: "",
-    rateOrAmount: "",
+    rateOrAmount: "0",
     period: "",
   });
 
@@ -285,25 +260,27 @@ export default function CreateCNBComponent() {
           />
         </NextBtnWrapper>
       </Header>
-      <FormWrapper>
+      <Paper sx={{ width: "100%", p: "20px 30px" }}>
         <Form style={{ marginBottom: "32px" }}>
           <Typography>
             Profile Name
             <span style={{ color: "red" }}>*</span>
           </Typography>
-          <TextFieldWrapper>
-            <TextField
-              fullWidth
-              placeholder="Sales"
-              value={BaseCompensation.name}
-              onChange={(e) =>
-                setBaseCompensation({
-                  ...BaseCompensation,
-                  name: e.target.value as string,
-                })
-              }
-            />
-          </TextFieldWrapper>
+          <Grid container>
+            <Grid item xs={6} md={6} lg={6} xl={6}>
+              <TextField
+                fullWidth
+                placeholder="Sales"
+                value={BaseCompensation.name}
+                onChange={(e) =>
+                  setBaseCompensation({
+                    ...BaseCompensation,
+                    name: e.target.value as string,
+                  })
+                }
+              />
+            </Grid>
+          </Grid>
           <Typography
             style={{
               marginBottom: "17px",
@@ -325,9 +302,9 @@ export default function CreateCNBComponent() {
           >
             Base
           </Typography>
-          <SectionInputWrapper>
-            <InputWrapper>
-              <div id="right" style={{ width: "100%", maxWidth: "511px" }}>
+          <Grid>
+            <Grid container spacing={2}>
+              <Grid item xs={6} md={6} lg={6} xl={6}>
                 <div style={{ marginBottom: "16px" }}>
                   <Typography style={{ fontSize: "14px" }}>
                     Compensation Component
@@ -350,13 +327,14 @@ export default function CreateCNBComponent() {
                     ))}
                   </Select>
                 </div>
-              </div>
-              <div id="center" style={{ maxWidth: "388px", width: "100%" }}>
+              </Grid>
+              <Grid item xs={6} md={6} lg={6} xl={6}>
                 <Typography style={{ fontSize: "14px" }}>
                   Tax Status<span style={{ color: "red" }}>*</span>
                 </Typography>
                 <RadioGroup
                   row
+                  style={{ height: "54px" }}
                   value={BaseCompensation.taxStatus}
                   onChange={(e) =>
                     setBaseCompensation({
@@ -380,51 +358,55 @@ export default function CreateCNBComponent() {
                     label="Non-Taxable"
                   />
                 </RadioGroup>
-              </div>
-            </InputWrapper>
-            <div>
+              </Grid>
+            </Grid>
+            <Grid container>
               <Typography>
                 {BaseCompensation?.compensationComponentId === "1"
                   ? "Rate"
                   : "Amount"}
                 <span style={{ color: "red" }}>*</span>
               </Typography>
-              <InputWrapper style={{ maxWidth: "511px" }}>
-                <TextField
-                  fullWidth
-                  value={BaseCompensation.rateOrAmount}
-                  onChange={(e) =>
-                    setBaseCompensation({
-                      ...BaseCompensation,
-                      rateOrAmount: e.target.value,
-                    })
-                  }
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">Rp</InputAdornment>
-                    ),
-                    endAdornment: (
-                      <InputAdornment position="end">IDR</InputAdornment>
-                    ),
-                  }}
-                />
-                <Select
-                  fullWidth
-                  value={BaseCompensation.period}
-                  onChange={(e) =>
-                    setBaseCompensation({
-                      ...BaseCompensation,
-                      period: e.target.value as string,
-                    })
-                  }
-                >
-                  <MenuItem value="Per Week">per Week</MenuItem>
-                  <MenuItem value="Per Month">per Month</MenuItem>
-                  <MenuItem value="Per Year">per Year</MenuItem>
-                </Select>
-              </InputWrapper>
-            </div>
-          </SectionInputWrapper>
+              <Grid container spacing={2}>
+                <Grid item xs={3} md={3} lg={3} xl={3}>
+                  <TextField
+                    fullWidth
+                    value={BaseCompensation.rateOrAmount}
+                    onChange={(e) =>
+                      setBaseCompensation({
+                        ...BaseCompensation,
+                        rateOrAmount: e.target.value,
+                      })
+                    }
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">Rp</InputAdornment>
+                      ),
+                      endAdornment: (
+                        <InputAdornment position="end">IDR</InputAdornment>
+                      ),
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={3} md={3} lg={3} xl={3}>
+                  <Select
+                    fullWidth
+                    value={BaseCompensation.period}
+                    onChange={(e) =>
+                      setBaseCompensation({
+                        ...BaseCompensation,
+                        period: e.target.value as string,
+                      })
+                    }
+                  >
+                    <MenuItem value="Per Week">per Week</MenuItem>
+                    <MenuItem value="Per Month">per Month</MenuItem>
+                    <MenuItem value="Per Year">per Year</MenuItem>
+                  </Select>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
         </Form>
         <div>
           <div>
@@ -442,12 +424,10 @@ export default function CreateCNBComponent() {
                 </Typography>
                 <Form>
                   {supplementaryList.map((suplement, i) => (
-                    <SectionInputWrapper key={i}>
-                      <InputWrapper>
-                        <div
-                          id="right"
-                          style={{ width: "100%", maxWidth: "511px" }}
-                        >
+                    <div key={i} style={{ marginBottom: "33px" }}>
+                      <Grid container spacing={2}>
+                        {" "}
+                        <Grid item xs={6} md={6} lg={6} xl={6}>
                           <div style={{ marginBottom: "16px" }}>
                             <Typography style={{ fontSize: "14px" }}>
                               Compensation Component {i + 1}
@@ -474,60 +454,66 @@ export default function CreateCNBComponent() {
                               ))}
                             </Select>
                           </div>
-                        </div>
-                        <div
-                          id="center"
-                          style={{ maxWidth: "388px", flexGrow: "1" }}
-                        >
+                        </Grid>
+                        <Grid item xs={6} md={6} lg={6} xl={6}>
                           <Typography style={{ fontSize: "14px" }}>
                             Tax Status<span style={{ color: "red" }}>*</span>
                           </Typography>
-                          <RadioGroup
-                            row
-                            value={supplementaryList[i].data.taxStatus}
-                            onChange={(e) =>
-                              selectChange(i, e.target.value as string, "tax")
-                            }
+                          <Box
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                              height: "54px",
+                            }}
                           >
-                            <FormControlLabel
-                              value="true"
-                              control={
-                                <Radio
-                                  size="small"
-                                  checkedIcon={<BpCheckedIcon />}
-                                />
+                            <RadioGroup
+                              row
+                              value={supplementaryList[i].data.taxStatus}
+                              onChange={(e) =>
+                                selectChange(i, e.target.value as string, "tax")
                               }
-                              label="Taxable"
-                            />
-                            <FormControlLabel
-                              value="false"
-                              control={
-                                <Radio
-                                  size="small"
-                                  checkedIcon={<BpCheckedIcon />}
-                                />
-                              }
-                              label="Non-Taxable"
-                            />
-                          </RadioGroup>
-                        </div>
-                        <div>
-                          <Button
-                            color="red"
-                            startIcon={<DeleteIcon />}
-                            label="Delete"
-                            onClick={() => deleteSuplementary(suplement.id)}
-                          />
-                        </div>
-                      </InputWrapper>
-                      <div>
-                        <Typography>
-                          {suplement.data.compensationComponentId === "1"
-                            ? "Rate"
-                            : "Amount"}
-                          <span style={{ color: "red" }}>*</span>
-                        </Typography>
-                        <InputWrapper style={{ maxWidth: "511px" }}>
+                            >
+                              <FormControlLabel
+                                value="true"
+                                control={
+                                  <Radio
+                                    size="small"
+                                    checkedIcon={<BpCheckedIcon />}
+                                  />
+                                }
+                                label="Taxable"
+                              />
+                              <FormControlLabel
+                                value="false"
+                                control={
+                                  <Radio
+                                    size="small"
+                                    checkedIcon={<BpCheckedIcon />}
+                                  />
+                                }
+                                label="Non-Taxable"
+                              />
+                            </RadioGroup>
+                            <Box>
+                              <Button
+                                color="red"
+                                startIcon={<DeleteIcon />}
+                                label="Delete"
+                                onClick={() => deleteSuplementary(suplement.id)}
+                              />
+                            </Box>
+                          </Box>
+                        </Grid>
+                      </Grid>
+                      <Typography>
+                        {suplement.data.compensationComponentId === "1"
+                          ? "Rate"
+                          : "Amount"}
+                        <span style={{ color: "red" }}>*</span>
+                      </Typography>
+                      <Grid container spacing={2}>
+                        <Grid item xs={3} md={3} lg={3} xl={3}>
                           <TextField
                             fullWidth
                             type="number"
@@ -553,6 +539,8 @@ export default function CreateCNBComponent() {
                               ),
                             }}
                           />
+                        </Grid>
+                        <Grid item xs={3} md={3} lg={3} xl={3}>
                           <Select
                             fullWidth
                             value={supplementaryList[i].data.period}
@@ -564,9 +552,9 @@ export default function CreateCNBComponent() {
                             <MenuItem value="Per Month">per Month</MenuItem>
                             <MenuItem value="Per Year">per Year</MenuItem>
                           </Select>
-                        </InputWrapper>
-                      </div>
-                    </SectionInputWrapper>
+                        </Grid>
+                      </Grid>
+                    </div>
                   ))}
                 </Form>
               </>
@@ -579,7 +567,7 @@ export default function CreateCNBComponent() {
             onClick={() => addSuplementary()}
           />
         </div>
-      </FormWrapper>
+      </Paper>
     </div>
   );
 }
