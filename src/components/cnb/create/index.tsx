@@ -74,16 +74,6 @@ export default function CreateCNBComponent() {
     period: Yup.string().required("This is required"),
     rateOrAmount: Yup.string().required("This is required"),
     taxStatus: Yup.string().required("This is required"),
-    supplementary: Yup.array().of(
-      Yup.object().shape({
-        data: Yup.object({
-          compensationComponentId: Yup.string().required("This is required"),
-          period: Yup.string().required("This is required"),
-          rateOrAmount: Yup.string().required("This is required"),
-          taxStatus: Yup.string().required("This is required"),
-        }),
-      })
-    ),
   });
 
   const formik = useFormik({
@@ -93,16 +83,7 @@ export default function CreateCNBComponent() {
       period: "",
       rateOrAmount: "",
       taxStatus: "",
-      supplementary: [
-        {
-          data: {
-            compensationComponentId: "",
-            taxStatus: "",
-            rateOrAmount: "",
-            period: "",
-          },
-        },
-      ],
+      supplementary: supplementaryList,
     },
     onSubmit: (value) => {
       console.log(value);
