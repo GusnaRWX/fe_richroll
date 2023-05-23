@@ -16,6 +16,8 @@ import {
   Box,
   Grid,
   Paper,
+  FormControl,
+  FormHelperText,
 } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
 import { useRouter } from "next/router";
@@ -25,6 +27,8 @@ import {
 } from "@/store/reducers/slice/cnb/compensationSlice";
 import { useAppDispatch, useAppSelectors } from "@/hooks/index";
 import { getCompanyData } from "@/utils/helper";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 export default function CreateCNBComponent() {
   const router = useRouter();
@@ -33,6 +37,78 @@ export default function CreateCNBComponent() {
   const compensationComponentOption = useAppSelectors(
     (state) => state.compensation?.compensationComponentOption?.data?.items
   );
+
+  interface supplementType {
+    id: number;
+    data: {
+      compensationComponentId: string;
+      taxStatus: string;
+      rateOrAmount: number | null;
+      period: string;
+    };
+  }
+
+  const [supplementaryList, setSupplementaryList] = React.useState<
+    supplementType[]
+  >([]);
+
+  interface baseCompType {
+    name: string;
+    compensationComponentId: string;
+    taxStatus: string;
+    rateOrAmount: string;
+    period: string;
+  }
+
+  const [BaseCompensation, setBaseCompensation] = React.useState<baseCompType>({
+    name: "",
+    compensationComponentId: "",
+    taxStatus: "",
+    rateOrAmount: "0",
+    period: "",
+  });
+
+  const validationSchecma = Yup.object().shape({
+    name: Yup.string().required("This is required"),
+    compensationComponentId: Yup.string().required("This is required"),
+    period: Yup.string().required("This is required"),
+    rateOrAmount: Yup.string().required("This is required"),
+    taxStatus: Yup.string().required("This is required"),
+    supplementary: Yup.array().of(
+      Yup.object().shape({
+        data: Yup.object({
+          compensationComponentId: Yup.string().required("This is required"),
+          period: Yup.string().required("This is required"),
+          rateOrAmount: Yup.string().required("This is required"),
+          taxStatus: Yup.string().required("This is required"),
+        }),
+      })
+    ),
+  });
+
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+      compensationComponentId: "",
+      period: "",
+      rateOrAmount: "",
+      taxStatus: "",
+      supplementary: [
+        {
+          data: {
+            compensationComponentId: "",
+            taxStatus: "",
+            rateOrAmount: "",
+            period: "",
+          },
+        },
+      ],
+    },
+    onSubmit: (value) => {
+      console.log(value);
+    },
+    validationSchema: validationSchecma,
+  });
 
   React.useEffect(() => {
     dispatch({
@@ -115,36 +191,6 @@ export default function CreateCNBComponent() {
     },
   });
 
-  interface supplementType {
-    id: number;
-    data: {
-      compensationComponentId: string;
-      taxStatus: string;
-      rateOrAmount: number | null;
-      period: string;
-    };
-  }
-
-  const [supplementaryList, setSupplementaryList] = React.useState<
-    supplementType[]
-  >([]);
-
-  interface baseCompType {
-    name: string;
-    compensationComponentId: string;
-    taxStatus: string;
-    rateOrAmount: string;
-    period: string;
-  }
-
-  const [BaseCompensation, setBaseCompensation] = React.useState<baseCompType>({
-    name: "",
-    compensationComponentId: "",
-    taxStatus: "",
-    rateOrAmount: "0",
-    period: "",
-  });
-
   const addSuplementary = () => {
     const newData = {
       id: Math.floor(Math.random() * 100 + 1),
@@ -158,22 +204,6 @@ export default function CreateCNBComponent() {
     setSupplementaryList((prev) => [...prev, newData]);
   };
 
-  const selectChange = (index: number, newItem: unknown, type: string) => {
-    const items = [...supplementaryList];
-    const item = { ...items[index] };
-    if (type === "compensation") {
-      item.data.compensationComponentId = newItem as string;
-    } else if (type === "amount") {
-      item.data.rateOrAmount = newItem as number;
-    } else if (type === "tax") {
-      item.data.taxStatus = newItem as string;
-    } else if (type === "per") {
-      item.data.period = newItem as string;
-    }
-    items[index] = item;
-    setSupplementaryList(items);
-  };
-
   const deleteSuplementary = (i: number) => {
     const items = [...supplementaryList];
     const search = items.filter((item) => {
@@ -181,6 +211,10 @@ export default function CreateCNBComponent() {
     });
     setSupplementaryList(search);
   };
+
+  React.useEffect(() => {
+    console.log(formik.errors.supplementary);
+  }, [formik]);
 
   function CreateNewCnbProfile() {
     let supplement = true;
@@ -285,7 +319,7 @@ export default function CreateCNBComponent() {
             size="small"
             label="Save"
             color="primary"
-            onClick={() => CreateNewCnbProfile()}
+            onClick={() => formik.submitForm()}
           />
         </NextBtnWrapper>
       </Header>
@@ -299,14 +333,16 @@ export default function CreateCNBComponent() {
             <Grid item xs={6} md={6} lg={6} xl={6}>
               <TextField
                 fullWidth
-                inputProps={{ pattern: "[a-z]" }}
+                required
                 placeholder="Sales"
-                value={BaseCompensation.name}
+                error={formik.touched.name && Boolean(formik.errors.name)}
+                helperText={formik.touched.name && formik.errors.name}
+                value={formik.values.name}
                 onChange={(e) =>
-                  setBaseCompensation({
-                    ...BaseCompensation,
-                    name: e.target.value.replace(/[^a-z]/gi, "") as string,
-                  })
+                  formik.setFieldValue(
+                    "name",
+                    e.target.value.replace(/[^a-zA-Z\s]+/, "") as string
+                  )
                 }
               />
             </Grid>
@@ -340,54 +376,72 @@ export default function CreateCNBComponent() {
                     Compensation Component
                     <span style={{ color: "red" }}>*</span>
                   </Typography>
-                  <Select
+                  <FormControl
                     fullWidth
-                    value={BaseCompensation.compensationComponentId}
-                    onChange={(e) =>
-                      setBaseCompensation({
-                        ...BaseCompensation,
-                        compensationComponentId: e.target.value as string,
-                      })
+                    error={
+                      formik.touched.compensationComponentId &&
+                      Boolean(formik.errors.compensationComponentId)
                     }
                   >
-                    {compensationComponentOption?.map((Option, i) => (
-                      <MenuItem key={i} value={Option.id}>
-                        {Option.name}
-                      </MenuItem>
-                    ))}
-                  </Select>
+                    <Select
+                      fullWidth
+                      value={formik.values.compensationComponentId}
+                      onChange={(e) =>
+                        formik.setFieldValue(
+                          "compensationComponentId",
+                          e.target.value
+                        )
+                      }
+                    >
+                      {compensationComponentOption?.map((Option, i) => (
+                        <MenuItem key={i} value={Option.id}>
+                          {Option.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    <FormHelperText>
+                      {formik.touched.compensationComponentId &&
+                        formik.errors.compensationComponentId}
+                    </FormHelperText>
+                  </FormControl>
                 </div>
               </Grid>
               <Grid item xs={6} md={6} lg={6} xl={6}>
                 <Typography style={{ fontSize: "14px" }}>
                   Tax Status<span style={{ color: "red" }}>*</span>
                 </Typography>
-                <RadioGroup
-                  row
-                  style={{ height: "54px" }}
-                  value={BaseCompensation.taxStatus}
-                  onChange={(e) =>
-                    setBaseCompensation({
-                      ...BaseCompensation,
-                      taxStatus: e.target.value,
-                    })
+                <FormControl
+                  error={
+                    formik.touched.taxStatus && Boolean(formik.errors.taxStatus)
                   }
                 >
-                  <FormControlLabel
-                    value="true"
-                    control={
-                      <Radio size="small" checkedIcon={<BpCheckedIcon />} />
+                  <RadioGroup
+                    row
+                    style={{ height: "54px" }}
+                    value={formik.values.taxStatus}
+                    onChange={(e) =>
+                      formik.setFieldValue("taxStatus", e.target.value)
                     }
-                    label="Taxable"
-                  />
-                  <FormControlLabel
-                    value="false"
-                    control={
-                      <Radio size="small" checkedIcon={<BpCheckedIcon />} />
-                    }
-                    label="Non-Taxable"
-                  />
-                </RadioGroup>
+                  >
+                    <FormControlLabel
+                      value="true"
+                      control={
+                        <Radio size="small" checkedIcon={<BpCheckedIcon />} />
+                      }
+                      label="Taxable"
+                    />
+                    <FormControlLabel
+                      value="false"
+                      control={
+                        <Radio size="small" checkedIcon={<BpCheckedIcon />} />
+                      }
+                      label="Non-Taxable"
+                    />
+                  </RadioGroup>
+                  <FormHelperText>
+                    {formik.touched.taxStatus && formik.errors.taxStatus}
+                  </FormHelperText>
+                </FormControl>
               </Grid>
             </Grid>
             <Grid container>
@@ -402,12 +456,16 @@ export default function CreateCNBComponent() {
                   <TextField
                     fullWidth
                     type="number"
-                    value={BaseCompensation.rateOrAmount}
+                    error={
+                      formik.touched.rateOrAmount &&
+                      Boolean(formik.errors.rateOrAmount)
+                    }
+                    helperText={
+                      formik.touched.rateOrAmount && formik.errors.rateOrAmount
+                    }
+                    value={formik.values.rateOrAmount}
                     onChange={(e) =>
-                      setBaseCompensation({
-                        ...BaseCompensation,
-                        rateOrAmount: e.target.value,
-                      })
+                      formik.setFieldValue("rateOrAmount", e.target.value)
                     }
                     InputProps={{
                       startAdornment: (
@@ -420,20 +478,27 @@ export default function CreateCNBComponent() {
                   />
                 </Grid>
                 <Grid item xs={3} md={3} lg={3} xl={3}>
-                  <Select
+                  <FormControl
                     fullWidth
-                    value={BaseCompensation.period}
-                    onChange={(e) =>
-                      setBaseCompensation({
-                        ...BaseCompensation,
-                        period: e.target.value as string,
-                      })
+                    error={
+                      formik.touched.period && Boolean(formik.errors.period)
                     }
                   >
-                    <MenuItem value="Per Week">per Week</MenuItem>
-                    <MenuItem value="Per Month">per Month</MenuItem>
-                    <MenuItem value="Per Year">per Year</MenuItem>
-                  </Select>
+                    <Select
+                      fullWidth
+                      value={formik.values.period}
+                      onChange={(e) =>
+                        formik.setFieldValue("period", e.target.value)
+                      }
+                    >
+                      <MenuItem value="Per Week">per Week</MenuItem>
+                      <MenuItem value="Per Month">per Month</MenuItem>
+                      <MenuItem value="Per Year">per Year</MenuItem>
+                    </Select>
+                    <FormHelperText>
+                      {formik.touched.period && formik.errors.period}
+                    </FormHelperText>
+                  </FormControl>
                 </Grid>
               </Grid>
             </Grid>
@@ -463,26 +528,37 @@ export default function CreateCNBComponent() {
                               Compensation Component {i + 1}
                               <span style={{ color: "red" }}>*</span>
                             </Typography>
-                            <Select
+                            <FormControl
                               fullWidth
-                              value={
-                                supplementaryList[i].data
-                                  .compensationComponentId
-                              }
-                              onChange={(e) =>
-                                selectChange(
-                                  i,
-                                  e.target.value as string,
-                                  "compensation"
-                                )
-                              }
+                              // error={
+                              //   formik.errors.supplementary[0]?.data
+                              //     ?.compensationComponentId
+                              // }
                             >
-                              {compensationComponentOption?.map((Option, i) => (
-                                <MenuItem key={i} value={Option.id}>
-                                  {Option.name}
-                                </MenuItem>
-                              ))}
-                            </Select>
+                              <Select
+                                fullWidth
+                                onChange={(e) =>
+                                  formik.setFieldValue(
+                                    `supplementary.${i}.compensationComponentId`,
+                                    e.target.value
+                                  )
+                                }
+                              >
+                                {compensationComponentOption?.map(
+                                  (Option, i) => (
+                                    <MenuItem key={i} value={Option.id}>
+                                      {Option.name}
+                                    </MenuItem>
+                                  )
+                                )}
+                              </Select>
+                              {/* <FormHelperText>
+                                {formik.errors.supplementary[i]?.data
+                                  ?.compensationComponentId &&
+                                  formik.errors.supplementary[i]?.data
+                                    ?.compensationComponentId}
+                              </FormHelperText> */}
+                            </FormControl>
                           </div>
                         </Grid>
                         <Grid item xs={6} md={6} lg={6} xl={6}>
@@ -497,34 +573,42 @@ export default function CreateCNBComponent() {
                               height: "54px",
                             }}
                           >
-                            <RadioGroup
-                              row
-                              value={supplementaryList[i].data.taxStatus}
-                              onChange={(e) =>
-                                selectChange(i, e.target.value as string, "tax")
-                              }
-                            >
-                              <FormControlLabel
-                                value="true"
-                                control={
-                                  <Radio
-                                    size="small"
-                                    checkedIcon={<BpCheckedIcon />}
-                                  />
+                            <FormControl>
+                              <RadioGroup
+                                row
+                                value={
+                                  formik.values.supplementary[i]?.data
+                                    ?.taxStatus
                                 }
-                                label="Taxable"
-                              />
-                              <FormControlLabel
-                                value="false"
-                                control={
-                                  <Radio
-                                    size="small"
-                                    checkedIcon={<BpCheckedIcon />}
-                                  />
+                                onChange={(e) =>
+                                  formik.setFieldValue(
+                                    `supplementary.${i}.taxStatus`,
+                                    e.target.value
+                                  )
                                 }
-                                label="Non-Taxable"
-                              />
-                            </RadioGroup>
+                              >
+                                <FormControlLabel
+                                  value="true"
+                                  control={
+                                    <Radio
+                                      size="small"
+                                      checkedIcon={<BpCheckedIcon />}
+                                    />
+                                  }
+                                  label="Taxable"
+                                />
+                                <FormControlLabel
+                                  value="false"
+                                  control={
+                                    <Radio
+                                      size="small"
+                                      checkedIcon={<BpCheckedIcon />}
+                                    />
+                                  }
+                                  label="Non-Taxable"
+                                />
+                              </RadioGroup>
+                            </FormControl>
                             <Box>
                               <Button
                                 color="red"
@@ -537,7 +621,8 @@ export default function CreateCNBComponent() {
                         </Grid>
                       </Grid>
                       <Typography>
-                        {suplement.data.compensationComponentId === "1"
+                        {formik.values.supplementary[i]?.data
+                          ?.compensationComponentId === "1"
                           ? "Rate"
                           : "Amount"}
                         <span style={{ color: "red" }}>*</span>
@@ -547,12 +632,13 @@ export default function CreateCNBComponent() {
                           <TextField
                             fullWidth
                             type="number"
-                            value={supplementaryList[i].data.rateOrAmount}
+                            value={
+                              formik.values.supplementary[i]?.data?.rateOrAmount
+                            }
                             onChange={(e) =>
-                              selectChange(
-                                i,
-                                e.target.value as unknown,
-                                "amount"
+                              formik.setFieldValue(
+                                `supplementary.${i}.rateOrAmount`,
+                                e.target.value
                               )
                             }
                             InputProps={{
@@ -570,17 +656,24 @@ export default function CreateCNBComponent() {
                           />
                         </Grid>
                         <Grid item xs={3} md={3} lg={3} xl={3}>
-                          <Select
-                            fullWidth
-                            value={supplementaryList[i].data.period}
-                            onChange={(e) =>
-                              selectChange(i, e.target.value as string, "per")
-                            }
-                          >
-                            <MenuItem value="Per Week">per Week</MenuItem>
-                            <MenuItem value="Per Month">per Month</MenuItem>
-                            <MenuItem value="Per Year">per Year</MenuItem>
-                          </Select>
+                          <FormControl fullWidth>
+                            <Select
+                              fullWidth
+                              value={
+                                formik.values.supplementary[i]?.data?.period
+                              }
+                              onChange={(e) =>
+                                formik.setFieldValue(
+                                  `supplementary.${i}.period`,
+                                  e.target.value
+                                )
+                              }
+                            >
+                              <MenuItem value="Per Week">per Week</MenuItem>
+                              <MenuItem value="Per Month">per Month</MenuItem>
+                              <MenuItem value="Per Year">per Year</MenuItem>
+                            </Select>
+                          </FormControl>
                         </Grid>
                       </Grid>
                     </div>
