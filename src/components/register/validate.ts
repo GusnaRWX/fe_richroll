@@ -9,7 +9,7 @@ export const validationSchemeRegister = Yup.object({
   numberOfEmployees: Yup.string().required('Employee is required'),
   phoneNumberPrefix: Yup.string().notRequired(),
   phoneNumber: Yup.string()
-    .matches(/^\d{12,13}$/, 'Phone number should have 12 or 13 digits')
+    .matches(/^\d{11}$/, 'Phone number should have 12 or 13 digits include the national code')
     .required('Phone number is required')
     .typeError('Phone number should be a number')
 });
