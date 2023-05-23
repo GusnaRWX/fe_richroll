@@ -18,6 +18,9 @@ import {
   Paper,
   FormControl,
   FormHelperText,
+  Snackbar,
+  Alert,
+  AlertTitle,
 } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
 import { useRouter } from "next/router";
@@ -27,7 +30,7 @@ import {
 } from "@/store/reducers/slice/cnb/compensationSlice";
 import { useAppDispatch, useAppSelectors } from "@/hooks/index";
 import { getCompanyData } from "@/utils/helper";
-import { useFormik } from "formik";
+import { FieldArray, Form as FormikForm, Formik } from "formik";
 import * as Yup from "yup";
 
 export default function CreateCNBComponent() {
@@ -37,20 +40,7 @@ export default function CreateCNBComponent() {
   const compensationComponentOption = useAppSelectors(
     (state) => state.compensation?.compensationComponentOption?.data?.items
   );
-
-  interface supplementType {
-    id: number;
-    data: {
-      compensationComponentId: string;
-      taxStatus: string;
-      rateOrAmount: number | null;
-      period: string;
-    };
-  }
-
-  const [supplementaryList, setSupplementaryList] = React.useState<
-    supplementType[]
-  >([]);
+  const [openMsg, setOpenMsg] = React.useState(false);
 
   interface baseCompType {
     name: string;
@@ -74,21 +64,14 @@ export default function CreateCNBComponent() {
     period: Yup.string().required("This is required"),
     rateOrAmount: Yup.string().required("This is required"),
     taxStatus: Yup.string().required("This is required"),
-  });
-
-  const formik = useFormik({
-    initialValues: {
-      name: "",
-      compensationComponentId: "",
-      period: "",
-      rateOrAmount: "",
-      taxStatus: "",
-      supplementary: supplementaryList,
-    },
-    onSubmit: (value) => {
-      CreateNewCnbProfile(value);
-    },
-    validationSchema: validationSchecma,
+    supplementary: Yup.array().of(
+      Yup.object().shape({
+        compensationComponentId: Yup.string().required("This is required"),
+        period: Yup.string().required("This is required"),
+        rateOrAmount: Yup.string().required("This is required"),
+        taxStatus: Yup.string().required("This is required"),
+      })
+    ),
   });
 
   React.useEffect(() => {
@@ -172,33 +155,12 @@ export default function CreateCNBComponent() {
     },
   });
 
-  const addSuplementary = () => {
-    const newData = {
-      id: Math.floor(Math.random() * 100 + 1),
-      data: {
-        compensationComponentId: "",
-        taxStatus: "",
-        rateOrAmount: 0,
-        period: "",
-      },
-    };
-    setSupplementaryList((prev) => [...prev, newData]);
-  };
-
-  const deleteSuplementary = (i: number) => {
-    const items = [...supplementaryList];
-    const search = items.filter((item) => {
-      return item.id !== i;
-    });
-    setSupplementaryList(search);
-  };
-
   function CreateNewCnbProfile(value: any) {
-    let supplement = false;
+    let supplement = true;
     value.supplementary.map((item: any) => {
       if (value.supplementary.length === 0) {
         supplement = true;
-        return;
+        return false;
       }
       if (
         item.compensationComponentId &&
@@ -211,6 +173,7 @@ export default function CreateCNBComponent() {
         supplement = false;
       }
     });
+
     if (
       value.name !== "" &&
       value.compensationComponentId !== "" &&
@@ -219,442 +182,564 @@ export default function CreateCNBComponent() {
       value.taxStatus !== "" &&
       supplement
     ) {
-      dispatch({
-        type: postNewCnbProfileRequested.toString(),
-        Payload: {
-          companyId: companyData?.id,
-          name: value.name,
-          baseCompensation: {
-            compensationComponentId: parseInt(value.compensationComponentId),
-            taxStatus: value.taxStatus,
-            amount:
-              value.compensationComponentId === "1" ? 0 : value.rateOrAmount,
-            rate:
-              value.compensationComponentId === "1" ? value.rateOrAmount : 0,
-            period: value.period,
-          },
-          supplementaryCompensations: value.supplementary.map((item: any) => ({
-            compensationComponentId: parseInt(item.compensationComponentId),
-            taxStatus: item.taxStatus,
-            amount:
-              item.compensationComponentId === "1" ? 0 : item.rateOrAmount,
-            rate: item.compensationComponentId === "1" ? item.rateOrAmount : 0,
-            period: item.period,
-          })),
-        },
-      });
+      setOpenMsg(true);
+      // dispatch({
+      //   type: postNewCnbProfileRequested.toString(),
+      //   Payload: {
+      //     companyId: companyData?.id,
+      //     name: value.name,
+      //     baseCompensation: {
+      //       compensationComponentId: parseInt(value.compensationComponentId),
+      //       taxStatus: value.taxStatus,
+      //       amount:
+      //         value.compensationComponentId === "1" ? 0 : value.rateOrAmount,
+      //       rate:
+      //         value.compensationComponentId === "1" ? value.rateOrAmount : 0,
+      //       period: value.period,
+      //     },
+      //     supplementaryCompensations: value.supplementary.map((item: any) => ({
+      //       compensationComponentId: parseInt(item.compensationComponentId),
+      //       taxStatus: item.taxStatus,
+      //       amount:
+      //         item.compensationComponentId === "1" ? 0 : item.rateOrAmount,
+      //       rate: item.compensationComponentId === "1" ? item.rateOrAmount : 0,
+      //       period: item.period,
+      //     })),
+      //   },
+      // });
     } else {
       alert("Please fill all field");
     }
   }
 
+  interface suplementType {
+    compensationComponentId: string;
+    taxStatus: string;
+    rateOrAmount: number | null;
+    period: string;
+  }
+
+  const initialValues: {
+    name: string;
+    compensationComponentId: string;
+    period: string;
+    rateOrAmount: string;
+    taxStatus: string;
+    supplementary: suplementType[];
+  } = {
+    name: "",
+    compensationComponentId: "",
+    period: "",
+    rateOrAmount: "",
+    taxStatus: "",
+    supplementary: [],
+  };
+
   return (
-    <div>
-      <Header>
-        <HeaderPageTitle>
-          <IconButton
-            parentColor="primary.500"
-            icons={<ArrowBack sx={{ color: "#FFFFFF" }} />}
-            onClick={() => {
-              router.push("/compensation-benefits");
-            }}
-          />
-          <Typography
-            style={{
-              color: "#223567",
-              fontSize: "20px",
-              fontWeight: "700",
-              width: "250px",
-            }}
-          >
-            Create New CnB Profile
-          </Typography>
-        </HeaderPageTitle>
-        <NextBtnWrapper>
-          <Button
-            fullWidth={false}
-            size="small"
-            label="Cancel"
-            variant="outlined"
-            sx={{ mr: "12px" }}
-            color="primary"
-          />
-          <Button
-            fullWidth={false}
-            size="small"
-            label="Save"
-            color="primary"
-            onClick={() => formik.submitForm()}
-          />
-        </NextBtnWrapper>
-      </Header>
-      <Paper sx={{ width: "100%", p: "21px 32px" }}>
-        <Form style={{ marginBottom: "32px" }}>
-          <Typography>
-            Profile Name
-            <span style={{ color: "red" }}>*</span>
-          </Typography>
-          <Grid container>
-            <Grid item xs={6} md={6} lg={6} xl={6}>
-              <TextField
-                fullWidth
-                required
-                placeholder="Sales"
-                error={formik.touched.name && Boolean(formik.errors.name)}
-                helperText={formik.touched.name && formik.errors.name}
-                value={formik.values.name}
-                onChange={(e) =>
-                  formik.setFieldValue(
-                    "name",
-                    e.target.value.replace(/[^a-zA-Z\s]+/, "") as string
-                  )
-                }
+    <Formik
+      initialValues={initialValues}
+      onSubmit={(values) => {
+        console.log(values);
+      }}
+      validationSchema={validationSchecma}
+    >
+      {(formik) => (
+        <FormikForm>
+          <Header>
+            <HeaderPageTitle>
+              <IconButton
+                parentColor="primary.500"
+                icons={<ArrowBack sx={{ color: "#FFFFFF" }} />}
+                onClick={() => {
+                  router.push("/compensation-benefits");
+                }}
               />
-            </Grid>
-          </Grid>
-          <Typography
-            style={{
-              marginBottom: "17px",
-              marginTop: "31px",
-              fontSize: "18px",
-              fontWeight: "700",
-              color: "#223567",
-            }}
-          >
-            Compensation
-          </Typography>
-          <Typography
-            style={{
-              marginBottom: "17px",
-              fontSize: "16px",
-              fontWeight: "700",
-              color: "#223567",
-            }}
-          >
-            Base
-          </Typography>
-          <Grid>
-            <Grid container spacing={2}>
-              <Grid item xs={6} md={6} lg={6} xl={6}>
-                <div style={{ marginBottom: "16px" }}>
-                  <Typography style={{ fontSize: "14px" }}>
-                    Compensation Component
-                    <span style={{ color: "red" }}>*</span>
-                  </Typography>
-                  <FormControl
-                    fullWidth
-                    error={
-                      formik.touched.compensationComponentId &&
-                      Boolean(formik.errors.compensationComponentId)
-                    }
-                  >
-                    <Select
-                      fullWidth
-                      value={formik.values.compensationComponentId}
-                      onChange={(e) =>
-                        formik.setFieldValue(
-                          "compensationComponentId",
-                          e.target.value
-                        )
-                      }
-                    >
-                      {compensationComponentOption?.map((Option, i) => (
-                        <MenuItem key={i} value={Option.id}>
-                          {Option.name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                    <FormHelperText>
-                      {formik.touched.compensationComponentId &&
-                        formik.errors.compensationComponentId}
-                    </FormHelperText>
-                  </FormControl>
-                </div>
-              </Grid>
-              <Grid item xs={6} md={6} lg={6} xl={6}>
-                <Typography style={{ fontSize: "14px" }}>
-                  Tax Status<span style={{ color: "red" }}>*</span>
-                </Typography>
-                <FormControl
-                  error={
-                    formik.touched.taxStatus && Boolean(formik.errors.taxStatus)
-                  }
-                >
-                  <RadioGroup
-                    row
-                    style={{ height: "54px" }}
-                    value={formik.values.taxStatus}
-                    onChange={(e) =>
-                      formik.setFieldValue("taxStatus", e.target.value)
-                    }
-                  >
-                    <FormControlLabel
-                      value="true"
-                      control={
-                        <Radio size="small" checkedIcon={<BpCheckedIcon />} />
-                      }
-                      label="Taxable"
-                    />
-                    <FormControlLabel
-                      value="false"
-                      control={
-                        <Radio size="small" checkedIcon={<BpCheckedIcon />} />
-                      }
-                      label="Non-Taxable"
-                    />
-                  </RadioGroup>
-                  <FormHelperText>
-                    {formik.touched.taxStatus && formik.errors.taxStatus}
-                  </FormHelperText>
-                </FormControl>
-              </Grid>
-            </Grid>
-            <Grid container>
+              <Typography
+                style={{
+                  color: "#223567",
+                  fontSize: "20px",
+                  fontWeight: "700",
+                  width: "250px",
+                }}
+              >
+                Create New CnB Profile
+              </Typography>
+            </HeaderPageTitle>
+            <NextBtnWrapper>
+              <Button
+                fullWidth={false}
+                size="small"
+                label="Cancel"
+                variant="outlined"
+                sx={{ mr: "12px" }}
+                color="primary"
+              />
+              <Button
+                fullWidth={false}
+                size="small"
+                label="Save"
+                color="primary"
+                type="submit"
+              />
+            </NextBtnWrapper>
+          </Header>
+          <Paper sx={{ width: "100%", p: "21px 32px" }}>
+            <Form style={{ marginBottom: "32px" }}>
               <Typography>
-                {BaseCompensation?.compensationComponentId === "1"
-                  ? "Rate"
-                  : "Amount"}
+                Profile Name
                 <span style={{ color: "red" }}>*</span>
               </Typography>
-              <Grid container spacing={2}>
-                <Grid item xs={3} md={3} lg={3} xl={3}>
+              <Grid container>
+                <Grid item xs={6} md={6} lg={6} xl={6}>
                   <TextField
                     fullWidth
-                    type="number"
-                    error={
-                      formik.touched.rateOrAmount &&
-                      Boolean(formik.errors.rateOrAmount)
-                    }
-                    helperText={
-                      formik.touched.rateOrAmount && formik.errors.rateOrAmount
-                    }
-                    value={formik.values.rateOrAmount}
+                    required
+                    placeholder="Sales"
+                    error={formik.touched.name && Boolean(formik.errors.name)}
+                    helperText={formik.touched.name && formik.errors.name}
+                    value={formik.values.name}
                     onChange={(e) =>
-                      formik.setFieldValue("rateOrAmount", e.target.value)
+                      formik.setFieldValue(
+                        "name",
+                        e.target.value.replace(/[^a-zA-Z\s]+/, "") as string
+                      )
                     }
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">Rp</InputAdornment>
-                      ),
-                      endAdornment: (
-                        <InputAdornment position="end">IDR</InputAdornment>
-                      ),
-                    }}
                   />
                 </Grid>
-                <Grid item xs={3} md={3} lg={3} xl={3}>
-                  <FormControl
-                    fullWidth
-                    error={
-                      formik.touched.period && Boolean(formik.errors.period)
-                    }
-                  >
-                    <Select
-                      fullWidth
-                      value={formik.values.period}
-                      onChange={(e) =>
-                        formik.setFieldValue("period", e.target.value)
-                      }
-                    >
-                      <MenuItem value="Per Week">per Week</MenuItem>
-                      <MenuItem value="Per Month">per Month</MenuItem>
-                      <MenuItem value="Per Year">per Year</MenuItem>
-                    </Select>
-                    <FormHelperText>
-                      {formik.touched.period && formik.errors.period}
-                    </FormHelperText>
-                  </FormControl>
-                </Grid>
               </Grid>
-            </Grid>
-          </Grid>
-        </Form>
-        <div>
-          <div>
-            {supplementaryList.length > 0 && (
-              <>
-                <Typography
-                  style={{
-                    marginBottom: "17px",
-                    fontSize: "16px",
-                    fontWeight: "700",
-                    color: "#223567",
-                  }}
-                >
-                  Suplementary
-                </Typography>
-                <Form>
-                  {supplementaryList.map((suplement, i) => (
-                    <div key={i} style={{ marginBottom: "33px" }}>
-                      <Grid container spacing={2}>
-                        <Grid item xs={6} md={6} lg={6} xl={6}>
-                          <div style={{ marginBottom: "16px" }}>
-                            <Typography style={{ fontSize: "14px" }}>
-                              Compensation Component {i + 1}
-                              <span style={{ color: "red" }}>*</span>
-                            </Typography>
-                            <FormControl
-                              fullWidth
-                              // error={
-                              //   formik.errors.supplementary[0]?.data
-                              //     ?.compensationComponentId
-                              // }
-                            >
-                              <Select
-                                fullWidth
-                                onChange={(e) =>
-                                  formik.setFieldValue(
-                                    `supplementary.${i}.compensationComponentId`,
-                                    e.target.value
-                                  )
-                                }
-                              >
-                                {compensationComponentOption?.map(
-                                  (Option, i) => (
-                                    <MenuItem key={i} value={Option.id}>
-                                      {Option.name}
-                                    </MenuItem>
-                                  )
-                                )}
-                              </Select>
-                              {/* <FormHelperText>
-                                {formik.errors.supplementary[i]?.data
-                                  ?.compensationComponentId &&
-                                  formik.errors.supplementary[i]?.data
-                                    ?.compensationComponentId}
-                              </FormHelperText> */}
-                            </FormControl>
-                          </div>
-                        </Grid>
-                        <Grid item xs={6} md={6} lg={6} xl={6}>
-                          <Typography style={{ fontSize: "14px" }}>
-                            Tax Status<span style={{ color: "red" }}>*</span>
-                          </Typography>
-                          <Box
-                            style={{
-                              display: "flex",
-                              justifyContent: "space-between",
-                              alignItems: "center",
-                              height: "54px",
-                            }}
-                          >
-                            <FormControl>
-                              <RadioGroup
-                                row
-                                value={
-                                  formik.values.supplementary[i]?.data
-                                    ?.taxStatus
-                                }
-                                onChange={(e) =>
-                                  formik.setFieldValue(
-                                    `supplementary.${i}.taxStatus`,
-                                    e.target.value
-                                  )
-                                }
-                              >
-                                <FormControlLabel
-                                  value="true"
-                                  control={
-                                    <Radio
-                                      size="small"
-                                      checkedIcon={<BpCheckedIcon />}
-                                    />
-                                  }
-                                  label="Taxable"
-                                />
-                                <FormControlLabel
-                                  value="false"
-                                  control={
-                                    <Radio
-                                      size="small"
-                                      checkedIcon={<BpCheckedIcon />}
-                                    />
-                                  }
-                                  label="Non-Taxable"
-                                />
-                              </RadioGroup>
-                            </FormControl>
-                            <Box>
-                              <Button
-                                color="red"
-                                startIcon={<DeleteIcon />}
-                                label="Delete"
-                                onClick={() => deleteSuplementary(suplement.id)}
-                              />
-                            </Box>
-                          </Box>
-                        </Grid>
-                      </Grid>
-                      <Typography>
-                        {formik.values.supplementary[i]?.data
-                          ?.compensationComponentId === "1"
-                          ? "Rate"
-                          : "Amount"}
+              <Typography
+                style={{
+                  marginBottom: "17px",
+                  marginTop: "31px",
+                  fontSize: "18px",
+                  fontWeight: "700",
+                  color: "#223567",
+                }}
+              >
+                Compensation
+              </Typography>
+              <Typography
+                style={{
+                  marginBottom: "17px",
+                  fontSize: "16px",
+                  fontWeight: "700",
+                  color: "#223567",
+                }}
+              >
+                Base
+              </Typography>
+              <Grid>
+                <Grid container spacing={2}>
+                  <Grid item xs={6} md={6} lg={6} xl={6}>
+                    <div style={{ marginBottom: "16px" }}>
+                      <Typography style={{ fontSize: "14px" }}>
+                        Compensation Component
                         <span style={{ color: "red" }}>*</span>
                       </Typography>
-                      <Grid container spacing={2}>
-                        <Grid item xs={3} md={3} lg={3} xl={3}>
-                          <TextField
-                            fullWidth
-                            type="number"
-                            value={
-                              formik.values.supplementary[i]?.data?.rateOrAmount
-                            }
-                            onChange={(e) =>
-                              formik.setFieldValue(
-                                `supplementary.${i}.rateOrAmount`,
-                                e.target.value
-                              )
-                            }
-                            InputProps={{
-                              startAdornment: (
-                                <InputAdornment position="start">
-                                  Rp
-                                </InputAdornment>
-                              ),
-                              endAdornment: (
-                                <InputAdornment position="end">
-                                  IDR
-                                </InputAdornment>
-                              ),
-                            }}
-                          />
-                        </Grid>
-                        <Grid item xs={3} md={3} lg={3} xl={3}>
-                          <FormControl fullWidth>
-                            <Select
-                              fullWidth
-                              value={
-                                formik.values.supplementary[i]?.data?.period
-                              }
-                              onChange={(e) =>
-                                formik.setFieldValue(
-                                  `supplementary.${i}.period`,
-                                  e.target.value
-                                )
-                              }
-                            >
-                              <MenuItem value="Per Week">per Week</MenuItem>
-                              <MenuItem value="Per Month">per Month</MenuItem>
-                              <MenuItem value="Per Year">per Year</MenuItem>
-                            </Select>
-                          </FormControl>
-                        </Grid>
-                      </Grid>
+                      <FormControl
+                        fullWidth
+                        error={
+                          formik.touched.compensationComponentId &&
+                          Boolean(formik.errors.compensationComponentId)
+                        }
+                      >
+                        <Select
+                          fullWidth
+                          value={formik.values.compensationComponentId}
+                          onChange={(e) =>
+                            formik.setFieldValue(
+                              "compensationComponentId",
+                              e.target.value
+                            )
+                          }
+                        >
+                          {compensationComponentOption?.map((Option, i) => (
+                            <MenuItem key={i} value={Option.id}>
+                              {Option.name}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                        <FormHelperText>
+                          {formik.touched.compensationComponentId &&
+                            formik.errors.compensationComponentId}
+                        </FormHelperText>
+                      </FormControl>
                     </div>
-                  ))}
-                </Form>
-              </>
-            )}
-          </div>
-          <AddButton
-            color="secondary"
-            startIcon={<AddIcon />}
-            label="Add Supplementary Compensation"
-            onClick={() => addSuplementary()}
-          />
-        </div>
-      </Paper>
-    </div>
+                  </Grid>
+                  <Grid item xs={6} md={6} lg={6} xl={6}>
+                    <Typography style={{ fontSize: "14px" }}>
+                      Tax Status<span style={{ color: "red" }}>*</span>
+                    </Typography>
+                    <FormControl
+                      error={
+                        formik.touched.taxStatus &&
+                        Boolean(formik.errors.taxStatus)
+                      }
+                    >
+                      <RadioGroup
+                        row
+                        style={{ height: "54px" }}
+                        value={formik.values.taxStatus}
+                        onChange={(e) =>
+                          formik.setFieldValue("taxStatus", e.target.value)
+                        }
+                      >
+                        <FormControlLabel
+                          value="true"
+                          control={
+                            <Radio
+                              size="small"
+                              checkedIcon={<BpCheckedIcon />}
+                            />
+                          }
+                          label="Taxable"
+                        />
+                        <FormControlLabel
+                          value="false"
+                          control={
+                            <Radio
+                              size="small"
+                              checkedIcon={<BpCheckedIcon />}
+                            />
+                          }
+                          label="Non-Taxable"
+                        />
+                      </RadioGroup>
+                      <FormHelperText>
+                        {formik.touched.taxStatus && formik.errors.taxStatus}
+                      </FormHelperText>
+                    </FormControl>
+                  </Grid>
+                </Grid>
+                <Grid container>
+                  <Typography>
+                    {formik.values.compensationComponentId === "1"
+                      ? "Rate"
+                      : "Amount"}
+                    <span style={{ color: "red" }}>*</span>
+                  </Typography>
+                  <Grid container spacing={2}>
+                    <Grid item xs={3} md={3} lg={3} xl={3}>
+                      <TextField
+                        fullWidth
+                        type="number"
+                        error={
+                          formik.touched.rateOrAmount &&
+                          Boolean(formik.errors.rateOrAmount)
+                        }
+                        helperText={
+                          formik.touched.rateOrAmount &&
+                          formik.errors.rateOrAmount
+                        }
+                        value={formik.values.rateOrAmount}
+                        onChange={(e) =>
+                          formik.setFieldValue("rateOrAmount", e.target.value)
+                        }
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">Rp</InputAdornment>
+                          ),
+                          endAdornment: (
+                            <InputAdornment position="end">IDR</InputAdornment>
+                          ),
+                        }}
+                      />
+                    </Grid>
+                    <Grid item xs={3} md={3} lg={3} xl={3}>
+                      <FormControl
+                        fullWidth
+                        error={
+                          formik.touched.period && Boolean(formik.errors.period)
+                        }
+                      >
+                        <Select
+                          fullWidth
+                          value={formik.values.period}
+                          onChange={(e) =>
+                            formik.setFieldValue("period", e.target.value)
+                          }
+                        >
+                          <MenuItem value="Per Week">per Week</MenuItem>
+                          <MenuItem value="Per Month">per Month</MenuItem>
+                          <MenuItem value="Per Year">per Year</MenuItem>
+                        </Select>
+                        <FormHelperText>
+                          {formik.touched.period && formik.errors.period}
+                        </FormHelperText>
+                      </FormControl>
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Form>
+            <FieldArray
+              name="supplementary"
+              render={(arrayHelper) => {
+                return (
+                  <div>
+                    {formik.values.supplementary.length > 0 && (
+                      <>
+                        <Typography
+                          style={{
+                            marginBottom: "17px",
+                            fontSize: "16px",
+                            fontWeight: "700",
+                            color: "#223567",
+                          }}
+                        >
+                          Suplementary
+                        </Typography>
+                        <Form>
+                          {formik.values.supplementary.map((suplement, i) => (
+                            <div key={i} style={{ marginBottom: "33px" }}>
+                              <Grid container spacing={2}>
+                                <Grid item xs={6} md={6} lg={6} xl={6}>
+                                  <div style={{ marginBottom: "16px" }}>
+                                    <Typography style={{ fontSize: "14px" }}>
+                                      Compensation Component {i + 1}
+                                      <span style={{ color: "red" }}>*</span>
+                                    </Typography>
+                                    <FormControl
+                                      fullWidth
+                                      // error={
+                                      //   formik.touched.supplementary![i]
+                                      //     ?.compensationComponentId &&
+                                      //   Boolean(
+                                      //     formik.errors.supplementary![i]
+                                      //       ?.compensationComponentId
+                                      //   )
+                                      // }
+                                    >
+                                      <Select
+                                        fullWidth
+                                        value={
+                                          formik.values.supplementary[i]
+                                            ?.compensationComponentId
+                                        }
+                                        onChange={(e) =>
+                                          formik.setFieldValue(
+                                            `supplementary.${i}.compensationComponentId`,
+                                            e.target.value
+                                          )
+                                        }
+                                      >
+                                        {compensationComponentOption?.map(
+                                          (Option, i) => (
+                                            <MenuItem key={i} value={Option.id}>
+                                              {Option.name}
+                                            </MenuItem>
+                                          )
+                                        )}
+                                      </Select>
+                                      {/* <FormHelperText>
+                                        {formik.touched.supplementary![i]
+                                          ?.compensationComponentId &&
+                                          formik.errors.supplementary![i]
+                                            ?.compensationComponentId}
+                                      </FormHelperText> */}
+                                    </FormControl>
+                                  </div>
+                                </Grid>
+                                <Grid item xs={6} md={6} lg={6} xl={6}>
+                                  <Typography style={{ fontSize: "14px" }}>
+                                    Tax Status
+                                    <span style={{ color: "red" }}>*</span>
+                                  </Typography>
+                                  <Box
+                                    style={{
+                                      display: "flex",
+                                      justifyContent: "space-between",
+                                      alignItems: "center",
+                                      height: "54px",
+                                    }}
+                                  >
+                                    <FormControl
+                                    // error={
+                                    //   formik.touched.supplementary![i]
+                                    //     ?.taxStatus &&
+                                    //   Boolean(
+                                    //     formik.errors.supplementary![i]
+                                    //       ?.taxStatus
+                                    //   )
+                                    // }
+                                    >
+                                      <RadioGroup
+                                        row
+                                        value={
+                                          formik.values.supplementary[i]
+                                            ?.taxStatus
+                                        }
+                                        onChange={(e) =>
+                                          formik.setFieldValue(
+                                            `supplementary.${i}.taxStatus`,
+                                            e.target.value
+                                          )
+                                        }
+                                      >
+                                        <FormControlLabel
+                                          value="true"
+                                          control={
+                                            <Radio
+                                              size="small"
+                                              checkedIcon={<BpCheckedIcon />}
+                                            />
+                                          }
+                                          label="Taxable"
+                                        />
+                                        <FormControlLabel
+                                          value="false"
+                                          control={
+                                            <Radio
+                                              size="small"
+                                              checkedIcon={<BpCheckedIcon />}
+                                            />
+                                          }
+                                          label="Non-Taxable"
+                                        />
+                                      </RadioGroup>
+                                      {/* <FormHelperText>
+                                        {formik.touched.supplementary![i]
+                                          ?.taxStatus &&
+                                          formik.errors.supplementary![i]
+                                            ?.taxStatus}
+                                      </FormHelperText> */}
+                                    </FormControl>
+                                    <Box>
+                                      <Button
+                                        color="red"
+                                        startIcon={<DeleteIcon />}
+                                        label="Delete"
+                                        onClick={() => arrayHelper.remove(i)}
+                                      />
+                                    </Box>
+                                  </Box>
+                                </Grid>
+                              </Grid>
+                              <Typography>
+                                {formik.values.supplementary[i]
+                                  ?.compensationComponentId === "1"
+                                  ? "Rate"
+                                  : "Amount"}
+                                <span style={{ color: "red" }}>*</span>
+                              </Typography>
+                              <Grid container spacing={2}>
+                                <Grid item xs={3} md={3} lg={3} xl={3}>
+                                  <TextField
+                                    fullWidth
+                                    type="number"
+                                    // error={
+                                    //   formik.touched.supplementary[i]
+                                    //     ?.rateOrAmount &&
+                                    //   Boolean(
+                                    //     formik.errors.supplementary[i]
+                                    //       ?.rateOrAmount
+                                    //   )
+                                    // }
+                                    // helperText={
+                                    //   formik.touched.supplementary![i]
+                                    //     ?.rateOrAmount &&
+                                    //   formik.errors.supplementary![i]
+                                    //     ?.rateOrAmount
+                                    // }
+                                    value={
+                                      formik.values.supplementary[i]
+                                        ?.rateOrAmount
+                                    }
+                                    onChange={(e) =>
+                                      formik.setFieldValue(
+                                        `supplementary.${i}.rateOrAmount`,
+                                        e.target.value
+                                      )
+                                    }
+                                    InputProps={{
+                                      startAdornment: (
+                                        <InputAdornment position="start">
+                                          Rp
+                                        </InputAdornment>
+                                      ),
+                                      endAdornment: (
+                                        <InputAdornment position="end">
+                                          IDR
+                                        </InputAdornment>
+                                      ),
+                                    }}
+                                  />
+                                </Grid>
+                                <Grid item xs={3} md={3} lg={3} xl={3}>
+                                  <FormControl
+                                    fullWidth
+                                    // error={
+                                    //   formik.touched.supplementary![i]
+                                    //     ?.period &&
+                                    //   Boolean(
+                                    //     formik.errors.supplementary![i]?.period
+                                    //   )
+                                    // }
+                                  >
+                                    <Select
+                                      fullWidth
+                                      value={
+                                        formik.values.supplementary[i]?.period
+                                      }
+                                      onChange={(e) =>
+                                        formik.setFieldValue(
+                                          `supplementary.${i}.period`,
+                                          e.target.value
+                                        )
+                                      }
+                                    >
+                                      <MenuItem value="Per Week">
+                                        per Week
+                                      </MenuItem>
+                                      <MenuItem value="Per Month">
+                                        per Month
+                                      </MenuItem>
+                                      <MenuItem value="Per Year">
+                                        per Year
+                                      </MenuItem>
+                                    </Select>
+                                  </FormControl>
+                                </Grid>
+                              </Grid>
+                            </div>
+                          ))}
+                        </Form>
+                      </>
+                    )}
+                    <AddButton
+                      color="secondary"
+                      startIcon={<AddIcon />}
+                      label="Add Supplementary Compensation"
+                      onClick={() =>
+                        arrayHelper.insert(
+                          formik.values.supplementary.length + 1,
+                          {
+                            compensationComponentId: "",
+                            period: "",
+                            rateOrAmount: "",
+                            taxStatus: "",
+                          }
+                        )
+                      }
+                    />
+                  </div>
+                );
+              }}
+            />
+          </Paper>
+          <Snackbar
+            open={openMsg}
+            autoHideDuration={2000}
+            onClose={() => setOpenMsg(false)}
+            anchorOrigin={{ vertical: "top", horizontal: "right" }}
+          >
+            <Alert>
+              <AlertTitle>Successfully Saved!</AlertTitle>
+              New Compensation and Benefits Profile has been created
+            </Alert>
+          </Snackbar>
+        </FormikForm>
+      )}
+    </Formik>
   );
 }
