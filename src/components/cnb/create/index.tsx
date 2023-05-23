@@ -194,17 +194,17 @@ export default function CreateCNBComponent() {
   };
 
   function CreateNewCnbProfile(value: any) {
-    console.log(value);
-    let supplement = true;
+    let supplement = false;
     value.supplementary.map((item: any) => {
       if (value.supplementary.length === 0) {
-        return false;
+        supplement = true;
+        return;
       }
       if (
         item.compensationComponentId &&
         item.period &&
         item.rateOrAmount &&
-        item.taxStatus !== ""
+        item.taxStatus
       ) {
         supplement = true;
       } else {
@@ -212,10 +212,10 @@ export default function CreateCNBComponent() {
       }
     });
     if (
-      value.name &&
-      value.compensationComponentId &&
-      value.period &&
-      value.rateOrAmount &&
+      value.name !== "" &&
+      value.compensationComponentId !== "" &&
+      value.period !== "" &&
+      value.rateOrAmount !== "" &&
       value.taxStatus !== "" &&
       supplement
     ) {
@@ -244,7 +244,7 @@ export default function CreateCNBComponent() {
         },
       });
     } else {
-      alert("mohon isi seluruh field");
+      alert("Please fill all field");
     }
   }
 
@@ -288,7 +288,7 @@ export default function CreateCNBComponent() {
           />
         </NextBtnWrapper>
       </Header>
-      <Paper sx={{ width: "100%", p: "20px 30px" }}>
+      <Paper sx={{ width: "100%", p: "21px 32px" }}>
         <Form style={{ marginBottom: "32px" }}>
           <Typography>
             Profile Name
