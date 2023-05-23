@@ -45,7 +45,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
 
 
   const [useResidentialAddress, setUseResidentialAddress] = useState(personalValues?.useResidentialAddress);
-  const [isPermanentPersonalID, setIsPermanentPersonalID] = useState(personalValues?.isPermanentPersonalID);
+  // const [isPermanentPersonalID, setIsPermanentPersonalID] = useState(personalValues?.isPermanentPersonalID);
 
   const formik = useFormik({
     initialValues: {
@@ -92,7 +92,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
       console.log(values);
       nextPage(2);
       setIsPersonalInformationValid(true);
-      setValues({ ...formik.values, useResidentialAddress, isPermanentPersonalID });
+      setValues({ ...formik.values, useResidentialAddress });
     }
   });
 
@@ -104,6 +104,47 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
       type: getBanksRequested.toString()
     });
   }, []);
+
+  useEffect(() => {
+    if (useResidentialAddress) {
+      formik.setFieldValue('countryResidentialAddress', formik.values.countryCitizenAddress);
+      dispatch({
+        type: getSecondAdministrativeFirstLevelRequested.toString(),
+        payload: {
+          countryId: formik.values.countryCitizenAddress
+        }
+      });
+      formik.setFieldValue('provinceResidentialAddress', formik.values.provinceCitizenAddress);
+      setTimeout(() => {
+        dispatch({
+          type: getSecondAdministrativeSecondLevelRequested.toString(),
+          payload: {
+            countryId: formik.values.countryCitizenAddress,
+            firstLevelCode: formik.values.provinceCitizenAddress
+          }
+        });
+      }, 3000);
+     
+      formik.setFieldValue('cityResidentialAddress', formik.values.cityCitizenAddress);
+      setTimeout(() => {
+        dispatch({
+          type: getSecondAdministrativeThirdLevelRequested.toString(),
+          payload: {
+            countryId: formik.values.countryCitizenAddress,
+            firstLevelCode: formik.values.provinceCitizenAddress,
+            secondLevelCode: formik.values.cityCitizenAddress
+          }
+        });
+      }, 3500);
+      
+      formik.setFieldValue('subDistrictResidentialAddress', formik.values.subDistrictCitizenAddress);
+      formik.setFieldValue('addressResidentialAddress', formik.values.addressCitizenAddress);
+      formik.setFieldValue('zipCodeResidentialAddress', formik.values.zipCodeCitizenAddress );
+    }
+  }, [useResidentialAddress]);
+
+  console.log(formik.values.provinceCitizenAddress);
+  console.log(secondAdministrativeSecond);
 
   return (
     <form onSubmit={formik.handleSubmit} ref={refProp}>
@@ -694,7 +735,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
             />
           </Grid>
         </Grid>
-        <Grid
+        {/* <Grid
           container
           wrap='wrap'
           alignItems='center'
@@ -709,7 +750,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               onChange={() => setIsPermanentPersonalID((prev: boolean) => !prev)}
             />
           </Grid>
-        </Grid>
+        </Grid> */}
       </Box>
       <Box
         component='div'
@@ -850,7 +891,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
         <Grid item>
           <Button onClick={() => {
             nextPage(0);
-            setValues({ ...formik.values, useResidentialAddress, isPermanentPersonalID });
+            setValues({ ...formik.values, useResidentialAddress });
           }} label='Back' variant='outlined' />
         </Grid>
         <Grid item>

@@ -254,6 +254,7 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, set
               customLabel='End Date'
               value={formik.values.endDate as unknown as Date}
               onChange={(date: unknown) => formik.setFieldValue('endDate', date)}
+              disabled={formik.values.isPermanent}
             />
           </Grid>
         </Grid>

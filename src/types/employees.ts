@@ -91,7 +91,7 @@ export declare namespace Employees {
 
   interface PersonalValues {
     useResidentialAddress: boolean;
-    isPermanentPersonalID: boolean;
+    // isPermanentPersonalID: boolean;
     dateofBirthPersonalInformation: dayjs.Dayjs | null | string;
     genderPersonalInformation: number;
     maritialStatusPersonalInformation: number;
