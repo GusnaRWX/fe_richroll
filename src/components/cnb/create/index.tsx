@@ -86,7 +86,7 @@ export default function CreateCNBComponent() {
       supplementary: supplementaryList,
     },
     onSubmit: (value) => {
-      console.log(value);
+      CreateNewCnbProfile(value);
     },
     validationSchema: validationSchecma,
   });
@@ -193,21 +193,18 @@ export default function CreateCNBComponent() {
     setSupplementaryList(search);
   };
 
-  React.useEffect(() => {
-    console.log(formik.errors.supplementary);
-  }, [formik]);
-
-  function CreateNewCnbProfile() {
+  function CreateNewCnbProfile(value: any) {
+    console.log(value);
     let supplement = true;
-    supplementaryList.map((item) => {
-      if (supplementaryList.length === 0) {
+    value.supplementary.map((item: any) => {
+      if (value.supplementary.length === 0) {
         return false;
       }
       if (
-        item.data.compensationComponentId &&
-        item.data.period &&
-        item.data.rateOrAmount &&
-        item.data.taxStatus !== ""
+        item.compensationComponentId &&
+        item.period &&
+        item.rateOrAmount &&
+        item.taxStatus !== ""
       ) {
         supplement = true;
       } else {
@@ -215,47 +212,34 @@ export default function CreateCNBComponent() {
       }
     });
     if (
-      BaseCompensation.name &&
-      BaseCompensation.compensationComponentId &&
-      BaseCompensation.period &&
-      BaseCompensation.rateOrAmount &&
-      BaseCompensation.taxStatus !== "" &&
+      value.name &&
+      value.compensationComponentId &&
+      value.period &&
+      value.rateOrAmount &&
+      value.taxStatus !== "" &&
       supplement
     ) {
       dispatch({
         type: postNewCnbProfileRequested.toString(),
         Payload: {
           companyId: companyData?.id,
-          name: BaseCompensation.name,
+          name: value.name,
           baseCompensation: {
-            compensationComponentId: parseInt(
-              BaseCompensation.compensationComponentId
-            ),
-            taxStatus: BaseCompensation.taxStatus,
+            compensationComponentId: parseInt(value.compensationComponentId),
+            taxStatus: value.taxStatus,
             amount:
-              BaseCompensation.compensationComponentId === "1"
-                ? 0
-                : BaseCompensation.rateOrAmount,
+              value.compensationComponentId === "1" ? 0 : value.rateOrAmount,
             rate:
-              BaseCompensation.compensationComponentId === "1"
-                ? BaseCompensation.rateOrAmount
-                : 0,
-            period: BaseCompensation.period,
+              value.compensationComponentId === "1" ? value.rateOrAmount : 0,
+            period: value.period,
           },
-          supplementaryCompensations: supplementaryList.map((item) => ({
-            compensationComponentId: parseInt(
-              item.data.compensationComponentId
-            ),
-            taxStatus: item.data.taxStatus,
+          supplementaryCompensations: value.supplementary.map((item: any) => ({
+            compensationComponentId: parseInt(item.compensationComponentId),
+            taxStatus: item.taxStatus,
             amount:
-              item.data.compensationComponentId === "1"
-                ? 0
-                : item.data.rateOrAmount,
-            rate:
-              item.data.compensationComponentId === "1"
-                ? item.data.rateOrAmount
-                : 0,
-            period: item.data.period,
+              item.compensationComponentId === "1" ? 0 : item.rateOrAmount,
+            rate: item.compensationComponentId === "1" ? item.rateOrAmount : 0,
+            period: item.period,
           })),
         },
       });
