@@ -6,11 +6,11 @@ export const getCompaniesItem = () => {
 };
 
 export const getCompanyTypeItem = () => {
-  return get('/company_sectors');
+  return get('/company_types');
 };
 
 export const getCompanySectorItem = () => {
-  return get('/company_types');
+  return get('/company_sectors');
 };
 
 export const getBankItem = () => {
@@ -21,12 +21,13 @@ export const getPaymentMethodItem = () => {
   return get('/payment_methods');
 };
 
-export const postCompanyProfile = (payload: Company.CompanyProfilePayload) => {
-  return post('companies', payload);
+export const getCompanyDetail = (payload: Company.CompanyDetailPayload) => {
+  const {id} = payload;
+  return get(`companies/${id}`);
 };
 
-export const postCompanyDetail = (payload: Company.CompanyDetailPayload) => {
-  return post('companies/detail', payload);
+export const postCompanyProfile = (payload: Company.CompanyProfilePayload) => {
+  return post('companies', payload);
 };
 
 export const patchCompanyProfile = (payload: Company.CompanyParams) => {

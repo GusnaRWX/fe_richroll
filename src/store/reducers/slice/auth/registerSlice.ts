@@ -2,11 +2,11 @@ import { createSlice } from '@reduxjs/toolkit';
 import { HYDRATE } from 'next-redux-wrapper';
 
 interface RegisterState {
-  loading: boolean
+  loading: boolean;
 }
 
 const initialState: RegisterState = {
-  loading: false
+  loading: false,
 };
 
 export const registerSlice = createSlice({
@@ -17,7 +17,7 @@ export const registerSlice = createSlice({
       state.loading = true;
     },
     registerSuccess: (state) => {
-      state.loading = false;
+      state.loading = true;
     },
     registerFailed: (state) => {
       state.loading = false;

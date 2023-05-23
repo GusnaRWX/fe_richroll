@@ -1,11 +1,11 @@
-import { AnyAction } from "@reduxjs/toolkit";
+import { AnyAction } from '@reduxjs/toolkit';
 import {
   getDataTable,
   getCompensationComponentOption,
   postNewCnbProfile,
   deleteCnbProfile,
-} from "../saga-actions/cnb/compensationActions";
-import { call, put, takeEvery, delay } from "redux-saga/effects";
+} from '../saga-actions/cnb/compensationActions';
+import { call, put, takeEvery, delay } from 'redux-saga/effects';
 import {
   getTableRequested,
   getTableSuccess,
@@ -19,11 +19,11 @@ import {
   deleteCompensationRequested,
   deleteCompensationSuccess,
   deleteCompensationFailed,
-} from "@/store/reducers/slice/cnb/compensationSlice";
-import { setResponserMessage } from "@/store/reducers/slice/responserSlice";
-import { Services } from "@/types/axios";
-import { AxiosError, AxiosResponse } from "axios";
-import Router from "next/router";
+} from '@/store/reducers/slice/cnb/compensationSlice';
+import { setResponserMessage } from '@/store/reducers/slice/responserSlice';
+import { Services } from '@/types/axios';
+import { AxiosError, AxiosResponse } from 'axios';
+import Router from 'next/router';
 
 // Get Data Table
 function* fetchGetTable(action: AnyAction) {

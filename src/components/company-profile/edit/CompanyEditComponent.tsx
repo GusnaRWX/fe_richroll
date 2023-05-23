@@ -1,24 +1,15 @@
 import React, {useState} from 'react';
 import {
   Box,
-  BoxProps,
-  AppBar,
-  Toolbar,
+  Grid,
+  Button as MuiButton,
   Card,
-  CardProps,
-  Divider,
   Typography,
   Tab,
   Tabs
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import Image from 'next/image';
-import { CompanyCreate } from '@/types/component';
-import { Image as ImageType } from '@/utils/assetsConstant';
-import { IconButton } from '@/components/_shared/form';
-import { BsBellFill } from 'react-icons/bs';
-import LocalizationMenu from '@/components/_shared/_core/localization/Index';
-import Profile from '@/components/_shared/_core/appbar/Profile';
+import { CompanyEdit } from '@/types/component';
 import CompanyInformationForm from './CompanyProfileInformationForm';
 import CompanyBankForm from './CompanyProfileBankForm';
 import { useForm, useAppDispatch, useAppSelectors } from '@/hooks/index';
@@ -27,32 +18,21 @@ import {
   administrativeSecondLevelRequested,
   administrativeThirdLevelRequsted
 } from '@/store/reducers/slice/options/optionSlice';
-import { postCompanyProfileRequested } from '@/store/reducers/slice/company/companySlice';
+import { patchCompanyProfileRequested } from '@/store/reducers/slice/company/companySlice';
+import { useRouter } from 'next/router';
+import { getCompanyData } from '@/utils/helper';
 
-const WrapperAuth = styled(Box)<BoxProps>(({ theme }) => ({
-  background: theme.palette.secondary[100],
-  minHeight: '100vh'
-}));
-
-const WrapperCard = styled(Card)<CardProps>(() => ({
-  paddingTop: '100px',
-  background: 'none',
-  borderRadius: 'none',
-  boxShadow: 'none',
-  paddingLeft: '135px',
-  paddingRight: '135px'
-}));
-
-const WrapperCardContent = styled(Box)<BoxProps>(() => ({
-  borderRadius: '8px',
-  boxShadow: '0px 6px 20px rgba(0, 0, 0, 0.05)',
-  background: 'white',
-  padding: '24px'
-}));
-
-const WrapperNavbarContent = styled(Toolbar)(() => ({
+const ButtonWrapper = styled(Box)(({
   display: 'flex',
-  justifyContent: 'space-between'
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'flex-end',
+  gap: '1rem',
+  marginTop: '.1rem'
+}));
+
+const ContentWrapper = styled(Card)(({
+  padding: '1rem'
 }));
 
 interface TabPanelProps {
@@ -89,38 +69,12 @@ function a11yProps(index: number) {
   };
 }
 
-const Navbar = () => {
-  return (
-    <AppBar
-      component='nav'
-      sx={{
-        background: '#FFFFFF',
-        color: 'primary.main',
-      }}
-    >
-      <WrapperNavbarContent>
-        <Box>
-          <Image
-            src={ImageType.KAYAROLL_LOGO}
-            width={151}
-            height={40}
-            alt='kayaroll'
-          />
-        </Box>
-        <Box sx={{ display: { xs: 'none', sm: 'flex' }, gap: { sm: 1 } }}>
-          <IconButton icons={<BsBellFill />} parentColor='' size='small' />
-          <Divider sx={{ borderWidth: '0.5px' }} />
-          <LocalizationMenu />
-          <Divider sx={{ borderWidth: '0.5px' }} />
-          <Profile />
-        </Box>
-      </WrapperNavbarContent>
-    </AppBar>
-  );
-};
-
-const CompanyCreateComponent = ({ companyType, companySector, bank, paymentMethod, countries }: CompanyCreate.Component) => {
+const CompanyEditComponent = ({ detail, companyType, companySector, bank, paymentMethod, countries }: CompanyEdit.Component) => {
   const [tabSelected, setTabSelected] = useState(0);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [images, setImages] = useState<string | null>(detail?.information?.imageUrl);
+  const companyData = getCompanyData();
+  const router = useRouter();
   const dispatch = useAppDispatch();
 
   const {
@@ -132,44 +86,44 @@ const CompanyCreateComponent = ({ companyType, companySector, bank, paymentMetho
   const [initialValues] = useState({
 
     // Group Company Information
-    companyType: '',
-    companyName: '',
-    companyNPWP: '',
-    companySector: '',
-    companyEmail: '',
-    phoneNumberPrefix: '',
-    phoneNumber: '',
+    companyType: detail?.information?.type?.id,
+    companyName: detail?.information?.name,
+    companyNPWP: detail?.information?.npwp,
+    companySector: detail?.information?.sector?.id,
+    companyEmail: detail?.information?.email,
+    phoneNumberPrefix: detail?.information?.contact.slice(0,3),
+    phoneNumber: detail?.information?.contact,
 
     // Group Company Address
-    countryCompanyAddress: '',
-    provinceCompanyAddress: '',
-    cityCompanyAddress: '',
-    subDistrictCompanyAddress: '',
-    addressCompanyAddress: '',
-    zipCodeCompanyAddress: '',
+    countryCompanyAddress: detail?.address?.country?.code,
+    provinceCompanyAddress: detail?.address?.firstLevel?.code,
+    cityCompanyAddress: detail?.address?.secondLevel?.code,
+    subDistrictCompanyAddress: detail?.address?.thirdLevel?.code,
+    addressCompanyAddress: detail?.address?.address,
+    zipCodeCompanyAddress: detail?.address?.zipCode,
 
     // Group Bank Information
-    bankBankInformation: '',
-    bankAccountHolderNameBankInformation: '',
-    bankAccoutNoBankInformation: '',
-    bankCodeBankInformation: '',
-    branchCodeBankInformation: '',
-    branchNameBankInformation: '',
-    swiftCodeBankInformation: '',
+    bankBankInformation: detail?.bank?.bank?.id,
+    bankAccountHolderNameBankInformation: detail?.bank?.accountName,
+    bankAccoutNoBankInformation: detail?.bank?.accountNumber,
+    bankCodeBankInformation: detail?.bank?.bankCode,
+    branchCodeBankInformation: detail?.bank?.branchCode,
+    branchNameBankInformation: detail?.bank?.branchName,
+    swiftCodeBankInformation: detail?.bank?.swiftCode,
 
     // Group Payroll Information
-    isMonthly: true,
-    isWeekly: false,
-    isBiWeekly: false,
-    monthlyPeriodStart: '',
-    monthlyPeriodEnd: '',
-    monthlyPayrollDate: '',
-    monthlyMethod: '',
-    weeklyPeriod: '',
-    weeklyMethod: '',
-    biWeeklyPeriod: '',
-    biWeeklyPeriodWeek: '',
-    biWeeklyMethod: ''
+    isMonthly: !!detail?.payroll?.monthly,
+    isWeekly: !!detail?.payroll?.weekly,
+    isBiWeekly: !!detail?.payroll?.biWeekly,
+    monthlyPeriodStart: detail?.payroll?.monthly?.periodStart,
+    monthlyPeriodEnd: detail?.payroll?.monthly?.periodEnd,
+    monthlyPayrollDate: detail?.payroll?.monthly?.payrollDate,
+    monthlyMethod: detail?.payroll?.monthly?.method?.id,
+    weeklyPeriod: detail?.payroll?.weekly?.period,
+    weeklyMethod: detail?.payroll?.weekly?.method?.id,
+    biWeeklyPeriod: detail?.payroll?.biWeekly?.period,
+    biWeeklyPeriodWeek: detail?.payroll?.biWeekly?.periodWeek,
+    biWeeklyMethod: detail?.payroll?.biWeekly?.method?.id
   });
 
   const validate = (fieldOfValues = values) => {
@@ -309,9 +263,39 @@ const CompanyCreateComponent = ({ companyType, companySector, bank, paymentMetho
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    let payrollCheck = {};
+
+    const informationData = {
+      typeId: values.companyType,
+      name: values.companyName,
+      npwp: values.companyNPWP,
+      sectorId: values.companySector,
+      email: values.companyEmail,
+      contact: values.phoneNumberPrefix + values.phoneNumber,
+    };
+
+    const addressData = {
+      countryId: values.countryCompanyAddress,
+      firstLevelCode: values.provinceCompanyAddress,
+      secondLevelCode: values.cityCompanyAddress,
+      thirdLevelCode: values.subDistrictCompanyAddress,
+      fourthLevelCode: null,
+      address: values.addressCompanyAddress,
+      zipCode: values.zipCodeCompanyAddress,
+    };
+
+    const bankData = {
+      bankId: values.bankBankInformation,
+      accountName: values.bankAccountHolderNameBankInformation,
+      accountNumber: values.bankAccoutNoBankInformation,
+      bankCode: values.bankCodeBankInformation,
+      branchCode: values.branchCodeBankInformation,
+      branchName: values.branchNameBankInformation,
+      swiftCode: values.swiftCodeBankInformation
+    };
+
+    let payrollData = {};
     if (values.isMonthly) {
-      payrollCheck = {...payrollCheck, ...{monthly: {
+      payrollData = {...payrollData, ...{monthly: {
         periodStart: values.monthlyPeriodStart,
         periodEnd: values.monthlyPeriodEnd,
         payrollDate: values.monthlyPayrollDate,
@@ -319,113 +303,97 @@ const CompanyCreateComponent = ({ companyType, companySector, bank, paymentMetho
       }}};
     }
     if (values.isWeekly) {
-      payrollCheck = {...payrollCheck, ...{weekly: {
+      payrollData = {...payrollData, ...{weekly: {
         period: values.weeklyPeriod,
         methodId: values.weeklyMethod,
       }}};
     }
     if (values.isBiWeekly) {
-      payrollCheck = {...payrollCheck, ...{biWeekly: {
+      payrollData = {...payrollData, ...{biWeekly: {
         period: values.biWeeklyPeriod,
         periodWeek: values.biWeeklyPeriodWeek,
         methodId: values.biWeeklyMethod,
       }}};
     }
-    const payload = {
-      information: {
-        imageUrl: 'image.com/image123',
-        typeId: values.companyType,
-        name: values.companyName,
-        npwp: values.companyNPWP,
-        sectorId: values.companySector,
-        email: values.companyEmail,
-        contact: values.phoneNumberPrefix + values.phoneNumber,
-      },
-      address: {
-        countryId: values.countryCompanyAddress,
-        firstLevelCode: values.provinceCompanyAddress,
-        secondLevelCode: values.cityCompanyAddress,
-        thirdLevelCode: values.subDistrictCompanyAddress,
-        fourthLevelCode: 'kosong',
-        address: values.addressCompanyAddress,
-        zipCode: values.zipCodeCompanyAddress,
-      },
-      bank: {
-        bankId: values.bankBankInformation,
-        accountName: values.bankAccountHolderNameBankInformation,
-        accountNumber: values.bankAccoutNoBankInformation,
-        bankCode: values.bankCodeBankInformation,
-        branchCode: values.branchCodeBankInformation,
-        branchName: values.branchNameBankInformation,
-        swiftCode: values.swiftCodeBankInformation
-      },
-      payroll: payrollCheck
-    };
+
+    const inputData = new FormData();
+    inputData.append('picture', values?.picture[0] || detail?.information?.imageUrl);
+    inputData.append('information', JSON.stringify(informationData));
+    inputData.append('address', JSON.stringify(addressData));
+    inputData.append('bank', JSON.stringify(bankData));
+    inputData.append('payroll', JSON.stringify(payrollData));
     
     dispatch({
-      type: postCompanyProfileRequested.toString(),
-      payload: payload
+      type: patchCompanyProfileRequested.toString(),
+      payload: {id: detail.id, data: inputData}
     });
   };
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabSelected(newValue);
   };
-  const handleNext = (val: number) => {
-    setTabSelected(val);
-  };
 
   return (
     <>
-      <Navbar />
-      <WrapperAuth>
-        <WrapperCard>
-          <Typography
-            variant='text-lg'
-            component='div'
-            sx={{ fontWeight: 700, mb: '24px' }}
-          >
-            Create Company Profile
-          </Typography>
-          <WrapperCardContent>
-            <Box sx={{ width: '100%' }}>
-              <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                <Tabs value={tabSelected} onChange={handleChange} aria-label='basic tabs'>
-                  <Tab sx={{ textTransform: 'none' }} label='Company Information' {...a11yProps(0)} />
-                  <Tab sx={{ textTransform: 'none' }} label='Bank and Payroll Information' {...a11yProps(1)} />
-                </Tabs>
-              </Box>
-              <TabPanel value={tabSelected} index={0}>
-                <CompanyInformationForm
-                  nextPage={handleNext}
-                  companyType={companyType}
-                  companySector={companySector}
-                  countries={countries}
-                  administrativeFirst={administrativeFirst}
-                  administrativeSecond={administrativeSecond}
-                  administrativeThird={administrativeThird}
-                  values={values}
-                  errors={errors}
-                  handleInputChange={handleInputChange}
-                />
-              </TabPanel>
-              <TabPanel value={tabSelected} index={1}>
-                <CompanyBankForm
-                  handleSubmit={handleSubmit}
-                  values={values}
-                  errors={errors}
-                  handleInputChange={handleInputChange}
-                  bank={bank}
-                  paymentMethod={paymentMethod}
-                />
-              </TabPanel>
-            </Box>
-          </WrapperCardContent>
-        </WrapperCard>
-
-      </WrapperAuth>
+      <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
+        <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+          <Typography variant='h5' color='primary.main'>Company Profile</Typography>
+          <Typography variant='text-base' color='#4B5563'>{companyData?.name}</Typography>
+        </Grid>
+        <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+          <ButtonWrapper>
+            <MuiButton
+              variant='outlined'
+              size='small'
+              color='primary'
+              onClick={() => { router.push('/company-management/company-profile'); }}
+            >Cancel</MuiButton>
+            <MuiButton
+              variant='contained'
+              size='small'
+              color='primary'
+              sx={{ color: 'white' }}
+              onClick={(e) => { handleSubmit(e); }}
+            >Save</MuiButton>
+          </ButtonWrapper>
+        </Grid>
+      </Grid>
+      <ContentWrapper>
+        <Box sx={{ width: '100%' }}>
+          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            <Tabs value={tabSelected} onChange={handleChange} aria-label='basic tabs'>
+              <Tab sx={{ textTransform: 'none' }} label='Company Information' {...a11yProps(0)} />
+              <Tab sx={{ textTransform: 'none' }} label='Payment Information' {...a11yProps(1)} />
+            </Tabs>
+          </Box>
+          <TabPanel value={tabSelected} index={0}>
+            <CompanyInformationForm
+              companyType={companyType}
+              companySector={companySector}
+              countries={countries}
+              administrativeFirst={administrativeFirst}
+              administrativeSecond={administrativeSecond}
+              administrativeThird={administrativeThird}
+              values={values}
+              errors={errors}
+              handleInputChange={handleInputChange}
+              images={images}
+              setImages={setImages}
+            />
+          </TabPanel>
+          <TabPanel value={tabSelected} index={1}>
+            <CompanyBankForm
+              values={values}
+              errors={errors}
+              handleInputChange={handleInputChange}
+              bank={bank}
+              paymentMethod={paymentMethod}
+            />
+          </TabPanel>
+        </Box>
+      </ContentWrapper>
     </>
   );
 };
 
-export default CompanyCreateComponent;
+export default CompanyEditComponent;

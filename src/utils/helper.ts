@@ -88,14 +88,17 @@ export const convertDateValue = (name, event) => {
   return obj;
 };
 
-export const convertImageParams = (name, value, callback, onClose) => {
+export const convertImageParams = (name, value, callback?, onClose?) => {
   const files = value;
   const reader = new FileReader();
   reader.readAsDataURL(value);
   reader.onloadend = function () {
     callback(reader.result as string);
   };
-  onClose();
+  if (onClose) {
+    onClose();
+  }
+
   const obj = {
     target: {
       name, value: [files]
@@ -124,4 +127,15 @@ export const base64ToFile = (base64String: string | undefined, fileName: string)
   const file = new File([blob], fileName);
 
   return file;
+};
+
+
+/**
+ * Handle for read message from Validation response 
+ * 
+ */
+export const readValidationResponse = (validationResponse: Array<string>) => {
+  return validationResponse.flatMap(value => {
+    return Object.keys(value).length > 0 ? Object.values(value).join('') : [];
+  });
 };

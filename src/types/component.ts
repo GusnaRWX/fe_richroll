@@ -25,6 +25,17 @@ export declare namespace Register {
     phoneNumber: string;
   }
 
+  export interface InitialValuesRegister {
+    email: string;
+    password: string;
+    name: string;
+    countryID: string;
+    companyName: string;
+    numberOfEmployees: string;
+    phoneNumberPrefix: string;
+    phoneNumber: string;
+  }
+
   export interface Component {
     countries: Array<{ label: string; value: string }>;
     doRegister: (_payload: Form) => void,
@@ -44,6 +55,17 @@ export declare namespace CompanyCreate {
     bank: [];
     paymentMethod: [];
     countries: [];
+  }
+}
+
+export declare namespace CompanyEdit {
+  export interface Component {
+    companyType: [];
+    companySector: [];
+    bank: [];
+    paymentMethod: [];
+    countries: [];
+    detail;
   }
 }
 
@@ -72,6 +94,7 @@ export declare namespace SharedComponent {
     customLabel?: string;
     options?: Array<{ label: string, value: string }> | undefined;
     withAsterisk?: boolean;
+    helperText?: string;
   }
 
   export type ComponentButton = ButtonProps & {

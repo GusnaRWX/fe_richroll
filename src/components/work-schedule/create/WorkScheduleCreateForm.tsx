@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Input, Select } from '@/components/_shared/form';
-import { Button as MuiButton, Grid, InputAdornment, Typography } from '@mui/material';
+import { Button as MuiButton, Grid, InputAdornment, Typography, Button } from '@mui/material';
 import { Add } from '@mui/icons-material';
 import { Scheduler } from '@aldabil/react-scheduler';
 import CustomModal from '@/components/_shared/common/CustomModal';
@@ -9,6 +9,11 @@ import { styled } from '@mui/material/styles';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import type { SchedulerRef } from '@aldabil/react-scheduler/types';
+import { useFormik } from 'formik';
+import { workSchedule } from '@/types/workSchedule';
+import { validationSchemaWorkScheduler } from './validate';
+import dayjs from 'dayjs';
 
 
 const AsteriskComponent = styled('span')(({ theme }) => ({
@@ -23,92 +28,65 @@ const FlexBoxRow = styled('div')(() => ({
   gap: '1rem'
 }));
 
-interface EventDataType {
-  event_id: number;
-  title: string;
-  start: Date;
-  end: Date;
-  editable?: boolean;
-  disabled?: boolean;
-  color?: string;
-}
 
 function WorkScheduleCreateForm() {
-  const eventsData = [
-    {
-      event_id: 1,
-      title: 'Work Hour',
-      start: new Date(new Date(new Date().setHours(9)).setMinutes(0)),
-      end: new Date(new Date(new Date().setHours(12)).setMinutes(0)),
-      disabled: false,
-      editeable: false
-    },
-    {
-      event_id: 1,
-      title: 'lunch break',
-      start: new Date(new Date(new Date().setHours(12)).setMinutes(0)),
-      end: new Date(new Date(new Date().setHours(13)).setMinutes(0)),
-      editable: false,
-      color: '#75AD99'
-    },
-    {
-      event_id: 1,
-      title: 'Work Hour',
-      start: new Date(new Date(new Date().setHours(13)).setMinutes(0)),
-      end: new Date(new Date(new Date().setHours(17)).setMinutes(0)),
-      disabled: false,
-      editeable: false
-    },
-    {
-      event_id: 2,
-      title: 'Work Hour',
-      start: new Date (new Date(new Date(new Date().setHours(9)).setMinutes(0)).setDate(new Date().getDate() + 1)),
-      end: new Date(new Date(new Date(new Date().setHours(12)).setMinutes(0)).setDate(new Date().getDate() + 1)),
-      disabled: false,
-      editeable: false
-    },
-    {
-      event_id: 2,
-      title: 'lunch break',
-      start: new Date (new Date(new Date(new Date().setHours(12)).setMinutes(0)).setDate(new Date().getDate() + 1)),
-      end: new Date(new Date(new Date(new Date().setHours(13)).setMinutes(0)).setDate(new Date().getDate() + 1)),
-      editable: false,
-      color: '#75AD99'
-    },
-    {
-      event_id: 2,
-      title: 'Work Hour',
-      start: new Date (new Date(new Date(new Date().setHours(13)).setMinutes(0)).setDate(new Date().getDate() + 1)),
-      end: new Date(new Date(new Date(new Date().setHours(17)).setMinutes(0)).setDate(new Date().getDate() + 1)),
-      disabled: false,
-      editeable: false
-    },
-  ];
+  const calendarRef = useRef<SchedulerRef>(null);
   const [profileName, setProfileName] = useState('');
   const [openForm, setOPenForm] = useState(false);
-  const [dataForEvent, setDataForEvent] = useState<Array<EventDataType>>([]);
-  const [fetchData, setFetchData] = useState(false);
-  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-  const [initialValues, setInitialValues] = useState({
-    type: '',
-    startDays: '',
-    endDays: '',
-    workHour: '',
-    dayType: '',
-    breakName: '',
-    breakDuration: '',
-    specifyBreak: false,
-    breakHour: ''
+  const [hydrated, setHaydrated] = useState(false);
+  const formik = useFormik({
+    initialValues: {
+      type: 'fixed',
+      flexiWorkHour: '',
+      flexiMinWorkHour: '7',
+      fixedStartDay: '',
+      fixedEndDay: '',
+      fixedStartTime: '',
+      fixedEndTime: '',
+      fixedWorkDayType: '',
+      flexiWorkDay: '',
+      breakName: '',
+      breakDuration: '',
+      specifyBreakHour: false,
+      breakStartTime: '',
+      breakEndTime: ''
+    } as workSchedule.initialValuesWorkScheduleForm,
+    validationSchema: validationSchemaWorkScheduler,
+    onSubmit: (values) => {
+      handleSubmit(values);
+    }
   });
+
 
   const handleFormOpen = () => {
     setOPenForm(true);
   };
 
   const handleFormClose = () => {
-    console.log('here');
     setOPenForm(false);
-    setFetchData(true);
+  };
+
+  const handleSubmit = (data) => {
+    if (formik.dirty === true) {
+      const payload = {
+        type: data.type,
+        flexiWorkHour: data.flexiWorkHour,
+        flexiMinWorkHour: data.flexiMinWorkHour,
+        fixedStartDay: data.fixedStartDay,
+        fixedEndDay: data.fixedEndDay,
+        fixedStartTime: dayjs(data.fixedStartTime).format('HH:mm:ss A'),
+        fixedEndTime: dayjs(data.fixedEndTime).format('HH:mm:ss A'),
+        fixedWorkDayType: data.fixedWorkDayType,
+        flexiWorkDay: data.flexiWorkDay,
+        breakName: data.breakName,
+        breakDuration: data.breakDuration,
+        specifyBreakHour: data.specifyBreakHour,
+        breakStartTime: dayjs(data.breakStartTime).format('HH:mm:ss A'),
+        breakEndTime: dayjs(data.breakEndTime).format('HH:mm:ss A')
+      };
+      console.log(payload);
+      handleFormClose();
+    }
   };
 
   const handleInput = (e) => {
@@ -116,12 +94,12 @@ function WorkScheduleCreateForm() {
   };
 
   useEffect(() => {
-    function checkData() {
-      setDataForEvent(eventsData);
-    }
-    checkData();
-    console.log(dataForEvent);
-  }, [fetchData]);
+    setHaydrated(true);
+  }, []);
+
+  if (!hydrated) {
+    return null;
+  }
   return (
     <>
       <Grid container spacing={4} mb='1rem' alignItems='flex-end'>
@@ -177,13 +155,35 @@ function WorkScheduleCreateForm() {
         </Grid>
       </Grid>
       <Scheduler
-        events={dataForEvent}
+        view='week'
+        disableViewNavigator={true}
+        ref={calendarRef}
+        events={[]}
+        day={null}
+        month={null}
+        week={{
+          weekDays: [0, 1,2,3,4,5,6],
+          weekStartOn: 1,
+          startHour: 1,
+          endHour: 23,
+          step: 60,
+          cellRenderer: () => {
+            return (
+              <Button
+                onClick={() => {
+                  return null;
+                }}
+              />
+            );
+          }
+        }}
       />
       <CustomModal
         open={openForm}
         handleClose={handleFormClose}
         title='Work Schedule Form'
         width='774px'
+        handleConfirm={() => formik.submitForm()}
       >
         <Grid container mt='1rem' mb='1rem'>
           <Grid item sm={5.8}>
@@ -192,6 +192,8 @@ function WorkScheduleCreateForm() {
               withAsterisk={false}
               label=''
               name='type'
+              value={formik.values.type}
+              onChange={formik.handleChange}
               options={[
                 { label: 'Fixed Work Hour', value: 'fixed' },
                 { label: 'Flexi Work Hour', value: 'flexi' }
@@ -201,85 +203,181 @@ function WorkScheduleCreateForm() {
             />
           </Grid>
         </Grid>
-        <Typography mb='12px' fontWeight='bold' color='primary'>Spesific Working Day<AsteriskComponent>*</AsteriskComponent></Typography>
-        <Grid container spacing={2} alignItems='end' mb='1rem'>
-          <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
-            <Select
-              customLabel='Works Days'
-              variant='outlined'
-              size='small'
-              fullWidth
-              name='startDay'
-              options={[
-                { label: 'Monday', value: 'Monday' },
-                { label: 'Tuesday', value: 'Tuesday' },
-                { label: 'Wendesday', value: 'Wendesday' },
-                { label: 'Thursday', value: 'Thursday' },
-                { label: 'Friday', value: 'Friday' },
-              ]}
-            />
-          </Grid>
-          <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
-            <Select
-              customLabel='To'
-              variant='outlined'
-              size='small'
-              fullWidth
-              name='endDay'
-              options={[
-                { label: 'Monday', value: 'Monday' },
-                { label: 'Tuesday', value: 'Tuesday' },
-                { label: 'Wendesday', value: 'Wendesday' },
-                { label: 'Thursday', value: 'Thursday' },
-                { label: 'Friday', value: 'Friday' },
-              ]}
-            />
-          </Grid>
-        </Grid>
-        <Grid container spacing={2} alignItems='end' mb='1rem'>
-          <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
-            <Typography width='150px' fontSize='16px'>Work Hours</Typography>
-            <FlexBoxRow>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <TimePicker
-                  sx={{
-                    '& .MuiOutlinedInput-input': {
-                      padding: '8.5px 14px',
-                      border: 'none !important'
-                    },
-                    width: '100%'
-                  }}
-                />
-              </LocalizationProvider>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <TimePicker
-                  sx={{
-                    '& .MuiOutlinedInput-input': {
-                      padding: '8.5px 14px',
-                      border: 'none !important'
-                    },
-                    width: '100%'
-                  }}
-                />
-              </LocalizationProvider>
-            </FlexBoxRow>
-          </Grid>
-          <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
-            <Select
-              variant='outlined'
-              size='small'
-              fullWidth
-              name='endDay'
-              options={[
-                { label: 'This Day Only', value: '1' },
-                { label: 'Full Week', value: '2' },
-                { label: 'Repeat during Weekend (Saturday-Sunday)', value: '3' },
-                { label: 'Repeat during Weekday (Monday-Friday)', value: '4' },
-                { label: 'Custom Repeat', value: '5' },
-              ]}
-            />
-          </Grid>
-        </Grid>
+        {
+          formik.values.type === 'flexi' && (
+            <>
+              <Typography mb='12px' fontWeight='bold' color='primary'>Working Hour Duration<AsteriskComponent>*</AsteriskComponent></Typography>
+              <Grid mb='1rem' container spacing={2}>
+                <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+                  <Input
+                    name='flexiWorkHour'
+                    withAsterisk={false}
+                    customLabel='Working Hour'
+                    type='number'
+                    placeholder='Input Working Hour'
+                    size='small'
+                    value={formik.values.flexiWorkHour}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={formik.touched.flexiWorkHour && Boolean(formik.errors.flexiWorkHour)}
+                    helperText={formik.touched.flexiWorkHour && formik.errors.flexiWorkHour}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position='end'>
+                          <Typography color='grey.500'>Hours/day</Typography>
+                        </InputAdornment>
+                      )
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+                  <Input
+                    name='flexiMinWorkHour'
+                    withAsterisk={false}
+                    customLabel='Minimun Working Hour'
+                    size='small'
+                    disabled
+                    value={formik.values.flexiMinWorkHour}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position='end'>
+                          <Typography color='grey.500'>Hours/day</Typography>
+                        </InputAdornment>
+                      )
+                    }}
+                  />
+                </Grid>
+              </Grid>
+            </>
+          )
+        }
+        {
+          formik.values.type === 'fixed' && (
+            <>
+              <Typography mb='12px' fontWeight='bold' color='primary'>Spesific Working Day<AsteriskComponent>*</AsteriskComponent></Typography>
+              <Grid container spacing={2} alignItems='end' mb='1rem'>
+                <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+                  <Select
+                    customLabel='Works Days'
+                    variant='outlined'
+                    size='small'
+                    fullWidth
+                    name='fixedStartDay'
+                    value={formik.values.fixedStartDay}
+                    onChange={formik.handleChange}
+                    options={[
+                      { label: 'Monday', value: 'Monday' },
+                      { label: 'Tuesday', value: 'Tuesday' },
+                      { label: 'Wendesday', value: 'Wendesday' },
+                      { label: 'Thursday', value: 'Thursday' },
+                      { label: 'Friday', value: 'Friday' },
+                    ]}
+                  />
+                </Grid>
+                <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+                  <Select
+                    customLabel='To'
+                    variant='outlined'
+                    size='small'
+                    fullWidth
+                    name='fixedEndDay'
+                    value={formik.values.fixedEndDay}
+                    onChange={formik.handleChange}
+                    options={[
+                      { label: 'Monday', value: 'Monday' },
+                      { label: 'Tuesday', value: 'Tuesday' },
+                      { label: 'Wendesday', value: 'Wendesday' },
+                      { label: 'Thursday', value: 'Thursday' },
+                      { label: 'Friday', value: 'Friday' },
+                    ]}
+                  />
+                </Grid>
+              </Grid>
+              <Grid container spacing={2} alignItems='end' mb='1rem'>
+                <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+                  <Typography width='150px' fontSize='16px'>Work Hours</Typography>
+                  <FlexBoxRow>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <TimePicker
+                        value={formik.values.fixedStartTime}
+                        onChange={(val) => formik.setFieldValue('fixedStartTime', val, true)}
+                        sx={{
+                          '& .MuiOutlinedInput-input': {
+                            padding: '8.5px 14px',
+                            border: 'none !important'
+                          },
+                          width: '100%'
+                        }}
+                      />
+                    </LocalizationProvider>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <TimePicker
+                        value={formik.values.fixedEndTime}
+                        onChange={(val) => formik.setFieldValue('fixedEndTime', val, true)}
+                        sx={{
+                          '& .MuiOutlinedInput-input': {
+                            padding: '8.5px 14px',
+                            border: 'none !important'
+                          },
+                          width: '100%'
+                        }}
+                      />
+                    </LocalizationProvider>
+                  </FlexBoxRow>
+                </Grid>
+                <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+                  <Select
+                    variant='outlined'
+                    size='small'
+                    fullWidth
+                    name='fixedWorkDayType'
+                    value={formik.values.fixedWorkDayType}
+                    onChange={formik.handleChange}
+                    options={[
+                      { label: 'This Day Only', value: '1' },
+                      { label: 'Full Week', value: '2' },
+                      { label: 'Repeat during Weekend (Saturday-Sunday)', value: '3' },
+                      { label: 'Repeat during Weekday (Monday-Friday)', value: '4' },
+                      { label: 'Custom Repeat', value: '5' },
+                    ]}
+                  />
+                </Grid>
+              </Grid>
+            </>
+          )
+        }
+        {
+          formik.values.type === 'flexi' && (
+            <>
+              <Typography mb='12px' fontWeight='bold' color='primary'>Spesific Working Day</Typography>
+              <Grid container>
+                <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+                  <Select
+                    customLabel='Works Days'
+                    variant='outlined'
+                    size='small'
+                    fullWidth
+                    name='flexiWorkDay'
+                    value={formik.values.flexiWorkDay}
+                    onChange={formik.handleChange}
+                    options={[
+                      { label: 'Monday', value: 'Monday' },
+                      { label: 'Tuesday', value: 'Tuesday' },
+                      { label: 'Wendesday', value: 'Wendesday' },
+                      { label: 'Thursday', value: 'Thursday' },
+                      { label: 'Friday', value: 'Friday' },
+                      { label: 'Saturday', value: 'Saturday' },
+                      { label: 'Sunday', value: 'Sunday' },
+                      { label: 'Weekday (Monday - Monday)', value: 'Weekday' },
+                      { label: 'Weekend (Saturday - Sunday)',  value: 'Weekend'},
+                      { label: 'Full Week', value: 'Fullweek' }
+                    ]}
+                  />
+                </Grid>
+              </Grid>
+            </>
+          )
+        }
         <Typography mb='12px' fontWeight='bold' color='primary'>Add Break</Typography>
         <Grid container spacing={2}>
           <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
@@ -288,6 +386,9 @@ function WorkScheduleCreateForm() {
               withAsterisk={false}
               customLabel='Break Name'
               placeholder='Input Break Name'
+              value={formik.values.breakName}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               size='small'
             />
           </Grid>
@@ -297,6 +398,10 @@ function WorkScheduleCreateForm() {
               withAsterisk={false}
               customLabel='Break Duration'
               placeholder='Input Break Duration'
+              type='number'
+              value={formik.values.breakDuration}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               size='small'
               InputProps={{
                 endAdornment: (
@@ -310,36 +415,46 @@ function WorkScheduleCreateForm() {
         </Grid>
         <CheckBox
           customLabel='Specify Break Hour'
-          name='isSpecifyBreak'
+          name='specifyBreakHour'
+          value={formik.values.specifyBreakHour}
+          onChange={formik.handleChange}
         />
-        <Grid container spacing={2}>
-          <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <TimePicker
-                sx={{
-                  '& .MuiOutlinedInput-input': {
-                    padding: '8.5px 14px',
-                    border: 'none !important'
-                  },
-                  width: '100%'
-                }}
-              />
-            </LocalizationProvider>
-          </Grid>
-          <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <TimePicker
-                sx={{
-                  '& .MuiOutlinedInput-input': {
-                    padding: '8.5px 14px',
-                    border: 'none !important'
-                  },
-                  width: '100%'
-                }}
-              />
-            </LocalizationProvider>
-          </Grid>
-        </Grid>
+        {
+          formik.values.specifyBreakHour === true && (
+            <Grid container spacing={2}>
+              <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <TimePicker
+                    value={formik.values.breakStartTime}
+                    onChange={(val) => formik.setFieldValue('breakStartTime', val, true)}
+                    sx={{
+                      '& .MuiOutlinedInput-input': {
+                        padding: '8.5px 14px',
+                        border: 'none !important'
+                      },
+                      width: '100%'
+                    }}
+                  />
+                </LocalizationProvider>
+              </Grid>
+              <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <TimePicker
+                    value={formik.values.breakEndTime}
+                    onChange={(val) => formik.setFieldValue('breakEndTime', val, true)}
+                    sx={{
+                      '& .MuiOutlinedInput-input': {
+                        padding: '8.5px 14px',
+                        border: 'none !important'
+                      },
+                      width: '100%'
+                    }}
+                  />
+                </LocalizationProvider>
+              </Grid>
+            </Grid>
+          )
+        }
       </CustomModal>
     </>
   );

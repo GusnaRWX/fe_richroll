@@ -7,6 +7,9 @@ interface OptionState {
   administrativeFirst: Array<{ label: string; value: string }>
   administrativeSecond: Array<{ label: string; value: string }>
   administrativeThird: Array<{ label: string; value: string }>,
+  secondAdministrativeFirst: Array<{ label: string; value: string }>
+  secondAdministrativeSecond: Array<{ label: string; value: string }>
+  secondAdministrativeThird: Array<{ label: string; value: string }>,
   banks: Array<{ label: string, value: string }>
   listDepartment: Array<{ label: string, value: string }>
   listPosition: Array<{ label: string, value: string }>
@@ -21,6 +24,9 @@ const initialState: OptionState = {
   banks: [],
   listDepartment: [],
   listPosition: [],
+  secondAdministrativeFirst: [],
+  secondAdministrativeSecond: [],
+  secondAdministrativeThird: []
 };
 
 export const optionSlice = createSlice({
@@ -131,6 +137,51 @@ export const optionSlice = createSlice({
     },
     getListPositionFailed: (state) => {
       state.loading = false;
+    },
+    getSecondAdministrativeFirstLevelRequested: (state) => {
+      state.loading = true;
+    },
+    getSecondAdministrativeFirstLevelSuccess: (state, action) => {
+      state.loading = false;
+      state.secondAdministrativeFirst = action?.payload?.items?.map(item => {
+        return {
+          label: item.name,
+          value: item.code
+        };
+      });
+    },
+    getSecondAdministrativeFirstLevelFailed: (state) => {
+      state.loading = false;
+    },
+    getSecondAdministrativeSecondLevelRequested: (state) => {
+      state.loading = true;
+    },
+    getSecondAdministrativeSecondLevelSuccess: (state, action) => {
+      state.loading = false;
+      state.secondAdministrativeSecond = action?.payload?.items?.map(item => {
+        return {
+          label: item.name,
+          value: item.code
+        };
+      });
+    },
+    getSecondAdministrativeSecondLevelFailed: (state) => {
+      state.loading = false;
+    },
+    getSecondAdministrativeThirdLevelRequested: (state) => {
+      state.loading = true;
+    },
+    getSecondAdministrativeThirdLevelSuccess: (state, action) => {
+      state.loading = false;
+      state.secondAdministrativeThird = action?.payload?.items?.map(item => {
+        return {
+          label: item.name,
+          value: item.code
+        };
+      });
+    },
+    getSecondAdministrativeThirdLevelFailed: (state) => {
+      state.loading = false;
     }
   },
   extraReducers: {
@@ -164,7 +215,16 @@ export const {
   getListDepartmentFailed,
   getListPositionRequested,
   getListPositionSuccess,
-  getListPositionFailed
+  getListPositionFailed,
+  getSecondAdministrativeFirstLevelRequested,
+  getSecondAdministrativeFirstLevelSuccess,
+  getSecondAdministrativeFirstLevelFailed,
+  getSecondAdministrativeSecondLevelRequested,
+  getSecondAdministrativeSecondLevelSuccess,
+  getSecondAdministrativeSecondLevelFailed,
+  getSecondAdministrativeThirdLevelRequested,
+  getSecondAdministrativeThirdLevelSuccess,
+  getSecondAdministrativeThirdLevelFailed
 } = optionSlice.actions;
 
 export default optionSlice.reducer;

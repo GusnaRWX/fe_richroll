@@ -12,7 +12,7 @@ export const maritialStatus: Array<Option.Mapper> = [
 ];
 
 export const religions: Array<Option.Mapper> = [
-  { label: 'Islamic', value: '1' },
+  { label: 'Islam', value: '1' },
   { label: 'Christian', value: '2' },
   { label: 'Buddhist', value: '3' },
   { label: 'Hindu', value: '4' },

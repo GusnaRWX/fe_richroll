@@ -3,27 +3,22 @@ import React, { HTMLAttributes, useState } from 'react';
 import {
   Grid,
   Typography,
-  Box
+  Box,
+  SelectChangeEvent
 } from '@mui/material';
 import { Input, Button, Select as CustomSelect, CheckBox, DatePicker, FileUploadModal } from '@/components/_shared/form';
 import { styled as MuiStyled } from '@mui/material/styles';
 import { Image as ImageType } from '@/utils/assetsConstant';
 import styled from '@emotion/styled';
-import { useForm, useAppDispatch, useAppSelectors } from '@/hooks/index';
-import {
-  checkRegulerExpression,
-  getCompanyData,
-  convertValue,
-  convertChecked,
-  convertDateValue,
-  convertImageParams,
-  base64ToFile
-} from '@/utils/helper';
+import { useAppSelectors, useAppDispatch } from '@/hooks/index';
 import dayjs from 'dayjs';
-import { postEmployeeInfoRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
 import { Alert, Text } from '@/components/_shared/common';
 import CancelIcon from '@mui/icons-material/Cancel';
-import { setStorages, getStorage } from '@/utils/storage';
+import { Employees } from '@/types/employees';
+import { validationSchemeEmployeeInformation } from './validate';
+import { useFormik } from 'formik';
+import { convertImageParams, getCompanyData } from '@/utils/helper';
+import { getListPositionRequested } from '@/store/reducers/slice/options/optionSlice';
 
 
 const AsteriskComponent = MuiStyled('span')(({ theme }) => ({
@@ -67,86 +62,45 @@ const ImageReview = styled.div`
 interface EmployeeProps {
   refProp: React.Ref<HTMLFormElement>;
   nextPage: (_val: number) => void;
+  setValues: React.Dispatch<React.SetStateAction<Employees.InformationValues>>
+  infoValues: Employees.InformationValues,
+  setIsInformationValid: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-function EmployeeInformationForm({ refProp, nextPage }: EmployeeProps) {
-  const [open, setOpen] = useState(false);
+function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, setIsInformationValid }: EmployeeProps) {
   const dispatch = useAppDispatch();
-  const companyData = getCompanyData();
-  const persistInformation = getStorage('emp-information') ? JSON.parse(getStorage('emp-information') as string) : null;
+  const [open, setOpen] = useState(false);
   const { listDepartment, listPosition } = useAppSelectors(state => state.option);
-  const [images, setImages] = useState<string | null>(null || persistInformation?.images);
-  const [errorFields, setErrorFields] = useState<boolean>(false);
+  const [images, setImages] = useState<string | null>(infoValues?.images);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [initialValues, setInitialValues] = useState({
-    companyID: companyData?.id,
-    picture: [],
-    fullName: persistInformation?.fullName !== undefined ? persistInformation?.fullName : '',
-    nickname: persistInformation?.nickname !== undefined ? persistInformation?.nickname : '',
-    phoneNumberPrefix: persistInformation?.phoneNumberPrefix !== undefined ? persistInformation?.phoneNumberPrefix : '',
-    phoneNumber: persistInformation?.phoneNumber !== undefined ? persistInformation?.phoneNumber : '',
-    email: persistInformation?.email !== undefined ? persistInformation?.email : '',
-    startDate: persistInformation?.startDate !== undefined ? dayjs(persistInformation?.startDate) : null,
-    endDate: persistInformation?.endDate !== undefined ? dayjs(persistInformation?.endDate) : null,
-    isPermanent: persistInformation?.isPermanent !== undefined ? persistInformation?.isPermanent : false,
-    department: persistInformation?.department !== undefined ? persistInformation?.department : '',
-    position: persistInformation?.position !== undefined ? persistInformation?.position : '',
-    isSelfService: persistInformation?.isSelfService !== undefined ? persistInformation?.isSelfService : false,
-    position2: ''
-  });
-
-
-
-
-  const validate = (fieldOfValues = values) => {
-    const temp = { ...errors };
-
-    if ('picture' in fieldOfValues)
-      temp.picture = fieldOfValues.picture.length !== 0 || persistInformation?.images !== null
-        ? ''
-        : 'This field is required';
-
-    if ('fullName' in fieldOfValues)
-      temp.fullName = fieldOfValues.fullName ? '' : 'This field is required';
-
-    if ('phoneNumber' in fieldOfValues)
-      temp.phoneNumber = fieldOfValues.phoneNumber ? '' : 'This field is required';
-
-    if ('email' in fieldOfValues) {
-      const patternEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      const emailValue = fieldOfValues.email || '';
-      let emailErrorMessage = '';
-      if (!emailValue) {
-        emailErrorMessage = 'Email is required';
-      } else if (!checkRegulerExpression(patternEmail, emailValue)) {
-        emailErrorMessage = 'Email should be valid';
-      }
-      temp.email = emailErrorMessage;
+  const formik = useFormik({
+    initialValues: {
+      picture: [],
+      fullName: infoValues?.fullName,
+      nickname: infoValues?.nickname,
+      phoneNumberPrefix: infoValues?.phoneNumberPrefix,
+      phoneNumber: infoValues?.phoneNumber,
+      email: infoValues?.email,
+      startDate: dayjs(infoValues?.startDate),
+      endDate: dayjs(infoValues?.endDate),
+      isPermanent: infoValues?.isPermanent,
+      department: infoValues?.department,
+      position: infoValues?.position,
+      isSelfService: infoValues?.isSelfService
+    },
+    validationSchema: validationSchemeEmployeeInformation,
+    onSubmit: (values, { setErrors }) => {
+      const allInfoValues = {
+        ...values,
+        companyID: getCompanyData()?.id as string,
+        images: String(images)
+      };
+      setValues(allInfoValues);
+      nextPage(1);
+      setIsInformationValid(true);
+      setErrors({});
     }
-
-    if ('startDate' in fieldOfValues)
-      temp.startDate = fieldOfValues.startDate ? '' : 'This field is required';
-
-    if ('endDate' in fieldOfValues)
-      temp.endDate = fieldOfValues.endDate ? '' : 'This field is required';
-
-    if ('department' in fieldOfValues)
-      temp.department = fieldOfValues.department ? '' : '';
-
-    if ('position' in fieldOfValues)
-      temp.position = fieldOfValues.position ? '' : '';
-
-
-    setErrors({
-      ...temp
-    });
-
-    if (fieldOfValues === values)
-      return Object.values(temp).every(x => x === '');
-  };
-
-  const { values, errors, setErrors, handleInputChange } = useForm(initialValues, true, validate);
+  });
 
   const handleOpen = () => {
     setOpen(true);
@@ -167,61 +121,10 @@ function EmployeeInformationForm({ refProp, nextPage }: EmployeeProps) {
     }
   ];
 
-  console.log(values, 'here');
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const convertToBase64 = base64ToFile(images as string, 'example.png');
-    if (validate()) {
-      const inputData = new FormData();
-      inputData.append('companyID', values.companyID);
-      inputData.append('picture', values.picture[0] || convertToBase64);
-      inputData.append('fullName', values.fullName);
-      inputData.append('nickname', values.nickname);
-      inputData.append('phoneNumberPrefix', values.phoneNumberPrefix);
-      inputData.append('phoneNumber', values.phoneNumber);
-      inputData.append('email', values.email);
-      inputData.append('startDate', dayjs(values.startDate).format('YYYY-MM-DD'));
-      inputData.append('endDate', dayjs(values.endDate).format('YYYY-MM-DD'));
-      inputData.append('isPermanent', values.isPermanent);
-      if (values.department !== '') {
-        inputData.append('department', values.department);
-      }
-      if (values.position !== '') {
-        inputData.append('position', values.position);
-      }
-      inputData.append('isSelfService', values.isSelfService);
-      dispatch({
-        type: postEmployeeInfoRequested.toString(),
-        payload: inputData
-      });
-
-      setInitialValues({
-        companyID: companyData?.id,
-        picture: [],
-        fullName: '',
-        nickname: '',
-        phoneNumberPrefix: '',
-        phoneNumber: '',
-        email: '',
-        startDate: dayjs(null),
-        endDate: dayjs(null),
-        isPermanent: false,
-        department: '',
-        position: '',
-        isSelfService: false,
-        position2: ''
-      });
-      setErrorFields(false);
-    } else {
-      setErrorFields(true);
-    }
-  };
-
   return (
     <div>
       {
-        errorFields && (
+        Object.keys(formik.errors).length > 0 && (
           <Alert
             severity='error'
             content='Please fill in all the mandatory fields'
@@ -237,7 +140,7 @@ function EmployeeInformationForm({ refProp, nextPage }: EmployeeProps) {
         title='Employee Information'
         mb='16px'
       />
-      <form ref={refProp} onSubmit={(e) => handleSubmit(e)}>
+      <form ref={refProp} onSubmit={formik.handleSubmit}>
         <Box component='div'>
           <Text
             component='span'
@@ -246,7 +149,7 @@ function EmployeeInformationForm({ refProp, nextPage }: EmployeeProps) {
           />
           <ImageReview image={!images ? ImageType.PLACEHOLDER : images} onClick={handleOpen} />
           {
-            errors.picture && (
+            formik.errors.picture && (
               <Typography component='span' fontSize='12px' color='red.500'>This field is required</Typography>
             )
           }
@@ -257,11 +160,13 @@ function EmployeeInformationForm({ refProp, nextPage }: EmployeeProps) {
               name='fullName'
               customLabel='Full Name'
               withAsterisk={true}
-              onChange={handleInputChange}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               size='small'
-              value={values.fullName || persistInformation?.fullName}
+              value={formik.values.fullName}
               placeholder='Input Full Name'
-              error={errors.fullName}
+              error={formik.touched.fullName && Boolean(formik.errors.fullName)}
+              helperText={formik.touched.fullName && formik.errors.fullName}
             />
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
@@ -269,10 +174,13 @@ function EmployeeInformationForm({ refProp, nextPage }: EmployeeProps) {
               name='nickname'
               customLabel='Nickname'
               withAsterisk={false}
-              onChange={handleInputChange}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               size='small'
-              value={values.nickname || persistInformation?.nickname}
+              value={formik.values.nickname}
               placeholder='Input Nickname'
+              error={formik.touched.nickname && Boolean(formik.errors.nickname)}
+              helperText={formik.touched.nickname && formik.errors.nickname}
             />
           </Grid>
         </Grid>
@@ -285,9 +193,10 @@ function EmployeeInformationForm({ refProp, nextPage }: EmployeeProps) {
                   variant='outlined'
                   size='small'
                   fullWidth
-                  onChange={(e) => handleInputChange(convertValue('phoneNumberPrefix', e))}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                   name='phoneNumberPrefix'
-                  value={values.phoneNumberPrefix}
+                  value={formik.values.phoneNumberPrefix}
                   options={phonePrefixOptions}
                   MenuProps={{ disableAutoFocus: true }}
                   sx={{
@@ -305,10 +214,12 @@ function EmployeeInformationForm({ refProp, nextPage }: EmployeeProps) {
                   type='number'
                   placeholder='Input Correct Number'
                   withAsterisk={true}
-                  onChange={handleInputChange}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                   size='small'
-                  value={values.phoneNumber}
-                  error={errors.phoneNumber}
+                  value={formik.values.phoneNumber}
+                  error={formik.touched.phoneNumber && Boolean(formik.errors.phoneNumber)}
+                  helperText={formik.touched.phoneNumber && formik.errors.phoneNumber}
                 />
               </Grid>
             </Grid>
@@ -319,10 +230,12 @@ function EmployeeInformationForm({ refProp, nextPage }: EmployeeProps) {
               customLabel='Personal Email Address'
               withAsterisk={true}
               size='small'
-              onChange={handleInputChange}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               placeholder='Personal Email Address'
-              value={values.email}
-              error={errors.email}
+              value={formik.values.email}
+              error={formik.touched.email && Boolean(formik.errors.email)}
+              helperText={formik.touched.email && formik.errors.email}
             />
           </Grid>
         </Grid>
@@ -331,26 +244,25 @@ function EmployeeInformationForm({ refProp, nextPage }: EmployeeProps) {
             <DatePicker
               customLabel='Start Date'
               withAsterisk
-              value={values.startDate}
-              onChange={(e: unknown) => handleInputChange(convertDateValue('startDate', e))}
-              error={errors.startDate}
+              value={formik.values.startDate as unknown as Date}
+              onChange={(date: unknown) => formik.setFieldValue('startDate', date)}
+              error={formik.touched.startDate && formik.errors.startDate ? String(formik.errors.startDate) : ''}
             />
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <DatePicker
               customLabel='End Date'
-              withAsterisk
-              value={values.endDate}
-              onChange={(e: unknown) => handleInputChange(convertDateValue('endDate', e))}
-              error={errors.endDate}
+              value={formik.values.endDate as unknown as Date}
+              onChange={(date: unknown) => formik.setFieldValue('endDate', date)}
             />
           </Grid>
         </Grid>
         <CheckBox
           customLabel='Permanent'
           name='isPermanent'
-          checked={values.isPermanent}
-          onChange={(e) => handleInputChange(convertChecked(e))}
+          checked={formik.values.isPermanent}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
         />
         <Grid container spacing={2}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
@@ -358,8 +270,17 @@ function EmployeeInformationForm({ refProp, nextPage }: EmployeeProps) {
               customLabel='Department'
               withAsterisk={false}
               variant='outlined'
-              value={values.department}
-              onChange={(e) => handleInputChange(convertValue('department', e))}
+              value={formik.values.department}
+              onChange={(e: unknown) => {
+                formik.handleChange(e);
+                dispatch({
+                  type: getListPositionRequested.toString(),
+                  payload: {
+                    departmentID: (e as SelectChangeEvent).target.value
+                  }
+                });
+              }}
+              onBlur={formik.handleBlur}
               fullWidth={true}
               name='department'
               size='small'
@@ -371,8 +292,9 @@ function EmployeeInformationForm({ refProp, nextPage }: EmployeeProps) {
               customLabel='Position'
               withAsterisk={false}
               variant='outlined'
-              value={values.position}
-              onChange={(e) => handleInputChange(convertValue('position', e))}
+              value={formik.values.position}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               fullWidth={true}
               name='position'
               size='small'
@@ -386,24 +308,22 @@ function EmployeeInformationForm({ refProp, nextPage }: EmployeeProps) {
               <CheckBox
                 customLabel='Employee Self Serive'
                 name='isSelfService'
-                checked={values.isSelfService}
-                onChange={(e) => handleInputChange(convertChecked(e))}
+                checked={formik.values.isSelfService}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
               />
               <Typography>Activate button to send account activation link via email. Employee Self Service enables self-data filling.</Typography>
             </EmployeeSelfWrapper>
           </Grid>
         </Grid>
         <NextBtnWrapper>
-          <Button fullWidth={false} size='small' label='Next' color='primary' onClick={() => {
-            nextPage(1);
-            setStorages([{ name: 'emp-information', value: JSON.stringify({ ...values, images }) }]);
-          }} />
+          <Button fullWidth={false} size='small' label='Next' color='primary' type={'submit'} />
         </NextBtnWrapper>
       </form>
       <FileUploadModal
         open={open}
         handleClose={handleClose}
-        onChange={(e) => handleInputChange(convertImageParams('picture', !e.target.files ? null : e.target.files[0], setImages, handleClose))}
+        onChange={(e) => formik.setFieldValue('picture', convertImageParams('picture', !e.target.files ? null : e.target.files[0], setImages, handleClose), false)}
       />
     </div>
   );

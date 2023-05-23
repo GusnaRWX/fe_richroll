@@ -1,11 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import { useAppDispatch } from '@/hooks/index';
 import { setResponserMessage } from '@/store/reducers/slice/responserSlice';
 import { BsCheckCircle } from 'react-icons/bs';
 import { IconButton, Typography } from '@mui/material';
-import { Close } from '@mui/icons-material';
-
+import { Close, ErrorOutlineOutlined } from '@mui/icons-material';
 
 const CardWrapper = styled.div`
  visibility: hidden;
@@ -45,7 +44,7 @@ const ContentWrapaper = styled.div`
  flex-direction: row;
  flex-wrap: nowrap;
  align-items: center;
- justfiy-content: flex-start;
+ justify-content: flex-start;
  gap: 1rem;
 `;
 
@@ -58,9 +57,11 @@ const MessageWrapper = styled.div`
 
 interface NotifyProps {
   body: string;
+  error: boolean,
+  footerMessage?: string;
 }
 
-function Notify({body}: NotifyProps) {
+function Notify({ body, error, footerMessage }: NotifyProps) {
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const dispatch = useAppDispatch();
@@ -80,16 +81,36 @@ function Notify({body}: NotifyProps) {
   }, [open]);
 
   return (
-    <CardWrapper className={open ? 'open' : ''}>
-      <ContentWrapaper>
-        <BsCheckCircle fontSize={20} style={{ color: '#4ADE80' }}/>
-        <MessageWrapper>
-          <Typography fontWeight='bold'>Successfully Saved!</Typography>
-          <Typography color='grey'>{body}</Typography>
-        </MessageWrapper>
-        <IconButton sx={{ margin: 0 }} onClick={() => setOpen(false)}><Close /></IconButton>
-      </ContentWrapaper>
-    </CardWrapper>
+    <>
+      {
+        !error && (
+          <CardWrapper className={open ? 'open' : ''}>
+            <ContentWrapaper>
+              <BsCheckCircle fontSize={20} style={{ color: '#4ADE80' }} />
+              <MessageWrapper>
+                <Typography fontWeight='bold'>{footerMessage ? body : `Successfully Saved!`}</Typography>
+                <Typography color='grey'>{footerMessage ? footerMessage : body}</Typography>
+              </MessageWrapper>
+              <IconButton sx={{ margin: 0 }} onClick={() => setOpen(false)}><Close /></IconButton>
+            </ContentWrapaper>
+          </CardWrapper>
+        )
+      }
+      {
+        error && (
+          <CardWrapper className={open ? 'open' : ''}>
+            <ContentWrapaper>
+              <ErrorOutlineOutlined sx={{ color: '#ff3333' }} />
+              <MessageWrapper>
+                <Typography fontWeight='bold'>Request Failed!</Typography>
+                <Typography color='grey'>{body}</Typography>
+              </MessageWrapper>
+              <IconButton sx={{ margin: 0 }} onClick={() => setOpen(false)}><Close /></IconButton>
+            </ContentWrapaper>
+          </CardWrapper>
+        )
+      }
+    </>
   );
 }
 

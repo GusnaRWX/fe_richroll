@@ -159,8 +159,8 @@ export default function CreateCNBComponent() {
   };
 
   const selectChange = (index: number, newItem: unknown, type: string) => {
-    let items = [...supplementaryList];
-    let item = { ...items[index] };
+    const items = [...supplementaryList];
+    const item = { ...items[index] };
     if (type === "compensation") {
       item.data.compensationComponentId = newItem as string;
     } else if (type === "amount") {
@@ -175,8 +175,8 @@ export default function CreateCNBComponent() {
   };
 
   const deleteSuplementary = (i: number) => {
-    let items = [...supplementaryList];
-    let search = items.filter((item) => {
+    const items = [...supplementaryList];
+    const search = items.filter((item) => {
       return item.id !== i;
     });
     setSupplementaryList(search);

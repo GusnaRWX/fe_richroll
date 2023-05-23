@@ -2,58 +2,20 @@
 import React, { HTMLAttributes, useState } from 'react';
 import {
   Grid,
-  Button as MuiButton,
-  IconButton,
   Typography,
-  Modal,
   Select,
-  Box,
   MenuItem,
   FormControl } from '@mui/material';
-import { Input, Button, Textarea } from '@/components/_shared/form';
+import { Input, Textarea, FileUploadModal } from '@/components/_shared/form';
 import { styled as MuiStyled } from '@mui/material/styles';
 import { Image as ImageType } from '@/utils/assetsConstant';
-import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
-import { Close } from '@mui/icons-material';
-import { BsFileEarmarkPlus } from 'react-icons/bs';
-import { AiOutlineCamera } from 'react-icons/ai';
 import { CustomHooks } from '@/types/hooks';
+import { convertImageParams } from '@/utils/helper';
 
 
 const AsteriskComponent = MuiStyled('span')(({ theme }) => ({
   color: theme.palette.error.main
-}));
-
-const NextBtnWrapper = MuiStyled(Box)(({
-  width: '100%',
-  display: 'flex',
-  flexDirection: 'row',
-  alignItems: 'center',
-  justifyContent: 'flex-end',
-  marginTop: '2rem'
-}));
-
-const ModalHeader = MuiStyled(Box)(({
-  width: '100%',
-  display: 'flex',
-  flexDirection: 'row',
-  alignItems: 'center',
-  justifyContent: 'center',
-  fontWeight: 'bold',
-  fontSize: '18px',
-  borderBottom: '1px solid #E5E7EB',
-  paddingBottom: '1rem'
-}));
-
-const ModalBtnWrapper = MuiStyled(Box)(({
-  width: '100%',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
-  padding: '2rem',
-  gap: '.5rem'
 }));
 
 interface ImagePriviewProps extends HTMLAttributes<HTMLDivElement> {
@@ -71,20 +33,7 @@ const ImageReview = styled.div`
   cursor: pointer;
   `;
 
-const modalStyle = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: '284px',
-  bgcolor: 'background.paper',
-  border: '1px solid #E5E7EB',
-  borderRadius: '8px',
-  p: 2,
-};
-
 interface CompanyInfoProps {
-  nextPage: (_val: number) => void;
   values;
   errors;
   handleInputChange: (_e: CustomHooks.HandleInput) => CustomHooks.HandleInput;
@@ -94,10 +43,11 @@ interface CompanyInfoProps {
   administrativeFirst: [];
   administrativeSecond: [];
   administrativeThird: [];
+  images;
+  setImages;
 }
 
-function CompanyInformationForm ({
-  nextPage,
+function CompanyProfileInformationForm ({
   values,
   errors,
   handleInputChange,
@@ -106,12 +56,11 @@ function CompanyInformationForm ({
   countries,
   administrativeFirst,
   administrativeSecond,
-  administrativeThird
+  administrativeThird,
+  images,
+  setImages
 }:CompanyInfoProps) {
   const [open, setOpen] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [images, setImages] = useState<string | null>(null);
-  const router = useRouter();
 
   const handleOpen = () => {
     setOpen(true);
@@ -121,27 +70,17 @@ function CompanyInformationForm ({
     setOpen(false);
   };
 
-  const convertParams = (name, value) => {
-    const files = value;
-    const reader = new FileReader();
-    reader.readAsDataURL(value);
-    reader.onloadend = function () {
-      setImages(reader.result as string);
-    };
-    const obj = {
-      target: {
-        name, value: [files]
-      }
-    };
-    return obj;
-  };
-
   return (
     <>
       <Typography component='h3' fontSize={18} color='primary'>Company Information</Typography>
       <form>
         <Typography variant='text-sm' component='div' color='primary' sx={{ mt: '16px' }}>Company Logo</Typography>
         <ImageReview image={!images ? ImageType.PLACEHOLDER : images} onClick={handleOpen}/>
+        {
+          errors.picture && (
+            <Typography component='span' fontSize='12px' color='red.500'>This field is required</Typography>
+          )
+        }
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <FormControl fullWidth>
@@ -355,47 +294,14 @@ function CompanyInformationForm ({
             />
           </Grid>
         </Grid>
-        <NextBtnWrapper>
-          <Button onClick={() => { router.push('/company');}} fullWidth={false} size='small' label='Cancel' variant='outlined' sx={{ mr: '12px' }} color='primary'/>
-          <Button onClick={() => nextPage(1)} fullWidth={false} size='small' label='Next' color='primary'/>
-        </NextBtnWrapper>
       </form>
-      <Modal
+      <FileUploadModal
         open={open}
-        onClose={handleClose}
-        keepMounted
-        disableAutoFocus
-      >
-        <Box sx={modalStyle}>
-          <ModalHeader>Choose an action</ModalHeader>
-          <IconButton onClick={handleClose} sx={{
-            position: 'fixed',
-            top: 10,
-            right: 0
-          }}>
-            <Close />
-          </IconButton>
-          <ModalBtnWrapper>
-            <input
-              id='input-file'
-              onChange={(e) => handleInputChange(convertParams('picture', !e.target.files ? null : e.target.files[0]))}
-              type='file'
-              style={{ display: 'none' }}
-              accept='image/'
-            />
-            <label htmlFor='input-file'>
-              <MuiButton component='span' fullWidth size='small' variant='outlined'>
-                <BsFileEarmarkPlus /> &nbsp; Browse File
-              </MuiButton>
-            </label>
-            <MuiButton size='small' variant='outlined'>
-              <AiOutlineCamera /> &nbsp; Take A Photo
-            </MuiButton>
-          </ModalBtnWrapper>
-        </Box>
-      </Modal>
+        handleClose={handleClose}
+        onChange={(e) => handleInputChange(convertImageParams('picture', !e.target.files ? null : e.target.files[0], setImages, handleClose))}
+      />
     </>
   );
 }
 
-export default CompanyInformationForm;
+export default CompanyProfileInformationForm;

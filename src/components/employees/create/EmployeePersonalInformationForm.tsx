@@ -1,31 +1,35 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, memo } from 'react';
 import { Alert, Text } from '@/components/_shared/common';
 import { RadioGroup, Input, Button, Textarea, DatePicker, CheckBox, Select } from '@/components/_shared/form';
-import { Box, Grid } from '@mui/material';
-import { useForm, useAppDispatch, useAppSelectors } from '@/hooks/index';
+import { Box, Grid, SelectChangeEvent } from '@mui/material';
+import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { maritialStatus, religions, IDTypes, employeeItems } from '@/utils/options';
 import {
   administrativeFirstLevelRequested,
   administrativeSecondLevelRequested,
   administrativeThirdLevelRequsted,
   countriesRequested,
+  getSecondAdministrativeFirstLevelRequested,
+  getSecondAdministrativeSecondLevelRequested,
+  getSecondAdministrativeThirdLevelRequested,
   getBanksRequested
 } from '@/store/reducers/slice/options/optionSlice';
 import dayjs from 'dayjs';
-import { postPersonalInformationRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
-import { convertDateValue, convertValue, getCompanyData } from '@/utils/helper';
-import { Employees } from '@/types/employees';
 import CancelIcon from '@mui/icons-material/Cancel';
-import { getStorage, setStorages } from '@/utils/storage';
+import { Employees } from '@/types/employees';
+import { validationSchemePersonalInformation } from './validate';
+import { useFormik } from 'formik';
 
 interface PersonalInformationProps {
   refProp: React.Ref<HTMLFormElement>
   nextPage: (_val: number) => void;
+  setValues: React.Dispatch<React.SetStateAction<Employees.PersonalValues>>;
+  personalValues: Employees.PersonalValues,
+  setIsPersonalInformationValid: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 
-const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformationProps) => {
+const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, personalValues, setIsPersonalInformationValid }: PersonalInformationProps) => {
   const dispatch = useAppDispatch();
 
   const {
@@ -33,184 +37,64 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
     administrativeFirst,
     administrativeSecond,
     administrativeThird,
+    secondAdministrativeFirst,
+    secondAdministrativeSecond,
+    secondAdministrativeThird,
     banks
   } = useAppSelectors(state => state.option);
 
-  const {
-    employeeID
-  } = useAppSelectors(state => state.employee);
 
-  const persistInformation = getStorage('emp-personal-information') ? JSON.parse(getStorage('emp-personal-information') as string) : null;
-  const [useResidentialAddress, setUseResidentialAddress] = useState(persistInformation?.useResidentialAddress !== undefined ? persistInformation?.useResidentialAddress : false);
-  const [isPermanentPersonalID, setIsPermanentPersonalID] = useState(persistInformation?.isPermanentPersonalID !== undefined ? persistInformation?.isPermanentPersonalID : false);
-  const companyData = getCompanyData();
+  const [useResidentialAddress, setUseResidentialAddress] = useState(personalValues?.useResidentialAddress);
+  const [isPermanentPersonalID, setIsPermanentPersonalID] = useState(personalValues?.isPermanentPersonalID);
 
-  const [initialValues] = useState({
+  const formik = useFormik({
+    initialValues: {
+      dateofBirthPersonalInformation: dayjs(personalValues?.dateofBirthPersonalInformation),
+      genderPersonalInformation: personalValues?.genderPersonalInformation,
+      maritialStatusPersonalInformation: personalValues?.maritialStatusPersonalInformation,
+      numberOfDependantsPersonalInformation: personalValues?.numberOfDependantsPersonalInformation,
+      nationalityPersonalInformation: personalValues?.nationalityPersonalInformation,
+      religionPersonalInformation: personalValues?.religionPersonalInformation,
 
-    // Group Personal Information
-    dateofBirthPersonalInformation: persistInformation?.dateofBirthPersonalInformation !== undefined ? dayjs(persistInformation?.dateofBirthPersonalInformation) : null,
-    genderPersonalInformation: persistInformation?.genderPersonalInformation !== undefined ? persistInformation?.genderPersonalInformation : '',
-    maritialStatusPersonalInformation: persistInformation?.maritialStatusPersonalInformation !== undefined ? persistInformation?.maritialStatusPersonalInformation : '',
-    numberOfDependantsPersonalInformation: persistInformation?.numberOfDependantsPersonalInformation !== undefined ? persistInformation?.numberOfDependantsPersonalInformation : '',
-    nationalityPersonalInformation: persistInformation?.nationalityPersonalInformation !== undefined ? persistInformation?.nationalityPersonalInformation : '',
-    religionPersonalInformation: persistInformation?.religionPersonalInformation !== undefined ? persistInformation?.religionPersonalInformation : '',
+      // Group Citizen Address
+      countryCitizenAddress: personalValues?.countryCitizenAddress,
+      provinceCitizenAddress: personalValues?.provinceCitizenAddress,
+      cityCitizenAddress: personalValues?.cityCitizenAddress,
+      subDistrictCitizenAddress: personalValues?.subDistrictCitizenAddress,
+      addressCitizenAddress: personalValues?.addressCitizenAddress,
+      zipCodeCitizenAddress: personalValues?.zipCodeCitizenAddress,
 
-    // Group Citizen Address
-    countryCitizenAddress: persistInformation?.countryCitizenAddress !== undefined ? persistInformation?.countryCitizenAddress : '',
-    provinceCitizenAddress: persistInformation?.provinceCitizenAddress !== undefined ? persistInformation?.provinceCitizenAddress : '',
-    cityCitizenAddress: persistInformation?.cityCitizenAddress !== undefined ? persistInformation?.cityCitizenAddress : '',
-    subDistrictCitizenAddress: persistInformation?.subDistrictCitizenAddress !== undefined ? persistInformation?.subDistrictCitizenAddress : '',
-    addressCitizenAddress: persistInformation?.addressCitizenAddress !== undefined ? persistInformation?.addressCitizenAddress : '',
-    zipCodeCitizenAddress: persistInformation?.zipCodeCitizenAddress !== undefined ? persistInformation?.zipCodeCitizenAddress : '',
-
-    // Group Residential Address
-    countryResidentialAddress: persistInformation?.countryResidentialAddress !== undefined ? persistInformation?.countryResidentialAddress : '',
-    provinceResidentialAddress: persistInformation?.provinceResidentialAddress !== undefined ? persistInformation?.provinceResidentialAddress : '',
-    cityResidentialAddress: persistInformation?.cityResidentialAddress !== undefined ? persistInformation?.cityResidentialAddress : '',
-    subDistrictResidentialAddress: persistInformation?.subDistrictResidentialAddress !== undefined ? persistInformation?.subDistrictResidentialAddress : '',
-    addressResidentialAddress: persistInformation?.addressResidentialAddress !== undefined ? persistInformation?.addressResidentialAddress : '',
-    zipCodeResidentialAddress: persistInformation?.zipCodeResidentialAddress !== undefined ? persistInformation?.zipCodeResidentialAddress : '',
+      // Group Residential Address
+      countryResidentialAddress: personalValues?.countryResidentialAddress,
+      provinceResidentialAddress: personalValues?.provinceResidentialAddress,
+      cityResidentialAddress: personalValues?.cityResidentialAddress,
+      subDistrictResidentialAddress: personalValues?.subDistrictResidentialAddress,
+      addressResidentialAddress: personalValues?.addressResidentialAddress,
+      zipCodeResidentialAddress: personalValues?.zipCodeResidentialAddress,
 
 
-    // Group Bank Information
-    bankBankInformation: persistInformation?.bankBankInformation !== undefined ? persistInformation?.bankBankInformation : '',
-    bankAccountHolderNameBankInformation: persistInformation?.bankAccountHolderNameBankInformation !== undefined ? persistInformation?.bankAccountHolderNameBankInformation : '',
-    bankAccoutNoBankInformation: persistInformation?.bankAccoutNoBankInformation !== undefined ? persistInformation?.bankAccoutNoBankInformation : '',
-    bankCodeBankInformation: persistInformation?.bankCodeBankInformation !== undefined ? persistInformation?.bankCodeBankInformation : '',
-    branchCodeBankInformation: persistInformation?.branchCodeBankInformation !== undefined ? persistInformation?.branchCodeBankInformation : '',
-    branchNameBankInformation: persistInformation?.branchNameBankInformation !== undefined ? persistInformation?.branchNameBankInformation : '',
-    swiftCodeBankInformation: persistInformation?.swiftCodeBankInformation !== undefined ? persistInformation?.swiftCodeBankInformation : '',
+      // Group Bank Information
+      bankBankInformation: personalValues?.bankBankInformation,
+      bankAccountHolderNameBankInformation: personalValues?.bankAccountHolderNameBankInformation,
+      bankAccoutNoBankInformation: personalValues?.bankAccoutNoBankInformation,
+      bankCodeBankInformation: personalValues?.bankCodeBankInformation,
+      branchCodeBankInformation: personalValues?.branchCodeBankInformation,
+      branchNameBankInformation: personalValues?.branchNameBankInformation,
+      swiftCodeBankInformation: personalValues?.swiftCodeBankInformation,
 
-    // Group Personal ID
-    idTypePersonalID: persistInformation?.idTypePersonalID !== undefined ? persistInformation?.idTypePersonalID : '',
-    idNumberPersonalID: persistInformation?.idNumberPersonalID !== undefined ? persistInformation?.idNumberPersonalID : '',
-    idExpirationDatePersonalID: persistInformation?.idExpirationDatePersonalID !== undefined ? dayjs(persistInformation?.idExpirationDatePersonalID) : '',
-  });
-
-  const [errorFields, setErrorFields] = useState(false);
-
-  const validate = (fieldOfValues = values) => {
-    const temp = { ...errors };
-
-    // Group Personal Information
-
-    if ('dateofBirthPersonalInformation' in fieldOfValues)
-      temp.dateofBirthPersonalInformation = fieldOfValues.dateofBirthPersonalInformation ? '' : 'This field is required';
-
-    if ('genderPersonalInformation' in fieldOfValues)
-      temp.genderPersonalInformation = fieldOfValues.genderPersonalInformation ? '' : 'This is required';
-
-    if ('maritialStatusPersonalInformation' in fieldOfValues)
-      temp.maritialStatusPersonalInformation = fieldOfValues.maritialStatusPersonalInformation ? '' : 'This field is required';
-
-    if ('numberOfDependantsPersonalInformation' in fieldOfValues)
-      temp.numberOfDependantsPersonalInformation = fieldOfValues.numberOfDependantsPersonalInformation ? '' : 'This field is required';
-
-    if ('nationalityPersonalInformation' in fieldOfValues)
-      temp.nationalityPersonalInformation = fieldOfValues.nationalityPersonalInformation ? '' : 'This field is required';
-
-    if ('religionPersonalInformation' in fieldOfValues)
-      temp.religionPersonalInformation = fieldOfValues.religionPersonalInformation ? '' : '';
-
-    // Group Citizen Address
-
-    if ('countryCitizenAddress' in fieldOfValues)
-      temp.countryCitizenAddress = fieldOfValues.countryCitizenAddress ? '' : 'This field is required';
-
-    if ('provinceCitizenAddress' in fieldOfValues)
-      temp.provinceCitizenAddress = fieldOfValues.provinceCitizenAddress ? '' : 'This field is required';
-
-    if ('cityCitizenAddress' in fieldOfValues)
-      temp.cityCitizenAddress = fieldOfValues.cityCitizenAddress ? '' : 'This field is required';
-
-    if ('subDistrictCitizenAddress' in fieldOfValues)
-      temp.subDistrictCitizenAddress = fieldOfValues.subDistrictCitizenAddress ? '' : 'This field is required';
-
-    if ('addressCitizenAddress' in fieldOfValues)
-      temp.addressCitizenAddress = fieldOfValues.addressCitizenAddress ? '' : 'This field is required';
-
-    if ('zipCodeCitizenAddress' in fieldOfValues)
-      temp.zipCodeCitizenAddress = fieldOfValues.zipCodeCitizenAddress ? '' : 'This field is required';
-
-    // Group Resdential Address
-    if ('countryResidentialAddress' in fieldOfValues)
-      temp.countryResidentialAddress = fieldOfValues.countryResidentialAddress
-        ? ''
-        : useResidentialAddress ? '' : 'This field is required';
-
-
-    if ('provinceResidentialAddress' in fieldOfValues)
-      temp.provinceResidentialAddress = fieldOfValues.provinceResidentialAddress
-        ? ''
-        : useResidentialAddress ? '' : 'This field is required';
-
-    if ('cityResidentialAddress' in fieldOfValues)
-      temp.cityResidentialAddress = fieldOfValues.cityResidentialAddress
-        ? ''
-        : useResidentialAddress ? '' : 'This field is required';
-
-    if ('subDistrictResidentialAddress' in fieldOfValues)
-      temp.subDistrictResidentialAddress = fieldOfValues.subDistrictResidentialAddress
-        ? ''
-        : useResidentialAddress ? '' : 'This field is required';
-
-    if ('addressResidentialAddress' in fieldOfValues)
-      temp.addressResidentialAddress = fieldOfValues.addressResidentialAddress
-        ? ''
-        : useResidentialAddress ? '' : 'This field is required';
-
-    if ('zipCodeResidentialAddress' in fieldOfValues)
-      temp.zipCodeResidentialAddress = fieldOfValues.zipCodeResidentialAddress
-        ? ''
-        : useResidentialAddress ? '' : 'This field is required';
-
-    // Group Bank Information
-    if ('bankBankInformation' in fieldOfValues)
-      temp.bankBankInformation = fieldOfValues.bankBankInformation ? '' : '';
-
-    if ('bankAccountHolderNameBankInformation' in fieldOfValues)
-      temp.bankAccountHolderNameBankInformation = fieldOfValues.bankAccountHolderNameBankInformation ? '' : '';
-
-    if ('bankAccoutNoBankInformation' in fieldOfValues)
-      temp.bankAccoutNoBankInformation = fieldOfValues.bankAccoutNoBankInformation ? '' : '';
-
-    if ('bankCodeBankInformation' in fieldOfValues)
-      temp.bankCodeBankInformation = fieldOfValues.bankCodeBankInformation ? '' : '';
-
-    if ('branchCodeBankInformation' in fieldOfValues)
-      temp.branchCodeBankInformation = fieldOfValues.branchCodeBankInformation ? '' : '';
-
-    if ('branchNameBankInformation' in fieldOfValues)
-      temp.branchNameBankInformation = fieldOfValues.branchNameBankInformation ? '' : '';
-
-    if ('swiftCodeBankInformation' in fieldOfValues)
-      temp.swiftCodeBankInformation = fieldOfValues.swiftCodeBankInformation ? '' : '';
-
-
-    // Group Personal ID
-    if ('idTypePersonalID' in fieldOfValues)
-      temp.idTypePersonalID = fieldOfValues.idTypePersonalID ? '' : 'This field is required';
-
-    if ('idNumberPersonalID' in fieldOfValues)
-      temp.idNumberPersonalID = fieldOfValues.idNumberPersonalID ? '' : 'This field is required';
-
-    if ('idExpirationDatePersonalID' in fieldOfValues)
-      temp.idExpirationDatePersonalID = fieldOfValues.idExpirationDatePersonalID ? '' : 'This field is required';
-
-    setErrors({ ...temp });
-
-    if (fieldOfValues === values) {
-      return Object.values(temp).every((x) => x === '');
+      // Group Personal ID
+      idTypePersonalID: personalValues?.idTypePersonalID,
+      idNumberPersonalID: personalValues?.idNumberPersonalID,
+      idExpirationDatePersonalID: dayjs(personalValues?.idExpirationDatePersonalID)
+    },
+    validationSchema: validationSchemePersonalInformation,
+    onSubmit: (values) => {
+      console.log(values);
+      nextPage(2);
+      setIsPersonalInformationValid(true);
+      setValues({ ...formik.values, useResidentialAddress, isPermanentPersonalID });
     }
-  };
-  const {
-    values,
-    errors,
-    setErrors,
-    handleInputChange
-  } = useForm(initialValues, true, validate);
-
-  console.log(errors);
+  });
 
   useEffect(() => {
     dispatch({
@@ -221,156 +105,9 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
     });
   }, []);
 
-  useEffect(() => {
-    function hitCountries() {
-      dispatch({
-        type: administrativeFirstLevelRequested.toString(),
-        payload: {
-          countryId: values.countryCitizenAddress || values.countryResidentialAddress
-        }
-      });
-    }
-    hitCountries();
-
-    return () => hitCountries();
-  }, [values.countryCitizenAddress, values.countryResidentialAddress]);
-
-  useEffect(() => {
-    function hitAdministrativeFirstLevel() {
-      dispatch({
-        type: administrativeSecondLevelRequested.toString(),
-        payload: {
-          countryId: values.countryCitizenAddress || values.countryResidentialAddress,
-          firstLevelCode: values.provinceCitizenAddress || values.provinceResidentialAddress
-        }
-      });
-    }
-    hitAdministrativeFirstLevel();
-    return () => hitAdministrativeFirstLevel();
-  }, [values.provinceCitizenAddress, values.provinceResidentialAddress]);
-
-  useEffect(() => {
-    function hitAdministrativeThirdLevel() {
-      dispatch({
-        type: administrativeThirdLevelRequsted.toString(),
-        payload: {
-          countryId: values.countryCitizenAddress || values.countryResidentialAddress,
-          firstLevelCode: values.provinceCitizenAddress || values.provinceResidentialAddress,
-          secondLevelCode: values.cityCitizenAddress || values.cityResidentialAddress
-        }
-      });
-    }
-    hitAdministrativeThirdLevel();
-    return () => hitAdministrativeThirdLevel();
-  }, [values.cityCitizenAddress, values.cityResidentialAddress]);
-
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const payload: Employees.PersonalInformationPayload = {
-      employeeID: employeeID,
-      companyID: companyData?.id as string,
-      citizen: {
-        countryID: values.countryCitizenAddress,
-        firstLevelCode: values.provinceCitizenAddress,
-        secondLevelCode: values.cityCitizenAddress,
-        thirdLevelCode: values.subDistrictCitizenAddress,
-        address: values.addressCitizenAddress,
-        zipCode: values.zipCodeCitizenAddress,
-        isCitizen: true,
-        isResident: useResidentialAddress,
-      },
-      personal: {
-        dateOfBirth: dayjs(values.dateofBirthPersonalInformation).format('YYYY-MM-DD'),
-        gender: values.genderPersonalInformation === 'male' ? 1 : 2,
-        maritalStatus: +values.maritialStatusPersonalInformation,
-        numberOfChildren: +values.numberOfDependantsPersonalInformation,
-        countryID: values.nationalityPersonalInformation,
-        religion: +values.religionPersonalInformation
-      },
-      identity: {
-        type: +values.idTypePersonalID,
-        number: +values.idNumberPersonalID,
-        // expireAt: dayjs(values.idExpirationDatePersonalID).format('YYYY-MM-DD'),
-        isPermanent: true
-      },
-      bank: {
-        bankID: values.bankBankInformation,
-        holder: values.bankAccountHolderNameBankInformation,
-        accountNumber: values.bankAccoutNoBankInformation,
-        bankCode: values.bankCodeBankInformation,
-        branchCode: values.branchCodeBankInformation,
-        branchName: values.branchNameBankInformation,
-        swiftCode: values.swiftCodeBankInformation
-      },
-      residential: {
-        countryID: values.countryResidentialAddress,
-        firstLevelCode: values.provinceResidentialAddress,
-        secondLevelCode: values.cityResidentialAddress,
-        thirdLevelCode: values.subDistrictResidentialAddress,
-        address: values.addressResidentialAddress,
-        zipCode: values.zipCodeResidentialAddress,
-        isCitizen: false,
-        isResident: true
-      }
-    };
-
-    if (useResidentialAddress && isPermanentPersonalID) {
-      // eslint-disable-next-line no-unused-vars
-      const { residential, ...rest } = payload;
-      // delete identity?.expireAt;
-      const combineBoth = { ...rest };
-      console.log(combineBoth);
-      if (validate()) {
-        setErrorFields(false);
-        dispatch({
-          type: postPersonalInformationRequested.toString(),
-          payload: rest
-        });
-      } else {
-        setErrorFields(true);
-      }
-
-    } else if (useResidentialAddress) {
-      // eslint-disable-next-line no-unused-vars
-      const { residential, ...rest } = payload;
-      if (validate()) {
-        setErrorFields(false);
-        dispatch({
-          type: postPersonalInformationRequested.toString(),
-          payload: rest
-        });
-      } else {
-        setErrorFields(true);
-      }
-    } else if (isPermanentPersonalID) {
-      const { identity, ...rest } = payload;
-      delete identity?.expireAt;
-      if (validate()) {
-        setErrorFields(false);
-        dispatch({
-          type: postPersonalInformationRequested.toString(),
-          payload: rest
-        });
-      } else {
-        setErrorFields(true);
-      }
-    } else {
-      if (validate()) {
-        setErrorFields(false);
-        dispatch({
-          type: postPersonalInformationRequested.toString(),
-          payload: payload
-        });
-      } else {
-        setErrorFields(true);
-      }
-    }
-  };
-
   return (
-    <form onSubmit={handleSubmit} ref={refProp}>
-      {errorFields && (
+    <form onSubmit={formik.handleSubmit} ref={refProp}>
+      {Object.keys(formik.errors).length > 0 && (
         <Alert
           severity={'error'}
           content='Please fill in all the mandatory fields'
@@ -402,10 +139,10 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
           >
             <DatePicker
               customLabel='Date of Birth'
-              value={values.dateofBirthPersonalInformation}
-              onChange={(e: unknown) => handleInputChange(convertDateValue('dateofBirthPersonalInformation', e))}
+              value={formik.values.dateofBirthPersonalInformation as unknown as Date}
+              onChange={(date: unknown) => formik.setFieldValue('dateofBirthPersonalInformation', date)}
               withAsterisk
-              error={errors.dateofBirthPersonalInformation}
+              error={formik.touched.dateofBirthPersonalInformation && formik.errors.dateofBirthPersonalInformation ? String(formik.errors.dateofBirthPersonalInformation) : ''}
             />
           </Grid>
           <Grid
@@ -420,9 +157,10 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
                 { label: 'Male', value: 'male' },
                 { label: 'Female', value: 'female' }
               ]}
-              value={values.genderPersonalInformation}
-              onChange={handleInputChange}
-              error={errors.genderPersonalInformation}
+              value={formik.values.genderPersonalInformation}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.genderPersonalInformation && Boolean(formik.errors.genderPersonalInformation) ? formik.errors.genderPersonalInformation : ''}
               row
             />
           </Grid>
@@ -431,7 +169,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
           container
           wrap='wrap'
           justifyContent='space-between'
-          alignItems='center'
+          alignItems='baseline'
           mb='16px'
         >
           <Grid
@@ -442,12 +180,15 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
               variant='outlined'
               size='small'
               fullWidth
-              onChange={(e: unknown) => handleInputChange(convertValue('maritialStatusPersonalInformation', e))}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               options={maritialStatus}
-              value={values.maritialStatusPersonalInformation}
+              name='maritialStatusPersonalInformation'
+              value={formik.values.maritialStatusPersonalInformation}
               customLabel='Maritial Status'
               withAsterisk
-              error={errors.maritialStatusPersonalInformation}
+              error={formik.touched.maritialStatusPersonalInformation && Boolean(formik.errors.maritialStatusPersonalInformation)}
+              helperText={formik.touched.maritialStatusPersonalInformation && formik.errors.maritialStatusPersonalInformation ? formik.errors.maritialStatusPersonalInformation : ''}
             />
           </Grid>
           <Grid
@@ -461,9 +202,12 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
               variant='outlined'
               options={employeeItems}
               fullWidth
-              onChange={(e: unknown) => handleInputChange(convertValue('numberOfDependantsPersonalInformation', e))}
-              value={values.numberOfDependantsPersonalInformation}
-              error={errors.numberOfDependantsPersonalInformation}
+              name='numberOfDependantsPersonalInformation'
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              value={formik.values.numberOfDependantsPersonalInformation}
+              error={formik.touched.numberOfDependantsPersonalInformation && Boolean(formik.errors.numberOfDependantsPersonalInformation)}
+              helperText={formik.touched.numberOfDependantsPersonalInformation && formik.errors.numberOfDependantsPersonalInformation ? formik.errors.numberOfDependantsPersonalInformation : ''}
             />
           </Grid>
         </Grid>
@@ -471,7 +215,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
           container
           wrap='wrap'
           justifyContent='space-between'
-          alignItems='center'
+          alignItems='baseline'
           mb='16px'
         >
           <Grid
@@ -485,10 +229,12 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
               variant='outlined'
               size='small'
               name='nationalityPersonalInformation'
-              value={values.nationalityPersonalInformation}
-              onChange={(e: unknown) => handleInputChange(convertValue('nationalityPersonalInformation', e))}
+              value={formik.values.nationalityPersonalInformation}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               options={countries}
-              error={errors.nationalityPersonalInformation}
+              error={formik.touched.nationalityPersonalInformation && Boolean(formik.errors.nationalityPersonalInformation)}
+              helperText={formik.touched.nationalityPersonalInformation && formik.errors.nationalityPersonalInformation ? formik.errors.nationalityPersonalInformation : ''}
             />
           </Grid>
           <Grid
@@ -501,8 +247,9 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
               variant='outlined'
               size='small'
               name='religionPersonalInformation'
-              value={values.religionPersonalInformation}
-              onChange={(e: unknown) => handleInputChange(convertValue('religionPersonalInformation', e))}
+              value={formik.values.religionPersonalInformation}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               options={religions}
             />
           </Grid>
@@ -523,7 +270,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
           container
           wrap='wrap'
           justifyContent='space-between'
-          alignItems='center'
+          alignItems='baseline'
           mb='16px'
           mt='16px'
         >
@@ -538,10 +285,20 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
               variant='outlined'
               size='small'
               name='countryCitizenAddress'
-              value={values.countryCitizenAddress}
-              onChange={(e: unknown) => handleInputChange(convertValue('countryCitizenAddress', e))}
+              value={formik.values.countryCitizenAddress}
+              onBlur={formik.handleBlur}
+              onChange={(e: unknown) => {
+                formik.handleChange(e);
+                dispatch({
+                  type: administrativeFirstLevelRequested.toString(),
+                  payload: {
+                    countryId: (e as SelectChangeEvent).target.value
+                  }
+                });
+              }}
               options={countries}
-              error={errors.countryCitizenAddress}
+              error={formik.touched.countryCitizenAddress && Boolean(formik.errors.countryCitizenAddress)}
+              helperText={formik.touched.countryCitizenAddress && formik.errors.countryCitizenAddress ? formik.errors.countryCitizenAddress : ''}
             />
           </Grid>
           <Grid
@@ -555,10 +312,21 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
               variant='outlined'
               size='small'
               name='provinceCitizenAddress'
-              value={values.provinceCitizenAddress}
-              onChange={(e: unknown) => handleInputChange(convertValue('provinceCitizenAddress', e))}
+              value={formik.values.provinceCitizenAddress}
+              onChange={(e: unknown) => {
+                formik.handleChange(e);
+                dispatch({
+                  type: administrativeSecondLevelRequested.toString(),
+                  payload: {
+                    countryId: formik.values.countryCitizenAddress,
+                    firstLevelCode: (e as SelectChangeEvent).target.value
+                  }
+                });
+              }}
+              onBlur={formik.handleBlur}
               options={administrativeFirst}
-              error={errors.provinceCitizenAddress}
+              error={formik.touched.provinceCitizenAddress && Boolean(formik.errors.provinceCitizenAddress)}
+              helperText={formik.touched.provinceCitizenAddress && formik.errors.provinceCitizenAddress ? formik.errors.provinceCitizenAddress : ''}
             />
           </Grid>
         </Grid>
@@ -566,7 +334,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
           container
           wrap='wrap'
           justifyContent='space-between'
-          alignItems='center'
+          alignItems='baseline'
           mb='16px'
         >
           <Grid
@@ -580,10 +348,22 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
               variant='outlined'
               size='small'
               name='cityCitizenAddress'
-              value={values.cityCitizenAddress}
-              onChange={(e: unknown) => handleInputChange(convertValue('cityCitizenAddress', e))}
+              value={formik.values.cityCitizenAddress}
+              onBlur={formik.handleBlur}
+              onChange={(e: unknown) => {
+                formik.handleChange(e);
+                dispatch({
+                  type: administrativeThirdLevelRequsted.toString(),
+                  payload: {
+                    countryId: formik.values.countryCitizenAddress,
+                    firstLevelCode: formik.values.provinceCitizenAddress,
+                    secondLevelCode: (e as SelectChangeEvent).target.value
+                  }
+                });
+              }}
               options={administrativeSecond}
-              error={errors.cityCitizenAddress}
+              error={formik.touched.cityCitizenAddress && Boolean(formik.errors.cityCitizenAddress)}
+              helperText={formik.touched.cityCitizenAddress && formik.errors.cityCitizenAddress ? formik.errors.cityCitizenAddress : ''}
             />
           </Grid>
           <Grid
@@ -597,10 +377,12 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
               variant='outlined'
               size='small'
               name='subDistrictCitizenAddress'
-              value={values.subDistrictCitizenAddress}
-              onChange={(e: unknown) => handleInputChange(convertValue('subDistrictCitizenAddress', e))}
+              value={formik.values.subDistrictCitizenAddress}
+              onChange={(e: unknown) => formik.handleChange(e)}
+              onBlur={formik.handleBlur}
               options={administrativeThird}
-              error={errors.subDistrictCitizenAddress}
+              error={formik.touched.subDistrictCitizenAddress && Boolean(formik.errors.subDistrictCitizenAddress)}
+              helperText={formik.touched.subDistrictCitizenAddress && formik.errors.subDistrictCitizenAddress ? formik.errors.subDistrictCitizenAddress : ''}
             />
           </Grid>
         </Grid>
@@ -608,7 +390,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
           container
           wrap='wrap'
           justifyContent='space-between'
-          alignItems='center'
+          alignItems='baseline'
           mb='16px'
         >
           <Grid
@@ -619,9 +401,10 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
               name='addressCitizenAddress'
               maxRows={5}
               minRows={3}
-              value={values.addressCitizenAddress}
-              onChange={handleInputChange}
-              error={errors.addressCitizenAddress}
+              value={formik.values.addressCitizenAddress}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.addressCitizenAddress && Boolean(formik.errors.addressCitizenAddress) ? formik.errors.addressCitizenAddress : ''}
               withAsterisk
               customLabel='Citizen ID Street Name, Building Name'
             />
@@ -635,9 +418,10 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
               customLabel='ZIP Code'
               size='small'
               name='zipCodeCitizenAddress'
-              value={values.zipCodeCitizenAddress}
-              onChange={handleInputChange}
-              error={errors.zipCodeCitizenAddress}
+              value={formik.values.zipCodeCitizenAddress}
+              onChange={formik.handleChange}
+              error={formik.touched.zipCodeCitizenAddress && Boolean(formik.errors.zipCodeCitizenAddress)}
+              helperText={formik.touched.zipCodeCitizenAddress && formik.errors.zipCodeCitizenAddress}
             />
           </Grid>
         </Grid>
@@ -656,7 +440,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
               customLabel='Use as residential address'
               name='useResidentialCitizenAddress'
               checked={useResidentialAddress}
-              onChange={() => setUseResidentialAddress(prev => !prev)}
+              onChange={() => setUseResidentialAddress((prev: boolean) => !prev)}
             />
           </Grid>
         </Grid>
@@ -677,7 +461,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
           container
           wrap='wrap'
           justifyContent='space-between'
-          alignItems='center'
+          alignItems='baseline'
           mb='16px'
           mt='16px'
         >
@@ -692,10 +476,20 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
               variant='outlined'
               size='small'
               name='countryResidentialAddress'
-              value={values.countryResidentialAddress}
-              onChange={(e: unknown) => handleInputChange(convertValue('countryResidentialAddress', e))}
+              value={formik.values.countryResidentialAddress}
+              onBlur={formik.handleBlur}
+              onChange={(e: unknown) => {
+                formik.handleChange(e);
+                dispatch({
+                  type: getSecondAdministrativeFirstLevelRequested.toString(),
+                  payload: {
+                    countryId: (e as SelectChangeEvent).target.value
+                  }
+                });
+              }}
               options={countries}
-              error={useResidentialAddress ? '' : errors.countryResidentialAddress}
+              error={formik.touched.countryResidentialAddress && Boolean(formik.errors.countryResidentialAddress)}
+              helperText={formik.touched.countryResidentialAddress && formik.errors.countryResidentialAddress ? formik.errors.countryResidentialAddress : ''}
             />
           </Grid>
           <Grid
@@ -709,10 +503,21 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
               variant='outlined'
               size='small'
               name='provinceResidentialAddress'
-              value={values.provinceResidentialAddress}
-              onChange={(e: unknown) => handleInputChange(convertValue('provinceResidentialAddress', e))}
-              options={administrativeFirst}
-              error={useResidentialAddress ? '' : errors.provinceResidentialAddress}
+              value={formik.values.provinceResidentialAddress}
+              onChange={(e: unknown) => {
+                formik.handleChange(e);
+                dispatch({
+                  type: getSecondAdministrativeSecondLevelRequested.toString(),
+                  payload: {
+                    countryId: formik.values.countryResidentialAddress,
+                    firstLevelCode: (e as SelectChangeEvent).target.value
+                  }
+                });
+              }}
+              onBlur={formik.handleBlur}
+              options={secondAdministrativeFirst}
+              error={formik.touched.provinceResidentialAddress && Boolean(formik.errors.provinceResidentialAddress)}
+              helperText={formik.touched.provinceResidentialAddress && formik.errors.provinceResidentialAddress ? formik.errors.provinceResidentialAddress : ''}
             />
           </Grid>
         </Grid>
@@ -720,7 +525,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
           container
           wrap='wrap'
           justifyContent='space-between'
-          alignItems='center'
+          alignItems='baseline'
           mb='16px'
         >
           <Grid
@@ -734,10 +539,22 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
               variant='outlined'
               size='small'
               name='cityResidentialAddress'
-              value={values.cityResidentialAddress}
-              onChange={(e: unknown) => handleInputChange(convertValue('cityResidentialAddress', e))}
-              options={administrativeSecond}
-              error={useResidentialAddress ? '' : errors.cityResidentialAddress}
+              value={formik.values.cityResidentialAddress}
+              onChange={(e: unknown) => {
+                formik.handleChange(e);
+                dispatch({
+                  type: getSecondAdministrativeThirdLevelRequested.toString(),
+                  payload: {
+                    countryId: formik.values.countryResidentialAddress,
+                    firstLevelCode: formik.values.provinceResidentialAddress,
+                    secondLevelCode: (e as SelectChangeEvent).target.value
+                  }
+                });
+              }}
+              onBlur={formik.handleBlur}
+              options={secondAdministrativeSecond}
+              error={formik.touched.cityResidentialAddress && Boolean(formik.errors.cityResidentialAddress)}
+              helperText={formik.touched.cityResidentialAddress && formik.errors.cityResidentialAddress ? formik.errors.cityResidentialAddress : ''}
             />
           </Grid>
           <Grid
@@ -751,10 +568,12 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
               variant='outlined'
               size='small'
               name='subDistrictResidentialAddress'
-              value={values.subDistrictResidentialAddress}
-              onChange={(e: unknown) => handleInputChange(convertValue('subDistrictResidentialAddress', e))}
-              options={administrativeThird}
-              error={useResidentialAddress ? '' : errors.subDistrictResidentialAddress}
+              value={formik.values.subDistrictResidentialAddress}
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              options={secondAdministrativeThird}
+              error={formik.touched.subDistrictResidentialAddress && Boolean(formik.errors.subDistrictResidentialAddress)}
+              helperText={formik.touched.subDistrictResidentialAddress && formik.errors.subDistrictResidentialAddress ? formik.errors.subDistrictResidentialAddress : ''}
             />
           </Grid>
         </Grid>
@@ -762,7 +581,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
           container
           wrap='wrap'
           justifyContent='space-between'
-          alignItems='center'
+          alignItems='baseline'
           mb='16px'
         >
           <Grid
@@ -773,9 +592,10 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
               name='addressResidentialAddress'
               maxRows={5}
               minRows={3}
-              value={values.addressResidentialAddress}
-              onChange={handleInputChange}
-              error={useResidentialAddress ? '' : errors.addressResidentialAddress}
+              value={formik.values.addressResidentialAddress}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.addressResidentialAddress && Boolean(formik.errors.addressResidentialAddress) ? formik.errors.addressResidentialAddress : ''}
               withAsterisk
               customLabel='Citizen ID Street Name, Building Name'
             />
@@ -789,9 +609,11 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
               customLabel='ZIP Code'
               size='small'
               name='zipCodeResidentialAddress'
-              value={values.zipCodeResidentialAddress}
-              onChange={handleInputChange}
-              error={useResidentialAddress ? '' : errors.zipCodeResidentialAddress}
+              value={formik.values.zipCodeResidentialAddress}
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              error={formik.touched.zipCodeResidentialAddress && Boolean(formik.errors.zipCodeResidentialAddress)}
+              helperText={formik.touched.zipCodeResidentialAddress && formik.errors.zipCodeResidentialAddress}
             />
           </Grid>
         </Grid>
@@ -826,10 +648,12 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
               variant='outlined'
               size='small'
               name='idTypePersonalID'
-              value={values.idTypePersonalID}
-              onChange={(e: unknown) => handleInputChange(convertValue('idTypePersonalID', e))}
+              value={formik.values.idTypePersonalID}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               options={IDTypes}
-              error={errors.idTypePersonalID}
+              error={formik.touched.idTypePersonalID && Boolean(formik.errors.idTypePersonalID)}
+              helperText={formik.touched.idTypePersonalID && formik.errors.idTypePersonalID ? formik.errors.idTypePersonalID : ''}
             />
           </Grid>
           <Grid
@@ -841,9 +665,11 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
               customLabel='ID Number'
               size='small'
               name='idNumberPersonalID'
-              value={values.idNumberPersonalID}
-              onChange={handleInputChange}
-              error={errors.idNumberPersonalID}
+              value={formik.values.idNumberPersonalID}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.idNumberPersonalID && Boolean(formik.errors.idNumberPersonalID)}
+              helperText={formik.touched.idNumberPersonalID && formik.errors.idNumberPersonalID}
             />
           </Grid>
         </Grid>
@@ -860,11 +686,11 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
           >
             <DatePicker
               customLabel='ID Expiration Date'
+              value={formik.values.idExpirationDatePersonalID as unknown as Date}
+              onChange={(date: unknown) => formik.setFieldValue('idExpirationDatePersonalID', date)}
               withAsterisk
-              value={values.idExpirationDatePersonalID}
-              onChange={(e: unknown) => handleInputChange(convertDateValue('idExpirationDatePersonalID', e))}
-              error={values.PersonalIDPersonalID ? '' : errors.idExpirationDatePersonalID}
-              disabled={values.PersonalIDPersonalID}
+              // error={formik.touched.idExpirationDatePersonalID && formik.errors.idExpirationDatePersonalID ? String(formik.errors.idExpirationDatePersonalID) : ''}
+              error={formik.touched.idExpirationDatePersonalID && formik.errors.idExpirationDatePersonalID ? String(formik.errors.idExpirationDatePersonalID) : ''}
             />
           </Grid>
         </Grid>
@@ -879,8 +705,8 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
               customLabel='Permanent'
               color='primary'
               name='PersonalIDPersonalID'
-              checked={values.PersonalIDPersonalID}
-              onChange={() => setIsPermanentPersonalID(prev => !prev)}
+              checked={isPermanentPersonalID}
+              onChange={() => setIsPermanentPersonalID((prev: boolean) => !prev)}
             />
           </Grid>
         </Grid>
@@ -913,8 +739,9 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
               variant='outlined'
               size='small'
               name='bankBankInformation'
-              value={values.bankBankInformation}
-              onChange={(e: unknown) => handleInputChange(convertValue('bankBankInformation', e))}
+              value={formik.values.bankBankInformation}
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
               options={banks}
             />
           </Grid>
@@ -926,8 +753,9 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
               customLabel={`Bank Account Holder's Name`}
               size='small'
               name='bankAccountHolderNameBankInformation'
-              value={values.bankAccountHolderNameBankInformation}
-              onChange={handleInputChange}
+              value={formik.values.bankAccountHolderNameBankInformation}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
             />
           </Grid>
         </Grid>
@@ -946,8 +774,9 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
               customLabel='Bank Account No'
               size='small'
               name='bankAccoutNoBankInformation'
-              value={values.bankAccoutNoBankInformation}
-              onChange={handleInputChange}
+              value={formik.values.bankAccoutNoBankInformation}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
             />
           </Grid>
           <Grid
@@ -960,8 +789,9 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
                   customLabel='Bank Code'
                   size='small'
                   name='bankCodeBankInformation'
-                  value={values.bankCodeBankInformation}
-                  onChange={handleInputChange}
+                  value={formik.values.bankCodeBankInformation}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                 />
               </Grid>
               <Grid item sm={5.8}>
@@ -969,8 +799,9 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
                   customLabel='Branch Code'
                   size='small'
                   name='branchCodeBankInformation'
-                  value={values.branchCodeBankInformation}
-                  onChange={handleInputChange}
+                  value={formik.values.branchCodeBankInformation}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                 />
               </Grid>
             </Grid>
@@ -991,8 +822,9 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
               customLabel='Branch Name'
               size='small'
               name='branchNameBankInformation'
-              value={values.branchNameBankInformation}
-              onChange={handleInputChange}
+              value={formik.values.branchNameBankInformation}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
             />
           </Grid>
           <Grid
@@ -1003,8 +835,8 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
               customLabel='Swift Code'
               size='small'
               name='swiftCodeBankInformation'
-              value={values.swiftCodeBankInformation}
-              onChange={handleInputChange}
+              value={formik.values.swiftCodeBankInformation}
+              onChange={formik.handleChange}
             />
           </Grid>
         </Grid>
@@ -1016,17 +848,17 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage }: PersonalInformat
         gap={2}
       >
         <Grid item>
-          <Button onClick={() => nextPage(0)} label='Back' variant='outlined' />
+          <Button onClick={() => {
+            nextPage(0);
+            setValues({ ...formik.values, useResidentialAddress, isPermanentPersonalID });
+          }} label='Back' variant='outlined' />
         </Grid>
         <Grid item>
-          <Button onClick={() => {
-            nextPage(2);
-            setStorages([{ name: 'emp-personal-information', value: JSON.stringify({ ...values, useResidentialAddress, isPermanentPersonalID }) }]);
-          }} label='Next' />
+          <Button type='submit' label='Next' />
         </Grid>
       </Grid>
     </form>
   );
 };
 
-export default EmployeePersonalInformationForm;
+export default memo(EmployeePersonalInformationForm);

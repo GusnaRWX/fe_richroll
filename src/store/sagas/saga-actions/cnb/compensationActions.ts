@@ -1,7 +1,7 @@
-import { post, get } from "@/utils/services";
-import axios, {AxiosHeaderValue} from "axios";
-import { config } from "@config";
-import { getStorage } from "@/utils/storage";
+import { post, get } from '@/utils/services';
+import axios, { AxiosHeaderValue } from 'axios';
+import { config } from '@config';
+import { getStorage } from '@/utils/storage';
 
 const service = axios.create({
   baseURL: config.API_URL || 'http://localhost',
@@ -23,6 +23,7 @@ export const getCompensationComponentOption = () => {
   return get(`compensation_components`);
 };
 // Create New CNB Profile
+// eslint-disable-next-line @typescript-eslint/ban-types
 export const postNewCnbProfile = (Payload: Object) => {
   return post(`compensation_benefits`, Payload);
 };

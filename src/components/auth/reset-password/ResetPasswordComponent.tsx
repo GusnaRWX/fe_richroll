@@ -5,13 +5,13 @@ import kayaroll from '../../../../public/images/kayaroll-logo.png';
 import LocalizationMenu from '@/components/_shared/_core/localization/Index';
 import { Card, CardContent, Typography, Box, Stack, IconButton, InputAdornment } from '@mui/material';
 import { Input, Button } from '@/components/_shared/form';
-import { useForm } from '@/hooks/index';
+import { useForm, useAppSelectors, useAppDispatch } from '@/hooks/index';
 import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
 import { checkRegulerExpression } from '@/utils/helper';
-import { useAppSelectors, useAppDispatch } from '@/hooks/index';
 import Notify from '@/components/_shared/common/Notify';
 import { resetPasswordRequested } from '@/store/reducers/slice/auth/loginSlice';
 import { useRouter } from 'next/router';
+import { OverlayLoading } from '@/components/_shared/common';
 
 const NavHead = styled.div`
  height: 64px;
@@ -43,7 +43,7 @@ height: 100vh;
 `;
 
 function ResetPasswordComponent() {
-  const { responser } = useAppSelectors((state) => state);
+  const { responser, login } = useAppSelectors((state) => state);
   const [openNewPassword, setOpenNewPassword] = useState(false);
   const [openConfirmPassword, setOpenConfirmPassword] = useState(false);
   const dispatch = useAppDispatch();
@@ -113,9 +113,15 @@ function ResetPasswordComponent() {
           <LocalizationMenu />
         </div>
       </NavHead>
+      <OverlayLoading open={login.isLoading}/>
       {
         [200, 201].includes(responser.code) && (
-          <Notify body={responser.message}/>
+          <Notify error={false} body={responser.message}/>
+        )
+      }
+      {
+        [400, 401].includes(responser.code) && (
+          <Notify error={true} body='Please check your input or check your authorization'/>
         )
       }
       <Card sx={{ width: '585px', height: '75%' }}>

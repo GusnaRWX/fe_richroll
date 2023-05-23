@@ -1,4 +1,4 @@
-import { Box, Container, List, Toolbar } from '@mui/material';
+import { Box, Container, List, Toolbar, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import Appbar from '@/components/_shared/_core/appbar/Index';
 import DrawerCore from '@/components/_shared/_core/drawer/Index';
@@ -12,6 +12,7 @@ import Notify from '../../common/Notify';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { getStorage } from '@/utils/storage';
 import { meSuccessed } from '@/store/reducers/slice/auth/meSlice';
+import { getCompanyData } from '@/utils/helper';
 
 export interface LayoutProps {
   children?: React.ReactNode;
@@ -31,6 +32,8 @@ const Layout = ({
 }: LayoutProps) => {
   const [mobileOpen, setMobileOpen] = useState<boolean>(false);
   const dispatch = useAppDispatch();
+  const companyData = getCompanyData();
+
   const handleDrawerToggle = () => {
     setMobileOpen((mobile) => !mobile);
   };
@@ -42,7 +45,7 @@ const Layout = ({
     if (getUserProfile) {
       dispatch({
         type: meSuccessed.toString(),
-        payload: { ...JSON.parse(getUserProfile as string) }
+        payload: { ...JSON.parse(getUserProfile) }
       });
     }
   }, []);
@@ -66,6 +69,39 @@ const Layout = ({
           />
         </Box>
       </Toolbar>
+      <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', px: '16px', gap: '12px' }}>
+        <Box component='div' sx={{ position: 'relative', width: '60px', height: '60px' }}>
+          <Image
+            src={companyData?.imageUrl && companyData?.imageUrl.includes('http') ? companyData?.imageUrl : ImageType.PLACEHOLDER_COMPANY}
+            fill={true}
+            style={{ objectFit: 'contain' }}
+            alt={'company-logo'}
+          />
+        </Box>
+        <Box component='div'>
+          <Typography
+            variant='text-lg'
+            component='div'
+            sx={{ fontWeight: 700, width: '100%', color: '#223567' }}
+          >
+            {companyData?.name}
+          </Typography>
+          <Typography
+            variant='text-xs'
+            component='div'
+            sx={{ fontWeight: 500, width: '100%', color: '#6B7280' }}
+          >
+            {companyData?.sector}
+          </Typography>
+        </Box>
+      </Box>
+      <Typography
+        variant='text-base'
+        component='div'
+        sx={{ fontWeight: 400, px: '16px', mt: '8px', color: '#6B7280', width: '100%' }}
+      >
+            Menus
+      </Typography>
       <List>
         {
           Menus?.map(menu => (
@@ -95,7 +131,7 @@ const Layout = ({
       />
       {
         [200, 201].includes(responser.code) && (
-          <Notify body={responser.message} />
+          <Notify error={false} body={responser.message} />
         )
       }
       <DrawerCore

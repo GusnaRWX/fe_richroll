@@ -46,9 +46,9 @@ const headerItems = [
   { id: 'user.name', label: 'Name' },
   { id: 'position.name', label: 'Position' },
   { id: 'department.name', label: 'Department' },
-  { id: 'user.isActive', label: 'Status' },
+  { id: 'isActive', label: 'Status' },
   { id: 'user.createdAt', label: 'Created on' },
-  { id: 'user.createdAt', label: 'Last Login' },
+  { id: 'user.lastLogin', label: 'Last Login' },
 ];
 
 interface EmployeeTableProps {
@@ -91,7 +91,7 @@ function EmployeesTable({
 
   useEffect(() => {
     console.log(companyData);
-    
+
     dispatch({
       type: getEmployeeRequested.toString(),
       payload: {
@@ -100,7 +100,7 @@ function EmployeesTable({
         sort: sort,
         direction: direction.toUpperCase(),
         search: search,
-        isActive: tabValue === 0 ? false : true,
+        isActive: tabValue === 0 ? true : false,
         companyID: companyData?.id
       }
     });
@@ -198,7 +198,7 @@ function EmployeesTable({
                       </TableCell>
                       <TableCell>{item.position.name}</TableCell>
                       <TableCell>{item.department.name}</TableCell>
-                      <TableCell>{item.user.isActive ? (
+                      <TableCell>{item.isActive ? (
                         <Chip color='secondary' label='active' />
                       ):(
                         <Chip label='Non Active' sx={{ backgroundColor: '#FEE2E2' }}/>

@@ -1,29 +1,97 @@
-import React, { useState } from 'react';
-import { Text } from '@/components/_shared/common';
-import { Form, RadioGroup, Input, Button } from '@/components/_shared/form';
-import { Box, Checkbox, FormControl, FormControlLabel, Grid, MenuItem, Select } from '@mui/material';
-import { useForm } from '@/hooks/index';
-import { styled } from '@mui/material/styles';
-
-const AsteriskComponent = styled('span')(({ theme }) => ({
-  color: theme.palette.error.main
-}));
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import React, { useEffect, useState, memo } from 'react';
+import { Alert, Text } from '@/components/_shared/common';
+import { RadioGroup, Input, Button, Textarea, DatePicker, CheckBox, Select } from '@/components/_shared/form';
+import { Box, Grid } from '@mui/material';
+import { useForm, useAppDispatch, useAppSelectors } from '@/hooks/index';
+import { maritialStatus, religions, IDTypes, employeeItems } from '@/utils/options';
+import {
+  administrativeFirstLevelRequested,
+  administrativeSecondLevelRequested,
+  administrativeThirdLevelRequsted,
+  countriesRequested,
+  getBanksRequested
+} from '@/store/reducers/slice/options/optionSlice';
+import dayjs from 'dayjs';
+import { convertDateValue, convertValue } from '@/utils/helper';
+import CancelIcon from '@mui/icons-material/Cancel';
+import { Employees } from '@/types/employees';
 
 interface PersonalInformationProps {
-  nextTab: (_val: number) => void
+  refProp: React.Ref<HTMLFormElement>
+  nextPage: (_val: number) => void;
+  setValues: React.Dispatch<React.SetStateAction<Employees.PersonalValues>>;
+  personalValues: Employees.PersonalValues,
+  setIsPersonalInformationValid: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const PersonalInformationEdit = ({ nextTab }: PersonalInformationProps) => {
+
+const EmployeePersonalInformationEdit = ({ refProp, nextPage, setValues, personalValues, setIsPersonalInformationValid }: PersonalInformationProps) => {
+  const dispatch = useAppDispatch();
+
+  const {
+    countries,
+    administrativeFirst,
+    administrativeSecond,
+    administrativeThird,
+    banks
+  } = useAppSelectors(state => state.option);
+
+
+  const [useResidentialAddress, setUseResidentialAddress] = useState(personalValues?.useResidentialAddress);
+  const [isPermanentPersonalID, setIsPermanentPersonalID] = useState(personalValues?.isPermanentPersonalID);
+
   const [initialValues] = useState({
-    genderPersonalInformation: '',
-    maritialStatusPersonalInformation: '',
-    numberOfDependantsPersonalInformation: '',
-    nationalityPersonalInformation: '',
-    religionPersonalInformation: ''
+
+    // Group Personal Information
+    dateofBirthPersonalInformation: dayjs(personalValues?.dateofBirthPersonalInformation),
+    genderPersonalInformation: personalValues?.genderPersonalInformation === 1 ? 'male' : 'female',
+    maritialStatusPersonalInformation: personalValues?.maritialStatusPersonalInformation,
+    numberOfDependantsPersonalInformation: personalValues?.numberOfDependantsPersonalInformation,
+    nationalityPersonalInformation: personalValues?.nationalityPersonalInformation,
+    religionPersonalInformation: personalValues?.religionPersonalInformation,
+
+    // Group Citizen Address
+    countryCitizenAddress: personalValues?.countryCitizenAddress,
+    provinceCitizenAddress: personalValues?.provinceCitizenAddress,
+    cityCitizenAddress: personalValues?.cityCitizenAddress,
+    subDistrictCitizenAddress: personalValues?.subDistrictCitizenAddress,
+    addressCitizenAddress: personalValues?.addressCitizenAddress,
+    zipCodeCitizenAddress: personalValues?.zipCodeCitizenAddress,
+
+    // Group Residential Address
+    countryResidentialAddress: personalValues?.countryResidentialAddress,
+    provinceResidentialAddress: personalValues?.provinceResidentialAddress,
+    cityResidentialAddress: personalValues?.cityResidentialAddress,
+    subDistrictResidentialAddress: personalValues?.subDistrictResidentialAddress,
+    addressResidentialAddress: personalValues?.addressResidentialAddress,
+    zipCodeResidentialAddress: personalValues?.zipCodeResidentialAddress,
+
+
+    // Group Bank Information
+    bankBankInformation: personalValues?.bankBankInformation,
+    bankAccountHolderNameBankInformation: personalValues?.bankAccountHolderNameBankInformation,
+    bankAccoutNoBankInformation: personalValues?.bankAccoutNoBankInformation,
+    bankCodeBankInformation: personalValues?.bankCodeBankInformation,
+    branchCodeBankInformation: personalValues?.branchCodeBankInformation,
+    branchNameBankInformation: personalValues?.branchNameBankInformation,
+    swiftCodeBankInformation: personalValues?.swiftCodeBankInformation,
+
+    // Group Personal ID
+    idTypePersonalID: personalValues?.idTypePersonalID,
+    idNumberPersonalID: personalValues?.idNumberPersonalID,
+    idExpirationDatePersonalID: dayjs(personalValues?.idExpirationDatePersonalID)
   });
+
+  const [errorFields, setErrorFields] = useState(false);
 
   const validate = (fieldOfValues = values) => {
     const temp = { ...errors };
+
+    // Group Personal Information
+
+    if ('dateofBirthPersonalInformation' in fieldOfValues)
+      temp.dateofBirthPersonalInformation = fieldOfValues.dateofBirthPersonalInformation ? '' : 'This field is required';
 
     if ('genderPersonalInformation' in fieldOfValues)
       temp.genderPersonalInformation = fieldOfValues.genderPersonalInformation ? '' : 'This is required';
@@ -38,7 +106,129 @@ const PersonalInformationEdit = ({ nextTab }: PersonalInformationProps) => {
       temp.nationalityPersonalInformation = fieldOfValues.nationalityPersonalInformation ? '' : 'This field is required';
 
     if ('religionPersonalInformation' in fieldOfValues)
-      temp.religionPersonalInformation = fieldOfValues.religionPersonalInformation;
+      temp.religionPersonalInformation = fieldOfValues.religionPersonalInformation ? '' : '';
+
+    // Group Citizen Address
+
+    if ('countryCitizenAddress' in fieldOfValues) {
+      temp.countryCitizenAddress = dispatch({
+        type: administrativeFirstLevelRequested.toString(),
+        payload: {
+          countryId: fieldOfValues.countryCitizenAddress
+        }
+      }) ? '' : 'This field is required';
+    }
+
+
+    if ('provinceCitizenAddress' in fieldOfValues) {
+      temp.provinceCitizenAddress = dispatch({
+        type: administrativeSecondLevelRequested.toString(),
+        payload: {
+          countryId: values.countryCitizenAddress,
+          firstLevelCode: fieldOfValues.provinceCitizenAddress
+        }
+      }) ? '' : 'This field is required';
+    }
+
+    if ('cityCitizenAddress' in fieldOfValues) {
+      temp.cityCitizenAddress = dispatch({
+        type: administrativeThirdLevelRequsted.toString(),
+        payload: {
+          countryId: values.countryCitizenAddress,
+          firstLevelCode: values.provinceCitizenAddress,
+          secondLevelCode: fieldOfValues.cityCitizenAddress
+        }
+      }) ? '' : 'This field is required';
+    }
+
+
+    if ('subDistrictCitizenAddress' in fieldOfValues)
+      temp.subDistrictCitizenAddress = fieldOfValues.subDistrictCitizenAddress ? '' : 'This field is required';
+
+    if ('addressCitizenAddress' in fieldOfValues)
+      temp.addressCitizenAddress = fieldOfValues.addressCitizenAddress ? '' : 'This field is required';
+
+    if ('zipCodeCitizenAddress' in fieldOfValues)
+      temp.zipCodeCitizenAddress = fieldOfValues.zipCodeCitizenAddress ? '' : 'This field is required';
+
+    // Group Resdential Address
+    if ('countryResidentialAddress' in fieldOfValues) {
+      temp.countryResidentialAddress = dispatch({
+        type: administrativeFirstLevelRequested.toString(),
+        payload: {
+          countryId: fieldOfValues.countryResidentialAddress
+        }
+      }) ? '' : 'This field is required';
+    }
+
+    if ('provinceResidentialAddress' in fieldOfValues) {
+      temp.provinceResidentialAddress = dispatch({
+        type: administrativeSecondLevelRequested.toString(),
+        payload: {
+          countryId: values.countryResidentialAddress,
+          firstLevelCode: fieldOfValues.provinceResidentialAddress
+        }
+      }) ? '' : 'This field is required';
+    }
+
+    if ('cityResidentialAddress' in fieldOfValues) {
+      temp.cityResidentialAddress = dispatch({
+        type: administrativeThirdLevelRequsted.toString(),
+        payload: {
+          countryId: values.countryResidentialAddress,
+          firstLevelCode: values.provinceResidentialAddress,
+          secondLevelCode: fieldOfValues.cityResidentialAddress
+        }
+      }) ? '' : 'This field is required';
+    }
+
+    if ('subDistrictResidentialAddress' in fieldOfValues)
+      temp.subDistrictResidentialAddress = fieldOfValues.subDistrictResidentialAddress
+        ? ''
+        : 'This field is required';
+
+    if ('addressResidentialAddress' in fieldOfValues)
+      temp.addressResidentialAddress = fieldOfValues.addressResidentialAddress
+        ? ''
+        : 'This field is required';
+
+    if ('zipCodeResidentialAddress' in fieldOfValues)
+      temp.zipCodeResidentialAddress = fieldOfValues.zipCodeResidentialAddress
+        ? ''
+        : 'This field is required';
+
+    // Group Bank Information
+    if ('bankBankInformation' in fieldOfValues)
+      temp.bankBankInformation = fieldOfValues.bankBankInformation ? '' : '';
+
+    if ('bankAccountHolderNameBankInformation' in fieldOfValues)
+      temp.bankAccountHolderNameBankInformation = fieldOfValues.bankAccountHolderNameBankInformation ? '' : '';
+
+    if ('bankAccoutNoBankInformation' in fieldOfValues)
+      temp.bankAccoutNoBankInformation = fieldOfValues.bankAccoutNoBankInformation ? '' : '';
+
+    if ('bankCodeBankInformation' in fieldOfValues)
+      temp.bankCodeBankInformation = fieldOfValues.bankCodeBankInformation ? '' : '';
+
+    if ('branchCodeBankInformation' in fieldOfValues)
+      temp.branchCodeBankInformation = fieldOfValues.branchCodeBankInformation ? '' : '';
+
+    if ('branchNameBankInformation' in fieldOfValues)
+      temp.branchNameBankInformation = fieldOfValues.branchNameBankInformation ? '' : '';
+
+    if ('swiftCodeBankInformation' in fieldOfValues)
+      temp.swiftCodeBankInformation = fieldOfValues.swiftCodeBankInformation ? '' : '';
+
+
+    // Group Personal ID
+    if ('idTypePersonalID' in fieldOfValues)
+      temp.idTypePersonalID = fieldOfValues.idTypePersonalID ? '' : 'This field is required';
+
+    if ('idNumberPersonalID' in fieldOfValues)
+      temp.idNumberPersonalID = fieldOfValues.idNumberPersonalID ? '' : 'This field is required';
+
+    if ('idExpirationDatePersonalID' in fieldOfValues)
+      temp.idExpirationDatePersonalID = fieldOfValues.idExpirationDatePersonalID ? '' : 'This field is required';
 
     setErrors({ ...temp });
 
@@ -53,512 +243,691 @@ const PersonalInformationEdit = ({ nextTab }: PersonalInformationProps) => {
     handleInputChange
   } = useForm(initialValues, true, validate);
 
-  const employeeItems = [
-    { label: '< 10', value: 1 },
-    { label: '< 25', value: 2 },
-    { label: '< 50', value: 3 },
-    { label: '> 50', value: 4 }
-  ];
+
+  useEffect(() => {
+    dispatch({
+      type: countriesRequested.toString()
+    });
+    dispatch({
+      type: getBanksRequested.toString()
+    });
+    dispatch({
+      type: administrativeFirstLevelRequested.toString(),
+      payload: {
+        countryId: personalValues?.countryResidentialAddress
+      }
+    });
+    dispatch({
+      type: administrativeSecondLevelRequested.toString(),
+      payload: {
+        countryId: personalValues?.countryResidentialAddress,
+        firstLevelCode: personalValues.provinceResidentialAddress
+      }
+    });
+    dispatch({
+      type: administrativeThirdLevelRequsted.toString(),
+      payload: {
+        countryId: personalValues?.countryResidentialAddress,
+        firstLevelCode: personalValues.provinceResidentialAddress,
+        secondLevelCode: personalValues?.cityCitizenAddress
+      }
+    });
+  }, []);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (validate()) {
+      setErrorFields(false);
+      nextPage(2);
+      setIsPersonalInformationValid(true);
+      setValues({ ...values, useResidentialAddress, isPermanentPersonalID });
+    } else {
+      setErrorFields(true);
+      setIsPersonalInformationValid(false);
+    }
+  };
 
   return (
-    <>
-      <Form>
-        <Box
-          component='div'
-          id='personal-information-field'
+    <form onSubmit={handleSubmit} ref={refProp}>
+      {errorFields && (
+        <Alert
+          severity={'error'}
+          content='Please fill in all the mandatory fields'
+          icon={<CancelIcon />}
+        />
+      )}
+      <Box
+        component='div'
+        id='personal-information-field'
+        mb='16px'
+      >
+        <Text
+          variant='text-lg'
+          title='Personal Information'
+          fontWeight={700}
+          color='primary.500'
+        />
+        <Grid
+          container
+          wrap='wrap'
+          justifyContent='space-between'
+          alignItems='center'
           mb='16px'
+          mt='16px'
         >
-          <Text
-            variant='text-lg'
-            title='Personal Informaton'
-            fontWeight={700}
-            color='primary.500'
-          />
           <Grid
-            container
-            wrap='wrap'
-            justifyContent='space-between'
-            alignItems='center'
-            mb='16px'
+            item
+            sm={5.8}
           >
-            <Grid
-              item
-              sm={5.8}
-            >
-              {/* <DatePicker
-                customLabel='Date of Birth'
-                withAsterisk
-                name='date'
-              /> */}
-            </Grid>
-            <Grid
-              item
-              sm={5.8}
-            >
-              <RadioGroup
-                withAsterisk
-                label='Gender'
-                name='genderPersonalInformation'
-                options={[
-                  { label: 'Male', value: 'male' },
-                  { label: 'Female', value: 'female' }
-                ]}
-                value={values.genderPersonalInformation}
-                onChange={handleInputChange}
-                row
-              />
-            </Grid>
+            <DatePicker
+              customLabel='Date of Birth'
+              value={values.dateofBirthPersonalInformation}
+              onChange={(e: unknown) => handleInputChange(convertDateValue('dateofBirthPersonalInformation', e))}
+              withAsterisk
+              error={errors.dateofBirthPersonalInformation}
+            />
           </Grid>
           <Grid
-            container
-            wrap='wrap'
-            justifyContent='space-between'
-            alignItems='center'
-            mb='16px'
+            item
+            sm={5.8}
           >
-            <Grid
-              item
-              sm={5.8}
-            >
-              <FormControl fullWidth>
-                <Text
-                  title='Marital Status'
-                >
-                  <AsteriskComponent>*</AsteriskComponent>
-                </Text>
-                <Select
-                  variant='outlined'
+            <RadioGroup
+              withAsterisk
+              label='Gender'
+              name='genderPersonalInformation'
+              options={[
+                { label: 'Male', value: 'male' },
+                { label: 'Female', value: 'female' }
+              ]}
+              value={values.genderPersonalInformation}
+              onChange={handleInputChange}
+              error={errors.genderPersonalInformation}
+              row
+            />
+          </Grid>
+        </Grid>
+        <Grid
+          container
+          wrap='wrap'
+          justifyContent='space-between'
+          alignItems='center'
+          mb='16px'
+        >
+          <Grid
+            item
+            sm={5.8}
+          >
+            <Select
+              variant='outlined'
+              size='small'
+              fullWidth
+              onChange={(e: unknown) => handleInputChange(convertValue('maritialStatusPersonalInformation', e))}
+              options={maritialStatus}
+              value={values.maritialStatusPersonalInformation}
+              customLabel='Maritial Status'
+              withAsterisk
+              error={errors.maritialStatusPersonalInformation}
+            />
+          </Grid>
+          <Grid
+            item
+            sm={5.8}
+          >
+            <Select
+              customLabel='Number of Dependants'
+              withAsterisk
+              size='small'
+              variant='outlined'
+              options={employeeItems}
+              fullWidth
+              onChange={(e: unknown) => handleInputChange(convertValue('numberOfDependantsPersonalInformation', e))}
+              value={values.numberOfDependantsPersonalInformation}
+              error={errors.numberOfDependantsPersonalInformation}
+            />
+          </Grid>
+        </Grid>
+        <Grid
+          container
+          wrap='wrap'
+          justifyContent='space-between'
+          alignItems='center'
+          mb='16px'
+        >
+          <Grid
+            item
+            sm={5.8}
+          >
+            <Select
+              fullWidth
+              customLabel='Nationality'
+              withAsterisk
+              variant='outlined'
+              size='small'
+              name='nationalityPersonalInformation'
+              value={values.nationalityPersonalInformation}
+              onChange={(e: unknown) => handleInputChange(convertValue('nationalityPersonalInformation', e))}
+              options={countries}
+              error={errors.nationalityPersonalInformation}
+            />
+          </Grid>
+          <Grid
+            item
+            sm={5.8}
+          >
+            <Select
+              fullWidth
+              customLabel='Religion'
+              variant='outlined'
+              size='small'
+              name='religionPersonalInformation'
+              value={values.religionPersonalInformation}
+              onChange={(e: unknown) => handleInputChange(convertValue('religionPersonalInformation', e))}
+              options={religions}
+            />
+          </Grid>
+        </Grid>
+      </Box>
+      <Box
+        component='div'
+        id='citizen-address'
+        mb='16px'
+      >
+        <Text
+          variant='text-base'
+          title='Citizen Address'
+          color='primary.500'
+          fontWeight={700}
+        />
+        <Grid
+          container
+          wrap='wrap'
+          justifyContent='space-between'
+          alignItems='center'
+          mb='16px'
+          mt='16px'
+        >
+          <Grid
+            item
+            sm={5.8}
+          >
+            <Select
+              fullWidth
+              customLabel='Country'
+              withAsterisk
+              variant='outlined'
+              size='small'
+              name='countryCitizenAddress'
+              value={values.countryCitizenAddress}
+              onChange={(e: unknown) => handleInputChange(convertValue('countryCitizenAddress', e))}
+              options={countries}
+              error={errors.countryCitizenAddress}
+            />
+          </Grid>
+          <Grid
+            item
+            sm={5.8}
+          >
+            <Select
+              fullWidth
+              customLabel='Province'
+              withAsterisk
+              variant='outlined'
+              size='small'
+              name='provinceCitizenAddress'
+              value={values.provinceCitizenAddress}
+              onChange={(e: unknown) => handleInputChange(convertValue('provinceCitizenAddress', e))}
+              options={administrativeFirst}
+              error={errors.provinceCitizenAddress}
+            />
+          </Grid>
+        </Grid>
+        <Grid
+          container
+          wrap='wrap'
+          justifyContent='space-between'
+          alignItems='center'
+          mb='16px'
+        >
+          <Grid
+            item
+            sm={5.8}
+          >
+            <Select
+              fullWidth
+              customLabel='City'
+              withAsterisk
+              variant='outlined'
+              size='small'
+              name='cityCitizenAddress'
+              value={values.cityCitizenAddress}
+              onChange={(e: unknown) => handleInputChange(convertValue('cityCitizenAddress', e))}
+              options={administrativeSecond}
+              error={errors.cityCitizenAddress}
+            />
+          </Grid>
+          <Grid
+            item
+            sm={5.8}
+          >
+            <Select
+              fullWidth
+              customLabel='Sub-District'
+              withAsterisk
+              variant='outlined'
+              size='small'
+              name='subDistrictCitizenAddress'
+              value={values.subDistrictCitizenAddress}
+              onChange={(e: unknown) => handleInputChange(convertValue('subDistrictCitizenAddress', e))}
+              options={administrativeThird}
+              error={errors.subDistrictCitizenAddress}
+            />
+          </Grid>
+        </Grid>
+        <Grid
+          container
+          wrap='wrap'
+          justifyContent='space-between'
+          alignItems='center'
+          mb='16px'
+        >
+          <Grid
+            item
+            sm={5.8}
+          >
+            <Textarea
+              name='addressCitizenAddress'
+              maxRows={5}
+              minRows={3}
+              value={values.addressCitizenAddress}
+              onChange={handleInputChange}
+              error={errors.addressCitizenAddress}
+              withAsterisk
+              customLabel='Citizen ID Street Name, Building Name'
+            />
+          </Grid>
+          <Grid
+            item
+            sm={5.8}
+          >
+            <Input
+              withAsterisk
+              customLabel='ZIP Code'
+              size='small'
+              name='zipCodeCitizenAddress'
+              value={values.zipCodeCitizenAddress}
+              onChange={handleInputChange}
+              error={errors.zipCodeCitizenAddress}
+            />
+          </Grid>
+        </Grid>
+        <Grid
+          container
+          wrap='wrap'
+          justifyContent='space-between'
+          alignItems='center'
+          mb='16px'
+        >
+          <Grid
+            item
+            sm={5.8}
+          >
+            <CheckBox
+              customLabel='Use as residential address'
+              name='useResidentialCitizenAddress'
+              checked={useResidentialAddress}
+              onChange={() => setUseResidentialAddress((prev: boolean) => !prev)}
+            />
+          </Grid>
+        </Grid>
+      </Box>
+      <Box
+        component='div'
+        id='residential-address'
+        mb='16px'
+      >
+        <Text
+          variant='text-base'
+          title='Residential Address'
+          color='primary.500'
+          fontWeight={700}
+          mb='16px'
+        />
+        <Grid
+          container
+          wrap='wrap'
+          justifyContent='space-between'
+          alignItems='center'
+          mb='16px'
+          mt='16px'
+        >
+          <Grid
+            item
+            sm={5.8}
+          >
+            <Select
+              fullWidth
+              customLabel='Country'
+              withAsterisk
+              variant='outlined'
+              size='small'
+              name='countryResidentialAddress'
+              value={values.countryResidentialAddress}
+              onChange={(e: unknown) => handleInputChange(convertValue('countryResidentialAddress', e))}
+              options={countries}
+              error={useResidentialAddress ? '' : errors.countryResidentialAddress}
+            />
+          </Grid>
+          <Grid
+            item
+            sm={5.8}
+          >
+            <Select
+              fullWidth
+              customLabel='Province'
+              withAsterisk
+              variant='outlined'
+              size='small'
+              name='provinceResidentialAddress'
+              value={values.provinceResidentialAddress}
+              onChange={(e: unknown) => handleInputChange(convertValue('provinceResidentialAddress', e))}
+              options={administrativeFirst}
+              error={useResidentialAddress ? '' : errors.provinceResidentialAddress}
+            />
+          </Grid>
+        </Grid>
+        <Grid
+          container
+          wrap='wrap'
+          justifyContent='space-between'
+          alignItems='center'
+          mb='16px'
+        >
+          <Grid
+            item
+            sm={5.8}
+          >
+            <Select
+              fullWidth
+              customLabel='City'
+              withAsterisk
+              variant='outlined'
+              size='small'
+              name='cityResidentialAddress'
+              value={values.cityResidentialAddress}
+              onChange={(e: unknown) => handleInputChange(convertValue('cityResidentialAddress', e))}
+              options={administrativeSecond}
+              error={useResidentialAddress ? '' : errors.cityResidentialAddress}
+            />
+          </Grid>
+          <Grid
+            item
+            sm={5.8}
+          >
+            <Select
+              fullWidth
+              customLabel='Sub-District'
+              withAsterisk
+              variant='outlined'
+              size='small'
+              name='subDistrictResidentialAddress'
+              value={values.subDistrictResidentialAddress}
+              onChange={(e: unknown) => handleInputChange(convertValue('subDistrictResidentialAddress', e))}
+              options={administrativeThird}
+              error={useResidentialAddress ? '' : errors.subDistrictResidentialAddress}
+            />
+          </Grid>
+        </Grid>
+        <Grid
+          container
+          wrap='wrap'
+          justifyContent='space-between'
+          alignItems='center'
+          mb='16px'
+        >
+          <Grid
+            item
+            sm={5.8}
+          >
+            <Textarea
+              name='addressResidentialAddress'
+              maxRows={5}
+              minRows={3}
+              value={values.addressResidentialAddress}
+              onChange={handleInputChange}
+              error={useResidentialAddress ? '' : errors.addressResidentialAddress}
+              withAsterisk
+              customLabel='Citizen ID Street Name, Building Name'
+            />
+          </Grid>
+          <Grid
+            item
+            sm={5.8}
+          >
+            <Input
+              withAsterisk
+              customLabel='ZIP Code'
+              size='small'
+              name='zipCodeResidentialAddress'
+              value={values.zipCodeResidentialAddress}
+              onChange={handleInputChange}
+              error={useResidentialAddress ? '' : errors.zipCodeResidentialAddress}
+            />
+          </Grid>
+        </Grid>
+      </Box>
+      <Box
+        component='div'
+        id='personal-id'
+        mb='16px'
+      >
+        <Text
+          variant='text-lg'
+          title='Personal ID'
+          fontWeight={700}
+          color='primary.500'
+        />
+        <Grid
+          container
+          wrap='wrap'
+          justifyContent='space-between'
+          alignItems='center'
+          mb='16px'
+          mt='16px'
+        >
+          <Grid
+            item
+            sm={5.8}
+          >
+            <Select
+              fullWidth
+              customLabel='ID Type'
+              withAsterisk
+              variant='outlined'
+              size='small'
+              name='idTypePersonalID'
+              value={values.idTypePersonalID}
+              onChange={(e: unknown) => handleInputChange(convertValue('idTypePersonalID', e))}
+              options={IDTypes}
+              error={errors.idTypePersonalID}
+            />
+          </Grid>
+          <Grid
+            item
+            sm={5.8}
+          >
+            <Input
+              withAsterisk
+              customLabel='ID Number'
+              size='small'
+              name='idNumberPersonalID'
+              value={values.idNumberPersonalID}
+              onChange={handleInputChange}
+              error={errors.idNumberPersonalID}
+            />
+          </Grid>
+        </Grid>
+        <Grid
+          container
+          wrap='wrap'
+          justifyContent='space-between'
+          alignItems='center'
+          mb='16px'
+        >
+          <Grid
+            item
+            sm={5.8}
+          >
+            <DatePicker
+              customLabel='ID Expiration Date'
+              withAsterisk
+              value={values.idExpirationDatePersonalID}
+              onChange={(e: unknown) => handleInputChange(convertDateValue('idExpirationDatePersonalID', e))}
+              error={values.PersonalIDPersonalID ? '' : errors.idExpirationDatePersonalID}
+              disabled={values.PersonalIDPersonalID}
+            />
+          </Grid>
+        </Grid>
+        <Grid
+          container
+          wrap='wrap'
+          alignItems='center'
+          mb='16px'
+        >
+          <Grid item sm={5.8}>
+            <CheckBox
+              customLabel='Permanent'
+              color='primary'
+              name='PersonalIDPersonalID'
+              checked={values.PersonalIDPersonalID}
+              onChange={() => setIsPermanentPersonalID((prev: boolean) => !prev)}
+            />
+          </Grid>
+        </Grid>
+      </Box>
+      <Box
+        component='div'
+        id='Bank Information'
+      >
+        <Text
+          variant='text-lg'
+          title='Bank Information'
+          fontWeight={700}
+          color='primary.500'
+        />
+        <Grid
+          container
+          wrap='wrap'
+          justifyContent='space-between'
+          alignItems='center'
+          mb='16px'
+          mt='16px'
+        >
+          <Grid
+            item
+            sm={5.8}
+          >
+            <Select
+              fullWidth
+              customLabel='Bank'
+              variant='outlined'
+              size='small'
+              name='bankBankInformation'
+              value={values.bankBankInformation}
+              onChange={(e: unknown) => handleInputChange(convertValue('bankBankInformation', e))}
+              options={banks}
+            />
+          </Grid>
+          <Grid
+            item
+            sm={5.8}
+          >
+            <Input
+              customLabel={`Bank Account Holder's Name`}
+              size='small'
+              name='bankAccountHolderNameBankInformation'
+              value={values.bankAccountHolderNameBankInformation}
+              onChange={handleInputChange}
+            />
+          </Grid>
+        </Grid>
+        <Grid
+          container
+          wrap='wrap'
+          justifyContent='space-between'
+          alignItems='center'
+          mb='16px'
+        >
+          <Grid
+            item
+            sm={5.8}
+          >
+            <Input
+              customLabel='Bank Account No'
+              size='small'
+              name='bankAccoutNoBankInformation'
+              value={values.bankAccoutNoBankInformation}
+              onChange={handleInputChange}
+            />
+          </Grid>
+          <Grid
+            item
+            sm={5.8}
+          >
+            <Grid container justifyContent='space-between'>
+              <Grid item sm={5.8}>
+                <Input
+                  customLabel='Bank Code'
                   size='small'
-                  name='maritialStatusPersonalInformation'
+                  name='bankCodeBankInformation'
+                  value={values.bankCodeBankInformation}
                   onChange={handleInputChange}
-                  value={values.maritialStatusPersonalInformation}
-                >
-                  <MenuItem value='single'>Single</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid
-              item
-              sm={5.8}
-            >
-              <FormControl fullWidth>
-                <Text
-                  title='Number of Dependants'
-                >
-                  <AsteriskComponent>*</AsteriskComponent>
-                </Text>
-                <Select
-                  variant='outlined'
+                />
+              </Grid>
+              <Grid item sm={5.8}>
+                <Input
+                  customLabel='Branch Code'
                   size='small'
-                  name='numberOfDependantsPersonalInformation'
+                  name='branchCodeBankInformation'
+                  value={values.branchCodeBankInformation}
                   onChange={handleInputChange}
-                  value={values.numberOfDependantsPersonalInformation}
-                >
-                  {
-                    employeeItems.map(item => (
-                      <MenuItem key={item.label} value={item.value}>{item.label}</MenuItem>
-                    ))
-                  }
-                </Select>
-              </FormControl>
+                />
+              </Grid>
             </Grid>
           </Grid>
-          <Grid
-            container
-            wrap='wrap'
-            justifyContent='space-between'
-            alignItems='center'
-            mb='16px'
-          >
-            <Grid
-              item
-              sm={5.8}
-            >
-              <FormControl fullWidth>
-                <Text
-                  title='Nationality'
-                >
-                  <AsteriskComponent>*</AsteriskComponent>
-                </Text>
-                <Select
-                  variant='outlined'
-                  size='small'
-                >
-                  <MenuItem value='single'>Indonesian</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid
-              item
-              sm={5.8}
-            >
-              <FormControl fullWidth>
-                <Text
-                  title='Religion'
-                >
-                  <AsteriskComponent>*</AsteriskComponent>
-                </Text>
-                <Select
-                  variant='outlined'
-                  size='small'
-                >
-                  <MenuItem value='single'>Islamic</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-          </Grid>
-        </Box>
-        <Box
-          component='div'
-          id='citizen-address'
+        </Grid>
+        <Grid
+          container
+          wrap='wrap'
+          justifyContent='space-between'
+          alignItems='center'
           mb='16px'
         >
-          <Text
-            variant='text-base'
-            title='Citizen Address'
-            color='primary.500'
-            fontWeight={700}
-          />
           <Grid
-            container
-            wrap='wrap'
-            justifyContent='space-between'
-            alignItems='center'
-            mb='16px'
+            item
+            sm={5.8}
           >
-            <Grid
-              item
-              sm={5.8}
-            >
-              <FormControl fullWidth>
-                <Text
-                  title='Country'
-                >
-                  <AsteriskComponent>*</AsteriskComponent>
-                </Text>
-                <Select
-                  variant='outlined'
-                  size='small'
-                >
-                  <MenuItem value='single'>Single</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid
-              item
-              sm={5.8}
-            >
-              <FormControl fullWidth>
-                <Text
-                  title='Province'
-                >
-                  <AsteriskComponent>*</AsteriskComponent>
-                </Text>
-                <Select
-                  variant='outlined'
-                  size='small'
-                >
-                  <MenuItem value='single'>Single</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
+            <Input
+              customLabel='Branch Name'
+              size='small'
+              name='branchNameBankInformation'
+              value={values.branchNameBankInformation}
+              onChange={handleInputChange}
+            />
           </Grid>
           <Grid
-            container
-            wrap='wrap'
-            justifyContent='space-between'
-            alignItems='center'
-            mb='16px'
+            item
+            sm={5.8}
           >
-            <Grid
-              item
-              sm={5.8}
-            >
-              <FormControl fullWidth>
-                <Text
-                  title='City'
-                >
-                  <AsteriskComponent>*</AsteriskComponent>
-                </Text>
-                <Select
-                  variant='outlined'
-                  size='small'
-                >
-                  <MenuItem value='single'>Single</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid
-              item
-              sm={5.8}
-            >
-              <FormControl fullWidth>
-                <Text
-                  title='Sub-District'
-                >
-                  <AsteriskComponent>*</AsteriskComponent>
-                </Text>
-                <Select
-                  variant='outlined'
-                  size='small'
-                >
-                  <MenuItem value='single'>Single</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
+            <Input
+              customLabel='Swift Code'
+              size='small'
+              name='swiftCodeBankInformation'
+              value={values.swiftCodeBankInformation}
+              onChange={handleInputChange}
+            />
           </Grid>
-          <Grid
-            container
-            wrap='wrap'
-            justifyContent='space-between'
-            alignItems='center'
-            mb='16px'
-          >
-            <Grid
-              item
-              sm={5.8}
-            >
-              <Input
-                withAsterisk
-                customLabel='Citizen ID  Street Name, Building Name'
-              />
-            </Grid>
-            <Grid
-              item
-              sm={5.8}
-            >
-              <Input
-                withAsterisk
-                customLabel='ZIP Code'
-                size='small'
-              />
-            </Grid>
-          </Grid>
-          <Grid
-            container
-            wrap='wrap'
-            justifyContent='space-between'
-            alignItems='center'
-            mb='16px'
-          >
-            <Grid
-              item
-              sm={5.8}
-            >
-              <FormControlLabel
-                label='Use as residential address'
-                control={
-                  <Checkbox color='primary' />
-                }
-              />
-            </Grid>
-          </Grid>
-        </Box>
-        <Box
-          component='div'
-          id='residential-address'
-          mb='16px'
-        >
-          <Text
-            variant='text-base'
-            title='Residential Address'
-            color='primary.500'
-            fontWeight={700}
-          />
-          <Grid
-            container
-            wrap='wrap'
-            justifyContent='space-between'
-            alignItems='center'
-            mb='16px'
-          >
-            <Grid
-              item
-              sm={5.8}
-            >
-              <FormControl fullWidth>
-                <Text
-                  title='Country'
-                >
-                  <AsteriskComponent>*</AsteriskComponent>
-                </Text>
-                <Select
-                  variant='outlined'
-                  size='small'
-                >
-                  <MenuItem value='single'>Single</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid
-              item
-              sm={5.8}
-            >
-              <FormControl fullWidth>
-                <Text
-                  title='Province'
-                >
-                  <AsteriskComponent>*</AsteriskComponent>
-                </Text>
-                <Select
-                  variant='outlined'
-                  size='small'
-                >
-                  <MenuItem value='single'>Single</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-          </Grid>
-          <Grid
-            container
-            wrap='wrap'
-            justifyContent='space-between'
-            alignItems='center'
-            mb='16px'
-          >
-            <Grid
-              item
-              sm={5.8}
-            >
-              <FormControl fullWidth>
-                <Text
-                  title='City'
-                >
-                  <AsteriskComponent>*</AsteriskComponent>
-                </Text>
-                <Select
-                  variant='outlined'
-                  size='small'
-                >
-                  <MenuItem value='single'>Single</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid
-              item
-              sm={5.8}
-            >
-              <FormControl fullWidth>
-                <Text
-                  title='Sub-District'
-                >
-                  <AsteriskComponent>*</AsteriskComponent>
-                </Text>
-                <Select
-                  variant='outlined'
-                  size='small'
-                >
-                  <MenuItem value='single'>Single</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-          </Grid>
-          <Grid
-            container
-            wrap='wrap'
-            justifyContent='space-between'
-            alignItems='center'
-            mb='16px'
-          >
-            <Grid
-              item
-              sm={5.8}
-            >
-              <Input
-                withAsterisk
-                customLabel='Citizen ID  Street Name, Building Name'
-              />
-            </Grid>
-            <Grid
-              item
-              sm={5.8}
-            >
-              <Input
-                withAsterisk
-                customLabel='ZIP Code'
-                size='small'
-              />
-            </Grid>
-          </Grid>
-        </Box>
-        <Box
-          component='div'
-          id='personal-id'
-          mb='16px'
-        >
-          <Text
-            variant='text-lg'
-            title='Personal ID'
-            fontWeight={700}
-            color='primary.500'
-          />
-          <Grid
-            container
-            wrap='wrap'
-            justifyContent='space-between'
-            alignItems='center'
-            mb='16px'
-          >
-            <Grid
-              item
-              sm={5.8}
-            >
-              <FormControl fullWidth>
-                <Text
-                  title='ID Type'
-                >
-                  <AsteriskComponent>*</AsteriskComponent>
-                </Text>
-                <Select
-                  variant='outlined'
-                  size='small'
-                >
-                  <MenuItem value='ktp'>KTP</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid
-              item
-              sm={5.8}
-            >
-              <Input
-                withAsterisk
-                customLabel='ID Number'
-                size='small'
-              />
-            </Grid>
-          </Grid>
-          <Grid
-            container
-            wrap='wrap'
-            justifyContent='space-between'
-            alignItems='center'
-            mb='16px'
-          >
-            <Grid
-              item
-              sm={5.8}
-            >
-              {/* <DatePicker
-                customLabel='Date of Birth'
-                withAsterisk
-                name='date'
-              /> */}
-            </Grid>
-          </Grid>
-        </Box>
-        <Box
-          component='div'
-          id='Bank Information'
-        >
-          <Text
-            variant='text-lg'
-            title='Bank Information'
-            fontWeight={700}
-            color='primary.500'
-          />
-        </Box>
-      </Form>
+        </Grid>
+      </Box>
       <Grid
         container
         justifyContent='flex-end'
@@ -566,14 +935,17 @@ const PersonalInformationEdit = ({ nextTab }: PersonalInformationProps) => {
         gap={2}
       >
         <Grid item>
-          <Button onClick={() => nextTab(0)} label='Back' variant='outlined' />
+          <Button onClick={() => {
+            nextPage(0);
+            setValues({ ...values, useResidentialAddress, isPermanentPersonalID });
+          }} label='Back' variant='outlined' />
         </Grid>
         <Grid item>
-          <Button onClick={() => nextTab(2)} label='Next' />
+          <Button type='submit' label='Next' />
         </Grid>
       </Grid>
-    </>
+    </form>
   );
 };
 
-export default PersonalInformationEdit;
+export default memo(EmployeePersonalInformationEdit);

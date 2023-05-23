@@ -1,15 +1,26 @@
-import React, { HTMLAttributes, useState } from 'react';
-import { Grid, Button as MuiButton, IconButton, Typography, Modal, Select, Box, MenuItem, FormControlLabel, Checkbox, FormControl } from '@mui/material';
-import { Input, Button } from '@/components/_shared/form';
+import React, { HTMLAttributes, useState, useEffect } from 'react';
+import {
+  Grid,
+  Typography,
+  Box
+} from '@mui/material';
+import { Input, Button, Select as CustomSelect, CheckBox, DatePicker, FileUploadModal } from '@/components/_shared/form';
 import { styled as MuiStyled } from '@mui/material/styles';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { Image as ImageType } from '@/utils/assetsConstant';
 import styled from '@emotion/styled';
-import { Close } from '@mui/icons-material';
-import { BsFileEarmarkPlus } from 'react-icons/bs';
-import { AiOutlineCamera } from 'react-icons/ai';
+import { useForm, useAppSelectors, useAppDispatch } from '@/hooks/index';
+import {
+  checkRegulerExpression,
+  convertValue,
+  convertChecked,
+  convertDateValue,
+  convertImageParams,
+} from '@/utils/helper';
+import dayjs from 'dayjs';
+import { Alert, Text } from '@/components/_shared/common';
+import CancelIcon from '@mui/icons-material/Cancel';
+import { Employees } from '@/types/employees';
+import { getListPositionRequested } from '@/store/reducers/slice/options/optionSlice';
 
 const AsteriskComponent = MuiStyled('span')(({ theme }) => ({
   color: theme.palette.error.main
@@ -34,27 +45,6 @@ const NextBtnWrapper = MuiStyled(Box)(({
   marginTop: '2rem'
 }));
 
-const ModalHeader = MuiStyled(Box)(({
-  width: '100%',
-  display: 'flex',
-  flexDirection: 'row',
-  alignItems: 'center',
-  justifyContent: 'center',
-  fontWeight: 'bold',
-  fontSize: '18px',
-  borderBottom: '1px solid #E5E7EB',
-  paddingBottom: '1rem'
-}));
-
-const ModalBtnWrapper = MuiStyled(Box)(({
-  width: '100%',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
-  padding: '2rem',
-  gap: '.5rem'
-}));
 
 interface ImagePriviewProps extends HTMLAttributes<HTMLDivElement> {
   image?: string;
@@ -71,76 +61,177 @@ const ImageReview = styled.div`
   cursor: pointer;
   `;
 
-const modalStyle = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: '284px',
-  bgcolor: 'background.paper',
-  border: '1px solid #E5E7EB',
-  borderRadius: '8px',
-  p: 2,
-};
-
-// const convertParams = (name, value) => {
-//   const reader = new FileReader();
-//   reader.readAsDataURL(value || '');
-
-//   const obj = {
-//     target: {
-//       name, value
-//     }
-//   };
-
-//   return obj;
-// };
-
-interface EmployeeInformationProps {
-  nextTab: (_val: number) => void
+interface EmployeeProps {
+  refProp: React.Ref<HTMLFormElement>;
+  nextPage: (_val: number) => void;
+  setValues: React.Dispatch<React.SetStateAction<Employees.InformationValues>>
+  infoValues: Employees.InformationValues,
+  setIsInformationValid: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 
-function EmployeeInformationEdit({ nextTab }: EmployeeInformationProps) {
-  const [checked, setChecked] = useState(false);
-  const [checkedSelf, setCheckedSelf] = useState(false);
+function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, setIsInformationValid }: EmployeeProps) {
+  const { listDepartment, listPosition } = useAppSelectors(state => state.option);
   const [open, setOpen] = useState(false);
-  const [images, setImages] = useState<string | null>(null);
-  const handleCheck = () => {
-    setChecked(!checked);
+  const [images, setImages] = useState<string | null>(infoValues?.images);
+  const [errorFields, setErrorFields] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
+
+  const [initialValues] = useState({
+    picture: [],
+    fullName: infoValues?.fullName,
+    nickname: infoValues?.nickname,
+    phoneNumberPrefix: infoValues.phoneNumberPrefix,
+    phoneNumber: infoValues?.phoneNumber,
+    email: infoValues?.email,
+    startDate: dayjs(infoValues?.startDate),
+    endDate: dayjs(infoValues?.endDate),
+    isPermanent: infoValues?.isPermanent,
+    department: infoValues?.department,
+    position: infoValues?.position,
+    isSelfService: infoValues?.isSelfService,
+  });
+
+  const validate = (fieldOfValues = values) => {
+    const temp = { ...errors };
+
+    if ('picture' in fieldOfValues)
+      temp.picture = fieldOfValues.picture.length !== 0 || infoValues?.images
+        ? ''
+        : 'This field is required';
+
+    if ('fullName' in fieldOfValues)
+      temp.fullName = fieldOfValues.fullName ? '' : 'This field is required';
+
+    if ('phoneNumber' in fieldOfValues)
+      temp.phoneNumber = fieldOfValues.phoneNumber ? '' : 'This field is required';
+
+    if ('email' in fieldOfValues) {
+      const patternEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const emailValue = fieldOfValues.email || '';
+      let emailErrorMessage = '';
+      if (!emailValue) {
+        emailErrorMessage = 'Email is required';
+      } else if (!checkRegulerExpression(patternEmail, emailValue)) {
+        emailErrorMessage = 'Email should be valid';
+      }
+      temp.email = emailErrorMessage;
+    }
+
+    if ('startDate' in fieldOfValues)
+      temp.startDate = fieldOfValues.startDate ? '' : 'This field is required';
+
+    if ('endDate' in fieldOfValues)
+      temp.endDate = fieldOfValues.endDate ? '' : 'This field is required';
+
+    if ('department' in fieldOfValues)
+      temp.department = fieldOfValues.department ? '' : '';
+
+    if ('position' in fieldOfValues){
+      temp.position = dispatch({
+        type: getListPositionRequested.toString(),
+        payload: {
+          departmentID: values.department
+        }
+      }) ? '' : 'This field is required';
+    }
+
+
+    setErrors({
+      ...temp
+    });
+
+    if (fieldOfValues === values)
+      return Object.values(temp).every(x => x === '');
   };
-  const handleCheckSelf = () => {
-    setCheckedSelf(!checkedSelf);
-  };
+
+  const { values, errors, setErrors, handleInputChange } = useForm(initialValues, true, validate);
+
   const handleOpen = () => {
     setOpen(true);
   };
+
   const handleClose = () => {
     setOpen(false);
   };
-  const uploadImage = (data) => {
-    if(!data) return;
-    const reader = new FileReader();
-    reader.addEventListener('load', () => {
-      if (!reader.result) return;
-      setImages(reader?.result as string);
-    });
-    handleClose();
-    reader.readAsDataURL(data);
+
+  const phonePrefixOptions = [
+    {
+      label: '+62',
+      value: '+62'
+    },
+    {
+      label: '+62',
+      value: '+62'
+    }
+  ];
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (validate()) {
+      setValues({ ...values, images: images });
+      nextPage(1);
+      setErrorFields(false);
+      setIsInformationValid(true);
+    } else {
+      setErrorFields(true);
+      setIsInformationValid(false);
+    }
   };
+
+  useEffect(() => {
+    dispatch({
+      type: getListPositionRequested.toString(),
+      payload: {
+        departmentID: infoValues?.department
+      }
+    });
+  }, []);
+
   return (
     <>
-      <Typography component='h3' fontSize={18} color='primary'>Employee Information</Typography>
-      <form>
-        <ImageReview image={!images ? ImageType.PLACEHOLDER : images} onClick={handleOpen}/>
+      {
+        errorFields && (
+          <Alert
+            severity='error'
+            content='Please fill in all the mandatory fields'
+            icon={<CancelIcon />}
+          />
+        )
+      }
+      <Text
+        component='h3'
+        variant='text-lg'
+        fontWeight={700}
+        color='primary.500'
+        title='Employee Information'
+        mb='16px'
+      />
+      <form ref={refProp} onSubmit={(e) => handleSubmit(e)}>
+        <Box component='div'>
+          <Text
+            component='span'
+            title='Employee Photo'
+            color='primary.500'
+          />
+          <ImageReview image={!images ? ImageType.PLACEHOLDER : images} onClick={handleOpen} />
+          {
+            errors.picture && (
+              <Typography component='span' fontSize='12px' color='red.500'>This field is required</Typography>
+            )
+          }
+        </Box>
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Input
-              name='fullname'
+              name='fullName'
               customLabel='Full Name'
               withAsterisk={true}
+              onChange={handleInputChange}
               size='small'
+              value={values.fullName}
               placeholder='Input Full Name'
+              error={errors.fullName}
             />
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
@@ -148,7 +239,9 @@ function EmployeeInformationEdit({ nextTab }: EmployeeInformationProps) {
               name='nickname'
               customLabel='Nickname'
               withAsterisk={false}
+              onChange={handleInputChange}
               size='small'
+              value={values.nickname}
               placeholder='Input Nickname'
             />
           </Grid>
@@ -158,29 +251,34 @@ function EmployeeInformationEdit({ nextTab }: EmployeeInformationProps) {
             <Typography>Contact Number<AsteriskComponent>*</AsteriskComponent></Typography>
             <Grid container spacing={2}>
               <Grid item xs={1} sm={3} md={2} lg={2} xl={2} spacing={2}>
-                <Select
+                <CustomSelect
                   variant='outlined'
                   size='small'
                   fullWidth
+                  onChange={(e) => handleInputChange(convertValue('phoneNumberPrefix', e))}
                   name='phoneNumberPrefix'
+                  value={values.phoneNumberPrefix}
+                  options={phonePrefixOptions}
                   MenuProps={{ disableAutoFocus: true }}
                   sx={{
                     backgroundColor: '#D9EFE7',
                     border: '1px solid #D9EFE7',
                     borderRadius: '9999px',
-                    marginRight: '12px'
+                    marginRight: '12px',
+                    fontSize: '14px'
                   }}
-                >
-                  <MenuItem value='+62'>+62</MenuItem>
-                  <MenuItem value='+44'>+44</MenuItem>
-                </Select>
+                />
               </Grid>
               <Grid item xs={9} sm={9} md={9} lg={9} xl={10} alignSelf='flex-end'>
                 <Input
                   name='phoneNumber'
+                  type='number'
                   placeholder='Input Correct Number'
                   withAsterisk={true}
+                  onChange={handleInputChange}
                   size='small'
+                  value={values.phoneNumber}
+                  error={errors.phoneNumber}
                 />
               </Grid>
             </Grid>
@@ -191,132 +289,89 @@ function EmployeeInformationEdit({ nextTab }: EmployeeInformationProps) {
               customLabel='Personal Email Address'
               withAsterisk={true}
               size='small'
+              onChange={handleInputChange}
               placeholder='Personal Email Address'
+              value={values.email}
+              error={errors.email}
             />
           </Grid>
         </Grid>
         <Grid container spacing={2}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
-            <Typography>Start Date</Typography>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker  sx={{
-                '& .MuiOutlinedInput-input': {
-                  padding: '10px 14px',
-                  border: 'none !important'
-                },
-                width: '100%'
-              }}/>
-            </LocalizationProvider>
+            <DatePicker
+              customLabel='Start Date'
+              withAsterisk
+              value={values.startDate}
+              onChange={(e: unknown) => handleInputChange(convertDateValue('startDate', e))}
+              error={errors.startDate}
+            />
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
-            <Typography>End Date</Typography>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker sx={{
-                '& .MuiOutlinedInput-input': {
-                  padding: '10px 14px',
-                  border: 'none !important'
-                },
-                width: '100%'
-              }}/>
-            </LocalizationProvider>
+            <DatePicker
+              customLabel='End Date'
+              withAsterisk
+              value={values.endDate}
+              onChange={(e: unknown) => handleInputChange(convertDateValue('endDate', e))}
+              error={errors.endDate}
+            />
           </Grid>
         </Grid>
-        <FormControlLabel
-          sx={{ marginTop: '.5rem', marginBottom: '.5rem' }}
-          value={true}
-          label={<Typography fontWeight='bold'>Permanent</Typography>}
-          control={
-            <Checkbox checked={checked} onChange={handleCheck} color='primary' />
-          }
-          labelPlacement='end'
+        <CheckBox
+          customLabel='Permanent'
+          name='isPermanent'
+          checked={values.isPermanent}
+          onChange={(e) => handleInputChange(convertChecked(e))}
         />
         <Grid container spacing={2}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
-            <FormControl fullWidth>
-              <Typography>Department<AsteriskComponent>*</AsteriskComponent></Typography>
-              <Select
-                fullWidth
-                variant='outlined'
-                size='small'
-                name='department'
-              >
-                <MenuItem value='Marketing'>Marketing</MenuItem>
-                <MenuItem value='Management'>Management</MenuItem>
-                <MenuItem value='Finance'>Finance</MenuItem>
-              </Select>
-            </FormControl>
+            <CustomSelect
+              customLabel='Department'
+              withAsterisk={false}
+              variant='outlined'
+              value={values.department}
+              onChange={(e) => handleInputChange(convertValue('department', e))}
+              fullWidth={true}
+              name='department'
+              size='small'
+              options={listDepartment}
+            />
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
-            <FormControl fullWidth>
-              <Typography>Position<AsteriskComponent>*</AsteriskComponent></Typography>
-              <Select
-                fullWidth
-                variant='outlined'
-                size='small'
-                name='position'
-              >
-                <MenuItem value='Manager'>Manager</MenuItem>
-                <MenuItem value='Assistance'>Assstance</MenuItem>
-                <MenuItem value='Finance'>Finance</MenuItem>
-              </Select>
-            </FormControl>
+            <CustomSelect
+              customLabel='Position'
+              withAsterisk={false}
+              variant='outlined'
+              value={values.position}
+              onChange={(e) => handleInputChange(convertValue('position', e))}
+              fullWidth={true}
+              name='position'
+              size='small'
+              options={listPosition}
+            />
           </Grid>
         </Grid>
         <Grid container spacing={2} sx={{ marginTop: '1rem' }}>
           <Grid item xs={12} sm={12} md={8} lg={8} xl={8}>
             <EmployeeSelfWrapper>
-              <FormControlLabel
-                sx={{ marginTop: '.5rem', marginBottom: '.5rem', fontWeight: 'bold' }}
-                value={true}
-                label={ <Typography fontWeight='bold'>Employee Self Service</Typography> }
-                control={
-                  <Checkbox checked={checkedSelf} onChange={handleCheckSelf} color='primary' />
-                }
-                labelPlacement='end'
+              <CheckBox
+                customLabel='Employee Self Serive'
+                name='isSelfService'
+                checked={values.isSelfService}
+                onChange={(e) => handleInputChange(convertChecked(e))}
               />
               <Typography>Activate button to send account activation link via email. Employee Self Service enables self-data filling.</Typography>
             </EmployeeSelfWrapper>
           </Grid>
         </Grid>
         <NextBtnWrapper>
-          <Button fullWidth={false} onClick={() => nextTab(1)} size='small' label='Next' color='primary'/>
+          <Button fullWidth={false} size='small' label='Next' color='primary' type={'submit'} />
         </NextBtnWrapper>
       </form>
-      <Modal
+      <FileUploadModal
         open={open}
-        onClose={handleClose}
-        keepMounted
-        disableAutoFocus
-      >
-        <Box sx={modalStyle}>
-          <ModalHeader>Choose an action</ModalHeader>
-          <IconButton onClick={handleClose} sx={{
-            position: 'fixed',
-            top: 10,
-            right: 0
-          }}>
-            <Close />
-          </IconButton>
-          <ModalBtnWrapper>
-            <input
-              id='input-file'
-              onChange={(e) => uploadImage(!e.target.files ? null : e.target.files[0])}
-              name='images'
-              type='file'
-              style={{ display: 'none' }}
-              accept='image/'
-            />
-            <label htmlFor='input-file'>
-              <MuiButton component='span' fullWidth size='small' variant='outlined'>
-                <BsFileEarmarkPlus /> &nbsp; Browse File
-              </MuiButton>
-            </label>
-            <MuiButton size='small' variant='outlined'>
-              <AiOutlineCamera /> &nbsp; Take A Photo
-            </MuiButton>
-          </ModalBtnWrapper>
-        </Box>
-      </Modal>
+        handleClose={handleClose}
+        onChange={(e) => handleInputChange(convertImageParams('picture', !e.target.files ? null : e.target.files[0], setImages, handleClose))}
+      />
     </>
   );
 }
