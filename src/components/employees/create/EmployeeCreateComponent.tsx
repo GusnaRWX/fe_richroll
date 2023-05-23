@@ -158,7 +158,7 @@ function EmployeeCreateComponent() {
     swiftCodeBankInformation: '',
 
     useResidentialAddress: false,
-    isPermanentPersonalID: false,
+    // isPermanentPersonalID: false,
 
     idExpirationDatePersonalID: '',
     idNumberPersonalID: '',
