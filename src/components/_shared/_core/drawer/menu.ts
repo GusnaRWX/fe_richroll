@@ -25,7 +25,7 @@ export const Menus: CoreLayout.SidebarItem[] = [
         title: 'Company Profile',
       },
       {
-        path: '/company-management/departments',
+        path: '/company-management/department',
         title: 'Departments',
       },
       {
