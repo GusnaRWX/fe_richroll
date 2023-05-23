@@ -39,7 +39,7 @@ const EmployeePersonalInformationEdit = ({ refProp, nextPage, setValues, persona
 
 
   const [useResidentialAddress, setUseResidentialAddress] = useState(personalValues?.useResidentialAddress);
-  const [isPermanentPersonalID, setIsPermanentPersonalID] = useState(personalValues?.isPermanentPersonalID);
+  // const [isPermanentPersonalID, setIsPermanentPersonalID] = useState(personalValues?.isPermanentPersonalID);
 
   const [initialValues] = useState({
 
@@ -280,7 +280,7 @@ const EmployeePersonalInformationEdit = ({ refProp, nextPage, setValues, persona
       setErrorFields(false);
       nextPage(2);
       setIsPersonalInformationValid(true);
-      setValues({ ...values, useResidentialAddress, isPermanentPersonalID });
+      setValues({ ...values, useResidentialAddress });
     } else {
       setErrorFields(true);
       setIsPersonalInformationValid(false);
@@ -787,7 +787,7 @@ const EmployeePersonalInformationEdit = ({ refProp, nextPage, setValues, persona
             />
           </Grid>
         </Grid>
-        <Grid
+        {/* <Grid
           container
           wrap='wrap'
           alignItems='center'
@@ -802,7 +802,7 @@ const EmployeePersonalInformationEdit = ({ refProp, nextPage, setValues, persona
               onChange={() => setIsPermanentPersonalID((prev: boolean) => !prev)}
             />
           </Grid>
-        </Grid>
+        </Grid> */}
       </Box>
       <Box
         component='div'
@@ -937,7 +937,7 @@ const EmployeePersonalInformationEdit = ({ refProp, nextPage, setValues, persona
         <Grid item>
           <Button onClick={() => {
             nextPage(0);
-            setValues({ ...values, useResidentialAddress, isPermanentPersonalID });
+            setValues({ ...values, useResidentialAddress });
           }} label='Back' variant='outlined' />
         </Grid>
         <Grid item>

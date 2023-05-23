@@ -150,7 +150,7 @@ function EmployeeEditComponent() {
     swiftCodeBankInformation: dataPersonalInformation?.bank?.swiftCode,
 
     useResidentialAddress: dataPersonalInformation?.citizen?.isResident,
-    isPermanentPersonalID: dataPersonalInformation?.citizen?.isPermanent,
+    // isPermanentPersonalID: dataPersonalInformation?.citizen?.isPermanent,
 
     idExpirationDatePersonalID: dataPersonalInformation?.identity?.expiredAt,
     idNumberPersonalID: dataPersonalInformation?.identity?.number,
