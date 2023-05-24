@@ -285,23 +285,27 @@ export default function EnhancedTable(rows: any) {
                       <TableCell>
                         {dayjs(row.updatedAt).format("DD/MM/YY")}
                       </TableCell>
-                      <TableCell style={{ display: "flex", gap: "8px" }}>
-                        <IconButton
-                          parentColor="primary.50"
-                          icons={<VisibilityIcon sx={{ color: "#223567" }} />}
-                          onClick={() =>
-                            setDetailOpen({ id: row.id, open: true })
-                          }
-                        />
-                        <IconButton
-                          parentColor="primary.50"
-                          icons={<BorderColorIcon sx={{ color: "#223567" }} />}
-                        />
-                        <IconButton
-                          parentColor="red.100"
-                          icons={<DeleteIcon sx={{ color: "#EF4444" }} />}
-                          onClick={() => handleOpen(row.id)}
-                        />
+                      <TableCell>
+                        <div style={{ display: "flex", gap: "8px" }}>
+                          <IconButton
+                            parentColor="primary.50"
+                            icons={<VisibilityIcon sx={{ color: "#223567" }} />}
+                            onClick={() =>
+                              setDetailOpen({ id: row.id, open: true })
+                            }
+                          />
+                          <IconButton
+                            parentColor="primary.50"
+                            icons={
+                              <BorderColorIcon sx={{ color: "#223567" }} />
+                            }
+                          />
+                          <IconButton
+                            parentColor="red.100"
+                            icons={<DeleteIcon sx={{ color: "#EF4444" }} />}
+                            onClick={() => handleOpen(row.id)}
+                          />
+                        </div>
                       </TableCell>
                     </TableRow>
                   );

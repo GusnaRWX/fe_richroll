@@ -20,7 +20,7 @@ const modalStyle = {
   borderRadius: "8px",
   paddingTop: "10px",
   p: 2,
-  height: "100%",
+  maxHeight: "100%",
   overflowY: "auto",
 };
 
@@ -64,7 +64,7 @@ function DetailModal({
       onClose={handleClose}
       sx={{
         ".MuiModal-backdrop": {
-          background: "rgba(0,0,0,0.2)",
+          background: "rgba(0,0,0,0.75)",
         },
       }}
       keepMounted
