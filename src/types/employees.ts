@@ -95,7 +95,7 @@ export declare namespace Employees {
     dateofBirthPersonalInformation: dayjs.Dayjs | null | string;
     genderPersonalInformation: number;
     maritialStatusPersonalInformation: number;
-    numberOfDependantsPersonalInformation: string;
+    numberOfDependantsPersonalInformation: number | null;
     nationalityPersonalInformation: string;
     religionPersonalInformation: number
 
