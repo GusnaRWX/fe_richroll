@@ -1,8 +1,15 @@
 import React from "react";
-import { Box, Grid, styled, Typography, Button } from "@mui/material";
+import { Box, Grid, styled, Typography, Button, Skeleton } from "@mui/material";
+import { useAppDispatch, useAppSelectors } from "@/hooks/index";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
+import { getDetailRequested } from "@/store/reducers/slice/cnb/compensationSlice";
 
-const DetailCnb = () => {
+const DetailCnb = ({ id, open }) => {
+  const dispatch = useAppDispatch();
+  const detail = useAppSelectors((state) => state.compensation.detail?.data);
+  const detailLoading = useAppSelectors(
+    (state) => state.compensation?.detailLoading
+  );
   const TitleData = styled(Typography)({
     fontSize: "14px",
     fontWeight: "600",
@@ -14,61 +21,42 @@ const DetailCnb = () => {
     fontWeight: "400",
   });
 
+  React.useEffect(() => {
+    if (open) {
+      dispatch({
+        type: getDetailRequested.toString(),
+        Id: id,
+      });
+    }
+  }, [id, open]);
+
   return (
     <>
-      <Grid container direction="column" gap={4} xs={12} md={12}>
-        {/* name */}
-        <Grid
-          container
-          direction="row"
-          justifyContent="space-between"
-          alignItems="center"
-        >
-          <Box display="flex" flexDirection="column" gap="6px">
-            <TitleData>CnB Profile Name</TitleData>
-            <ItemData>Sales</ItemData>
-          </Box>
-          <Button
-            variant="contained"
-            color="secondary"
-            startIcon={<BorderColorIcon sx={{ color: "white" }} />}
+      {!detailLoading ? (
+        <Grid container direction="column" gap={4} xs={12} md={12}>
+          {/* name */}
+          <Grid
+            container
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
           >
-            <Typography fontSize={14} color="white">
-              Edit
-            </Typography>
-          </Button>
-        </Grid>
+            <Box display="flex" flexDirection="column" gap="6px">
+              <TitleData>CnB Profile Name</TitleData>
+              <ItemData>{detail?.name}</ItemData>
+            </Box>
+            <Button
+              variant="contained"
+              color="secondary"
+              startIcon={<BorderColorIcon sx={{ color: "white" }} />}
+            >
+              <Typography fontSize={14} color="white">
+                Edit
+              </Typography>
+            </Button>
+          </Grid>
 
-        {/* Date */}
-        <Grid
-          container
-          direction="row"
-          justifyContent="space-between"
-          alignItems="flex-start"
-        >
-          <Grid xs={6} display="flex" flexDirection="column" gap="6px">
-            <TitleData>Date Created</TitleData>
-            <ItemData>01/02/23, 12:00</ItemData>
-          </Grid>
-          <Grid xs={6} display="flex" flexDirection="column" gap="6px">
-            <TitleData>Last Updated</TitleData>
-            <ItemData>01/02/22</ItemData>
-          </Grid>
-        </Grid>
-
-        {/* Base */}
-        <Grid
-          container
-          direction="column"
-          justifyContent="space-between"
-          alignItems="flex-start"
-          gap="16px"
-        >
-          <Grid item>
-            <Typography fontWeight={700} color="#223567">
-              Base
-            </Typography>
-          </Grid>
+          {/* Date */}
           <Grid
             container
             direction="row"
@@ -76,54 +64,108 @@ const DetailCnb = () => {
             alignItems="flex-start"
           >
             <Grid xs={6} display="flex" flexDirection="column" gap="6px">
-              <TitleData>Compensation Component</TitleData>
-              <ItemData>Wage</ItemData>
+              <TitleData>Date Created</TitleData>
+              <ItemData>01/02/23, 12:00</ItemData>
             </Grid>
             <Grid xs={6} display="flex" flexDirection="column" gap="6px">
-              <TitleData>Tax Status</TitleData>
-              <ItemData>Taxable</ItemData>
+              <TitleData>Last Updated</TitleData>
+              <ItemData>01/02/22</ItemData>
             </Grid>
           </Grid>
-          <Grid display="flex" flexDirection="column" gap="6px">
-            <TitleData>Rate per Hour</TitleData>
-            <ItemData>Rp 30.000,00</ItemData>
-          </Grid>
-        </Grid>
 
-        {/* Supplement */}
-        <Grid
-          container
-          direction="column"
-          justifyContent="space-between"
-          alignItems="flex-start"
-          gap="16px"
-        >
-          <Grid item>
-            <Typography fontWeight={700} color="#223567">
-              Supplementary
-            </Typography>
-          </Grid>
+          {/* Base */}
           <Grid
             container
-            direction="row"
+            direction="column"
             justifyContent="space-between"
             alignItems="flex-start"
+            gap="16px"
           >
-            <Grid xs={6} display="flex" flexDirection="column" gap="6px">
-              <TitleData>Compensation Component 1</TitleData>
-              <ItemData>Transportation Allowance</ItemData>
+            <Grid item>
+              <Typography fontWeight={700} color="#223567">
+                Base
+              </Typography>
             </Grid>
-            <Grid xs={6} display="flex" flexDirection="column" gap="6px">
-              <TitleData>Tax Status</TitleData>
-              <ItemData>NTaxable</ItemData>
+            <Grid
+              container
+              direction="row"
+              justifyContent="space-between"
+              alignItems="flex-start"
+            >
+              <Grid xs={6} display="flex" flexDirection="column" gap="6px">
+                <TitleData>Compensation Component</TitleData>
+                <ItemData>Wage</ItemData>
+              </Grid>
+              <Grid xs={6} display="flex" flexDirection="column" gap="6px">
+                <TitleData>Tax Status</TitleData>
+                <ItemData>
+                  {detail?.baseCompensation[0]?.taxStatus
+                    ? "Taxable"
+                    : "NTaxable"}
+                </ItemData>
+              </Grid>
+            </Grid>
+            <Grid display="flex" flexDirection="column" gap="6px">
+              <TitleData>
+                {detail?.baseCompensation[0]?.amount ? "Amount" : "Rate"} per
+                Hour
+              </TitleData>
+              <ItemData>
+                Rp&nbsp;
+                {detail?.baseCompensation[0]?.amount ||
+                  detail?.baseCompensation[0]?.rate}
+              </ItemData>
             </Grid>
           </Grid>
-          <Grid display="flex" flexDirection="column" gap="6px">
-            <TitleData>Amount per Month</TitleData>
-            <ItemData>Rp 500.000,00</ItemData>
-          </Grid>
+
+          {/* Supplement */}
+          {detail?.supplementaryCompensation.map(
+            (supplement: any, i: number) => (
+              <Grid
+                key={i}
+                container
+                direction="column"
+                justifyContent="space-between"
+                alignItems="flex-start"
+                gap="16px"
+              >
+                <Grid item>
+                  <Typography fontWeight={700} color="#223567">
+                    Supplementary
+                  </Typography>
+                </Grid>
+                <Grid
+                  container
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="flex-start"
+                >
+                  <Grid xs={6} display="flex" flexDirection="column" gap="6px">
+                    <TitleData>Compensation Component {i}</TitleData>
+                    <ItemData>Transportation Allowance</ItemData>
+                  </Grid>
+                  <Grid xs={6} display="flex" flexDirection="column" gap="6px">
+                    <TitleData>Tax Status</TitleData>
+                    <ItemData>
+                      {supplement?.taxStatus ? "Taxable" : "NTaxable"}
+                    </ItemData>
+                  </Grid>
+                </Grid>
+                <Grid display="flex" flexDirection="column" gap="6px">
+                  <TitleData>
+                    {supplement?.amount ? "Amount" : "Rate"} per Month
+                  </TitleData>
+                  <ItemData>
+                    Rp {supplement?.amount || supplement?.rate}
+                  </ItemData>
+                </Grid>
+              </Grid>
+            )
+          )}
         </Grid>
-      </Grid>
+      ) : (
+        <Skeleton variant="rounded" height={100} />
+      )}
     </>
   );
 };

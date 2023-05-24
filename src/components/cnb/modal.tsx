@@ -65,6 +65,8 @@ function DetailModal({
           background: "rgba(0,0,0,0.2)",
         },
       }}
+      keepMounted
+      disableAutoFocus
     >
       <Box sx={modalStyle}>
         <ModalHeader>

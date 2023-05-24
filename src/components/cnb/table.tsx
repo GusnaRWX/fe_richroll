@@ -229,7 +229,7 @@ export default function EnhancedTable(rows: any) {
     setDeleteConfirmation(false);
   };
 
-  const [detailOpen, setDetailOpen] = React.useState<boolean>(false);
+  const [detailOpen, setDetailOpen] = React.useState({ id: 0, open: false });
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -287,7 +287,9 @@ export default function EnhancedTable(rows: any) {
                         <IconButton
                           parentColor="primary.50"
                           icons={<VisibilityIcon sx={{ color: "#223567" }} />}
-                          onClick={() => setDetailOpen(true)}
+                          onClick={() =>
+                            setDetailOpen({ id: row.id, open: true })
+                          }
                         />
                         <IconButton
                           parentColor="primary.50"
@@ -312,10 +314,17 @@ export default function EnhancedTable(rows: any) {
 
                       {/* Detail */}
                       <DetailModal
-                        open={detailOpen}
-                        handleClose={() => setDetailOpen(false)}
+                        open={detailOpen.open}
+                        handleClose={() =>
+                          setDetailOpen({ id: 0, open: false })
+                        }
                         title="CnB Profile Detail"
-                        content={<DetailCnb />}
+                        content={
+                          <DetailCnb
+                            id={detailOpen.id}
+                            open={detailOpen.open}
+                          />
+                        }
                       />
                     </TableRow>
                   );

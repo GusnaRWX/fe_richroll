@@ -1,22 +1,26 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { HYDRATE } from 'next-redux-wrapper';
+import { createSlice } from "@reduxjs/toolkit";
+import { HYDRATE } from "next-redux-wrapper";
 
 interface CnbState {
   loading: boolean;
   dataTable: [];
   compensationComponentOption: [];
   rerender: boolean;
+  detail: [];
+  detailLoading: boolean;
 }
 
 const initialState: CnbState = {
   loading: false,
   dataTable: [],
   compensationComponentOption: [],
-  rerender: false
+  rerender: false,
+  detail: [],
+  detailLoading: false,
 };
 
 export const cnbSlice = createSlice({
-  name: 'cnbTable',
+  name: "cnbTable",
   initialState,
   reducers: {
     // Get Table Item
@@ -54,7 +58,7 @@ export const cnbSlice = createSlice({
       state.loading = false;
     },
 
-    // Create New CNB Profile
+    // Delete CNB Profile
     deleteCompensationRequested: (state) => {
       state.loading = true;
     },
@@ -65,6 +69,18 @@ export const cnbSlice = createSlice({
     deleteCompensationFailed: (state) => {
       state.loading = false;
       state.rerender = !state.rerender;
+    },
+
+    // Delete CNB Profile
+    getDetailRequested: (state) => {
+      state.detailLoading = true;
+    },
+    getDetailSuccess: (state, action) => {
+      state.detailLoading = false;
+      state.detail = action.payload;
+    },
+    getDetailFailed: (state) => {
+      state.detailLoading = false;
     },
   },
   extraReducers: {
@@ -90,6 +106,9 @@ export const {
   deleteCompensationRequested,
   deleteCompensationSuccess,
   deleteCompensationFailed,
+  getDetailRequested,
+  getDetailSuccess,
+  getDetailFailed,
 } = cnbSlice.actions;
 
 export default cnbSlice.reducer;

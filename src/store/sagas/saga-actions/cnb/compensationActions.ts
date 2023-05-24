@@ -1,17 +1,17 @@
-import { post, get } from '@/utils/services';
-import axios, { AxiosHeaderValue } from 'axios';
-import { config } from '@config';
-import { getStorage } from '@/utils/storage';
+import { post, get } from "@/utils/services";
+import axios, { AxiosHeaderValue } from "axios";
+import { config } from "@config";
+import { getStorage } from "@/utils/storage";
 
 const service = axios.create({
-  baseURL: config.API_URL || 'http://localhost',
+  baseURL: config.API_URL || "http://localhost",
   headers: {
     Authorization: {
       toString() {
-        return `Bearer ${getStorage('accessToken')}`;
-      }
-    } as AxiosHeaderValue
-  }
+        return `Bearer ${getStorage("accessToken")}`;
+      },
+    } as AxiosHeaderValue,
+  },
 });
 
 // Get Table Data
@@ -23,11 +23,14 @@ export const getCompensationComponentOption = () => {
   return get(`compensation_components`);
 };
 // Create New CNB Profile
-// eslint-disable-next-line @typescript-eslint/ban-types
 export const postNewCnbProfile = (Payload: Object) => {
   return post(`compensation_benefits`, Payload);
 };
 // Delete CNB
 export const deleteCnbProfile = (Id: string) => {
   return service.delete(`compensation_benefits/${Id}`);
+};
+// Get Detail
+export const getDetailCnb = (Id: string) => {
+  return get(`compensation_benefits/detail/${Id}`);
 };
