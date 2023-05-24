@@ -41,13 +41,15 @@ const ModalBtnWrapper = MuiStyled(Box)(({
 interface FileUploadModalProps {
   open: boolean;
   handleClose?: () => void,
-  onChange?: React.ChangeEventHandler<HTMLInputElement>
+  onChange?: React.ChangeEventHandler<HTMLInputElement>,
+  onCapture?: () => void
 }
 
 function FileUploadModal({
   open,
   handleClose,
-  onChange
+  onChange,
+  onCapture
 }: FileUploadModalProps) {
   return (
     <Modal
@@ -74,11 +76,11 @@ function FileUploadModal({
             accept='image/'
           />
           <label htmlFor='input-file'>
-            <MuiButton component='span' fullWidth size='small' variant='outlined'>
+            <MuiButton sx={{ paddingLeft: '.9rem', paddingRight: '.9rem' }} component='span' fullWidth size='small' variant='outlined'>
               <BsFileEarmarkPlus /> &nbsp; Browse File
             </MuiButton>
           </label>
-          <MuiButton size='small' variant='outlined'>
+          <MuiButton onClick={onCapture} size='small' variant='outlined'>
             <AiOutlineCamera /> &nbsp; Take A Photo
           </MuiButton>
         </ModalBtnWrapper>

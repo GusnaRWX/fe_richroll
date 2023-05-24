@@ -1,11 +1,14 @@
 /* eslint-disable no-unused-vars */
-import React, { HTMLAttributes, useState } from 'react';
+import React, { HTMLAttributes, useState, useCallback, useRef } from 'react';
 import {
   Grid,
   Typography,
   Box,
-  SelectChangeEvent
+  SelectChangeEvent,
+  IconButton,
+  Modal
 } from '@mui/material';
+import Webcam from 'react-webcam';
 import { Input, Button, Select as CustomSelect, CheckBox, DatePicker, FileUploadModal } from '@/components/_shared/form';
 import { styled as MuiStyled } from '@mui/material/styles';
 import { Image as ImageType } from '@/utils/assetsConstant';
@@ -13,12 +16,18 @@ import styled from '@emotion/styled';
 import { useAppSelectors, useAppDispatch } from '@/hooks/index';
 import dayjs from 'dayjs';
 import { Alert, Text } from '@/components/_shared/common';
-import CancelIcon from '@mui/icons-material/Cancel';
+import { CameraAlt, Cancel } from '@mui/icons-material';
 import { Employees } from '@/types/employees';
 import { validationSchemeEmployeeInformation } from './validate';
 import { useFormik } from 'formik';
-import { convertImageParams, getCompanyData } from '@/utils/helper';
+import { convertImageParams, getCompanyData, base64ToFile, randomCode } from '@/utils/helper';
 import { getListPositionRequested } from '@/store/reducers/slice/options/optionSlice';
+
+const videoConstraints = {
+  width: 500,
+  height: 720,
+  facingMode: 'user'
+};
 
 
 const AsteriskComponent = MuiStyled('span')(({ theme }) => ({
@@ -44,6 +53,27 @@ const NextBtnWrapper = MuiStyled(Box)(({
   marginTop: '2rem'
 }));
 
+const modalStyleCamera = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: '30%',
+  bgcolor: 'background.paper',
+  border: '1px solid #E5E7EB',
+  borderRadius: '8px',
+  paddingTop: '.2rem',
+  paddingRight: '.5rem',
+  paddingLeft: '.5rem'
+};
+
+const ContentCameraWrapper = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center'
+};
+
 interface ImagePriviewProps extends HTMLAttributes<HTMLDivElement> {
   image?: string;
 }
@@ -68,6 +98,20 @@ interface EmployeeProps {
 }
 
 function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, setIsInformationValid }: EmployeeProps) {
+  const [isCaptureEnable, setCaptureEnable] = useState<boolean>(false);
+  const webcamRef = useRef<Webcam>(null);
+  const [openCamera, setOpenCamera] = useState(false);
+  const capture = useCallback(() => {
+    const imageSrc = webcamRef.current?.getScreenshot();
+    if (imageSrc) {
+      setImages(imageSrc);
+      const nameFile = randomCode(5);
+      const fileImage = base64ToFile(imageSrc, nameFile);
+      formik.setFieldValue('picture', fileImage);
+      handleClose();
+      handleCloseCamera();
+    }
+  }, [webcamRef]);
   const dispatch = useAppDispatch();
   const [open, setOpen] = useState(false);
   const { listDepartment, listPosition } = useAppSelectors(state => state.option);
@@ -121,6 +165,16 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, set
     }
   ];
 
+  const handleOpenCamera = () => {
+    setCaptureEnable(true);
+    setOpenCamera(true);
+  };
+
+  const handleCloseCamera = () => {
+    setCaptureEnable(false);
+    setOpenCamera(false);
+  };
+
   return (
     <div>
       {
@@ -128,7 +182,7 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, set
           <Alert
             severity='error'
             content='Please fill in all the mandatory fields'
-            icon={<CancelIcon />}
+            icon={<Cancel />}
           />
         )
       }
@@ -325,7 +379,46 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, set
         open={open}
         handleClose={handleClose}
         onChange={(e) => formik.setFieldValue('picture', convertImageParams('picture', !e.target.files ? null : e.target.files[0], setImages, handleClose), false)}
+        onCapture={handleOpenCamera}
       />
+      <Modal
+        open={openCamera}
+        onClose={handleCloseCamera}
+        keepMounted
+      >
+        <Box sx={modalStyleCamera}>
+          {
+            isCaptureEnable && (
+              <>
+                <Box sx={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'flex-end',
+                  marginBottom: '.5rem'
+                }}>
+                  <IconButton onClick={handleCloseCamera}>
+                    <Cancel />
+                  </IconButton>
+                </Box>
+                <Box sx={ContentCameraWrapper}>
+                  <Webcam
+                    audio={false}
+                    width={600}
+                    height={360}
+                    ref={webcamRef}
+                    screenshotFormat='image/jpeg'
+                    videoConstraints={videoConstraints}
+                  />
+                  <IconButton onClick={capture} sx={{ marginTop: '.5rem' }}>
+                    <CameraAlt sx={{ fontSize: '30px' }}/>
+                  </IconButton>
+                </Box>
+              </>
+            )
+          }
+        </Box>
+      </Modal>
     </div>
   );
 }
