@@ -220,13 +220,15 @@ export default function EnhancedTable(rows: any) {
     [order, orderBy, page, rowsPerPage]
   );
 
-  const [DeleteConfirmation, setDeleteConfirmation] =
-    React.useState<boolean>(false);
-  const handleOpen = () => {
-    setDeleteConfirmation(true);
+  const [DeleteConfirmation, setDeleteConfirmation] = React.useState({
+    open: false,
+    id: 0,
+  });
+  const handleOpen = (id: number) => {
+    setDeleteConfirmation({ open: true, id: id });
   };
   const handleClose = () => {
-    setDeleteConfirmation(false);
+    setDeleteConfirmation({ open: false, id: 0 });
   };
 
   const [detailOpen, setDetailOpen] = React.useState({ id: 0, open: false });
@@ -298,18 +300,18 @@ export default function EnhancedTable(rows: any) {
                         <IconButton
                           parentColor="red.100"
                           icons={<DeleteIcon sx={{ color: "#EF4444" }} />}
-                          onClick={() => handleOpen()}
+                          onClick={() => handleOpen(row.id)}
                         />
                       </TableCell>
                       {/* Delete */}
                       <ConfirmationModal
-                        open={DeleteConfirmation}
+                        open={DeleteConfirmation.open}
                         handleClose={handleClose}
                         title="Are you sure you want to delete this record?"
                         content="Any unsaved changes will be discarded. This cannot be undone"
                         withCallback
                         noChange={true}
-                        callback={() => deleteCnb(row.id)}
+                        callback={() => deleteCnb(DeleteConfirmation.id)}
                       />
 
                       {/* Detail */}
