@@ -153,7 +153,7 @@ const DetailCnb = ({ id, open }) => {
                   alignItems="flex-start"
                 >
                   <Grid xs={6} display="flex" flexDirection="column" gap="6px">
-                    <TitleData>Compensation Component {i}</TitleData>
+                    <TitleData>Compensation Component {i + 1}</TitleData>
                     <ItemData>Transportation Allowance</ItemData>
                   </Grid>
                   <Grid xs={6} display="flex" flexDirection="column" gap="6px">

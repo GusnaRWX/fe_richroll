@@ -20,6 +20,8 @@ const modalStyle = {
   borderRadius: "8px",
   paddingTop: "10px",
   p: 2,
+  height: "100%",
+  overflowY: "auto",
 };
 
 const ModalHeader = styled.div`
