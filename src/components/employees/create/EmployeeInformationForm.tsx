@@ -134,18 +134,24 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, set
     },
     validationSchema: validationSchemeEmployeeInformation,
     onSubmit: (values, { setErrors }) => {
-      const allInfoValues = {
-        ...values,
-        companyID: getCompanyData()?.id as string,
-        images: String(images)
-      };
-      setValues(allInfoValues);
-      nextPage(1);
-      setIsInformationValid(true);
-      setErrors({});
+      handleSubmit(values, setErrors);
     }
   });
 
+  const handleSubmit = (val, setErrors) => {
+    const allInfoValues = {
+      ...val,
+      companyID: getCompanyData()?.id as string,
+      images: String(images)
+    };
+    setValues(allInfoValues);
+    nextPage(1);
+    setIsInformationValid(true);
+    setErrors({});
+  };
+
+
+  console.log(formik.values.picture);
   const handleOpen = () => {
     setOpen(true);
   };
@@ -174,6 +180,8 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, set
     setCaptureEnable(false);
     setOpenCamera(false);
   };
+
+  console.log(formik.errors);
 
   return (
     <div>
@@ -411,7 +419,7 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, set
                     videoConstraints={videoConstraints}
                   />
                   <IconButton onClick={capture} sx={{ marginTop: '.5rem' }}>
-                    <CameraAlt sx={{ fontSize: '30px' }}/>
+                    <CameraAlt sx={{ fontSize: '30px' }} />
                   </IconButton>
                 </Box>
               </>
