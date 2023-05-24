@@ -213,14 +213,6 @@ function LeaveSummaryTable({
                     <TableCell>{item.type}</TableCell>
                     <TableCell>{item.date}</TableCell>
                     <TableCell>
-                      {/* {item.isActive ? (
-                        <Chip color="secondary" label="active" />
-                      ) : (
-                        <Chip
-                          label="Non Active"
-                          sx={{ backgroundColor: "#FEE2E2" }}
-                        />
-                      )} */}
                       {item.period}
                     </TableCell>
                     <TableCell>

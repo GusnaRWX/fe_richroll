@@ -143,7 +143,7 @@ export default function CreateLeaveApplicationComponent() {
             parentColor="primary.500"
             icons={<ArrowBack sx={{ color: "#FFFFFF" }} />}
             onClick={() => {
-              router.push("/attendance&leave/leave-summary");
+              router.push("/attendance-leave/leave-summary");
             }}
           />
           <Typography
@@ -166,7 +166,7 @@ export default function CreateLeaveApplicationComponent() {
             sx={{ mr: "12px" }}
             color="primary"
             onClick={() => {
-              router.push("/attendance&leave/leave-summary");
+              router.push("/attendance-leave/leave-summary");
             }}
           />
           <Button
