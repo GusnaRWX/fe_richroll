@@ -107,6 +107,18 @@ export const convertImageParams = (name, value, callback?, onClose?) => {
   return obj;
 };
 
+export const randomCode = (length: number) => {
+  let result = '';
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const charactersLength = characters.length;
+  let counter = 0;
+  while (counter < length) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    counter += 1;
+  }
+  return result;
+};
+
 export const base64ToFile = (base64String: string | undefined, fileName: string): File | null => {
   if (!base64String) {
     return null;
@@ -131,8 +143,8 @@ export const base64ToFile = (base64String: string | undefined, fileName: string)
 
 
 /**
- * Handle for read message from Validation response 
- * 
+ * Handle for read message from Validation response
+ *
  */
 export const readValidationResponse = (validationResponse: Array<string>) => {
   return validationResponse.flatMap(value => {
