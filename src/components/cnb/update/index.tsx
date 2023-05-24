@@ -33,7 +33,7 @@ import { getCompanyData } from "@/utils/helper";
 import { FieldArray, Form as FormikForm, Formik } from "formik";
 import * as Yup from "yup";
 
-export default function CreateCNBComponent() {
+export default function UpdateCNBComponent() {
   const router = useRouter();
   const companyData = getCompanyData();
   const dispatch = useAppDispatch();
@@ -246,26 +246,9 @@ export default function CreateCNBComponent() {
                   width: "250px",
                 }}
               >
-                Create New CnB Profile
+                Update Profile
               </Typography>
             </HeaderPageTitle>
-            <NextBtnWrapper>
-              <Button
-                fullWidth={false}
-                size="small"
-                label="Cancel"
-                variant="outlined"
-                sx={{ mr: "12px" }}
-                color="primary"
-              />
-              <Button
-                fullWidth={false}
-                size="small"
-                label="Save"
-                color="primary"
-                type="submit"
-              />
-            </NextBtnWrapper>
           </Header>
           <Paper sx={{ width: "100%", p: "21px 32px" }}>
             <Form style={{ marginBottom: "32px" }}>
@@ -611,20 +594,8 @@ export default function CreateCNBComponent() {
                                   <TextField
                                     fullWidth
                                     type="number"
-                                    // error={
-                                    //   formik.touched.supplementary[i]
-                                    //     ?.rateOrAmount &&
-                                    //   Boolean(
-                                    //     formik.errors.supplementary[i]
-                                    //       ?.rateOrAmount
-                                    //   )
-                                    // }
-                                    // helperText={
-                                    //   formik.touched.supplementary![i]
-                                    //     ?.rateOrAmount &&
-                                    //   formik.errors.supplementary![i]
-                                    //     ?.rateOrAmount
-                                    // }
+                                    // error={formik.touched.supplementary[i]?.rateOrAmount&&Boolean(formik.errors.supplementary[i]?.rateOrAmount)}
+                                    // helperText={formik.touched.supplementary![i]?.rateOrAmount&&formik.errors.supplementary![i]rateOrAmount}
                                     value={
                                       formik.values.supplementary[i]
                                         ?.rateOrAmount
@@ -652,13 +623,7 @@ export default function CreateCNBComponent() {
                                 <Grid item xs={3} md={3} lg={3} xl={3}>
                                   <FormControl
                                     fullWidth
-                                    // error={
-                                    //   formik.touched.supplementary![i]
-                                    //     ?.period &&
-                                    //   Boolean(
-                                    //     formik.errors.supplementary![i]?.period
-                                    //   )
-                                    // }
+                                    // error={formik.touched.supplementary![i]?.period &&Boolean(formik.errors.supplementary![i]?.period)}
                                   >
                                     <Select
                                       fullWidth
@@ -690,22 +655,41 @@ export default function CreateCNBComponent() {
                         </Form>
                       </>
                     )}
-                    <AddButton
-                      color="secondary"
-                      startIcon={<AddIcon />}
-                      label="Add Supplementary Compensation"
-                      onClick={() =>
-                        arrayHelper.insert(
-                          formik.values.supplementary.length + 1,
-                          {
-                            compensationComponentId: "",
-                            period: "",
-                            rateOrAmount: "",
-                            taxStatus: "",
-                          }
-                        )
-                      }
-                    />
+                    <section>
+                      <AddButton
+                        color="secondary"
+                        startIcon={<AddIcon />}
+                        label="Add Supplementary Compensation"
+                        onClick={() =>
+                          arrayHelper.insert(
+                            formik.values.supplementary.length + 1,
+                            {
+                              compensationComponentId: "",
+                              period: "",
+                              rateOrAmount: "",
+                              taxStatus: "",
+                            }
+                          )
+                        }
+                      />
+                      <NextBtnWrapper>
+                        <Button
+                          fullWidth={false}
+                          size="small"
+                          label="Cancel"
+                          variant="outlined"
+                          sx={{ mr: "12px" }}
+                          color="primary"
+                        />
+                        <Button
+                          fullWidth={false}
+                          size="small"
+                          label="Save"
+                          color="primary"
+                          type="submit"
+                        />
+                      </NextBtnWrapper>
+                    </section>
                   </div>
                 );
               }}

@@ -29,6 +29,7 @@ import { deleteCompensationRequested } from "@/store/reducers/slice/cnb/compensa
 import dayjs from "dayjs";
 import DetailModal from "./modal";
 import DetailCnb from "./detail";
+import { useRouter } from "next/router";
 
 interface Data {
   name: string;
@@ -172,6 +173,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 }
 
 export default function EnhancedTable(rows: any) {
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<keyof Data>("createdAt");
@@ -298,6 +300,11 @@ export default function EnhancedTable(rows: any) {
                             parentColor="primary.50"
                             icons={
                               <BorderColorIcon sx={{ color: "#223567" }} />
+                            }
+                            onClick={() =>
+                              router.push(
+                                `/compensation-benefits/update?id=${row.id}`
+                              )
                             }
                           />
                           <IconButton
