@@ -1,15 +1,7 @@
 import * as Yup from 'yup';
 
 export const validationSchemeEmployeeInformation = Yup.object({
-  picture: Yup.mixed().test('imageValidate', 'This field is required', function (value: unknown) {
-    if (!value || (value as []).length === 0) {
-      return this.createError({
-        path: 'picture',
-        message: 'This field is required'
-      });
-    }
-    return true;
-  }),
+  picture: Yup.mixed().notRequired(),
   fullName: Yup.string().required('This field is required'),
   nickname: Yup.string().notRequired(),
   phoneNumberPrefix: Yup.string().notRequired(),
@@ -18,6 +10,7 @@ export const validationSchemeEmployeeInformation = Yup.object({
     .typeError('Phone number should be a number'),
   email: Yup.string().email('Email should be valid').required('Email is required'),
   startDate: Yup.date().typeError('This field is required').required(),
+  endDate: Yup.string().notRequired(),
   isPermanent: Yup.bool().notRequired(),
   department: Yup.string().notRequired(),
   position: Yup.string().notRequired(),
