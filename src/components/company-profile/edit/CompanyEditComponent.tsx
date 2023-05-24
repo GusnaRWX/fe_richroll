@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Box,
   Grid,
@@ -18,6 +18,11 @@ import { useRouter } from 'next/router';
 import { getCompanyData } from '@/utils/helper';
 import { useFormik } from 'formik';
 import { validationSchemeCompanyProfile } from './validate';
+import {
+  administrativeFirstLevelRequested,
+  administrativeSecondLevelRequested,
+  administrativeThirdLevelRequsted
+} from '@/store/reducers/slice/options/optionSlice';
 
 const ButtonWrapper = styled(Box)(({
   display: 'flex',
@@ -66,6 +71,22 @@ function a11yProps(index: number) {
   };
 }
 
+function ifEmptyReplace(check, replace) {
+  if (!check || !check.length) {
+    return replace;
+  } else {
+    return check;
+  }
+}
+
+function ifThen(check, isTrue, isFalse) {
+  if (!check) {
+    return isFalse;
+  } else {
+    return isTrue;
+  }
+}
+
 const CompanyEditComponent = ({ detail, companyType, companySector, bank, paymentMethod, countries }: CompanyEdit.Component) => {
   const [tabSelected, setTabSelected] = useState(0);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -108,15 +129,15 @@ const CompanyEditComponent = ({ detail, companyType, companySector, bank, paymen
       isMonthly: !!detail?.payroll?.monthly,
       isWeekly: !!detail?.payroll?.weekly,
       isBiWeekly: !!detail?.payroll?.biWeekly,
-      monthlyPeriodStart: detail?.payroll?.monthly ? detail?.payroll?.monthly?.periodStart : '',
-      monthlyPeriodEnd: detail?.payroll?.monthly ? detail?.payroll?.monthly?.periodEnd : '',
-      monthlyPayrollDate: detail?.payroll?.monthly ? detail?.payroll?.monthly?.payrollDate : '',
-      monthlyMethod: detail?.payroll?.monthly ? detail?.payroll?.monthly?.method?.id : '',
-      weeklyPeriod: detail?.payroll?.weekly ? detail?.payroll?.weekly?.period : '',
-      weeklyMethod: detail?.payroll?.weekly ? detail?.payroll?.weekly?.method?.id : '',
-      biWeeklyPeriod: detail?.payroll?.biWeekly ? detail?.payroll?.biWeekly?.period : '',
-      biWeeklyPeriodWeek: detail?.payroll?.biWeekly ? detail?.payroll?.biWeekly?.periodWeek : '',
-      biWeeklyMethod: detail?.payroll?.biWeekly ? detail?.payroll?.biWeekly?.method?.id : ''
+      monthlyPeriodStart: ifThen(!!detail?.payroll?.monthly, detail?.payroll?.monthly?.periodStart, ''),
+      monthlyPeriodEnd: ifThen(!!detail?.payroll?.monthly, detail?.payroll?.monthly?.periodEnd, ''),
+      monthlyPayrollDate: ifThen(!!detail?.payroll?.monthly, detail?.payroll?.monthly?.payrollDate, ''),
+      monthlyMethod: ifThen(!!detail?.payroll?.monthly, detail?.payroll?.monthly?.method?.id, ''),
+      weeklyPeriod: ifThen(!!detail?.payroll?.weekly, detail?.payroll?.weekly?.period, ''),
+      weeklyMethod: ifThen(!!detail?.payroll?.weekly, detail?.payroll?.weekly?.method?.id, ''),
+      biWeeklyPeriod: ifThen(!!detail?.payroll?.biWeekly, detail?.payroll?.biWeekly?.period, ''),
+      biWeeklyPeriodWeek: ifThen(!!detail?.payroll?.biWeekly, detail?.payroll?.biWeekly?.periodWeek, ''),
+      biWeeklyMethod: ifThen(!!detail?.payroll?.biWeekly, detail?.payroll?.biWeekly?.method?.id, '')
     } as Company.Detail,
     validationSchema: validationSchemeCompanyProfile,
     onSubmit: (values) => {
@@ -128,10 +149,10 @@ const CompanyEditComponent = ({ detail, companyType, companySector, bank, paymen
     const informationData = {
       typeId: val.companyType,
       name: val.companyName,
-      npwp: val.companyNPWP || null,
+      npwp: ifEmptyReplace(val.companyNPWP, null),
       sectorId: val.companySector,
       email: val.companyEmail,
-      phoneNumber: val.phoneNumber,
+      phoneNumber: val.phoneNumber.toString(),
       phoneNumberPrefix: val.phoneNumberPrefix,
     };
 
@@ -149,10 +170,10 @@ const CompanyEditComponent = ({ detail, companyType, companySector, bank, paymen
       bankId: val.bankBankInformation,
       accountName: val.bankAccountHolderNameBankInformation,
       accountNumber: val.bankAccoutNoBankInformation,
-      bankCode: val.bankCodeBankInformation || null,
-      branchCode: val.branchCodeBankInformation || null,
-      branchName: val.branchNameBankInformation || null,
-      swiftCode: val.swiftCodeBankInformation || null
+      bankCode: ifEmptyReplace(val.bankCodeBankInformation, null),
+      branchCode: ifEmptyReplace(val.branchCodeBankInformation, null),
+      branchName: ifEmptyReplace(val.branchNameBankInformation, null),
+      swiftCode: ifEmptyReplace(val.swiftCodeBankInformation, null)
     };
 
     let payrollData = {};
@@ -163,8 +184,6 @@ const CompanyEditComponent = ({ detail, companyType, companySector, bank, paymen
         payrollDate: val.monthlyPayrollDate,
         methodId: val.monthlyMethod,
       }}};
-    } else {
-      payrollData = {...payrollData, ...{monthly: null}};
     }
 
     if (val.isWeekly) {
@@ -172,8 +191,6 @@ const CompanyEditComponent = ({ detail, companyType, companySector, bank, paymen
         period: val.weeklyPeriod,
         methodId: val.weeklyMethod,
       }}};
-    } else {
-      payrollData = {...payrollData, ...{weekly: null}};
     }
 
     if (val.isBiWeekly) {
@@ -182,12 +199,10 @@ const CompanyEditComponent = ({ detail, companyType, companySector, bank, paymen
         periodWeek: val.biWeeklyPeriodWeek,
         methodId: val.biWeeklyMethod,
       }}};
-    } else {
-      payrollData = {...payrollData, ...{biWeekly: null}};
     }
 
     const inputData = new FormData();
-    inputData.append('picture', val?.picture?.length ? val?.picture[0] : detail?.information?.imageUrl);
+    inputData.append('picture', ifThen(val?.picture?.length, val?.picture[0], detail?.information?.imageUrl));
     inputData.append('information', JSON.stringify(informationData));
     inputData.append('address', JSON.stringify(addressData));
     inputData.append('bank', JSON.stringify(bankData));
@@ -202,6 +217,33 @@ const CompanyEditComponent = ({ detail, companyType, companySector, bank, paymen
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabSelected(newValue);
   };
+
+  useEffect(() => {
+    dispatch({
+      type: administrativeFirstLevelRequested.toString(),
+      payload: {
+        countryId: detail?.address?.country?.id
+      }
+    });
+
+    dispatch({
+      type: administrativeSecondLevelRequested.toString(),
+      payload: {
+        countryId: detail?.address?.country?.id,
+        firstLevelCode: detail?.address?.firstLevel?.code
+      }
+    });
+
+    dispatch({
+      type: administrativeThirdLevelRequsted.toString(),
+      payload: {
+        countryId: detail?.address?.country?.id,
+        firstLevelCode: detail?.address?.firstLevel?.code,
+        secondLevelCode: detail?.address?.secondLevel?.code
+      }
+    });
+
+  }, []);
 
   return (
     <>

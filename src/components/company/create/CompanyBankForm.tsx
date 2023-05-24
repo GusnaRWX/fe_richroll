@@ -35,6 +35,10 @@ interface CompanyBankProps {
   formik;
 }
 
+function compareCheck(firstArg, secondArg = true, thirdArg = true) {
+  return (firstArg && secondArg && thirdArg);
+}
+
 function CompanyBankForm ({bank, paymentMethod, formik} :CompanyBankProps) {
   const { responser } = useAppSelectors(state => state);
   const router = useRouter();
@@ -44,6 +48,17 @@ function CompanyBankForm ({bank, paymentMethod, formik} :CompanyBankProps) {
         name, value: event?.target?.checked
       }
     };
+  };
+
+  const checkPaymentMethod = (value: string) => {
+    if (value?.length === 0) {
+      return <Text title='Select Payment Method' color='grey.400' />;
+    }
+    const selectedPaymentMethod = paymentMethod.find(type => type?.['id'] === value);
+    if (selectedPaymentMethod) {
+      return `${selectedPaymentMethod?.['name']}`;
+    }
+    return null;
   };
 
   return (
@@ -56,7 +71,7 @@ function CompanyBankForm ({bank, paymentMethod, formik} :CompanyBankProps) {
         </Grid>
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
-            <FormControl fullWidth error={formik.touched.bankBankInformation && Boolean(formik.errors.bankBankInformation)}>
+            <FormControl fullWidth error={compareCheck(formik.touched.bankBankInformation, Boolean(formik.errors.bankBankInformation))}>
               <Typography sx={{ mb: '6px' }}>Bank<AsteriskComponent>*</AsteriskComponent></Typography>
               <Select
                 fullWidth
@@ -83,7 +98,7 @@ function CompanyBankForm ({bank, paymentMethod, formik} :CompanyBankProps) {
                   <MenuItem key={idx} value={val?.['id']}>{val?.['name']}</MenuItem>
                 ))}
               </Select>
-              <FormHelperText>{formik.touched.bankBankInformation && formik.errors.bankBankInformation}</FormHelperText>
+              <FormHelperText>{compareCheck(formik.touched.bankBankInformation, formik.errors.bankBankInformation)}</FormHelperText>
             </FormControl>
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
@@ -91,8 +106,8 @@ function CompanyBankForm ({bank, paymentMethod, formik} :CompanyBankProps) {
               name='bankAccountHolderNameBankInformation'
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={formik.touched.bankAccountHolderNameBankInformation && Boolean(formik.errors.bankAccountHolderNameBankInformation)}
-              helperText={formik.touched.bankAccountHolderNameBankInformation && formik.errors.bankAccountHolderNameBankInformation}
+              error={compareCheck(formik.touched.bankAccountHolderNameBankInformation, Boolean(formik.errors.bankAccountHolderNameBankInformation))}
+              helperText={compareCheck(formik.touched.bankAccountHolderNameBankInformation, formik.errors.bankAccountHolderNameBankInformation)}
               customLabel='Bank Account Holder’s Name'
               withAsterisk={true}
               size='small'
@@ -107,8 +122,8 @@ function CompanyBankForm ({bank, paymentMethod, formik} :CompanyBankProps) {
               name='bankAccoutNoBankInformation'
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={formik.touched.bankAccoutNoBankInformation && Boolean(formik.errors.bankAccoutNoBankInformation)}
-              helperText={formik.touched.bankAccoutNoBankInformation && formik.errors.bankAccoutNoBankInformation}
+              error={compareCheck(formik.touched.bankAccoutNoBankInformation, Boolean(formik.errors.bankAccoutNoBankInformation))}
+              helperText={compareCheck(formik.touched.bankAccoutNoBankInformation, formik.errors.bankAccoutNoBankInformation)}
               customLabel='Bank Account No'
               withAsterisk={true}
               size='small'
@@ -121,8 +136,8 @@ function CompanyBankForm ({bank, paymentMethod, formik} :CompanyBankProps) {
               name='bankCodeBankInformation'
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={formik.touched.bankCodeBankInformation && Boolean(formik.errors.bankCodeBankInformation)}
-              helperText={formik.touched.bankCodeBankInformation && formik.errors.bankCodeBankInformation}
+              error={compareCheck(formik.touched.bankCodeBankInformation, Boolean(formik.errors.bankCodeBankInformation))}
+              helperText={compareCheck(formik.touched.bankCodeBankInformation, formik.errors.bankCodeBankInformation)}
               customLabel='Bank Code'
               withAsterisk={false}
               size='small'
@@ -135,8 +150,8 @@ function CompanyBankForm ({bank, paymentMethod, formik} :CompanyBankProps) {
               name='branchCodeBankInformation'
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={formik.touched.branchCodeBankInformation && Boolean(formik.errors.branchCodeBankInformation)}
-              helperText={formik.touched.branchCodeBankInformation && formik.errors.branchCodeBankInformation}
+              error={compareCheck(formik.touched.branchCodeBankInformation, Boolean(formik.errors.branchCodeBankInformation))}
+              helperText={compareCheck(formik.touched.branchCodeBankInformation, formik.errors.branchCodeBankInformation)}
               customLabel='Branch Code'
               withAsterisk={false}
               size='small'
@@ -151,8 +166,8 @@ function CompanyBankForm ({bank, paymentMethod, formik} :CompanyBankProps) {
               name='branchNameBankInformation'
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={formik.touched.branchNameBankInformation && Boolean(formik.errors.branchNameBankInformation)}
-              helperText={formik.touched.branchNameBankInformation && formik.errors.branchNameBankInformation}
+              error={compareCheck(formik.touched.branchNameBankInformation, Boolean(formik.errors.branchNameBankInformation))}
+              helperText={compareCheck(formik.touched.branchNameBankInformation, formik.errors.branchNameBankInformation)}
               customLabel='Branch Name'
               withAsterisk={false}
               size='small'
@@ -165,8 +180,8 @@ function CompanyBankForm ({bank, paymentMethod, formik} :CompanyBankProps) {
               name='swiftCodeBankInformation'
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={formik.touched.swiftCodeBankInformation && Boolean(formik.errors.swiftCodeBankInformation)}
-              helperText={formik.touched.swiftCodeBankInformation && formik.errors.swiftCodeBankInformation}
+              error={compareCheck(formik.touched.swiftCodeBankInformation, Boolean(formik.errors.swiftCodeBankInformation))}
+              helperText={compareCheck(formik.touched.swiftCodeBankInformation, formik.errors.swiftCodeBankInformation)}
               customLabel='Swift Code'
               withAsterisk={false}
               size='small'
@@ -184,7 +199,7 @@ function CompanyBankForm ({bank, paymentMethod, formik} :CompanyBankProps) {
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Typography component='div' variant='text-base'>Schedule Type<AsteriskComponent>*</AsteriskComponent></Typography>
             {
-              !formik.values.isMonthly && !formik.values.isWeekly && !formik.values.isBiWeekly && (
+              compareCheck(!formik.values.isMonthly, !formik.values.isWeekly, !formik.values.isBiWeekly) && (
                 <Box>
                   <Typography component='span' fontSize='12px' color='red.500'>This field is required</Typography>
                 </Box>
@@ -223,8 +238,8 @@ function CompanyBankForm ({bank, paymentMethod, formik} :CompanyBankProps) {
                       name='monthlyPeriodStart'
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
-                      error={formik.touched.monthlyPeriodStart && Boolean(formik.errors.monthlyPeriodStart)}
-                      helperText={formik.touched.monthlyPeriodStart && formik.errors.monthlyPeriodStart}
+                      error={compareCheck(formik.touched.monthlyPeriodStart, Boolean(formik.errors.monthlyPeriodStart))}
+                      helperText={compareCheck(formik.touched.monthlyPeriodStart, formik.errors.monthlyPeriodStart)}
                       withAsterisk={true}
                       size='small'
                       value={formik.values.monthlyPeriodStart}
@@ -235,8 +250,8 @@ function CompanyBankForm ({bank, paymentMethod, formik} :CompanyBankProps) {
                       name='monthlyPeriodEnd'
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
-                      error={formik.touched.monthlyPeriodEnd && Boolean(formik.errors.monthlyPeriodEnd)}
-                      helperText={formik.touched.monthlyPeriodEnd && formik.errors.monthlyPeriodEnd}
+                      error={compareCheck(formik.touched.monthlyPeriodEnd, Boolean(formik.errors.monthlyPeriodEnd))}
+                      helperText={compareCheck(formik.touched.monthlyPeriodEnd, formik.errors.monthlyPeriodEnd)}
                       withAsterisk={true}
                       size='small'
                       value={formik.values.monthlyPeriodEnd}
@@ -249,8 +264,8 @@ function CompanyBankForm ({bank, paymentMethod, formik} :CompanyBankProps) {
                     name='monthlyPayrollDate'
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    error={formik.touched.monthlyPayrollDate && Boolean(formik.errors.monthlyPayrollDate)}
-                    helperText={formik.touched.monthlyPayrollDate && formik.errors.monthlyPayrollDate}
+                    error={compareCheck(formik.touched.monthlyPayrollDate, Boolean(formik.errors.monthlyPayrollDate))}
+                    helperText={compareCheck(formik.touched.monthlyPayrollDate, formik.errors.monthlyPayrollDate)}
                     withAsterisk={true}
                     size='small'
                     value={formik.values.monthlyPayrollDate}
@@ -261,7 +276,7 @@ function CompanyBankForm ({bank, paymentMethod, formik} :CompanyBankProps) {
               </Box>
             </Grid>
             <Grid item xs={6} md={6} lg={6} xl={6}>
-              <FormControl fullWidth error={formik.touched.monthlyMethod && Boolean(formik.errors.monthlyMethod)}>
+              <FormControl fullWidth error={compareCheck(formik.touched.monthlyMethod, Boolean(formik.errors.monthlyMethod))}>
                 <Typography sx={{ mb: '6px' }}>Default Payment Method<AsteriskComponent>*</AsteriskComponent></Typography>
                 <Select
                   fullWidth
@@ -274,21 +289,14 @@ function CompanyBankForm ({bank, paymentMethod, formik} :CompanyBankProps) {
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   renderValue={(value: string) => {
-                    if (value.length === 0) {
-                      return <Text title='Select Payment Method' color='grey.400' />;
-                    }
-                    const selectedPaymentMethod = paymentMethod.find(type => type?.['id'] === value);
-                    if (selectedPaymentMethod) {
-                      return `${selectedPaymentMethod?.['name']}`;
-                    }
-                    return null;
+                    return checkPaymentMethod(value);
                   }}
                 >
                   {paymentMethod?.map((val, idx) => (
                     <MenuItem key={idx} value={val?.['id']}>{val?.['name']}</MenuItem>
                   ))}
                 </Select>
-                <FormHelperText>{formik.touched.monthlyMethod && formik.errors.monthlyMethod}</FormHelperText>
+                <FormHelperText>{compareCheck(formik.touched.monthlyMethod, formik.errors.monthlyMethod)}</FormHelperText>
               </FormControl>
             </Grid>
           </Grid>
@@ -317,7 +325,7 @@ function CompanyBankForm ({bank, paymentMethod, formik} :CompanyBankProps) {
               </FormControl>
             </Grid>
             <Grid item xs={6} md={6} lg={6} xl={6}>
-              <FormControl fullWidth error={formik.touched.weeklyMethod && Boolean(formik.errors.weeklyMethod)}>
+              <FormControl fullWidth error={compareCheck(formik.touched.weeklyMethod, Boolean(formik.errors.weeklyMethod))}>
                 <Typography sx={{ mb: '6px' }}>Default Payment Method<AsteriskComponent>*</AsteriskComponent></Typography>
                 <Select
                   fullWidth
@@ -330,21 +338,14 @@ function CompanyBankForm ({bank, paymentMethod, formik} :CompanyBankProps) {
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   renderValue={(value: string) => {
-                    if (value.length === 0) {
-                      return <Text title='Select Payment Method' color='grey.400' />;
-                    }
-                    const selectedPaymentMethod = paymentMethod.find(type => type?.['id'] === value);
-                    if (selectedPaymentMethod) {
-                      return `${selectedPaymentMethod?.['name']}`;
-                    }
-                    return null;
+                    return checkPaymentMethod(value);
                   }}
                 >
                   {paymentMethod?.map((val, idx) => (
                     <MenuItem key={idx} value={val?.['id']}>{val?.['name']}</MenuItem>
                   ))}
                 </Select>
-                <FormHelperText>{formik.touched.weeklyMethod && formik.errors.weeklyMethod}</FormHelperText>
+                <FormHelperText>{compareCheck(formik.touched.weeklyMethod, formik.errors.weeklyMethod)}</FormHelperText>
               </FormControl>
             </Grid>
           </Grid>
@@ -390,7 +391,7 @@ function CompanyBankForm ({bank, paymentMethod, formik} :CompanyBankProps) {
               </Box>
             </Grid>
             <Grid item xs={6} md={6} lg={6} xl={6}>
-              <FormControl fullWidth error={formik.touched.biWeeklyMethod && Boolean(formik.errors.biWeeklyMethod)}>
+              <FormControl fullWidth error={compareCheck(formik.touched.biWeeklyMethod, Boolean(formik.errors.biWeeklyMethod))}>
                 <Typography sx={{ mb: '6px' }}>Default Payment Method<AsteriskComponent>*</AsteriskComponent></Typography>
                 <Select
                   fullWidth
@@ -403,21 +404,14 @@ function CompanyBankForm ({bank, paymentMethod, formik} :CompanyBankProps) {
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   renderValue={(value: string) => {
-                    if (value.length === 0) {
-                      return <Text title='Select Payment Method' color='grey.400' />;
-                    }
-                    const selectedPaymentMethod = paymentMethod.find(type => type?.['id'] === value);
-                    if (selectedPaymentMethod) {
-                      return `${selectedPaymentMethod?.['name']}`;
-                    }
-                    return null;
+                    return checkPaymentMethod(value);
                   }}
                 >
                   {paymentMethod?.map((val, idx) => (
                     <MenuItem key={idx} value={val?.['id']}>{val?.['name']}</MenuItem>
                   ))}
                 </Select>
-                <FormHelperText>{formik.touched.biWeeklyMethod && formik.errors.biWeeklyMethod}</FormHelperText>
+                <FormHelperText>{compareCheck(formik.touched.biWeeklyMethod, formik.errors.biWeeklyMethod)}</FormHelperText>
               </FormControl>
             </Grid>
           </Grid>
@@ -432,7 +426,7 @@ function CompanyBankForm ({bank, paymentMethod, formik} :CompanyBankProps) {
         )}
         <NextBtnWrapper>
           <Button onClick={() => { router.push('/company');}} fullWidth={false} size='small' label='Cancel' variant='outlined' sx={{ mr: '12px' }} color='primary'/>
-          <Button onClick={() => { formik.submitForm(); }} disabled={!formik.values.isMonthly && !formik.values.isWeekly && !formik.values.isBiWeekly} fullWidth={false} size='small' label='Save' color='primary'/>
+          <Button onClick={() => { formik.submitForm(); }} disabled={compareCheck(!formik.values.isMonthly, !formik.values.isWeekly, !formik.values.isBiWeekly)} fullWidth={false} size='small' label='Save' color='primary'/>
         </NextBtnWrapper>
       </form>
     </>
