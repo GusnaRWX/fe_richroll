@@ -119,8 +119,8 @@ const DetailCnb = ({ id, open }) => {
             </Grid>
             <Grid display="flex" flexDirection="column" gap="6px">
               <TitleData>
-                {detail?.baseCompensation[0]?.amount ? "Amount" : "Rate"} per
-                Hour
+                {detail?.baseCompensation[0]?.amount ? "Amount" : "Rate"}&nbsp;
+                {detail?.baseCompensation[0].period}
               </TitleData>
               <ItemData>
                 Rp&nbsp;
@@ -165,7 +165,8 @@ const DetailCnb = ({ id, open }) => {
                 </Grid>
                 <Grid display="flex" flexDirection="column" gap="6px">
                   <TitleData>
-                    {supplement?.amount ? "Amount" : "Rate"} per Month
+                    {supplement?.amount ? "Amount" : "Rate"}&nbsp;
+                    {supplement?.period}
                   </TitleData>
                   <ItemData>
                     Rp {supplement?.amount || supplement?.rate}
