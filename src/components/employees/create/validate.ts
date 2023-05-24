@@ -30,7 +30,7 @@ export const validationSchemePersonalInformation = Yup.object().shape({
   dateofBirthPersonalInformation: Yup.date().typeError('This field is required').required(),
   genderPersonalInformation: Yup.string().required('This field is required').oneOf(['male', 'female'], 'This field is required'),
   maritialStatusPersonalInformation: Yup.number().min(1, 'This field is required').required('This field is required'),
-  numberOfDependantsPersonalInformation: Yup.string().matches(/^[1-9][0-9]*$/, 'This field only number allowed').required('This field is required'),
+  numberOfDependantsPersonalInformation: Yup.number().required('This field is required'),
   nationalityPersonalInformation: Yup.string().required('This field is required'),
   religionPersonalInformation: Yup.string().notRequired(),
 

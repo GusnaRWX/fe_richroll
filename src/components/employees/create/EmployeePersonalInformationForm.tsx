@@ -263,6 +263,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               placeholder='Input Number of Children'
               withAsterisk
               size='small'
+              type='number'
               customLabel='Number of Children'
               value={formik.values.numberOfDependantsPersonalInformation}
               onChange={formik.handleChange}
