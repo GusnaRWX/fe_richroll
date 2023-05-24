@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Grid,
   Typography,
@@ -34,10 +34,10 @@ const TopWrapper = MuiStyled(Box)(() => ({
 }));
 
 interface TempSuplementaryType {
-  compensation: string;
+  compensation: string | number;
   tax: string;
-  rate: string;
-  period: string;
+  rate: string | number;
+  period: string | number;
 }
 
 function CnbCreateForm() {
@@ -77,6 +77,28 @@ function CnbCreateForm() {
     temp.splice(index, 1);
     setSuplementary(temp);
   };
+
+  useEffect(() => {
+    if (isEdit !== false){
+      const data: Array<{compensation: string | number, tax: string, rate: string | number, period: string | number}> = [];
+      formik.setFieldValue('baseCompensation', employee?.detailCnb?.baseCompensation[0]?.id);
+      formik.setFieldValue('baseTax', employee?.detailCnb?.baseCompensation[0]?.taxStatus === false ? 'Non-Taxable' : 'Taxable');
+      formik.setFieldValue('basePeriod', employee?.detailCnb?.baseCompensation[0]?.period);
+      formik.setFieldValue('baseRate', employee?.detailCnb?.baseCompensation[0]?.rate > 0 || employee?.detailCnb?.baseCompensation[0]?.rate !== null ? employee?.detailCnb?.baseCompensation[0]?.rate : employee?.detailCnb?.baseCompensation[0]?.amount);
+      employee?.detailCnb.supplementaryCompensation.map((item) => {
+        data.push({
+          compensation: item?.id,
+          tax: item?.taxStatus === false ?  'Non-Taxable' : 'Taxable',
+          rate: item?.rate > 0 || item?.rate !== null ? item?.rate : item?.amount,
+          period: item?.period
+        });
+      });
+      const temp = [...data];
+      console.log(temp);
+      setSuplementary(temp);
+      formik.setFieldValue('suplementary', temp);
+    }
+  }, [isEdit]);
   return (
     <>
       <Grid container mb='2rem'>
