@@ -49,6 +49,18 @@ interface CompanyInfoProps {
   setImages;
 }
 
+function ifThen(check, isTrue, isFalse) {
+  if (!check) {
+    return isFalse;
+  } else {
+    return isTrue;
+  }
+}
+
+function compareCheck(firstArg, secondArg = true, thirdArg = true) {
+  return (firstArg && secondArg && thirdArg);
+}
+
 function CompanyProfileInformationForm ({
   formik,
   companyType,
@@ -79,10 +91,10 @@ function CompanyProfileInformationForm ({
       <Typography component='h3' fontSize={18} color='primary'>Company Information</Typography>
       <form>
         <Typography variant='text-sm' component='div' color='primary' sx={{ mt: '16px' }}>Company Logo</Typography>
-        <ImageReview image={!images ? ImageType.PLACEHOLDER : images} onClick={handleOpen}/>
+        <ImageReview image={ifThen(!images, ImageType.PLACEHOLDER, images)} onClick={handleOpen}/>
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
-            <FormControl fullWidth error={formik.touched.companyType && Boolean(formik.errors.companyType)}>
+            <FormControl fullWidth error={compareCheck(formik.touched.companyType, Boolean(formik.errors.companyType))}>
               <Typography sx={{ mb: '6px' }}>Company Type<AsteriskComponent>*</AsteriskComponent></Typography>
               <Select
                 fullWidth
@@ -109,7 +121,7 @@ function CompanyProfileInformationForm ({
                   <MenuItem key={idx} value={val?.['id']}>{val?.['name']}</MenuItem>
                 ))}
               </Select>
-              <FormHelperText>{formik.touched.companyType && formik.errors.companyType}</FormHelperText>
+              <FormHelperText>{compareCheck(formik.touched.companyType, formik.errors.companyType)}</FormHelperText>
             </FormControl>
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
@@ -117,8 +129,8 @@ function CompanyProfileInformationForm ({
               name='companyName'
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={formik.touched.companyName && Boolean(formik.errors.companyName)}
-              helperText={formik.touched.companyName && formik.errors.companyName}
+              error={compareCheck(formik.touched.companyName, Boolean(formik.errors.companyName))}
+              helperText={compareCheck(formik.touched.companyName, formik.errors.companyName)}
               customLabel='Company Company Name'
               withAsterisk={true}
               size='small'
@@ -133,8 +145,8 @@ function CompanyProfileInformationForm ({
               name='companyNPWP'
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={formik.touched.companyNPWP && Boolean(formik.errors.companyNPWP)}
-              helperText={formik.touched.companyNPWP && formik.errors.companyNPWP}
+              error={compareCheck(formik.touched.companyNPWP, Boolean(formik.errors.companyNPWP))}
+              helperText={compareCheck(formik.touched.companyNPWP, formik.errors.companyNPWP)}
               customLabel='Company Company NPWP'
               withAsterisk={false}
               size='small'
@@ -143,7 +155,7 @@ function CompanyProfileInformationForm ({
             />
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
-            <FormControl fullWidth error={formik.touched.companySector && Boolean(formik.errors.companySector)}>
+            <FormControl fullWidth error={compareCheck(formik.touched.companySector, Boolean(formik.errors.companySector))}>
               <Typography sx={{ mb: '6px' }}>Company Sector<AsteriskComponent>*</AsteriskComponent></Typography>
               <Select
                 fullWidth
@@ -170,7 +182,7 @@ function CompanyProfileInformationForm ({
                   <MenuItem key={idx} value={val?.['id']}>{val?.['name']}</MenuItem>
                 ))}
               </Select>
-              <FormHelperText>{formik.touched.companySector && formik.errors.companySector}</FormHelperText>
+              <FormHelperText>{compareCheck(formik.touched.companySector, formik.errors.companySector)}</FormHelperText>
             </FormControl>
           </Grid>
         </Grid>
@@ -180,8 +192,8 @@ function CompanyProfileInformationForm ({
               name='companyEmail'
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={formik.touched.companyEmail && Boolean(formik.errors.companyEmail)}
-              helperText={formik.touched.companyEmail && formik.errors.companyEmail}
+              error={compareCheck(formik.touched.companyEmail, Boolean(formik.errors.companyEmail))}
+              helperText={compareCheck(formik.touched.companyEmail, formik.errors.companyEmail)}
               customLabel='Company Email Address'
               withAsterisk={true}
               size='small'
@@ -220,8 +232,8 @@ function CompanyProfileInformationForm ({
                   type='number'
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  error={formik.touched.phoneNumber && Boolean(formik.errors.phoneNumber)}
-                  helperText={formik.touched.phoneNumber && formik.errors.phoneNumber}
+                  error={compareCheck(formik.touched.phoneNumber, Boolean(formik.errors.phoneNumber))}
+                  helperText={compareCheck(formik.touched.phoneNumber, formik.errors.phoneNumber)}
                   withAsterisk={true}
                   size='small'
                   value={formik.values.phoneNumber}
@@ -238,7 +250,7 @@ function CompanyProfileInformationForm ({
         </Grid>
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
-            <FormControl fullWidth error={formik.touched.countryCompanyAddress && Boolean(formik.errors.countryCompanyAddress)}>
+            <FormControl fullWidth error={compareCheck(formik.touched.countryCompanyAddress, Boolean(formik.errors.countryCompanyAddress))}>
               <Typography sx={{ mb: '6px' }}>Country<AsteriskComponent>*</AsteriskComponent></Typography>
               <Select
                 fullWidth
@@ -273,11 +285,11 @@ function CompanyProfileInformationForm ({
                   <MenuItem key={item?.['label']} value={item?.['value']}>{item?.['label']}</MenuItem>
                 ))}
               </Select>
-              <FormHelperText>{formik.touched.countryCompanyAddress && formik.errors.countryCompanyAddress}</FormHelperText>
+              <FormHelperText>{compareCheck(formik.touched.countryCompanyAddress, formik.errors.countryCompanyAddress)}</FormHelperText>
             </FormControl>
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
-            <FormControl fullWidth error={formik.touched.provinceCompanyAddress && Boolean(formik.errors.provinceCompanyAddress)}>
+            <FormControl fullWidth error={compareCheck(formik.touched.provinceCompanyAddress, Boolean(formik.errors.provinceCompanyAddress))}>
               <Typography sx={{ mb: '6px' }}>Province<AsteriskComponent>*</AsteriskComponent></Typography>
               <Select
                 fullWidth
@@ -313,13 +325,13 @@ function CompanyProfileInformationForm ({
                   <MenuItem key={item?.['label']} value={item?.['value']}>{item?.['label']}</MenuItem>
                 ))}
               </Select>
-              <FormHelperText>{formik.touched.provinceCompanyAddress && formik.errors.provinceCompanyAddress}</FormHelperText>
+              <FormHelperText>{compareCheck(formik.touched.provinceCompanyAddress, formik.errors.provinceCompanyAddress)}</FormHelperText>
             </FormControl>
           </Grid>
         </Grid>
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
-            <FormControl fullWidth error={formik.touched.cityCompanyAddress && Boolean(formik.errors.cityCompanyAddress)}>
+            <FormControl fullWidth error={compareCheck(formik.touched.cityCompanyAddress, Boolean(formik.errors.cityCompanyAddress))}>
               <Typography sx={{ mb: '6px' }}>City<AsteriskComponent>*</AsteriskComponent></Typography>
               <Select
                 fullWidth
@@ -356,7 +368,7 @@ function CompanyProfileInformationForm ({
                   <MenuItem key={item?.['label']} value={item?.['value']}>{item?.['label']}</MenuItem>
                 ))}
               </Select>
-              <FormHelperText>{formik.touched.cityCompanyAddress && formik.errors.cityCompanyAddress}</FormHelperText>
+              <FormHelperText>{compareCheck(formik.touched.cityCompanyAddress, formik.errors.cityCompanyAddress)}</FormHelperText>
             </FormControl>
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
@@ -387,7 +399,7 @@ function CompanyProfileInformationForm ({
                   <MenuItem key={item?.['label']} value={item?.['value']}>{item?.['label']}</MenuItem>
                 ))}
               </Select>
-              <FormHelperText>{formik.touched.subDistrictCompanyAddress && formik.errors.subDistrictCompanyAddress}</FormHelperText>
+              <FormHelperText>{compareCheck(formik.touched.subDistrictCompanyAddress, formik.errors.subDistrictCompanyAddress)}</FormHelperText>
             </FormControl>
           </Grid>
         </Grid>
@@ -400,7 +412,7 @@ function CompanyProfileInformationForm ({
               value={formik.values.addressCompanyAddress}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={formik.touched.addressCompanyAddress ? formik.errors.addressCompanyAddress : false}
+              error={ifThen(formik.touched.addressCompanyAddress, formik.errors.addressCompanyAddress, false)}
               withAsterisk={true}
               customLabel='Street Name, Building Name'
               placeholder='Input Address Details'
@@ -411,8 +423,8 @@ function CompanyProfileInformationForm ({
               name='zipCodeCompanyAddress'
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={formik.touched.zipCodeCompanyAddress && Boolean(formik.errors.zipCodeCompanyAddress)}
-              helperText={formik.touched.zipCodeCompanyAddress && formik.errors.zipCodeCompanyAddress}
+              error={compareCheck(formik.touched.zipCodeCompanyAddress, Boolean(formik.errors.zipCodeCompanyAddress))}
+              helperText={compareCheck(formik.touched.zipCodeCompanyAddress, formik.errors.zipCodeCompanyAddress)}
               customLabel='ZIP Code'
               withAsterisk={true}
               size='small'
