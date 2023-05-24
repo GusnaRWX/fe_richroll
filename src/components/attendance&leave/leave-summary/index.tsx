@@ -1,11 +1,21 @@
 import React, { useState } from "react";
-import { Typography, Paper, Tabs, Tab, Box } from "@mui/material";
-import PendingLeaveSummaryTable from "../TableComponent/PendingTable";
-import ApprovedLeaveSummaryTable from "../TableComponent/ApprovedTable";
-import styled from "@emotion/styled";
-import { Button } from "@/components/_shared/form";
+import {
+  Typography,
+  Paper,
+  Tabs,
+  Tab,
+  Box,
+  Grid,
+  Select,
+  MenuItem,
+} from "@mui/material";
+import { Button, Input } from "@/components/_shared/form";
 import AddIcon from "@mui/icons-material/Add";
+import { Search } from "@mui/icons-material";
 import { useRouter } from "next/router";
+import BasicDatePicker from "@/components/_shared/form/DatePicker";
+import styled from "@emotion/styled";
+import LeaveSummaryTable from "./table";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -48,6 +58,13 @@ const AttendanceAndLeaveComponent = () => {
     margin-bottom: 24px;
   `;
 
+  const [search, setSearch] = useState("");
+  const handleSearch = (e) => {
+    if (e.key === "Enter") {
+      setSearch(e.target.value);
+    }
+  };
+
   return (
     <>
       <TitleWrapper>
@@ -71,17 +88,75 @@ const AttendanceAndLeaveComponent = () => {
             <Tab label="History" {...a11yProps(4)} />
           </Tabs>
         </Box>
+        <Grid
+          container
+          spacing={2}
+          style={{ alignItems: "center" }}
+          sx={{ p: 3, pb: 0 }}
+        >
+          <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
+            <Input
+              name="search"
+              size="small"
+              placeholder="Search"
+              onKeyDown={(e) => handleSearch(e)}
+              type="text"
+              InputProps={{
+                startAdornment: <Search sx={{ color: "#9CA3AF" }} />,
+              }}
+            />
+          </Grid>
+          <Grid item xs={5} sm={5} md={5} lg={5} xl={5}>
+            <Grid
+              container
+              style={{ textAlign: "center", alignItems: "center" }}
+            >
+              <Grid item xs={5.5} sm={5.5} md={5.5} lg={5.5} xl={5.5}>
+                <BasicDatePicker />
+              </Grid>
+              <Grid item xs={1} sm={1} md={1} lg={1} xl={1}>
+                -
+              </Grid>
+              <Grid item xs={5.5} sm={5.5} md={5.5} lg={5.5} xl={5.5}>
+                <BasicDatePicker sx={{ height: "15px" }} />{" "}
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item xs={2.5} sm={2.5} md={2.5} lg={2.5} xl={2.5}>
+            <Select
+              fullWidth
+              variant="outlined"
+              size="small"
+              placeholder="Sort by Status"
+            >
+              <MenuItem value="annual/paid leave">Annual/Paid Leave</MenuItem>
+              <MenuItem value="child care leave">Child Care Leave</MenuItem>
+              <MenuItem value="no pay leave">No Pay Leave</MenuItem>
+              <MenuItem value="maternirty leave">Maternity Leave</MenuItem>
+              <MenuItem value="paternity leave">Paternity Leave</MenuItem>
+              <MenuItem value="shared parental leave">
+                Shared Parental Leave
+              </MenuItem>
+              <MenuItem value="sick leave">Sick Leave</MenuItem>
+            </Select>
+          </Grid>
+        </Grid>
         <TabPanel value={value} index={0}>
-          <PendingLeaveSummaryTable tabValue={value} />
+          <LeaveSummaryTable
+            tabValue={value}
+            ApproveAction
+            DeclineAction
+            ShowDetailAction
+          />
         </TabPanel>
         <TabPanel value={value} index={1}>
-          <ApprovedLeaveSummaryTable tabValue={value} />
+          <LeaveSummaryTable tabValue={value} EditAction />
         </TabPanel>
         <TabPanel value={value} index={2}>
-          Tab Option 3
+          <LeaveSummaryTable tabValue={value} />
         </TabPanel>
         <TabPanel value={value} index={3}>
-          Tab Option 4
+          <LeaveSummaryTable tabValue={value} />
         </TabPanel>
       </Paper>
     </>

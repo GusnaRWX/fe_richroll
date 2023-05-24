@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { styled as MuiStyled } from "@mui/material/styles";
 import {
   Button,
@@ -6,9 +6,8 @@ import {
   IconButton,
   Input,
   Textarea,
+  FileUploadModal,
 } from "@/components/_shared/form";
-import AddIcon from "@mui/icons-material/Add";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { styled } from "@mui/material/styles";
 import {
   Typography,
@@ -21,11 +20,9 @@ import {
   Paper,
   Grid,
 } from "@mui/material";
-// import { DatePicker } from "@/components/_shared/form";
 import BasicDatePicker from "@/components/_shared/form/DatePicker";
 import { ArrowBack } from "@mui/icons-material";
 import { useRouter } from "next/router";
-
 export default function CreateLeaveApplicationComponent() {
   const router = useRouter();
 
@@ -95,6 +92,12 @@ export default function CreateLeaveApplicationComponent() {
     },
   });
 
+  const BrowseButton = styled("button")({
+    width: "88px",
+    border: "1px solid #cbcbcb",
+    backgroundColor: "#F4F5F7",
+  });
+
   const DummyEmployeeName = [
     { employeeId: 1, name: "Mr. A" },
     { employeeId: 2, name: "Mr. B" },
@@ -120,6 +123,16 @@ export default function CreateLeaveApplicationComponent() {
 
   const Star = () => {
     return <span style={{ color: "red" }}>*</span>;
+  };
+
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
   };
 
   return (
@@ -165,7 +178,7 @@ export default function CreateLeaveApplicationComponent() {
         </NextBtnWrapper>
       </Header>
       <Paper style={{ padding: "21px 32px" }}>
-        <Form>
+        <Form onSubmit={(e) => e.preventDefault()}>
           <Grid container spacing={2} rowSpacing={4}>
             <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
               <Typography style={{ fontSize: "14px", marginBottom: "6px" }}>
@@ -265,8 +278,23 @@ export default function CreateLeaveApplicationComponent() {
             </Grid>
             <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
               Browse For Upload File (On Progress)
+              <div style={{ display: "flex" }} onClick={handleOpen}>
+                <Input
+                  inputProps={{ readOnly: true }}
+                  size="small"
+                  placeholder="Choose File"
+                ></Input>
+                <BrowseButton>
+                  <Typography style={{ fontSize: "14px" }}>Browse</Typography>
+                </BrowseButton>
+              </div>
             </Grid>
           </Grid>
+          <FileUploadModal
+            open={open}
+            handleClose={handleClose}
+            // onChange={(e) => formik.setFieldValue('picture', convertImageParams('picture', !e.target.files ? null : e.target.files[0], setImages, handleClose), false)}
+          />
         </Form>
       </Paper>
     </div>
