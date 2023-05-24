@@ -183,30 +183,30 @@ export default function CreateCNBComponent() {
       supplement
     ) {
       setOpenMsg(true);
-      // dispatch({
-      //   type: postNewCnbProfileRequested.toString(),
-      //   Payload: {
-      //     companyId: companyData?.id,
-      //     name: value.name,
-      //     baseCompensation: {
-      //       compensationComponentId: parseInt(value.compensationComponentId),
-      //       taxStatus: value.taxStatus,
-      //       amount:
-      //         value.compensationComponentId === "1" ? 0 : value.rateOrAmount,
-      //       rate:
-      //         value.compensationComponentId === "1" ? value.rateOrAmount : 0,
-      //       period: value.period,
-      //     },
-      //     supplementaryCompensations: value.supplementary.map((item: any) => ({
-      //       compensationComponentId: parseInt(item.compensationComponentId),
-      //       taxStatus: item.taxStatus,
-      //       amount:
-      //         item.compensationComponentId === "1" ? 0 : item.rateOrAmount,
-      //       rate: item.compensationComponentId === "1" ? item.rateOrAmount : 0,
-      //       period: item.period,
-      //     })),
-      //   },
-      // });
+      dispatch({
+        type: postNewCnbProfileRequested.toString(),
+        Payload: {
+          companyId: companyData?.id,
+          name: value.name,
+          baseCompensation: {
+            compensationComponentId: parseInt(value.compensationComponentId),
+            taxStatus: value.taxStatus,
+            amount:
+              value.compensationComponentId === "1" ? 0 : value.rateOrAmount,
+            rate:
+              value.compensationComponentId === "1" ? value.rateOrAmount : 0,
+            period: value.period,
+          },
+          supplementaryCompensations: value.supplementary.map((item: any) => ({
+            compensationComponentId: parseInt(item.compensationComponentId),
+            taxStatus: item.taxStatus,
+            amount:
+              item.compensationComponentId === "1" ? 0 : item.rateOrAmount,
+            rate: item.compensationComponentId === "1" ? item.rateOrAmount : 0,
+            period: item.period,
+          })),
+        },
+      });
     } else {
       alert("Please fill all field");
     }
@@ -238,8 +238,8 @@ export default function CreateCNBComponent() {
   return (
     <Formik
       initialValues={initialValues}
-      onSubmit={(values) => {
-        console.log(values);
+      onSubmit={(values: any) => {
+        CreateNewCnbProfile(values);
       }}
       validationSchema={validationSchecma}
     >
