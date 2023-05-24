@@ -6,7 +6,8 @@ import {
   getAdministrativeThirdLevel,
   getBanks,
   getListDepartment,
-  getListPosition
+  getListPosition,
+  getCnb
 } from './saga-actions/optionActions';
 import { takeEvery, call, put, delay } from 'redux-saga/effects';
 import { Option } from '@/types/option';
@@ -40,7 +41,10 @@ import {
   getSecondAdministrativeSecondLevelFailed,
   getSecondAdministrativeThirdLevelRequested,
   getSecondAdministrativeThirdLevelSuccess,
-  getSecondAdministrativeThirdLevelFailed
+  getSecondAdministrativeThirdLevelFailed,
+  getListCnbRequested,
+  getListCnbFailed,
+  getListCnbSuccess
 } from '../reducers/slice/options/optionSlice';
 import { Services } from '@/types/axios';
 import { setResponserMessage } from '../reducers/slice/responserSlice';
@@ -384,6 +388,36 @@ function* fetchSecondAdministrativeLevelThird(action: AnyAction) {
   }
 }
 
+function* fetchListCnb() {
+  try {
+    const res: AxiosResponse = yield call(getCnb);
+
+    if (res.status === 200) {
+      const { items } = res?.data?.data as Option.Cnb;
+
+      yield put({
+        type: getListCnbSuccess.toString(),
+        payload: {
+          items: items
+        }
+      });
+    }
+  } catch(err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      yield delay(2000, true);
+      yield put({ type: getListCnbFailed.toString() });
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message,
+        }
+      });
+    }
+  }
+}
+
 
 function* optionSaga() {
   yield takeEvery(countriesRequested.toString(), fetchGetCountries);
@@ -396,6 +430,7 @@ function* optionSaga() {
   yield takeEvery(getSecondAdministrativeFirstLevelRequested.toString(), fetchSecondAdministrativeLevelFirst);
   yield takeEvery(getSecondAdministrativeSecondLevelRequested.toString(), fetchSecondAdministrativeLevelSecond);
   yield takeEvery(getSecondAdministrativeThirdLevelRequested.toString(), fetchSecondAdministrativeLevelThird);
+  yield takeEvery(getListCnbRequested.toString(), fetchListCnb);
 }
 
 export default optionSaga;

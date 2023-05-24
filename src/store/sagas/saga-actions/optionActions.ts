@@ -30,3 +30,8 @@ export const getListDepartment = (): Promise<AxiosResponse> => {
 export const getListPosition = ({departmentID}): Promise<AxiosResponse> => {
   return get(`/positions?page=1&itemPerPage=10000&departmentID=${departmentID}`);
 };
+
+export const getCnb = (): Promise<AxiosResponse> => {
+  const data =  getCompanyData();
+  return get(`compensation_benefits/${data?.id}`);
+};

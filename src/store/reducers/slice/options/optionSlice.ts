@@ -13,6 +13,7 @@ interface OptionState {
   banks: Array<{ label: string, value: string }>
   listDepartment: Array<{ label: string, value: string }>
   listPosition: Array<{ label: string, value: string }>
+  listCnb: Array<{label: string, value: number| string}>
 }
 
 const initialState: OptionState = {
@@ -26,7 +27,8 @@ const initialState: OptionState = {
   listPosition: [],
   secondAdministrativeFirst: [],
   secondAdministrativeSecond: [],
-  secondAdministrativeThird: []
+  secondAdministrativeThird: [],
+  listCnb: []
 };
 
 export const optionSlice = createSlice({
@@ -182,6 +184,21 @@ export const optionSlice = createSlice({
     },
     getSecondAdministrativeThirdLevelFailed: (state) => {
       state.loading = false;
+    },
+    getListCnbRequested: (state) => {
+      state.loading = true;
+    },
+    getListCnbSuccess: (state, action) => {
+      state.loading = false;
+      state.listCnb = action?.payload?.items?.map(item => {
+        return {
+          label: item.name,
+          value: item.id
+        };
+      });
+    },
+    getListCnbFailed: (state) => {
+      state.loading = false;
     }
   },
   extraReducers: {
@@ -224,7 +241,10 @@ export const {
   getSecondAdministrativeSecondLevelFailed,
   getSecondAdministrativeThirdLevelRequested,
   getSecondAdministrativeThirdLevelSuccess,
-  getSecondAdministrativeThirdLevelFailed
+  getSecondAdministrativeThirdLevelFailed,
+  getListCnbRequested,
+  getListCnbFailed,
+  getListCnbSuccess
 } = optionSlice.actions;
 
 export default optionSlice.reducer;
