@@ -14,7 +14,8 @@ const CustomTextArea = styled(TextareaAutosize)<SharedComponent.ComponentTextare
   },
   color: theme.palette.grey[500],
   fontFamily: 'inherit',
-  fontSize: '1rem'
+  fontSize: '1rem',
+  padding: '9px 12px'
 }));
 
 const AsteriskComponent = styled('span')(({ theme }) => ({

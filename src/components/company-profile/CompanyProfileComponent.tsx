@@ -150,7 +150,7 @@ function CompanyProfileComponent() {
               </Grid>
               <Grid item xs={6} md={6} lg={6} xl={6}>
                 <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Contact Number</Typography>
-                <Typography component='div' variant='text-sm' color='#4B5563'>{data?.information?.contact}</Typography>
+                <Typography component='div' variant='text-sm' color='#4B5563'>{data?.information?.phoneNumberPrefix} {data?.information?.phoneNumber}</Typography>
               </Grid>
             </Grid>
             <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
