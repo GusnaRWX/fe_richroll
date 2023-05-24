@@ -19,6 +19,10 @@ export declare namespace Option {
     items: Array<{ id: string, name: string }>
   }
 
+  export interface Cnb {
+    items: Array<{id: string | number, name: string, baseCompensation: [], supplementaryCompensation: [], createdAt: string, updatedAt: string}>
+  }
+
   export interface Mapper {
     label: string;
     value: string;

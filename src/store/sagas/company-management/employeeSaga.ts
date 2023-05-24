@@ -5,7 +5,8 @@ import {
   postEmergency,
   postPersonalInformation,
   getDetailEmployeeInformation,
-  getDetailPersonalInformation
+  getDetailPersonalInformation,
+  getDetailCnb
 } from '../saga-actions/company-management/employeeActions';
 import { call, put, takeEvery, delay } from 'redux-saga/effects';
 import {
@@ -26,7 +27,10 @@ import {
   employeeInfoDetailSuccess,
   personalInfoDetailFailed,
   personalInfoDetailRequested,
-  personalInfoDetailSuccess
+  personalInfoDetailSuccess,
+  getDetailCnbFailed,
+  getDetailCnbRequested,
+  getDetailCnbSuccess
 } from '@/store/reducers/slice/company-management/employees/employeeSlice';
 import { setResponserMessage } from '@/store/reducers/slice/responserSlice';
 import { Services } from '@/types/axios';
@@ -320,6 +324,33 @@ function* fetchGetPersonalInformationDetail(action: AnyAction) {
   }
 }
 
+function* fetchGetDetailCnb(action: AnyAction) {
+  try{
+    const res: AxiosResponse = yield call(getDetailCnb, action?.payload);
+    if (res.data.code === 200) {
+      yield put({
+        type: getDetailCnbSuccess.toString(),
+        payload: {
+          data: res?.data?.data
+        }
+      });
+    }
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      yield put({ type: getDetailCnbFailed.toString() });
+      yield delay(2000, true);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message,
+        }
+      });
+    }
+  }
+}
+
 function* employeeSaga() {
   yield takeEvery(getEmployeeRequested.toString(), fetchGetEmployee);
   yield takeEvery(postEmployeeInfoRequested.toString(), fetchPostEmployeeInfo);
@@ -327,6 +358,7 @@ function* employeeSaga() {
   yield takeEvery(postPersonalInformationRequested.toString(), fetchPostPersonalInformation);
   yield takeEvery(employeeInfoDetailRequested.toString(), fetchGetEmployeeInformation);
   yield takeEvery(personalInfoDetailRequested.toString(), fetchGetPersonalInformationDetail);
+  yield takeEvery(getDetailCnbRequested.toString(), fetchGetDetailCnb);
 }
 
 export default employeeSaga;
