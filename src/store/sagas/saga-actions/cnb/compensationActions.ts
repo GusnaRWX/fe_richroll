@@ -1,4 +1,4 @@
-import { post, get } from "@/utils/services";
+import { post, get, patch } from "@/utils/services";
 import axios, { AxiosHeaderValue } from "axios";
 import { config } from "@config";
 import { getStorage } from "@/utils/storage";
@@ -33,4 +33,8 @@ export const deleteCnbProfile = (Id: string) => {
 // Get Detail
 export const getDetailCnb = (Id: string) => {
   return get(`compensation_benefits/detail/${Id}`);
+};
+// Update CNB Profile
+export const putCnbProfile = (Payload: Object, Id: number) => {
+  return patch(`compensation_benefits/${Id}`, Payload);
 };

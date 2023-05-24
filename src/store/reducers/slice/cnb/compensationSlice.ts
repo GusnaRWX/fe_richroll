@@ -82,6 +82,17 @@ export const cnbSlice = createSlice({
     getDetailFailed: (state) => {
       state.detailLoading = false;
     },
+
+    // Update CNB Profile
+    putUpdateRequested: (state) => {
+      state.detailLoading = true;
+    },
+    putUpdateSuccess: (state, action) => {
+      state.detailLoading = false;
+    },
+    putUpdateFailed: (state) => {
+      state.detailLoading = false;
+    },
   },
   extraReducers: {
     [HYDRATE]: (state, action) => {
@@ -109,6 +120,9 @@ export const {
   getDetailRequested,
   getDetailSuccess,
   getDetailFailed,
+  putUpdateRequested,
+  putUpdateSuccess,
+  putUpdateFailed,
 } = cnbSlice.actions;
 
 export default cnbSlice.reducer;

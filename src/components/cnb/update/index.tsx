@@ -26,7 +26,7 @@ import { ArrowBack } from "@mui/icons-material";
 import { useRouter } from "next/router";
 import {
   getCompensationComponentOptionRequested,
-  postNewCnbProfileRequested,
+  putUpdateRequested,
 } from "@/store/reducers/slice/cnb/compensationSlice";
 import { useAppDispatch, useAppSelectors } from "@/hooks/index";
 import { getCompanyData } from "@/utils/helper";
@@ -168,7 +168,8 @@ export default function UpdateCNBComponent() {
     ) {
       setOpenMsg(true);
       dispatch({
-        type: postNewCnbProfileRequested.toString(),
+        type: putUpdateRequested.toString(),
+        Id: router.query.id,
         Payload: {
           companyId: companyData?.id,
           name: value.name,
