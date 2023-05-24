@@ -131,7 +131,7 @@ function EmployeeCreateComponent() {
     dateofBirthPersonalInformation: null,
     genderPersonalInformation: 0,
     maritialStatusPersonalInformation: 0,
-    numberOfDependantsPersonalInformation: 0,
+    numberOfDependantsPersonalInformation: '',
     nationalityPersonalInformation: '',
     religionPersonalInformation: 0,
 
