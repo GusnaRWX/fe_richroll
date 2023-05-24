@@ -303,34 +303,29 @@ export default function EnhancedTable(rows: any) {
                           onClick={() => handleOpen(row.id)}
                         />
                       </TableCell>
-                      {/* Delete */}
-                      <ConfirmationModal
-                        open={DeleteConfirmation.open}
-                        handleClose={handleClose}
-                        title="Are you sure you want to delete this record?"
-                        content="Any unsaved changes will be discarded. This cannot be undone"
-                        withCallback
-                        noChange={true}
-                        callback={() => deleteCnb(DeleteConfirmation.id)}
-                      />
-
-                      {/* Detail */}
-                      <DetailModal
-                        open={detailOpen.open}
-                        handleClose={() =>
-                          setDetailOpen({ id: 0, open: false })
-                        }
-                        title="CnB Profile Detail"
-                        content={
-                          <DetailCnb
-                            id={detailOpen.id}
-                            open={detailOpen.open}
-                          />
-                        }
-                      />
                     </TableRow>
                   );
                 })}
+              {/* Delete */}
+              <ConfirmationModal
+                open={DeleteConfirmation.open}
+                handleClose={handleClose}
+                title="Are you sure you want to delete this record?"
+                content="Any unsaved changes will be discarded. This cannot be undone"
+                withCallback
+                noChange={true}
+                callback={() => deleteCnb(DeleteConfirmation.id)}
+              />
+
+              {/* Detail */}
+              <DetailModal
+                open={detailOpen.open}
+                handleClose={() => setDetailOpen({ id: 0, open: false })}
+                title="CnB Profile Detail"
+                content={
+                  <DetailCnb id={detailOpen.id} open={detailOpen.open} />
+                }
+              />
               {rows?.rows?.items.length === undefined && (
                 <TableRow>
                   <TableCell colSpan={5} align="center">
