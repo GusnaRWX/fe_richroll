@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/indent */
 /* eslint-disable no-unused-vars */
-import * as React from 'react';
+import * as React from "react";
 import {
   Box,
   Table,
@@ -14,19 +14,21 @@ import {
   Paper,
   TextField,
   InputAdornment,
-} from '@mui/material/';
-import ConfirmationModal from '../_shared/common/ConfirmationModal';
-import SearchIcon from '@mui/icons-material/Search';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import DeleteIcon from '@mui/icons-material/Delete';
-import BorderColorIcon from '@mui/icons-material/BorderColor';
+} from "@mui/material/";
+import ConfirmationModal from "../_shared/common/ConfirmationModal";
+import SearchIcon from "@mui/icons-material/Search";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import DeleteIcon from "@mui/icons-material/Delete";
+import BorderColorIcon from "@mui/icons-material/BorderColor";
 
-import { styled } from '@mui/material/styles';
-import { TextFieldProps } from '@mui/material/';
-import { IconButton } from '../_shared/form';
-import { useAppDispatch } from '@/hooks/index';
-import { deleteCompensationRequested } from '@/store/reducers/slice/cnb/compensationSlice';
-import dayjs from 'dayjs';
+import { styled } from "@mui/material/styles";
+import { TextFieldProps } from "@mui/material/";
+import { IconButton } from "../_shared/form";
+import { useAppDispatch } from "@/hooks/index";
+import { deleteCompensationRequested } from "@/store/reducers/slice/cnb/compensationSlice";
+import dayjs from "dayjs";
+import DetailModal from "./modal";
+import DetailCnb from "./detail";
 
 interface Data {
   name: string;
@@ -47,7 +49,7 @@ function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   return 0;
 }
 
-type Order = 'asc' | 'desc';
+type Order = "asc" | "desc";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function getComparator<Key extends keyof any>(
@@ -57,7 +59,7 @@ function getComparator<Key extends keyof any>(
   _a: { [key in Key]: number | string },
   _b: { [key in Key]: number | string }
 ) => number {
-  return order === 'desc'
+  return order === "desc"
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
@@ -86,34 +88,34 @@ interface HeadCell {
 
 const headCells: readonly HeadCell[] = [
   {
-    id: 'name',
+    id: "name",
     numeric: false,
     disablePadding: false,
-    label: 'Profile Name',
+    label: "Profile Name",
   },
   {
-    id: 'baseCompensation',
+    id: "baseCompensation",
     numeric: false,
     disablePadding: false,
-    label: 'Base Compensation',
+    label: "Base Compensation",
   },
   {
-    id: 'supplementaryCompensation',
+    id: "supplementaryCompensation",
     numeric: false,
     disablePadding: false,
-    label: 'Supplement Compensation',
+    label: "Supplement Compensation",
   },
   {
-    id: 'createdAt',
+    id: "createdAt",
     numeric: false,
     disablePadding: false,
-    label: 'Date Created',
+    label: "Date Created",
   },
   {
-    id: 'updatedAt',
+    id: "updatedAt",
     numeric: false,
     disablePadding: false,
-    label: 'Last Updated',
+    label: "Last Updated",
   },
 ];
 
@@ -127,13 +129,13 @@ interface EnhancedTableProps {
 }
 
 const SearchTable = styled(TextField)<TextFieldProps>(({ theme }) => ({
-  marginTop: '16px',
-  marginLeft: '16px',
-  [theme.breakpoints.down('md')]: {
-    maxWidth: '200px',
+  marginTop: "16px",
+  marginLeft: "16px",
+  [theme.breakpoints.down("md")]: {
+    maxWidth: "200px",
   },
-  [theme.breakpoints.up('md')]: {
-    maxWidth: '300px',
+  [theme.breakpoints.up("md")]: {
+    maxWidth: "300px",
   },
 }));
 
@@ -150,13 +152,13 @@ function EnhancedTableHead(props: EnhancedTableProps) {
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align={headCell.numeric ? 'right' : 'left'}
-            padding={headCell.disablePadding ? 'none' : 'normal'}
+            align={headCell.numeric ? "right" : "left"}
+            padding={headCell.disablePadding ? "none" : "normal"}
             sortDirection={orderBy === headCell.id ? order : false}
           >
             <TableSortLabel
               active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : 'asc'}
+              direction={orderBy === headCell.id ? order : "asc"}
               onClick={createSortHandler(headCell.id)}
             >
               {headCell.label}
@@ -171,8 +173,8 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 
 export default function EnhancedTable(rows: any) {
   const dispatch = useAppDispatch();
-  const [order, setOrder] = React.useState<Order>('asc');
-  const [orderBy, setOrderBy] = React.useState<keyof Data>('createdAt');
+  const [order, setOrder] = React.useState<Order>("asc");
+  const [orderBy, setOrderBy] = React.useState<keyof Data>("createdAt");
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -187,8 +189,8 @@ export default function EnhancedTable(rows: any) {
     event: React.MouseEvent<unknown>,
     property: keyof Data
   ) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
+    const isAsc = orderBy === property && order === "asc";
+    setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
 
@@ -227,24 +229,26 @@ export default function EnhancedTable(rows: any) {
     setDeleteConfirmation(false);
   };
 
+  const [detailOpen, setDetailOpen] = React.useState<boolean>(false);
+
   return (
-    <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '100%', mb: 2 }}>
+    <Box sx={{ width: "100%" }}>
+      <Paper sx={{ width: "100%", mb: 2 }}>
         <SearchTable
-          id='search-table'
-          placeholder='Search'
-          variant='outlined'
+          id="search-table"
+          placeholder="Search"
+          variant="outlined"
           fullWidth
           InputProps={{
             startAdornment: (
-              <InputAdornment position='start'>
+              <InputAdornment position="start">
                 <SearchIcon />
               </InputAdornment>
             ),
           }}
         />
         <TableContainer>
-          <Table sx={{ minWidth: 750 }} aria-labelledby='tableTitle'>
+          <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
             <EnhancedTableHead
               order={order}
               orderBy={orderBy}
@@ -256,53 +260,69 @@ export default function EnhancedTable(rows: any) {
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
-                    <TableRow hover role='checkbox' tabIndex={-1} key={index}>
+                    <TableRow hover role="checkbox" tabIndex={-1} key={index}>
                       <TableCell
-                        component='th'
+                        component="th"
                         id={labelId}
-                        scope='row'
-                        padding='normal'
+                        scope="row"
+                        padding="normal"
                       >
                         {row.name}
                       </TableCell>
                       <TableCell>{row.baseCompensation[0]}</TableCell>
                       <TableCell>
-                        {row.supplementaryCompensation.map((item: string, i: number) => (
-                          <div key={i}>{item}</div>
-                        ))}
+                        {row.supplementaryCompensation.map(
+                          (item: string, i: number) => (
+                            <div key={i}>{item}</div>
+                          )
+                        )}
                       </TableCell>
-                      <TableCell>{dayjs(row.createdAt).format('DD/MM/YY')}</TableCell>
-                      <TableCell>{dayjs(row.updatedAt).format('DD/MM/YY')}</TableCell>
-                      <TableCell style={{ display: 'flex', gap: '8px' }}>
+                      <TableCell>
+                        {dayjs(row.createdAt).format("DD/MM/YY")}
+                      </TableCell>
+                      <TableCell>
+                        {dayjs(row.updatedAt).format("DD/MM/YY")}
+                      </TableCell>
+                      <TableCell style={{ display: "flex", gap: "8px" }}>
                         <IconButton
-                          parentColor='primary.50'
-                          icons={<VisibilityIcon sx={{ color: '#223567' }} />}
+                          parentColor="primary.50"
+                          icons={<VisibilityIcon sx={{ color: "#223567" }} />}
+                          onClick={() => setDetailOpen(true)}
                         />
                         <IconButton
-                          parentColor='primary.50'
-                          icons={<BorderColorIcon sx={{ color: '#223567' }} />}
+                          parentColor="primary.50"
+                          icons={<BorderColorIcon sx={{ color: "#223567" }} />}
                         />
                         <IconButton
-                          parentColor='red.100'
-                          icons={<DeleteIcon sx={{ color: '#EF4444' }} />}
+                          parentColor="red.100"
+                          icons={<DeleteIcon sx={{ color: "#EF4444" }} />}
                           onClick={() => handleOpen()}
                         />
                       </TableCell>
+                      {/* Delete */}
                       <ConfirmationModal
                         open={DeleteConfirmation}
                         handleClose={handleClose}
-                        title='Are you sure you want to delete this record?'
-                        content='Any unsaved changes will be discarded. This cannot be undone'
+                        title="Are you sure you want to delete this record?"
+                        content="Any unsaved changes will be discarded. This cannot be undone"
                         withCallback
                         noChange={true}
                         callback={() => deleteCnb(row.id)}
+                      />
+
+                      {/* Detail */}
+                      <DetailModal
+                        open={detailOpen}
+                        handleClose={() => setDetailOpen(false)}
+                        title="CnB Profile Detail"
+                        content={<DetailCnb />}
                       />
                     </TableRow>
                   );
                 })}
               {rows?.rows?.items.length === undefined && (
                 <TableRow>
-                  <TableCell colSpan={5} align='center'>
+                  <TableCell colSpan={5} align="center">
                     No Data
                   </TableCell>
                 </TableRow>
@@ -319,41 +339,41 @@ export default function EnhancedTable(rows: any) {
             </TableBody>
           </Table>
         </TableContainer>
-        {rows?.rows?.items.length !== undefined &&
+        {rows?.rows?.items.length !== undefined && (
           <TablePagination
             rowsPerPageOptions={[5, 10]}
-            component='div'
+            component="div"
             count={rows?.rows?.items.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
-            labelRowsPerPage='Record per pages'
+            labelRowsPerPage="Record per pages"
             sx={{
-              '.MuiTablePagination-toolbar': {
-                paddingRight: '24px',
+              ".MuiTablePagination-toolbar": {
+                paddingRight: "24px",
               },
-              '.MuiTablePagination-spacer': {
-                display: 'none',
+              ".MuiTablePagination-spacer": {
+                display: "none",
               },
-              '.MuiTablePagination-selectLabel': {
+              ".MuiTablePagination-selectLabel": {
                 order: 2,
-                marginRight: '16px',
+                marginRight: "16px",
               },
-              '.mui-style-t2m9id-MuiInputBase-root-MuiTablePagination-select': {
+              ".mui-style-t2m9id-MuiInputBase-root-MuiTablePagination-select": {
                 order: 1,
-                marginRight: '8px',
+                marginRight: "8px",
               },
-              '.MuiTablePagination-displayedRows': {
+              ".MuiTablePagination-displayedRows": {
                 order: 3,
               },
-              '.MuiTablePagination-actions': {
+              ".MuiTablePagination-actions": {
                 order: 4,
-                marginLeft: 'auto !important',
+                marginLeft: "auto !important",
               },
             }}
           />
-        }
+        )}
       </Paper>
     </Box>
   );
