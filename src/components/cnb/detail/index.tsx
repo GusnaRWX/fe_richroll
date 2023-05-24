@@ -21,6 +21,18 @@ const DetailCnb = ({ id, open }) => {
     fontWeight: "400",
   });
 
+  const TaxData = styled(Box)({
+    fontSize: "14px",
+    fontWeight: "600",
+    backgroundColor: "#E5E7EB",
+    padding: "3px 12px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "75px",
+    borderRadius: "4px",
+  });
+
   React.useEffect(() => {
     if (open) {
       dispatch({
@@ -98,11 +110,11 @@ const DetailCnb = ({ id, open }) => {
               </Grid>
               <Grid xs={6} display="flex" flexDirection="column" gap="6px">
                 <TitleData>Tax Status</TitleData>
-                <ItemData>
+                <TaxData>
                   {detail?.baseCompensation[0]?.taxStatus
                     ? "Taxable"
                     : "NTaxable"}
-                </ItemData>
+                </TaxData>
               </Grid>
             </Grid>
             <Grid display="flex" flexDirection="column" gap="6px">
@@ -146,9 +158,9 @@ const DetailCnb = ({ id, open }) => {
                   </Grid>
                   <Grid xs={6} display="flex" flexDirection="column" gap="6px">
                     <TitleData>Tax Status</TitleData>
-                    <ItemData>
+                    <TaxData>
                       {supplement?.taxStatus ? "Taxable" : "NTaxable"}
-                    </ItemData>
+                    </TaxData>
                   </Grid>
                 </Grid>
                 <Grid display="flex" flexDirection="column" gap="6px">
