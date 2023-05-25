@@ -43,6 +43,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
     banks
   } = useAppSelectors(state => state.option);
 
+  const { responser } = useAppSelectors(state => state);
 
   const [useResidentialAddress, setUseResidentialAddress] = useState(personalValues?.useResidentialAddress);
   // const [isPermanentPersonalID, setIsPermanentPersonalID] = useState(personalValues?.isPermanentPersonalID);
@@ -149,6 +150,13 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
         <Alert
           severity={'error'}
           content='Please fill in all the mandatory fields'
+          icon={<CancelIcon />}
+        />
+      )}
+      {![200, 201, 0].includes(responser?.code) && (
+        <Alert
+          severity='error'
+          content={responser?.message}
           icon={<CancelIcon />}
         />
       )}

@@ -117,6 +117,8 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, set
   const { listDepartment, listPosition } = useAppSelectors(state => state.option);
   const [images, setImages] = useState<string | null>(infoValues?.images);
 
+  const { responser } = useAppSelectors(state => state);
+
   const formik = useFormik({
     initialValues: {
       picture: [],
@@ -190,6 +192,15 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, set
           <Alert
             severity='error'
             content='Please fill in all the mandatory fields'
+            icon={<Cancel />}
+          />
+        )
+      }
+      {
+        ![200, 201, 0].includes(responser?.code) && (
+          <Alert
+            severity='error'
+            content={responser?.message}
             icon={<Cancel />}
           />
         )
