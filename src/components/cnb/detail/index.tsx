@@ -3,6 +3,7 @@ import { Box, Grid, styled, Typography, Button, Skeleton } from "@mui/material";
 import { useAppDispatch, useAppSelectors } from "@/hooks/index";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import { getDetailRequested } from "@/store/reducers/slice/cnb/compensationSlice";
+import { numberFormat } from "@/utils/format";
 
 const DetailCnb = ({ id, open }) => {
   const dispatch = useAppDispatch();
@@ -45,7 +46,7 @@ const DetailCnb = ({ id, open }) => {
   return (
     <>
       {!detailLoading ? (
-        <Grid container direction="column" gap={4} xs={12} md={12}>
+        <Grid container direction="column" gap={4}>
           {/* name */}
           <Grid
             container
@@ -75,11 +76,11 @@ const DetailCnb = ({ id, open }) => {
             justifyContent="space-between"
             alignItems="flex-start"
           >
-            <Grid xs={6} display="flex" flexDirection="column" gap="6px">
+            <Grid item xs={6} display="flex" flexDirection="column" gap="6px">
               <TitleData>Date Created</TitleData>
               <ItemData>01/02/23, 12:00</ItemData>
             </Grid>
-            <Grid xs={6} display="flex" flexDirection="column" gap="6px">
+            <Grid item xs={6} display="flex" flexDirection="column" gap="6px">
               <TitleData>Last Updated</TitleData>
               <ItemData>01/02/22</ItemData>
             </Grid>
@@ -104,11 +105,11 @@ const DetailCnb = ({ id, open }) => {
               justifyContent="space-between"
               alignItems="flex-start"
             >
-              <Grid xs={6} display="flex" flexDirection="column" gap="6px">
+              <Grid item xs={6} display="flex" flexDirection="column" gap="6px">
                 <TitleData>Compensation Component</TitleData>
                 <ItemData>Wage</ItemData>
               </Grid>
-              <Grid xs={6} display="flex" flexDirection="column" gap="6px">
+              <Grid item xs={6} display="flex" flexDirection="column" gap="6px">
                 <TitleData>Tax Status</TitleData>
                 <TaxData>
                   {detail?.baseCompensation[0]?.taxStatus
@@ -124,8 +125,10 @@ const DetailCnb = ({ id, open }) => {
               </TitleData>
               <ItemData>
                 Rp&nbsp;
-                {detail?.baseCompensation[0]?.amount ||
-                  detail?.baseCompensation[0]?.rate}
+                {numberFormat(
+                  Math.round(detail?.baseCompensation[0]?.amount)
+                ) ||
+                  numberFormat(Math.round(detail?.baseCompensation[0]?.rate))}
               </ItemData>
             </Grid>
           </Grid>
@@ -152,11 +155,23 @@ const DetailCnb = ({ id, open }) => {
                   justifyContent="space-between"
                   alignItems="flex-start"
                 >
-                  <Grid xs={6} display="flex" flexDirection="column" gap="6px">
+                  <Grid
+                    item
+                    xs={6}
+                    display="flex"
+                    flexDirection="column"
+                    gap="6px"
+                  >
                     <TitleData>Compensation Component {i + 1}</TitleData>
                     <ItemData>Transportation Allowance</ItemData>
                   </Grid>
-                  <Grid xs={6} display="flex" flexDirection="column" gap="6px">
+                  <Grid
+                    item
+                    xs={6}
+                    display="flex"
+                    flexDirection="column"
+                    gap="6px"
+                  >
                     <TitleData>Tax Status</TitleData>
                     <TaxData>
                       {supplement?.taxStatus ? "Taxable" : "NTaxable"}
@@ -169,7 +184,9 @@ const DetailCnb = ({ id, open }) => {
                     {supplement?.period}
                   </TitleData>
                   <ItemData>
-                    Rp {supplement?.amount || supplement?.rate}
+                    Rp&nbsp;
+                    {numberFormat(Math.round(supplement?.amount)) ||
+                      numberFormat(Math.round(supplement?.rate))}
                   </ItemData>
                 </Grid>
               </Grid>
