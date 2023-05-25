@@ -268,7 +268,7 @@ export default function CreateCNBComponent() {
             </NextBtnWrapper>
           </Header>
           <Paper sx={{ width: "100%", p: "21px 32px" }}>
-            <Box style={{ marginBottom: "32px" }}>
+            <Form style={{ marginBottom: "32px" }}>
               <Typography>
                 Profile Name
                 <span style={{ color: "red" }}>*</span>
@@ -455,7 +455,7 @@ export default function CreateCNBComponent() {
                   </Grid>
                 </Grid>
               </Grid>
-            </Box>
+            </Form>
             <FieldArray
               name="supplementary"
               render={(arrayHelper) => {
@@ -473,7 +473,7 @@ export default function CreateCNBComponent() {
                         >
                           Suplementary
                         </Typography>
-                        <Box>
+                        <Form>
                           {formik.values.supplementary.map((suplement, i) => (
                             <div key={i} style={{ marginBottom: "33px" }}>
                               <Grid container spacing={2}>
@@ -687,7 +687,7 @@ export default function CreateCNBComponent() {
                               </Grid>
                             </div>
                           ))}
-                        </Box>
+                        </Form>
                       </>
                     )}
                     <AddButton
