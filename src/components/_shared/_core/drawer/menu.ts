@@ -1,8 +1,8 @@
-import { AiFillHome } from 'react-icons/ai';
-import { HiBuildingOffice, HiCurrencyDollar } from 'react-icons/hi2';
-import { CoreLayout } from '@/types/component';
-import { BsFillCalendar2Fill } from 'react-icons/bs';
-import { HiDocumentReport, HiOutlineSupport } from 'react-icons/hi';
+import { AiFillHome } from "react-icons/ai";
+import { HiBuildingOffice, HiCurrencyDollar } from "react-icons/hi2";
+import { CoreLayout } from "@/types/component";
+import { BsFillCalendar2Fill } from "react-icons/bs";
+import { HiDocumentReport, HiOutlineSupport } from "react-icons/hi";
 
 export const Menus: CoreLayout.SidebarItem[] = [
   {
@@ -43,10 +43,21 @@ export const Menus: CoreLayout.SidebarItem[] = [
     ],
   },
   {
-    key: 'leave-management',
-    path: '/leave-management',
-    title: 'Leave Management',
+    key: 'attendance-leave',
+    path: '/attendance-leave',
+    title: 'attendance & Leave',
     icons: BsFillCalendar2Fill,
+    hasChild: true,
+    child: [
+      {
+        path: '/attendance-leave/leave-summary',
+        title: 'Leave Summary',
+      },
+      {
+        path: '/attendance-leave/settings',
+        title: 'Settings',
+      },
+    ],
   },
   {
     key: 'compensation-benefits',
