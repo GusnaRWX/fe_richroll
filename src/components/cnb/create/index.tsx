@@ -30,7 +30,7 @@ import {
 } from "@/store/reducers/slice/cnb/compensationSlice";
 import { useAppDispatch, useAppSelectors } from "@/hooks/index";
 import { getCompanyData } from "@/utils/helper";
-import { FieldArray, Form as FormikForm, Formik } from "formik";
+import { FieldArray, Form as FormikForm, Formik, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
 export default function CreateCNBComponent() {
@@ -485,14 +485,14 @@ export default function CreateCNBComponent() {
                                     </Typography>
                                     <FormControl
                                       fullWidth
-                                      // error={
-                                      //   formik.touched.supplementary![i]
-                                      //     ?.compensationComponentId &&
-                                      //   Boolean(
-                                      //     formik.errors.supplementary![i]
-                                      //       ?.compensationComponentId
-                                      //   )
-                                      // }
+                                      {...(formik.touched?.supplementary &&
+                                        formik.errors?.supplementary && {
+                                          error:
+                                            formik.touched?.supplementary[i]
+                                              ?.compensationComponentId &&
+                                            formik.errors?.supplementary[i]
+                                              ?.compensationComponentId,
+                                        })}
                                     >
                                       <Select
                                         fullWidth
@@ -515,12 +515,15 @@ export default function CreateCNBComponent() {
                                           )
                                         )}
                                       </Select>
-                                      {/* <FormHelperText>
-                                        {formik.touched.supplementary![i]
-                                          ?.compensationComponentId &&
-                                          formik.errors.supplementary![i]
-                                            ?.compensationComponentId}
-                                      </FormHelperText> */}
+                                      {formik.touched?.supplementary &&
+                                        formik.errors?.supplementary && (
+                                          <FormHelperText>
+                                            {formik.touched?.supplementary[i]
+                                              ?.compensationComponentId &&
+                                              formik.errors?.supplementary[i]
+                                                ?.compensationComponentId}
+                                          </FormHelperText>
+                                        )}
                                     </FormControl>
                                   </div>
                                 </Grid>
@@ -538,14 +541,15 @@ export default function CreateCNBComponent() {
                                     }}
                                   >
                                     <FormControl
-                                    // error={
-                                    //   formik.touched.supplementary![i]
-                                    //     ?.taxStatus &&
-                                    //   Boolean(
-                                    //     formik.errors.supplementary![i]
-                                    //       ?.taxStatus
-                                    //   )
-                                    // }
+                                      fullWidth
+                                      {...(formik.touched?.supplementary &&
+                                        formik.errors?.supplementary && {
+                                          error:
+                                            formik.touched?.supplementary[i]
+                                              ?.period &&
+                                            formik.errors?.supplementary[i]
+                                              ?.period,
+                                        })}
                                     >
                                       <RadioGroup
                                         row
@@ -581,12 +585,15 @@ export default function CreateCNBComponent() {
                                           label="Non-Taxable"
                                         />
                                       </RadioGroup>
-                                      {/* <FormHelperText>
-                                        {formik.touched.supplementary![i]
-                                          ?.taxStatus &&
-                                          formik.errors.supplementary![i]
-                                            ?.taxStatus}
-                                      </FormHelperText> */}
+                                      {formik.touched?.supplementary &&
+                                        formik.errors?.supplementary && (
+                                          <FormHelperText>
+                                            {formik.touched?.supplementary[i]
+                                              ?.taxStatus &&
+                                              formik.errors?.supplementary[i]
+                                                ?.taxStatus}
+                                          </FormHelperText>
+                                        )}
                                     </FormControl>
                                     <Box>
                                       <Button
@@ -611,20 +618,22 @@ export default function CreateCNBComponent() {
                                   <TextField
                                     fullWidth
                                     type="number"
-                                    // error={
-                                    //   formik.touched.supplementary[i]
-                                    //     ?.rateOrAmount &&
-                                    //   Boolean(
-                                    //     formik.errors.supplementary[i]
-                                    //       ?.rateOrAmount
-                                    //   )
-                                    // }
-                                    // helperText={
-                                    //   formik.touched.supplementary![i]
-                                    //     ?.rateOrAmount &&
-                                    //   formik.errors.supplementary![i]
-                                    //     ?.rateOrAmount
-                                    // }
+                                    {...(formik.touched?.supplementary &&
+                                      formik.errors?.supplementary && {
+                                        error:
+                                          formik.touched?.supplementary[i]
+                                            ?.rateOrAmount &&
+                                          formik.errors?.supplementary[i]
+                                            ?.rateOrAmount,
+                                      })}
+                                    {...(formik.touched?.supplementary &&
+                                      formik.errors?.supplementary && {
+                                        helperText:
+                                          formik.touched?.supplementary[i]
+                                            ?.rateOrAmount &&
+                                          formik.errors?.supplementary[i]
+                                            ?.rateOrAmount,
+                                      })}
                                     value={
                                       formik.values.supplementary[i]
                                         ?.rateOrAmount
@@ -652,13 +661,14 @@ export default function CreateCNBComponent() {
                                 <Grid item xs={3} md={3} lg={3} xl={3}>
                                   <FormControl
                                     fullWidth
-                                    // error={
-                                    //   formik.touched.supplementary![i]
-                                    //     ?.period &&
-                                    //   Boolean(
-                                    //     formik.errors.supplementary![i]?.period
-                                    //   )
-                                    // }
+                                    {...(formik.touched?.supplementary &&
+                                      formik.errors?.supplementary && {
+                                        error:
+                                          formik.touched?.supplementary[i]
+                                            ?.period &&
+                                          formik.errors?.supplementary[i]
+                                            ?.period,
+                                      })}
                                   >
                                     <Select
                                       fullWidth
@@ -682,6 +692,15 @@ export default function CreateCNBComponent() {
                                         per Year
                                       </MenuItem>
                                     </Select>
+                                    {formik.touched?.supplementary &&
+                                      formik.errors?.supplementary && (
+                                        <FormHelperText>
+                                          {formik.touched?.supplementary[i]
+                                            ?.period &&
+                                            formik.errors?.supplementary[i]
+                                              ?.period}
+                                        </FormHelperText>
+                                      )}
                                   </FormControl>
                                 </Grid>
                               </Grid>
