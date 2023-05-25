@@ -151,3 +151,18 @@ export const readValidationResponse = (validationResponse: Array<string>) => {
     return Object.keys(value).length > 0 ? Object.values(value).join('') : [];
   });
 };
+
+/**
+ * Check if object is empty
+ */
+export const checkObject = (obj) => {
+  for (const key in obj) {
+    // eslint-disable-next-line no-prototype-builtins
+    if (obj.hasOwnProperty(key)) {
+      if (!obj[key] || obj[key] === '') {
+        return true;
+      }
+    }
+  }
+  return false;
+};

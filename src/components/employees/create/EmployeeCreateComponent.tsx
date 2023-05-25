@@ -11,6 +11,7 @@ import { useAppDispatch } from '@/hooks/index';
 import dayjs from 'dayjs';
 import { postEmployeeInfoRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
 import { base64ToFile, getCompanyData } from '@/utils/helper';
+import { resetResponserMessage } from '@/store/reducers/slice/responserSlice';
 
 const EmployeeInformationFormClient = dynamic(() => import('./EmployeeInformationForm'), {
   ssr: false
@@ -289,6 +290,9 @@ function EmployeeCreateComponent() {
         withCallback
         callback={() => {
           router.push('/company-management/employees');
+          dispatch({
+            type: resetResponserMessage.toString()
+          });
         }}
       />
     </>

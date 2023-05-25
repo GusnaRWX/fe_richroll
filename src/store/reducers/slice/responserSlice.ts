@@ -22,6 +22,11 @@ export const responseSlice = createSlice({
       state.message = action?.payload?.message;
       state.footerMessage = action?.payload?.footerMessage;
     },
+    resetResponserMessage(state) {
+      state.code = 0;
+      state.message = '';
+      state.footerMessage = '';
+    }
   },
   extraReducers: {
     [HYDRATE]: (state, action) => {
@@ -33,6 +38,6 @@ export const responseSlice = createSlice({
   },
 });
 
-export const { setResponserMessage } = responseSlice.actions;
+export const { setResponserMessage, resetResponserMessage } = responseSlice.actions;
 
 export default responseSlice.reducer;
