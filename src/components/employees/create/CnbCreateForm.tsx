@@ -45,7 +45,10 @@ function CnbCreateForm() {
   const {option, employee} = useAppSelectors((state) => state);
   const dispatch = useAppDispatch();
   const [suplementary, setSuplementary] = useState<Array<TempSuplementaryType>>([]);
-  console.log(employee.detailCnb);
+  const compensationComponentOption = useAppSelectors(
+    (state) => state.compensation?.compensationComponentOption?.data?.items
+  );
+  const [compensation, setCompensation] = useState<Array<{label: string, value: string}>>([]);
 
 
   const formik = useFormik({
@@ -94,10 +97,17 @@ function CnbCreateForm() {
         });
       });
       const temp = [...data];
-      console.log(temp);
       setSuplementary(temp);
       formik.setFieldValue('suplementary', temp);
     }
+    const tempItems: Array<{label: string, value: string}> = [];
+    compensationComponentOption.map((item) => {
+      tempItems.push({
+        label: item.name,
+        value: item?.id
+      });
+    });
+    setCompensation(tempItems);
   }, [isEdit]);
   return (
     <>
@@ -142,7 +152,7 @@ function CnbCreateForm() {
                     <Grid mb='2rem' container spacing={2}>
                       <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
                         <Typography fontSize='14px' color='gray' mb='.5rem'>Compensation Component</Typography>
-                        <Typography fontSize='14px'>{item?.id}</Typography>
+                        <Typography fontSize='14px'>{item?.name}</Typography>
                       </Grid>
                       <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
                         <Typography fontSize='14px' color='gray' mb='.5rem'>Tax Status</Typography>
@@ -187,7 +197,7 @@ function CnbCreateForm() {
       {
         isEdit === true && formik.values.profile !== '' && (
           <>
-            <Typography mb='1rem' fontSize='20px' fontWeight='bold' color='primary'>{formik.values.profile}</Typography>
+            <Typography mb='1rem' fontSize='20px' fontWeight='bold' color='primary'>{employee?.detailCnb?.name}</Typography>
             <Typography mb='1.5rem' fontSize='16px' fontWeight='bold' color='primary'>Base</Typography>
             <Grid mb='1rem' container spacing={3}>
               <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
@@ -199,12 +209,7 @@ function CnbCreateForm() {
                   withAsterisk
                   fullWidth
                   name='baseCompensation'
-                  options={[
-                    { label: 'Salary', value: 'salary' },
-                    { label: 'Wage', value: 'Wage' },
-                    {label: 'Comission', value: 'Commision'},
-                    {label: 'Piece Rate', value: 'Piece Rate'}
-                  ]}
+                  options={compensation}
                 />
               </Grid>
               <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
@@ -281,14 +286,7 @@ function CnbCreateForm() {
                               withAsterisk
                               fullWidth
                               name='compensation'
-                              options={[
-                                { label: 'Bonus', value: 'Bonus' },
-                                { label: 'Overtime', value: 'Overtime' },
-                                {label: 'Comission', value: 'Commision'},
-                                {label: 'Piece Rate', value: 'Piece Rate'},
-                                {label: 'Wage', value: 'Wage'},
-                                {label: 'Salary', value: 'Salary'}
-                              ]}
+                              options={compensation}
                             />
                           </Grid>
                           <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>

@@ -1,10 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Input, Select } from '@/components/_shared/form';
+import { Input, Select, RadioGroup, CheckBox } from '@/components/_shared/form';
 import { Button as MuiButton, Grid, InputAdornment, Typography, Button } from '@mui/material';
 import { Add } from '@mui/icons-material';
 import { Scheduler } from '@aldabil/react-scheduler';
 import CustomModal from '@/components/_shared/common/CustomModal';
-import { RadioGroup, CheckBox } from '@/components/_shared/form';
 import { styled } from '@mui/material/styles';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -14,6 +13,7 @@ import { useFormik } from 'formik';
 import { workSchedule } from '@/types/workSchedule';
 import { validationSchemaWorkScheduler } from './validate';
 import dayjs from 'dayjs';
+import WorkScheduleEditForm from '../WorkScheduleEditForm';
 
 
 const AsteriskComponent = styled('span')(({ theme }) => ({
@@ -27,7 +27,6 @@ const FlexBoxRow = styled('div')(() => ({
   justifyContent: 'flex-start',
   gap: '1rem'
 }));
-
 
 function WorkScheduleCreateForm() {
   const calendarRef = useRef<SchedulerRef>(null);
@@ -85,8 +84,21 @@ function WorkScheduleCreateForm() {
         breakEndTime: dayjs(data.breakEndTime).format('HH:mm:ss A')
       };
       console.log(payload);
+      handleSubmitExample();
       handleFormClose();
     }
+  };
+
+  const handleSubmitExample = () => {
+    const eventData = {
+      event_id: 2,
+      title: 'Event 1',
+      start: new Date(new Date(new Date().setHours(8)).setMinutes(0)),
+      end: new Date(new Date(new Date().setHours(12)).setMinutes(0)),
+      disabled: false,
+      admin_id: [1, 2, 3, 4]
+    };
+    calendarRef.current?.scheduler.confirmEvent(eventData, 'create');
   };
 
   const handleInput = (e) => {
@@ -158,8 +170,20 @@ function WorkScheduleCreateForm() {
         view='week'
         disableViewNavigator={true}
         ref={calendarRef}
-        events={[]}
+        events={[
+          {
+            event_id: 1,
+            title: 'Event 1',
+            start: new Date(new Date(new Date().setHours(1)).setMinutes(0)),
+            end: new Date(new Date(new Date().setHours(6)).setMinutes(0)),
+            disabled: false,
+            admin_id: [1, 2, 3, 4]
+          }
+        ]}
         day={null}
+        customEditor={(scheduler) => (
+          <WorkScheduleEditForm scheduler={scheduler}/>
+        )}
         month={null}
         week={{
           weekDays: [0, 1,2,3,4,5,6],
