@@ -197,10 +197,10 @@ export default function CreateCNBComponent() {
   }
 
   interface suplementType {
-    compensationComponentId: string;
-    taxStatus: string;
-    rateOrAmount: number | null;
-    period: string;
+    compensationComponentId: string | boolean;
+    taxStatus: string | boolean;
+    rateOrAmount: number | null | boolean;
+    period: string | boolean;
   }
 
   const initialValues: {
@@ -490,8 +490,13 @@ export default function CreateCNBComponent() {
                                           error:
                                             formik.touched?.supplementary[i]
                                               ?.compensationComponentId &&
-                                            formik.errors?.supplementary[i]
-                                              ?.compensationComponentId,
+                                            Boolean(
+                                              (
+                                                formik.errors?.supplementary[
+                                                  i
+                                                ] as unknown as suplementType
+                                              )?.compensationComponentId
+                                            ),
                                         })}
                                     >
                                       <Select
@@ -520,8 +525,11 @@ export default function CreateCNBComponent() {
                                           <FormHelperText>
                                             {formik.touched?.supplementary[i]
                                               ?.compensationComponentId &&
-                                              formik.errors?.supplementary[i]
-                                                ?.compensationComponentId}
+                                              (
+                                                formik.errors?.supplementary[
+                                                  i
+                                                ] as unknown as suplementType
+                                              )?.compensationComponentId}
                                           </FormHelperText>
                                         )}
                                     </FormControl>
@@ -547,8 +555,13 @@ export default function CreateCNBComponent() {
                                           error:
                                             formik.touched?.supplementary[i]
                                               ?.period &&
-                                            formik.errors?.supplementary[i]
-                                              ?.period,
+                                            Boolean(
+                                              (
+                                                formik.errors?.supplementary[
+                                                  i
+                                                ] as unknown as suplementType
+                                              )?.period
+                                            ),
                                         })}
                                     >
                                       <RadioGroup
@@ -590,8 +603,11 @@ export default function CreateCNBComponent() {
                                           <FormHelperText>
                                             {formik.touched?.supplementary[i]
                                               ?.taxStatus &&
-                                              formik.errors?.supplementary[i]
-                                                ?.taxStatus}
+                                              (
+                                                formik.errors?.supplementary[
+                                                  i
+                                                ] as unknown as suplementType
+                                              )?.taxStatus}
                                           </FormHelperText>
                                         )}
                                     </FormControl>
@@ -623,16 +639,24 @@ export default function CreateCNBComponent() {
                                         error:
                                           formik.touched?.supplementary[i]
                                             ?.rateOrAmount &&
-                                          formik.errors?.supplementary[i]
-                                            ?.rateOrAmount,
+                                          Boolean(
+                                            (
+                                              formik.errors?.supplementary[
+                                                i
+                                              ] as unknown as suplementType
+                                            )?.rateOrAmount
+                                          ),
                                       })}
                                     {...(formik.touched?.supplementary &&
                                       formik.errors?.supplementary && {
                                         helperText:
                                           formik.touched?.supplementary[i]
                                             ?.rateOrAmount &&
-                                          formik.errors?.supplementary[i]
-                                            ?.rateOrAmount,
+                                          (
+                                            formik.errors?.supplementary[
+                                              i
+                                            ] as unknown as suplementType
+                                          )?.rateOrAmount,
                                       })}
                                     value={
                                       formik.values.supplementary[i]
@@ -666,8 +690,13 @@ export default function CreateCNBComponent() {
                                         error:
                                           formik.touched?.supplementary[i]
                                             ?.period &&
-                                          formik.errors?.supplementary[i]
-                                            ?.period,
+                                          Boolean(
+                                            (
+                                              formik.errors?.supplementary[
+                                                i
+                                              ] as unknown as suplementType
+                                            )?.period
+                                          ),
                                       })}
                                   >
                                     <Select
@@ -697,8 +726,11 @@ export default function CreateCNBComponent() {
                                         <FormHelperText>
                                           {formik.touched?.supplementary[i]
                                             ?.period &&
-                                            formik.errors?.supplementary[i]
-                                              ?.period}
+                                            (
+                                              formik.errors?.supplementary[
+                                                i
+                                              ] as unknown as suplementType
+                                            )?.period}
                                         </FormHelperText>
                                       )}
                                   </FormControl>
