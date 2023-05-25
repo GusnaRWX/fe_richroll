@@ -4,8 +4,10 @@ import { useAppDispatch, useAppSelectors } from "@/hooks/index";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import { getDetailRequested } from "@/store/reducers/slice/cnb/compensationSlice";
 import { numberFormat } from "@/utils/format";
+import { useRouter } from "next/router";
 
 const DetailCnb = ({ id, open }) => {
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const detail = useAppSelectors((state) => state.compensation.detail?.data);
   const detailLoading = useAppSelectors(
@@ -62,6 +64,11 @@ const DetailCnb = ({ id, open }) => {
               variant="contained"
               color="secondary"
               startIcon={<BorderColorIcon sx={{ color: "white" }} />}
+              onClick={() =>
+                router.push(
+                  `/compensation-benefits/update?cnb=${id}&id=${detail?.baseCompensation[0].id}`
+                )
+              }
             >
               <Typography fontSize={14} color="white">
                 Edit

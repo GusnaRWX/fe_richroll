@@ -169,11 +169,12 @@ export default function UpdateCNBComponent() {
       setOpenMsg(true);
       dispatch({
         type: putUpdateRequested.toString(),
-        Id: router.query.id,
+        Id: router.query.cnb,
         Payload: {
           companyId: companyData?.id,
           name: value.name,
           baseCompensation: {
+            id: router.query.id,
             compensationComponentId: parseInt(value.compensationComponentId),
             taxStatus: value.taxStatus,
             amount:

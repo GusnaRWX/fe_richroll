@@ -302,9 +302,7 @@ export default function EnhancedTable(rows: any) {
                               <BorderColorIcon sx={{ color: "#223567" }} />
                             }
                             onClick={() =>
-                              router.push(
-                                `/compensation-benefits/update?id=${row.id}`
-                              )
+                              setDetailOpen({ id: row.id, open: true })
                             }
                           />
                           <IconButton
