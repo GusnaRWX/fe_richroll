@@ -1,8 +1,8 @@
-import { AiFillHome } from "react-icons/ai";
-import { HiBuildingOffice, HiCurrencyDollar } from "react-icons/hi2";
-import { CoreLayout } from "@/types/component";
-import { BsFillCalendar2Fill } from "react-icons/bs";
-import { HiDocumentReport, HiOutlineSupport } from "react-icons/hi";
+import { AiFillHome } from 'react-icons/ai';
+import { HiBuildingOffice, HiCurrencyDollar } from 'react-icons/hi2';
+import { CoreLayout } from '@/types/component';
+import { BsFillCalendar2Fill } from 'react-icons/bs';
+import { HiDocumentReport, HiOutlineSupport } from 'react-icons/hi';
 
 export const Menus: CoreLayout.SidebarItem[] = [
   {
