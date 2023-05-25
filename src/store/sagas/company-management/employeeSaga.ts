@@ -132,13 +132,13 @@ function* fetchPostEmergency(action: AnyAction) {
       employeeID: String(getCompanyData()?.id),
       primary: {
         name: action?.payload?.data?.fullNamePrimary,
-        relationship: action?.payload?.data.relationPrimary,
+        relationship: +action?.payload?.data.relationPrimary,
         phoneNumberPrefix: action?.payload.data.phoneNumberPrefixPrimary,
         phoneNumber: action?.payload.data.phoneNumberPrimary
       },
       secondary: {
         name: action?.payload?.data?.fullNameSecondary,
-        relationship: action?.payload?.data.relationSecondary,
+        relationship: +action?.payload?.data.relationSecondary,
         phoneNumberPrefix: action?.payload.data.phoneNumberPrefixSecondary,
         phoneNumber: action?.payload.data.phoneNumberSecondary
       }
