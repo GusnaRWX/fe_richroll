@@ -1,22 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   TableCell,
   TableRow,
-  Avatar,
+  // Avatar,
   Box,
   TableSortLabel,
   Typography,
-} from "@mui/material";
-import Table from "@/components/_shared/form/Table";
-import { IconButton } from "@/components/_shared/form";
-import styled from "@emotion/styled";
-import { visuallyHidden } from "@mui/utils";
+} from '@mui/material';
+import Table from '@/components/_shared/form/Table';
+import { IconButton } from '@/components/_shared/form';
+import styled from '@emotion/styled';
+import { visuallyHidden } from '@mui/utils';
 
 // Import Icon React Icon
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import { BsCheckLg } from "react-icons/bs";
-import { BsX } from "react-icons/bs";
-import { HiPencilAlt } from "react-icons/hi";
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import { BsCheckLg } from 'react-icons/bs';
+import { BsX } from 'react-icons/bs';
+import { HiPencilAlt } from 'react-icons/hi';
 
 const ButtonWrapper = styled.div`
   display: flex;
@@ -34,14 +34,14 @@ const NameWrapper = styled.div`
 `;
 
 const headerItems = [
-  { id: "id", label: "Request ID" },
-  { id: "name", label: "Employee Name" },
-  { id: "type", label: "Type" },
-  { id: "date", label: "Date Requested" },
-  { id: "period", label: "Period" },
-  { id: "duration", label: "Duration" },
-  { id: "note", label: "Notes" },
-  { id: "action", label: "" },
+  { id: 'id', label: 'Request ID' },
+  { id: 'name', label: 'Employee Name' },
+  { id: 'type', label: 'Type' },
+  { id: 'date', label: 'Date Requested' },
+  { id: 'period', label: 'Period' },
+  { id: 'duration', label: 'Duration' },
+  { id: 'note', label: 'Notes' },
+  { id: 'action', label: '' },
 ];
 
 interface LeaveSummaryTableProps {
@@ -52,10 +52,10 @@ interface LeaveSummaryTableProps {
   ShowDetailAction?: boolean;
 }
 
-type Order = "asc" | "desc";
+type Order = 'asc' | 'desc';
 
 function LeaveSummaryTable({
-  tabValue,
+  // tabValue,
   EditAction,
   ApproveAction,
   DeclineAction,
@@ -63,56 +63,56 @@ function LeaveSummaryTable({
 }: LeaveSummaryTableProps) {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
-  const [direction, setDirection] = useState<Order>("desc");
-  const [sort, setSort] = useState("");
+  const [direction, setDirection] = useState<Order>('desc');
+  const [sort, setSort] = useState('');
   const [hydrated, setHaydrated] = useState(false);
 
   const data = {
     items: [
       {
         id: 1,
-        employeeName: "Testing Employee",
-        type: "Sick Leave",
-        date: "30/10/2022",
-        period: "3 Month",
-        Duration: "3 Month",
-        Notes: "asdasd",
+        employeeName: 'Testing Employee',
+        type: 'Sick Leave',
+        date: '30/10/2022',
+        period: '3 Month',
+        Duration: '3 Month',
+        Notes: 'asdasd',
       },
       {
         id: 1,
-        employeeName: "Testing Employee",
-        type: "Sick Leave",
-        date: "30/10/2022",
-        period: "3 Month",
-        Duration: "3 Month",
-        Notes: "asdasd",
+        employeeName: 'Testing Employee',
+        type: 'Sick Leave',
+        date: '30/10/2022',
+        period: '3 Month',
+        Duration: '3 Month',
+        Notes: 'asdasd',
       },
       {
         id: 1,
-        employeeName: "Testing Employee",
-        type: "Sick Leave",
-        date: "30/10/2022",
-        period: "3 Month",
-        Duration: "3 Month",
-        Notes: "asdasd",
+        employeeName: 'Testing Employee',
+        type: 'Sick Leave',
+        date: '30/10/2022',
+        period: '3 Month',
+        Duration: '3 Month',
+        Notes: 'asdasd',
       },
       {
         id: 1,
-        employeeName: "Testing Employee",
-        type: "Sick Leave",
-        date: "30/10/2022",
-        period: "3 Month",
-        Duration: "3 Month",
-        Notes: "asdasd",
+        employeeName: 'Testing Employee',
+        type: 'Sick Leave',
+        date: '30/10/2022',
+        period: '3 Month',
+        Duration: '3 Month',
+        Notes: 'asdasd',
       },
       {
         id: 1,
-        employeeName: "Testing Employee",
-        type: "Sick Leave",
-        date: "30/10/2022",
-        period: "3 Month",
-        Duration: "3 Month",
-        Notes: "asdasd",
+        employeeName: 'Testing Employee',
+        type: 'Sick Leave',
+        date: '30/10/2022',
+        period: '3 Month',
+        Duration: '3 Month',
+        Notes: 'asdasd',
       },
     ],
     itemTotals: 5,
@@ -130,8 +130,8 @@ function LeaveSummaryTable({
     event: React.MouseEvent<unknown>,
     headId: string
   ) => {
-    const isAsc = sort === headId && direction === "asc";
-    setDirection(isAsc ? "desc" : "asc");
+    const isAsc = sort === headId && direction === 'asc';
+    setDirection(isAsc ? 'desc' : 'asc');
     setSort(headId);
   };
 
@@ -160,15 +160,15 @@ function LeaveSummaryTable({
               >
                 <TableSortLabel
                   active={sort === item.id}
-                  direction={sort === item.id ? direction : "asc"}
+                  direction={sort === item.id ? direction : 'asc'}
                   onClick={(e) => handleRequestSort(e, item.id)}
                 >
                   {item.label}
                   {sort === item.id ? (
-                    <Box component="span" sx={visuallyHidden}>
-                      {direction === "asc"
-                        ? "sorted descending"
-                        : "sorted ascending"}
+                    <Box component='span' sx={visuallyHidden}>
+                      {direction === 'asc'
+                        ? 'sorted descending'
+                        : 'sorted ascending'}
                     </Box>
                   ) : null}
                 </TableSortLabel>
@@ -178,10 +178,10 @@ function LeaveSummaryTable({
         }
         bodyChildren={
           <>
-            {typeof data?.items !== "undefined" ? (
+            {typeof data?.items !== 'undefined' ? (
               data?.items.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={12} align="center">
+                  <TableCell colSpan={12} align='center'>
                     <Typography>Data not found</Typography>
                   </TableCell>
                 </TableRow>
@@ -224,28 +224,28 @@ function LeaveSummaryTable({
                       <ButtonWrapper>
                         {ApproveAction && (
                           <IconButton
-                            parentColor="secondary.100"
-                            icons={<BsCheckLg fontSize={20} color="#223567" />}
+                            parentColor='secondary.100'
+                            icons={<BsCheckLg fontSize={20} color='#223567' />}
                           />
                         )}
                         {DeclineAction && (
                           <IconButton
-                            parentColor="red.100"
-                            icons={<BsX fontSize={25} color="#EF4444" />}
+                            parentColor='red.100'
+                            icons={<BsX fontSize={25} color='#EF4444' />}
                           />
                         )}
                         {EditAction && (
                           <IconButton
-                            parentColor="primary.50"
+                            parentColor='primary.50'
                             icons={
-                              <HiPencilAlt fontSize={20} color="#223567" />
+                              <HiPencilAlt fontSize={20} color='#223567' />
                             }
                           />
                         )}
                         {ShowDetailAction && (
                           <IconButton
-                            parentColor="primary.50"
-                            icons={<VisibilityIcon sx={{ color: "#223567" }} />}
+                            parentColor='primary.50'
+                            icons={<VisibilityIcon sx={{ color: '#223567' }} />}
                           />
                         )}
                       </ButtonWrapper>
@@ -255,7 +255,7 @@ function LeaveSummaryTable({
               )
             ) : (
               <TableRow>
-                <TableCell colSpan={12} align="center">
+                <TableCell colSpan={12} align='center'>
                   <Typography>Data not found</Typography>
                 </TableCell>
               </TableRow>
