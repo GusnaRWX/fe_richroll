@@ -17,7 +17,7 @@ import { Company, CompanyCreate } from '@/types/component';
 import { Image as ImageType } from '@/utils/assetsConstant';
 import { IconButton } from '@/components/_shared/form';
 import { BsBellFill } from 'react-icons/bs';
-import LocalizationMenu from '@/components/_shared/_core/localization/Index';
+import LocalizationMenu from '@/components/_shared/_core/localization/LocalizationMenu';
 import Profile from '@/components/_shared/_core/appbar/Profile';
 import CompanyInformationForm from './CompanyInformationForm';
 import CompanyBankForm from './CompanyBankForm';

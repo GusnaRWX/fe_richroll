@@ -63,7 +63,7 @@ function* fetchAuthenticationLogin(action: AnyAction) {
           code: errorMessage?.code || errorValidationMessage?.code,
           message: errorMessage.message === 'Invalid email and password' ?
             'Incorrect email address or password' :
-            readValidationResponse(errorValidationMessage.error).map(errorMessage => errorMessage.replace(/"/g, ''))
+            readValidationResponse(errorValidationMessage.error).map(errMessage => errMessage.replace(/"/g, ''))
         }
       });
       yield put({ type: loginFailured.toString() });
@@ -200,11 +200,11 @@ function* fetchSetNewPassword(action: AnyAction) {
   }
 }
 
-function* authSaga() {
+function* loginSaga() {
   yield takeEvery(loginRequested.toString(), fetchAuthenticationLogin);
   yield takeEvery(forgotPasswordRequested.toString(), fetchForgotPassword);
   yield takeEvery(resetPasswordRequested.toString(), fetchResetPassword);
   yield takeEvery(employeeSetNewPasswordRequested.toString(), fetchSetNewPassword);
 }
 
-export default authSaga;
+export default loginSaga;

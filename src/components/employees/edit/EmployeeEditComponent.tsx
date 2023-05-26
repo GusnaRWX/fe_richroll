@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 import ConfirmationModal from '@/components/_shared/common/ConfirmationModal';
 import { Employees } from '@/types/employees';
 import dayjs from 'dayjs';
-import { getCompanyData } from '@/utils/helper';
+import { getCompanyData, ifThenElse } from '@/utils/helper';
 import { useAppSelectors } from '@/hooks/index';
 
 const EmployeeInformationEdit = dynamic(() => import('./EmployeeInformationEdit'), {
@@ -100,27 +100,27 @@ function EmployeeEditComponent() {
   const { employee } = useAppSelectors((state) => state);
   const dataEmployeeInformation = employee.employeeInformationDetail;
   const dataPersonalInformation = employee.personalInformationDetail;
-  const phoneNumberPrefix = typeof dataEmployeeInformation.phoneNumber !== 'undefined' ? dataEmployeeInformation.phoneNumber.split('').slice(0, 3).join('') : '';
-  const phoneNumber = typeof dataEmployeeInformation.phoneNumber !== 'undefined' ? dataEmployeeInformation.phoneNumber.slice(3) : '';
+  const phoneNumberPrefix = ifThenElse(typeof dataEmployeeInformation.phoneNumber !== 'undefined', dataEmployeeInformation?.phoneNumber?.split('')?.slice(0, 3).join(''), '');
+  const phoneNumber = ifThenElse(typeof dataEmployeeInformation.phoneNumber !== 'undefined', dataEmployeeInformation?.phoneNumber?.slice(3), '');
 
   const [informationValue, setInformationValue] = useState<Employees.InformationValues>({
     companyID: getCompanyData()?.id as string,
     department: dataEmployeeInformation?.department,
     email: dataEmployeeInformation?.email,
-    endDate: dataEmployeeInformation?.endDate !== null ? dayjs(dataEmployeeInformation?.endDate).format('YYYY/MM/DD') : null,
+    endDate: ifThenElse(dataEmployeeInformation?.endDate !== null, dayjs(dataEmployeeInformation?.endDate).format('YYYY/MM/DD'), null),
     fullName: dataEmployeeInformation?.fullName,
-    images: dataEmployeeInformation?.picture !== null ? dataEmployeeInformation?.picture : '',
+    images: ifThenElse(dataEmployeeInformation?.picture !== null, dataEmployeeInformation?.picture, ''),
     isPermanent: dataEmployeeInformation?.isPermanent,
     isSelfService: dataEmployeeInformation?.isSelfService,
     nickname: dataEmployeeInformation?.nickname,
     phoneNumber: phoneNumber,
     phoneNumberPrefix: phoneNumberPrefix,
-    picture: dataEmployeeInformation?.picture !== null ? dataEmployeeInformation?.picture : [],
+    picture: ifThenElse(dataEmployeeInformation?.picture !== null, dataEmployeeInformation?.picture, []),
     position: dataEmployeeInformation?.position,
-    startDate: dataEmployeeInformation?.startDate !== null ? dayjs(dataEmployeeInformation?.startDate).format('YYYY/MM/DD') : null
+    startDate: ifThenElse(dataEmployeeInformation?.startDate !== null, dayjs(dataEmployeeInformation?.startDate).format('YYYY/MM/DD'), null)
   });
   const [personalInformationValue, setPersonalInformationValue] = useState<Employees.PersonalValues>({
-    dateofBirthPersonalInformation: dataPersonalInformation?.personal?.dateOfBirth !== null ? dayjs(dataPersonalInformation?.personal?.dateOfBirth).format('YYYY/MM/DD') : null,
+    dateofBirthPersonalInformation: ifThenElse(dataPersonalInformation?.personal?.dateOfBirth !== null, dayjs(dataPersonalInformation?.personal?.dateOfBirth).format('YYYY/MM/DD'), null),
     genderPersonalInformation: dataPersonalInformation?.personal?.gender,
     maritialStatusPersonalInformation: dataPersonalInformation?.personal?.maritalStatus,
     numberOfDependantsPersonalInformation: dataPersonalInformation?.personal?.numberOfChildren,
@@ -183,14 +183,14 @@ function EmployeeEditComponent() {
     inputData.append('email', informationValue.email);
     inputData.append('startDate', dayjs(informationValue.startDate).format('YYYY-MM-DD'));
     inputData.append('endDate', dayjs(informationValue.endDate).format('YYYY-MM-DD'));
-    inputData.append('isPermanent', informationValue.isPermanent ? 'true' : 'false');
+    inputData.append('isPermanent', ifThenElse(informationValue.isPermanent, 'true', 'false'));
     if (informationValue.department !== '') {
       inputData.append('department', informationValue.department);
     }
     if (informationValue.position !== '') {
       inputData.append('position', informationValue.position);
     }
-    inputData.append('isSelfService', informationValue.isSelfService ? 'true' : 'false');
+    inputData.append('isSelfService', ifThenElse(informationValue.isSelfService, 'true', 'false'));
   };
 
   return (

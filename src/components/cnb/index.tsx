@@ -1,5 +1,5 @@
 import React from 'react';
-import EnhancedTable from './table';
+import EnhancedTable from './EnhancedTable';
 import { Typography, Skeleton } from '@mui/material';
 import styled from '@emotion/styled';
 import { Button } from '../_shared/form';

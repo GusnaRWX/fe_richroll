@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { styled as MuiStyled } from '@mui/material/styles';
 import {
   Button,
   Form,
@@ -39,7 +38,7 @@ export default function CreateLeaveApplicationComponent() {
     alignItems: 'center',
   });
 
-  const NextBtnWrapper = MuiStyled(Box)({
+  const NextBtnWrapper = styled(Box)({
     width: '100%',
     display: 'flex',
     flexDirection: 'row',

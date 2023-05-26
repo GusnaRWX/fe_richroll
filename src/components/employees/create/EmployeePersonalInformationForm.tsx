@@ -19,6 +19,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import { Employees } from '@/types/employees';
 import { validationSchemePersonalInformation } from './validate';
 import { useFormik } from 'formik';
+import { ifThenElse, compareCheck } from '@/utils/helper';
 
 interface PersonalInformationProps {
   refProp: React.Ref<HTMLFormElement>
@@ -144,6 +145,18 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
     }
   }, [useResidentialAddress]);
 
+
+  const checkCountry = (value: unknown) => {
+    if ((value as string).length === 0) {
+      return <Text title='Select Country' color='grey.400' />;
+    }
+    const selectedCountries = (countries as Array<{ label: string, value: string }>).find(country => country.value === value);
+    if (selectedCountries) {
+      return `${selectedCountries.label}`;
+    }
+    return null;
+  };
+
   return (
     <form onSubmit={formik.handleSubmit} ref={refProp}>
       {Object.keys(formik.errors).length > 0 && (
@@ -188,7 +201,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               value={formik.values.dateofBirthPersonalInformation as unknown as Date}
               onChange={(date: unknown) => formik.setFieldValue('dateofBirthPersonalInformation', date)}
               withAsterisk
-              error={formik.touched.dateofBirthPersonalInformation && formik.errors.dateofBirthPersonalInformation ? String(formik.errors.dateofBirthPersonalInformation) : ''}
+              error={ifThenElse(compareCheck(formik.touched.dateofBirthPersonalInformation, Boolean(formik.errors.dateofBirthPersonalInformation)), String(formik.errors.dateofBirthPersonalInformation), '')}
             />
           </Grid>
           <Grid
@@ -206,7 +219,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               value={formik.values.genderPersonalInformation}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={formik.touched.genderPersonalInformation && Boolean(formik.errors.genderPersonalInformation) ? formik.errors.genderPersonalInformation : ''}
+              error={ifThenElse(compareCheck(formik.touched.genderPersonalInformation, Boolean(formik.errors.genderPersonalInformation)), formik.errors.genderPersonalInformation, '')}
               row
             />
           </Grid>
@@ -244,8 +257,8 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
                 }
                 return null;
               }}
-              error={formik.touched.maritialStatusPersonalInformation && Boolean(formik.errors.maritialStatusPersonalInformation)}
-              helperText={formik.touched.maritialStatusPersonalInformation && formik.errors.maritialStatusPersonalInformation ? formik.errors.maritialStatusPersonalInformation : ''}
+              error={compareCheck(formik.touched.maritialStatusPersonalInformation, Boolean(formik.errors.maritialStatusPersonalInformation))}
+              helperText={ifThenElse(compareCheck(formik.touched.maritialStatusPersonalInformation, Boolean(formik.errors.maritialStatusPersonalInformation)), formik.errors.maritialStatusPersonalInformation, '')}
             />
           </Grid>
           <Grid
@@ -263,8 +276,8 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               onBlur={formik.handleBlur}
               onChange={formik.handleChange}
               value={formik.values.numberOfDependantsPersonalInformation}
-              error={formik.touched.numberOfDependantsPersonalInformation && Boolean(formik.errors.numberOfDependantsPersonalInformation)}
-              helperText={formik.touched.numberOfDependantsPersonalInformation && formik.errors.numberOfDependantsPersonalInformation ? formik.errors.numberOfDependantsPersonalInformation : ''}
+              error={compareCheck(formik.touched.numberOfDependantsPersonalInformation && Boolean(formik.errors.numberOfDependantsPersonalInformation))}
+              helperText={ifThenElse(compareCheck(formik.touched.numberOfDependantsPersonalInformation, Boolean(formik.errors.numberOfDependantsPersonalInformation)), formik.errors.numberOfDependantsPersonalInformation, '')}
             /> */}
             <Input
               name='numberOfDependantsPersonalInformation'
@@ -276,8 +289,8 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               value={formik.values.numberOfDependantsPersonalInformation}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={formik.touched.numberOfDependantsPersonalInformation && Boolean(formik.errors.numberOfDependantsPersonalInformation)}
-              helperText={formik.touched.numberOfDependantsPersonalInformation && formik.errors.numberOfDependantsPersonalInformation}
+              error={compareCheck(formik.touched.numberOfDependantsPersonalInformation, Boolean(formik.errors.numberOfDependantsPersonalInformation))}
+              helperText={ifThenElse(formik.touched.numberOfDependantsPersonalInformation, formik.errors.numberOfDependantsPersonalInformation, '')}
             />
           </Grid>
         </Grid>
@@ -314,8 +327,8 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
                 }
                 return null;
               }}
-              error={formik.touched.nationalityPersonalInformation && Boolean(formik.errors.nationalityPersonalInformation)}
-              helperText={formik.touched.nationalityPersonalInformation && formik.errors.nationalityPersonalInformation ? formik.errors.nationalityPersonalInformation : ''}
+              error={compareCheck(formik.touched.nationalityPersonalInformation && Boolean(formik.errors.nationalityPersonalInformation))}
+              helperText={ifThenElse(compareCheck(formik.touched.nationalityPersonalInformation, Boolean(formik.errors.nationalityPersonalInformation)), formik.errors.nationalityPersonalInformation, '')}
             />
           </Grid>
           <Grid
@@ -389,18 +402,11 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
                 });
               }}
               options={countries}
-              error={formik.touched.countryCitizenAddress && Boolean(formik.errors.countryCitizenAddress)}
-              helperText={formik.touched.countryCitizenAddress && formik.errors.countryCitizenAddress ? formik.errors.countryCitizenAddress : ''}
+              error={compareCheck(formik.touched.countryCitizenAddress, Boolean(formik.errors.countryCitizenAddress))}
+              helperText={ifThenElse(compareCheck(formik.touched.countryCitizenAddress, Boolean(formik.errors.countryCitizenAddress)), formik.errors.countryCitizenAddress, '')}
               displayEmpty
               renderValue={(value: unknown) => {
-                if ((value as string).length === 0) {
-                  return <Text title='Select Country' color='grey.400' />;
-                }
-                const selectedCountries = (countries as Array<{ label: string, value: string }>).find(country => country.value === value);
-                if (selectedCountries) {
-                  return `${selectedCountries.label}`;
-                }
-                return null;
+                return checkCountry(value);
               }}
             />
           </Grid>
@@ -428,8 +434,8 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               }}
               onBlur={formik.handleBlur}
               options={administrativeFirst}
-              error={formik.touched.provinceCitizenAddress && Boolean(formik.errors.provinceCitizenAddress)}
-              helperText={formik.touched.provinceCitizenAddress && formik.errors.provinceCitizenAddress ? formik.errors.provinceCitizenAddress : ''}
+              error={compareCheck(formik.touched.provinceCitizenAddress && Boolean(formik.errors.provinceCitizenAddress))}
+              helperText={ifThenElse(compareCheck(formik.touched.provinceCitizenAddress, Boolean(formik.errors.provinceCitizenAddress)), formik.errors.provinceCitizenAddress, '')}
               displayEmpty
               renderValue={(value: unknown) => {
                 if ((value as string).length === 0) {
@@ -476,8 +482,8 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
                 });
               }}
               options={administrativeSecond}
-              error={formik.touched.cityCitizenAddress && Boolean(formik.errors.cityCitizenAddress)}
-              helperText={formik.touched.cityCitizenAddress && formik.errors.cityCitizenAddress ? formik.errors.cityCitizenAddress : ''}
+              error={compareCheck(formik.touched.cityCitizenAddress, Boolean(formik.errors.cityCitizenAddress))}
+              helperText={ifThenElse(compareCheck(formik.touched.cityCitizenAddress, Boolean(formik.errors.cityCitizenAddress)), formik.errors.cityCitizenAddress, '')}
               displayEmpty
               renderValue={(value: unknown) => {
                 if ((value as string).length === 0) {
@@ -506,8 +512,8 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               onChange={(e: unknown) => formik.handleChange(e)}
               onBlur={formik.handleBlur}
               options={administrativeThird}
-              error={formik.touched.subDistrictCitizenAddress && Boolean(formik.errors.subDistrictCitizenAddress)}
-              helperText={formik.touched.subDistrictCitizenAddress && formik.errors.subDistrictCitizenAddress ? formik.errors.subDistrictCitizenAddress : ''}
+              error={compareCheck(formik.touched.subDistrictCitizenAddress, Boolean(formik.errors.subDistrictCitizenAddress))}
+              helperText={ifThenElse(compareCheck(formik.touched.subDistrictCitizenAddress, Boolean(formik.errors.subDistrictCitizenAddress)), formik.errors.subDistrictCitizenAddress, '')}
               displayEmpty
               renderValue={(value: unknown) => {
                 if ((value as string).length === 0) {
@@ -540,7 +546,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               value={formik.values.addressCitizenAddress}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={formik.touched.addressCitizenAddress && Boolean(formik.errors.addressCitizenAddress) ? formik.errors.addressCitizenAddress : ''}
+              error={ifThenElse(compareCheck(formik.touched.addressCitizenAddress, Boolean(formik.errors.addressCitizenAddress)), formik.errors.addressCitizenAddress, '')}
               withAsterisk
               customLabel='Citizen ID Street Name, Building Name'
               placeholder='Input Address Details'
@@ -557,8 +563,8 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               name='zipCodeCitizenAddress'
               value={formik.values.zipCodeCitizenAddress}
               onChange={formik.handleChange}
-              error={formik.touched.zipCodeCitizenAddress && Boolean(formik.errors.zipCodeCitizenAddress)}
-              helperText={formik.touched.zipCodeCitizenAddress && formik.errors.zipCodeCitizenAddress}
+              error={compareCheck(formik.touched.zipCodeCitizenAddress, Boolean(formik.errors.zipCodeCitizenAddress))}
+              helperText={ifThenElse(formik.touched.zipCodeCitizenAddress, formik.errors.zipCodeCitizenAddress, '')}
               placeholder='Input Zip Code'
             />
           </Grid>
@@ -626,18 +632,11 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
                 });
               }}
               options={countries}
-              error={formik.touched.countryResidentialAddress && Boolean(formik.errors.countryResidentialAddress)}
-              helperText={formik.touched.countryResidentialAddress && formik.errors.countryResidentialAddress ? formik.errors.countryResidentialAddress : ''}
+              error={compareCheck(formik.touched.countryResidentialAddress, Boolean(formik.errors.countryResidentialAddress))}
+              helperText={ifThenElse(compareCheck(formik.touched.countryResidentialAddress, Boolean(formik.errors.countryResidentialAddress)), formik.errors.countryResidentialAddress, '')}
               displayEmpty
               renderValue={(value: unknown) => {
-                if ((value as string).length === 0) {
-                  return <Text title='Select Country' color='grey.400' />;
-                }
-                const selectedCountries = (countries as Array<{ label: string, value: string }>).find(country => country.value === value);
-                if (selectedCountries) {
-                  return `${selectedCountries.label}`;
-                }
-                return null;
+                return checkCountry(value);
               }}
             />
           </Grid>
@@ -665,8 +664,8 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               }}
               onBlur={formik.handleBlur}
               options={secondAdministrativeFirst}
-              error={formik.touched.provinceResidentialAddress && Boolean(formik.errors.provinceResidentialAddress)}
-              helperText={formik.touched.provinceResidentialAddress && formik.errors.provinceResidentialAddress ? formik.errors.provinceResidentialAddress : ''}
+              error={compareCheck(formik.touched.provinceResidentialAddress, Boolean(formik.errors.provinceResidentialAddress))}
+              helperText={ifThenElse(compareCheck(formik.touched.provinceResidentialAddress, Boolean(formik.errors.provinceResidentialAddress)), formik.errors.provinceResidentialAddress, '')}
               displayEmpty
               renderValue={(value: unknown) => {
                 if ((value as string).length === 0) {
@@ -713,8 +712,8 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               }}
               onBlur={formik.handleBlur}
               options={secondAdministrativeSecond}
-              error={formik.touched.cityResidentialAddress && Boolean(formik.errors.cityResidentialAddress)}
-              helperText={formik.touched.cityResidentialAddress && formik.errors.cityResidentialAddress ? formik.errors.cityResidentialAddress : ''}
+              error={compareCheck(formik.touched.cityResidentialAddress, Boolean(formik.errors.cityResidentialAddress))}
+              helperText={ifThenElse(compareCheck(formik.touched.cityResidentialAddress, Boolean(formik.errors.cityResidentialAddress)), formik.errors.cityResidentialAddress, '')}
               displayEmpty
               renderValue={(value: unknown) => {
                 if ((value as string).length === 0) {
@@ -743,8 +742,8 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               onBlur={formik.handleBlur}
               onChange={formik.handleChange}
               options={secondAdministrativeThird}
-              error={formik.touched.subDistrictResidentialAddress && Boolean(formik.errors.subDistrictResidentialAddress)}
-              helperText={formik.touched.subDistrictResidentialAddress && formik.errors.subDistrictResidentialAddress ? formik.errors.subDistrictResidentialAddress : ''}
+              error={compareCheck(formik.touched.subDistrictResidentialAddress, Boolean(formik.errors.subDistrictResidentialAddress))}
+              helperText={ifThenElse(compareCheck(formik.touched.subDistrictResidentialAddress, Boolean(formik.errors.subDistrictResidentialAddress)), formik.errors.subDistrictResidentialAddress, '')}
               displayEmpty
               renderValue={(value: unknown) => {
                 if ((value as string).length === 0) {
@@ -777,7 +776,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               value={formik.values.addressResidentialAddress}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={formik.touched.addressResidentialAddress && Boolean(formik.errors.addressResidentialAddress) ? formik.errors.addressResidentialAddress : ''}
+              error={ifThenElse(compareCheck(formik.touched.addressResidentialAddress, Boolean(formik.errors.addressResidentialAddress)), formik.errors.addressResidentialAddress, '')}
               withAsterisk
               customLabel='Residential Street Name, Building Name'
               placeholder='Input Address Details'
@@ -795,8 +794,8 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               value={formik.values.zipCodeResidentialAddress}
               onBlur={formik.handleBlur}
               onChange={formik.handleChange}
-              error={formik.touched.zipCodeResidentialAddress && Boolean(formik.errors.zipCodeResidentialAddress)}
-              helperText={formik.touched.zipCodeResidentialAddress && formik.errors.zipCodeResidentialAddress}
+              error={compareCheck(formik.touched.zipCodeResidentialAddress, Boolean(formik.errors.zipCodeResidentialAddress))}
+              helperText={ifThenElse(formik.touched.zipCodeResidentialAddress, formik.errors.zipCodeResidentialAddress, '')}
               placeholder='Input Zip Code'
             />
           </Grid>
@@ -836,8 +835,8 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               options={IDTypes}
-              error={formik.touched.idTypePersonalID && Boolean(formik.errors.idTypePersonalID)}
-              helperText={formik.touched.idTypePersonalID && formik.errors.idTypePersonalID ? formik.errors.idTypePersonalID : ''}
+              error={compareCheck(formik.touched.idTypePersonalID, Boolean(formik.errors.idTypePersonalID))}
+              helperText={ifThenElse(compareCheck(formik.touched.idTypePersonalID, Boolean(formik.errors.idTypePersonalID)), formik.errors.idTypePersonalID, '')}
               displayEmpty
               renderValue={(value: unknown) => {
                 if ((value as string).length === 0) {
@@ -863,8 +862,8 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               value={formik.values.idNumberPersonalID}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={formik.touched.idNumberPersonalID && Boolean(formik.errors.idNumberPersonalID)}
-              helperText={formik.touched.idNumberPersonalID && formik.errors.idNumberPersonalID}
+              error={compareCheck(formik.touched.idNumberPersonalID, Boolean(formik.errors.idNumberPersonalID))}
+              helperText={ifThenElse(formik.touched.idNumberPersonalID, formik.errors.idNumberPersonalID, '')}
               placeholder='Input ID Number'
             />
           </Grid>
@@ -885,8 +884,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               value={formik.values.idExpirationDatePersonalID as unknown as Date}
               onChange={(date: unknown) => formik.setFieldValue('idExpirationDatePersonalID', date)}
               withAsterisk
-              // error={formik.touched.idExpirationDatePersonalID && formik.errors.idExpirationDatePersonalID ? String(formik.errors.idExpirationDatePersonalID) : ''}
-              error={formik.touched.idExpirationDatePersonalID && formik.errors.idExpirationDatePersonalID ? String(formik.errors.idExpirationDatePersonalID) : ''}
+              error={ifThenElse(compareCheck(formik.touched.idExpirationDatePersonalID, Boolean(formik.errors.idExpirationDatePersonalID)), String(formik.errors.idExpirationDatePersonalID), '')}
             />
           </Grid>
         </Grid>

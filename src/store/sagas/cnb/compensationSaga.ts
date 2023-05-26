@@ -137,7 +137,7 @@ function* fetchPostNewCnbProfile(action: AnyAction) {
   }
 }
 
-function* cnbSaga() {
+function* compensationSaga() {
   yield takeEvery(getTableRequested.toString(), fetchGetTable);
   yield takeEvery(
     getCompensationComponentOptionRequested.toString(),
@@ -150,4 +150,4 @@ function* cnbSaga() {
   yield takeEvery(deleteCompensationRequested.toString(), deleteCnb);
 }
 
-export default cnbSaga;
+export default compensationSaga;

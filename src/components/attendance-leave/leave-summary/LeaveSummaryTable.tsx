@@ -15,7 +15,6 @@ import { visuallyHidden } from '@mui/utils';
 // Import Icon React Icon
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { BsCheckLg } from 'react-icons/bs';
-import { BsX } from 'react-icons/bs';
 import { HiPencilAlt } from 'react-icons/hi';
 
 const ButtonWrapper = styled.div`
@@ -231,7 +230,7 @@ function LeaveSummaryTable({
                         {DeclineAction && (
                           <IconButton
                             parentColor='red.100'
-                            icons={<BsX fontSize={25} color='#EF4444' />}
+                            icons={<BsCheckLg fontSize={25} color='#EF4444' />}
                           />
                         )}
                         {EditAction && (

@@ -14,6 +14,7 @@ import {
   Paper,
   TextField,
   InputAdornment,
+  TextFieldProps
 } from '@mui/material/';
 import ConfirmationModal from '../_shared/common/ConfirmationModal';
 import SearchIcon from '@mui/icons-material/Search';
@@ -22,7 +23,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 
 import { styled } from '@mui/material/styles';
-import { TextFieldProps } from '@mui/material/';
 import { IconButton } from '../_shared/form';
 import { useAppDispatch } from '@/hooks/index';
 import { deleteCompensationRequested } from '@/store/reducers/slice/cnb/compensationSlice';

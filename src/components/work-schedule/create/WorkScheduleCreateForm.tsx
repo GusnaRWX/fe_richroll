@@ -49,7 +49,7 @@ function WorkScheduleCreateForm() {
       specifyBreakHour: false,
       breakStartTime: '',
       breakEndTime: ''
-    } as workSchedule.initialValuesWorkScheduleForm,
+    } as workSchedule.InitialValuesWorkScheduleForm,
     validationSchema: validationSchemaWorkScheduler,
     onSubmit: (values) => {
       handleSubmit(values);

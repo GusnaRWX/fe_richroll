@@ -13,6 +13,7 @@ import { Input, CheckBox} from '@/components/_shared/form';
 import { Text } from '@/components/_shared/common';
 import { styled as MuiStyled } from '@mui/material/styles';
 import { useAppSelectors } from '@/hooks/index';
+import { ifThenElse, compareCheck } from '@/utils/helper';
 
 
 const AsteriskComponent = MuiStyled('span')(({ theme }) => ({
@@ -23,18 +24,6 @@ interface CompanyBankProps {
   bank: [];
   paymentMethod: [];
   formik;
-}
-
-function ifThen(check, isTrue, isFalse) {
-  if (!check) {
-    return isFalse;
-  } else {
-    return isTrue;
-  }
-}
-
-function compareCheck(firstArg, secondArg = true, thirdArg = true) {
-  return (firstArg && secondArg && thirdArg);
 }
 
 function CompanyProfileBankForm ({bank, paymentMethod, formik} :CompanyBankProps) {
@@ -95,7 +84,7 @@ function CompanyProfileBankForm ({bank, paymentMethod, formik} :CompanyBankProps
                   <MenuItem key={idx} value={val?.['id']}>{val?.['name']}</MenuItem>
                 ))}
               </Select>
-              <FormHelperText>{ifThen(formik.touched.bankBankInformation, formik.errors.bankBankInformation, '')}</FormHelperText>
+              <FormHelperText>{ifThenElse(formik.touched.bankBankInformation, formik.errors.bankBankInformation, '')}</FormHelperText>
             </FormControl>
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
@@ -104,7 +93,7 @@ function CompanyProfileBankForm ({bank, paymentMethod, formik} :CompanyBankProps
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               error={compareCheck(formik.touched.bankAccountHolderNameBankInformation, Boolean(formik.errors.bankAccountHolderNameBankInformation))}
-              helperText={ifThen(formik.touched.bankAccountHolderNameBankInformation, formik.errors.bankAccountHolderNameBankInformation, '')}
+              helperText={ifThenElse(formik.touched.bankAccountHolderNameBankInformation, formik.errors.bankAccountHolderNameBankInformation, '')}
               customLabel='Bank Account Holder’s Name'
               withAsterisk={true}
               size='small'
@@ -120,7 +109,7 @@ function CompanyProfileBankForm ({bank, paymentMethod, formik} :CompanyBankProps
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               error={compareCheck(formik.touched.bankAccoutNoBankInformation, Boolean(formik.errors.bankAccoutNoBankInformation))}
-              helperText={ifThen(formik.touched.bankAccoutNoBankInformation, formik.errors.bankAccoutNoBankInformation, '')}
+              helperText={ifThenElse(formik.touched.bankAccoutNoBankInformation, formik.errors.bankAccoutNoBankInformation, '')}
               customLabel='Bank Account No'
               withAsterisk={true}
               size='small'
@@ -134,7 +123,7 @@ function CompanyProfileBankForm ({bank, paymentMethod, formik} :CompanyBankProps
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               error={compareCheck(formik.touched.bankCodeBankInformation, Boolean(formik.errors.bankCodeBankInformation))}
-              helperText={ifThen(formik.touched.bankCodeBankInformation, formik.errors.bankCodeBankInformation, '')}
+              helperText={ifThenElse(formik.touched.bankCodeBankInformation, formik.errors.bankCodeBankInformation, '')}
               customLabel='Bank Code'
               withAsterisk={false}
               size='small'
@@ -148,7 +137,7 @@ function CompanyProfileBankForm ({bank, paymentMethod, formik} :CompanyBankProps
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               error={compareCheck(formik.touched.branchCodeBankInformation, Boolean(formik.errors.branchCodeBankInformation))}
-              helperText={ifThen(formik.touched.branchCodeBankInformation, formik.errors.branchCodeBankInformation, '')}
+              helperText={ifThenElse(formik.touched.branchCodeBankInformation, formik.errors.branchCodeBankInformation, '')}
               customLabel='Branch Code'
               withAsterisk={false}
               size='small'
@@ -164,7 +153,7 @@ function CompanyProfileBankForm ({bank, paymentMethod, formik} :CompanyBankProps
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               error={compareCheck(formik.touched.branchNameBankInformation, Boolean(formik.errors.branchNameBankInformation))}
-              helperText={ifThen(formik.touched.branchNameBankInformation, formik.errors.branchNameBankInformation, '')}
+              helperText={ifThenElse(formik.touched.branchNameBankInformation, formik.errors.branchNameBankInformation, '')}
               customLabel='Branch Name'
               withAsterisk={false}
               size='small'
@@ -178,7 +167,7 @@ function CompanyProfileBankForm ({bank, paymentMethod, formik} :CompanyBankProps
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               error={compareCheck(formik.touched.swiftCodeBankInformation, Boolean(formik.errors.swiftCodeBankInformation))}
-              helperText={ifThen(formik.touched.swiftCodeBankInformation, formik.errors.swiftCodeBankInformation, '')}
+              helperText={ifThenElse(formik.touched.swiftCodeBankInformation, formik.errors.swiftCodeBankInformation, '')}
               customLabel='Swift Code'
               withAsterisk={false}
               size='small'
@@ -236,7 +225,7 @@ function CompanyProfileBankForm ({bank, paymentMethod, formik} :CompanyBankProps
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                       error={compareCheck(formik.touched.monthlyPeriodStart, Boolean(formik.errors.monthlyPeriodStart))}
-                      helperText={ifThen(formik.touched.monthlyPeriodStart, formik.errors.monthlyPeriodStart, '')}
+                      helperText={ifThenElse(formik.touched.monthlyPeriodStart, formik.errors.monthlyPeriodStart, '')}
                       withAsterisk={true}
                       size='small'
                       value={formik.values.monthlyPeriodStart}
@@ -248,7 +237,7 @@ function CompanyProfileBankForm ({bank, paymentMethod, formik} :CompanyBankProps
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                       error={compareCheck(formik.touched.monthlyPeriodEnd, Boolean(formik.errors.monthlyPeriodEnd))}
-                      helperText={ifThen(formik.touched.monthlyPeriodEnd, formik.errors.monthlyPeriodEnd, '')}
+                      helperText={ifThenElse(formik.touched.monthlyPeriodEnd, formik.errors.monthlyPeriodEnd, '')}
                       withAsterisk={true}
                       size='small'
                       value={formik.values.monthlyPeriodEnd}
@@ -262,7 +251,7 @@ function CompanyProfileBankForm ({bank, paymentMethod, formik} :CompanyBankProps
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     error={compareCheck(formik.touched.monthlyPayrollDate, Boolean(formik.errors.monthlyPayrollDate))}
-                    helperText={ifThen(formik.touched.monthlyPayrollDate, formik.errors.monthlyPayrollDate, '')}
+                    helperText={ifThenElse(formik.touched.monthlyPayrollDate, formik.errors.monthlyPayrollDate, '')}
                     withAsterisk={true}
                     size='small'
                     value={formik.values.monthlyPayrollDate}
@@ -293,7 +282,7 @@ function CompanyProfileBankForm ({bank, paymentMethod, formik} :CompanyBankProps
                     <MenuItem key={idx} value={val?.['id']}>{val?.['name']}</MenuItem>
                   ))}
                 </Select>
-                <FormHelperText>{ifThen(formik.touched.monthlyMethod, formik.errors.monthlyMethod, '')}</FormHelperText>
+                <FormHelperText>{ifThenElse(formik.touched.monthlyMethod, formik.errors.monthlyMethod, '')}</FormHelperText>
               </FormControl>
             </Grid>
           </Grid>
@@ -342,7 +331,7 @@ function CompanyProfileBankForm ({bank, paymentMethod, formik} :CompanyBankProps
                     <MenuItem key={idx} value={val?.['id']}>{val?.['name']}</MenuItem>
                   ))}
                 </Select>
-                <FormHelperText>{ifThen(formik.touched.weeklyMethod, formik.errors.weeklyMethod, '')}</FormHelperText>
+                <FormHelperText>{ifThenElse(formik.touched.weeklyMethod, formik.errors.weeklyMethod, '')}</FormHelperText>
               </FormControl>
             </Grid>
           </Grid>
@@ -408,7 +397,7 @@ function CompanyProfileBankForm ({bank, paymentMethod, formik} :CompanyBankProps
                     <MenuItem key={idx} value={val?.['id']}>{val?.['name']}</MenuItem>
                   ))}
                 </Select>
-                <FormHelperText>{ifThen(formik.touched.biWeeklyMethod, formik.errors.biWeeklyMethod, '')}</FormHelperText>
+                <FormHelperText>{ifThenElse(formik.touched.biWeeklyMethod, formik.errors.biWeeklyMethod, '')}</FormHelperText>
               </FormControl>
             </Grid>
           </Grid>

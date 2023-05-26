@@ -59,33 +59,30 @@ export const getCompanyData = () => {
 };
 
 export const convertValue = (name, event) => {
-  const obj = {
+  return {
     target: {
       name, value: event.target.value
     }
   };
-  return obj;
 };
 
 export const convertChecked = (event) => {
   const { name, checked } = event.target;
 
-  const obj = {
+  return {
     target: {
       name, value: checked
     }
   };
-  return obj;
 };
 
 export const convertDateValue = (name, event) => {
   console.log('helpers', event);
-  const obj = {
+  return {
     target: {
       name, value: event.$d
     }
   };
-  return obj;
 };
 
 export const convertImageParams = (name, value, callback?, onClose?) => {
@@ -99,12 +96,11 @@ export const convertImageParams = (name, value, callback?, onClose?) => {
     onClose();
   }
 
-  const obj = {
+  return {
     target: {
       name, value: [files]
     }
   };
-  return obj;
 };
 
 export const randomCode = (length: number) => {
@@ -136,11 +132,8 @@ export const base64ToFile = (base64String: string | undefined, fileName: string)
   const blob = new Blob([buffer as BlobPart], { type: mimeType });
 
   // Create a File from the Blob
-  const file = new File([blob], fileName);
-
-  return file;
+  return new File([blob], fileName);
 };
-
 
 /**
  * Handle for read message from Validation response
@@ -165,4 +158,36 @@ export const checkObject = (obj) => {
     }
   }
   return false;
+};
+
+/**
+ * Handle simple If Then Else to reduce cognitive complexity
+ *
+ */
+export const ifThenElse = (condition, ifTrue, ifFalse) => {
+  if (!condition) {
+    return ifFalse;
+  } else {
+    return ifTrue;
+  }
+};
+
+/**
+ * Handle compare up to 3 variable
+ *
+ */
+export const compareCheck = (firstArg, secondArg = true, thirdArg = true) => {
+  return (firstArg && secondArg && thirdArg);
+};
+
+/**
+ * Handle replace if empty
+ *
+ */
+export const ifEmptyReplace = (condition, replace) => {
+  if (!condition || !condition.length) {
+    return replace;
+  } else {
+    return condition;
+  }
 };
