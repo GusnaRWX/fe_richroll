@@ -1,27 +1,27 @@
-import React from "react";
+import React from 'react';
 import {
   Modal,
   Box,
   IconButton,
   Typography,
   Button as MuiButton,
-} from "@mui/material";
-import { Close } from "@mui/icons-material";
-import styled from "@emotion/styled";
+} from '@mui/material';
+import { Close } from '@mui/icons-material';
+import styled from '@emotion/styled';
 
 const modalStyle = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: "543px",
-  bgcolor: "background.paper",
-  border: "1px solid #E5E7EB",
-  borderRadius: "8px",
-  paddingTop: "10px",
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: '543px',
+  bgcolor: 'background.paper',
+  border: '1px solid #E5E7EB',
+  borderRadius: '8px',
+  paddingTop: '10px',
   p: 2,
-  maxHeight: "100%",
-  overflowY: "auto",
+  maxHeight: '100%',
+  overflowY: 'auto',
 };
 
 const ModalHeader = styled.div`
@@ -63,8 +63,8 @@ function DetailModal({
       open={open}
       onClose={handleClose}
       sx={{
-        ".MuiModal-backdrop": {
-          background: "rgba(0,0,0,0.75)",
+        '.MuiModal-backdrop': {
+          background: 'rgba(0,0,0,0.75)',
         },
       }}
       keepMounted
@@ -72,18 +72,18 @@ function DetailModal({
     >
       <Box sx={modalStyle}>
         <ModalHeader>
-          <Typography component="h5" fontWeight="bold">
+          <Typography component='h5' fontWeight='bold'>
             {title}
           </Typography>
           <IconButton onClick={handleClose}>
             <Close />
           </IconButton>
         </ModalHeader>
-        <div style={{ paddingBottom: "1rem", paddingTop: "1rem" }}>
+        <div style={{ paddingBottom: '1rem', paddingTop: '1rem' }}>
           {content}
         </div>
         <ModalFooter>
-          <MuiButton variant="outlined" size="small" onClick={handleClose}>
+          <MuiButton variant='outlined' size='small' onClick={handleClose}>
             Close
           </MuiButton>
         </ModalFooter>

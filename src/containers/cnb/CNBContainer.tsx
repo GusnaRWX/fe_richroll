@@ -1,8 +1,7 @@
-import React from "react";
-import Layout from "@/components/_shared/_core/layout/Index";
-import CNBComponent from "@/components/cnb";
+import React from 'react';
+import Layout from '@/components/_shared/_core/layout/Index';
+import CNBComponent from '@/components/cnb';
 
-const CNBContainer = () => {
 const CNBContainer = () => {
   return (
     <Layout>
