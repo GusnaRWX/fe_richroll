@@ -12,6 +12,8 @@ import {
 } from "@mui/material";
 import LeaveBalanceProfileDetailTable from "./leaveBalanceTable";
 import LeaveBalanceHistoryTable from "./LeaveHistoryTable";
+import LeaveBalanceProfileEditModal from "./EditModal";
+
 import { Button, IconButton } from "@/components/_shared/form";
 import { styled as MuiStyled } from "@mui/material/styles";
 import { useRouter } from "next/router";
@@ -44,6 +46,14 @@ const LeaveBalanceProfileDetailComponent = () => {
     alignItems: "center",
     justifyContent: "flex-end",
   });
+
+  const [ModalOpen, setModalOpen] = useState<boolean>(false);
+  function HandleOpen() {
+    setModalOpen(true);
+  }
+  function HandleClose() {
+    setModalOpen(false);
+  }
 
   return (
     <>
@@ -86,6 +96,7 @@ const LeaveBalanceProfileDetailComponent = () => {
             size="small"
             label="Edit"
             color="secondary"
+            onClick={() => HandleOpen()}
             style={{ color: "#fff", display: "flex", gap: "8px" }}
             buttonIcon={
               <HiPencilAlt
@@ -161,6 +172,11 @@ const LeaveBalanceProfileDetailComponent = () => {
       <Paper sx={{ p: "16px" }}>
         <LeaveBalanceHistoryTable tabValue={0} />
       </Paper>
+      <LeaveBalanceProfileEditModal
+        open={ModalOpen}
+        handleClose={HandleClose}
+        title="Customize Leave Entitlement for Individuals"
+      />
     </>
   );
 };
