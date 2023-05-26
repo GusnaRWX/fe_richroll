@@ -1,5 +1,4 @@
 import React from "react";
-import { styled as MuiStyled } from "@mui/material/styles";
 import { Button, Form, IconButton } from "@/components/_shared/form";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -87,7 +86,7 @@ export default function UpdateCNBComponent() {
     alignItems: "center",
   });
 
-  const NextBtnWrapper = MuiStyled(Box)({
+  const NextBtnWrapper = styled(Box)({
     width: "100%",
     display: "flex",
     flexDirection: "row",
@@ -198,7 +197,7 @@ export default function UpdateCNBComponent() {
     }
   }
 
-  interface suplementType {
+  interface SuplementType {
     compensationComponentId: string;
     taxStatus: string;
     rateOrAmount: number | null;
@@ -211,7 +210,7 @@ export default function UpdateCNBComponent() {
     period: string;
     rateOrAmount: string;
     taxStatus: string;
-    supplementary: suplementType[];
+    supplementary: SuplementType[];
   } = {
     name: "",
     compensationComponentId: "",
@@ -479,7 +478,7 @@ export default function UpdateCNBComponent() {
                                               (
                                                 formik.errors?.supplementary[
                                                   i
-                                                ] as unknown as suplementType
+                                                ] as unknown as SuplementType
                                               )?.compensationComponentId
                                             ),
                                         })}
@@ -513,7 +512,7 @@ export default function UpdateCNBComponent() {
                                               (
                                                 formik.errors?.supplementary[
                                                   i
-                                                ] as unknown as suplementType
+                                                ] as unknown as SuplementType
                                               )?.compensationComponentId}
                                           </FormHelperText>
                                         )}
@@ -544,7 +543,7 @@ export default function UpdateCNBComponent() {
                                               (
                                                 formik.errors?.supplementary[
                                                   i
-                                                ] as unknown as suplementType
+                                                ] as unknown as SuplementType
                                               )?.period
                                             ),
                                         })}
@@ -591,7 +590,7 @@ export default function UpdateCNBComponent() {
                                               (
                                                 formik.errors?.supplementary[
                                                   i
-                                                ] as unknown as suplementType
+                                                ] as unknown as SuplementType
                                               )?.taxStatus}
                                           </FormHelperText>
                                         )}
@@ -628,7 +627,7 @@ export default function UpdateCNBComponent() {
                                             (
                                               formik.errors?.supplementary[
                                                 i
-                                              ] as unknown as suplementType
+                                              ] as unknown as SuplementType
                                             )?.rateOrAmount
                                           ),
                                       })}
@@ -640,7 +639,7 @@ export default function UpdateCNBComponent() {
                                           (
                                             formik.errors?.supplementary[
                                               i
-                                            ] as unknown as suplementType
+                                            ] as unknown as SuplementType
                                           )?.rateOrAmount,
                                       })}
                                     value={
@@ -679,7 +678,7 @@ export default function UpdateCNBComponent() {
                                             (
                                               formik.errors?.supplementary[
                                                 i
-                                              ] as unknown as suplementType
+                                              ] as unknown as SuplementType
                                             )?.period
                                           ),
                                       })}
@@ -714,7 +713,7 @@ export default function UpdateCNBComponent() {
                                             (
                                               formik.errors?.supplementary[
                                                 i
-                                              ] as unknown as suplementType
+                                              ] as unknown as SuplementType
                                             )?.period}
                                         </FormHelperText>
                                       )}

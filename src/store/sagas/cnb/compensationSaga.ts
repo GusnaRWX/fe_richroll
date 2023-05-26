@@ -206,7 +206,7 @@ function* patchCnbProfile(action: AnyAction) {
   }
 }
 
-function* cnbSaga() {
+function* compensationSaga() {
   yield takeEvery(getTableRequested.toString(), fetchGetTable);
   yield takeEvery(
     getCompensationComponentOptionRequested.toString(),
@@ -221,4 +221,4 @@ function* cnbSaga() {
   yield takeEvery(putUpdateRequested.toString(), patchCnbProfile);
 }
 
-export default cnbSaga;
+export default compensationSaga;
