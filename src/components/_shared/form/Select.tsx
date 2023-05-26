@@ -48,9 +48,6 @@ function Select(
           )
         }
       </MuiSelect>
-      {/* {error && (
-        <FormHelperText sx={{ color: '#EF4444' }}>{error}</FormHelperText>
-      )} */}
       {error && (
         <FormHelperText sx={{ color: '#EF4444' }}>{helperText}</FormHelperText>
       )}

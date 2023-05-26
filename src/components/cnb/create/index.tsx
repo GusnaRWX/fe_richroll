@@ -1,5 +1,4 @@
 import React from 'react';
-import { styled as MuiStyled } from '@mui/material/styles';
 import { Button, Form, IconButton } from '@/components/_shared/form';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -60,7 +59,7 @@ export default function CreateCNBComponent() {
     alignItems: 'center',
   });
 
-  const NextBtnWrapper = MuiStyled(Box)({
+  const NextBtnWrapper = styled(Box)({
     width: '100%',
     display: 'flex',
     flexDirection: 'row',
@@ -140,7 +139,7 @@ export default function CreateCNBComponent() {
     },
   });
 
-  interface supplementType {
+  interface SupplementType {
     id: number;
     data: {
       compensationComponentId: string;
@@ -151,10 +150,10 @@ export default function CreateCNBComponent() {
   }
 
   const [supplementaryList, setSupplementaryList] = React.useState<
-  supplementType[]
+  SupplementType[]
   >([]);
 
-  interface baseCompType {
+  interface BaseCompType {
     name: string;
     compensationComponentId: string;
     taxStatus: string;
@@ -162,7 +161,7 @@ export default function CreateCNBComponent() {
     period: string;
   }
 
-  const [BaseCompensation, setBaseCompensation] = React.useState<baseCompType>({
+  const [BaseCompensation, setBaseCompensation] = React.useState<BaseCompType>({
     name: '',
     compensationComponentId: '',
     taxStatus: '',
@@ -467,8 +466,8 @@ export default function CreateCNBComponent() {
                                 )
                               }
                             >
-                              {compensationComponentOption?.map((Option, i) => (
-                                <MenuItem key={i} value={Option.id}>
+                              {compensationComponentOption?.map((Option, j) => (
+                                <MenuItem key={j} value={Option.id}>
                                   {Option.name}
                                 </MenuItem>
                               ))}

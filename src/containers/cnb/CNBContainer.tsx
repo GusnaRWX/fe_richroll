@@ -1,13 +1,13 @@
 import React from 'react';
 import Layout from '@/components/_shared/_core/layout/Index';
-import CompanyProfileComponent from '@/components/cnb';
+import CNBComponent from '@/components/cnb';
 
-const CompanyProfileContainer = () => {
+const CNBContainer = () => {
   return (
     <Layout>
-      <CompanyProfileComponent />
+      <CNBComponent />
     </Layout>
   );
 };
 
-export default CompanyProfileContainer;
+export default CNBContainer;

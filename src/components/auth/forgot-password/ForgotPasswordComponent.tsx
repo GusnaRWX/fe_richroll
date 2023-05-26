@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from '@emotion/styled';
 import Image from 'next/image';
 import kayaroll from '../../../../public/images/kayaroll-logo.png';
-import LocalizationMenu from '@/components/_shared/_core/localization/Index';
+import LocalizationMenu from '@/components/_shared/_core/localization/LocalizationMenu';
 import { Card, CardContent, Typography, Box, Stack } from '@mui/material';
 import { Input, Button } from '@/components/_shared/form';
 import { useForm, useAppSelectors, useAppDispatch } from '@/hooks/index';

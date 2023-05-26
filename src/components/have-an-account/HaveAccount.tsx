@@ -3,7 +3,7 @@ import React from 'react';
 import Image from 'next/image';
 import { Image as ImageType } from '@/utils/assetsConstant';
 import { styled } from '@mui/material/styles';
-import LocalizationMenu from '../_shared/_core/localization/Index';
+import LocalizationMenu from '../_shared/_core/localization/LocalizationMenu';
 import { Text } from '../_shared/common';
 import { Button } from '../_shared/form';
 import Link from 'next/link';

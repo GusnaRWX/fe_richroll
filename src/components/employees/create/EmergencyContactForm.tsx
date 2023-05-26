@@ -62,6 +62,17 @@ function EmergencyContactForm({ refProp, nextPage, setValues, emergencyValues, s
 
   };
 
+  const checkRelationship = (value: unknown) => {
+    if ((value as string).length === 0) {
+      return <Text title='Select Relationship' color='grey.400' />;
+    }
+    const selected = relationshipItems.find(item => item.value === value);
+    if (selected) {
+      return `${selected.label}`;
+    }
+    return null;
+  };
+
   return (
     <>
       {
@@ -123,14 +134,7 @@ function EmergencyContactForm({ refProp, nextPage, setValues, emergencyValues, s
                   name='relationPrimary'
                   displayEmpty
                   renderValue={(value: unknown) => {
-                    if ((value as string).length === 0) {
-                      return <Text title='Select Relationship' color='grey.400' />;
-                    }
-                    const selected = relationshipItems.find(item => item.value === value);
-                    if (selected) {
-                      return `${selected.label}`;
-                    }
-                    return null;
+                    return checkRelationship(value);
                   }}
                 >
                   <MenuItem value='1'>Parent</MenuItem>
@@ -214,14 +218,7 @@ function EmergencyContactForm({ refProp, nextPage, setValues, emergencyValues, s
                   name='relationSecondary'
                   displayEmpty
                   renderValue={(value: unknown) => {
-                    if ((value as string).length === 0) {
-                      return <Text title='Select Relationship' color='grey.400' />;
-                    }
-                    const selected = relationshipItems.find(item => item.value === value);
-                    if (selected) {
-                      return `${selected.label}`;
-                    }
-                    return null;
+                    return checkRelationship(value);
                   }}
                 >
                   <MenuItem value='1'>Parent</MenuItem>

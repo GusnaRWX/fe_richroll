@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker, DatePickerProps } from '@mui/x-date-pickers/DatePicker';
+import { DatePicker as CommonDatePicker, DatePickerProps } from '@mui/x-date-pickers/DatePicker';
 import { FormHelperText, Typography, styled } from '@mui/material';
 
 const AsteriskComponent = styled('span')(({ theme }) => ({
@@ -16,7 +16,7 @@ type DatePickerType = DatePickerProps<Date> & {
   error?: string;
 };
 
-const BasicDatePicker = ({
+const DatePicker = ({
   customLabel,
   onChange,
   value,
@@ -32,7 +32,7 @@ const BasicDatePicker = ({
           {withAsterisk && <AsteriskComponent>*</AsteriskComponent>}
         </Typography>
       )}
-      <DatePicker
+      <CommonDatePicker
         format='DD/MM/YYYY'
         value={value}
         onChange={onChange}
@@ -54,4 +54,4 @@ const BasicDatePicker = ({
   );
 };
 
-export default BasicDatePicker;
+export default DatePicker;

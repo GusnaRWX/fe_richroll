@@ -135,7 +135,7 @@ export declare namespace SharedComponent {
 
   export type SelectInput = SelectProps & {
     customLabel?: string;
-    options?: Array<{ label: string, value: string }> | undefined;
+    options: Array<{ label: string, value: string }> | undefined;
     withAsterisk?: boolean;
     helperText?: string;
   }

@@ -16,7 +16,7 @@ import { Search } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import BasicDatePicker from '@/components/_shared/form/DatePicker';
 import styled from '@emotion/styled';
-import LeaveSummaryTable from './table';
+import LeaveSummaryTable from './LeaveSummaryTable';
 
 interface TabPanelProps {
   children?: React.ReactNode;
