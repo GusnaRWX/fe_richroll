@@ -32,84 +32,56 @@ const NameWrapper = styled.div`
 `;
 
 const headerItems = [
-  { id: "id", label: "Request ID" },
+  { id: "no", label: "No" },
   { id: "name", label: "Employee Name" },
-  { id: "position", label: "Position" },
-  { id: "departement", label: "Departement" },
-  { id: "starting", label: "Starting Balance" },
-  { id: "leave", label: "Leave Used" },
-  { id: "remaining", label: "Remaining Balance" },
-  { id: "action", label: "" },
+  { id: "leave", label: "Leave Date" },
+  { id: "type", label: "Type" },
+  { id: "change", label: "Changes" },
 ];
 
-interface LeaveBalanceTableProps {
+interface LeaveBalanceHistoryTableProps {
   tabValue: number;
 }
 
 type Order = "asc" | "desc";
 
-function LeaveBalanceTable({ tabValue }: LeaveBalanceTableProps) {
+function LeaveBalanceHistoryTable({ tabValue }: LeaveBalanceHistoryTableProps) {
   const router = useRouter();
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
   const [direction, setDirection] = useState<Order>("desc");
   const [sort, setSort] = useState("");
+  const EmployeeName = router.query.name;
   const [hydrated, setHaydrated] = useState(false);
 
   const data = {
     items: [
       {
-        id: 1,
-        employeeImage: null,
-        employeeName: "Mamank Racing",
-        position: "Leader",
-        departement: "PT. Mencari Jodoh",
-        starting_balance: "3 Month",
-        leave_used: "3 Month",
-        remaining_balance: "3 Month",
+        no: 1,
+        employeeImage: EmployeeName?.toString(),
+        employeeName: EmployeeName?.toString(),
+        leave: "00/00/0000 - 00/00/0000",
+        type: "No Pay leave",
+        change: "99 Days",
       },
       {
-        id: 2,
-        employeeImage: null,
-        employeeName: "Agus Knalpot",
-        position: "Leader",
-        departement: "PT. Mencari Jodoh",
-        starting_balance: "3 Month",
-        leave_used: "3 Month",
-        remaining_balance: "3 Month",
+        no: 2,
+        employeeImage: EmployeeName?.toString(),
+        employeeName: EmployeeName?.toString(),
+        leave: "00/00/0000 - 00/00/0000",
+        type: "No Pay leave",
+        change: "99 Days",
       },
       {
-        id: 3,
-        employeeImage: null,
-        employeeName: "Mimin wkwk.land",
-        position: "Leader",
-        departement: "PT. Mencari Jodoh",
-        starting_balance: "3 Month",
-        leave_used: "3 Month",
-        remaining_balance: "3 Month",
-      },
-      {
-        id: 4,
-        employeeImage: null,
-        employeeName: "Rehan",
-        position: "Leader",
-        departement: "PT. Mencari Jodoh",
-        starting_balance: "3 Month",
-        leave_used: "3 Month",
-        remaining_balance: "3 Month",
-      },
-      {
-        id: 5,
-        employeeImage: null,
-        employeeName: "Dapa anak baik",
-        position: "Leader",
-        departement: "PT. Mencari Jodoh",
-        starting_balance: "3 Month",
-        leave_used: "3 Month",
-        remaining_balance: "3 Month",
+        no: 3,
+        employeeImage: EmployeeName?.toString(),
+        employeeName: EmployeeName?.toString(),
+        leave: "00/00/0000 - 00/00/0000",
+        type: "No Pay leave",
+        change: "99 Days",
       },
     ],
-    itemTotals: 5,
+    itemTotals: 3,
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -189,7 +161,7 @@ function LeaveBalanceTable({ tabValue }: LeaveBalanceTableProps) {
               ) : (
                 data?.items.map((item, index) => (
                   <TableRow key={index}>
-                    <TableCell>{item.id}</TableCell>
+                    <TableCell>{item.no}</TableCell>
                     <TableCell>
                       <NameWrapper>
                         <Avatar
@@ -211,25 +183,9 @@ function LeaveBalanceTable({ tabValue }: LeaveBalanceTableProps) {
                         &nbsp;{item.employeeName}
                       </NameWrapper>
                     </TableCell>
-                    <TableCell>{item.position}</TableCell>
-                    <TableCell>{item.departement}</TableCell>
-                    <TableCell>{item.starting_balance}</TableCell>
-                    <TableCell>
-                      {/* {dayjs(item.user.createdAt).format("YYYY-MM-DD H:m:s")} */}
-                      {item.leave_used}
-                    </TableCell>
-                    <TableCell>{item.remaining_balance}</TableCell>
-                    <TableCell>
-                      <ButtonWrapper>
-                        <IconButton
-                          parentColor="primary.50"
-                          icons={<HiPencilAlt fontSize={20} color="#223567" />}
-                          onClick={() =>
-                            OpenProfileDetail(item.employeeName, item.position)
-                          }
-                        />
-                      </ButtonWrapper>
-                    </TableCell>
+                    <TableCell>{item.leave}</TableCell>
+                    <TableCell>{item.type}</TableCell>
+                    <TableCell>{item.change}</TableCell>
                   </TableRow>
                 ))
               )
@@ -247,4 +203,4 @@ function LeaveBalanceTable({ tabValue }: LeaveBalanceTableProps) {
   );
 }
 
-export default LeaveBalanceTable;
+export default LeaveBalanceHistoryTable;

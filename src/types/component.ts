@@ -143,6 +143,7 @@ export declare namespace SharedComponent {
   export type ComponentButton = ButtonProps & {
     label: string;
     isLoading?: boolean;
+    buttonIcon?:unknown;
   }
 
   export type CheckboxInput = CheckboxProps & {
