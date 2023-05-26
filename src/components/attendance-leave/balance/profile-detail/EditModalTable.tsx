@@ -6,10 +6,11 @@ import {
   TableSortLabel,
   Typography,
 } from "@mui/material";
-import { Input, Form } from "@/components/_shared/form";
+import { Input } from "@/components/_shared/form";
 import Table from "@/components/_shared/form/Table";
 import { visuallyHidden } from "@mui/utils";
 import { styled } from "@mui/material/styles";
+import { Formik, FieldArray } from "formik";
 
 const headerItems = [
   { id: "no", label: "No" },
@@ -24,7 +25,7 @@ interface EditModalTableProps {
 
 type Order = "asc" | "desc";
 
-function EditModalTable({ tabValue }: EditModalTableProps) {
+function EditModalTable({ tabValue, submitRef }) {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
   const [direction, setDirection] = useState<Order>("desc");
@@ -133,79 +134,129 @@ function EditModalTable({ tabValue }: EditModalTableProps) {
 
   return (
     <>
-      <Table
-        count={data?.itemTotals}
-        rowsPerPageOptions={[5, 10, 15]}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onChangePage={handleChangePage}
-        onRowsPerPagesChange={(e) => handleChangeRowsPerPage(e)}
-        headChildren={
-          <TableRow>
-            {headerItems.map((item) => (
-              <TableCell
-                key={item.id}
-                sortDirection={sort === item.id ? direction : false}
-              >
-                <TableSortLabel
-                  active={sort === item.id}
-                  direction={sort === item.id ? direction : "asc"}
-                  onClick={(e) => handleRequestSort(e, item.id)}
-                >
-                  {item.label}
-                  {sort === item.id ? (
-                    <Box component="span" sx={visuallyHidden}>
-                      {direction === "asc"
-                        ? "sorted descending"
-                        : "sorted ascending"}
-                    </Box>
-                  ) : null}
-                </TableSortLabel>
-              </TableCell>
-            ))}
-          </TableRow>
-        }
-        bodyChildren={
-          <>
-            {typeof data?.items !== "undefined" ? (
-              data?.items.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={12} align="center">
-                    <Typography>Data not found</Typography>
-                  </TableCell>
-                </TableRow>
-              ) : (
-                data?.items.map((item, index) => (
-                  <TableRow key={index}>
-                    <TableCell>{item.no}</TableCell>
-                    <TableCell>{item.leaveType}</TableCell>
-                    <TableCell>
-                      <IncrementDecrementButton>-</IncrementDecrementButton>
-                      <Input
-                        size="small"
-                        value={item.days}
-                        sx={{ width: "60px", textAlign: "center" }}
-                      />
-                      <IncrementDecrementButton>+</IncrementDecrementButton>
-                    </TableCell>
-                    <TableCell>
-                      <Typography style={{ color: "#16A34A" }}>
-                        Curent : {item.current}
-                      </Typography>
-                    </TableCell>
-                  </TableRow>
-                ))
-              )
-            ) : (
-              <TableRow>
-                <TableCell colSpan={12} align="center">
-                  <Typography>Data not found</Typography>
-                </TableCell>
-              </TableRow>
-            )}
-          </>
-        }
-      />
+      <Formik
+        initialValues={{
+          days: data.items,
+        }}
+        onSubmit={(value: any) => console.log(value)}
+      >
+        {(formik) => {
+          return (
+            <FieldArray
+              name="days"
+              render={(arrayHelper) => {
+                return (
+                  <Table
+                    count={data?.itemTotals}
+                    rowsPerPageOptions={[5, 10, 15]}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onChangePage={handleChangePage}
+                    onRowsPerPagesChange={(e) => handleChangeRowsPerPage(e)}
+                    headChildren={
+                      <TableRow>
+                        {headerItems.map((item) => (
+                          <TableCell
+                            key={item.id}
+                            sortDirection={sort === item.id ? direction : false}
+                          >
+                            <TableSortLabel
+                              active={sort === item.id}
+                              direction={sort === item.id ? direction : "asc"}
+                              onClick={(e) => handleRequestSort(e, item.id)}
+                            >
+                              {item.label}
+                              {sort === item.id ? (
+                                <Box component="span" sx={visuallyHidden}>
+                                  {direction === "asc"
+                                    ? "sorted descending"
+                                    : "sorted ascending"}
+                                </Box>
+                              ) : null}
+                            </TableSortLabel>
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    }
+                    bodyChildren={
+                      <>
+                        {typeof data?.items !== "undefined" ? (
+                          data?.items.length === 0 ? (
+                            <TableRow>
+                              <TableCell colSpan={12} align="center">
+                                <Typography>Data not found</Typography>
+                              </TableCell>
+                            </TableRow>
+                          ) : (
+                            formik.values.days.map((item, index) => (
+                              <TableRow key={index}>
+                                <TableCell>{item.no}</TableCell>
+                                <TableCell>{item.leaveType}</TableCell>
+                                <TableCell>
+                                  <IncrementDecrementButton
+                                    onClick={() =>
+                                      formik.setFieldValue(
+                                        `days.${index}.days`,
+                                        formik.values.days[index].days - 1
+                                      )
+                                    }
+                                  >
+                                    -
+                                  </IncrementDecrementButton>
+                                  <Input
+                                    size="small"
+                                    value={item.days}
+                                    onChange={(e) =>
+                                      formik.setFieldValue(
+                                        `days.${index}.days`,
+                                        e.target.value
+                                      )
+                                    }
+                                    sx={{ width: "60px", textAlign: "center" }}
+                                  />
+                                  <IncrementDecrementButton
+                                    onClick={() =>
+                                      formik.setFieldValue(
+                                        `days.${index}.days`,
+                                        formik.values.days[index].days + 1
+                                      )
+                                    }
+                                  >
+                                    +
+                                  </IncrementDecrementButton>
+                                </TableCell>
+                                <TableCell>
+                                  <Typography style={{ color: "#16A34A" }}>
+                                    Curent : {item.current}
+                                  </Typography>
+                                </TableCell>
+                              </TableRow>
+                            ))
+                          )
+                        ) : (
+                          <TableRow>
+                            <TableCell colSpan={12} align="center">
+                              <Typography>Data not found</Typography>
+                            </TableCell>
+                          </TableRow>
+                        )}
+                        <button
+                          hidden
+                          onClick={() => formik.submitForm()}
+                          ref={submitRef}
+                          type="submit"
+                        >
+                          submit
+                        </button>
+                      </>
+                    }
+                  />
+                );
+              }}
+            />
+          );
+        }}
+      </Formik>
     </>
   );
 }

@@ -143,7 +143,7 @@ function LeaveBalanceProfileEditModal({
                 startAdornment: <Search sx={{ color: "#9CA3AF" }} />,
               }}
             />
-            <EditModalTable tabValue={0} />
+            <EditModalTable submitRef={submitRef} tabValue={0} />
           </div>
           <ModalFooter>
             <Button
@@ -159,6 +159,7 @@ function LeaveBalanceProfileEditModal({
               size="small"
               label="Save"
               color="primary"
+              onClick={() => submitRef.current.click()}
             />
           </ModalFooter>
         </Box>
