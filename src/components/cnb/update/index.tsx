@@ -32,6 +32,7 @@ import { useAppDispatch, useAppSelectors } from "@/hooks/index";
 import { getCompanyData } from "@/utils/helper";
 import { FieldArray, Form as FormikForm, Formik } from "formik";
 import * as Yup from "yup";
+import ConfirmationModal from "@/components/_shared/common/ConfirmationModal";
 
 export default function UpdateCNBComponent() {
   const router = useRouter();
@@ -139,7 +140,7 @@ export default function UpdateCNBComponent() {
     },
   });
 
-  function CreateNewCnbProfile(value: any) {
+  function UpdateCnbProfile(value: any) {
     let supplement = true;
     value.supplementary.map((item: any) => {
       if (value.supplementary.length === 0) {
@@ -166,7 +167,6 @@ export default function UpdateCNBComponent() {
       value.taxStatus !== "" &&
       supplement
     ) {
-      setOpenMsg(true);
       dispatch({
         type: putUpdateRequested.toString(),
         Id: router.query.cnb,
@@ -224,8 +224,8 @@ export default function UpdateCNBComponent() {
   return (
     <Formik
       initialValues={initialValues}
-      onSubmit={(values: any) => {
-        CreateNewCnbProfile(values);
+      onSubmit={() => {
+        setOpenMsg(true);
       }}
       validationSchema={validationSchecma}
     >
@@ -470,14 +470,19 @@ export default function UpdateCNBComponent() {
                                     </Typography>
                                     <FormControl
                                       fullWidth
-                                      // error={
-                                      //   formik.touched.supplementary![i]
-                                      //     ?.compensationComponentId &&
-                                      //   Boolean(
-                                      //     formik.errors.supplementary![i]
-                                      //       ?.compensationComponentId
-                                      //   )
-                                      // }
+                                      {...(formik.touched?.supplementary &&
+                                        formik.errors?.supplementary && {
+                                          error:
+                                            formik.touched?.supplementary[i]
+                                              ?.compensationComponentId &&
+                                            Boolean(
+                                              (
+                                                formik.errors?.supplementary[
+                                                  i
+                                                ] as unknown as suplementType
+                                              )?.compensationComponentId
+                                            ),
+                                        })}
                                     >
                                       <Select
                                         fullWidth
@@ -500,12 +505,18 @@ export default function UpdateCNBComponent() {
                                           )
                                         )}
                                       </Select>
-                                      {/* <FormHelperText>
-                                        {formik.touched.supplementary![i]
-                                          ?.compensationComponentId &&
-                                          formik.errors.supplementary![i]
-                                            ?.compensationComponentId}
-                                      </FormHelperText> */}
+                                      {formik.touched?.supplementary &&
+                                        formik.errors?.supplementary && (
+                                          <FormHelperText>
+                                            {formik.touched?.supplementary[i]
+                                              ?.compensationComponentId &&
+                                              (
+                                                formik.errors?.supplementary[
+                                                  i
+                                                ] as unknown as suplementType
+                                              )?.compensationComponentId}
+                                          </FormHelperText>
+                                        )}
                                     </FormControl>
                                   </div>
                                 </Grid>
@@ -523,14 +534,20 @@ export default function UpdateCNBComponent() {
                                     }}
                                   >
                                     <FormControl
-                                    // error={
-                                    //   formik.touched.supplementary![i]
-                                    //     ?.taxStatus &&
-                                    //   Boolean(
-                                    //     formik.errors.supplementary![i]
-                                    //       ?.taxStatus
-                                    //   )
-                                    // }
+                                      fullWidth
+                                      {...(formik.touched?.supplementary &&
+                                        formik.errors?.supplementary && {
+                                          error:
+                                            formik.touched?.supplementary[i]
+                                              ?.period &&
+                                            Boolean(
+                                              (
+                                                formik.errors?.supplementary[
+                                                  i
+                                                ] as unknown as suplementType
+                                              )?.period
+                                            ),
+                                        })}
                                     >
                                       <RadioGroup
                                         row
@@ -566,12 +583,18 @@ export default function UpdateCNBComponent() {
                                           label="Non-Taxable"
                                         />
                                       </RadioGroup>
-                                      {/* <FormHelperText>
-                                        {formik.touched.supplementary![i]
-                                          ?.taxStatus &&
-                                          formik.errors.supplementary![i]
-                                            ?.taxStatus}
-                                      </FormHelperText> */}
+                                      {formik.touched?.supplementary &&
+                                        formik.errors?.supplementary && (
+                                          <FormHelperText>
+                                            {formik.touched?.supplementary[i]
+                                              ?.taxStatus &&
+                                              (
+                                                formik.errors?.supplementary[
+                                                  i
+                                                ] as unknown as suplementType
+                                              )?.taxStatus}
+                                          </FormHelperText>
+                                        )}
                                     </FormControl>
                                     <Box>
                                       <Button
@@ -596,8 +619,30 @@ export default function UpdateCNBComponent() {
                                   <TextField
                                     fullWidth
                                     type="number"
-                                    // error={formik.touched.supplementary[i]?.rateOrAmount&&Boolean(formik.errors.supplementary[i]?.rateOrAmount)}
-                                    // helperText={formik.touched.supplementary![i]?.rateOrAmount&&formik.errors.supplementary![i]rateOrAmount}
+                                    {...(formik.touched?.supplementary &&
+                                      formik.errors?.supplementary && {
+                                        error:
+                                          formik.touched?.supplementary[i]
+                                            ?.rateOrAmount &&
+                                          Boolean(
+                                            (
+                                              formik.errors?.supplementary[
+                                                i
+                                              ] as unknown as suplementType
+                                            )?.rateOrAmount
+                                          ),
+                                      })}
+                                    {...(formik.touched?.supplementary &&
+                                      formik.errors?.supplementary && {
+                                        helperText:
+                                          formik.touched?.supplementary[i]
+                                            ?.rateOrAmount &&
+                                          (
+                                            formik.errors?.supplementary[
+                                              i
+                                            ] as unknown as suplementType
+                                          )?.rateOrAmount,
+                                      })}
                                     value={
                                       formik.values.supplementary[i]
                                         ?.rateOrAmount
@@ -625,7 +670,19 @@ export default function UpdateCNBComponent() {
                                 <Grid item xs={3} md={3} lg={3} xl={3}>
                                   <FormControl
                                     fullWidth
-                                    // error={formik.touched.supplementary![i]?.period &&Boolean(formik.errors.supplementary![i]?.period)}
+                                    {...(formik.touched?.supplementary &&
+                                      formik.errors?.supplementary && {
+                                        error:
+                                          formik.touched?.supplementary[i]
+                                            ?.period &&
+                                          Boolean(
+                                            (
+                                              formik.errors?.supplementary[
+                                                i
+                                              ] as unknown as suplementType
+                                            )?.period
+                                          ),
+                                      })}
                                   >
                                     <Select
                                       fullWidth
@@ -649,6 +706,18 @@ export default function UpdateCNBComponent() {
                                         per Year
                                       </MenuItem>
                                     </Select>
+                                    {formik.touched?.supplementary &&
+                                      formik.errors?.supplementary && (
+                                        <FormHelperText>
+                                          {formik.touched?.supplementary[i]
+                                            ?.period &&
+                                            (
+                                              formik.errors?.supplementary[
+                                                i
+                                              ] as unknown as suplementType
+                                            )?.period}
+                                        </FormHelperText>
+                                      )}
                                   </FormControl>
                                 </Grid>
                               </Grid>
@@ -697,17 +766,15 @@ export default function UpdateCNBComponent() {
               }}
             />
           </Paper>
-          <Snackbar
+          <ConfirmationModal
             open={openMsg}
-            autoHideDuration={2000}
-            onClose={() => setOpenMsg(false)}
-            anchorOrigin={{ vertical: "top", horizontal: "right" }}
-          >
-            <Alert>
-              <AlertTitle>Successfully Saved!</AlertTitle>
-              New Compensation and Benefits Profile has been created
-            </Alert>
-          </Snackbar>
+            handleClose={() => setOpenMsg(false)}
+            title="Save Changes"
+            content="Are you sure you want to update profile with this data? Any unsaved changes made to data will be discarded"
+            withCallback
+            noChange={true}
+            callback={() => UpdateCnbProfile(formik.values)}
+          />
         </FormikForm>
       )}
     </Formik>

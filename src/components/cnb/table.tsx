@@ -24,8 +24,11 @@ import BorderColorIcon from "@mui/icons-material/BorderColor";
 import { styled } from "@mui/material/styles";
 import { TextFieldProps } from "@mui/material/";
 import { IconButton } from "../_shared/form";
-import { useAppDispatch } from "@/hooks/index";
-import { deleteCompensationRequested } from "@/store/reducers/slice/cnb/compensationSlice";
+import { useAppDispatch, useAppSelectors } from "@/hooks/index";
+import {
+  deleteCompensationRequested,
+  getDetailRequested,
+} from "@/store/reducers/slice/cnb/compensationSlice";
 import dayjs from "dayjs";
 import DetailModal from "./modal";
 import DetailCnb from "./detail";
@@ -179,12 +182,23 @@ export default function EnhancedTable(rows: any) {
   const [orderBy, setOrderBy] = React.useState<keyof Data>("createdAt");
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const detail = useAppSelectors((state) => state.compensation.detail?.data);
 
   const deleteCnb = (Id: string | number) => {
     dispatch({
       type: deleteCompensationRequested.toString(),
       Id: Id,
     });
+  };
+
+  const editCnb = (rowId: number) => {
+    dispatch({
+      type: getDetailRequested.toString(),
+      Id: rowId,
+    });
+    router.push(
+      `/compensation-benefits/update?cnb=${rowId}&id=${detail?.baseCompensation[0]?.id}`
+    );
   };
 
   const handleRequestSort = (
@@ -301,9 +315,7 @@ export default function EnhancedTable(rows: any) {
                             icons={
                               <BorderColorIcon sx={{ color: "#223567" }} />
                             }
-                            onClick={() =>
-                              setDetailOpen({ id: row.id, open: true })
-                            }
+                            onClick={() => editCnb(row.id)}
                           />
                           <IconButton
                             parentColor="red.100"
