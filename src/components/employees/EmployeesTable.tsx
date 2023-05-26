@@ -175,19 +175,19 @@ function EmployeesTable({
           <>
             {
               ifThenElse(typeof data?.items !== 'undefined', (
-                ifThenElse(data?.items.length === 0, (
+                ifThenElse(data?.items?.length === 0, (
                   <TableRow>
                     <TableCell colSpan={12} align='center'><Typography>Data not found</Typography></TableCell>
                   </TableRow>
                 ), (
-                  data?.items.map((item, index) => (
+                  data?.items?.map((item, index) => (
                     <TableRow key={index}>
                       <TableCell>{item.id}</TableCell>
                       <TableCell>
                         <NameWrapper>
                           <Avatar
-                            src={ifThenElse(item?.user?.userInformation !== null, item?.user?.userInformation.picture, item.user.name)}
-                            alt={ifThenElse(item?.user?.userInformation !== null, item?.user?.userInformation.picture, item.user.name)}
+                            src={ifThenElse(item?.user?.userInformation !== null, item?.user?.userInformation?.picture, item.user.name)}
+                            alt={ifThenElse(item?.user?.userInformation !== null, item?.user?.userInformation?.picture, item.user.name)}
                             sx={{
                               width: 24, height: 24
                             }}
@@ -197,7 +197,7 @@ function EmployeesTable({
                       </TableCell>
                       <TableCell>{item.position.name}</TableCell>
                       <TableCell>{item.department.name}</TableCell>
-                      <TableCell>{ifThenElse(item.isActive, (
+                      <TableCell>{ifThenElse(item?.isActive, (
                         <Chip color='secondary' label='active' />
                       ), (
                         <Chip label='Non Active' sx={{ backgroundColor: '#FEE2E2' }}/>
