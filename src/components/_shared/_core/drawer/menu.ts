@@ -25,7 +25,7 @@ export const Menus: CoreLayout.SidebarItem[] = [
         title: 'Company Profile',
       },
       {
-        path: '/company-management/departments',
+        path: '/company-management/department',
         title: 'Departments',
       },
       {
@@ -43,10 +43,21 @@ export const Menus: CoreLayout.SidebarItem[] = [
     ],
   },
   {
-    key: 'leave-management',
-    path: '/leave-management',
-    title: 'Leave Management',
+    key: 'attendance-leave',
+    path: '/attendance-leave',
+    title: 'attendance & Leave',
     icons: BsFillCalendar2Fill,
+    hasChild: true,
+    child: [
+      {
+        path: '/attendance-leave/leave-summary',
+        title: 'Leave Summary',
+      },
+      {
+        path: '/attendance-leave/settings',
+        title: 'Settings',
+      },
+    ],
   },
   {
     key: 'compensation-benefits',

@@ -1,24 +1,16 @@
 import * as Yup from 'yup';
 
 export const validationSchemeEmployeeInformation = Yup.object({
-  picture: Yup.mixed().test('imageValidate', 'This field is required', function (value: unknown) {
-    if (!value || (value as []).length === 0) {
-      return this.createError({
-        path: 'picture',
-        message: 'This field is required'
-      });
-    }
-    return true;
-  }),
+  picture: Yup.mixed().notRequired(),
   fullName: Yup.string().required('This field is required'),
   nickname: Yup.string().notRequired(),
   phoneNumberPrefix: Yup.string().notRequired(),
-  phoneNumber: Yup.string().matches(/^\d{12,13}$/, 'Phone number should have 12 or 13 digits')
+  phoneNumber: Yup.string().matches(/^\d{11}$/, 'Phone number should have 12 or 13 digits')
     .required('Phone number is required')
     .typeError('Phone number should be a number'),
   email: Yup.string().email('Email should be valid').required('Email is required'),
   startDate: Yup.date().typeError('This field is required').required(),
-  endDate: Yup.date().notRequired(),
+  endDate: Yup.string().notRequired(),
   isPermanent: Yup.bool().notRequired(),
   department: Yup.string().notRequired(),
   position: Yup.string().notRequired(),
@@ -26,11 +18,11 @@ export const validationSchemeEmployeeInformation = Yup.object({
 });
 
 export const validationSchemePersonalInformation = Yup.object().shape({
-  // Group Personal Information 
+  // Group Personal Information
   dateofBirthPersonalInformation: Yup.date().typeError('This field is required').required(),
   genderPersonalInformation: Yup.string().required('This field is required').oneOf(['male', 'female'], 'This field is required'),
   maritialStatusPersonalInformation: Yup.number().min(1, 'This field is required').required('This field is required'),
-  numberOfDependantsPersonalInformation: Yup.number().min(1, 'This field is required').required('This field is required'),
+  numberOfDependantsPersonalInformation: Yup.number().required('This field is required'),
   nationalityPersonalInformation: Yup.string().required('This field is required'),
   religionPersonalInformation: Yup.string().notRequired(),
 
@@ -42,7 +34,7 @@ export const validationSchemePersonalInformation = Yup.object().shape({
   addressCitizenAddress: Yup.string().required('This field is required'),
   zipCodeCitizenAddress: Yup.string().required('This field is required'),
 
-  // Group Residential Address 
+  // Group Residential Address
   countryResidentialAddress: Yup.string().required('This field is required'),
   provinceResidentialAddress: Yup.string().required('This field is required'),
   cityResidentialAddress: Yup.string().required('This field is required'),
@@ -70,7 +62,7 @@ export const validationSchemeEmployeeEmergencyContact = Yup.object({
   fullNamePrimary: Yup.string().required('This field is required'),
   relationPrimary: Yup.string().notRequired(),
   phoneNumberPrefixPrimary: Yup.string().notRequired(),
-  phoneNumberPrimary: Yup.string().matches(/^\d{12,13}$/, 'Phone number should have 12 or 13 digits')
+  phoneNumberPrimary: Yup.string().matches(/^\d{11}$/, 'Phone number should have 12 or 13 digits')
     .required('Phone number is required')
     .typeError('Phone number should be a number'),
   fullNameSecondary: Yup.string().notRequired(),

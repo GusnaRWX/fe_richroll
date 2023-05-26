@@ -178,7 +178,27 @@ const Navbar = () => {
   );
 };
 
+
+
+const imageComponent = (col:number, slice2:number|undefined) => {
+  return (
+    <ImageList cols={col} rowHeight={64}>
+      {ImageListAll.slice(col === 6 ? -6 : 0, slice2).map((item, id) => (
+        <ImageListItem sx={{ alignItems: 'center' }} key={id}>
+          <Image
+            src={item.img}
+            alt={item.alt}
+            height={64}
+            width={80}
+          />
+        </ImageListItem>
+      ))}
+    </ImageList>
+  );
+};
+
 const LandingComponent = () => {
+
   return (
     <Box component='div' sx={{ marginTop: '100px' }}>
       <Navbar />
@@ -278,46 +298,13 @@ const LandingComponent = () => {
             We’ve helped 100+ SMEs and Startups
           </Typography>
           <Box component='div' sx={{ display: {xs: 'none', md: 'block'}, marginBottom: '40px', justifyContent: 'space-between', alignContent: 'center' }}>
-            <ImageList cols={7} rowHeight={64}>
-              {ImageListAll.slice(0, 7).map((item, id) => (
-                <ImageListItem sx={{ alignItems: 'center' }} key={id}>
-                  <Image
-                    src={item.img}
-                    alt={item.alt}
-                    height={64}
-                    width={80}
-                  />
-                </ImageListItem>
-              ))}
-            </ImageList>
+            {imageComponent(7, 7)}
           </Box>
           <Box component='div' sx={{ display: {xs: 'none', md: 'block'}, justifyContent: 'space-around', alignContent: 'center' }}>
-            <ImageList cols={6} rowHeight={64}>
-              {ImageListAll.slice(-6).map((item, id) => (
-                <ImageListItem sx={{ alignItems: 'center' }} key={id}>
-                  <Image
-                    src={item.img}
-                    alt={item.alt}
-                    height={64}
-                    width={80}
-                  />
-                </ImageListItem>
-              ))}
-            </ImageList>
+            {imageComponent(6, undefined)}
           </Box>
           <Box component='div' sx={{ display: {xs: 'block', md: 'none'}, justifyContent: 'space-between', alignContent: 'center' }}>
-            <ImageList cols={3} rowHeight={64}>
-              {ImageListAll.slice(0, 12).map((item, id) => (
-                <ImageListItem sx={{ alignItems: 'center' }} key={id}>
-                  <Image
-                    src={item.img}
-                    alt={item.alt}
-                    height={64}
-                    width={80}
-                  />
-                </ImageListItem>
-              ))}
-            </ImageList>
+            {imageComponent(3, 12)}
           </Box>
         </Box>
       </WrapperContainer>

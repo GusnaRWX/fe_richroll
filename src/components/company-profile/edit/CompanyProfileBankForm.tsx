@@ -4,14 +4,16 @@ import {
   Grid,
   Typography,
   Select,
+  FormHelperText,
   Box,
   MenuItem,
   Alert,
   FormControl } from '@mui/material';
 import { Input, CheckBox} from '@/components/_shared/form';
+import { Text } from '@/components/_shared/common';
 import { styled as MuiStyled } from '@mui/material/styles';
-import { CustomHooks } from '@/types/hooks';
 import { useAppSelectors } from '@/hooks/index';
+import { ifThenElse, compareCheck } from '@/utils/helper';
 
 
 const AsteriskComponent = MuiStyled('span')(({ theme }) => ({
@@ -21,12 +23,10 @@ const AsteriskComponent = MuiStyled('span')(({ theme }) => ({
 interface CompanyBankProps {
   bank: [];
   paymentMethod: [];
-  handleInputChange: (_e: CustomHooks.HandleInput) => CustomHooks.HandleInput;
-  values;
-  errors;
+  formik;
 }
 
-function CompanyProfileBankForm ({bank, paymentMethod, handleInputChange, values, errors} :CompanyBankProps) {
+function CompanyProfileBankForm ({bank, paymentMethod, formik} :CompanyBankProps) {
   const { responser } = useAppSelectors(state => state);
   const convertCheckbox = (name, event) => {
     return {
@@ -34,6 +34,17 @@ function CompanyProfileBankForm ({bank, paymentMethod, handleInputChange, values
         name, value: event?.target?.checked
       }
     };
+  };
+
+  const checkPaymentMethod = (value: string) => {
+    if (value?.length === 0) {
+      return <Text title='Select Payment Method' color='grey.400' />;
+    }
+    const selectedPaymentMethod = paymentMethod.find(type => type?.['id'] === value);
+    if (selectedPaymentMethod) {
+      return `${selectedPaymentMethod?.['name']}`;
+    }
+    return null;
   };
 
   return (
@@ -46,33 +57,48 @@ function CompanyProfileBankForm ({bank, paymentMethod, handleInputChange, values
         </Grid>
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
-            <FormControl fullWidth>
+            <FormControl fullWidth error={compareCheck(formik.touched.bankBankInformation, Boolean(formik.errors.bankBankInformation))}>
               <Typography sx={{ mb: '6px' }}>Bank<AsteriskComponent>*</AsteriskComponent></Typography>
               <Select
                 fullWidth
+                displayEmpty
                 variant='outlined'
                 size='small'
-                value={values.bankBankInformation}
-                onChange={handleInputChange}
-                name='bankBankInformation'
                 placeholder='Select Bank'
+                name='bankBankInformation'
+                value={formik.values.bankBankInformation}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                renderValue={(value: string) => {
+                  if (value?.length === 0) {
+                    return <Text title='Select Bank' color='grey.400' />;
+                  }
+                  const selectedBank = bank.find(type => type?.['id'] === value);
+                  if (selectedBank) {
+                    return `${selectedBank?.['name']}`;
+                  }
+                  return null;
+                }}
               >
-                {bank.map((val, idx) => (
+                {bank?.map((val, idx) => (
                   <MenuItem key={idx} value={val?.['id']}>{val?.['name']}</MenuItem>
                 ))}
               </Select>
+              <FormHelperText>{ifThenElse(formik.touched.bankBankInformation, formik.errors.bankBankInformation, '')}</FormHelperText>
             </FormControl>
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Input
               name='bankAccountHolderNameBankInformation'
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={compareCheck(formik.touched.bankAccountHolderNameBankInformation, Boolean(formik.errors.bankAccountHolderNameBankInformation))}
+              helperText={ifThenElse(formik.touched.bankAccountHolderNameBankInformation, formik.errors.bankAccountHolderNameBankInformation, '')}
               customLabel='Bank Account Holder’s Name'
               withAsterisk={true}
-              onChange={handleInputChange}
               size='small'
+              value={formik.values.bankAccountHolderNameBankInformation}
               placeholder='Input Bank Account Holder’s Name'
-              value={values.bankAccountHolderNameBankInformation}
-              error={errors.bankAccountHolderNameBankInformation}
             />
           </Grid>
         </Grid>
@@ -80,37 +106,43 @@ function CompanyProfileBankForm ({bank, paymentMethod, handleInputChange, values
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Input
               name='bankAccoutNoBankInformation'
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={compareCheck(formik.touched.bankAccoutNoBankInformation, Boolean(formik.errors.bankAccoutNoBankInformation))}
+              helperText={ifThenElse(formik.touched.bankAccoutNoBankInformation, formik.errors.bankAccoutNoBankInformation, '')}
               customLabel='Bank Account No'
               withAsterisk={true}
-              onChange={handleInputChange}
               size='small'
+              value={formik.values.bankAccoutNoBankInformation}
               placeholder='Input Bank Account No'
-              value={values.bankAccoutNoBankInformation}
-              error={errors.bankAccoutNoBankInformation}
             />
           </Grid>
           <Grid item xs={3} md={3} lg={3} xl={3}>
             <Input
               name='bankCodeBankInformation'
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={compareCheck(formik.touched.bankCodeBankInformation, Boolean(formik.errors.bankCodeBankInformation))}
+              helperText={ifThenElse(formik.touched.bankCodeBankInformation, formik.errors.bankCodeBankInformation, '')}
               customLabel='Bank Code'
-              withAsterisk={true}
-              onChange={handleInputChange}
+              withAsterisk={false}
               size='small'
+              value={formik.values.bankCodeBankInformation}
               placeholder='Input Bank Code'
-              value={values.bankCodeBankInformation}
-              error={errors.bankCodeBankInformation}
             />
           </Grid>
           <Grid item xs={3} md={3} lg={3} xl={3}>
             <Input
               name='branchCodeBankInformation'
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={compareCheck(formik.touched.branchCodeBankInformation, Boolean(formik.errors.branchCodeBankInformation))}
+              helperText={ifThenElse(formik.touched.branchCodeBankInformation, formik.errors.branchCodeBankInformation, '')}
               customLabel='Branch Code'
-              withAsterisk={true}
-              onChange={handleInputChange}
+              withAsterisk={false}
               size='small'
+              value={formik.values.branchCodeBankInformation}
               placeholder='Input Branch Code'
-              value={values.branchCodeBankInformation}
-              error={errors.branchCodeBankInformation}
             />
           </Grid>
         </Grid>
@@ -118,25 +150,29 @@ function CompanyProfileBankForm ({bank, paymentMethod, handleInputChange, values
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Input
               name='branchNameBankInformation'
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={compareCheck(formik.touched.branchNameBankInformation, Boolean(formik.errors.branchNameBankInformation))}
+              helperText={ifThenElse(formik.touched.branchNameBankInformation, formik.errors.branchNameBankInformation, '')}
               customLabel='Branch Name'
-              withAsterisk={true}
-              onChange={handleInputChange}
+              withAsterisk={false}
               size='small'
+              value={formik.values.branchNameBankInformation}
               placeholder='Input Branch Name'
-              value={values.branchNameBankInformation}
-              error={errors.branchNameBankInformation}
             />
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Input
               name='swiftCodeBankInformation'
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={compareCheck(formik.touched.swiftCodeBankInformation, Boolean(formik.errors.swiftCodeBankInformation))}
+              helperText={ifThenElse(formik.touched.swiftCodeBankInformation, formik.errors.swiftCodeBankInformation, '')}
               customLabel='Swift Code'
-              withAsterisk={true}
-              onChange={handleInputChange}
+              withAsterisk={false}
               size='small'
+              value={formik.values.swiftCodeBankInformation}
               placeholder='Input Swift Code'
-              value={values.swiftCodeBankInformation}
-              error={errors.swiftCodeBankInformation}
             />
           </Grid>
         </Grid>
@@ -148,29 +184,36 @@ function CompanyProfileBankForm ({bank, paymentMethod, handleInputChange, values
         <Grid container spacing={2}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Typography component='div' variant='text-base'>Schedule Type<AsteriskComponent>*</AsteriskComponent></Typography>
+            {
+              compareCheck(!formik.values.isMonthly, !formik.values.isWeekly, !formik.values.isBiWeekly) && (
+                <Box>
+                  <Typography component='span' fontSize='12px' color='red.500'>This field is required</Typography>
+                </Box>
+              )
+            }
             <Box>
               <CheckBox
                 customLabel='Monthly'
                 name='isMonthly'
-                checked={values.isMonthly}
-                onChange={(e) => handleInputChange(convertCheckbox('isMonthly', e))}
+                checked={formik.values.isMonthly}
+                onChange={(e) => formik.handleChange(convertCheckbox('isMonthly', e))}
               />
               <CheckBox
                 customLabel='Weekly'
                 name='isWeekly'
-                checked={values.isWeekly}
-                onChange={(e) => handleInputChange(convertCheckbox('isWeekly', e))}
+                checked={formik.values.isWeekly}
+                onChange={(e) => formik.handleChange(convertCheckbox('isWeekly', e))}
               />
               <CheckBox
                 customLabel='Bi Weekly'
                 name='isBiWeekly'
-                checked={values.isBiWeekly}
-                onChange={(e) => handleInputChange(convertCheckbox('isBiWeekly', e))}
+                checked={formik.values.isBiWeekly}
+                onChange={(e) => formik.handleChange(convertCheckbox('isBiWeekly', e))}
               />
             </Box>
           </Grid>
         </Grid>
-        {!!values.isMonthly && (
+        {!!formik.values.isMonthly && (
           <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
             <Grid item xs={6} md={6} lg={6} xl={6}>
               <Box component='div' sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
@@ -179,59 +222,72 @@ function CompanyProfileBankForm ({bank, paymentMethod, handleInputChange, values
                   <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px' }}>
                     <Input
                       name='monthlyPeriodStart'
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      error={compareCheck(formik.touched.monthlyPeriodStart, Boolean(formik.errors.monthlyPeriodStart))}
+                      helperText={ifThenElse(formik.touched.monthlyPeriodStart, formik.errors.monthlyPeriodStart, '')}
                       withAsterisk={true}
-                      onChange={handleInputChange}
                       size='small'
+                      value={formik.values.monthlyPeriodStart}
                       placeholder='Day 1'
-                      value={values.monthlyPeriodStart}
-                      error={errors.monthlyPeriodStart}
                     />
                     <Typography component='div' variant='text-base'> - </Typography>
                     <Input
                       name='monthlyPeriodEnd'
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      error={compareCheck(formik.touched.monthlyPeriodEnd, Boolean(formik.errors.monthlyPeriodEnd))}
+                      helperText={ifThenElse(formik.touched.monthlyPeriodEnd, formik.errors.monthlyPeriodEnd, '')}
                       withAsterisk={true}
-                      onChange={handleInputChange}
                       size='small'
+                      value={formik.values.monthlyPeriodEnd}
                       placeholder='Day 31'
-                      value={values.monthlyPeriodEnd}
-                      error={errors.monthlyPeriodEnd}
                     />
                   </Box>
                 </Box>
                 <Box component='div'>
                   <Input
                     name='monthlyPayrollDate'
-                    customLabel='Payroll Date'
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={compareCheck(formik.touched.monthlyPayrollDate, Boolean(formik.errors.monthlyPayrollDate))}
+                    helperText={ifThenElse(formik.touched.monthlyPayrollDate, formik.errors.monthlyPayrollDate, '')}
                     withAsterisk={true}
-                    onChange={handleInputChange}
                     size='small'
+                    value={formik.values.monthlyPayrollDate}
                     placeholder='Input Date'
-                    value={values.monthlyPayrollDate}
-                    error={errors.monthlyPayrollDate}
+                    customLabel='Payroll Date'
                   />
                 </Box>
               </Box>
             </Grid>
             <Grid item xs={6} md={6} lg={6} xl={6}>
-              <FormControl fullWidth>
+              <FormControl fullWidth error={compareCheck(formik.touched.monthlyMethod, Boolean(formik.errors.monthlyMethod))}>
                 <Typography sx={{ mb: '6px' }}>Default Payment Method<AsteriskComponent>*</AsteriskComponent></Typography>
                 <Select
                   fullWidth
+                  displayEmpty
                   variant='outlined'
                   size='small'
-                  value={values.monthlyMethod}
-                  onChange={handleInputChange}
+                  placeholder='Select Payment Method'
                   name='monthlyMethod'
+                  value={formik.values.monthlyMethod}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  renderValue={(value: string) => {
+                    return checkPaymentMethod(value);
+                  }}
                 >
-                  {paymentMethod.map((val, idx) => (
+                  {paymentMethod?.map((val, idx) => (
                     <MenuItem key={idx} value={val?.['id']}>{val?.['name']}</MenuItem>
                   ))}
                 </Select>
+                <FormHelperText>{ifThenElse(formik.touched.monthlyMethod, formik.errors.monthlyMethod, '')}</FormHelperText>
               </FormControl>
             </Grid>
           </Grid>
         )}
-        {!!values.isWeekly && (
+        {!!formik.values.isWeekly && (
           <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
             <Grid item xs={6} md={6} lg={6} xl={6}>
               <FormControl fullWidth>
@@ -240,8 +296,9 @@ function CompanyProfileBankForm ({bank, paymentMethod, handleInputChange, values
                   fullWidth
                   variant='outlined'
                   size='small'
-                  value={values.weeklyPeriod}
-                  onChange={handleInputChange}
+                  value={formik.values.weeklyPeriod}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                   name='weeklyPeriod'
                 >
                   <MenuItem value='Sunday'>Sunday</MenuItem>
@@ -254,25 +311,32 @@ function CompanyProfileBankForm ({bank, paymentMethod, handleInputChange, values
               </FormControl>
             </Grid>
             <Grid item xs={6} md={6} lg={6} xl={6}>
-              <FormControl fullWidth>
+              <FormControl fullWidth error={compareCheck(formik.touched.weeklyMethod, Boolean(formik.errors.weeklyMethod))}>
                 <Typography sx={{ mb: '6px' }}>Default Payment Method<AsteriskComponent>*</AsteriskComponent></Typography>
                 <Select
                   fullWidth
+                  displayEmpty
                   variant='outlined'
                   size='small'
-                  value={values.weeklyMethod}
-                  onChange={handleInputChange}
+                  placeholder='Select Payment Method'
                   name='weeklyMethod'
+                  value={formik.values.weeklyMethod}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  renderValue={(value: string) => {
+                    return checkPaymentMethod(value);
+                  }}
                 >
-                  {paymentMethod.map((val, idx) => (
+                  {paymentMethod?.map((val, idx) => (
                     <MenuItem key={idx} value={val?.['id']}>{val?.['name']}</MenuItem>
                   ))}
                 </Select>
+                <FormHelperText>{ifThenElse(formik.touched.weeklyMethod, formik.errors.weeklyMethod, '')}</FormHelperText>
               </FormControl>
             </Grid>
           </Grid>
         )}
-        {!!values.isBiWeekly && (
+        {!!formik.values.isBiWeekly && (
           <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
             <Grid item xs={6} md={6} lg={6} xl={6}>
               <Typography component='div' variant='text-base' sx={{ mb: '6px' }}>Bi Weekly Pay Period (includes overtime)<AsteriskComponent>*</AsteriskComponent></Typography>
@@ -282,8 +346,9 @@ function CompanyProfileBankForm ({bank, paymentMethod, handleInputChange, values
                     fullWidth
                     variant='outlined'
                     size='small'
-                    value={values.biWeeklyPeriod}
-                    onChange={handleInputChange}
+                    value={formik.values.biWeeklyPeriod}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                     name='biWeeklyPeriod'
                   >
                     <MenuItem value='Sunday'>Sunday</MenuItem>
@@ -300,8 +365,9 @@ function CompanyProfileBankForm ({bank, paymentMethod, handleInputChange, values
                     fullWidth
                     variant='outlined'
                     size='small'
-                    value={values.biWeeklyPeriodWeek}
-                    onChange={handleInputChange}
+                    value={formik.values.biWeeklyPeriodWeek}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                     name='biWeeklyPeriodWeek'
                   >
                     <MenuItem value='First Week'>First Week</MenuItem>
@@ -311,20 +377,27 @@ function CompanyProfileBankForm ({bank, paymentMethod, handleInputChange, values
               </Box>
             </Grid>
             <Grid item xs={6} md={6} lg={6} xl={6}>
-              <FormControl fullWidth>
+              <FormControl fullWidth error={compareCheck(formik.touched.biWeeklyMethod, Boolean(formik.errors.biWeeklyMethod))}>
                 <Typography sx={{ mb: '6px' }}>Default Payment Method<AsteriskComponent>*</AsteriskComponent></Typography>
                 <Select
                   fullWidth
+                  displayEmpty
                   variant='outlined'
                   size='small'
-                  value={values.biWeeklyMethod}
-                  onChange={handleInputChange}
+                  placeholder='Select Payment Method'
                   name='biWeeklyMethod'
+                  value={formik.values.biWeeklyMethod}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  renderValue={(value: string) => {
+                    return checkPaymentMethod(value);
+                  }}
                 >
-                  {paymentMethod.map((val, idx) => (
+                  {paymentMethod?.map((val, idx) => (
                     <MenuItem key={idx} value={val?.['id']}>{val?.['name']}</MenuItem>
                   ))}
                 </Select>
+                <FormHelperText>{ifThenElse(formik.touched.biWeeklyMethod, formik.errors.biWeeklyMethod, '')}</FormHelperText>
               </FormControl>
             </Grid>
           </Grid>

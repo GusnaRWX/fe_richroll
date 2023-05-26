@@ -17,7 +17,7 @@ import { Image as ImageType } from '@/utils/assetsConstant';
 import { Company } from '@/types/component';
 import { IconButton } from '@/components/_shared/form';
 import { BsBellFill } from 'react-icons/bs';
-import LocalizationMenu from '@/components/_shared/_core/localization/Index';
+import LocalizationMenu from '@/components/_shared/_core/localization/LocalizationMenu';
 import Profile from '@/components/_shared/_core/appbar/Profile';
 import { setStorages } from '@/utils/storage';
 import Notify from '@/components/_shared/common/Notify';
@@ -150,7 +150,7 @@ const CompanyComponent = ({ companies }: Company.Component) => {
       {
         [200, 201].includes(responser.code) && (
           <Box display={'flex'}>
-            <Notify error={false} body={responser.message || 'aaaa'} />
+            <Notify error={false} body={responser.message || 'New company has been created.'} />
           </Box>
         )
       }

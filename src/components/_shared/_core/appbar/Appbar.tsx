@@ -9,7 +9,7 @@ import {
 import { styled } from '@mui/material/styles';
 import { IconButton } from '@/components/_shared/form';
 import { BsBellFill } from 'react-icons/bs';
-import LocalizationMenu from '@/components/_shared/_core/localization/Index';
+import LocalizationMenu from '@/components/_shared/_core/localization/LocalizationMenu';
 import Profile from './Profile';
 import { Menu } from '@mui/icons-material';
 

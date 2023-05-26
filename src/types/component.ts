@@ -46,6 +46,49 @@ export declare namespace Company {
   export interface Component {
     companies: [];
   }
+  export interface Detail {
+    picture: [],
+
+    // Group Company Information
+    companyType: string,
+    companyName: string,
+    companyNPWP?: string | null,
+    companySector: string,
+    companyEmail: string,
+    phoneNumberPrefix: string,
+    phoneNumber: string,
+
+    // Group Company Address
+    countryCompanyAddress: string,
+    provinceCompanyAddress: string,
+    cityCompanyAddress: string,
+    subDistrictCompanyAddress: string,
+    addressCompanyAddress: string,
+    zipCodeCompanyAddress: string,
+
+    // Group Bank Information
+    bankBankInformation: string,
+    bankAccountHolderNameBankInformation: string,
+    bankAccoutNoBankInformation: string,
+    bankCodeBankInformation?: string | null,
+    branchCodeBankInformation?: string | null,
+    branchNameBankInformation?: string | null,
+    swiftCodeBankInformation?: string | null,
+
+    // Group Payroll Information
+    isMonthly?: boolean,
+    isWeekly?: boolean,
+    isBiWeekly?: boolean,
+    monthlyPeriodStart?: string,
+    monthlyPeriodEnd?: string,
+    monthlyPayrollDate?: string,
+    monthlyMethod?: string,
+    weeklyPeriod?: string,
+    weeklyMethod?: string,
+    biWeeklyPeriod?: string,
+    biWeeklyPeriodWeek?: string,
+    biWeeklyMethod?: string
+  }
 }
 
 export declare namespace CompanyCreate {
@@ -92,7 +135,7 @@ export declare namespace SharedComponent {
 
   export type SelectInput = SelectProps & {
     customLabel?: string;
-    options?: Array<{ label: string, value: string }> | undefined;
+    options: Array<{ label: string, value: string }> | undefined;
     withAsterisk?: boolean;
     helperText?: string;
   }

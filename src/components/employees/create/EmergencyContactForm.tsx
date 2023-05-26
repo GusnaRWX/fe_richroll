@@ -8,6 +8,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import { Employees } from '@/types/employees';
 import { useFormik } from 'formik';
 import { validationSchemeEmployeeEmergencyContact } from './validate';
+import { relationshipItems } from '@/utils/options';
 
 const AsteriskComponent = MuiStyled('span')(({ theme }) => ({
   color: theme.palette.error.main
@@ -23,7 +24,7 @@ interface EmergencyProps {
 
 function EmergencyContactForm({ refProp, nextPage, setValues, emergencyValues, setIsEmergencyValid }: EmergencyProps) {
   const { employeeID } = useAppSelectors((state) => state.employee);
-
+  const { responser } = useAppSelectors(state => state);
   const formik = useFormik({
     initialValues: {
       employeeID: employeeID,
@@ -39,8 +40,8 @@ function EmergencyContactForm({ refProp, nextPage, setValues, emergencyValues, s
     validationSchema: validationSchemeEmployeeEmergencyContact,
     onSubmit: (values, { setErrors }) => {
       const emergencyLastValue = {
-        ...formik.values,
-        phoneNumberPrimary: String(formik.values.phoneNumberPrefixPrimary)
+        ...values,
+        phoneNumberPrimary: String(formik.values.phoneNumberPrimary)
       };
       setValues(emergencyLastValue);
       nextPage(3);
@@ -61,6 +62,17 @@ function EmergencyContactForm({ refProp, nextPage, setValues, emergencyValues, s
 
   };
 
+  const checkRelationship = (value: unknown) => {
+    if ((value as string).length === 0) {
+      return <Text title='Select Relationship' color='grey.400' />;
+    }
+    const selected = relationshipItems.find(item => item.value === value);
+    if (selected) {
+      return `${selected.label}`;
+    }
+    return null;
+  };
+
   return (
     <>
       {
@@ -68,6 +80,15 @@ function EmergencyContactForm({ refProp, nextPage, setValues, emergencyValues, s
           <Alert
             severity='error'
             content='Please fill in all the mandatory fields'
+            icon={<CancelIcon />}
+          />
+        )
+      }
+      {
+        ![200, 201, 0].includes(responser?.code) && (
+          <Alert
+            severity='error'
+            content={responser?.message}
             icon={<CancelIcon />}
           />
         )
@@ -111,11 +132,15 @@ function EmergencyContactForm({ refProp, nextPage, setValues, emergencyValues, s
                   onBlur={formik.handleBlur}
                   value={formik.values.relationPrimary}
                   name='relationPrimary'
+                  displayEmpty
+                  renderValue={(value: unknown) => {
+                    return checkRelationship(value);
+                  }}
                 >
                   <MenuItem value='1'>Parent</MenuItem>
                   <MenuItem value='2'>Sibling</MenuItem>
                   <MenuItem value='3'>Spouse</MenuItem>
-                  <MenuItem value='4'>Others</MenuItem>
+                  <MenuItem value='0'>Others</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
@@ -149,7 +174,7 @@ function EmergencyContactForm({ refProp, nextPage, setValues, emergencyValues, s
                 <Grid item xs={9} sm={9} md={9} lg={9} xl={10} alignSelf='flex-end'>
                   <Input
                     name='phoneNumberPrimary'
-                    placeholder='Input Correct Number'
+                    placeholder='Input contact number'
                     withAsterisk={true}
                     size='small'
                     type='number'
@@ -191,11 +216,15 @@ function EmergencyContactForm({ refProp, nextPage, setValues, emergencyValues, s
                   onBlur={formik.handleBlur}
                   value={formik.values.relationSecondary}
                   name='relationSecondary'
+                  displayEmpty
+                  renderValue={(value: unknown) => {
+                    return checkRelationship(value);
+                  }}
                 >
                   <MenuItem value='1'>Parent</MenuItem>
                   <MenuItem value='2'>Sibling</MenuItem>
                   <MenuItem value='3'>Spouse</MenuItem>
-                  <MenuItem value='4'>Others</MenuItem>
+                  <MenuItem value='0'>Others</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
@@ -229,7 +258,7 @@ function EmergencyContactForm({ refProp, nextPage, setValues, emergencyValues, s
                 <Grid item xs={9} sm={9} md={9} lg={9} xl={10} alignSelf='flex-end'>
                   <Input
                     name='phoneNumberSecondary'
-                    placeholder='Input Correct Number'
+                    placeholder='Input contact number'
                     withAsterisk={true}
                     size='small'
                     onChange={formik.handleChange}

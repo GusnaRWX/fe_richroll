@@ -7,6 +7,7 @@ interface EmployeeState {
   employeeID: string | number;
   employeeInformationDetail: object;
   personalInformationDetail: object;
+  detailCnb: object;
 }
 
 const initialState: EmployeeState = {
@@ -14,7 +15,8 @@ const initialState: EmployeeState = {
   data: [],
   employeeID: '',
   employeeInformationDetail: {},
-  personalInformationDetail: {}
+  personalInformationDetail: {},
+  detailCnb: {}
 };
 
 export const employeeSlice = createSlice({
@@ -78,6 +80,16 @@ export const employeeSlice = createSlice({
     },
     personalInfoDetailFailed: (state) => {
       state.isLoading = false;
+    },
+    getDetailCnbRequested: (state) => {
+      state.isLoading = true;
+    },
+    getDetailCnbSuccess: (state, action) => {
+      state.isLoading = false;
+      state.detailCnb = action?.payload?.data;
+    },
+    getDetailCnbFailed: (state) => {
+      state.isLoading = false;
     }
   },
   extraReducers: {
@@ -108,7 +120,10 @@ export const {
   employeeInfoDetailSuccess,
   personalInfoDetailRequested,
   personalInfoDetailFailed,
-  personalInfoDetailSuccess
+  personalInfoDetailSuccess,
+  getDetailCnbFailed,
+  getDetailCnbRequested,
+  getDetailCnbSuccess
 } = employeeSlice.actions;
 
 export default employeeSlice.reducer;

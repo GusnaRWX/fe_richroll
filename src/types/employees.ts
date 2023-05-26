@@ -1,5 +1,7 @@
 import dayjs from 'dayjs';
 
+type DayJS = dayjs.Dayjs | null | string;
+
 export declare namespace Employees {
   interface EmployeeParams {
     page: number;
@@ -91,11 +93,11 @@ export declare namespace Employees {
 
   interface PersonalValues {
     useResidentialAddress: boolean;
-    isPermanentPersonalID: boolean;
-    dateofBirthPersonalInformation: dayjs.Dayjs | null | string;
+    // isPermanentPersonalID: boolean;
+    dateofBirthPersonalInformation: DayJS;
     genderPersonalInformation: number;
     maritialStatusPersonalInformation: number;
-    numberOfDependantsPersonalInformation: number;
+    numberOfDependantsPersonalInformation: number | null;
     nationalityPersonalInformation: string;
     religionPersonalInformation: number
 
@@ -123,7 +125,7 @@ export declare namespace Employees {
 
     idTypePersonalID: string;
     idNumberPersonalID: string;
-    idExpirationDatePersonalID: dayjs.Dayjs | null | string
+    idExpirationDatePersonalID: DayJS
   }
 
   interface CnbValues {
@@ -132,7 +134,7 @@ export declare namespace Employees {
     baseTax: string;
     baseRate: string;
     basePeriod: string;
-    suplementary: Array<{ compensation: string; tax: string; rate: string; period: string }>
+    suplementary: Array<{ compensation: string | number; tax: string; rate: string | number; period: string | number }>
   }
 
   interface InformationValues {
@@ -144,8 +146,8 @@ export declare namespace Employees {
     phoneNumberPrefix: string
     phoneNumber: string
     email: string
-    startDate: dayjs.Dayjs | null | string
-    endDate: dayjs.Dayjs | null | string
+    startDate: DayJS
+    endDate: DayJS
     isPermanent: boolean
     department: string
     position: string

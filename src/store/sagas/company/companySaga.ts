@@ -195,9 +195,7 @@ function* fetchGetPaymentMethod() {
 
     if (err instanceof AxiosError) {
       const errorMessage = err?.response?.data as Services.ErrorResponse;
-      yield delay(2000, true);
       yield put({ type: paymentMethodFailed.toString() });
-      yield delay(2000, true);
       yield put({
         type: setResponserMessage.toString(),
         payload: {
@@ -235,7 +233,6 @@ function* fetchPostCompanyProfile(action: AnyAction) {
     if (err instanceof AxiosError) {
       const errorMessage = err?.response?.data as Services.ErrorResponse;
       yield put({ type: postCompanyProfileFailed.toString() });
-      yield delay(2000, true);
       yield put({
         type: setResponserMessage.toString(),
         payload: {
@@ -272,9 +269,9 @@ function* fetchGetCompanyDetail(action: AnyAction) {
 function* fetchPatchCompanyProfile(action: AnyAction) {
   try {
     const res: AxiosResponse = yield call(patchCompanyProfile, action?.payload);
-    if (res.data.code === 201) {
+    if (res.data.code === 200) {
       yield put({ type: patchCompanyProfileSuccess.toString(), payload: res.data.data });
-      yield delay(2000);
+      Router.back();
       yield put({
         type: setResponserMessage.toString(),
         payload: {

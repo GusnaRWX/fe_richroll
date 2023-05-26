@@ -31,3 +31,10 @@ export const employeeItems: Array<Option.Mapper> = [
   { label: '< 50', value: '3' },
   { label: '> 50', value: '4' }
 ];
+
+export const relationshipItems: Array<Option.Mapper> = [
+  { label: 'Parent', value: '1' },
+  { label: 'Sibling', value: '2' },
+  { label: 'Spouse', value: '3' },
+  { label: 'Others', value: '0' }
+];

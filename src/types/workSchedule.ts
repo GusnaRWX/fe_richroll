@@ -1,5 +1,5 @@
 export declare namespace workSchedule {
-  interface initialValuesWorkScheduleForm {
+  interface InitialValuesWorkScheduleForm {
     type: string | number;
     flexiWorkHour: string,
     flexiMinWorkHour: string,

@@ -10,7 +10,8 @@ import { Employees } from '@/types/employees';
 import { useAppDispatch } from '@/hooks/index';
 import dayjs from 'dayjs';
 import { postEmployeeInfoRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
-import { getCompanyData } from '@/utils/helper';
+import { base64ToFile, getCompanyData } from '@/utils/helper';
+import { resetResponserMessage } from '@/store/reducers/slice/responserSlice';
 
 const EmployeeInformationFormClient = dynamic(() => import('./EmployeeInformationForm'), {
   ssr: false
@@ -131,7 +132,7 @@ function EmployeeCreateComponent() {
     dateofBirthPersonalInformation: null,
     genderPersonalInformation: 0,
     maritialStatusPersonalInformation: 0,
-    numberOfDependantsPersonalInformation: 0,
+    numberOfDependantsPersonalInformation: null,
     nationalityPersonalInformation: '',
     religionPersonalInformation: 0,
 
@@ -158,7 +159,7 @@ function EmployeeCreateComponent() {
     swiftCodeBankInformation: '',
 
     useResidentialAddress: false,
-    isPermanentPersonalID: false,
+    // isPermanentPersonalID: false,
 
     idExpirationDatePersonalID: '',
     idNumberPersonalID: '',
@@ -172,10 +173,11 @@ function EmployeeCreateComponent() {
     setValue(newValue);
   };
   const handleClick = async () => {
+    const convertToBase64 = base64ToFile(informationValue.images as string, 'example.png');
     const inputData = new FormData();
     inputData.append('companyID', getCompanyData()?.id as string);
-    if (informationValue.picture && (informationValue.picture as []).length > 0) {
-      inputData.append('picture', (informationValue.picture as unknown as File)[0]);
+    if ((informationValue.picture as []).length > 0 || convertToBase64) {
+      inputData.append('picture', (informationValue.picture as unknown as File)[0] || convertToBase64);
     }
     inputData.append('fullName', informationValue.fullName);
     inputData.append('nickname', informationValue.nickname);
@@ -183,7 +185,7 @@ function EmployeeCreateComponent() {
     inputData.append('phoneNumber', informationValue.phoneNumber);
     inputData.append('email', informationValue.email);
     inputData.append('startDate', dayjs(informationValue.startDate).format('YYYY-MM-DD'));
-    inputData.append('endDate', dayjs(informationValue.endDate).format('YYYY-MM-DD'));
+    inputData.append('endDate', dayjs(informationValue.endDate).isValid() ? dayjs(informationValue.endDate).format('YYYY-MM-DD') : dayjs().set('dates', 12).set('months', 12).set('years', 2975).format('YYYY-MM-DD'));
     inputData.append('isPermanent', informationValue.isPermanent ? 'true' : 'false');
     if (informationValue.department !== '') {
       inputData.append('department', informationValue.department);
@@ -288,6 +290,9 @@ function EmployeeCreateComponent() {
         withCallback
         callback={() => {
           router.push('/company-management/employees');
+          dispatch({
+            type: resetResponserMessage.toString()
+          });
         }}
       />
     </>
