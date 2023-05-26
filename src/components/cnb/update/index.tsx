@@ -18,9 +18,6 @@ import {
   Paper,
   FormControl,
   FormHelperText,
-  Snackbar,
-  Alert,
-  AlertTitle,
 } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
 import { useRouter } from "next/router";
@@ -40,6 +37,9 @@ export default function UpdateCNBComponent() {
   const dispatch = useAppDispatch();
   const compensationComponentOption = useAppSelectors(
     (state) => state.compensation?.compensationComponentOption?.data?.items
+  );
+  const detailLoading = useAppSelectors(
+    (state) => state.compensation?.detailLoading
   );
   const [openMsg, setOpenMsg] = React.useState(false);
 
@@ -758,6 +758,7 @@ export default function UpdateCNBComponent() {
                           label="Save"
                           color="primary"
                           type="submit"
+                          disabled={detailLoading}
                         />
                       </NextBtnWrapper>
                     </section>
