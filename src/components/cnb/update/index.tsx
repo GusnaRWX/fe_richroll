@@ -132,7 +132,7 @@ export default function UpdateCNBComponent() {
       width: 16,
       height: 16,
       backgroundImage: 'radial-gradient(#fff,#fff 28%,transparent 32%)',
-      content: '',
+      content: '""',
     },
     'input:hover ~ &': {
       backgroundColor: '#106ba3',
