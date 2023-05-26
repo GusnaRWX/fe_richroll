@@ -17,27 +17,28 @@ import {
   Paper,
   FormControl,
   FormHelperText,
-  Snackbar,
-  Alert,
-  AlertTitle,
 } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import {
   getCompensationComponentOptionRequested,
-  postNewCnbProfileRequested,
+  putUpdateRequested,
 } from '@/store/reducers/slice/cnb/compensationSlice';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { getCompanyData } from '@/utils/helper';
 import { FieldArray, Form as FormikForm, Formik } from 'formik';
 import * as Yup from 'yup';
+import ConfirmationModal from '@/components/_shared/common/ConfirmationModal';
 
-export default function CreateCNBComponent() {
+export default function UpdateCNBComponent() {
   const router = useRouter();
   const companyData = getCompanyData();
   const dispatch = useAppDispatch();
   const compensationComponentOption = useAppSelectors(
     (state) => state.compensation?.compensationComponentOption?.data?.items
+  );
+  const detailLoading = useAppSelectors(
+    (state) => state.compensation?.detailLoading
   );
   const [openMsg, setOpenMsg] = React.useState(false);
 
@@ -138,7 +139,7 @@ export default function CreateCNBComponent() {
     },
   });
 
-  function CreateNewCnbProfile(value: any) {
+  function UpdateCnbProfile(value: any) {
     let supplement = true;
     value.supplementary.map((item: any) => {
       if (value.supplementary.length === 0) {
@@ -165,13 +166,14 @@ export default function CreateCNBComponent() {
       value.taxStatus !== '' &&
       supplement
     ) {
-      setOpenMsg(true);
       dispatch({
-        type: postNewCnbProfileRequested.toString(),
+        type: putUpdateRequested.toString(),
+        Id: router.query.cnb,
         Payload: {
           companyId: companyData?.id,
           name: value.name,
           baseCompensation: {
+            id: router.query.id,
             compensationComponentId: parseInt(value.compensationComponentId),
             taxStatus: value.taxStatus,
             amount:
@@ -196,10 +198,10 @@ export default function CreateCNBComponent() {
   }
 
   interface SuplementType {
-    compensationComponentId: string | boolean;
-    taxStatus: string | boolean;
-    rateOrAmount: number | null | boolean;
-    period: string | boolean;
+    compensationComponentId: string;
+    taxStatus: string;
+    rateOrAmount: number | null;
+    period: string;
   }
 
   const initialValues: {
@@ -221,8 +223,8 @@ export default function CreateCNBComponent() {
   return (
     <Formik
       initialValues={initialValues}
-      onSubmit={(values: any) => {
-        CreateNewCnbProfile(values);
+      onSubmit={() => {
+        setOpenMsg(true);
       }}
       validationSchema={validationSchecma}
     >
@@ -245,26 +247,9 @@ export default function CreateCNBComponent() {
                   width: '250px',
                 }}
               >
-                Create New CnB Profile
+                Update Profile
               </Typography>
             </HeaderPageTitle>
-            <NextBtnWrapper>
-              <Button
-                fullWidth={false}
-                size='small'
-                label='Cancel'
-                variant='outlined'
-                sx={{ mr: '12px' }}
-                color='primary'
-              />
-              <Button
-                fullWidth={false}
-                size='small'
-                label='Save'
-                color='primary'
-                type='submit'
-              />
-            </NextBtnWrapper>
           </Header>
           <Paper sx={{ width: '100%', p: '21px 32px' }}>
             <Form style={{ marginBottom: '32px' }}>
@@ -740,38 +725,56 @@ export default function CreateCNBComponent() {
                         </Form>
                       </>
                     )}
-                    <AddButton
-                      color='secondary'
-                      startIcon={<AddIcon />}
-                      label='Add Supplementary Compensation'
-                      onClick={() =>
-                        arrayHelper.insert(
-                          formik.values.supplementary.length + 1,
-                          {
-                            compensationComponentId: '',
-                            period: '',
-                            rateOrAmount: '',
-                            taxStatus: '',
-                          }
-                        )
-                      }
-                    />
+                    <section>
+                      <AddButton
+                        color='secondary'
+                        startIcon={<AddIcon />}
+                        label='Add Supplementary Compensation'
+                        onClick={() =>
+                          arrayHelper.insert(
+                            formik.values.supplementary.length + 1,
+                            {
+                              compensationComponentId: '',
+                              period: '',
+                              rateOrAmount: '',
+                              taxStatus: '',
+                            }
+                          )
+                        }
+                      />
+                      <NextBtnWrapper>
+                        <Button
+                          fullWidth={false}
+                          size='small'
+                          label='Cancel'
+                          variant='outlined'
+                          sx={{ mr: '12px' }}
+                          color='primary'
+                        />
+                        <Button
+                          fullWidth={false}
+                          size='small'
+                          label='Save'
+                          color='primary'
+                          type='submit'
+                          disabled={detailLoading}
+                        />
+                      </NextBtnWrapper>
+                    </section>
                   </div>
                 );
               }}
             />
           </Paper>
-          <Snackbar
+          <ConfirmationModal
             open={openMsg}
-            autoHideDuration={2000}
-            onClose={() => setOpenMsg(false)}
-            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-          >
-            <Alert>
-              <AlertTitle>Successfully Saved!</AlertTitle>
-              New Compensation and Benefits Profile has been created
-            </Alert>
-          </Snackbar>
+            handleClose={() => setOpenMsg(false)}
+            title='Save Changes'
+            content='Are you sure you want to update profile with this data? Any unsaved changes made to data will be discarded'
+            withCallback
+            noChange={true}
+            callback={() => UpdateCnbProfile(formik.values)}
+          />
         </FormikForm>
       )}
     </Formik>

@@ -14,7 +14,6 @@ import {
   Paper,
   TextField,
   InputAdornment,
-  TextFieldProps
 } from '@mui/material/';
 import ConfirmationModal from '../_shared/common/ConfirmationModal';
 import SearchIcon from '@mui/icons-material/Search';
@@ -23,10 +22,17 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 
 import { styled } from '@mui/material/styles';
+import { TextFieldProps } from '@mui/material/';
 import { IconButton } from '../_shared/form';
-import { useAppDispatch } from '@/hooks/index';
-import { deleteCompensationRequested } from '@/store/reducers/slice/cnb/compensationSlice';
+import { useAppDispatch, useAppSelectors } from '@/hooks/index';
+import {
+  deleteCompensationRequested,
+  getDetailRequested,
+} from '@/store/reducers/slice/cnb/compensationSlice';
 import dayjs from 'dayjs';
+import DetailModal from './modal';
+import DetailCnb from './detail';
+import { useRouter } from 'next/router';
 
 interface Data {
   name: string;
@@ -170,17 +176,29 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 }
 
 export default function EnhancedTable(rows: any) {
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const [order, setOrder] = React.useState<Order>('asc');
   const [orderBy, setOrderBy] = React.useState<keyof Data>('createdAt');
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const detail = useAppSelectors((state) => state.compensation.detail?.data);
 
   const deleteCnb = (Id: string | number) => {
     dispatch({
       type: deleteCompensationRequested.toString(),
       Id: Id,
     });
+  };
+
+  const editCnb = (rowId: number) => {
+    dispatch({
+      type: getDetailRequested.toString(),
+      Id: rowId,
+    });
+    router.push(
+      `/compensation-benefits/update?cnb=${rowId}&id=${detail?.baseCompensation[0]?.id}`
+    );
   };
 
   const handleRequestSort = (
@@ -218,14 +236,18 @@ export default function EnhancedTable(rows: any) {
     [order, orderBy, page, rowsPerPage]
   );
 
-  const [DeleteConfirmation, setDeleteConfirmation] =
-    React.useState<boolean>(false);
-  const handleOpen = () => {
-    setDeleteConfirmation(true);
+  const [DeleteConfirmation, setDeleteConfirmation] = React.useState({
+    open: false,
+    id: 0,
+  });
+  const handleOpen = (id: number) => {
+    setDeleteConfirmation({ open: true, id: id });
   };
   const handleClose = () => {
-    setDeleteConfirmation(false);
+    setDeleteConfirmation({ open: false, id: 0 });
   };
+
+  const [detailOpen, setDetailOpen] = React.useState({ id: 0, open: false });
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -267,38 +289,64 @@ export default function EnhancedTable(rows: any) {
                       </TableCell>
                       <TableCell>{row.baseCompensation[0]}</TableCell>
                       <TableCell>
-                        {row.supplementaryCompensation.map((item: string, i: number) => (
-                          <div key={i}>{item}</div>
-                        ))}
+                        {row.supplementaryCompensation.map(
+                          (item: string, i: number) => (
+                            <div key={i}>{item}</div>
+                          )
+                        )}
                       </TableCell>
-                      <TableCell>{dayjs(row.createdAt).format('DD/MM/YY')}</TableCell>
-                      <TableCell>{dayjs(row.updatedAt).format('DD/MM/YY')}</TableCell>
-                      <TableCell style={{ display: 'flex', gap: '8px' }}>
-                        <IconButton
-                          parentColor='primary.50'
-                          icons={<VisibilityIcon sx={{ color: '#223567' }} />}
-                        />
-                        <IconButton
-                          parentColor='primary.50'
-                          icons={<BorderColorIcon sx={{ color: '#223567' }} />}
-                        />
-                        <IconButton
-                          parentColor='red.100'
-                          icons={<DeleteIcon sx={{ color: '#EF4444' }} />}
-                          onClick={() => handleOpen()}
-                        />
+                      <TableCell>
+                        {dayjs(row.createdAt).format('DD/MM/YY')}
                       </TableCell>
-                      <ConfirmationModal
-                        open={DeleteConfirmation}
-                        handleClose={handleClose}
-                        title='Are you sure you want to delete this record?'
-                        content='Any unsaved changes will be discarded. This cannot be undone'
-                        withCallback
-                        callback={() => deleteCnb(row.id)}
-                      />
+                      <TableCell>
+                        {dayjs(row.updatedAt).format('DD/MM/YY')}
+                      </TableCell>
+                      <TableCell>
+                        <div style={{ display: 'flex', gap: '8px' }}>
+                          <IconButton
+                            parentColor='primary.50'
+                            icons={<VisibilityIcon sx={{ color: '#223567' }} />}
+                            onClick={() =>
+                              setDetailOpen({ id: row.id, open: true })
+                            }
+                          />
+                          <IconButton
+                            parentColor='primary.50'
+                            icons={
+                              <BorderColorIcon sx={{ color: '#223567' }} />
+                            }
+                            onClick={() => editCnb(row.id)}
+                          />
+                          <IconButton
+                            parentColor='red.100'
+                            icons={<DeleteIcon sx={{ color: '#EF4444' }} />}
+                            onClick={() => handleOpen(row.id)}
+                          />
+                        </div>
+                      </TableCell>
                     </TableRow>
                   );
                 })}
+              {/* Delete */}
+              <ConfirmationModal
+                open={DeleteConfirmation.open}
+                handleClose={handleClose}
+                title='Are you sure you want to delete this record?'
+                content='Any unsaved changes will be discarded. This cannot be undone'
+                withCallback
+                noChange={true}
+                callback={() => deleteCnb(DeleteConfirmation.id)}
+              />
+
+              {/* Detail */}
+              <DetailModal
+                open={detailOpen.open}
+                handleClose={() => setDetailOpen({ id: 0, open: false })}
+                title='CnB Profile Detail'
+                content={
+                  <DetailCnb id={detailOpen.id} open={detailOpen.open} />
+                }
+              />
               {rows?.rows?.items.length === undefined && (
                 <TableRow>
                   <TableCell colSpan={5} align='center'>
@@ -318,7 +366,7 @@ export default function EnhancedTable(rows: any) {
             </TableBody>
           </Table>
         </TableContainer>
-        {rows?.rows?.items.length !== undefined &&
+        {rows?.rows?.items.length !== undefined && (
           <TablePagination
             rowsPerPageOptions={[5, 10]}
             component='div'
@@ -352,7 +400,7 @@ export default function EnhancedTable(rows: any) {
               },
             }}
           />
-        }
+        )}
       </Paper>
     </Box>
   );

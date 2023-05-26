@@ -46,14 +46,17 @@ interface ConfirmationModalProp {
   content: string;
   withCallback?: boolean;
   callback?: () => void;
+  noChange: boolean;
 }
 
 
-function ConfirmationModal({ open, handleClose, title, content, withCallback, callback }: ConfirmationModalProp) {
+function ConfirmationModal({ open, handleClose, title, content, withCallback, callback, noChange }: ConfirmationModalProp) {
   const router = useRouter();
   const handleClick = () => {
     handleClose();
-    router.back();
+    if (!noChange) {
+      router.back();
+    }
     if (withCallback && callback) {
       callback();
     }
