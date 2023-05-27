@@ -22,8 +22,11 @@ import { Image as ImageType, Icons } from '@/utils/assetsConstant';
 import { ImageList as ImageListAll } from './ImageList';
 
 const WrapperContainer = styled(Box)<BoxProps>(({ theme }) => ({
-  [theme.breakpoints.up('md')]: {
+  [theme.breakpoints.up('lg')]: {
     padding: '80px 135px',
+  },
+  [theme.breakpoints.only('md')]: {
+    padding: '80px 45px',
   },
   [theme.breakpoints.down('md')]: {
     padding: '40px 24px',
@@ -34,8 +37,11 @@ const WrapperContainer = styled(Box)<BoxProps>(({ theme }) => ({
 }));
 
 const WrapperContainerSpotlight = styled(Box)<BoxProps>(({ theme }) => ({
-  [theme.breakpoints.up('md')]: {
+  [theme.breakpoints.up('lg')]: {
     padding: '80px 135px',
+  },
+  [theme.breakpoints.only('md')]: {
+    padding: '80px 45px',
   },
   [theme.breakpoints.down('md')]: {
     padding: '40px 24px',
@@ -170,7 +176,7 @@ const Navbar = () => {
               textTransform: 'none',
             }}
           >
-            Try for free
+            Sign up for free
           </Button>
         </Box>
       </WrapperNavbarContent>
@@ -206,15 +212,9 @@ const LandingComponent = () => {
       <WrapperContainer sx={{ justifyContent: {xs: 'center', md: 'space-between'}, flexDirection: {xs: 'column', md: 'row'} }}>
         <Box component='div'>
           <Typography
-            variant='text-lg'
-            component='div'
-            sx={{ marginBottom: '24px' }}
-          >
-            Payroll & HR Solutions Specially Curated For SMEs And Start-Ups
-          </Typography>
-          <Typography
             variant='text-5xl'
             component='div'
+            color='primary.main'
             sx={{ fontWeight: 700 }}
           >
             The Smoother The Better.
@@ -231,7 +231,7 @@ const LandingComponent = () => {
               variant='text-lg'
               sx={{ marginLeft: '8px' }}
             >
-              Easy Set Up
+              EASY TO USE
             </Typography>
           </Box>
           <Box component='div' sx={{ display: 'flex', alignItems: 'center' }}>
@@ -245,7 +245,7 @@ const LandingComponent = () => {
               variant='text-lg'
               sx={{ marginLeft: '8px' }}
             >
-              Friendly Customer Support
+              SAVE TIME
             </Typography>
           </Box>
           <Box component='div' sx={{ display: 'flex', alignItems: 'center' }}>
@@ -259,7 +259,7 @@ const LandingComponent = () => {
               variant='text-lg'
               sx={{ marginLeft: '8px' }}
             >
-              Cancel Anytime
+              FREE UP TO 50 EMPLOYEES
             </Typography>
           </Box>
 
@@ -271,10 +271,11 @@ const LandingComponent = () => {
             sx={{
               textTransform: 'none',
               marginTop: '40px',
+              fontSize: '18px',
               width: {xs: '100%', md: 'auto'}
             }}
           >
-            Get a Demo, Try Us!
+            Get a Free Demo
           </Button>
         </Box>
         <Box component='div' sx={{ position: 'relative', width: { xs: '100%', md: '40%' }, height: '320px', mt: {xs: '32px', md: '0px'} }}>
@@ -323,7 +324,7 @@ const LandingComponent = () => {
             component='div'
             sx={{ marginBottom: '24px', fontWeight: 400, textAlign: 'center' }}
           >
-            A friend to SMEs and Start‑ups, we’re here to help you keep payroll<br />processes simple, smooth and secure, so that you can focus on what’s<br />important!
+            A friend to SMEs and Start‑ups,<br />We’re here to help you keep payroll processes simple, smooth and secure,<br />So that you can focus on what’s important!
           </Typography>
 
           <Box
@@ -331,8 +332,8 @@ const LandingComponent = () => {
               display: 'flex',
               flexWrap: 'wrap',
               '& > :not(style)': {
-                m: 0.5,
-                width: {xs: '100%', md: 377},
+                m: 1,
+                width: {xs: '100%', md: 350},
                 padding: '24px',
                 textAlign: 'center'
               },
@@ -358,7 +359,7 @@ const LandingComponent = () => {
                   component='div'
                   sx={{ fontWeight: 400 }}
                 >
-                  We’re here to offer a Fresh Approach
+                  We’re here to offer<br />A Fresh Approach
                 </Typography>
               </Box>
             </Paper>
@@ -382,7 +383,7 @@ const LandingComponent = () => {
                   component='div'
                   sx={{ fontWeight: 400 }}
                 >
-                  We’re fully Homegrown
+                  Fully Homegrown
                 </Typography>
               </Box>
             </Paper>
@@ -406,7 +407,7 @@ const LandingComponent = () => {
                   component='div'
                   sx={{ fontWeight: 400 }}
                 >
-                  We’re focussed on empowering SMEs and Startups
+                  SME Friendly. We’re focused on Empowering SMEs and Start-ups
                 </Typography>
               </Box>
             </Paper>
