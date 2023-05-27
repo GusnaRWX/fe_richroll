@@ -1,9 +1,13 @@
 import React from 'react';
 import EmployeeDetailContainer from '@/containers/employees/EmployeeDetailContainer';
+import MetaHead from '@/components/_shared/_core/layout/MetaHead';
 
 function index() {
   return (
-    <EmployeeDetailContainer />
+    <>
+      <MetaHead title='Kayaroll - Employee Details'/>
+      <EmployeeDetailContainer />
+    </>
   );
 }
 
