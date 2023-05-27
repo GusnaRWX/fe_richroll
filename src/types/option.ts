@@ -20,7 +20,7 @@ export declare namespace Option {
   }
 
   export interface Cnb {
-    items: Array<{id: string | number, name: string, baseCompensation: [], supplementaryCompensation: [], createdAt: string, updatedAt: string}>
+    items: Array<{ id: string | number, name: string, baseCompensation: [], supplementaryCompensation: [], createdAt: string, updatedAt: string }>
   }
 
   export interface Mapper {
@@ -29,7 +29,7 @@ export declare namespace Option {
   }
 
   export interface FreesoloType {
-    label: string;
+    label: string | Element;
     value?: string;
     inputValue?: string
   }

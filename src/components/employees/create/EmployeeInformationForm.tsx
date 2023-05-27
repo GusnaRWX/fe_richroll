@@ -4,16 +4,17 @@ import {
   Grid,
   Typography,
   Box,
-  SelectChangeEvent,
   IconButton,
-  Modal
+  Modal,
+  Autocomplete,
+  TextField
 } from '@mui/material';
 import Webcam from 'react-webcam';
 import { Input, Button, Select as CustomSelect, CheckBox, DatePicker, FileUploadModal } from '@/components/_shared/form';
 import { styled as MuiStyled } from '@mui/material/styles';
 import { Image as ImageType } from '@/utils/assetsConstant';
 import styled from '@emotion/styled';
-import { useAppSelectors, useAppDispatch } from '@/hooks/index';
+import { useAppSelectors } from '@/hooks/index';
 import dayjs from 'dayjs';
 import { Alert, Text } from '@/components/_shared/common';
 import { CameraAlt, Cancel } from '@mui/icons-material';
@@ -21,7 +22,11 @@ import { Employees } from '@/types/employees';
 import { validationSchemeEmployeeInformation } from './validate';
 import { useFormik } from 'formik';
 import { convertImageParams, getCompanyData, base64ToFile, randomCode } from '@/utils/helper';
-import { getListPositionRequested } from '@/store/reducers/slice/options/optionSlice';
+// import { getListPositionRequested } from '@/store/reducers/slice/options/optionSlice';
+import { createFilterOptions } from '@mui/material';
+import { Option } from '@/types/option';
+import { BsTrash3 } from 'react-icons/bs';
+import { AiOutlinePlus } from 'react-icons/ai';
 
 const videoConstraints = {
   width: 500,
@@ -112,11 +117,11 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, set
       handleCloseCamera();
     }
   }, [webcamRef]);
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
   const [open, setOpen] = useState(false);
   const { listDepartment, listPosition } = useAppSelectors(state => state.option);
   const [images, setImages] = useState<string | null>(infoValues?.images);
-
+  console.log(listPosition);
   const { responser } = useAppSelectors(state => state);
 
   const formik = useFormik({
@@ -144,7 +149,7 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, set
     const allInfoValues = {
       ...val,
       companyID: getCompanyData()?.id as string,
-      images: String(images)
+      images: String(images),
     };
     setValues(allInfoValues);
     nextPage(1);
@@ -152,8 +157,6 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, set
     setErrors({});
   };
 
-
-  console.log(formik.values.picture);
   const handleOpen = () => {
     setOpen(true);
   };
@@ -183,7 +186,22 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, set
     setOpenCamera(false);
   };
 
-  console.log(formik.errors);
+  const filter = createFilterOptions<Option.FreesoloType>();
+
+  const [mappedDepartment, setMappedDepartment] = useState(listDepartment);
+  const [mappedListPosition, setMappedListPosition] = useState(listPosition);
+
+  const handleDelete = (id: number) => {
+    const temp = [...mappedDepartment];
+    temp.splice(id, 1);
+    setMappedDepartment(temp);
+  };
+
+  const handleDeletePosition = (id: number) => {
+    const temp = [...mappedListPosition];
+    temp.slice(id, 1);
+    setMappedDepartment(temp);
+  };
 
   return (
     <div>
@@ -340,39 +358,156 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, set
         />
         <Grid container spacing={2}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
-            <CustomSelect
-              customLabel='Department'
-              withAsterisk={false}
-              variant='outlined'
+            <Text title='Department' mb='6px' />
+            <Autocomplete
+              id='department'
+              freeSolo
               value={formik.values.department}
-              onChange={(e: unknown) => {
-                formik.handleChange(e);
-                dispatch({
-                  type: getListPositionRequested.toString(),
-                  payload: {
-                    departmentID: (e as SelectChangeEvent).target.value
-                  }
-                });
+              onChange={(event, newValue) => {
+                if (typeof newValue === 'string') {
+                  formik.setFieldValue('department', newValue, false);
+                } else if (newValue && newValue.inputValue) {
+                  formik.setFieldValue('department', newValue.inputValue, false);
+                  setMappedDepartment((prevDepartments) => [...prevDepartments, {
+                    label: newValue.inputValue,
+                    id: String(Math.random() * Math.PI)
+                  }]);
+                } else {
+                  formik.setFieldValue('department', newValue?.label);
+                }
               }}
-              onBlur={formik.handleBlur}
-              fullWidth={true}
-              name='department'
               size='small'
-              options={listDepartment}
+              filterOptions={(options, params) => {
+                const filtered = filter(options, params);
+                const { inputValue } = params;
+                const isExisting = options.some((option) => inputValue === option.label);
+                if (inputValue !== '' && !isExisting) {
+                  filtered.push({
+                    inputValue,
+                    label: (
+                      <Box
+                        component='span'
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '5px'
+                        }}>
+                        <AiOutlinePlus />
+                        Add New {inputValue}
+                      </Box>
+                    ) as unknown as Element
+                  });
+                }
+                return filtered;
+              }}
+              selectOnFocus
+              clearOnBlur
+              handleHomeEndKeys
+              options={mappedDepartment as readonly Option.FreesoloType[]}
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              getOptionLabel={(option: any) => {
+                if (typeof option === 'string') {
+                  return option;
+                }
+
+                if (option.inputValue) {
+                  return option.inputValue;
+                }
+
+                return option.label;
+              }}
+              renderOption={(props, option) => (
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                  }}>
+                  <li {...props} style={{ width: '100%' }}>{option.label}</li>
+                  {option.label.length > 0 && (
+                    <BsTrash3 style={{ marginRight: '8px' }} onClick={() => {
+                      handleDelete(option.id);
+                    }} />
+                  )}
+                </Box>
+              )}
+              renderInput={(params) => <TextField name='department' {...params} />}
             />
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
-            <CustomSelect
-              customLabel='Position'
-              withAsterisk={false}
-              variant='outlined'
+            <Text title='Position' mb='6px' />
+            <Autocomplete
+              id='position'
+              freeSolo
               value={formik.values.position}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              fullWidth={true}
-              name='position'
+              onChange={(event, newValue) => {
+                if (typeof newValue === 'string') {
+                  formik.setFieldValue('position', newValue, false);
+                } else if (newValue && newValue.inputValue) {
+                  formik.setFieldValue('position', newValue.inputValue, false);
+                  setMappedListPosition((prev) => [...prev, {
+                    label: newValue.inputValue,
+                    id: String(Math.random() * Math.PI)
+                  }]);
+                } else {
+                  formik.setFieldValue('position', newValue?.label);
+                }
+              }}
               size='small'
-              options={listPosition}
+              filterOptions={(options, params) => {
+                const filtered = filter(options, params);
+                const { inputValue } = params;
+                const isExisting = options.some((option) => inputValue === option.label);
+                if (inputValue !== '' && !isExisting) {
+                  filtered.push({
+                    inputValue,
+                    label: (
+                      <Box component='span'
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '5px'
+                        }}
+                      >
+                        <AiOutlinePlus />
+                        Add New {inputValue}
+                      </Box>
+                    ) as unknown as Element
+                  });
+                }
+                return filtered;
+              }}
+              selectOnFocus
+              clearOnBlur
+              handleHomeEndKeys
+              options={mappedListPosition as readonly Option.FreesoloType[]}
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              getOptionLabel={(option: any) => {
+                if (typeof option === 'string') {
+                  return option;
+                }
+                if (option.inputValue) {
+                  return option.inputValue;
+                }
+
+                return option.label;
+              }}
+              renderOption={(props, option) => (
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                  }}>
+                  <li {...props} style={{ width: '100%' }}>{option.label}</li>
+                  {option.label.length > 0 && (
+                    <BsTrash3 style={{ marginRight: '8px' }} onClick={() => {
+                      handleDeletePosition(option.id);
+                    }} />
+                  )}
+                </Box>
+              )}
+              renderInput={(params) => <TextField name='position' {...params} />}
             />
           </Grid>
         </Grid>
