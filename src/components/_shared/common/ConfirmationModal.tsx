@@ -46,7 +46,7 @@ interface ConfirmationModalProp {
   content: string;
   withCallback?: boolean;
   callback?: () => void;
-  noChange: boolean;
+  noChange?: boolean;
 }
 
 

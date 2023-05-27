@@ -865,6 +865,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               error={compareCheck(formik.touched.idNumberPersonalID, Boolean(formik.errors.idNumberPersonalID))}
               helperText={ifThenElse(formik.touched.idNumberPersonalID, formik.errors.idNumberPersonalID, '')}
               placeholder='Input ID Number'
+              type='number'
             />
           </Grid>
         </Grid>
