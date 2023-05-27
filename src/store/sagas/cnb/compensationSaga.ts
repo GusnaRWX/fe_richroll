@@ -1,4 +1,4 @@
-import { AnyAction } from "@reduxjs/toolkit";
+import { AnyAction } from '@reduxjs/toolkit';
 import {
   getDataTable,
   getCompensationComponentOption,
@@ -6,8 +6,8 @@ import {
   deleteCnbProfile,
   getDetailCnb,
   putCnbProfile,
-} from "../saga-actions/cnb/compensationActions";
-import { call, put, takeEvery, delay } from "redux-saga/effects";
+} from '../saga-actions/cnb/compensationActions';
+import { call, put, takeEvery, delay } from 'redux-saga/effects';
 import {
   getTableRequested,
   getTableSuccess,
@@ -27,11 +27,11 @@ import {
   putUpdateRequested,
   putUpdateSuccess,
   putUpdateFailed,
-} from "@/store/reducers/slice/cnb/compensationSlice";
-import { setResponserMessage } from "@/store/reducers/slice/responserSlice";
-import { Services } from "@/types/axios";
-import { AxiosError, AxiosResponse } from "axios";
-import Router from "next/router";
+} from '@/store/reducers/slice/cnb/compensationSlice';
+import { setResponserMessage } from '@/store/reducers/slice/responserSlice';
+import { Services } from '@/types/axios';
+import { AxiosError, AxiosResponse } from 'axios';
+import Router from 'next/router';
 
 // Get Data Table
 function* fetchGetTable(action: AnyAction) {
@@ -154,7 +154,7 @@ function* fetchPostNewCnbProfile(action: AnyAction) {
           data: res.data.data,
         },
       });
-      yield Router.push("/compensation-benefits");
+      yield Router.push('/compensation-benefits');
       yield delay(1000);
     }
   } catch (err) {
@@ -187,7 +187,7 @@ function* patchCnbProfile(action: AnyAction) {
           data: res.data.data,
         },
       });
-      yield Router.push("/compensation-benefits");
+      yield Router.push('/compensation-benefits');
       yield delay(1000);
     }
   } catch (err) {

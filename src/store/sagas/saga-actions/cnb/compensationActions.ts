@@ -1,14 +1,15 @@
-import { post, get, patch } from "@/utils/services";
-import axios, { AxiosHeaderValue } from "axios";
-import { config } from "@config";
-import { getStorage } from "@/utils/storage";
+/* eslint-disable @typescript-eslint/ban-types */
+import { post, get, patch } from '@/utils/services';
+import axios, { AxiosHeaderValue } from 'axios';
+import { config } from '@config';
+import { getStorage } from '@/utils/storage';
 
 const service = axios.create({
-  baseURL: config.API_URL || "http://localhost",
+  baseURL: config.API_URL || 'http://localhost',
   headers: {
     Authorization: {
       toString() {
-        return `Bearer ${getStorage("accessToken")}`;
+        return `Bearer ${getStorage('accessToken')}`;
       },
     } as AxiosHeaderValue,
   },
