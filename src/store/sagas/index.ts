@@ -6,7 +6,17 @@ import employeeSaga from './company-management/employeeSaga';
 import departmentSaga from './company-management/departmentSaga';
 import companySaga from './company/companySaga';
 import cnbSaga from './cnb/compensationSaga';
+import workScheduleSaga from './company-management/workScheduleSaga';
 
 export default function* rootSaga() {
-  yield all([authSaga(), optionSaga(), registerSaga(), employeeSaga(), departmentSaga(), companySaga(), cnbSaga()]);
+  yield all([
+    authSaga(),
+    optionSaga(),
+    registerSaga(),
+    employeeSaga(),
+    departmentSaga(),
+    companySaga(),
+    cnbSaga(),
+    workScheduleSaga()
+  ]);
 }

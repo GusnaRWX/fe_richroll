@@ -84,13 +84,13 @@ function CnbCreateForm() {
   useEffect(() => {
     if (isEdit !== false){
       const data: Array<{compensation: string | number, tax: string, rate: string | number, period: string | number}> = [];
-      formik.setFieldValue('baseCompensation', employee?.detailCnb?.baseCompensation[0]?.id);
+      formik.setFieldValue('baseCompensation', employee?.detailCnb?.baseCompensation[0]?.compensationComponent?.id);
       formik.setFieldValue('baseTax', employee?.detailCnb?.baseCompensation[0]?.taxStatus === false ? 'Non-Taxable' : 'Taxable');
       formik.setFieldValue('basePeriod', employee?.detailCnb?.baseCompensation[0]?.period);
       formik.setFieldValue('baseRate', employee?.detailCnb?.baseCompensation[0]?.rate > 0 || employee?.detailCnb?.baseCompensation[0]?.rate !== null ? employee?.detailCnb?.baseCompensation[0]?.rate : employee?.detailCnb?.baseCompensation[0]?.amount);
       employee?.detailCnb.supplementaryCompensation.map((item) => {
         data.push({
-          compensation: item?.id,
+          compensation: item?.compensationComponent?.id,
           tax: item?.taxStatus === false ?  'Non-Taxable' : 'Taxable',
           rate: item?.rate > 0 || item?.rate !== null ? item?.rate : item?.amount,
           period: item?.period
@@ -152,7 +152,7 @@ function CnbCreateForm() {
                     <Grid mb='2rem' container spacing={2}>
                       <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
                         <Typography fontSize='14px' color='gray' mb='.5rem'>Compensation Component</Typography>
-                        <Typography fontSize='14px'>{item?.name}</Typography>
+                        <Typography fontSize='14px'>{item?.compensationComponent?.name}</Typography>
                       </Grid>
                       <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
                         <Typography fontSize='14px' color='gray' mb='.5rem'>Tax Status</Typography>
@@ -178,7 +178,7 @@ function CnbCreateForm() {
                     <Grid mb='2rem' container spacing={2}>
                       <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
                         <Typography fontSize='14px' color='gray' mb='.5rem'>Compensation Component</Typography>
-                        <Typography fontSize='14px'>{item?.id}</Typography>
+                        <Typography fontSize='14px'>{item?.compensationComponent?.name}</Typography>
                       </Grid>
                       <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
                         <Typography fontSize='14px' color='gray' mb='.5rem'>Tax Status</Typography>
@@ -186,7 +186,7 @@ function CnbCreateForm() {
                       </Grid>
                     </Grid>
                     <Typography fontSize='14px' color='gray' mb='.5rem'>Amount per Mounth</Typography>
-                    <Typography mb='2.5rem' fontSize='14px'>Rp.{ item?.amount + ' ' + item?.period }</Typography>
+                    <Typography mb='2.5rem' fontSize='14px'>Rp.{ item?.amount > 0 ? item?.amount : item?.rate + ' ' + item?.period }</Typography>
                   </Box>
                 ))
               }
