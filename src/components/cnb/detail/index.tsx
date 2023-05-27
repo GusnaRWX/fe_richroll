@@ -6,7 +6,12 @@ import { getDetailRequested } from '@/store/reducers/slice/cnb/compensationSlice
 import { numberFormat } from '@/utils/format';
 import { useRouter } from 'next/router';
 
-const DetailCnb = ({ id, open }) => {
+export interface DetailCNBProps {
+  id: unknown,
+  open: boolean;
+}
+
+const DetailCnb = ({ id, open }: DetailCNBProps) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const detail = useAppSelectors((state) => state.compensation.detail?.data);
