@@ -9,7 +9,9 @@ import ConfirmationModal from '@/components/_shared/common/ConfirmationModal';
 import { Employees } from '@/types/employees';
 import dayjs from 'dayjs';
 import { getCompanyData, ifThenElse } from '@/utils/helper';
-import { useAppSelectors } from '@/hooks/index';
+import { useAppSelectors, useAppDispatch } from '@/hooks/index';
+import { patchEmployeeInformationRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
+
 
 const EmployeeInformationEdit = dynamic(() => import('./EmployeeInformationEdit'), {
   ssr: false
@@ -102,7 +104,7 @@ function EmployeeEditComponent() {
   const dataPersonalInformation = employee.personalInformationDetail;
   const phoneNumberPrefix = ifThenElse(typeof dataEmployeeInformation.phoneNumber !== 'undefined', dataEmployeeInformation?.phoneNumber?.split('')?.slice(0, 3).join(''), '');
   const phoneNumber = ifThenElse(typeof dataEmployeeInformation.phoneNumber !== 'undefined', dataEmployeeInformation?.phoneNumber?.slice(3), '');
-
+  const dispatch = useAppDispatch();
   const [informationValue, setInformationValue] = useState<Employees.InformationValues>({
     companyID: getCompanyData()?.id as string,
     department: dataEmployeeInformation?.department,
@@ -170,6 +172,8 @@ function EmployeeEditComponent() {
     setValue(val);
   };
 
+  console.log(router);
+
   const handleClick = async () => {
     const inputData = new FormData();
     inputData.append('companyID', getCompanyData()?.id as string);
@@ -191,6 +195,16 @@ function EmployeeEditComponent() {
       inputData.append('position', informationValue.position);
     }
     inputData.append('isSelfService', ifThenElse(informationValue.isSelfService, 'true', 'false'));
+
+    dispatch({
+      type: patchEmployeeInformationRequested.toString(),
+      payload: {
+        employeeInformationPatch: {
+          employeeID: router.query.id,
+          information: inputData
+        }
+      }
+    });
   };
 
   return (

@@ -8,7 +8,8 @@ import {
   getDetailPersonalInformation,
   getDetailCnb,
   postEmployeeCNB,
-  getEmployeeEmergencyDetail
+  getEmployeeEmergencyDetail,
+  patchEmployeeInformation
 } from '../saga-actions/company-management/employeeActions';
 import { call, put, takeEvery, delay } from 'redux-saga/effects';
 import {
@@ -38,7 +39,10 @@ import {
   postCnbEmployeeFailed,
   cnbInformationDetailRequested,
   cnbInformationDetailSuccess,
-  cnbInformationDetailFailed
+  cnbInformationDetailFailed,
+  patchEmployeeInformationRequested,
+  patchEmployeeInformationSuccess,
+  patchEmployeeInformationFailed
 } from '@/store/reducers/slice/company-management/employees/employeeSlice';
 import { setResponserMessage } from '@/store/reducers/slice/responserSlice';
 import { Services } from '@/types/axios';
@@ -479,6 +483,44 @@ function* fetchGetDetailCnb(action: AnyAction) {
   }
 }
 
+function* fetchPatchEmployeeInformation(action: AnyAction) {
+  try {
+    const res: AxiosResponse = yield call(patchEmployeeInformation, action?.payload?.employeeInformationPatch);
+    if (res.data.code) {
+      yield put({ type: patchEmployeeInformationSuccess.toString(), payload: res?.data?.data });
+      yield delay(1000);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: res?.data?.code,
+          message: res?.data?.message
+        }
+      });
+      yield delay(1000);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: 0,
+          message: null
+        }
+      });
+    }
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      yield put({ type: patchEmployeeInformationFailed.toString() });
+      yield delay(2000, true);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message
+        }
+      });
+    }
+  }
+}
+
 function* employeeSaga() {
   yield takeEvery(getEmployeeRequested.toString(), fetchGetEmployee);
   yield takeEvery(postEmployeeInfoRequested.toString(), fetchPostEmployeeInfo);
@@ -489,6 +531,7 @@ function* employeeSaga() {
   yield takeEvery(getDetailCnbRequested.toString(), fetchGetDetailCnb);
   yield takeEvery(postCnbEmplyeeRequested.toString(), fetchPostCnbEmployee);
   yield takeEvery(cnbInformationDetailRequested.toString(), fetchGetCnbInformationDetail);
+  yield takeEvery(patchEmployeeInformationRequested.toString(), fetchPatchEmployeeInformation);
 }
 
 export default employeeSaga;

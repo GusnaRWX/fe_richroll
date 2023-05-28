@@ -193,4 +193,21 @@ export declare namespace Employees {
       supplementaryCompensations?: Array<string>
     }
   }
+
+  interface PatchEmployeeInformation {
+    companyID: string;
+    picture?: unknown;
+    fullName: string;
+    nickname?: string;
+    phoneNumberPrefix: string;
+    phoneNumber: string;
+    email: string;
+    startDate: string;
+    endDate: string;
+    isPermanent: boolean;
+    department?: string;
+    position?: string;
+    isSelfService: boolean;
+  }
 }
+
