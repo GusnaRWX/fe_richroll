@@ -51,7 +51,7 @@ interface ImagePriviewProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 const ImageReview = styled.div`
-  background-image: url(${({image}: ImagePriviewProps) => image});
+  background-image: url(${({ image }: ImagePriviewProps) => image});
   background-repeat: no-repeat;
   width: 102px;
   height: 102px;
@@ -121,13 +121,13 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
     if ('startDate' in fieldOfValues)
       temp.startDate = fieldOfValues.startDate ? '' : 'This field is required';
 
-    if ('endDate' in fieldOfValues)
-      temp.endDate = fieldOfValues.endDate ? '' : 'This field is required';
+    // if ('endDate' in fieldOfValues)
+    //   temp.endDate = fieldOfValues.endDate ? '' : 'This field is required';
 
     if ('department' in fieldOfValues)
       temp.department = fieldOfValues.department ? '' : '';
 
-    if ('position' in fieldOfValues){
+    if ('position' in fieldOfValues) {
       temp.position = dispatch({
         type: getListPositionRequested.toString(),
         payload: {
@@ -309,10 +309,11 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <DatePicker
               customLabel='End Date'
-              withAsterisk
+              // withAsterisk
               value={values.endDate}
               onChange={(e: unknown) => handleInputChange(convertDateValue('endDate', e))}
-              error={errors.endDate}
+              // error={errors.endDate}
+              disabled={values.isPermanent}
             />
           </Grid>
         </Grid>
