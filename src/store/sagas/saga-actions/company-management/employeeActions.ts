@@ -29,3 +29,11 @@ export const getDetailPersonalInformation = (payload: number | string) => {
 export const getDetailCnb = (payload: number | string) => {
   return get('compensation_benefits/detail/' + payload);
 };
+
+export const postEmployeeCNB = (payload: Employees.CnbEmployeePayload) => {
+  return post('employees/compensation-benefit', payload);
+};
+
+export const getEmployeeEmergencyDetail = (payload: string) => {
+  return get(`employees/emergency/${payload}`);
+};

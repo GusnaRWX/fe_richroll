@@ -155,7 +155,7 @@ export declare namespace Employees {
   }
 
   interface EmergencyContactValues {
-    employeeID: string;
+    // employeeID: string;
     fullNamePrimary: string;
     relationPrimary: string;
     phoneNumberPrefixPrimary: string;
@@ -175,5 +175,22 @@ export declare namespace Employees {
     relationSecondary?: string;
     phoneNumberPrefixSecondary?: string;
     phoneNumberSecondary?: string;
+  }
+
+  interface CnbEmployeePayload {
+    employeeID: string;
+    compensationBenefitId: string;
+    compensationBenefit: {
+      companyId: number,
+      name: string,
+      baseCompensation: {
+        compensationComponentId: number,
+        taxStatus: boolean,
+        amount: number,
+        rate: number,
+        period: string
+      },
+      supplementaryCompensations?: Array<string>
+    }
   }
 }

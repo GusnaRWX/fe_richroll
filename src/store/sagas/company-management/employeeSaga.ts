@@ -6,7 +6,9 @@ import {
   postPersonalInformation,
   getDetailEmployeeInformation,
   getDetailPersonalInformation,
-  getDetailCnb
+  getDetailCnb,
+  postEmployeeCNB,
+  getEmployeeEmergencyDetail
 } from '../saga-actions/company-management/employeeActions';
 import { call, put, takeEvery, delay } from 'redux-saga/effects';
 import {
@@ -30,7 +32,13 @@ import {
   personalInfoDetailSuccess,
   getDetailCnbFailed,
   getDetailCnbRequested,
-  getDetailCnbSuccess
+  getDetailCnbSuccess,
+  postCnbEmplyeeRequested,
+  postCnbEmployeeSuccess,
+  postCnbEmployeeFailed,
+  cnbInformationDetailRequested,
+  cnbInformationDetailSuccess,
+  cnbInformationDetailFailed
 } from '@/store/reducers/slice/company-management/employees/employeeSlice';
 import { setResponserMessage } from '@/store/reducers/slice/responserSlice';
 import { Services } from '@/types/axios';
@@ -108,6 +116,15 @@ function* fetchPostEmployeeInfo(action: AnyAction) {
         };
         yield call(fetchPostEmergency, body);
       }
+
+      const body = {
+        type: postCnbEmplyeeRequested.toString(),
+        payload: {
+          employeeID: res?.data?.data,
+          data: action?.payload?.cnbValue
+        }
+      };
+      yield call(fetchPostCnbEmployee, body);
     }
   } catch (err) {
     if (err instanceof AxiosError) {
@@ -129,7 +146,7 @@ function* fetchPostEmployeeInfo(action: AnyAction) {
 function* fetchPostEmergency(action: AnyAction) {
   try {
     const payload = {
-      employeeID: String(getCompanyData()?.id),
+      employeeID: action?.payload?.employeeID,
       primary: {
         name: action?.payload?.data?.fullNamePrimary,
         relationship: +action?.payload?.data.relationPrimary,
@@ -295,6 +312,68 @@ function* fetchPostPersonalInformation(action: AnyAction) {
   }
 }
 
+/**
+ * Post CNB Employee
+ * @param action 
+ */
+function* fetchPostCnbEmployee(action: AnyAction) {
+  try {
+    const payload = {
+      employeeID: action?.payload?.employeeID,
+      compensationBenefitId: action?.payload?.data?.compensationBenefitId,
+      compensationBenefit: {
+        companyId: Number(getCompanyData()?.id),
+        name: 'PT Teknologi Cibaduyut',
+        baseCompensation: {
+          compensationComponentId: +action?.payload?.data?.baseCompensation?.compensationComponent?.id,
+          taxStatus: action?.payload?.data?.baseCompensation?.taxStatus || false,
+          amount: action?.payload?.data?.baseCompensation?.amount || 10000,
+          rate: action?.payload?.data?.baseCompensation?.rate === null ? 0 : action?.payload?.data?.baseCompensation?.rate,
+          period: action?.payload?.data?.baseCompensation?.period || 'per Hour'
+        },
+        supplementaryCompensations: ['']
+      }
+    };
+
+    const res: AxiosResponse = yield call(postEmployeeCNB, payload);
+
+    if (res?.data?.code === 200 || res?.data?.code === 201) {
+      yield put({ type: postCnbEmployeeSuccess.toString() });
+      yield delay(2000);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: res?.data?.code,
+          message: res?.data?.message
+        }
+      });
+      yield delay(2000);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: 0,
+          message: null
+        }
+      });
+    }
+
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      yield put({ type: postCnbEmployeeFailed.toString() });
+      yield delay(2000, true);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message
+        }
+      });
+    }
+  }
+}
+
+
 function* fetchGetEmployeeInformation(action: AnyAction) {
   try {
     const res: AxiosResponse = yield call(getDetailEmployeeInformation, action?.payload);
@@ -349,6 +428,30 @@ function* fetchGetPersonalInformationDetail(action: AnyAction) {
   }
 }
 
+function* fetchGetCnbInformationDetail(action: AnyAction) {
+  try {
+    const res: AxiosResponse = yield call(getEmployeeEmergencyDetail, action?.payload);
+    yield put({
+      type: cnbInformationDetailSuccess.toString(),
+      payload: {
+        data: res?.data?.data
+      }
+    });
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      yield put({ type: cnbInformationDetailFailed.toString() });
+      yield put({
+        type: setResponserMessage?.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message
+        }
+      });
+    }
+  }
+}
+
 function* fetchGetDetailCnb(action: AnyAction) {
   try {
     const res: AxiosResponse = yield call(getDetailCnb, action?.payload);
@@ -384,6 +487,8 @@ function* employeeSaga() {
   yield takeEvery(employeeInfoDetailRequested.toString(), fetchGetEmployeeInformation);
   yield takeEvery(personalInfoDetailRequested.toString(), fetchGetPersonalInformationDetail);
   yield takeEvery(getDetailCnbRequested.toString(), fetchGetDetailCnb);
+  yield takeEvery(postCnbEmplyeeRequested.toString(), fetchPostCnbEmployee);
+  yield takeEvery(cnbInformationDetailRequested.toString(), fetchGetCnbInformationDetail);
 }
 
 export default employeeSaga;

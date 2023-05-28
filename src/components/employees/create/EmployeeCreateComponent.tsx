@@ -118,7 +118,7 @@ function EmployeeCreateComponent() {
     startDate: ''
   });
   const [emergencyValue, setEmergencyValue] = useState<Employees.EmergencyContactValues>({
-    employeeID: '',
+    // employeeID: '',
     fullNamePrimary: '',
     relationPrimary: '',
     phoneNumberPrefixPrimary: '',
@@ -165,6 +165,9 @@ function EmployeeCreateComponent() {
     idNumberPersonalID: '',
     idTypePersonalID: ''
   });
+
+  const [cnbEmployeeValues, setCnbEmployeeValues] = useState();
+  console.log(cnbEmployeeValues);
   const [isInformationValid, setIsInformationValid] = useState(false);
   const [isPersonalInformationValid, setIsPersonalInformationValid] = useState(false);
   const [isEmergencyValid, setIsEmergencyValid] = useState(false);
@@ -177,7 +180,7 @@ function EmployeeCreateComponent() {
     const inputData = new FormData();
     inputData.append('companyID', getCompanyData()?.id as string);
     if ((informationValue.picture as []).length > 0 || convertToBase64) {
-      inputData.append('picture', (informationValue.picture as unknown as File)[0] || convertToBase64);
+      inputData.append('picture', (informationValue.picture as File)[0] || convertToBase64);
     }
     inputData.append('fullName', informationValue.fullName);
     inputData.append('nickname', informationValue.nickname);
@@ -198,10 +201,15 @@ function EmployeeCreateComponent() {
 
     dispatch({
       type: postEmployeeInfoRequested.toString(),
-      payload: { employeeInformation: inputData, isPersonalInformationValid, personalValue: personalInformationValue, isEmergencyValid, emergencyContactValue: emergencyValue }
+      payload: {
+        employeeInformation: inputData,
+        isPersonalInformationValid,
+        personalValue: personalInformationValue,
+        isEmergencyValid,
+        emergencyContactValue: emergencyValue,
+        cnbValue: cnbEmployeeValues
+      }
     });
-
-
   };
 
   const handleOpen = () => {
@@ -275,7 +283,10 @@ function EmployeeCreateComponent() {
               setIsEmergencyValid={setIsEmergencyValid} />
           </TabPanel>
           <TabPanel value={value} index={3}>
-            <CnbCreateForm />
+            <CnbCreateForm
+              cnbValues={cnbEmployeeValues}
+              setValues={setCnbEmployeeValues}
+            />
           </TabPanel>
           <TabPanel value={value} index={4}>
             <WorkScheduleCreateForm />

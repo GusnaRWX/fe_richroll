@@ -100,7 +100,7 @@ function EmployeeDetailComponent() {
           <Button
             color='secondary'
             label='Edit'
-            onClick={() => { router.push('/company-management/employees/edit/'+ router.query.id); }}
+            onClick={() => { router.push('/company-management/employees/edit/' + router.query.id); }}
             startIcon={
               <FiEdit
                 size={12}
@@ -123,13 +123,13 @@ function EmployeeDetailComponent() {
             </Tabs>
           </Box>
           <TabPanel value={value} index={0}>
-            <EmployeeInformationDetail data={employee.employeeInformationDetail}/>
+            <EmployeeInformationDetail data={employee.employeeInformationDetail} />
           </TabPanel>
           <TabPanel value={value} index={1}>
-            <EmployeePersonalInformationDetail data={employee.personalInformationDetail}/>
+            <EmployeePersonalInformationDetail data={employee.personalInformationDetail} />
           </TabPanel>
           <TabPanel value={value} index={2}>
-            <EmergencyContactDetail/>
+            <EmergencyContactDetail data={employee.cnbInformationDetail} />
           </TabPanel>
           <TabPanel value={value} index={3}>
             on Development

@@ -8,6 +8,7 @@ interface EmployeeState {
   employeeInformationDetail: object;
   personalInformationDetail: object;
   detailCnb: object;
+  cnbInformationDetail: object;
 }
 
 const initialState: EmployeeState = {
@@ -16,7 +17,8 @@ const initialState: EmployeeState = {
   employeeID: '',
   employeeInformationDetail: {},
   personalInformationDetail: {},
-  detailCnb: {}
+  detailCnb: {},
+  cnbInformationDetail: {}
 };
 
 export const employeeSlice = createSlice({
@@ -90,6 +92,25 @@ export const employeeSlice = createSlice({
     },
     getDetailCnbFailed: (state) => {
       state.isLoading = false;
+    },
+    postCnbEmplyeeRequested: (state) => {
+      state.isLoading = true;
+    },
+    postCnbEmployeeSuccess: (state) => {
+      state.isLoading = false;
+    },
+    postCnbEmployeeFailed: (state) => {
+      state.isLoading = false;
+    },
+    cnbInformationDetailRequested: (state) => {
+      state.isLoading = true;
+    },
+    cnbInformationDetailSuccess: (state, action) => {
+      state.isLoading = false;
+      state.cnbInformationDetail = action?.payload?.data;
+    },
+    cnbInformationDetailFailed: (state) => {
+      state.isLoading = false;
     }
   },
   extraReducers: {
@@ -123,7 +144,13 @@ export const {
   personalInfoDetailSuccess,
   getDetailCnbFailed,
   getDetailCnbRequested,
-  getDetailCnbSuccess
+  getDetailCnbSuccess,
+  postCnbEmplyeeRequested,
+  postCnbEmployeeSuccess,
+  postCnbEmployeeFailed,
+  cnbInformationDetailRequested,
+  cnbInformationDetailSuccess,
+  cnbInformationDetailFailed
 } = employeeSlice.actions;
 
 export default employeeSlice.reducer;

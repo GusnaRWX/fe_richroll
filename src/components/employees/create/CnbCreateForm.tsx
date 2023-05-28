@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import {
   Grid,
@@ -5,7 +6,7 @@ import {
   Button as MuiButton,
   Box,
   Chip,
-  SelectChangeEvent ,
+  SelectChangeEvent,
   InputAdornment,
 } from '@mui/material';
 import { useFormik } from 'formik';
@@ -16,6 +17,7 @@ import { Select, Input, RadioGroup } from '@/components/_shared/form';
 import { Employees } from '@/types/employees';
 import { Add, Delete } from '@mui/icons-material';
 import { getDetailCnbRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
+import { numberFormat } from '@/utils/format';
 
 const ContentWrapper = MuiStyled(Box)(() => ({
   padding: '1rem',
@@ -40,15 +42,24 @@ interface TempSuplementaryType {
   period: string | number;
 }
 
-function CnbCreateForm() {
+interface CnbEmployeeProps {
+  cnbValues: any,
+  setValues: React.Dispatch<React.SetStateAction<any>>
+}
+
+function CnbCreateForm({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  cnbValues,
+  setValues
+}: CnbEmployeeProps) {
   const [isEdit, setIsEdit] = useState(false);
-  const {option, employee} = useAppSelectors((state) => state);
+  const { option, employee } = useAppSelectors((state) => state);
   const dispatch = useAppDispatch();
   const [suplementary, setSuplementary] = useState<Array<TempSuplementaryType>>([]);
   const compensationComponentOption = useAppSelectors(
     (state) => state.compensation?.compensationComponentOption?.data?.items
   );
-  const [compensation, setCompensation] = useState<Array<{label: string, value: string}>>([]);
+  const [compensation, setCompensation] = useState<Array<{ label: string, value: string }>>([]);
 
 
   const formik = useFormik({
@@ -60,12 +71,31 @@ function CnbCreateForm() {
       basePeriod: '',
       suplementary: suplementary
     } as Employees.CnbValues,
-    onSubmit: (values) => {
-      console.log(values);
+    onSubmit: (_values) => {
+      handleSubmit();
     }
   });
 
-  const handleAddSuplementary =  () => {
+  const handleSubmit = () => {
+    let payload = {
+      compensationBenefitId: formik.values.profile
+    };
+    if (isEdit) {
+      payload = {
+        ...payload,
+        ...formik.values
+      };
+      setValues(payload);
+    } else {
+      payload = {
+        ...payload,
+        ...employee?.detailCnb
+      };
+      setValues(payload);
+    }
+  };
+
+  const handleAddSuplementary = () => {
     const data = {
       compensation: '',
       tax: '',
@@ -82,8 +112,8 @@ function CnbCreateForm() {
   };
 
   useEffect(() => {
-    if (isEdit !== false){
-      const data: Array<{compensation: string | number, tax: string, rate: string | number, period: string | number}> = [];
+    if (isEdit !== false) {
+      const data: Array<{ compensation: string | number, tax: string, rate: string | number, period: string | number }> = [];
       formik.setFieldValue('baseCompensation', employee?.detailCnb?.baseCompensation[0]?.compensationComponent?.id);
       formik.setFieldValue('baseTax', employee?.detailCnb?.baseCompensation[0]?.taxStatus === false ? 'Non-Taxable' : 'Taxable');
       formik.setFieldValue('basePeriod', employee?.detailCnb?.baseCompensation[0]?.period);
@@ -91,7 +121,7 @@ function CnbCreateForm() {
       employee?.detailCnb.supplementaryCompensation.map((item) => {
         data.push({
           compensation: item?.compensationComponent?.id,
-          tax: item?.taxStatus === false ?  'Non-Taxable' : 'Taxable',
+          tax: item?.taxStatus === false ? 'Non-Taxable' : 'Taxable',
           rate: item?.rate > 0 || item?.rate !== null ? item?.rate : item?.amount,
           period: item?.period
         });
@@ -100,7 +130,7 @@ function CnbCreateForm() {
       setSuplementary(temp);
       formik.setFieldValue('suplementary', temp);
     }
-    const tempItems: Array<{label: string, value: string}> = [];
+    const tempItems: Array<{ label: string, value: string }> = [];
     compensationComponentOption.map((item) => {
       tempItems.push({
         label: item.name,
@@ -144,7 +174,7 @@ function CnbCreateForm() {
                 >
                   Base
                 </Typography>
-                <MuiButton variant='contained' onClick={() => setIsEdit(true)} size='small' color='secondary' sx={{ color: '#FFFFFF' }}><HiPencilAlt/>&nbsp;Edit</MuiButton>
+                <MuiButton variant='contained' onClick={() => setIsEdit(true)} size='small' color='secondary' sx={{ color: '#FFFFFF' }}><HiPencilAlt />&nbsp;Edit</MuiButton>
               </TopWrapper>
               {
                 employee?.detailCnb?.baseCompensation.map((item, index) => (
@@ -156,11 +186,11 @@ function CnbCreateForm() {
                       </Grid>
                       <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
                         <Typography fontSize='14px' color='gray' mb='.5rem'>Tax Status</Typography>
-                        <Chip label={!item?.taxStatus ? 'Non-Taxable' : 'Taxable'}/>
+                        <Chip label={!item?.taxStatus ? 'Non-Taxable' : 'Taxable'} />
                       </Grid>
                     </Grid>
                     <Typography fontSize='14px' color='gray' mb='.5rem'>Rate</Typography>
-                    <Typography mb='2.5rem' fontSize='14px'>Rp.{ item?.amount+ ' '} {item?.period}</Typography>
+                    <Typography mb='2.5rem' fontSize='14px'>Rp.{numberFormat(item?.amount) + ' '} {item?.period}</Typography>
                   </Box>
                 ))
               }
@@ -170,7 +200,7 @@ function CnbCreateForm() {
                 fontWeight='Bold'
                 mb='1rem'
               >
-                  Supplementary
+                Supplementary
               </Typography>
               {
                 employee?.detailCnb?.supplementaryCompensation.map((item, index) => (
@@ -182,11 +212,11 @@ function CnbCreateForm() {
                       </Grid>
                       <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
                         <Typography fontSize='14px' color='gray' mb='.5rem'>Tax Status</Typography>
-                        <Chip label={!item.taxStatus ? 'Non-Taxable' : 'Taxable'}/>
+                        <Chip label={!item.taxStatus ? 'Non-Taxable' : 'Taxable'} />
                       </Grid>
                     </Grid>
                     <Typography fontSize='14px' color='gray' mb='.5rem'>Amount per Mounth</Typography>
-                    <Typography mb='2.5rem' fontSize='14px'>Rp.{ item?.amount > 0 ? item?.amount : item?.rate + ' ' + item?.period }</Typography>
+                    <Typography mb='2.5rem' fontSize='14px'>Rp.{numberFormat(item?.amount) + ' ' + item?.period}</Typography>
                   </Box>
                 ))
               }
@@ -262,9 +292,9 @@ function CnbCreateForm() {
                   options={[
                     { label: 'Per Hour', value: 'Per Hour' },
                     { label: 'Per Day', value: 'Per Day' },
-                    {label: 'Per Week', value: 'Per Week'},
-                    {label: 'Per Month', value: 'Per Month'},
-                    {label: 'Per Year', value: 'Per Year'}
+                    { label: 'Per Week', value: 'Per Week' },
+                    { label: 'Per Month', value: 'Per Month' },
+                    { label: 'Per Year', value: 'Per Year' }
                   ]}
                 />
               </Grid>
@@ -351,9 +381,9 @@ function CnbCreateForm() {
                               options={[
                                 { label: 'Per Hour', value: 'Per Hour' },
                                 { label: 'Per Day', value: 'Per Day' },
-                                {label: 'Per Week', value: 'Per Week'},
-                                {label: 'Per Month', value: 'Per Month'},
-                                {label: 'Per Year', value: 'Per Year'}
+                                { label: 'Per Week', value: 'Per Week' },
+                                { label: 'Per Month', value: 'Per Month' },
+                                { label: 'Per Year', value: 'Per Year' }
 
                               ]}
                             />
