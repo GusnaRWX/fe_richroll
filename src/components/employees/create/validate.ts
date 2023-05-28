@@ -58,7 +58,7 @@ export const validationSchemePersonalInformation = Yup.object().shape({
 });
 
 export const validationSchemeEmployeeEmergencyContact = Yup.object({
-  employeeID: Yup.string().notRequired(),
+  // employeeID: Yup.string().notRequired(),
   fullNamePrimary: Yup.string().required('This field is required'),
   relationPrimary: Yup.string().notRequired(),
   phoneNumberPrefixPrimary: Yup.string().notRequired(),

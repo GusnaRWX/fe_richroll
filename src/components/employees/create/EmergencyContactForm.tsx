@@ -23,11 +23,11 @@ interface EmergencyProps {
 }
 
 function EmergencyContactForm({ refProp, nextPage, setValues, emergencyValues, setIsEmergencyValid }: EmergencyProps) {
-  const { employeeID } = useAppSelectors((state) => state.employee);
+  // const { employeeID } = useAppSelectors((state) => state.employee);
   const { responser } = useAppSelectors(state => state);
   const formik = useFormik({
     initialValues: {
-      employeeID: employeeID,
+      // employeeID: employeeID,
       fullNamePrimary: emergencyValues?.fullNamePrimary,
       relationPrimary: emergencyValues?.relationPrimary,
       phoneNumberPrefixPrimary: emergencyValues?.phoneNumberPrefixPrimary,
