@@ -42,7 +42,7 @@ function EmergencyContactDetail({ data }: EmergencyContactProps) {
               color='grey.400'
             />
             <Text
-              title={data?.primary.name}
+              title={data?.primary?.name || ''}
               fontWeight={400}
               color='grey.600'
             />
@@ -68,7 +68,7 @@ function EmergencyContactDetail({ data }: EmergencyContactProps) {
               color='grey.400'
             />
             <Text
-              title={data?.primary.phoneNumberPrefix + data?.primary?.phoneNumber}
+              title={data?.primary?.phoneNumberPrefix + data?.primary?.phoneNumber || ''}
               fontWeight={400}
               color='grey.600'
             />
@@ -85,7 +85,7 @@ function EmergencyContactDetail({ data }: EmergencyContactProps) {
               color='grey.400'
             />
             <Text
-              title={data?.secondary?.name}
+              title={data?.secondary?.name || ''}
               fontWeight={400}
               color='grey.600'
             />

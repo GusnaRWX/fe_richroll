@@ -117,7 +117,7 @@ function EmployeeEditComponent() {
     nickname: dataEmployeeInformation?.nickname,
     phoneNumber: phoneNumber,
     phoneNumberPrefix: phoneNumberPrefix,
-    picture: ifThenElse(dataEmployeeInformation?.picture !== null, dataEmployeeInformation?.picture, []),
+    picture: [],
     position: dataEmployeeInformation?.position,
     startDate: ifThenElse(dataEmployeeInformation?.startDate !== null, dayjs(dataEmployeeInformation?.startDate).format('YYYY/MM/DD'), null)
   });
@@ -172,12 +172,10 @@ function EmployeeEditComponent() {
     setValue(val);
   };
 
-  console.log(router);
-
   const handleClick = async () => {
     const inputData = new FormData();
     inputData.append('companyID', getCompanyData()?.id as string);
-    if (informationValue.picture && (informationValue.picture as []).length > 0) {
+    if ((informationValue.picture as []).length > 0) {
       inputData.append('picture', (informationValue.picture as unknown as File)[0]);
     }
     inputData.append('fullName', informationValue.fullName);
