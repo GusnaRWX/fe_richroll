@@ -8,7 +8,7 @@ export declare namespace workSchedule {
     fixedEndDay: string,
     fixedStartTime: string,
     fixedEndTime: string,
-    fixedWorkDayType: string,
+    fixedWorkDayType: string | number,
     flexiWorkDay: string,
     breakName: string,
     breakDuration: string | number,

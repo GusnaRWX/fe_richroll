@@ -191,3 +191,69 @@ export const ifEmptyReplace = (condition, replace) => {
     return condition;
   }
 };
+
+export const getGender = (id) => {
+  switch (id) {
+    case 1 :
+      return 'Male';
+      break;
+    case 2 :
+      return 'Female';
+      break;
+    default :
+      return '';
+  }
+};
+
+export const getReligion = (id) => {
+  switch (id) {
+    case 1 :
+      return 'Islam';
+      break;
+    case 2 :
+      return 'Christian';
+      break;
+    case 3 :
+      return 'Buddhist';
+      break;
+    case 4 :
+      return 'Hindu';
+      break;
+    case 5 :
+      return 'Catholic';
+      break;
+    default :
+      return '';
+  }
+};
+
+export const getMaritalStatus = (id) => {
+  switch (id) {
+    case 1 :
+      return 'Single';
+      break;
+    case 2 :
+      return 'Married';
+      break;
+    case 3 :
+      return 'Divorced';
+      break;
+    case 4 :
+      return 'Separated';
+      break;
+    case 5 :
+      return 'Widowed';
+      break;
+    case 6 :
+      return 'Domestic Partnership';
+      break;
+    case 7 :
+      return 'Civil Union';
+      break;
+    case 8 :
+      return 'Annuled';
+      break;
+    default :
+      return '';
+  }
+};

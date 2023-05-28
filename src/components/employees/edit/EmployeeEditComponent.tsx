@@ -93,15 +93,19 @@ function EmployeeEditComponent() {
   const [value, setValue] = useState(0);
   const [leave, setLeave] = useState(false);
   const employeeRef = useRef<HTMLFormElement>(null);
+  const emergencyRef = useRef<HTMLFormElement>(null);
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   const [isInformationValid, setIsInformationValid] = useState(false);
   const personalInformationRef = useRef<HTMLFormElement>(null);
+  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+  const [isEmergencyValid, setIsEmergencyValid] = useState(false);
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   const [isPersonalInformationValid, setIsPersonalInformationValid] = useState(false);
   const router = useRouter();
   const { employee } = useAppSelectors((state) => state);
   const dataEmployeeInformation = employee.employeeInformationDetail;
   const dataPersonalInformation = employee.personalInformationDetail;
+  const dataEmergencyContact = employee.emergencyContactDetail;
   const phoneNumberPrefix = ifThenElse(typeof dataEmployeeInformation.phoneNumber !== 'undefined', dataEmployeeInformation?.phoneNumber?.split('')?.slice(0, 3).join(''), '');
   const phoneNumber = ifThenElse(typeof dataEmployeeInformation.phoneNumber !== 'undefined', dataEmployeeInformation?.phoneNumber?.slice(3), '');
   const dispatch = useAppDispatch();
@@ -158,6 +162,18 @@ function EmployeeEditComponent() {
     idNumberPersonalID: dataPersonalInformation?.identity?.number,
     idTypePersonalID: dataPersonalInformation?.identity?.type
   });
+  const [emergencyValue, setEmergencyValue] = useState<Employees.EmergencyContactPatchValues>({
+    primaryId: dataEmergencyContact?.primary?.id,
+    secondaryId: dataEmergencyContact?.secondary?.id,
+    fullNamePrimary: dataEmergencyContact?.primary?.name,
+    relationPrimary: dataEmergencyContact?.primary?.relationship,
+    phoneNumberPrefixPrimary: dataEmergencyContact?.primary?.phoneNumberPrefix,
+    phoneNumberPrimary: dataEmergencyContact?.primary?.phoneNumber,
+    fullNameSecondary: dataEmergencyContact?.secondary?.name,
+    relationSecondary: dataEmergencyContact?.secondary?.relationship,
+    phoneNumberPrefixSecondary: dataEmergencyContact?.secondary?.phoneNumberPrefix,
+    phoneNumberSecondary: dataEmergencyContact?.secondary?.phoneNumber
+  });
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
@@ -200,6 +216,10 @@ function EmployeeEditComponent() {
         employeeInformationPatch: {
           employeeID: router.query.id,
           information: inputData
+        },
+        emergencyContactPatch : {
+          employeeID: router.query.id,
+          emergency: emergencyValue
         }
       }
     });
@@ -253,7 +273,13 @@ function EmployeeEditComponent() {
             />
           </TabPanel>
           <TabPanel value={value} index={2}>
-            <EmergencyContactEdit nextTab={handleNext} />
+            <EmergencyContactEdit
+              nextPage={handleNext}
+              refProp={emergencyRef}
+              setValues={setEmergencyValue}
+              emergencyValues={emergencyValue}
+              setIsEmergencyValid={setIsEmergencyValid}
+            />
           </TabPanel>
           <TabPanel value={value} index={3}>
             on Development

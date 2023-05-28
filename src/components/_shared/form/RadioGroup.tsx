@@ -14,7 +14,7 @@ import { Text } from '../common';
 
 type RadioOption = {
   label: string;
-  value: string;
+  value: string | number;
 };
 
 const AsteriskComponent = styled('span')(({ theme }) => ({
