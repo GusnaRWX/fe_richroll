@@ -41,3 +41,7 @@ export const getEmployeeEmergencyDetail = (payload: string) => {
 export const patchEmployeeInformation = (payload) => {
   return patch(`employees/information/${payload.employeeID}`, payload.information as Employees.PatchEmployeeInformation);
 };
+
+export const patchEmergencyContact = (payload) => {
+  return patch(`employees/emergency/${payload.employeeID}`, payload.emergency as Employees.EmergencyContactValues);
+};

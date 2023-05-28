@@ -3,7 +3,7 @@ import EmployeeEditComponent from '@/components/employees/edit/EmployeeEditCompo
 import Layout from '@/components/_shared/_core/layout/Index';
 import { useAppDispatch } from '@/hooks/index';
 import { getListDepartmentRequested, getListPositionRequested } from '@/store/reducers/slice/options/optionSlice';
-import { employeeInfoDetailRequested, personalInfoDetailRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
+import { employeeInfoDetailRequested, personalInfoDetailRequested, emergencyContactDetailRequested  } from '@/store/reducers/slice/company-management/employees/employeeSlice';
 import { useRouter } from 'next/router';
 import { getCompanyData } from '@/utils/helper';
 
@@ -28,6 +28,9 @@ function EmployeeEditContainer() {
       payload: {
         departmentID: getCompanyData()?.id
       }
+    });
+    dispatch({
+      type: emergencyContactDetailRequested.toString()
     });
   }, []);
   return (

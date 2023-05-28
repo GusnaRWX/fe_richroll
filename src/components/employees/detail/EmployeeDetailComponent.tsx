@@ -129,7 +129,7 @@ function EmployeeDetailComponent() {
             <EmployeePersonalInformationDetail data={employee.personalInformationDetail} />
           </TabPanel>
           <TabPanel value={value} index={2}>
-            <EmergencyContactDetail data={employee.cnbInformationDetail} />
+            <EmergencyContactDetail data={employee.emergencyContactDetail} />
           </TabPanel>
           <TabPanel value={value} index={3}>
             on Development

@@ -5,7 +5,7 @@ import { useAppDispatch } from '@/hooks/index';
 import {
   employeeInfoDetailRequested,
   personalInfoDetailRequested,
-  cnbInformationDetailRequested
+  emergencyContactDetailRequested
 } from '@/store/reducers/slice/company-management/employees/employeeSlice';
 import { useRouter } from 'next/router';
 
@@ -24,7 +24,7 @@ function EmployeeDetailContainer() {
         payload: router.query.id
       });
       dispatch({
-        type: cnbInformationDetailRequested.toString(),
+        type: emergencyContactDetailRequested.toString(),
         payload: router.query.id
       });
     };

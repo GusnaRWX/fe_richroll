@@ -3,6 +3,7 @@ import { Text } from '@/components/_shared/common';
 import { Grid, Typography } from '@mui/material';
 import dayjs from 'dayjs';
 import { ifThenElse } from '@/utils/helper';
+import { getGender, getMaritalStatus, getReligion } from '@/utils/helper';
 
 interface PersonalInformationDetailProps {
   data: {
@@ -65,7 +66,6 @@ interface PersonalInformationDetailProps {
 }
 
 const EmployeePersonalInformationDetail = ({data}: PersonalInformationDetailProps) => {
-  console.log(data);
   return (
     <>
       <Grid
@@ -115,7 +115,7 @@ const EmployeePersonalInformationDetail = ({data}: PersonalInformationDetailProp
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            {data?.personal?.gender}
+            {getGender(data?.personal?.gender)}
           </Typography>
         </Grid>
         <Grid
@@ -131,7 +131,7 @@ const EmployeePersonalInformationDetail = ({data}: PersonalInformationDetailProp
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            {data?.personal?.maritalStatus}
+            {getMaritalStatus(data?.personal?.maritalStatus)}
           </Typography>
         </Grid>
         <Grid
@@ -179,7 +179,7 @@ const EmployeePersonalInformationDetail = ({data}: PersonalInformationDetailProp
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            {data?.personal?.religion}
+            {getReligion(data?.personal?.religion)}
           </Typography>
         </Grid>
       </Grid>
