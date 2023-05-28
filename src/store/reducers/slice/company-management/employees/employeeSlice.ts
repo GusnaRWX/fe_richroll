@@ -111,6 +111,15 @@ export const employeeSlice = createSlice({
     },
     cnbInformationDetailFailed: (state) => {
       state.isLoading = false;
+    },
+    patchEmployeeInformationRequested: (state) => {
+      state.isLoading = true;
+    },
+    patchEmployeeInformationSuccess: (state) => {
+      state.isLoading = false;
+    },
+    patchEmployeeInformationFailed: (state) => {
+      state.isLoading = false;
     }
   },
   extraReducers: {
@@ -150,7 +159,10 @@ export const {
   postCnbEmployeeFailed,
   cnbInformationDetailRequested,
   cnbInformationDetailSuccess,
-  cnbInformationDetailFailed
+  cnbInformationDetailFailed,
+  patchEmployeeInformationRequested,
+  patchEmployeeInformationSuccess,
+  patchEmployeeInformationFailed
 } = employeeSlice.actions;
 
 export default employeeSlice.reducer;

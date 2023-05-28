@@ -188,7 +188,7 @@ function EmployeeCreateComponent() {
     inputData.append('phoneNumber', informationValue.phoneNumber);
     inputData.append('email', informationValue.email);
     inputData.append('startDate', dayjs(informationValue.startDate).format('YYYY-MM-DD'));
-    inputData.append('endDate', dayjs(informationValue.endDate).isValid() ? dayjs(informationValue.endDate).format('YYYY-MM-DD') : dayjs().set('dates', 12).set('months', 12).set('years', 2975).format('YYYY-MM-DD'));
+    inputData.append('endDate', dayjs(informationValue.endDate).isValid() ? dayjs(informationValue.endDate).format('YYYY-MM-DD') : '');
     inputData.append('isPermanent', informationValue.isPermanent ? 'true' : 'false');
     if (informationValue.department !== '') {
       inputData.append('department', informationValue.department);

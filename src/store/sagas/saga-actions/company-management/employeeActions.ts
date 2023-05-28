@@ -1,4 +1,4 @@
-import { post, get } from '@/utils/services';
+import { post, get, patch } from '@/utils/services';
 import { Employees } from '@/types/employees';
 
 export const getEmployee = (payload: Employees.EmployeeParams) => {
@@ -36,4 +36,8 @@ export const postEmployeeCNB = (payload: Employees.CnbEmployeePayload) => {
 
 export const getEmployeeEmergencyDetail = (payload: string) => {
   return get(`employees/emergency/${payload}`);
+};
+
+export const patchEmployeeInformation = (payload) => {
+  return patch(`employees/information/${payload.employeeID}`, payload.information as Employees.PatchEmployeeInformation);
 };
