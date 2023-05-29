@@ -119,7 +119,7 @@ const DetailCnb = ({ id, open }: DetailCNBProps) => {
             >
               <Grid item xs={6} display='flex' flexDirection='column' gap='6px'>
                 <TitleData>Compensation Component</TitleData>
-                <ItemData>Wage</ItemData>
+                <ItemData>{detail?.baseCompensation[0]?.compensationComponent?.name}</ItemData>
               </Grid>
               <Grid item xs={6} display='flex' flexDirection='column' gap='6px'>
                 <TitleData>Tax Status</TitleData>
@@ -175,7 +175,7 @@ const DetailCnb = ({ id, open }: DetailCNBProps) => {
                     gap='6px'
                   >
                     <TitleData>Compensation Component {i + 1}</TitleData>
-                    <ItemData>Transportation Allowance</ItemData>
+                    <ItemData>{supplement?.compensationComponent?.name}</ItemData>
                   </Grid>
                   <Grid
                     item
