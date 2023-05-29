@@ -107,7 +107,7 @@ const LoginForm = ({
             customLabel='Email'
             withAsterisk
             size='small'
-            placeholder='Input email address'
+            placeholder='Input Email Address'
             name='email'
             value={formik.values.email}
             onChange={formik.handleChange}
@@ -128,7 +128,7 @@ const LoginForm = ({
             error={formik.touched.password && Boolean(formik.errors.password)}
             helperText={formik.touched.password && formik.errors.password}
             type={openPassword ? 'text' : 'password'}
-            placeholder='Input password'
+            placeholder='Input Password'
             InputProps={{
               endAdornment: (
                 <InputAdornment position='end'>
@@ -159,7 +159,7 @@ const LoginForm = ({
           color='grey.400'
           textAlign='center'
         >
-          You can also log in using
+          You can also login using
         </Typography>
         <WrapperSSO component='div'>
           <Image
@@ -184,7 +184,7 @@ const LoginForm = ({
           color='grey.400'
           textAlign='center'
         >
-          Do Not Have an Account? &nbsp;
+          Do not have an account? &nbsp;
           <Link href='/register' style={{ textDecoration: 'none' }}>
             <Typography
               component='span'

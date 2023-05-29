@@ -262,7 +262,7 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
               </Grid>
               <Grid item xs={6} md={6} lg={6} xl={6}>
                 <FormControl fullWidth error={compareCheck(formik.touched.numberOfEmployees, Boolean(formik.errors.numberOfEmployees))}>
-                  <Typography>Employees<AsteriskComponent>*</AsteriskComponent></Typography>
+                  <Typography>Number of Employees<AsteriskComponent>*</AsteriskComponent></Typography>
                   <Select
                     fullWidth
                     variant='outlined'
@@ -282,7 +282,7 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
                 </FormControl>
               </Grid>
               <Grid item xs={6} md={6} lg={6} xl={6}>
-                <Typography>Phone Number<AsteriskComponent>*</AsteriskComponent></Typography>
+                <Typography>Contact Number<AsteriskComponent>*</AsteriskComponent></Typography>
                 <Grid container spacing={2}>
                   <Grid item xs={1} sm={3} md={3} lg={3} xl={3}>
                     <Select
@@ -324,7 +324,7 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
             </Grid>
             <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'start' }}>
               <FormControlLabel
-                sx={{ marginTop: '.5rem', marginBottom: '.5rem' }}
+                sx={{ marginTop: '.5rem', marginBottom: '.5rem', mr: '0px' }}
                 value={true}
                 label=''
                 control={
@@ -333,12 +333,19 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
                 labelPlacement='end'
               />
               <Typography color='grey.400' textAlign='center'>
-                I have read and agree to the &nbsp;
-                <Link href='/' style={{ textDecoration: 'none' }}>
+                I have read and agree to the
+                <Link href='/' style={{ textDecoration: 'none', marginLeft: '5px', marginRight: '5px' }}>
                   <Typography component='span' color='primary.main' fontWeight={500}>
-                    term of service
+                    Terms of Service
                   </Typography>
                 </Link>
+                and
+                <Link href='/' style={{ textDecoration: 'none', marginLeft: '5px' }}>
+                  <Typography component='span' color='primary.main' fontWeight={500}>
+                    Privacy Policy
+                  </Typography>
+                </Link>
+                .
               </Typography>
             </Box>
             <Stack>
@@ -351,7 +358,7 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
               />
             </Stack>
             <Box component='div' mt='17px'>
-              <Typography color='grey.400' textAlign='center'>You can also Register using</Typography>
+              <Typography color='grey.400' textAlign='center'>You can also register using</Typography>
               <WrapperSSO component='div'>
                 <Image
                   src={Icons.SSO_GOOGLE}
@@ -377,7 +384,7 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
                     color='primary.main'
                     fontWeight={500}
                   >
-                    Log in Now
+                    Login Now
                   </Typography>
                 </Link>
               </Typography>

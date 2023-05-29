@@ -36,8 +36,8 @@ export const Image: ImageType = {
 };
 
 export const Icons: IconsType = {
-  SSO_GOOGLE: '/assets/icons/sso-google.png',
-  SSO_FACEBOOK: '/assets/icons/sso-facebook.png',
+  SSO_GOOGLE: '/assets/icons/sso-google.svg',
+  SSO_FACEBOOK: '/assets/icons/sso-facebook.svg',
   ABOUT_1: '/assets/icons/about-1.svg',
   ABOUT_2: '/assets/icons/about-2.svg',
   ABOUT_3: '/assets/icons/about-3.svg',
