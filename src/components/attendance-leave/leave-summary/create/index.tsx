@@ -26,6 +26,7 @@ import { ArrowBack } from "@mui/icons-material";
 import { useRouter } from "next/router";
 import { Form as FormikForm, Formik } from "formik";
 import * as Yup from "yup";
+import dayjs from "dayjs";
 
 export default function CreateLeaveApplicationComponent() {
   const router = useRouter();
@@ -142,12 +143,8 @@ export default function CreateLeaveApplicationComponent() {
   const validationSchecma = Yup.object().shape({
     name: Yup.string().required("This is required"),
     type: Yup.string().required("This is required"),
-    remaining_leave_balance: Yup.string().required("This is required"),
-    leave_duration: Yup.string().required("This is required"),
     start_date: Yup.string().required("This is required"),
     end_date: Yup.string().required("This is required"),
-    note: Yup.string().required("This is required"),
-    file: Yup.string().required("This is required"),
   });
 
   const initialValues: {
@@ -159,6 +156,7 @@ export default function CreateLeaveApplicationComponent() {
     end_date: string;
     note: string;
     file: string;
+    fileName: string;
   } = {
     name: "",
     type: "",
@@ -168,6 +166,7 @@ export default function CreateLeaveApplicationComponent() {
     end_date: "",
     note: "",
     file: "",
+    fileName: "",
   };
 
   return (
@@ -217,6 +216,7 @@ export default function CreateLeaveApplicationComponent() {
                 size="small"
                 label="Save and Approve"
                 color="primary"
+                onClick={() => formik.handleSubmit()}
               />
             </NextBtnWrapper>
           </Header>
@@ -258,13 +258,30 @@ export default function CreateLeaveApplicationComponent() {
                       >
                         Type <Star />
                       </Typography>
-                      <Select fullWidth size="small">
-                        {DummyTypeChoicement.map((type, i) => (
-                          <MenuItem key={i} value={type.value}>
-                            {type.label}
-                          </MenuItem>
-                        ))}
-                      </Select>
+                      <FormControl
+                        fullWidth
+                        error={
+                          formik.touched.type && Boolean(formik.errors.type)
+                        }
+                      >
+                        <Select
+                          fullWidth
+                          size="small"
+                          value={formik.values.type}
+                          onChange={(e) =>
+                            formik.setFieldValue("type", e.target.value)
+                          }
+                        >
+                          {DummyTypeChoicement.map((type, i) => (
+                            <MenuItem key={i} value={type.value}>
+                              {type.label}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                        <FormHelperText>
+                          {formik.touched.type && formik.errors.type}
+                        </FormHelperText>
+                      </FormControl>
                     </Grid>
                     <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
                       <Typography
@@ -272,7 +289,16 @@ export default function CreateLeaveApplicationComponent() {
                       >
                         Remaining Leave Balance
                       </Typography>
-                      <Input size="small" />
+                      <Input
+                        size="small"
+                        value={formik.values.remaining_leave_balance}
+                        onChange={(e) =>
+                          formik.setFieldValue(
+                            "remaining_leave_balance",
+                            e.target.value.replace(/[^a-zA-Z\s]+/, "") as string
+                          )
+                        }
+                      />
                     </Grid>
                   </Grid>
                 </Grid>
@@ -298,29 +324,55 @@ export default function CreateLeaveApplicationComponent() {
                       >
                         Leave Duration
                       </Typography>
-                      <RadioGroup row>
-                        {DummyLeaveDurationChoicement.map((radio, i) => (
-                          <FormControlLabel
-                            key={i}
-                            value={radio.value}
-                            control={
-                              <Radio
-                                size="small"
-                                checkedIcon={<BpCheckedIcon />}
-                              />
-                            }
-                            label={radio.label}
-                          />
-                        ))}
-                      </RadioGroup>
+                      <FormControl>
+                        <RadioGroup
+                          row
+                          style={{ height: "54px" }}
+                          value={formik.values.leave_duration}
+                          onChange={(e) =>
+                            formik.setFieldValue(
+                              "leave_duration",
+                              e.target.value
+                            )
+                          }
+                        >
+                          {DummyLeaveDurationChoicement.map((radio, i) => (
+                            <FormControlLabel
+                              key={i}
+                              value={radio.value}
+                              control={
+                                <Radio
+                                  size="small"
+                                  checkedIcon={<BpCheckedIcon />}
+                                />
+                              }
+                              label={radio.label}
+                            />
+                          ))}
+                        </RadioGroup>
+                      </FormControl>
                     </Grid>
                     <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
                       <Grid container>
                         <Grid item xs={5.5} sm={5.5} md={5.5} lg={5.5} xl={5.5}>
-                          <BasicDatePicker
+                          
+                          <FormControl
+                        fullWidth
+                        error={
+                          formik.touched.start_date && Boolean(formik.errors.start_date)
+                        }
+                      >
+                        <BasicDatePicker
                             customLabel="Start Date"
                             withAsterisk
+                          onChange={(value) =>
+                            formik.setFieldValue("start_date", dayjs(value).format('DD/MM/YYYY'))
+                          }
                           />
+                        <FormHelperText>
+                          {formik.touched.start_date && formik.errors.start_date}
+                        </FormHelperText>
+                      </FormControl>
                         </Grid>
                         <Grid
                           item
@@ -334,10 +386,23 @@ export default function CreateLeaveApplicationComponent() {
                           -
                         </Grid>
                         <Grid item xs={5.5} sm={5.5} md={5.5} lg={5.5} xl={5.5}>
-                          <BasicDatePicker
-                            customLabel="End Date"
+                         <FormControl
+                        fullWidth
+                        error={
+                          formik.touched.end_date && Boolean(formik.errors.end_date)
+                        }
+                      >
+                        <BasicDatePicker
+                            customLabel="Start Date"
                             withAsterisk
-                          />{" "}
+                          onChange={(value) =>
+                            formik.setFieldValue("end_date", dayjs(value).format('DD/MM/YYYY'))
+                          }
+                          />
+                        <FormHelperText>
+                          {formik.touched.end_date && formik.errors.end_date}
+                        </FormHelperText>
+                      </FormControl>
                         </Grid>
                       </Grid>
                     </Grid>
@@ -347,7 +412,17 @@ export default function CreateLeaveApplicationComponent() {
                   <Typography style={{ fontSize: "14px", marginBottom: "6px" }}>
                     Note
                   </Typography>
-                  <Textarea minRows={6} style={{ resize: "vertical" }} />
+                  <Textarea
+                    minRows={6}
+                    style={{ resize: "vertical" }}
+                    value={formik.values.note}
+                    onChange={(e) =>
+                      formik.setFieldValue(
+                        "note",
+                        e.target.value.replace(/[^a-zA-Z\s]+/, "") as string
+                      )
+                    }
+                  />
                 </Grid>
                 <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
                   Browse For Upload File (On Progress)
@@ -356,6 +431,7 @@ export default function CreateLeaveApplicationComponent() {
                       inputProps={{ readOnly: true }}
                       size="small"
                       placeholder="Choose File"
+                      value={formik.values.fileName}
                     ></Input>
                     <BrowseButton>
                       <Typography style={{ fontSize: "14px" }}>
@@ -368,7 +444,21 @@ export default function CreateLeaveApplicationComponent() {
               <FileUploadModal
                 open={open}
                 handleClose={handleClose}
-                // onChange={(e) => formik.setFieldValue('picture', convertImageParams('picture', !e.target.files ? null : e.target.files[0], setImages, handleClose), false)}
+                onChange={(e) =>
+                  {
+                    formik.setFieldValue(
+                      "file",
+                      !e.target.files ? null : e.target.files[0],
+                      false
+                    )
+                    formik.setFieldValue(
+                      "fileName",
+                      !e.target.files ? null : e.target.files[0].name,
+                      false
+                    )
+                    handleClose()
+                  }
+                }
               />
             </Box>
           </Paper>
