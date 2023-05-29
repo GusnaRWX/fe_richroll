@@ -195,10 +195,8 @@ export default function EnhancedTable(rows: any) {
     dispatch({
       type: getDetailRequested.toString(),
       Id: rowId,
+      changePage: true,
     });
-    router.push(
-      `/compensation-benefits/update?cnb=${rowId}&id=${detail?.baseCompensation[0]?.id}`
-    );
   };
 
   const handleRequestSort = (

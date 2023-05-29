@@ -100,6 +100,9 @@ function* fetchCompensationDetail(action: AnyAction) {
         },
       });
     }
+    if (action?.changePage === true) {
+      Router.push(`/compensation-benefits/update?cnb=${action?.Id}&id=${res.data.data?.baseCompensation[0]?.id}`)
+    }
   } catch (err) {
     if (err instanceof AxiosError) {
       const errorMessage = err?.response?.data as Services.ErrorResponse;

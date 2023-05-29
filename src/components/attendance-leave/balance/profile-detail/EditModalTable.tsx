@@ -11,6 +11,7 @@ import Table from "@/components/_shared/form/Table";
 import { visuallyHidden } from "@mui/utils";
 import { styled } from "@mui/material/styles";
 import { Formik, FieldArray } from "formik";
+import * as Yup from 'yup'
 
 const headerItems = [
   { id: "no", label: "No" },
@@ -132,6 +133,16 @@ function EditModalTable({ tabValue, submitRef }) {
     fontSize: "16px",
   });
 
+  const validationSchecma = Yup.object().shape({
+    days: Yup.array().of(
+      Yup.object().shape({
+        leaveType: Yup.string().required('This is required'),
+        days: Yup.number().required('This is required').positive('Must be positive').integer('Must be number'),
+        current: Yup.string().required('This is required'),
+      })
+    )
+  });
+
   return (
     <>
       <Formik
@@ -139,6 +150,7 @@ function EditModalTable({ tabValue, submitRef }) {
           days: data.items,
         }}
         onSubmit={(value: any) => console.log(value)}
+        validationSchema={validationSchecma}
       >
         {(formik) => {
           return (

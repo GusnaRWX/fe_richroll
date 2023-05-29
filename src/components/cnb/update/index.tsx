@@ -46,13 +46,13 @@ export default function UpdateCNBComponent() {
     name: Yup.string().required('This is required'),
     compensationComponentId: Yup.string().required('This is required'),
     period: Yup.string().required('This is required'),
-    rateOrAmount: Yup.string().required('This is required'),
+    rateOrAmount: Yup.number().required('This is required').positive('Must be positive').integer('Must be number'),
     taxStatus: Yup.string().required('This is required'),
     supplementary: Yup.array().of(
       Yup.object().shape({
         compensationComponentId: Yup.string().required('This is required'),
         period: Yup.string().required('This is required'),
-        rateOrAmount: Yup.string().required('This is required'),
+        rateOrAmount: Yup.number().required('This is required').positive('Must be positive').integer('Must be number'),
         taxStatus: Yup.string().required('This is required'),
       })
     ),
