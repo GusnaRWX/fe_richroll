@@ -176,7 +176,7 @@ function EmployeeCreateComponent() {
     setValue(newValue);
   };
   const handleClick = async () => {
-    const convertToBase64 = base64ToFile(informationValue.images as string, 'example.png');
+    const convertToBase64 = base64ToFile(informationValue.images, 'example.png');
     const inputData = new FormData();
     inputData.append('companyID', getCompanyData()?.id as string);
     if ((informationValue.picture as []).length > 0 || convertToBase64) {

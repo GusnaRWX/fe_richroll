@@ -14,7 +14,7 @@ function EmployeeDetailContainer() {
   const router = useRouter();
   useEffect(() => {
     if (!router.isReady) return;
-    const fetchData = async () => {
+    const fetchData = () => {
       dispatch({
         type: employeeInfoDetailRequested.toString(),
         payload: router.query.id

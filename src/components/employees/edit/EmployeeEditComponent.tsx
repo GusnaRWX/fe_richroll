@@ -10,7 +10,7 @@ import { Employees } from '@/types/employees';
 import dayjs from 'dayjs';
 import { getCompanyData, ifThenElse } from '@/utils/helper';
 import { useAppSelectors, useAppDispatch } from '@/hooks/index';
-import { patchEmployeeInformationRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
+import { patchEmergencyContactRequested, patchEmployeeInformationRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
 
 
 const EmployeeInformationEdit = dynamic(() => import('./EmployeeInformationEdit'), {
@@ -174,6 +174,7 @@ function EmployeeEditComponent() {
     phoneNumberPrefixSecondary: dataEmergencyContact?.secondary?.phoneNumberPrefix,
     phoneNumberSecondary: dataEmergencyContact?.secondary?.phoneNumber
   });
+
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
@@ -187,12 +188,12 @@ function EmployeeEditComponent() {
   const handleNext = (val) => {
     setValue(val);
   };
-
-  const handleClick = async () => {
+  console.log(informationValue);
+  const handleClick = () => {
     const inputData = new FormData();
     inputData.append('companyID', getCompanyData()?.id as string);
     if ((informationValue.picture as []).length > 0) {
-      inputData.append('picture', (informationValue.picture as unknown as File)[0]);
+      inputData.append('picture', (informationValue.picture as File)[0]);
     }
     inputData.append('fullName', informationValue.fullName);
     inputData.append('nickname', informationValue.nickname);
@@ -216,13 +217,26 @@ function EmployeeEditComponent() {
         employeeInformationPatch: {
           employeeID: router.query.id,
           information: inputData
-        },
-        emergencyContactPatch : {
+        }
+      }
+    });
+  };
+
+  const handleClickEmergencyContact = () => {
+    dispatch({
+      type: patchEmergencyContactRequested.toString(),
+      payload: {
+        emergencyContactPatch: {
           employeeID: router.query.id,
           emergency: emergencyValue
         }
       }
     });
+  };
+
+  const handleSave = {
+    0: handleClick,
+    2: handleClickEmergencyContact
   };
 
   return (
@@ -240,7 +254,9 @@ function EmployeeEditComponent() {
         </BackWrapper>
         <ButtonWrapper>
           <MuiButton variant='outlined' size='small' onClick={() => handleOpen()}>Cancel</MuiButton>
-          <MuiButton variant='contained' onClick={handleClick} size='small' color='primary'>Save</MuiButton>
+          <MuiButton variant='contained' onClick={() => {
+            handleSave[value]();
+          }} size='small' color='primary'>Save</MuiButton>
         </ButtonWrapper>
       </TopWrapper>
       <ContentWrapper>
@@ -261,6 +277,7 @@ function EmployeeEditComponent() {
               setValues={setInformationValue}
               infoValues={informationValue}
               setIsInformationValid={setIsInformationValid}
+              handleFirstInformation={handleClick}
             />
           </TabPanel>
           <TabPanel value={value} index={1}>
@@ -279,6 +296,7 @@ function EmployeeEditComponent() {
               setValues={setEmergencyValue}
               emergencyValues={emergencyValue}
               setIsEmergencyValid={setIsEmergencyValid}
+              handleThirdEmergency={handleClickEmergencyContact}
             />
           </TabPanel>
           <TabPanel value={value} index={3}>

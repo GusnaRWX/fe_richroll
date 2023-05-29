@@ -1,26 +1,34 @@
-import React, { HTMLAttributes, useState, useEffect } from 'react';
+import React, { HTMLAttributes, useCallback, useRef, useState } from 'react';
 import {
   Grid,
   Typography,
-  Box
+  Box,
+  createFilterOptions,
+  Autocomplete,
+  TextField,
+  Modal,
+  IconButton
 } from '@mui/material';
 import { Input, Button, Select as CustomSelect, CheckBox, DatePicker, FileUploadModal } from '@/components/_shared/form';
 import { styled as MuiStyled } from '@mui/material/styles';
 import { Image as ImageType } from '@/utils/assetsConstant';
 import styled from '@emotion/styled';
-import { useForm, useAppSelectors, useAppDispatch } from '@/hooks/index';
+import { useAppSelectors } from '@/hooks/index';
 import {
-  checkRegulerExpression,
-  convertValue,
-  convertChecked,
-  convertDateValue,
-  convertImageParams,
+  base64ToFile,
+  convertImageParams, randomCode,
 } from '@/utils/helper';
 import dayjs from 'dayjs';
 import { Alert, Text } from '@/components/_shared/common';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { Employees } from '@/types/employees';
-import { getListPositionRequested } from '@/store/reducers/slice/options/optionSlice';
+import { useFormik } from 'formik';
+import { validationSchemeEmployeeInformation } from './validate';
+import { Option } from '@/types/option';
+import { AiOutlinePlus } from 'react-icons/ai';
+import { BsTrash3 } from 'react-icons/bs';
+import Webcam from 'react-webcam';
+import { CameraAlt } from '@mui/icons-material';
 
 const AsteriskComponent = MuiStyled('span')(({ theme }) => ({
   color: theme.palette.error.main
@@ -45,6 +53,33 @@ const NextBtnWrapper = MuiStyled(Box)(({
   marginTop: '2rem'
 }));
 
+const modalStyleCamera = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: '30%',
+  bgcolor: 'background.paper',
+  border: '1px solid #E5E7EB',
+  borderRadius: '8px',
+  paddingTop: '.2rem',
+  paddingRight: '.5rem',
+  paddingLeft: '.5rem'
+};
+
+const ContentCameraWrapper = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center'
+};
+
+const videoConstraints = {
+  width: 500,
+  height: 720,
+  facingMode: 'user'
+};
+
 
 interface ImagePriviewProps extends HTMLAttributes<HTMLDivElement> {
   image?: string;
@@ -66,86 +101,61 @@ interface EmployeeProps {
   nextPage: (_val: number) => void;
   setValues: React.Dispatch<React.SetStateAction<Employees.InformationValues>>
   infoValues: Employees.InformationValues,
-  setIsInformationValid: React.Dispatch<React.SetStateAction<boolean>>
+  setIsInformationValid: React.Dispatch<React.SetStateAction<boolean>>,
+  handleFirstInformation: () => void;
 }
 
 
-function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, setIsInformationValid }: EmployeeProps) {
+function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, setIsInformationValid, handleFirstInformation }: EmployeeProps) {
+  const [isCaptureEnable, setCaptureEnable] = useState<boolean>(false);
+  const webcamRef = useRef<Webcam>(null);
+  const [openCamera, setOpenCamera] = useState(false);
+
+  const handleCloseCamera = () => {
+    setCaptureEnable(false);
+    setOpenCamera(false);
+  };
+
+  const handleOpenCamera = () => {
+    setCaptureEnable(true);
+    setOpenCamera(true);
+  };
+
+  const capture = useCallback(() => {
+    const imageSrc = webcamRef.current?.getScreenshot();
+    if (imageSrc) {
+      setImages(imageSrc);
+      const nameFile = randomCode(5);
+      const fileImage = base64ToFile(imageSrc, nameFile);
+      formik.setFieldValue('picture', fileImage);
+      handleClose();
+      handleCloseCamera();
+    }
+  }, [webcamRef]);
   const { listDepartment, listPosition } = useAppSelectors(state => state.option);
   const [open, setOpen] = useState(false);
   const [images, setImages] = useState<string | null>(infoValues?.images);
-  const [errorFields, setErrorFields] = useState<boolean>(false);
-  const dispatch = useAppDispatch();
 
-  const [initialValues] = useState({
-    picture: [],
-    fullName: infoValues?.fullName,
-    nickname: infoValues?.nickname,
-    phoneNumberPrefix: infoValues.phoneNumberPrefix,
-    phoneNumber: infoValues?.phoneNumber,
-    email: infoValues?.email,
-    startDate: dayjs(infoValues?.startDate),
-    endDate: dayjs(infoValues?.endDate),
-    isPermanent: infoValues?.isPermanent,
-    department: infoValues?.department,
-    position: infoValues?.position,
-    isSelfService: infoValues?.isSelfService,
+  const formik = useFormik({
+    initialValues: {
+      picture: [],
+      fullName: infoValues?.fullName,
+      nickname: infoValues?.nickname,
+      phoneNumberPrefix: infoValues.phoneNumberPrefix,
+      phoneNumber: infoValues?.phoneNumber,
+      email: infoValues?.email,
+      startDate: dayjs(infoValues?.startDate),
+      endDate: dayjs(infoValues?.endDate),
+      isPermanent: infoValues?.isPermanent,
+      department: infoValues?.department,
+      position: infoValues?.position,
+      isSelfService: infoValues?.isSelfService,
+    },
+    validationSchema: validationSchemeEmployeeInformation,
+    onSubmit: (values, { setErrors }) => {
+      handleSubmit(values, setErrors);
+    }
   });
-
-  const validate = (fieldOfValues = values) => {
-    const temp = { ...errors };
-
-    if ('picture' in fieldOfValues)
-      temp.picture = fieldOfValues.picture.length !== 0 || infoValues?.images
-        ? ''
-        : 'This field is required';
-
-    if ('fullName' in fieldOfValues)
-      temp.fullName = fieldOfValues.fullName ? '' : 'This field is required';
-
-    if ('phoneNumber' in fieldOfValues)
-      temp.phoneNumber = fieldOfValues.phoneNumber ? '' : 'This field is required';
-
-    if ('email' in fieldOfValues) {
-      const patternEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      const emailValue = fieldOfValues.email || '';
-      let emailErrorMessage = '';
-      if (!emailValue) {
-        emailErrorMessage = 'Email is required';
-      } else if (!checkRegulerExpression(patternEmail, emailValue)) {
-        emailErrorMessage = 'Email should be valid';
-      }
-      temp.email = emailErrorMessage;
-    }
-
-    if ('startDate' in fieldOfValues)
-      temp.startDate = fieldOfValues.startDate ? '' : 'This field is required';
-
-    // if ('endDate' in fieldOfValues)
-    //   temp.endDate = fieldOfValues.endDate ? '' : 'This field is required';
-
-    if ('department' in fieldOfValues)
-      temp.department = fieldOfValues.department ? '' : '';
-
-    if ('position' in fieldOfValues) {
-      temp.position = dispatch({
-        type: getListPositionRequested.toString(),
-        payload: {
-          departmentID: values.department
-        }
-      }) ? '' : 'This field is required';
-    }
-
-
-    setErrors({
-      ...temp
-    });
-
-    if (fieldOfValues === values)
-      return Object.values(temp).every(x => x === '');
-  };
-
-  const { values, errors, setErrors, handleInputChange } = useForm(initialValues, true, validate);
 
   const handleOpen = () => {
     setOpen(true);
@@ -166,32 +176,39 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
     }
   ];
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (validate()) {
-      setValues({ ...values, images: images });
-      nextPage(1);
-      setErrorFields(false);
-      setIsInformationValid(true);
-    } else {
-      setErrorFields(true);
-      setIsInformationValid(false);
-    }
+  const handleSubmit = (val, setErrors) => {
+    const allInfoValues = {
+      ...val,
+      images: images
+    };
+    setValues(allInfoValues);
+    setIsInformationValid(true);
+    handleFirstInformation();
+    nextPage(1);
+    setErrors({});
   };
 
-  useEffect(() => {
-    dispatch({
-      type: getListPositionRequested.toString(),
-      payload: {
-        departmentID: infoValues?.department
-      }
-    });
-  }, []);
+  const filter = createFilterOptions<Option.FreesoloType>();
+
+  const [mappedDepartment, setMappedDeparment] = useState(listDepartment);
+  const [mappedListPosition, setMappedListPosition] = useState(listPosition);
+
+  const handleDelete = (id: number) => {
+    const temp = [...mappedDepartment];
+    temp.splice(id, 1);
+    setMappedDeparment(temp);
+  };
+
+  const handleDeletePosition = (id: number) => {
+    const temp = [...mappedListPosition];
+    temp.splice(id, 1);
+    setMappedListPosition(temp);
+  };
 
   return (
     <>
       {
-        errorFields && (
+        Object.keys(formik.errors).length > 0 && (
           <Alert
             severity='error'
             content='Please fill in all the mandatory fields'
@@ -207,7 +224,7 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
         title='Employee Information'
         mb='16px'
       />
-      <form ref={refProp} onSubmit={(e) => handleSubmit(e)}>
+      <form ref={refProp} onSubmit={formik.handleSubmit}>
         <Box component='div'>
           <Text
             component='span'
@@ -216,7 +233,7 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
           />
           <ImageReview image={!images ? ImageType.PLACEHOLDER : images} onClick={handleOpen} />
           {
-            errors.picture && (
+            formik.errors.picture && (
               <Typography component='span' fontSize='12px' color='red.500'>This field is required</Typography>
             )
           }
@@ -227,11 +244,13 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
               name='fullName'
               customLabel='Full Name'
               withAsterisk={true}
-              onChange={handleInputChange}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               size='small'
-              value={values.fullName}
+              value={formik.values.fullName}
               placeholder='Input Full Name'
-              error={errors.fullName}
+              error={formik.touched.fullName && Boolean(formik.errors.fullName)}
+              helperText={formik.touched.fullName && formik.errors.fullName}
             />
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
@@ -239,9 +258,10 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
               name='nickname'
               customLabel='Nickname'
               withAsterisk={false}
-              onChange={handleInputChange}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               size='small'
-              value={values.nickname}
+              value={formik.values.nickname}
               placeholder='Input Nickname'
             />
           </Grid>
@@ -255,9 +275,10 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
                   variant='outlined'
                   size='small'
                   fullWidth
-                  onChange={(e) => handleInputChange(convertValue('phoneNumberPrefix', e))}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                   name='phoneNumberPrefix'
-                  value={values.phoneNumberPrefix}
+                  value={formik.values.phoneNumberPrefix}
                   options={phonePrefixOptions}
                   MenuProps={{ disableAutoFocus: true }}
                   sx={{
@@ -275,10 +296,12 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
                   type='number'
                   placeholder='Input Correct Number'
                   withAsterisk={true}
-                  onChange={handleInputChange}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                   size='small'
-                  value={values.phoneNumber}
-                  error={errors.phoneNumber}
+                  value={formik.values.phoneNumber}
+                  error={formik.touched.phoneNumber && Boolean(formik.errors.phoneNumber)}
+                  helperText={formik.touched.phoneNumber && formik.errors.phoneNumber}
                 />
               </Grid>
             </Grid>
@@ -289,10 +312,12 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
               customLabel='Personal Email Address'
               withAsterisk={true}
               size='small'
-              onChange={handleInputChange}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               placeholder='Personal Email Address'
-              value={values.email}
-              error={errors.email}
+              value={formik.values.email}
+              error={formik.touched.email && Boolean(formik.errors.email)}
+              helperText={formik.touched.email && formik.errors.email}
             />
           </Grid>
         </Grid>
@@ -301,53 +326,184 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
             <DatePicker
               customLabel='Start Date'
               withAsterisk
-              value={values.startDate}
-              onChange={(e: unknown) => handleInputChange(convertDateValue('startDate', e))}
-              error={errors.startDate}
+              value={formik.values.startDate as unknown as Date}
+              onChange={(date: unknown) => formik.setFieldValue('startDate', date)}
+              error={formik.touched.startDate && formik.errors.startDate ? String(formik.errors.startDate) : ''}
             />
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <DatePicker
               customLabel='End Date'
-              // withAsterisk
-              value={values.endDate}
-              onChange={(e: unknown) => handleInputChange(convertDateValue('endDate', e))}
-              // error={errors.endDate}
-              disabled={values.isPermanent}
+              value={formik.values.endDate as unknown as Date}
+              onChange={(date: unknown) => formik.setFieldValue('endDate', date)}
+              disabled={formik.values.isPermanent}
             />
           </Grid>
         </Grid>
         <CheckBox
           customLabel='Permanent'
           name='isPermanent'
-          checked={values.isPermanent}
-          onChange={(e) => handleInputChange(convertChecked(e))}
+          checked={formik.values.isPermanent}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
         />
         <Grid container spacing={2}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
-            <CustomSelect
-              customLabel='Department'
-              withAsterisk={false}
-              variant='outlined'
-              value={values.department}
-              onChange={(e) => handleInputChange(convertValue('department', e))}
-              fullWidth={true}
-              name='department'
+            <Text title='Department' mb='6px' />
+            <Autocomplete
+              id='department'
+              freeSolo
+              value={formik.values.department}
+              onChange={(event, newValue) => {
+                if (typeof newValue === 'string') {
+                  formik.setFieldValue('department', newValue, false);
+                } else if (newValue && newValue.inputValue) {
+                  formik.setFieldValue('deparment', newValue.inputValue, false);
+                  setMappedDeparment((prev) => [...prev, {
+                    label: newValue.inputValue,
+                    id: String(Math.random() * Math.PI)
+                  }]);
+                } else {
+                  formik.setFieldValue('department', newValue?.label);
+                }
+              }}
               size='small'
-              options={listDepartment}
+              filterOptions={(options, params) => {
+                const filtered = filter(options, params);
+                const { inputValue } = params;
+                const isExisting = options.some((option) => inputValue === option.label);
+                if (inputValue !== '' && !isExisting) {
+                  filtered.push({
+                    inputValue,
+                    label: (
+                      <Box
+                        component='span'
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '5px'
+                        }}
+                      >
+                        <AiOutlinePlus />
+                        Add New {inputValue}
+                      </Box>
+                    ) as unknown as Element
+                  });
+                }
+                return filtered;
+              }}
+              selectOnFocus
+              clearOnBlur
+              handleHomeEndKeys
+              options={mappedDepartment as readonly Option.FreesoloType[]}
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              getOptionLabel={(option: any) => {
+                if (typeof option === 'string') {
+                  return option;
+                }
+
+                if (option.inputValue) {
+                  return option.inputValue;
+                }
+
+                return option.label;
+              }}
+              renderOption={(props, option) => (
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between'
+                  }}
+                >
+                  <li {...props} style={{ width: '100%' }}>{option.label}</li>
+                  {option.label.length > 0 && (
+                    <BsTrash3 style={{ marginRight: '8px', cursor: 'pointer' }}
+                      onClick={() => { handleDelete(option.id); }}
+                    />
+                  )}
+                </Box>
+              )}
+              renderInput={(params) => <TextField name='department' {...params} />}
             />
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
-            <CustomSelect
-              customLabel='Position'
-              withAsterisk={false}
-              variant='outlined'
-              value={values.position}
-              onChange={(e) => handleInputChange(convertValue('position', e))}
-              fullWidth={true}
-              name='position'
+            <Text title='Position' mb='6px' />
+            <Autocomplete
+              id='position'
+              freeSolo
+              value={formik.values.position}
+              onChange={(event, newValue) => {
+                if (typeof newValue === 'string') {
+                  formik.setFieldValue('position', newValue, false);
+                } else if (newValue && newValue.inputValue) {
+                  formik.setFieldValue('position', newValue.inputValue, false);
+                  setMappedListPosition((prev) => [...prev, {
+                    label: newValue.inputValue,
+                    id: String(Math.random() * Math.PI)
+                  }]);
+                } else {
+                  formik.setFieldValue('position', newValue?.label);
+                }
+              }}
               size='small'
-              options={listPosition}
+              filterOptions={(options, params) => {
+                const filtered = filter(options, params);
+                const { inputValue } = params;
+                const isExisting = options.some((option) => inputValue === option.label);
+                if (inputValue !== '' && !isExisting) {
+                  filtered.push({
+                    inputValue,
+                    label: (
+                      <Box
+                        component='span'
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '5px'
+                        }}
+                      >
+                        <AiOutlinePlus />
+                        Add New {inputValue}
+                      </Box>
+                    ) as unknown as Element
+                  });
+                }
+                return filtered;
+              }}
+              selectOnFocus
+              clearOnBlur
+              handleHomeEndKeys
+              options={mappedListPosition as readonly Option.FreesoloType[]}
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              getOptionLabel={(option: any) => {
+                if (typeof option === 'string') {
+                  return option;
+                }
+
+                if (option.inputValue) {
+                  return option.inputValue;
+                }
+
+                return option.label;
+              }}
+              renderOption={(props, option) => (
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between'
+                  }}
+                >
+                  <li {...props} style={{ width: '100%' }}>{option.label}</li>
+                  {option.label.length > 0 && (
+                    <BsTrash3 style={{ marginRight: '8px', cursor: 'pointer' }}
+                      onClick={() => { handleDeletePosition(option.id); }}
+                    />
+                  )}
+                </Box>
+              )}
+              renderInput={(params) => <TextField name='position' {...params} />}
             />
           </Grid>
         </Grid>
@@ -357,8 +513,9 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
               <CheckBox
                 customLabel='Employee Self Serive'
                 name='isSelfService'
-                checked={values.isSelfService}
-                onChange={(e) => handleInputChange(convertChecked(e))}
+                checked={formik.values.isSelfService}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
               />
               <Typography>Activate button to send account activation link via email. Employee Self Service enables self-data filling.</Typography>
             </EmployeeSelfWrapper>
@@ -371,8 +528,47 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
       <FileUploadModal
         open={open}
         handleClose={handleClose}
-        onChange={(e) => handleInputChange(convertImageParams('picture', !e.target.files ? null : e.target.files[0], setImages, handleClose))}
+        onChange={(e) => formik.setFieldValue('picture', convertImageParams('picture', !e.target.files ? null : e.target.files[0], setImages, handleClose), false)}
+        onCapture={handleOpenCamera}
       />
+      <Modal
+        open={openCamera}
+        onClose={handleCloseCamera}
+        keepMounted
+      >
+        <Box sx={modalStyleCamera}>
+          {
+            isCaptureEnable && (
+              <>
+                <Box sx={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'flex-end',
+                  marginBottom: '.5rem'
+                }}>
+                  <IconButton onClick={handleCloseCamera}>
+                    <CancelIcon />
+                  </IconButton>
+                </Box>
+                <Box sx={ContentCameraWrapper}>
+                  <Webcam
+                    audio={false}
+                    width={600}
+                    height={300}
+                    ref={webcamRef}
+                    screenshotFormat='image/jpeg'
+                    videoConstraints={videoConstraints}
+                  />
+                  <IconButton onClick={capture} sx={{ marginTop: '.5rem' }}>
+                    <CameraAlt sx={{ fontSize: '30px' }} />
+                  </IconButton>
+                </Box>
+              </>
+            )
+          }
+        </Box>
+      </Modal>
     </>
   );
 }

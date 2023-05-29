@@ -1,7 +1,7 @@
 import React from 'react';
 import { Typography, Box, Grid, FormControl, Select, MenuItem } from '@mui/material';
 import { Input, Button } from '@/components/_shared/form';
-import {styled as MuiStyled} from '@mui/material/styles';
+import { styled as MuiStyled } from '@mui/material/styles';
 import { Employees } from '@/types/employees';
 import { Alert, Text } from '@/components/_shared/common';
 import { useFormik } from 'formik';
@@ -18,21 +18,22 @@ interface EmergencyContactProps {
   nextPage: (_val: number) => void;
   setValues: React.Dispatch<React.SetStateAction<Employees.EmergencyContactPatchValues>>;
   emergencyValues: Employees.EmergencyContactPatchValues;
-  setIsEmergencyValid: React.Dispatch<React.SetStateAction<boolean>>
+  setIsEmergencyValid: React.Dispatch<React.SetStateAction<boolean>>;
+  handleThirdEmergency: () => void
 }
 
-function EmergencyContactEdit({refProp, nextPage, setValues, emergencyValues, setIsEmergencyValid}: EmergencyContactProps) {
+function EmergencyContactEdit({ refProp, nextPage, setValues, emergencyValues, setIsEmergencyValid, handleThirdEmergency }: EmergencyContactProps) {
   const formik = useFormik({
     initialValues: {
       // employeeID: employeeID,
       primaryId: emergencyValues?.primaryId,
       secondaryId: emergencyValues?.secondaryId,
       fullNamePrimary: emergencyValues?.fullNamePrimary,
-      relationPrimary: emergencyValues?.relationPrimary.toString(),
+      relationPrimary: emergencyValues?.relationPrimary?.toString(),
       phoneNumberPrefixPrimary: emergencyValues?.phoneNumberPrefixPrimary,
       phoneNumberPrimary: emergencyValues?.phoneNumberPrimary,
       fullNameSecondary: emergencyValues?.fullNameSecondary,
-      relationSecondary: emergencyValues?.relationSecondary.toString(),
+      relationSecondary: emergencyValues?.relationSecondary?.toString(),
       phoneNumberPrefixSecondary: emergencyValues?.phoneNumberPrefixSecondary,
       phoneNumberSecondary: emergencyValues?.phoneNumberSecondary
     },
@@ -43,8 +44,9 @@ function EmergencyContactEdit({refProp, nextPage, setValues, emergencyValues, se
         phoneNumberPrimary: String(formik.values.phoneNumberPrimary)
       };
       setValues(emergencyLastValue);
-      nextPage(3);
       setIsEmergencyValid(true);
+      handleThirdEmergency();
+      nextPage(3);
       setErrors({});
     }
   });
@@ -61,13 +63,11 @@ function EmergencyContactEdit({refProp, nextPage, setValues, emergencyValues, se
 
   };
 
-  console.log(formik.values);
-
   const checkRelationship = (value: unknown) => {
-    if ((value as string).length === 0) {
+    if ((value as string)?.length === 0) {
       return <Text title='Select Relationship' color='grey.400' />;
     }
-    const selected = relationshipItems.find(item => item.value === value);
+    const selected = relationshipItems?.find(item => item.value === value);
     if (selected) {
       return `${selected.label}`;
     }

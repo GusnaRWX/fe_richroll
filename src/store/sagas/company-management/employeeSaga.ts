@@ -492,15 +492,14 @@ function* fetchPatchEmployeeInformation(action: AnyAction) {
     const res: AxiosResponse = yield call(patchEmployeeInformation, action?.payload?.employeeInformationPatch);
     if (res.data.code) {
       yield put({ type: patchEmployeeInformationSuccess.toString(), payload: res?.data?.data });
-      console.log('sagas', action?.payload?.emergencyContactPatch);
-      const emergencyData = {
-        type: patchEmergencyContactRequested.toString(),
-        payload: {
-          employeeID: action?.payload?.emergencyContactPatch?.employeeID,
-          emergency: action?.payload?.emergencyContactPatch?.emergency
-        }
-      };
-      yield call(fetchPatchEmergencyContact, emergencyData);
+      // const emergencyData = {
+      //   type: patchEmergencyContactRequested.toString(),
+      //   payload: {
+      //     employeeID: action?.payload?.emergencyContactPatch?.employeeID,
+      //     emergency: action?.payload?.emergencyContactPatch?.emergency
+      //   }
+      // };
+      // yield call(fetchPatchEmergencyContact, emergencyData);
       yield delay(1000);
       yield put({
         type: setResponserMessage.toString(),
@@ -536,24 +535,23 @@ function* fetchPatchEmployeeInformation(action: AnyAction) {
 
 function* fetchPatchEmergencyContact(action: AnyAction) {
   try {
-    console.log('anjing : ', action?.payload);
     const payload = {
-      employeeID: action?.payload?.employeeID,
+      employeeID: action?.payload?.emergencyContactPatch?.employeeID,
       emergency: {
-        employeeID: action?.payload?.employeeID,
+        employeeID: action?.payload?.emergencyContactPatch?.employeeID,
         primary: {
-          id: action?.payload?.emergency?.primaryId,
-          name: action?.payload?.emergency?.fullNamePrimary,
-          relationship: +action?.payload?.emergency?.relationPrimary,
-          phoneNumberPrefix: action?.payload.emergency?.phoneNumberPrefixPrimary,
-          phoneNumber: action?.payload.emergency?.phoneNumberPrimary
+          id: action?.payload?.emergencyContactPatch?.emergency?.primaryId,
+          name: action?.payload?.emergencyContactPatch?.emergency?.fullNamePrimary,
+          relationship: +action?.payload?.emergencyContactPatch?.emergency?.relationPrimary,
+          phoneNumberPrefix: action?.payload?.emergencyContactPatch?.emergency?.phoneNumberPrefixPrimary,
+          phoneNumber: action?.payload?.emergencyContactPatch?.emergency?.phoneNumberPrimary
         },
         secondary: {
-          id: action?.payload?.emergency?.secondaryId,
-          name: action?.payload?.emergency?.fullNameSecondary,
-          relationship: +action?.payload?.emergency?.relationSecondary,
-          phoneNumberPrefix: action?.payload.emergency?.phoneNumberPrefixSecondary,
-          phoneNumber: action?.payload.emergency?.phoneNumberSecondary
+          id: action?.payload?.emergencyContactPatch?.emergency?.secondaryId,
+          name: action?.payload?.emergencyContactPatch?.emergency?.fullNameSecondary,
+          relationship: +action?.payload?.emergencyContactPatch?.emergency?.relationSecondary,
+          phoneNumberPrefix: action?.payload?.emergencyContactPatch?.emergency?.phoneNumberPrefixSecondary,
+          phoneNumber: action?.payload?.emergencyContactPatch?.emergency?.phoneNumberSecondary
         }
       }
     };
