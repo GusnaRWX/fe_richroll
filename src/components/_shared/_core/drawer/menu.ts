@@ -2,7 +2,7 @@ import { AiFillHome } from 'react-icons/ai';
 import { HiBuildingOffice, HiCurrencyDollar } from 'react-icons/hi2';
 import { CoreLayout } from '@/types/component';
 import { BsFillCalendar2Fill } from 'react-icons/bs';
-import { HiDocumentReport, HiOutlineSupport } from 'react-icons/hi';
+import { HiDocumentReport, HiOutlineSupport, HiUser } from 'react-icons/hi';
 
 export const Menus: CoreLayout.SidebarItem[] = [
   {
@@ -10,8 +10,6 @@ export const Menus: CoreLayout.SidebarItem[] = [
     path: '/dashboard/',
     title: 'Dashboard',
     icons: AiFillHome,
-    hasChild: true,
-    child: [],
   },
   {
     key: 'company-management',
@@ -45,7 +43,7 @@ export const Menus: CoreLayout.SidebarItem[] = [
   {
     key: 'attendance-leave',
     path: '/attendance-leave',
-    title: 'attendance & Leave',
+    title: 'Attendance & Leave',
     icons: BsFillCalendar2Fill,
     hasChild: true,
     child: [
@@ -76,5 +74,26 @@ export const Menus: CoreLayout.SidebarItem[] = [
     path: '/package-management',
     title: 'Package Management',
     icons: HiOutlineSupport,
+  },
+  {
+    key: 'payroll-disbursement',
+    path: '/payroll-disbursement',
+    title: 'Payroll & Disbursement',
+    icons: HiUser,
+    hasChild: true,
+    child: [
+      {
+        path: '/payroll-disbursement/payroll-assistant',
+        title: 'Payroll Assistant',
+      },
+      {
+        path: '/payroll-disbursement/attendance',
+        title: 'Attendance',
+      },
+      {
+        path: '/payroll-disbursement/payroll',
+        title: 'Payroll',
+      },
+    ],
   },
 ];

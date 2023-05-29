@@ -12,7 +12,7 @@ import Notify from '../../common/Notify';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { getStorage } from '@/utils/storage';
 import { meSuccessed } from '@/store/reducers/slice/auth/meSlice';
-import { getCompanyData } from '@/utils/helper';
+import { getCompanyData, CompanyDataParse } from '@/utils/helper';
 
 export interface LayoutProps {
   children?: React.ReactNode;
@@ -31,8 +31,8 @@ const Layout = ({
   children,
 }: LayoutProps) => {
   const [mobileOpen, setMobileOpen] = useState<boolean>(false);
+  const [companyData, setCompanyData] = useState<CompanyDataParse|null>({});
   const dispatch = useAppDispatch();
-  const companyData = getCompanyData();
 
   const handleDrawerToggle = () => {
     setMobileOpen((mobile) => !mobile);
@@ -41,6 +41,8 @@ const Layout = ({
 
   useEffect(() => {
     const getUserProfile = getStorage('user');
+    const tempData:CompanyDataParse|null = getCompanyData();
+    setCompanyData(tempData);
 
     if (getUserProfile) {
       dispatch({
@@ -66,6 +68,7 @@ const Layout = ({
             width={151}
             height={40}
             alt='kayaroll'
+            priority
           />
         </Box>
       </Toolbar>
@@ -75,7 +78,8 @@ const Layout = ({
             src={companyData?.imageUrl && companyData?.imageUrl.includes('http') ? companyData?.imageUrl : ImageType.PLACEHOLDER_COMPANY}
             fill={true}
             style={{ objectFit: 'contain' }}
-            alt={'company-logo'}
+            sizes='(max-width: 60px) 100%, 60px'
+            alt='company-logo'
           />
         </Box>
         <Box component='div'>
@@ -135,7 +139,7 @@ const Layout = ({
         )
       }
       <DrawerCore
-        drawerWidth={drawerWidth}
+        drawerwidth={drawerWidth}
         container={container}
         mobileOpen={mobileOpen}
         handleDrawerToggle={handleDrawerToggle}
