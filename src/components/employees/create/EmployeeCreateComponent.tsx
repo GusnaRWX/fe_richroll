@@ -212,6 +212,7 @@ function EmployeeCreateComponent() {
         cnbValue: cnbEmployeeValues
       }
     });
+    router.push('/company-management/employees');
   };
 
   const handleOpen = () => {
