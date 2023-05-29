@@ -8,6 +8,7 @@ interface EmployeeState {
   employeeInformationDetail: object;
   personalInformationDetail: object;
   detailCnb: object;
+  emergencyContactDetail: object;
 }
 
 const initialState: EmployeeState = {
@@ -16,7 +17,8 @@ const initialState: EmployeeState = {
   employeeID: '',
   employeeInformationDetail: {},
   personalInformationDetail: {},
-  detailCnb: {}
+  detailCnb: {},
+  emergencyContactDetail: {}
 };
 
 export const employeeSlice = createSlice({
@@ -90,6 +92,43 @@ export const employeeSlice = createSlice({
     },
     getDetailCnbFailed: (state) => {
       state.isLoading = false;
+    },
+    postCnbEmplyeeRequested: (state) => {
+      state.isLoading = true;
+    },
+    postCnbEmployeeSuccess: (state) => {
+      state.isLoading = false;
+    },
+    postCnbEmployeeFailed: (state) => {
+      state.isLoading = false;
+    },
+    emergencyContactDetailRequested: (state) => {
+      state.isLoading = true;
+    },
+    emergencyContactDetailSuccess: (state, action) => {
+      state.isLoading = false;
+      state.emergencyContactDetail = action?.payload?.data;
+    },
+    emergencyContactDetailFailed: (state) => {
+      state.isLoading = false;
+    },
+    patchEmployeeInformationRequested: (state) => {
+      state.isLoading = true;
+    },
+    patchEmployeeInformationSuccess: (state) => {
+      state.isLoading = false;
+    },
+    patchEmployeeInformationFailed: (state) => {
+      state.isLoading = false;
+    },
+    patchEmergencyContactRequested: (state) => {
+      state.isLoading = true;
+    },
+    patchEmergencyContactSuccess: (state) => {
+      state.isLoading = false;
+    },
+    patchEmergencyContactFailed: (state) => {
+      state.isLoading = false;
     }
   },
   extraReducers: {
@@ -123,7 +162,19 @@ export const {
   personalInfoDetailSuccess,
   getDetailCnbFailed,
   getDetailCnbRequested,
-  getDetailCnbSuccess
+  getDetailCnbSuccess,
+  postCnbEmplyeeRequested,
+  postCnbEmployeeSuccess,
+  postCnbEmployeeFailed,
+  emergencyContactDetailFailed,
+  emergencyContactDetailRequested,
+  emergencyContactDetailSuccess,
+  patchEmployeeInformationRequested,
+  patchEmployeeInformationSuccess,
+  patchEmployeeInformationFailed,
+  patchEmergencyContactRequested,
+  patchEmergencyContactSuccess,
+  patchEmergencyContactFailed
 } = employeeSlice.actions;
 
 export default employeeSlice.reducer;

@@ -36,5 +36,5 @@ export const relationshipItems: Array<Option.Mapper> = [
   { label: 'Parent', value: '1' },
   { label: 'Sibling', value: '2' },
   { label: 'Spouse', value: '3' },
-  { label: 'Others', value: '4' }
+  { label: 'Others', value: '0' }
 ];

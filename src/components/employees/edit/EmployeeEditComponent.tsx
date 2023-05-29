@@ -8,8 +8,10 @@ import { useRouter } from 'next/router';
 import ConfirmationModal from '@/components/_shared/common/ConfirmationModal';
 import { Employees } from '@/types/employees';
 import dayjs from 'dayjs';
-import { getCompanyData } from '@/utils/helper';
-import { useAppSelectors } from '@/hooks/index';
+import { getCompanyData, ifThenElse } from '@/utils/helper';
+import { useAppSelectors, useAppDispatch } from '@/hooks/index';
+import { patchEmployeeInformationRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
+
 
 const EmployeeInformationEdit = dynamic(() => import('./EmployeeInformationEdit'), {
   ssr: false
@@ -91,36 +93,40 @@ function EmployeeEditComponent() {
   const [value, setValue] = useState(0);
   const [leave, setLeave] = useState(false);
   const employeeRef = useRef<HTMLFormElement>(null);
+  const emergencyRef = useRef<HTMLFormElement>(null);
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   const [isInformationValid, setIsInformationValid] = useState(false);
   const personalInformationRef = useRef<HTMLFormElement>(null);
+  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+  const [isEmergencyValid, setIsEmergencyValid] = useState(false);
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   const [isPersonalInformationValid, setIsPersonalInformationValid] = useState(false);
   const router = useRouter();
   const { employee } = useAppSelectors((state) => state);
   const dataEmployeeInformation = employee.employeeInformationDetail;
   const dataPersonalInformation = employee.personalInformationDetail;
-  const phoneNumberPrefix = typeof dataEmployeeInformation.phoneNumber !== 'undefined' ? dataEmployeeInformation.phoneNumber.split('').slice(0, 3).join('') : '';
-  const phoneNumber = typeof dataEmployeeInformation.phoneNumber !== 'undefined' ? dataEmployeeInformation.phoneNumber.slice(3) : '';
-
+  const dataEmergencyContact = employee.emergencyContactDetail;
+  const phoneNumberPrefix = ifThenElse(typeof dataEmployeeInformation.phoneNumber !== 'undefined', dataEmployeeInformation?.phoneNumber?.split('')?.slice(0, 3).join(''), '');
+  const phoneNumber = ifThenElse(typeof dataEmployeeInformation.phoneNumber !== 'undefined', dataEmployeeInformation?.phoneNumber?.slice(3), '');
+  const dispatch = useAppDispatch();
   const [informationValue, setInformationValue] = useState<Employees.InformationValues>({
     companyID: getCompanyData()?.id as string,
     department: dataEmployeeInformation?.department,
     email: dataEmployeeInformation?.email,
-    endDate: dataEmployeeInformation?.endDate !== null ? dayjs(dataEmployeeInformation?.endDate).format('YYYY/MM/DD') : null,
+    endDate: ifThenElse(dataEmployeeInformation?.endDate !== null, dayjs(dataEmployeeInformation?.endDate).format('YYYY/MM/DD'), null),
     fullName: dataEmployeeInformation?.fullName,
-    images: dataEmployeeInformation?.picture !== null ? dataEmployeeInformation?.picture : '',
+    images: ifThenElse(dataEmployeeInformation?.picture !== null, dataEmployeeInformation?.picture, ''),
     isPermanent: dataEmployeeInformation?.isPermanent,
     isSelfService: dataEmployeeInformation?.isSelfService,
     nickname: dataEmployeeInformation?.nickname,
     phoneNumber: phoneNumber,
     phoneNumberPrefix: phoneNumberPrefix,
-    picture: dataEmployeeInformation?.picture !== null ? dataEmployeeInformation?.picture : [],
+    picture: [],
     position: dataEmployeeInformation?.position,
-    startDate: dataEmployeeInformation?.startDate !== null ? dayjs(dataEmployeeInformation?.startDate).format('YYYY/MM/DD') : null
+    startDate: ifThenElse(dataEmployeeInformation?.startDate !== null, dayjs(dataEmployeeInformation?.startDate).format('YYYY/MM/DD'), null)
   });
   const [personalInformationValue, setPersonalInformationValue] = useState<Employees.PersonalValues>({
-    dateofBirthPersonalInformation: dataPersonalInformation?.personal?.dateOfBirth !== null ? dayjs(dataPersonalInformation?.personal?.dateOfBirth).format('YYYY/MM/DD') : null,
+    dateofBirthPersonalInformation: ifThenElse(dataPersonalInformation?.personal?.dateOfBirth !== null, dayjs(dataPersonalInformation?.personal?.dateOfBirth).format('YYYY/MM/DD'), null),
     genderPersonalInformation: dataPersonalInformation?.personal?.gender,
     maritialStatusPersonalInformation: dataPersonalInformation?.personal?.maritalStatus,
     numberOfDependantsPersonalInformation: dataPersonalInformation?.personal?.numberOfChildren,
@@ -156,6 +162,18 @@ function EmployeeEditComponent() {
     idNumberPersonalID: dataPersonalInformation?.identity?.number,
     idTypePersonalID: dataPersonalInformation?.identity?.type
   });
+  const [emergencyValue, setEmergencyValue] = useState<Employees.EmergencyContactPatchValues>({
+    primaryId: dataEmergencyContact?.primary?.id,
+    secondaryId: dataEmergencyContact?.secondary?.id,
+    fullNamePrimary: dataEmergencyContact?.primary?.name,
+    relationPrimary: dataEmergencyContact?.primary?.relationship,
+    phoneNumberPrefixPrimary: dataEmergencyContact?.primary?.phoneNumberPrefix,
+    phoneNumberPrimary: dataEmergencyContact?.primary?.phoneNumber,
+    fullNameSecondary: dataEmergencyContact?.secondary?.name,
+    relationSecondary: dataEmergencyContact?.secondary?.relationship,
+    phoneNumberPrefixSecondary: dataEmergencyContact?.secondary?.phoneNumberPrefix,
+    phoneNumberSecondary: dataEmergencyContact?.secondary?.phoneNumber
+  });
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
@@ -173,7 +191,7 @@ function EmployeeEditComponent() {
   const handleClick = async () => {
     const inputData = new FormData();
     inputData.append('companyID', getCompanyData()?.id as string);
-    if (informationValue.picture && (informationValue.picture as []).length > 0) {
+    if ((informationValue.picture as []).length > 0) {
       inputData.append('picture', (informationValue.picture as unknown as File)[0]);
     }
     inputData.append('fullName', informationValue.fullName);
@@ -183,14 +201,28 @@ function EmployeeEditComponent() {
     inputData.append('email', informationValue.email);
     inputData.append('startDate', dayjs(informationValue.startDate).format('YYYY-MM-DD'));
     inputData.append('endDate', dayjs(informationValue.endDate).format('YYYY-MM-DD'));
-    inputData.append('isPermanent', informationValue.isPermanent ? 'true' : 'false');
+    inputData.append('isPermanent', ifThenElse(informationValue.isPermanent, 'true', 'false'));
     if (informationValue.department !== '') {
       inputData.append('department', informationValue.department);
     }
     if (informationValue.position !== '') {
       inputData.append('position', informationValue.position);
     }
-    inputData.append('isSelfService', informationValue.isSelfService ? 'true' : 'false');
+    inputData.append('isSelfService', ifThenElse(informationValue.isSelfService, 'true', 'false'));
+
+    dispatch({
+      type: patchEmployeeInformationRequested.toString(),
+      payload: {
+        employeeInformationPatch: {
+          employeeID: router.query.id,
+          information: inputData
+        },
+        emergencyContactPatch : {
+          employeeID: router.query.id,
+          emergency: emergencyValue
+        }
+      }
+    });
   };
 
   return (
@@ -241,7 +273,13 @@ function EmployeeEditComponent() {
             />
           </TabPanel>
           <TabPanel value={value} index={2}>
-            <EmergencyContactEdit nextTab={handleNext} />
+            <EmergencyContactEdit
+              nextPage={handleNext}
+              refProp={emergencyRef}
+              setValues={setEmergencyValue}
+              emergencyValues={emergencyValue}
+              setIsEmergencyValid={setIsEmergencyValid}
+            />
           </TabPanel>
           <TabPanel value={value} index={3}>
             on Development

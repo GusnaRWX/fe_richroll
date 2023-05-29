@@ -12,7 +12,7 @@ import {
 import { styled } from '@mui/material/styles';
 import Image from 'next/image';
 import { Image as ImageType } from '@/utils/assetsConstant';
-import LocalizationMenu from '@/components/_shared/_core/localization/Index';
+import LocalizationMenu from '@/components/_shared/_core/localization/LocalizationMenu';
 
 
 const WrapperAuth = styled(Box)<BoxProps>(({ theme }) => ({

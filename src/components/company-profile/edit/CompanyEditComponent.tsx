@@ -15,7 +15,7 @@ import CompanyBankForm from './CompanyProfileBankForm';
 import { useAppDispatch } from '@/hooks/index';
 import { patchCompanyProfileRequested } from '@/store/reducers/slice/company/companySlice';
 import { useRouter } from 'next/router';
-import { getCompanyData } from '@/utils/helper';
+import { getCompanyData, ifEmptyReplace, ifThenElse } from '@/utils/helper';
 import { useFormik } from 'formik';
 import { validationSchemeCompanyProfile } from './validate';
 import {
@@ -71,22 +71,6 @@ function a11yProps(index: number) {
   };
 }
 
-function ifEmptyReplace(check, replace) {
-  if (!check || !check.length) {
-    return replace;
-  } else {
-    return check;
-  }
-}
-
-function ifThen(check, isTrue, isFalse) {
-  if (!check) {
-    return isFalse;
-  } else {
-    return isTrue;
-  }
-}
-
 const CompanyEditComponent = ({ detail, companyType, companySector, bank, paymentMethod, countries }: CompanyEdit.Component) => {
   const [tabSelected, setTabSelected] = useState(0);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -129,15 +113,15 @@ const CompanyEditComponent = ({ detail, companyType, companySector, bank, paymen
       isMonthly: !!detail?.payroll?.monthly,
       isWeekly: !!detail?.payroll?.weekly,
       isBiWeekly: !!detail?.payroll?.biWeekly,
-      monthlyPeriodStart: ifThen(!!detail?.payroll?.monthly, detail?.payroll?.monthly?.periodStart, ''),
-      monthlyPeriodEnd: ifThen(!!detail?.payroll?.monthly, detail?.payroll?.monthly?.periodEnd, ''),
-      monthlyPayrollDate: ifThen(!!detail?.payroll?.monthly, detail?.payroll?.monthly?.payrollDate, ''),
-      monthlyMethod: ifThen(!!detail?.payroll?.monthly, detail?.payroll?.monthly?.method?.id, ''),
-      weeklyPeriod: ifThen(!!detail?.payroll?.weekly, detail?.payroll?.weekly?.period, ''),
-      weeklyMethod: ifThen(!!detail?.payroll?.weekly, detail?.payroll?.weekly?.method?.id, ''),
-      biWeeklyPeriod: ifThen(!!detail?.payroll?.biWeekly, detail?.payroll?.biWeekly?.period, ''),
-      biWeeklyPeriodWeek: ifThen(!!detail?.payroll?.biWeekly, detail?.payroll?.biWeekly?.periodWeek, ''),
-      biWeeklyMethod: ifThen(!!detail?.payroll?.biWeekly, detail?.payroll?.biWeekly?.method?.id, '')
+      monthlyPeriodStart: ifThenElse(!!detail?.payroll?.monthly, detail?.payroll?.monthly?.periodStart, ''),
+      monthlyPeriodEnd: ifThenElse(!!detail?.payroll?.monthly, detail?.payroll?.monthly?.periodEnd, ''),
+      monthlyPayrollDate: ifThenElse(!!detail?.payroll?.monthly, detail?.payroll?.monthly?.payrollDate, ''),
+      monthlyMethod: ifThenElse(!!detail?.payroll?.monthly, detail?.payroll?.monthly?.method?.id, ''),
+      weeklyPeriod: ifThenElse(!!detail?.payroll?.weekly, detail?.payroll?.weekly?.period, ''),
+      weeklyMethod: ifThenElse(!!detail?.payroll?.weekly, detail?.payroll?.weekly?.method?.id, ''),
+      biWeeklyPeriod: ifThenElse(!!detail?.payroll?.biWeekly, detail?.payroll?.biWeekly?.period, ''),
+      biWeeklyPeriodWeek: ifThenElse(!!detail?.payroll?.biWeekly, detail?.payroll?.biWeekly?.periodWeek, ''),
+      biWeeklyMethod: ifThenElse(!!detail?.payroll?.biWeekly, detail?.payroll?.biWeekly?.method?.id, '')
     } as Company.Detail,
     validationSchema: validationSchemeCompanyProfile,
     onSubmit: (values) => {
@@ -202,7 +186,7 @@ const CompanyEditComponent = ({ detail, companyType, companySector, bank, paymen
     }
 
     const inputData = new FormData();
-    inputData.append('picture', ifThen(val?.picture?.length, val?.picture[0], detail?.information?.imageUrl));
+    inputData.append('picture', ifThenElse(val?.picture?.length, val?.picture[0], detail?.information?.imageUrl));
     inputData.append('information', JSON.stringify(informationData));
     inputData.append('address', JSON.stringify(addressData));
     inputData.append('bank', JSON.stringify(bankData));

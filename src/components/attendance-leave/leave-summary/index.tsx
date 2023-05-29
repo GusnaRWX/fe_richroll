@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from "react";
 import {
   Typography,
@@ -15,7 +16,7 @@ import { Search } from "@mui/icons-material";
 import { useRouter } from "next/router";
 import BasicDatePicker from "@/components/_shared/form/DatePicker";
 import styled from "@emotion/styled";
-import LeaveSummaryTable from "./table";
+import LeaveSummaryTable from "./LeaveSummaryTable";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -58,6 +59,7 @@ const AttendanceAndLeaveComponent = () => {
     margin-bottom: 24px;
   `;
 
+  // eslint-disable-next-line no-unused-vars
   const [search, setSearch] = useState("");
   const handleSearch = (e) => {
     if (e.key === "Enter") {

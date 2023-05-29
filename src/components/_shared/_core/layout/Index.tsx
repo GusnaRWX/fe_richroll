@@ -1,6 +1,6 @@
 import { Box, Container, List, Toolbar, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import Appbar from '@/components/_shared/_core/appbar/Index';
+import Appbar from '@/components/_shared/_core/appbar/Appbar';
 import DrawerCore from '@/components/_shared/_core/drawer/Index';
 import { Menus } from '@/components/_shared/_core/drawer/menu';
 import { BoxProps } from '@mui/system';

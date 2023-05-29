@@ -3,7 +3,7 @@ import { AppBar, Toolbar, Box, Card, Grid, InputAdornment, IconButton } from '@m
 import Image from 'next/image';
 import { Image as ImageType, Icons } from '@/utils/assetsConstant';
 import { styled } from '@mui/material/styles';
-import LocalizationMenu from '@/components/_shared/_core/localization/Index';
+import LocalizationMenu from '@/components/_shared/_core/localization/LocalizationMenu';
 import { Text } from '@/components/_shared/common/';
 import { Button, Input } from '@/components/_shared/form';
 import { useForm, useAppDispatch, useAppSelectors } from '@/hooks/index';
@@ -12,6 +12,7 @@ import { signIn } from 'next-auth/react';
 import { AuthEmployee } from '@/types/component';
 import { employeeSetNewPasswordRequested } from '@/store/reducers/slice/auth/loginSlice';
 import Notify from '../_shared/common/Notify';
+import { ifThenElse } from '@/utils/helper';
 
 const WrapperNavbarContent = styled(Toolbar)(() => ({
   display: 'flex',
@@ -117,13 +118,13 @@ const SetNewPasswordComponent = ({
       temp.newPassword = fieldOfValues.newPassword ? '' : 'This field is required';
 
     if ('repeatNewPassword' in fieldOfValues)
-      temp.repeatNewPassword = fieldOfValues.repeatNewPassword
-        ? (
-          fieldOfValues.repeatNewPassword === values.newPassword
-            ? ''
-            : 'Repeat new password should match with new password'
+      temp.repeatNewPassword = ifThenElse(fieldOfValues.repeatNewPassword
+        , (
+          ifThenElse(fieldOfValues.repeatNewPassword === values.newPassword
+            , ''
+            , 'Repeat new password should match with new password')
         )
-        : 'This field is required';
+        ,'This field is required');
 
     setErrors({
       ...temp

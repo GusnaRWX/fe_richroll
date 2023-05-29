@@ -26,12 +26,13 @@ import { useAppSelectors } from '@/hooks/index';
 import { Input, Button } from '../_shared/form';
 import Link from 'next/link';
 import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
-import LocalizationMenu from '../_shared/_core/localization/Index';
+import LocalizationMenu from '../_shared/_core/localization/LocalizationMenu';
 import { signIn } from 'next-auth/react';
 import { Alert, OverlayLoading, Text } from '../_shared/common';
 import { useFormik } from 'formik';
 import { validationSchemeRegister } from './validate';
 import Notify from '../_shared/common/Notify';
+import { compareCheck, ifThenElse } from '@/utils/helper';
 
 const NavHead = styled.div`
  height: 64px;
@@ -165,8 +166,8 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
                   name='email'
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  error={formik.touched.email && Boolean(formik.errors.email)}
-                  helperText={formik.touched.email && formik.errors.email}
+                  error={compareCheck(formik.touched.email, Boolean(formik.errors.email))}
+                  helperText={ifThenElse(formik.touched.email, formik.errors.email, '')}
                   customLabel='Email Address'
                   withAsterisk={true}
                   size='small'
@@ -179,14 +180,14 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
                   name='password'
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  error={formik.touched.password && Boolean(formik.errors.password)}
-                  helperText={formik.touched.password && formik.errors.password}
+                  error={compareCheck(formik.touched.password, Boolean(formik.errors.password))}
+                  helperText={ifThenElse(formik.touched.password, formik.errors.password, '')}
                   customLabel='Password'
                   withAsterisk
                   size='small'
                   value={formik.values.password}
                   placeholder='Input Password'
-                  type={openPassword ? 'text' : 'password'}
+                  type={ifThenElse(openPassword, 'text', 'password')}
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position='end'>
@@ -207,8 +208,8 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
                   name='name'
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  error={formik.touched.name && Boolean(formik.errors.name)}
-                  helperText={formik.touched.name && formik.errors.name}
+                  error={compareCheck(formik.touched.name, Boolean(formik.errors.name))}
+                  helperText={ifThenElse(formik.touched.name, formik.errors.name, '')}
                   customLabel='Full Name'
                   withAsterisk={true}
                   size='small'
@@ -216,7 +217,7 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
                 />
               </Grid>
               <Grid item xs={6} md={6} lg={6} xl={6}>
-                <FormControl fullWidth error={formik.touched.countryID && Boolean(formik.errors.countryID)}>
+                <FormControl fullWidth error={compareCheck(formik.touched.countryID, Boolean(formik.errors.countryID))}>
                   <Typography mb='.35rem'>Country<AsteriskComponent>*</AsteriskComponent></Typography>
                   <Select
                     fullWidth
@@ -242,7 +243,7 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
                       <MenuItem key={item.label} value={item.value}>{item.label}</MenuItem>
                     ))}
                   </Select>
-                  <FormHelperText>{formik.touched.countryID && formik.errors.countryID}</FormHelperText>
+                  <FormHelperText>{ifThenElse(formik.touched.countryID, formik.errors.countryID, '')}</FormHelperText>
                 </FormControl>
               </Grid>
               <Grid item xs={12} md={12} lg={12} xl={12}>
@@ -250,8 +251,8 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
                   name='companyName'
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  error={formik.touched.companyName && Boolean(formik.errors.companyName)}
-                  helperText={formik.touched.companyName && formik.errors.companyName}
+                  error={compareCheck(formik.touched.companyName, Boolean(formik.errors.companyName))}
+                  helperText={ifThenElse(formik.touched.companyName, formik.errors.companyName, '')}
                   placeholder='Input Company Name'
                   withAsterisk={true}
                   size='small'
@@ -260,8 +261,8 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
                 />
               </Grid>
               <Grid item xs={6} md={6} lg={6} xl={6}>
-                <FormControl fullWidth error={formik.touched.numberOfEmployees && Boolean(formik.errors.numberOfEmployees)}>
-                  <Typography>Employees<AsteriskComponent>*</AsteriskComponent></Typography>
+                <FormControl fullWidth error={compareCheck(formik.touched.numberOfEmployees, Boolean(formik.errors.numberOfEmployees))}>
+                  <Typography>Number of Employees<AsteriskComponent>*</AsteriskComponent></Typography>
                   <Select
                     fullWidth
                     variant='outlined'
@@ -277,11 +278,11 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
                       ))
                     }
                   </Select>
-                  <FormHelperText>{formik.touched.numberOfEmployees && formik.errors.numberOfEmployees}</FormHelperText>
+                  <FormHelperText>{ifThenElse(formik.touched.numberOfEmployees, formik.errors.numberOfEmployees, '')}</FormHelperText>
                 </FormControl>
               </Grid>
               <Grid item xs={6} md={6} lg={6} xl={6}>
-                <Typography>Phone Number<AsteriskComponent>*</AsteriskComponent></Typography>
+                <Typography>Contact Number<AsteriskComponent>*</AsteriskComponent></Typography>
                 <Grid container spacing={2}>
                   <Grid item xs={1} sm={3} md={3} lg={3} xl={3}>
                     <Select
@@ -311,8 +312,8 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                       value={formik.values.phoneNumber}
-                      error={formik.touched.phoneNumber && Boolean(formik.errors.phoneNumber)}
-                      helperText={formik.touched.phoneNumber && formik.errors.phoneNumber}
+                      error={compareCheck(formik.touched.phoneNumber, Boolean(formik.errors.phoneNumber))}
+                      helperText={ifThenElse(formik.touched.phoneNumber, formik.errors.phoneNumber, '')}
                       withAsterisk={true}
                       size='small'
                       placeholder='Input Contact Number'
@@ -323,7 +324,7 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
             </Grid>
             <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'start' }}>
               <FormControlLabel
-                sx={{ marginTop: '.5rem', marginBottom: '.5rem' }}
+                sx={{ marginTop: '.5rem', marginBottom: '.5rem', mr: '0px' }}
                 value={true}
                 label=''
                 control={
@@ -332,12 +333,19 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
                 labelPlacement='end'
               />
               <Typography color='grey.400' textAlign='center'>
-                I have read and agree to the &nbsp;
-                <Link href='/' style={{ textDecoration: 'none' }}>
+                I have read and agree to the
+                <Link href='/' style={{ textDecoration: 'none', marginLeft: '5px', marginRight: '5px' }}>
                   <Typography component='span' color='primary.main' fontWeight={500}>
-                    term of service
+                    Terms of Service
                   </Typography>
                 </Link>
+                and
+                <Link href='/' style={{ textDecoration: 'none', marginLeft: '5px' }}>
+                  <Typography component='span' color='primary.main' fontWeight={500}>
+                    Privacy Policy
+                  </Typography>
+                </Link>
+                .
               </Typography>
             </Box>
             <Stack>
@@ -350,7 +358,7 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
               />
             </Stack>
             <Box component='div' mt='17px'>
-              <Typography color='grey.400' textAlign='center'>You can also Register using</Typography>
+              <Typography color='grey.400' textAlign='center'>You can also register using</Typography>
               <WrapperSSO component='div'>
                 <Image
                   src={Icons.SSO_GOOGLE}
@@ -376,7 +384,7 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
                     color='primary.main'
                     fontWeight={500}
                   >
-                    Log in Now
+                    Login Now
                   </Typography>
                 </Link>
               </Typography>

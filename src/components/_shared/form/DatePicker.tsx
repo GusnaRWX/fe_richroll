@@ -1,10 +1,10 @@
-import * as React from "react";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker, DatePickerProps } from "@mui/x-date-pickers/DatePicker";
-import { FormHelperText, Typography, styled } from "@mui/material";
+import * as React from 'react';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker as CommonDatePicker, DatePickerProps } from '@mui/x-date-pickers/DatePicker';
+import { FormHelperText, Typography, styled } from '@mui/material';
 
-const AsteriskComponent = styled("span")(({ theme }) => ({
+const AsteriskComponent = styled('span')(({ theme }) => ({
   color: theme.palette.error.main,
 }));
 
@@ -16,7 +16,7 @@ type DatePickerType = DatePickerProps<Date> & {
   error?: string;
 };
 
-const BasicDatePicker = ({
+const DatePicker = ({
   customLabel,
   onChange,
   value,
@@ -27,31 +27,31 @@ const BasicDatePicker = ({
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       {customLabel !== undefined && (
-        <Typography mb="6px">
-          {customLabel}{" "}
+        <Typography mb='6px'>
+          {customLabel}{' '}
           {withAsterisk && <AsteriskComponent>*</AsteriskComponent>}
         </Typography>
       )}
-      <DatePicker
-        format="DD/MM/YYYY"
+      <CommonDatePicker
+        format='DD/MM/YYYY'
         value={value}
         onChange={onChange}
         {...props}
         sx={{
-          "& .MuiOutlinedInput-input": {
-            padding: "10px 14px",
-            border: "none !important",
+          '& .MuiOutlinedInput-input': {
+            padding: '10px 14px',
+            border: 'none !important',
           },
-          width: "100%",
-          border: error ? "1px solid #EF4444" : "",
-          borderRadius: "5px",
+          width: '100%',
+          border: error ? '1px solid #EF4444' : '',
+          borderRadius: '5px',
         }}
       />
       {error && (
-        <FormHelperText sx={{ color: "#EF4444" }}>{error}</FormHelperText>
+        <FormHelperText sx={{ color: '#EF4444' }}>{error}</FormHelperText>
       )}
     </LocalizationProvider>
   );
 };
 
-export default BasicDatePicker;
+export default DatePicker;

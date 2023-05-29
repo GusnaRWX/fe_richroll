@@ -11,6 +11,7 @@ import { useAppDispatch } from '@/hooks/index';
 import dayjs from 'dayjs';
 import { postEmployeeInfoRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
 import { base64ToFile, getCompanyData } from '@/utils/helper';
+import { resetResponserMessage } from '@/store/reducers/slice/responserSlice';
 
 const EmployeeInformationFormClient = dynamic(() => import('./EmployeeInformationForm'), {
   ssr: false
@@ -117,7 +118,7 @@ function EmployeeCreateComponent() {
     startDate: ''
   });
   const [emergencyValue, setEmergencyValue] = useState<Employees.EmergencyContactValues>({
-    employeeID: '',
+    // employeeID: '',
     fullNamePrimary: '',
     relationPrimary: '',
     phoneNumberPrefixPrimary: '',
@@ -164,6 +165,9 @@ function EmployeeCreateComponent() {
     idNumberPersonalID: '',
     idTypePersonalID: ''
   });
+
+  const [cnbEmployeeValues, setCnbEmployeeValues] = useState();
+  console.log(cnbEmployeeValues);
   const [isInformationValid, setIsInformationValid] = useState(false);
   const [isPersonalInformationValid, setIsPersonalInformationValid] = useState(false);
   const [isEmergencyValid, setIsEmergencyValid] = useState(false);
@@ -176,7 +180,7 @@ function EmployeeCreateComponent() {
     const inputData = new FormData();
     inputData.append('companyID', getCompanyData()?.id as string);
     if ((informationValue.picture as []).length > 0 || convertToBase64) {
-      inputData.append('picture', (informationValue.picture as unknown as File)[0] || convertToBase64);
+      inputData.append('picture', (informationValue.picture as File)[0] || convertToBase64);
     }
     inputData.append('fullName', informationValue.fullName);
     inputData.append('nickname', informationValue.nickname);
@@ -184,7 +188,9 @@ function EmployeeCreateComponent() {
     inputData.append('phoneNumber', informationValue.phoneNumber);
     inputData.append('email', informationValue.email);
     inputData.append('startDate', dayjs(informationValue.startDate).format('YYYY-MM-DD'));
-    inputData.append('endDate', dayjs(informationValue.endDate).isValid() ? dayjs(informationValue.endDate).format('YYYY-MM-DD') : dayjs().set('dates', 12).set('months', 12).set('years', 2975).format('YYYY-MM-DD'));
+    if (!informationValue.isPermanent) {
+      inputData.append('endDate', dayjs(informationValue.endDate).format('YYYY-MM-DD'));
+    }
     inputData.append('isPermanent', informationValue.isPermanent ? 'true' : 'false');
     if (informationValue.department !== '') {
       inputData.append('department', informationValue.department);
@@ -197,10 +203,15 @@ function EmployeeCreateComponent() {
 
     dispatch({
       type: postEmployeeInfoRequested.toString(),
-      payload: { employeeInformation: inputData, isPersonalInformationValid, personalValue: personalInformationValue, isEmergencyValid, emergencyContactValue: emergencyValue }
+      payload: {
+        employeeInformation: inputData,
+        isPersonalInformationValid,
+        personalValue: personalInformationValue,
+        isEmergencyValid,
+        emergencyContactValue: emergencyValue,
+        cnbValue: cnbEmployeeValues
+      }
     });
-
-
   };
 
   const handleOpen = () => {
@@ -274,7 +285,10 @@ function EmployeeCreateComponent() {
               setIsEmergencyValid={setIsEmergencyValid} />
           </TabPanel>
           <TabPanel value={value} index={3}>
-            <CnbCreateForm />
+            <CnbCreateForm
+              cnbValues={cnbEmployeeValues}
+              setValues={setCnbEmployeeValues}
+            />
           </TabPanel>
           <TabPanel value={value} index={4}>
             <WorkScheduleCreateForm />
@@ -289,6 +303,9 @@ function EmployeeCreateComponent() {
         withCallback
         callback={() => {
           router.push('/company-management/employees');
+          dispatch({
+            type: resetResponserMessage.toString()
+          });
         }}
       />
     </>

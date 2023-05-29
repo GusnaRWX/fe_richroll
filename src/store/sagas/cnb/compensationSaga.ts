@@ -4,6 +4,8 @@ import {
   getCompensationComponentOption,
   postNewCnbProfile,
   deleteCnbProfile,
+  getDetailCnb,
+  putCnbProfile,
 } from '../saga-actions/cnb/compensationActions';
 import { call, put, takeEvery, delay } from 'redux-saga/effects';
 import {
@@ -19,6 +21,12 @@ import {
   deleteCompensationRequested,
   deleteCompensationSuccess,
   deleteCompensationFailed,
+  getDetailRequested,
+  getDetailSuccess,
+  getDetailFailed,
+  putUpdateRequested,
+  putUpdateSuccess,
+  putUpdateFailed,
 } from '@/store/reducers/slice/cnb/compensationSlice';
 import { setResponserMessage } from '@/store/reducers/slice/responserSlice';
 import { Services } from '@/types/axios';
@@ -68,6 +76,34 @@ function* fetchGetCompensationComponentOption() {
     if (err instanceof AxiosError) {
       const errorMessage = err?.response?.data as Services.ErrorResponse;
       yield put({ type: getCompensationComponentOptionFailed.toString() });
+      yield delay(2000, true);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message,
+        },
+      });
+    }
+  }
+}
+
+// Get Detail CnB
+function* fetchCompensationDetail(action: AnyAction) {
+  try {
+    const res: AxiosResponse = yield call(getDetailCnb, action?.Id);
+    if (res.status === 200) {
+      yield put({
+        type: getDetailSuccess.toString(),
+        payload: {
+          data: res.data.data,
+        },
+      });
+    }
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      yield put({ type: getDetailFailed.toString() });
       yield delay(2000, true);
       yield put({
         type: setResponserMessage.toString(),
@@ -137,7 +173,40 @@ function* fetchPostNewCnbProfile(action: AnyAction) {
   }
 }
 
-function* cnbSaga() {
+function* patchCnbProfile(action: AnyAction) {
+  try {
+    const res: AxiosResponse = yield call(
+      putCnbProfile,
+      action?.Payload,
+      action?.Id
+    );
+    if (res.status === 200) {
+      yield put({
+        type: putUpdateSuccess.toString(),
+        payload: {
+          data: res.data.data,
+        },
+      });
+      yield Router.push('/compensation-benefits');
+      yield delay(1000);
+    }
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      yield put({ type: putUpdateFailed.toString() });
+      yield delay(2000, true);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message,
+        },
+      });
+    }
+  }
+}
+
+function* compensationSaga() {
   yield takeEvery(getTableRequested.toString(), fetchGetTable);
   yield takeEvery(
     getCompensationComponentOptionRequested.toString(),
@@ -148,6 +217,8 @@ function* cnbSaga() {
     fetchPostNewCnbProfile
   );
   yield takeEvery(deleteCompensationRequested.toString(), deleteCnb);
+  yield takeEvery(getDetailRequested.toString(), fetchCompensationDetail);
+  yield takeEvery(putUpdateRequested.toString(), patchCnbProfile);
 }
 
-export default cnbSaga;
+export default compensationSaga;

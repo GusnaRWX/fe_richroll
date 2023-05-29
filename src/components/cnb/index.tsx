@@ -1,5 +1,5 @@
 import React from 'react';
-import EnhancedTable from './table';
+import EnhancedTable from './EnhancedTable';
 import { Typography, Skeleton } from '@mui/material';
 import styled from '@emotion/styled';
 import { Button } from '../_shared/form';
@@ -15,9 +15,7 @@ const CNBComponent = () => {
   const dataTable = useAppSelectors(
     (state) => state.compensation?.dataTable?.data
   );
-  const loading = useAppSelectors(
-    (state) => state.compensation?.loading
-  );
+  const loading = useAppSelectors((state) => state.compensation?.loading);
   const rerender = useAppSelectors((state) => state.compensation.rerender);
   const router = useRouter();
   const TitleWrapper = styled.div`
@@ -33,7 +31,7 @@ const CNBComponent = () => {
       payload: companyData?.id,
     });
   }, [rerender]);
-  
+
   return (
     <>
       <TitleWrapper>
@@ -46,11 +44,11 @@ const CNBComponent = () => {
           />
         </div>
       </TitleWrapper>
-      {!loading ? 
+      {!loading ? (
         <EnhancedTable rows={dataTable} />
-        :
+      ) : (
         <Skeleton variant='rounded' height={100} />
-      }
+      )}
     </>
   );
 };

@@ -2,6 +2,8 @@ import React from 'react';
 import { Text } from '@/components/_shared/common';
 import { Grid, Typography } from '@mui/material';
 import dayjs from 'dayjs';
+import { ifThenElse } from '@/utils/helper';
+import { getGender, getMaritalStatus, getReligion } from '@/utils/helper';
 
 interface PersonalInformationDetailProps {
   data: {
@@ -64,7 +66,6 @@ interface PersonalInformationDetailProps {
 }
 
 const EmployeePersonalInformationDetail = ({data}: PersonalInformationDetailProps) => {
-  console.log(data);
   return (
     <>
       <Grid
@@ -114,7 +115,7 @@ const EmployeePersonalInformationDetail = ({data}: PersonalInformationDetailProp
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            {data?.personal?.gender}
+            {getGender(data?.personal?.gender)}
           </Typography>
         </Grid>
         <Grid
@@ -130,7 +131,7 @@ const EmployeePersonalInformationDetail = ({data}: PersonalInformationDetailProp
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            {data?.personal?.maritalStatus}
+            {getMaritalStatus(data?.personal?.maritalStatus)}
           </Typography>
         </Grid>
         <Grid
@@ -178,7 +179,7 @@ const EmployeePersonalInformationDetail = ({data}: PersonalInformationDetailProp
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            {data?.personal?.religion}
+            {getReligion(data?.personal?.religion)}
           </Typography>
         </Grid>
       </Grid>
@@ -441,11 +442,11 @@ const EmployeePersonalInformationDetail = ({data}: PersonalInformationDetailProp
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            {data.identity.type === 0 ? 'KTP' : (
-              data.identity.type === 1 ? 'Nomor wajib pajak' : (
-                data.identity.type === 2 ? 'Passport' : '-'
-              )
-            )}
+            {ifThenElse(data.identity.type === 0, 'KTP', (
+              ifThenElse(data.identity.type === 1, 'Nomor wajib pajak', (
+                ifThenElse(data.identity.type === 2, 'Passport', '-')
+              ))
+            ))}
           </Typography>
         </Grid>
         <Grid
@@ -477,7 +478,7 @@ const EmployeePersonalInformationDetail = ({data}: PersonalInformationDetailProp
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            {data.identity.expiredAt === null ? '-' : dayjs(data.identity.expiredAt).format('YYYY/MM/DD')}
+            {ifThenElse(data.identity.expiredAt === null, '-', dayjs(data.identity.expiredAt).format('YYYY/MM/DD'))}
           </Typography>
         </Grid>
       </Grid>

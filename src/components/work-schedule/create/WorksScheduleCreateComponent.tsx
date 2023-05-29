@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import styled from '@emotion/styled';
+import dynamic from 'next/dynamic';
 import { Card, Typography, Button as MuiButton, Tab, Tabs, Box } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import { IconButton } from '@/components/_shared/form';
-import WorkScheduleCreateForm from './WorkScheduleCreateForm';
 import ConfirmationModal from '@/components/_shared/common/ConfirmationModal';
+
+const WorkScheduleCreateForm = dynamic(() => import('./WorkScheduleCreateForm'), {
+  ssr: false
+});
 
 const TopWrapper = styled.div`
  display: flex;

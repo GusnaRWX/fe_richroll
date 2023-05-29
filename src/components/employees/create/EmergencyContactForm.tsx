@@ -23,11 +23,11 @@ interface EmergencyProps {
 }
 
 function EmergencyContactForm({ refProp, nextPage, setValues, emergencyValues, setIsEmergencyValid }: EmergencyProps) {
-  const { employeeID } = useAppSelectors((state) => state.employee);
-
+  // const { employeeID } = useAppSelectors((state) => state.employee);
+  const { responser } = useAppSelectors(state => state);
   const formik = useFormik({
     initialValues: {
-      employeeID: employeeID,
+      // employeeID: employeeID,
       fullNamePrimary: emergencyValues?.fullNamePrimary,
       relationPrimary: emergencyValues?.relationPrimary,
       phoneNumberPrefixPrimary: emergencyValues?.phoneNumberPrefixPrimary,
@@ -40,8 +40,8 @@ function EmergencyContactForm({ refProp, nextPage, setValues, emergencyValues, s
     validationSchema: validationSchemeEmployeeEmergencyContact,
     onSubmit: (values, { setErrors }) => {
       const emergencyLastValue = {
-        ...formik.values,
-        phoneNumberPrimary: String(formik.values.phoneNumberPrefixPrimary)
+        ...values,
+        phoneNumberPrimary: String(formik.values.phoneNumberPrimary)
       };
       setValues(emergencyLastValue);
       nextPage(3);
@@ -62,6 +62,17 @@ function EmergencyContactForm({ refProp, nextPage, setValues, emergencyValues, s
 
   };
 
+  const checkRelationship = (value: unknown) => {
+    if ((value as string).length === 0) {
+      return <Text title='Select Relationship' color='grey.400' />;
+    }
+    const selected = relationshipItems.find(item => item.value === value);
+    if (selected) {
+      return `${selected.label}`;
+    }
+    return null;
+  };
+
   return (
     <>
       {
@@ -69,6 +80,15 @@ function EmergencyContactForm({ refProp, nextPage, setValues, emergencyValues, s
           <Alert
             severity='error'
             content='Please fill in all the mandatory fields'
+            icon={<CancelIcon />}
+          />
+        )
+      }
+      {
+        ![200, 201, 0].includes(responser?.code) && (
+          <Alert
+            severity='error'
+            content={responser?.message}
             icon={<CancelIcon />}
           />
         )
@@ -114,20 +134,13 @@ function EmergencyContactForm({ refProp, nextPage, setValues, emergencyValues, s
                   name='relationPrimary'
                   displayEmpty
                   renderValue={(value: unknown) => {
-                    if ((value as string).length === 0) {
-                      return <Text title='Select Relationship' color='grey.400' />;
-                    }
-                    const selected = relationshipItems.find(item => item.value === value);
-                    if (selected) {
-                      return `${selected.label}`;
-                    }
-                    return null;
+                    return checkRelationship(value);
                   }}
                 >
                   <MenuItem value='1'>Parent</MenuItem>
                   <MenuItem value='2'>Sibling</MenuItem>
                   <MenuItem value='3'>Spouse</MenuItem>
-                  <MenuItem value='4'>Others</MenuItem>
+                  <MenuItem value='0'>Others</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
@@ -205,20 +218,13 @@ function EmergencyContactForm({ refProp, nextPage, setValues, emergencyValues, s
                   name='relationSecondary'
                   displayEmpty
                   renderValue={(value: unknown) => {
-                    if ((value as string).length === 0) {
-                      return <Text title='Select Relationship' color='grey.400' />;
-                    }
-                    const selected = relationshipItems.find(item => item.value === value);
-                    if (selected) {
-                      return `${selected.label}`;
-                    }
-                    return null;
+                    return checkRelationship(value);
                   }}
                 >
                   <MenuItem value='1'>Parent</MenuItem>
                   <MenuItem value='2'>Sibling</MenuItem>
                   <MenuItem value='3'>Spouse</MenuItem>
-                  <MenuItem value='4'>Others</MenuItem>
+                  <MenuItem value='0'>Others</MenuItem>
                 </Select>
               </FormControl>
             </Grid>

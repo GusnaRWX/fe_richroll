@@ -14,7 +14,7 @@ import { styled as MuiStyled } from '@mui/material/styles';
 import { Image as ImageType } from '@/utils/assetsConstant';
 import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
-import { convertImageParams } from '@/utils/helper';
+import { convertImageParams, ifThenElse, compareCheck } from '@/utils/helper';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import {
   administrativeFirstLevelRequested,
@@ -61,18 +61,6 @@ interface CompanyInfoProps {
   setImages;
 }
 
-function ifThen(check, isTrue, isFalse) {
-  if (!check) {
-    return isFalse;
-  } else {
-    return isTrue;
-  }
-}
-
-function compareCheck(firstArg, secondArg = true, thirdArg = true) {
-  return (firstArg && secondArg && thirdArg);
-}
-
 function CompanyInformationForm ({
   nextPage,
   formik,
@@ -105,7 +93,7 @@ function CompanyInformationForm ({
       <Typography component='h3' fontSize={18} color='primary'>Company Information</Typography>
       <form>
         <Typography variant='text-sm' component='div' color='primary' sx={{ mt: '16px' }}>Company Logo</Typography>
-        <ImageReview image={ifThen(!images, ImageType.PLACEHOLDER, images)} onClick={handleOpen}/>
+        <ImageReview image={ifThenElse(!images, ImageType.PLACEHOLDER, images)} onClick={handleOpen}/>
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <FormControl fullWidth error={compareCheck(formik.touched.companyType, Boolean(formik.errors.companyType))}>
@@ -135,7 +123,7 @@ function CompanyInformationForm ({
                   <MenuItem key={idx} value={val?.['id']}>{val?.['name']}</MenuItem>
                 ))}
               </Select>
-              <FormHelperText>{ifThen(formik.touched.companyType, formik.errors.companyType, '')}</FormHelperText>
+              <FormHelperText>{ifThenElse(formik.touched.companyType, formik.errors.companyType, '')}</FormHelperText>
             </FormControl>
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
@@ -144,7 +132,7 @@ function CompanyInformationForm ({
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               error={compareCheck(formik.touched.companyName, Boolean(formik.errors.companyName))}
-              helperText={ifThen(formik.touched.companyName, formik.errors.companyName, '')}
+              helperText={ifThenElse(formik.touched.companyName, formik.errors.companyName, '')}
               customLabel='Company Company Name'
               withAsterisk={true}
               size='small'
@@ -160,7 +148,7 @@ function CompanyInformationForm ({
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               error={compareCheck(formik.touched.companyNPWP, Boolean(formik.errors.companyNPWP))}
-              helperText={ifThen(formik.touched.companyNPWP, formik.errors.companyNPWP, '')}
+              helperText={ifThenElse(formik.touched.companyNPWP, formik.errors.companyNPWP, '')}
               customLabel='Company Company NPWP'
               withAsterisk={false}
               size='small'
@@ -196,7 +184,7 @@ function CompanyInformationForm ({
                   <MenuItem key={idx} value={val?.['id']}>{val?.['name']}</MenuItem>
                 ))}
               </Select>
-              <FormHelperText>{ifThen(formik.touched.companySector, formik.errors.companySector, '')}</FormHelperText>
+              <FormHelperText>{ifThenElse(formik.touched.companySector, formik.errors.companySector, '')}</FormHelperText>
             </FormControl>
           </Grid>
         </Grid>
@@ -207,7 +195,7 @@ function CompanyInformationForm ({
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               error={compareCheck(formik.touched.companyEmail, Boolean(formik.errors.companyEmail))}
-              helperText={ifThen(formik.touched.companyEmail, formik.errors.companyEmail, '')}
+              helperText={ifThenElse(formik.touched.companyEmail, formik.errors.companyEmail, '')}
               customLabel='Company Email Address'
               withAsterisk={true}
               size='small'
@@ -247,7 +235,7 @@ function CompanyInformationForm ({
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   error={compareCheck(formik.touched.phoneNumber, Boolean(formik.errors.phoneNumber))}
-                  helperText={ifThen(formik.touched.phoneNumber, formik.errors.phoneNumber, '')}
+                  helperText={ifThenElse(formik.touched.phoneNumber, formik.errors.phoneNumber, '')}
                   withAsterisk={true}
                   size='small'
                   value={formik.values.phoneNumber}
@@ -299,7 +287,7 @@ function CompanyInformationForm ({
                   <MenuItem key={item?.['label']} value={item?.['value']}>{item?.['label']}</MenuItem>
                 ))}
               </Select>
-              <FormHelperText>{ifThen(formik.touched.countryCompanyAddress, formik.errors.countryCompanyAddress, '')}</FormHelperText>
+              <FormHelperText>{ifThenElse(formik.touched.countryCompanyAddress, formik.errors.countryCompanyAddress, '')}</FormHelperText>
             </FormControl>
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
@@ -339,7 +327,7 @@ function CompanyInformationForm ({
                   <MenuItem key={item?.['label']} value={item?.['value']}>{item?.['label']}</MenuItem>
                 ))}
               </Select>
-              <FormHelperText>{ifThen(formik.touched.provinceCompanyAddress, formik.errors.provinceCompanyAddress, '')}</FormHelperText>
+              <FormHelperText>{ifThenElse(formik.touched.provinceCompanyAddress, formik.errors.provinceCompanyAddress, '')}</FormHelperText>
             </FormControl>
           </Grid>
         </Grid>
@@ -382,7 +370,7 @@ function CompanyInformationForm ({
                   <MenuItem key={item?.['label']} value={item?.['value']}>{item?.['label']}</MenuItem>
                 ))}
               </Select>
-              <FormHelperText>{ifThen(formik.touched.cityCompanyAddress, formik.errors.cityCompanyAddress, '')}</FormHelperText>
+              <FormHelperText>{ifThenElse(formik.touched.cityCompanyAddress, formik.errors.cityCompanyAddress, '')}</FormHelperText>
             </FormControl>
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
@@ -413,7 +401,7 @@ function CompanyInformationForm ({
                   <MenuItem key={item?.['label']} value={item?.['value']}>{item?.['label']}</MenuItem>
                 ))}
               </Select>
-              <FormHelperText>{ifThen(formik.touched.subDistrictCompanyAddress, formik.errors.subDistrictCompanyAddress, '')}</FormHelperText>
+              <FormHelperText>{ifThenElse(formik.touched.subDistrictCompanyAddress, formik.errors.subDistrictCompanyAddress, '')}</FormHelperText>
             </FormControl>
           </Grid>
         </Grid>
@@ -426,7 +414,7 @@ function CompanyInformationForm ({
               value={formik.values.addressCompanyAddress}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={ifThen(formik.touched.addressCompanyAddress, formik.errors.addressCompanyAddress, false)}
+              error={ifThenElse(formik.touched.addressCompanyAddress, formik.errors.addressCompanyAddress, false)}
               withAsterisk={true}
               customLabel='Street Name, Building Name'
               placeholder='Input Address Details'
@@ -438,7 +426,7 @@ function CompanyInformationForm ({
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               error={compareCheck(formik.touched.zipCodeCompanyAddress, Boolean(formik.errors.zipCodeCompanyAddress))}
-              helperText={ifThen(formik.touched.zipCodeCompanyAddress, formik.errors.zipCodeCompanyAddress, '')}
+              helperText={ifThenElse(formik.touched.zipCodeCompanyAddress, formik.errors.zipCodeCompanyAddress, '')}
               customLabel='ZIP Code'
               withAsterisk={true}
               size='small'

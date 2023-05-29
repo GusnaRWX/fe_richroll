@@ -1,10 +1,10 @@
 import React from 'react';
 import ForgotPasswordContainer from '@/containers/auth/ForgotPasswordContainer';
 
-function index() {
+function ForgotPassword() {
   return (
     <ForgotPasswordContainer />
   );
 }
 
-export default index;
+export default ForgotPassword;
