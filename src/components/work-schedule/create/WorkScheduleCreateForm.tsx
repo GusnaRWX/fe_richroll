@@ -108,7 +108,6 @@ function WorkScheduleCreateForm() {
       setIsCreate(true);
     }
   };
-
   useEffect(() => {
     calendarRef.current?.scheduler.confirmEvent(workSchedule?.events, 'create');
 
@@ -171,7 +170,7 @@ function WorkScheduleCreateForm() {
             placeholder='Input Weekly Net'
             size='small'
             disabled
-            value={workSchedule?.grossNet}
+            value={workSchedule?.netHour}
             type='number'
             InputProps={{
               endAdornment: (
@@ -185,7 +184,7 @@ function WorkScheduleCreateForm() {
       </Grid>
       <Scheduler
         view='week'
-        disableViewNavigator={true}
+        disableViewNavigator={false}
         ref={calendarRef}
         events={[]}
         day={null}
