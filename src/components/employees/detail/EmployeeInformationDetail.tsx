@@ -1,5 +1,5 @@
 import React, { HTMLAttributes } from 'react';
-import { Grid, Typography, Chip  } from '@mui/material';
+import { Grid, Typography, Chip } from '@mui/material';
 import { Image as ImageType } from '@/utils/assetsConstant';
 import styled from '@emotion/styled';
 import { Text } from '@/components/_shared/common';
@@ -12,7 +12,7 @@ interface ImagePriviewProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 const ImageReview = styled.div`
-  background-image: url(${({image}: ImagePriviewProps) => image});
+  background-image: url(${({ image }: ImagePriviewProps) => image});
   background-repeat: no-repeat;
   width: 102px;
   height: 102px;
@@ -47,7 +47,7 @@ interface EmployeeInformationDetailProps {
   }
 }
 
-function EmployeeInformationDetail({data}: EmployeeInformationDetailProps) {
+function EmployeeInformationDetail({ data }: EmployeeInformationDetailProps) {
   return (
     <>
       <Typography component='h3' fontWeight='bold' fontSize={18} color='primary' mb='1rem'>Employee Information</Typography>
@@ -157,9 +157,9 @@ function EmployeeInformationDetail({data}: EmployeeInformationDetailProps) {
           />
           {
             data?.isSelfService === false ? (
-              <Chip label='Disabled' sx={{ backgroundColor: '#E5E7EB', fontWeight: 'bold' }}/>
-            ):(
-              <Chip label='Enabled' sx={{ backgroundColor: '#DCFCE7', color: '#166534', fontWeight: 'bold' }}/>
+              <Chip label='Disabled' sx={{ backgroundColor: '#E5E7EB', fontWeight: 'bold' }} />
+            ) : (
+              <Chip label='Enabled' sx={{ backgroundColor: '#DCFCE7', color: '#166534', fontWeight: 'bold' }} />
             )
           }
         </AdditionalWrapper>
@@ -172,9 +172,9 @@ function EmployeeInformationDetail({data}: EmployeeInformationDetailProps) {
           />
           {
             data?.isPermanent === false ? (
-              <Chip label='Non Active' sx={{ backgroundColor: '#FEE2E2', color: '#166534', fontWeight: 'bold' }}/>
-            ):(
-              <Chip label='Active' sx={{ backgroundColor: '#DCFCE7', color: '#166534', fontWeight: 'bold' }}/>
+              <Chip label='Non Active' sx={{ backgroundColor: '#FEE2E2', color: '#166534', fontWeight: 'bold' }} />
+            ) : (
+              <Chip label='Active' sx={{ backgroundColor: '#DCFCE7', color: '#166534', fontWeight: 'bold' }} />
             )
           }
         </AdditionalWrapper>

@@ -7,7 +7,8 @@ import {
   IconButton,
   Modal,
   Autocomplete,
-  TextField
+  TextField,
+  createFilterOptions
 } from '@mui/material';
 import Webcam from 'react-webcam';
 import { Input, Button, Select as CustomSelect, CheckBox, DatePicker, FileUploadModal } from '@/components/_shared/form';
@@ -22,8 +23,6 @@ import { Employees } from '@/types/employees';
 import { validationSchemeEmployeeInformation } from './validate';
 import { useFormik } from 'formik';
 import { convertImageParams, getCompanyData, base64ToFile, randomCode } from '@/utils/helper';
-// import { getListPositionRequested } from '@/store/reducers/slice/options/optionSlice';
-import { createFilterOptions } from '@mui/material';
 import { Option } from '@/types/option';
 import { BsTrash3 } from 'react-icons/bs';
 import { AiOutlinePlus } from 'react-icons/ai';
@@ -117,11 +116,11 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, set
       handleCloseCamera();
     }
   }, [webcamRef]);
-  // const dispatch = useAppDispatch();
+
   const [open, setOpen] = useState(false);
   const { listDepartment, listPosition } = useAppSelectors(state => state.option);
   const [images, setImages] = useState<string | null>(infoValues?.images);
-  console.log(listPosition);
+
   const { responser } = useAppSelectors(state => state);
 
   const formik = useFormik({
@@ -192,15 +191,13 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, set
   const [mappedListPosition, setMappedListPosition] = useState(listPosition);
 
   const handleDelete = (id: number) => {
-    const temp = [...mappedDepartment];
-    temp.splice(id, 1);
+    const temp = mappedDepartment.filter(item => +item.id !== +id);
     setMappedDepartment(temp);
   };
 
   const handleDeletePosition = (id: number) => {
-    const temp = [...mappedListPosition];
-    temp.slice(id, 1);
-    setMappedDepartment(temp);
+    const temp = mappedListPosition.filter(item => +item.id !== +id);
+    setMappedListPosition(temp);
   };
 
   return (
@@ -425,7 +422,7 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, set
                   }}>
                   <li {...props} style={{ width: '100%' }}>{option.label}</li>
                   {option.label.length > 0 && (
-                    <BsTrash3 style={{ marginRight: '8px' }} onClick={() => {
+                    <BsTrash3 style={{ marginRight: '8px', cursor: 'pointer' }} onClick={() => {
                       handleDelete(option.id);
                     }} />
                   )}
@@ -501,7 +498,7 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, set
                   }}>
                   <li {...props} style={{ width: '100%' }}>{option.label}</li>
                   {option.label.length > 0 && (
-                    <BsTrash3 style={{ marginRight: '8px' }} onClick={() => {
+                    <BsTrash3 style={{ marginRight: '8px', cursor: 'pointer' }} onClick={() => {
                       handleDeletePosition(option.id);
                     }} />
                   )}
