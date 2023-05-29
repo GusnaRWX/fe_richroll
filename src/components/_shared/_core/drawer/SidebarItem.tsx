@@ -35,7 +35,7 @@ const SidebarItem = ({
         <ListItemText primary={title} sx={{ fontSize: '14px', color: 'grey.400' }} />
         {
           hasChild && (
-            open || pathname.split('/')[1].replace('-', ' ') === title.toLocaleLowerCase() ? <HiOutlineChevronUp color='#9CA3AF' /> : <HiOutlineChevronDown color='#9CA3AF' />
+            open || pathname.split('/')[1].replace('-', ' ').replace('& ', '') === title.replace('& ', '').toLowerCase() ? <HiOutlineChevronUp color='#9CA3AF' /> : <HiOutlineChevronDown color='#9CA3AF' />
           )
         }
       </ListItemButton>
@@ -43,7 +43,7 @@ const SidebarItem = ({
         hasChild && (
           <Collapse
             in={
-              open || pathname.split('/')[1].replace('-', ' ') === title.toLowerCase()
+              open || pathname.split('/')[1].replace('-', ' ').replace('& ', '') === title.replace('& ', '').toLowerCase()
             }
           >
             <List

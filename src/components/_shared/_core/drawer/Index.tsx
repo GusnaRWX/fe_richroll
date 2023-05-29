@@ -3,17 +3,17 @@ import { Box, Drawer, DrawerProps } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 export interface CustomDrawerProps extends DrawerProps {
-  drawerWidth: number;
+  drawerwidth: number;
   mobileOpen?: boolean;
   handleDrawerToggle?: () => void;
   drawer?: unknown;
 }
 
-const CustomDrawer = styled(Drawer)<CustomDrawerProps>(({ drawerWidth }) => ({
-  width: drawerWidth,
+const CustomDrawer = styled(Drawer)<CustomDrawerProps>(({ drawerwidth }) => ({
+  width: drawerwidth,
   flexShrink: 0,
   '& .MuiDrawer-paper': {
-    width: drawerWidth,
+    width: drawerwidth,
     boxSizing: 'border-box',
     backgroundColor: '#FFFFFF',
     border: 'none'
@@ -21,7 +21,7 @@ const CustomDrawer = styled(Drawer)<CustomDrawerProps>(({ drawerWidth }) => ({
 }));
 
 const DrawerCore = ({
-  drawerWidth,
+  drawerwidth,
   container,
   mobileOpen,
   drawer,
@@ -32,7 +32,7 @@ const DrawerCore = ({
       component='nav'
       sx={{
         width: {
-          md: drawerWidth
+          md: drawerwidth
         },
         flexShrink: {
           sm: 0
@@ -41,7 +41,7 @@ const DrawerCore = ({
       aria-label='mailbox folders'
     >
       <CustomDrawer
-        drawerWidth={drawerWidth}
+        drawerwidth={drawerwidth}
         variant='temporary'
         container={container}
         open={mobileOpen}
@@ -59,7 +59,7 @@ const DrawerCore = ({
         {drawer as React.ReactNode}
       </CustomDrawer>
       <CustomDrawer
-        drawerWidth={drawerWidth}
+        drawerwidth={drawerwidth}
         variant='permanent'
         sx={{
           display: { xs: 'none', md: 'block' }
