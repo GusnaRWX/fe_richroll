@@ -1,4 +1,4 @@
-import React, { HTMLAttributes, useCallback, useRef, useState } from 'react';
+import React, { HTMLAttributes, useCallback, useEffect, useRef, useState } from 'react';
 import {
   Grid,
   Typography,
@@ -176,17 +176,25 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
     }
   ];
 
-  const handleSubmit = (val, setErrors) => {
-    const allInfoValues = {
-      ...val,
-      images: images
-    };
-    setValues(allInfoValues);
+  const handleSubmit = (_val, setErrors) => {
+    // const allInfoValues = {
+    //   ...val,
+    //   images: images
+    // };
+    // setValues(allInfoValues);
     setIsInformationValid(true);
     handleFirstInformation();
     nextPage(1);
     setErrors({});
   };
+
+  useEffect(() => {
+    const allInfoValues = {
+      ...formik.values,
+      images: String(images)
+    };
+    setValues(allInfoValues);
+  }, [formik.values]);
 
   const filter = createFilterOptions<Option.FreesoloType>();
 

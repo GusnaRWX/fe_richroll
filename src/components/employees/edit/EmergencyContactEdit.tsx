@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Typography, Box, Grid, FormControl, Select, MenuItem } from '@mui/material';
 import { Input, Button } from '@/components/_shared/form';
 import { styled as MuiStyled } from '@mui/material/styles';
@@ -39,17 +39,25 @@ function EmergencyContactEdit({ refProp, nextPage, setValues, emergencyValues, s
     },
     validationSchema: validationSchemeEmployeeEmergencyContact,
     onSubmit: (values, { setErrors }) => {
-      const emergencyLastValue = {
-        ...values,
-        phoneNumberPrimary: String(formik.values.phoneNumberPrimary)
-      };
-      setValues(emergencyLastValue);
+      // const emergencyLastValue = {
+      //   ...values,
+      //   phoneNumberPrimary: String(formik.values.phoneNumberPrimary)
+      // };
+      // setValues(emergencyLastValue);
       setIsEmergencyValid(true);
       handleThirdEmergency();
       nextPage(3);
       setErrors({});
     }
   });
+
+  useEffect(() => {
+    const emergencyLastValue = {
+      ...formik.values,
+      phoneNumberPrimary: String(formik.values.phoneNumberPrimary)
+    };
+    setValues(emergencyLastValue);
+  }, [formik.values]);
 
   const handleBack = (e) => {
     e.preventDefault();

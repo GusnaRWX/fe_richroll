@@ -188,7 +188,7 @@ function EmployeeEditComponent() {
   const handleNext = (val) => {
     setValue(val);
   };
-  console.log(informationValue);
+
   const handleClick = () => {
     const inputData = new FormData();
     inputData.append('companyID', getCompanyData()?.id as string);
@@ -256,6 +256,9 @@ function EmployeeEditComponent() {
           <MuiButton variant='outlined' size='small' onClick={() => handleOpen()}>Cancel</MuiButton>
           <MuiButton variant='contained' onClick={() => {
             handleSave[value]();
+            setTimeout(() => {
+              router.push(`/company-management/employees/detail/${router.query.id}`);
+            }, 2000);
           }} size='small' color='primary'>Save</MuiButton>
         </ButtonWrapper>
       </TopWrapper>
