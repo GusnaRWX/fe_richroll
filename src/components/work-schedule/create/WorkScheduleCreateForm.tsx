@@ -113,8 +113,6 @@ function WorkScheduleCreateForm() {
 
   }, [workSchedule?.events]);
 
-  console.log(workSchedule?.events);
-
   useEffect(() => {
     setHaydrated(true);
   }, []);
@@ -187,6 +185,7 @@ function WorkScheduleCreateForm() {
         disableViewNavigator={false}
         ref={calendarRef}
         events={[]}
+        navigation={false}
         day={null}
         customEditor={(scheduler) => (
           <WorkScheduleEditForm scheduler={scheduler}/>
