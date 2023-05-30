@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { styled } from '@mui/material/styles';
 import { Add } from '@mui/icons-material';
 import { useRouter } from 'next/router';
+import PayrollAssistantTable from './PayrollAssistantTable';
 
 const ButtonWrapper = styled(Box)(({
   display: 'flex',
@@ -86,8 +87,10 @@ function CompanyProfileComponent() {
             </Tabs>
           </Box>
           <TabPanel value={value} index={0}>
+            <PayrollAssistantTable tabValue={value}/>
           </TabPanel>
           <TabPanel value={value} index={1}>
+            <PayrollAssistantTable tabValue={value}/>
           </TabPanel>
         </Box>
       </ContentWrapper>

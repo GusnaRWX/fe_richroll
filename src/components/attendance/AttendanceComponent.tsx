@@ -17,7 +17,7 @@ const ContentWrapper = styled(Card)(({
   padding: '1rem'
 }));
 
-function PayrollAttendanceComponent() {
+function AttendanceComponent() {
   const router = useRouter();
   return (
     <>
@@ -47,4 +47,4 @@ function PayrollAttendanceComponent() {
   );
 }
 
-export default PayrollAttendanceComponent;
+export default AttendanceComponent;

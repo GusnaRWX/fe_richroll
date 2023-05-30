@@ -1,12 +1,12 @@
 import React from 'react';
-import PayrollAttendanceContainer from '@/containers/payroll-attendance/PayrollAttendanceContainer';
+import AttendanceContainer from '@/containers/attendance/AttendanceContainer';
 import MetaHead from '@/components/_shared/_core/layout/MetaHead';
 
-export default function PayrollAttendance() {
+export default function Attendance() {
   return (
     <>
-      <MetaHead title='Kayaroll - Payroll Attendance' />
-      <PayrollAttendanceContainer />
+      <MetaHead title='Kayaroll - Attendance' />
+      <AttendanceContainer />
     </>
   );
 }
