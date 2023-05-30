@@ -24,7 +24,7 @@ import {
 import BasicDatePicker from "@/components/_shared/form/DatePicker";
 import { ArrowBack } from "@mui/icons-material";
 import { useRouter } from "next/router";
-import { Form as FormikForm, Formik } from "formik";
+import { Form as FormikForm, Formik, FieldArray } from "formik";
 import * as Yup from "yup";
 import dayjs from "dayjs";
 
@@ -156,7 +156,6 @@ export default function CreateLeaveApplicationComponent() {
     end_date: string;
     note: string;
     files: any[];
-    fileName: string;
   } = {
     name: "",
     type: "",
@@ -166,7 +165,6 @@ export default function CreateLeaveApplicationComponent() {
     end_date: "",
     note: "",
     files: [],
-    fileName: "",
   };
 
   return (
@@ -431,7 +429,7 @@ export default function CreateLeaveApplicationComponent() {
                       inputProps={{ readOnly: true }}
                       size="small"
                       placeholder="Choose File"
-                      value={formik.values.fileName}
+                      value={formik.values.files[formik.values.files.length - 1].fileName}
                     ></Input>
                     <BrowseButton>
                       <Typography style={{ fontSize: "14px" }}>
@@ -439,6 +437,13 @@ export default function CreateLeaveApplicationComponent() {
                       </Typography>
                     </BrowseButton>
                   </div>
+                  <FieldArray name="files" render={(arrayHelper) => (
+                    <>
+                    {formik.values.files.map((item, i) => (
+                      <div key={i}>{item.fileName}</div>
+                    ))}
+                    </>
+                  )} />
                 </Grid>
               </Grid>
               <FileUploadModal
@@ -457,7 +462,7 @@ export default function CreateLeaveApplicationComponent() {
                     }
                     reader.readAsDataURL(e.target.files![0])
                     formik.setFieldValue(
-                      "fileName",
+                      `files.${formik.values.files.length}.fileName`,
                       !e.target.files ? null : e.target.files[0].name,
                       false
                     )
