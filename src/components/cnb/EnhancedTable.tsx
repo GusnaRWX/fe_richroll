@@ -247,6 +247,12 @@ export default function EnhancedTable(rows: any) {
 
   const [detailOpen, setDetailOpen] = React.useState({ id: 0, open: false });
 
+  const handleKeyDown = (e: any) => {
+    if (e.key === 'Enter') {
+      console.log(e.target.value)
+    }
+  }
+
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
@@ -262,6 +268,7 @@ export default function EnhancedTable(rows: any) {
               </InputAdornment>
             ),
           }}
+          onKeyDown={handleKeyDown}
         />
         <TableContainer>
           <Table sx={{ minWidth: 750 }} aria-labelledby='tableTitle'>

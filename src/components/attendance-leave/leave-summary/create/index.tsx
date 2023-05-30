@@ -155,7 +155,7 @@ export default function CreateLeaveApplicationComponent() {
     start_date: string;
     end_date: string;
     note: string;
-    file: string;
+    files: any[];
     fileName: string;
   } = {
     name: "",
@@ -165,7 +165,7 @@ export default function CreateLeaveApplicationComponent() {
     start_date: "",
     end_date: "",
     note: "",
-    file: "",
+    files: [],
     fileName: "",
   };
 
@@ -446,11 +446,16 @@ export default function CreateLeaveApplicationComponent() {
                 handleClose={handleClose}
                 onChange={(e) =>
                   {
-                    formik.setFieldValue(
-                      "file",
-                      !e.target.files ? null : e.target.files[0],
-                      false
-                    )
+                    e.preventDefault()
+                    const reader = new FileReader()
+                    let encodedFile: any
+                    reader.onload = () => {
+                      encodedFile = reader.result
+                      formik.setFieldValue(
+                        `files.${formik.values.files.length}.file`, encodedFile, false
+                      )
+                    }
+                    reader.readAsDataURL(e.target.files![0])
                     formik.setFieldValue(
                       "fileName",
                       !e.target.files ? null : e.target.files[0].name,
