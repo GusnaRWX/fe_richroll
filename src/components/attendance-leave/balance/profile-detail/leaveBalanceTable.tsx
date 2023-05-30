@@ -1,29 +1,29 @@
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/router";
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import {
   TableCell,
   TableRow,
   Box,
   TableSortLabel,
   Typography,
-} from "@mui/material";
-import Table from "@/components/_shared/form/Table";
-import { visuallyHidden } from "@mui/utils";
+} from '@mui/material';
+import Table from '@/components/_shared/form/Table';
+import { visuallyHidden } from '@mui/utils';
 
 const headerItems = [
-  { id: "anual", label: "Annual Leave" },
-  { id: "child_care", label: "Child Care Leave" },
-  { id: "nopay", label: "No Pay Leave" },
-  { id: "maternity", label: "Maternity Leave" },
-  { id: "paternity", label: "Paternity Leave" },
-  { id: "shared", label: "Shared Parental Leave" },
+  { id: 'anual', label: 'Annual Leave' },
+  { id: 'child_care', label: 'Child Care Leave' },
+  { id: 'nopay', label: 'No Pay Leave' },
+  { id: 'maternity', label: 'Maternity Leave' },
+  { id: 'paternity', label: 'Paternity Leave' },
+  { id: 'shared', label: 'Shared Parental Leave' },
 ];
 
 interface LeaveBalanceProfileDetailTableProps {
   tabValue: number;
 }
 
-type Order = "asc" | "desc";
+type Order = 'asc' | 'desc';
 
 function LeaveBalanceProfileDetailTable({
   tabValue,
@@ -31,19 +31,19 @@ function LeaveBalanceProfileDetailTable({
   const router = useRouter();
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
-  const [direction, setDirection] = useState<Order>("desc");
-  const [sort, setSort] = useState("");
+  const [direction, setDirection] = useState<Order>('desc');
+  const [sort, setSort] = useState('');
   const [hydrated, setHaydrated] = useState(false);
 
   const data = {
     items: [
       {
-        annual: "15/15",
-        childCare: "15/15",
-        noPay: "15/15",
-        maternity: "15/15",
-        paternity: "15/15",
-        sharedParental: "15/15",
+        annual: '15/15',
+        childCare: '15/15',
+        noPay: '15/15',
+        maternity: '15/15',
+        paternity: '15/15',
+        sharedParental: '15/15',
       },
     ],
     itemTotals: 1,
@@ -61,8 +61,8 @@ function LeaveBalanceProfileDetailTable({
     event: React.MouseEvent<unknown>,
     headId: string
   ) => {
-    const isAsc = sort === headId && direction === "asc";
-    setDirection(isAsc ? "desc" : "asc");
+    const isAsc = sort === headId && direction === 'asc';
+    setDirection(isAsc ? 'desc' : 'asc');
     setSort(headId);
   };
 
@@ -92,15 +92,15 @@ function LeaveBalanceProfileDetailTable({
               >
                 <TableSortLabel
                   active={sort === item.id}
-                  direction={sort === item.id ? direction : "asc"}
+                  direction={sort === item.id ? direction : 'asc'}
                   onClick={(e) => handleRequestSort(e, item.id)}
                 >
                   {item.label}
                   {sort === item.id ? (
-                    <Box component="span" sx={visuallyHidden}>
-                      {direction === "asc"
-                        ? "sorted descending"
-                        : "sorted ascending"}
+                    <Box component='span' sx={visuallyHidden}>
+                      {direction === 'asc'
+                        ? 'sorted descending'
+                        : 'sorted ascending'}
                     </Box>
                   ) : null}
                 </TableSortLabel>
@@ -110,10 +110,10 @@ function LeaveBalanceProfileDetailTable({
         }
         bodyChildren={
           <>
-            {typeof data?.items !== "undefined" ? (
+            {typeof data?.items !== 'undefined' ? (
               data?.items.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={12} align="center">
+                  <TableCell colSpan={12} align='center'>
                     <Typography>Data not found</Typography>
                   </TableCell>
                 </TableRow>
@@ -131,7 +131,7 @@ function LeaveBalanceProfileDetailTable({
               )
             ) : (
               <TableRow>
-                <TableCell colSpan={12} align="center">
+                <TableCell colSpan={12} align='center'>
                   <Typography>Data not found</Typography>
                 </TableCell>
               </TableRow>

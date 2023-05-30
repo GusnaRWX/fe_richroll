@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/router";
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import {
   TableCell,
   TableRow,
@@ -7,14 +7,14 @@ import {
   Box,
   TableSortLabel,
   Typography,
-} from "@mui/material";
-import Table from "@/components/_shared/form/Table";
-import { IconButton } from "@/components/_shared/form";
-import styled from "@emotion/styled";
-import { visuallyHidden } from "@mui/utils";
+} from '@mui/material';
+import Table from '@/components/_shared/form/Table';
+import { IconButton } from '@/components/_shared/form';
+import styled from '@emotion/styled';
+import { visuallyHidden } from '@mui/utils';
 
 // Import Icon React Icon
-import { HiPencilAlt } from "react-icons/hi";
+import { HiPencilAlt } from 'react-icons/hi';
 
 const ButtonWrapper = styled.div`
   display: flex;
@@ -32,28 +32,28 @@ const NameWrapper = styled.div`
 `;
 
 const headerItems = [
-  { id: "id", label: "Request ID" },
-  { id: "name", label: "Employee Name" },
-  { id: "position", label: "Position" },
-  { id: "departement", label: "Departement" },
-  { id: "starting", label: "Starting Balance" },
-  { id: "leave", label: "Leave Used" },
-  { id: "remaining", label: "Remaining Balance" },
-  { id: "action", label: "" },
+  { id: 'id', label: 'Request ID' },
+  { id: 'name', label: 'Employee Name' },
+  { id: 'position', label: 'Position' },
+  { id: 'departement', label: 'Departement' },
+  { id: 'starting', label: 'Starting Balance' },
+  { id: 'leave', label: 'Leave Used' },
+  { id: 'remaining', label: 'Remaining Balance' },
+  { id: 'action', label: '' },
 ];
 
 interface LeaveBalanceTableProps {
   tabValue: number;
 }
 
-type Order = "asc" | "desc";
+type Order = 'asc' | 'desc';
 
 function LeaveBalanceTable({ tabValue }: LeaveBalanceTableProps) {
   const router = useRouter();
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
-  const [direction, setDirection] = useState<Order>("desc");
-  const [sort, setSort] = useState("");
+  const [direction, setDirection] = useState<Order>('desc');
+  const [sort, setSort] = useState('');
   const [hydrated, setHaydrated] = useState(false);
 
   const data = {
@@ -61,52 +61,52 @@ function LeaveBalanceTable({ tabValue }: LeaveBalanceTableProps) {
       {
         id: 1,
         employeeImage: null,
-        employeeName: "Mamank Racing",
-        position: "Leader",
-        departement: "PT. Mencari Jodoh",
-        starting_balance: "3 Month",
-        leave_used: "3 Month",
-        remaining_balance: "3 Month",
+        employeeName: 'Mamank Racing',
+        position: 'Leader',
+        departement: 'PT. Mencari Jodoh',
+        starting_balance: '3 Month',
+        leave_used: '3 Month',
+        remaining_balance: '3 Month',
       },
       {
         id: 2,
         employeeImage: null,
-        employeeName: "Agus Knalpot",
-        position: "Leader",
-        departement: "PT. Mencari Jodoh",
-        starting_balance: "3 Month",
-        leave_used: "3 Month",
-        remaining_balance: "3 Month",
+        employeeName: 'Agus Knalpot',
+        position: 'Leader',
+        departement: 'PT. Mencari Jodoh',
+        starting_balance: '3 Month',
+        leave_used: '3 Month',
+        remaining_balance: '3 Month',
       },
       {
         id: 3,
         employeeImage: null,
-        employeeName: "Mimin wkwk.land",
-        position: "Leader",
-        departement: "PT. Mencari Jodoh",
-        starting_balance: "3 Month",
-        leave_used: "3 Month",
-        remaining_balance: "3 Month",
+        employeeName: 'Mimin wkwk.land',
+        position: 'Leader',
+        departement: 'PT. Mencari Jodoh',
+        starting_balance: '3 Month',
+        leave_used: '3 Month',
+        remaining_balance: '3 Month',
       },
       {
         id: 4,
         employeeImage: null,
-        employeeName: "Rehan",
-        position: "Leader",
-        departement: "PT. Mencari Jodoh",
-        starting_balance: "3 Month",
-        leave_used: "3 Month",
-        remaining_balance: "3 Month",
+        employeeName: 'Rehan',
+        position: 'Leader',
+        departement: 'PT. Mencari Jodoh',
+        starting_balance: '3 Month',
+        leave_used: '3 Month',
+        remaining_balance: '3 Month',
       },
       {
         id: 5,
         employeeImage: null,
-        employeeName: "Dapa anak baik",
-        position: "Leader",
-        departement: "PT. Mencari Jodoh",
-        starting_balance: "3 Month",
-        leave_used: "3 Month",
-        remaining_balance: "3 Month",
+        employeeName: 'Dapa anak baik',
+        position: 'Leader',
+        departement: 'PT. Mencari Jodoh',
+        starting_balance: '3 Month',
+        leave_used: '3 Month',
+        remaining_balance: '3 Month',
       },
     ],
     itemTotals: 5,
@@ -124,8 +124,8 @@ function LeaveBalanceTable({ tabValue }: LeaveBalanceTableProps) {
     event: React.MouseEvent<unknown>,
     headId: string
   ) => {
-    const isAsc = sort === headId && direction === "asc";
-    setDirection(isAsc ? "desc" : "asc");
+    const isAsc = sort === headId && direction === 'asc';
+    setDirection(isAsc ? 'desc' : 'asc');
     setSort(headId);
   };
 
@@ -161,15 +161,15 @@ function LeaveBalanceTable({ tabValue }: LeaveBalanceTableProps) {
               >
                 <TableSortLabel
                   active={sort === item.id}
-                  direction={sort === item.id ? direction : "asc"}
+                  direction={sort === item.id ? direction : 'asc'}
                   onClick={(e) => handleRequestSort(e, item.id)}
                 >
                   {item.label}
                   {sort === item.id ? (
-                    <Box component="span" sx={visuallyHidden}>
-                      {direction === "asc"
-                        ? "sorted descending"
-                        : "sorted ascending"}
+                    <Box component='span' sx={visuallyHidden}>
+                      {direction === 'asc'
+                        ? 'sorted descending'
+                        : 'sorted ascending'}
                     </Box>
                   ) : null}
                 </TableSortLabel>
@@ -179,10 +179,10 @@ function LeaveBalanceTable({ tabValue }: LeaveBalanceTableProps) {
         }
         bodyChildren={
           <>
-            {typeof data?.items !== "undefined" ? (
+            {typeof data?.items !== 'undefined' ? (
               data?.items.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={12} align="center">
+                  <TableCell colSpan={12} align='center'>
                     <Typography>Data not found</Typography>
                   </TableCell>
                 </TableRow>
@@ -215,15 +215,15 @@ function LeaveBalanceTable({ tabValue }: LeaveBalanceTableProps) {
                     <TableCell>{item.departement}</TableCell>
                     <TableCell>{item.starting_balance}</TableCell>
                     <TableCell>
-                      {/* {dayjs(item.user.createdAt).format("YYYY-MM-DD H:m:s")} */}
+                      {/* {dayjs(item.user.createdAt).format('YYYY-MM-DD H:m:s')} */}
                       {item.leave_used}
                     </TableCell>
                     <TableCell>{item.remaining_balance}</TableCell>
                     <TableCell>
                       <ButtonWrapper>
                         <IconButton
-                          parentColor="primary.50"
-                          icons={<HiPencilAlt fontSize={20} color="#223567" />}
+                          parentColor='primary.50'
+                          icons={<HiPencilAlt fontSize={20} color='#223567' />}
                           onClick={() =>
                             OpenProfileDetail(item.employeeName, item.position)
                           }
@@ -235,7 +235,7 @@ function LeaveBalanceTable({ tabValue }: LeaveBalanceTableProps) {
               )
             ) : (
               <TableRow>
-                <TableCell colSpan={12} align="center">
+                <TableCell colSpan={12} align='center'>
                   <Typography>Data not found</Typography>
                 </TableCell>
               </TableRow>

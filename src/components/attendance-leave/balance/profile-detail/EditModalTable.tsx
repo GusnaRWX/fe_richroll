@@ -1,99 +1,99 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   TableCell,
   TableRow,
   Box,
   TableSortLabel,
   Typography,
-} from "@mui/material";
-import { Input } from "@/components/_shared/form";
-import Table from "@/components/_shared/form/Table";
-import { visuallyHidden } from "@mui/utils";
-import { styled } from "@mui/material/styles";
-import { Formik, FieldArray } from "formik";
+} from '@mui/material';
+import { Input } from '@/components/_shared/form';
+import Table from '@/components/_shared/form/Table';
+import { visuallyHidden } from '@mui/utils';
+import { styled } from '@mui/material/styles';
+import { Formik, FieldArray } from 'formik';
 import * as Yup from 'yup'
 
 const headerItems = [
-  { id: "no", label: "No" },
-  { id: "type", label: "Leave Type" },
-  { id: "days", label: "Days" },
-  { id: "current", label: "" },
+  { id: 'no', label: 'No' },
+  { id: 'type', label: 'Leave Type' },
+  { id: 'days', label: 'Days' },
+  { id: 'current', label: '' },
 ];
 
 interface EditModalTableProps {
   tabValue: number;
 }
 
-type Order = "asc" | "desc";
+type Order = 'asc' | 'desc';
 
 function EditModalTable({ tabValue, submitRef }) {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
-  const [direction, setDirection] = useState<Order>("desc");
-  const [sort, setSort] = useState("");
+  const [direction, setDirection] = useState<Order>('desc');
+  const [sort, setSort] = useState('');
   const [hydrated, setHaydrated] = useState(false);
 
   const data = {
     items: [
       {
         no: 1,
-        leaveType: "Annual Leave",
+        leaveType: 'Annual Leave',
         days: 10,
-        current: "10 Days",
+        current: '10 Days',
       },
       {
         no: 2,
-        leaveType: "Annual Leave",
+        leaveType: 'Annual Leave',
         days: 10,
-        current: "10 Days",
+        current: '10 Days',
       },
       {
         no: 3,
-        leaveType: "Annual Leave",
+        leaveType: 'Annual Leave',
         days: 10,
-        current: "10 Days",
+        current: '10 Days',
       },
       {
         no: 4,
-        leaveType: "Annual Leave",
+        leaveType: 'Annual Leave',
         days: 10,
-        current: "10 Days",
+        current: '10 Days',
       },
       {
         no: 5,
-        leaveType: "Annual Leave",
+        leaveType: 'Annual Leave',
         days: 10,
-        current: "10 Days",
+        current: '10 Days',
       },
       {
         no: 6,
-        leaveType: "Annual Leave",
+        leaveType: 'Annual Leave',
         days: 10,
-        current: "10 Days",
+        current: '10 Days',
       },
       {
         no: 7,
-        leaveType: "Annual Leave",
+        leaveType: 'Annual Leave',
         days: 10,
-        current: "10 Days",
+        current: '10 Days',
       },
       {
         no: 8,
-        leaveType: "Annual Leave",
+        leaveType: 'Annual Leave',
         days: 10,
-        current: "10 Days",
+        current: '10 Days',
       },
       {
         no: 9,
-        leaveType: "Annual Leave",
+        leaveType: 'Annual Leave',
         days: 10,
-        current: "10 Days",
+        current: '10 Days',
       },
       {
         no: 10,
-        leaveType: "Annual Leave",
+        leaveType: 'Annual Leave',
         days: 10,
-        current: "10 Days",
+        current: '10 Days',
       },
     ],
     itemTotals: 10,
@@ -111,8 +111,8 @@ function EditModalTable({ tabValue, submitRef }) {
     event: React.MouseEvent<unknown>,
     headId: string
   ) => {
-    const isAsc = sort === headId && direction === "asc";
-    setDirection(isAsc ? "desc" : "asc");
+    const isAsc = sort === headId && direction === 'asc';
+    setDirection(isAsc ? 'desc' : 'asc');
     setSort(headId);
   };
 
@@ -124,13 +124,13 @@ function EditModalTable({ tabValue, submitRef }) {
     return null;
   }
 
-  const IncrementDecrementButton = styled("button")({
-    width: "40px",
-    height: "40px",
-    border: "none",
-    backgroundColor: "#8DD0B8",
-    color: "#fff",
-    fontSize: "16px",
+  const IncrementDecrementButton = styled('button')({
+    width: '40px',
+    height: '40px',
+    border: 'none',
+    backgroundColor: '#8DD0B8',
+    color: '#fff',
+    fontSize: '16px',
   });
 
   const validationSchecma = Yup.object().shape({
@@ -155,7 +155,7 @@ function EditModalTable({ tabValue, submitRef }) {
         {(formik) => {
           return (
             <FieldArray
-              name="days"
+              name='days'
               render={(arrayHelper) => {
                 return (
                   <Table
@@ -174,15 +174,15 @@ function EditModalTable({ tabValue, submitRef }) {
                           >
                             <TableSortLabel
                               active={sort === item.id}
-                              direction={sort === item.id ? direction : "asc"}
+                              direction={sort === item.id ? direction : 'asc'}
                               onClick={(e) => handleRequestSort(e, item.id)}
                             >
                               {item.label}
                               {sort === item.id ? (
-                                <Box component="span" sx={visuallyHidden}>
-                                  {direction === "asc"
-                                    ? "sorted descending"
-                                    : "sorted ascending"}
+                                <Box component='span' sx={visuallyHidden}>
+                                  {direction === 'asc'
+                                    ? 'sorted descending'
+                                    : 'sorted ascending'}
                                 </Box>
                               ) : null}
                             </TableSortLabel>
@@ -192,10 +192,10 @@ function EditModalTable({ tabValue, submitRef }) {
                     }
                     bodyChildren={
                       <>
-                        {typeof data?.items !== "undefined" ? (
+                        {typeof data?.items !== 'undefined' ? (
                           data?.items.length === 0 ? (
                             <TableRow>
-                              <TableCell colSpan={12} align="center">
+                              <TableCell colSpan={12} align='center'>
                                 <Typography>Data not found</Typography>
                               </TableCell>
                             </TableRow>
@@ -216,7 +216,7 @@ function EditModalTable({ tabValue, submitRef }) {
                                     -
                                   </IncrementDecrementButton>
                                   <Input
-                                    size="small"
+                                    size='small'
                                     value={item.days}
                                     onChange={(e) =>
                                       formik.setFieldValue(
@@ -224,7 +224,7 @@ function EditModalTable({ tabValue, submitRef }) {
                                         e.target.value
                                       )
                                     }
-                                    sx={{ width: "60px", textAlign: "center" }}
+                                    sx={{ width: '60px', textAlign: 'center' }}
                                   />
                                   <IncrementDecrementButton
                                     onClick={() =>
@@ -238,7 +238,7 @@ function EditModalTable({ tabValue, submitRef }) {
                                   </IncrementDecrementButton>
                                 </TableCell>
                                 <TableCell>
-                                  <Typography style={{ color: "#16A34A" }}>
+                                  <Typography style={{ color: '#16A34A' }}>
                                     Curent : {item.current}
                                   </Typography>
                                 </TableCell>
@@ -247,7 +247,7 @@ function EditModalTable({ tabValue, submitRef }) {
                           )
                         ) : (
                           <TableRow>
-                            <TableCell colSpan={12} align="center">
+                            <TableCell colSpan={12} align='center'>
                               <Typography>Data not found</Typography>
                             </TableCell>
                           </TableRow>
@@ -256,7 +256,7 @@ function EditModalTable({ tabValue, submitRef }) {
                           hidden
                           onClick={() => formik.submitForm()}
                           ref={submitRef}
-                          type="submit"
+                          type='submit'
                         >
                           submit
                         </button>

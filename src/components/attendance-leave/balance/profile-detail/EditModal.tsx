@@ -1,30 +1,30 @@
-import React, { useRef, useState } from "react";
-import { Modal, Box, IconButton, Typography } from "@mui/material";
-import { Button } from "@/components/_shared/form";
-import EditModalTable from "./EditModalTable";
-import { Close } from "@mui/icons-material";
-import styled from "@emotion/styled";
-import { useRouter } from "next/router";
-import { Input } from "@/components/_shared/form";
-import { Search } from "@mui/icons-material";
+import React, { useRef, useState } from 'react';
+import { Modal, Box, IconButton, Typography } from '@mui/material';
+import { Button } from '@/components/_shared/form';
+import EditModalTable from './EditModalTable';
+import { Close } from '@mui/icons-material';
+import styled from '@emotion/styled';
+import { useRouter } from 'next/router';
+import { Input } from '@/components/_shared/form';
+import { Search } from '@mui/icons-material';
 
 const WrapperStyle = {
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  height: "100vh",
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  height: '100vh',
 };
 
 const modalStyle = {
-  width: "920px",
-  height: "90%",
-  bgcolor: "background.paper",
-  border: "1px solid #E5E7EB",
-  borderRadius: "8px",
-  paddingTop: "10px",
+  width: '920px',
+  height: '90%',
+  bgcolor: 'background.paper',
+  border: '1px solid #E5E7EB',
+  borderRadius: '8px',
+  paddingTop: '10px',
   p: 2,
-  display: "flex",
-  flexDirection: "column",
+  display: 'flex',
+  flexDirection: 'column',
 };
 
 const ModalHeader = styled.div`
@@ -62,9 +62,9 @@ function LeaveBalanceProfileEditModal({
   const router = useRouter();
   const submitRef = useRef();
   const employeeName = router.query.name;
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
   const handleSearch = (e) => {
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       setSearch(e.target.value);
     }
   };
@@ -74,8 +74,8 @@ function LeaveBalanceProfileEditModal({
       open={open}
       onClose={handleClose}
       sx={{
-        ".MuiModal-backdrop": {
-          background: "rgba(0,0,0,0.75)",
+        '.MuiModal-backdrop': {
+          background: 'rgba(0,0,0,0.75)',
         },
       }}
       keepMounted
@@ -84,63 +84,63 @@ function LeaveBalanceProfileEditModal({
       <Box sx={WrapperStyle}>
         <Box sx={modalStyle}>
           <ModalHeader>
-            <Typography component="h5" fontWeight="bold">
+            <Typography component='h5' fontWeight='bold'>
               {title}
             </Typography>
             <IconButton onClick={handleClose}>
               <Close />
             </IconButton>
           </ModalHeader>
-          <div style={{ flexGrow: "1", height: "1px", overflow: "auto" }}>
+          <div style={{ flexGrow: '1', height: '1px', overflow: 'auto' }}>
             <Box
               sx={{
-                display: "flex",
-                gap: "24px",
-                mb: "24px",
-                height: "20px",
-                mt: "1rem",
+                display: 'flex',
+                gap: '24px',
+                mb: '24px',
+                height: '20px',
+                mt: '1rem',
               }}
             >
               <Typography
                 style={{
-                  color: "#9CA3AF",
-                  fontSize: "14px",
-                  fontWeight: "700",
-                  marginBottom: "16px",
+                  color: '#9CA3AF',
+                  fontSize: '14px',
+                  fontWeight: '700',
+                  marginBottom: '16px',
                 }}
               >
                 Employee Name
               </Typography>
               <Typography
                 style={{
-                  color: "#9CA3AF",
-                  fontSize: "14px",
-                  fontWeight: "700",
-                  marginBottom: "16px",
+                  color: '#9CA3AF',
+                  fontSize: '14px',
+                  fontWeight: '700',
+                  marginBottom: '16px',
                 }}
               >
                 :
               </Typography>
               <Typography
                 style={{
-                  color: "#4B5563",
-                  fontSize: "14px",
-                  fontWeight: "700",
-                  marginBottom: "16px",
+                  color: '#4B5563',
+                  fontSize: '14px',
+                  fontWeight: '700',
+                  marginBottom: '16px',
                 }}
               >
                 {employeeName}
               </Typography>
             </Box>
             <Input
-              name="search"
-              size="small"
-              placeholder="Search"
+              name='search'
+              size='small'
+              placeholder='Search'
               onKeyDown={(e) => handleSearch(e)}
-              type="text"
-              sx={{ width: "320px", mb: "49px" }}
+              type='text'
+              sx={{ width: '320px', mb: '49px' }}
               InputProps={{
-                startAdornment: <Search sx={{ color: "#9CA3AF" }} />,
+                startAdornment: <Search sx={{ color: '#9CA3AF' }} />,
               }}
             />
             <EditModalTable submitRef={submitRef} tabValue={0} />
@@ -148,17 +148,17 @@ function LeaveBalanceProfileEditModal({
           <ModalFooter>
             <Button
               fullWidth={false}
-              size="small"
-              label="Close"
-              color="primary"
-              variant="outlined"
+              size='small'
+              label='Close'
+              color='primary'
+              variant='outlined'
               onClick={() => handleClose()}
             />
             <Button
               fullWidth={false}
-              size="small"
-              label="Save"
-              color="primary"
+              size='small'
+              label='Save'
+              color='primary'
               onClick={() => submitRef.current.click()}
             />
           </ModalFooter>

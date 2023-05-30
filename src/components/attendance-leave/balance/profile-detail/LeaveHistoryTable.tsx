@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/router";
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import {
   TableCell,
   TableRow,
@@ -7,22 +7,11 @@ import {
   Box,
   TableSortLabel,
   Typography,
-} from "@mui/material";
-import Table from "@/components/_shared/form/Table";
-import { IconButton } from "@/components/_shared/form";
-import styled from "@emotion/styled";
-import { visuallyHidden } from "@mui/utils";
+} from '@mui/material';
+import Table from '@/components/_shared/form/Table';
+import styled from '@emotion/styled';
+import { visuallyHidden } from '@mui/utils';
 
-// Import Icon React Icon
-import { HiPencilAlt } from "react-icons/hi";
-
-const ButtonWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-`;
 const NameWrapper = styled.div`
   display: flex;
   flex-direction: row;
@@ -32,25 +21,25 @@ const NameWrapper = styled.div`
 `;
 
 const headerItems = [
-  { id: "no", label: "No" },
-  { id: "name", label: "Employee Name" },
-  { id: "leave", label: "Leave Date" },
-  { id: "type", label: "Type" },
-  { id: "change", label: "Changes" },
+  { id: 'no', label: 'No' },
+  { id: 'name', label: 'Employee Name' },
+  { id: 'leave', label: 'Leave Date' },
+  { id: 'type', label: 'Type' },
+  { id: 'change', label: 'Changes' },
 ];
 
 interface LeaveBalanceHistoryTableProps {
   tabValue: number;
 }
 
-type Order = "asc" | "desc";
+type Order = 'asc' | 'desc';
 
 function LeaveBalanceHistoryTable({ tabValue }: LeaveBalanceHistoryTableProps) {
   const router = useRouter();
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
-  const [direction, setDirection] = useState<Order>("desc");
-  const [sort, setSort] = useState("");
+  const [direction, setDirection] = useState<Order>('desc');
+  const [sort, setSort] = useState('');
   const EmployeeName = router.query.name;
   const [hydrated, setHaydrated] = useState(false);
 
@@ -60,25 +49,25 @@ function LeaveBalanceHistoryTable({ tabValue }: LeaveBalanceHistoryTableProps) {
         no: 1,
         employeeImage: EmployeeName?.toString(),
         employeeName: EmployeeName?.toString(),
-        leave: "00/00/0000 - 00/00/0000",
-        type: "No Pay leave",
-        change: "99 Days",
+        leave: '00/00/0000 - 00/00/0000',
+        type: 'No Pay leave',
+        change: '99 Days',
       },
       {
         no: 2,
         employeeImage: EmployeeName?.toString(),
         employeeName: EmployeeName?.toString(),
-        leave: "00/00/0000 - 00/00/0000",
-        type: "No Pay leave",
-        change: "99 Days",
+        leave: '00/00/0000 - 00/00/0000',
+        type: 'No Pay leave',
+        change: '99 Days',
       },
       {
         no: 3,
         employeeImage: EmployeeName?.toString(),
         employeeName: EmployeeName?.toString(),
-        leave: "00/00/0000 - 00/00/0000",
-        type: "No Pay leave",
-        change: "99 Days",
+        leave: '00/00/0000 - 00/00/0000',
+        type: 'No Pay leave',
+        change: '99 Days',
       },
     ],
     itemTotals: 3,
@@ -96,8 +85,8 @@ function LeaveBalanceHistoryTable({ tabValue }: LeaveBalanceHistoryTableProps) {
     event: React.MouseEvent<unknown>,
     headId: string
   ) => {
-    const isAsc = sort === headId && direction === "asc";
-    setDirection(isAsc ? "desc" : "asc");
+    const isAsc = sort === headId && direction === 'asc';
+    setDirection(isAsc ? 'desc' : 'asc');
     setSort(headId);
   };
 
@@ -107,12 +96,6 @@ function LeaveBalanceHistoryTable({ tabValue }: LeaveBalanceHistoryTableProps) {
 
   if (!hydrated) {
     return null;
-  }
-
-  function OpenProfileDetail(employeeName: string, position: string) {
-    router.push(
-      `/attendance-leave/balance/profile-detail?name=${employeeName}&position=${position}`
-    );
   }
 
   return (
@@ -133,15 +116,15 @@ function LeaveBalanceHistoryTable({ tabValue }: LeaveBalanceHistoryTableProps) {
               >
                 <TableSortLabel
                   active={sort === item.id}
-                  direction={sort === item.id ? direction : "asc"}
+                  direction={sort === item.id ? direction : 'asc'}
                   onClick={(e) => handleRequestSort(e, item.id)}
                 >
                   {item.label}
                   {sort === item.id ? (
-                    <Box component="span" sx={visuallyHidden}>
-                      {direction === "asc"
-                        ? "sorted descending"
-                        : "sorted ascending"}
+                    <Box component='span' sx={visuallyHidden}>
+                      {direction === 'asc'
+                        ? 'sorted descending'
+                        : 'sorted ascending'}
                     </Box>
                   ) : null}
                 </TableSortLabel>
@@ -151,10 +134,10 @@ function LeaveBalanceHistoryTable({ tabValue }: LeaveBalanceHistoryTableProps) {
         }
         bodyChildren={
           <>
-            {typeof data?.items !== "undefined" ? (
+            {typeof data?.items !== 'undefined' ? (
               data?.items.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={12} align="center">
+                  <TableCell colSpan={12} align='center'>
                     <Typography>Data not found</Typography>
                   </TableCell>
                 </TableRow>
@@ -191,7 +174,7 @@ function LeaveBalanceHistoryTable({ tabValue }: LeaveBalanceHistoryTableProps) {
               )
             ) : (
               <TableRow>
-                <TableCell colSpan={12} align="center">
+                <TableCell colSpan={12} align='center'>
                   <Typography>Data not found</Typography>
                 </TableCell>
               </TableRow>

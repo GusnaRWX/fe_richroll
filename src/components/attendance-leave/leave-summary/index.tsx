@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Typography,
   Paper,
@@ -9,14 +9,14 @@ import {
   Grid,
   Select,
   MenuItem,
-} from "@mui/material";
-import { Button, Input } from "@/components/_shared/form";
-import AddIcon from "@mui/icons-material/Add";
-import { Search } from "@mui/icons-material";
-import { useRouter } from "next/router";
-import BasicDatePicker from "@/components/_shared/form/DatePicker";
-import styled from "@emotion/styled";
-import LeaveSummaryTable from "./LeaveSummaryTable";
+} from '@mui/material';
+import { Button, Input } from '@/components/_shared/form';
+import AddIcon from '@mui/icons-material/Add';
+import { Search } from '@mui/icons-material';
+import { useRouter } from 'next/router';
+import BasicDatePicker from '@/components/_shared/form/DatePicker';
+import styled from '@emotion/styled';
+import LeaveSummaryTable from './LeaveSummaryTable';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -29,7 +29,7 @@ function TabPanel(props: TabPanelProps) {
 
   return (
     <div
-      role="tabpanel"
+      role='tabpanel'
       hidden={value !== index}
       id={`simple-tabpanel-${index}`}
       {...other}
@@ -42,7 +42,7 @@ function TabPanel(props: TabPanelProps) {
 function a11yProps(index: number) {
   return {
     id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
   };
 }
 
@@ -60,9 +60,9 @@ const AttendanceAndLeaveComponent = () => {
   `;
 
   // eslint-disable-next-line no-unused-vars
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
   const handleSearch = (e) => {
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       setSearch(e.target.value);
     }
   };
@@ -70,48 +70,48 @@ const AttendanceAndLeaveComponent = () => {
   return (
     <>
       <TitleWrapper>
-        <Typography variant="h5">Leave Summary</Typography>
+        <Typography variant='h5'>Leave Summary</Typography>
         <div>
           <Button
             onClick={() =>
-              router.push("/attendance-leave/leave-summary/create")
+              router.push('/attendance-leave/leave-summary/create')
             }
             startIcon={<AddIcon />}
-            label="Create New Leave Application"
+            label='Create New Leave Application'
           />
         </div>
       </TitleWrapper>
-      <Paper style={{ padding: "16px" }}>
-        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-          <Tabs value={value} onChange={handleChange} aria-label="basic tabs">
-            <Tab label="Pending" {...a11yProps(0)} />
-            <Tab label="Approved" {...a11yProps(1)} />
-            <Tab label="Upcoming" {...a11yProps(3)} />
-            <Tab label="History" {...a11yProps(4)} />
+      <Paper style={{ padding: '16px' }}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <Tabs value={value} onChange={handleChange} aria-label='basic tabs'>
+            <Tab label='Pending' {...a11yProps(0)} />
+            <Tab label='Approved' {...a11yProps(1)} />
+            <Tab label='Upcoming' {...a11yProps(3)} />
+            <Tab label='History' {...a11yProps(4)} />
           </Tabs>
         </Box>
         <Grid
           container
           spacing={2}
-          style={{ alignItems: "center" }}
+          style={{ alignItems: 'center' }}
           sx={{ p: 3, pb: 0 }}
         >
           <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
             <Input
-              name="search"
-              size="small"
-              placeholder="Search"
+              name='search'
+              size='small'
+              placeholder='Search'
               onKeyDown={(e) => handleSearch(e)}
-              type="text"
+              type='text'
               InputProps={{
-                startAdornment: <Search sx={{ color: "#9CA3AF" }} />,
+                startAdornment: <Search sx={{ color: '#9CA3AF' }} />,
               }}
             />
           </Grid>
           <Grid item xs={5} sm={5} md={5} lg={5} xl={5}>
             <Grid
               container
-              style={{ textAlign: "center", alignItems: "center" }}
+              style={{ textAlign: 'center', alignItems: 'center' }}
             >
               <Grid item xs={5.5} sm={5.5} md={5.5} lg={5.5} xl={5.5}>
                 <BasicDatePicker />
@@ -120,26 +120,26 @@ const AttendanceAndLeaveComponent = () => {
                 -
               </Grid>
               <Grid item xs={5.5} sm={5.5} md={5.5} lg={5.5} xl={5.5}>
-                <BasicDatePicker sx={{ height: "15px" }} />{" "}
+                <BasicDatePicker sx={{ height: '15px' }} />{' '}
               </Grid>
             </Grid>
           </Grid>
           <Grid item xs={2.5} sm={2.5} md={2.5} lg={2.5} xl={2.5}>
             <Select
               fullWidth
-              variant="outlined"
-              size="small"
-              placeholder="Sort by Status"
+              variant='outlined'
+              size='small'
+              placeholder='Sort by Status'
             >
-              <MenuItem value="annual/paid leave">Annual/Paid Leave</MenuItem>
-              <MenuItem value="child care leave">Child Care Leave</MenuItem>
-              <MenuItem value="no pay leave">No Pay Leave</MenuItem>
-              <MenuItem value="maternirty leave">Maternity Leave</MenuItem>
-              <MenuItem value="paternity leave">Paternity Leave</MenuItem>
-              <MenuItem value="shared parental leave">
+              <MenuItem value='annual/paid leave'>Annual/Paid Leave</MenuItem>
+              <MenuItem value='child care leave'>Child Care Leave</MenuItem>
+              <MenuItem value='no pay leave'>No Pay Leave</MenuItem>
+              <MenuItem value='maternirty leave'>Maternity Leave</MenuItem>
+              <MenuItem value='paternity leave'>Paternity Leave</MenuItem>
+              <MenuItem value='shared parental leave'>
                 Shared Parental Leave
               </MenuItem>
-              <MenuItem value="sick leave">Sick Leave</MenuItem>
+              <MenuItem value='sick leave'>Sick Leave</MenuItem>
             </Select>
           </Grid>
         </Grid>

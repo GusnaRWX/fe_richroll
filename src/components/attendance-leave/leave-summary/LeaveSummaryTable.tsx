@@ -211,11 +211,9 @@ function LeaveSummaryTable({
                     </TableCell>
                     <TableCell>{item.type}</TableCell>
                     <TableCell>{item.date}</TableCell>
+                    <TableCell>{item.period}</TableCell>
                     <TableCell>
-                      {item.period}
-                    </TableCell>
-                    <TableCell>
-                      {/* {dayjs(item.user.createdAt).format("YYYY-MM-DD H:m:s")} */}
+                      {/* {dayjs(item.user.createdAt).format('YYYY-MM-DD H:m:s')} */}
                       {item.Duration}
                     </TableCell>
                     <TableCell>{item.Notes}</TableCell>
