@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import CompanyCreateComponent from '@/components/company/create/CompanyCreateComponent';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
-import { companyTypeRequested, companySectorRequested, bankRequested, paymentMethodRequested } from '@/store/reducers/slice/company/companySlice';
+import { companyTypeRequested, companySectorRequested, bankRequested, paymentMethodRequested, companiesRequested } from '@/store/reducers/slice/company/companySlice';
 import { countriesRequested } from '@/store/reducers/slice/options/optionSlice';
 
 const CompanyCreateContainer = () => {
@@ -12,6 +12,7 @@ const CompanyCreateContainer = () => {
   const bank = useAppSelectors(state => state.company.bank);
   const paymentMethod = useAppSelectors(state => state.company.paymentMethod);
   const { countries } = useAppSelectors(state => state.option);
+  const listAllCompany = useAppSelectors(state => state.company.companies);
 
   useEffect(() => {
     dispatch({
@@ -29,9 +30,19 @@ const CompanyCreateContainer = () => {
     dispatch({
       type: countriesRequested.toString()
     });
+    dispatch({
+      type: companiesRequested.toString()
+    });
   }, []);
 
-  return <CompanyCreateComponent companyType={companyType} companySector={companySector} bank={bank} paymentMethod={paymentMethod} countries={countries} />;
+  return <CompanyCreateComponent
+    companyType={companyType}
+    companySector={companySector}
+    bank={bank}
+    paymentMethod={paymentMethod}
+    countries={countries}
+    listAllCompany={listAllCompany}
+  />;
 };
 
 export default CompanyCreateContainer;

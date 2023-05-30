@@ -8,8 +8,9 @@ import {
   Box,
   MenuItem,
   Alert,
-  FormControl } from '@mui/material';
-import { Input, Button, CheckBox} from '@/components/_shared/form';
+  FormControl
+} from '@mui/material';
+import { Input, Button, CheckBox } from '@/components/_shared/form';
 import { Text } from '@/components/_shared/common';
 import { styled as MuiStyled } from '@mui/material/styles';
 import { useRouter } from 'next/router';
@@ -36,7 +37,7 @@ interface CompanyBankProps {
   formik;
 }
 
-function CompanyBankForm ({bank, paymentMethod, formik} :CompanyBankProps) {
+function CompanyBankForm({ bank, paymentMethod, formik }: CompanyBankProps) {
   const { responser } = useAppSelectors(state => state);
   const router = useRouter();
   const convertCheckbox = (name, event) => {
@@ -63,7 +64,7 @@ function CompanyBankForm ({bank, paymentMethod, formik} :CompanyBankProps) {
       <form>
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
-            <Typography component='h3' fontSize={18} color='primary'>Bank Information</Typography>
+            <Typography component='h3' fontSize={18} color='primary' fontWeight={700}>Bank Information</Typography>
           </Grid>
         </Grid>
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
@@ -189,7 +190,7 @@ function CompanyBankForm ({bank, paymentMethod, formik} :CompanyBankProps) {
         </Grid>
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
-            <Typography component='h3' fontSize={18} color='primary'>Payroll Information</Typography>
+            <Typography component='h3' fontSize={18} color='primary' fontWeight={700}>Payroll Information</Typography>
           </Grid>
         </Grid>
         <Grid container spacing={2}>
@@ -422,8 +423,8 @@ function CompanyBankForm ({bank, paymentMethod, formik} :CompanyBankProps) {
           </Grid>
         )}
         <NextBtnWrapper>
-          <Button onClick={() => { router.push('/company');}} fullWidth={false} size='small' label='Cancel' variant='outlined' sx={{ mr: '12px' }} color='primary'/>
-          <Button onClick={() => { formik.submitForm(); }} disabled={compareCheck(!formik.values.isMonthly, !formik.values.isWeekly, !formik.values.isBiWeekly)} fullWidth={false} size='small' label='Save' color='primary'/>
+          <Button onClick={() => { router.push('/company'); }} fullWidth={false} size='small' label='Cancel' variant='outlined' sx={{ mr: '12px' }} color='primary' />
+          <Button onClick={() => { formik.submitForm(); }} disabled={compareCheck(!formik.values.isMonthly, !formik.values.isWeekly, !formik.values.isBiWeekly)} fullWidth={false} size='small' label='Save' color='primary' />
         </NextBtnWrapper>
       </form>
     </>

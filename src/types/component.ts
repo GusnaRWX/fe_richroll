@@ -98,6 +98,7 @@ export declare namespace CompanyCreate {
     bank: [];
     paymentMethod: [];
     countries: [];
+    listAllCompany: []
   }
 }
 

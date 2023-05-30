@@ -47,7 +47,6 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
   const { responser } = useAppSelectors(state => state);
 
   const [useResidentialAddress, setUseResidentialAddress] = useState(personalValues?.useResidentialAddress);
-  // const [isPermanentPersonalID, setIsPermanentPersonalID] = useState(personalValues?.isPermanentPersonalID);
 
   const formik = useFormik({
     initialValues: {
