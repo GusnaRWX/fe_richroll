@@ -135,7 +135,7 @@ function CompanyProfileInformationForm ({
               onBlur={formik.handleBlur}
               error={compareCheck(formik.touched.companyNPWP, Boolean(formik.errors.companyNPWP))}
               helperText={ifThenElse(formik.touched.companyNPWP, formik.errors.companyNPWP, '')}
-              customLabel='Company Company NPWP'
+              customLabel='Company NPWP'
               withAsterisk={false}
               size='small'
               value={formik.values.companyNPWP}
