@@ -440,7 +440,7 @@ export default function CreateLeaveApplicationComponent() {
                   <FieldArray name="files" render={(arrayHelper) => (
                     <>
                     {formik.values.files.map((item, i) => (
-                      <div key={i}>{item.fileName}</div>
+                      <div key={i}>{item.fileName}</div> // edit this
                     ))}
                     </>
                   )} />
@@ -461,6 +461,8 @@ export default function CreateLeaveApplicationComponent() {
                       )
                     }
                     reader.readAsDataURL(e.target.files![0])
+                    console.log(e.target.files![0]);
+                    
                     formik.setFieldValue(
                       `files.${formik.values.files.length}.fileName`,
                       !e.target.files ? null : e.target.files[0].name,
