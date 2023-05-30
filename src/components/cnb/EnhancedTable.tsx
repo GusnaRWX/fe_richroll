@@ -291,6 +291,7 @@ export default function EnhancedTable(rows: Rows) {
             />
             <TableBody>
               {rows?.rows?.items.length !== 0 &&
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 visibleRows?.map((row: any, index) => {
                   const labelId = `enhanced-table-checkbox-${index}`;
 
