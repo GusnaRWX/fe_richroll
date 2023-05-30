@@ -2,7 +2,9 @@ import { AiFillHome } from 'react-icons/ai';
 import { HiBuildingOffice, HiCurrencyDollar } from 'react-icons/hi2';
 import { CoreLayout } from '@/types/component';
 import { BsFillCalendar2Fill } from 'react-icons/bs';
-import { HiDocumentReport, HiOutlineSupport, HiUser } from 'react-icons/hi';
+import { GiReceiveMoney } from 'react-icons/gi';
+import { TbMoodDollar } from 'react-icons/tb';
+import { HiDocumentReport, HiTicket } from 'react-icons/hi';
 
 export const Menus: CoreLayout.SidebarItem[] = [
   {
@@ -64,22 +66,22 @@ export const Menus: CoreLayout.SidebarItem[] = [
     icons: HiCurrencyDollar,
   },
   {
+    key: 'reimbursement',
+    path: '/reimbursement',
+    title: 'Reimbursement',
+    icons: GiReceiveMoney,
+  },
+  {
     key: 'internal-reports',
     path: '/internal-reports',
     title: 'Internal Reports',
     icons: HiDocumentReport,
   },
   {
-    key: 'package-management',
-    path: '/package-management',
-    title: 'Package Management',
-    icons: HiOutlineSupport,
-  },
-  {
     key: 'payroll-disbursement',
     path: '/payroll-disbursement',
     title: 'Payroll & Disbursement',
-    icons: HiUser,
+    icons: TbMoodDollar,
     hasChild: true,
     child: [
       {
@@ -94,6 +96,16 @@ export const Menus: CoreLayout.SidebarItem[] = [
         path: '/payroll-disbursement/payroll',
         title: 'Payroll',
       },
+      {
+        path: '/payroll-disbursement/disbursement',
+        title: 'Disbursement',
+      },
     ],
+  },
+  {
+    key: 'package-management',
+    path: '/package-management',
+    title: 'Package Management',
+    icons: HiTicket,
   },
 ];

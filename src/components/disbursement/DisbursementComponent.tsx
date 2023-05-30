@@ -17,14 +17,14 @@ const ContentWrapper = styled(Card)(({
   padding: '1rem'
 }));
 
-function PayrollComponent() {
+function DisbursementComponent() {
   const router = useRouter();
   return (
     <>
       <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
         <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
           <Typography variant='h5' color='primary.main'>Payroll Operation</Typography>
-          <Typography variant='text-base' color='#4B5563'>Payroll</Typography>
+          <Typography variant='text-base' color='#4B5563'>Disbursement</Typography>
         </Grid>
         <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
           <ButtonWrapper>
@@ -34,7 +34,7 @@ function PayrollComponent() {
               color='secondary'
               sx={{ color: 'white' }}
               onClick={() => { router.push('/dashboard'); }}
-            ><Edit fontSize='small' />&nbsp; Generate Payroll</MuiButton>
+            ><Edit fontSize='small' />&nbsp; Generate Disbursement</MuiButton>
           </ButtonWrapper>
         </Grid>
       </Grid>
@@ -47,4 +47,4 @@ function PayrollComponent() {
   );
 }
 
-export default PayrollComponent;
+export default DisbursementComponent;
