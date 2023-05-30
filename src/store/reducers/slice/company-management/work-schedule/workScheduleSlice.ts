@@ -4,7 +4,19 @@ import { HYDRATE } from 'next-redux-wrapper';
 
 interface WorkScheduleState {
   isLoading: boolean;
-  events: Array<{day: number, eventId: number, label: string, name: string, start: Date, end:Date}>,
+  events: Array<{
+    day: number,
+    event_id: number,
+    title: string,
+    name: string,
+    start: Date,
+    end:Date,
+    isBreak?: boolean,
+    isDuration?: boolean,
+    color?: string,
+    duration?: number | string,
+    allDay?: boolean
+  }>,
   grossHour: number,
   netHour: number
 }
@@ -28,11 +40,16 @@ export const workScheduleSlice = createSlice({
       action?.payload?.events.map((item) => {
         state.events.push({
           day: item?.day,
-          eventId: item.eventId,
-          label: item.label,
+          event_id: item.eventId,
+          title: item.label,
           name: item.name,
           start: new Date(item.start),
-          end: new Date(item.end)
+          end: new Date(item.end),
+          isBreak: item.isBreak,
+          isDuration: item.isDuration,
+          color: item.color,
+          duration: item.duration,
+          allDay: item.allDay
         });
       });
     },
