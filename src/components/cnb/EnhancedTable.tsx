@@ -24,7 +24,7 @@ import BorderColorIcon from '@mui/icons-material/BorderColor';
 import { styled } from '@mui/material/styles';
 import { TextFieldProps } from '@mui/material/';
 import { IconButton } from '../_shared/form';
-import { useAppDispatch, useAppSelectors } from '@/hooks/index';
+import { useAppDispatch } from '@/hooks/index';
 import {
   deleteCompensationRequested,
   getDetailRequested,
@@ -32,7 +32,6 @@ import {
 import dayjs from 'dayjs';
 import DetailModal from './modal';
 import DetailCnb from './detail';
-import { useRouter } from 'next/router';
 
 interface Data {
   name: string;
@@ -175,14 +174,27 @@ function EnhancedTableHead(props: EnhancedTableProps) {
   );
 }
 
-export default function EnhancedTable(rows: any) {
-  const router = useRouter();
+interface Items {
+  name: string;
+  baseCompensation: string;
+  createdAt: string;
+  updatedAt: string;
+  id: number;
+  supplementaryCompensation: string;
+}
+
+interface Rows {
+  rows: {
+    items: Items[];
+  }
+}
+
+export default function EnhancedTable(rows: Rows) {
   const dispatch = useAppDispatch();
   const [order, setOrder] = React.useState<Order>('asc');
   const [orderBy, setOrderBy] = React.useState<keyof Data>('createdAt');
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const detail = useAppSelectors((state) => state.compensation.detail?.data);
 
   const deleteCnb = (Id: string | number) => {
     dispatch({
@@ -247,11 +259,11 @@ export default function EnhancedTable(rows: any) {
 
   const [detailOpen, setDetailOpen] = React.useState({ id: 0, open: false });
 
-  const handleKeyDown = (e: any) => {
+  const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
-      console.log(e.target.value)
+      console.log(e.target.value);
     }
-  }
+  };
 
   return (
     <Box sx={{ width: '100%' }}>
