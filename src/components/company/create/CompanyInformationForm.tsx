@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { HTMLAttributes, useState } from 'react';
+import React, { HTMLAttributes, useCallback, useRef, useState } from 'react';
 import {
   Grid,
   Typography,
@@ -7,20 +7,25 @@ import {
   FormHelperText,
   Box,
   MenuItem,
-  FormControl } from '@mui/material';
+  FormControl,
+  Modal,
+  IconButton
+} from '@mui/material';
 import { Input, Button, Textarea, FileUploadModal } from '@/components/_shared/form';
-import { Text } from '@/components/_shared/common';
+import { Alert, Text } from '@/components/_shared/common';
 import { styled as MuiStyled } from '@mui/material/styles';
 import { Image as ImageType } from '@/utils/assetsConstant';
 import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
-import { convertImageParams, ifThenElse, compareCheck } from '@/utils/helper';
+import { convertImageParams, ifThenElse, compareCheck, randomCode, base64ToFile } from '@/utils/helper';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import {
   administrativeFirstLevelRequested,
   administrativeSecondLevelRequested,
   administrativeThirdLevelRequsted
 } from '@/store/reducers/slice/options/optionSlice';
+import Webcam from 'react-webcam';
+import { CameraAlt, Cancel } from '@mui/icons-material';
 
 
 const AsteriskComponent = MuiStyled('span')(({ theme }) => ({
@@ -36,12 +41,39 @@ const NextBtnWrapper = MuiStyled(Box)(({
   marginTop: '2rem'
 }));
 
+const modalStyleCamera = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: '30%',
+  bgcolor: 'background.paper',
+  border: '1px solid #E5E7EB',
+  borderRadius: '8px',
+  paddingTop: '.2rem',
+  paddingRight: '.5rem',
+  paddingLeft: '.5rem'
+};
+
+const ContentCameraWrapper = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center'
+};
+
+const videoConstraints = {
+  width: 500,
+  height: 720,
+  facingMode: 'user'
+};
+
 interface ImagePriviewProps extends HTMLAttributes<HTMLDivElement> {
   image?: string;
 }
 
 const ImageReview = styled.div`
-  background-image: url(${({image}: ImagePriviewProps) => image});
+  background-image: url(${({ image }: ImagePriviewProps) => image});
   background-repeat: no-repeat;
   width: 102px;
   height: 102px;
@@ -59,17 +91,36 @@ interface CompanyInfoProps {
   countries: [];
   images;
   setImages;
+  listAllCompany: []
 }
 
-function CompanyInformationForm ({
+function CompanyInformationForm({
   nextPage,
   formik,
   companyType,
   companySector,
   countries,
   images,
-  setImages
-}:CompanyInfoProps) {
+  setImages,
+  listAllCompany
+}: CompanyInfoProps) {
+  const [isError, setIsError] = useState(false);
+  const [isCaptureEnable, setCaptureEnable] = useState(false);
+  const webcamRef = useRef<Webcam>(null);
+  const [openCamera, setOpenCamera] = useState(false);
+
+  const capture = useCallback(() => {
+    const imageSrc = webcamRef.current?.getScreenshot();
+    if (imageSrc) {
+      setImages(imageSrc);
+      const nameFile = randomCode(5);
+      const fileImage = base64ToFile(imageSrc, nameFile);
+      formik.setFieldValue('picture', fileImage);
+      handleClose();
+      handleCloseCamera();
+    }
+  }, [webcamRef]);
+
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -88,12 +139,41 @@ function CompanyInformationForm ({
     setOpen(false);
   };
 
+  const duplicateCompany = listAllCompany?.some(item => (item as { name: string }).name === formik.values.companyName);
+
+  const handleCloseCamera = () => {
+    setCaptureEnable(false);
+    setOpenCamera(false);
+  };
+
+  const handleOpenCamera = () => {
+    setCaptureEnable(true);
+    setOpenCamera(true);
+  };
+
+  const handleNext = () => {
+    formik.handleSubmit();
+    if (Object.keys(formik.errors).length === 3 && !duplicateCompany) {
+      nextPage(1);
+      setIsError(false);
+    } else {
+      setIsError(true);
+    }
+  };
+
   return (
     <>
-      <Typography component='h3' fontSize={18} color='primary'>Company Information</Typography>
+      {isError && duplicateCompany && (
+        <Alert
+          severity='error'
+          content='Please fill in all the mandatory fields'
+          icon={<Cancel />}
+        />
+      )}
+      <Typography component='h3' fontSize={18} color='primary' fontWeight={700}>Company Information</Typography>
       <form>
         <Typography variant='text-sm' component='div' color='primary' sx={{ mt: '16px' }}>Company Logo</Typography>
-        <ImageReview image={ifThenElse(!images, ImageType.PLACEHOLDER, images)} onClick={handleOpen}/>
+        <ImageReview image={ifThenElse(!images, ImageType.PLACEHOLDER, images)} onClick={handleOpen} />
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <FormControl fullWidth error={compareCheck(formik.touched.companyType, Boolean(formik.errors.companyType))}>
@@ -133,12 +213,15 @@ function CompanyInformationForm ({
               onBlur={formik.handleBlur}
               error={compareCheck(formik.touched.companyName, Boolean(formik.errors.companyName))}
               helperText={ifThenElse(formik.touched.companyName, formik.errors.companyName, '')}
-              customLabel='Company Company Name'
+              customLabel='Company Name'
               withAsterisk={true}
               size='small'
               value={formik.values.companyName}
               placeholder='Input Company Name'
             />
+            {duplicateCompany && (
+              <p style={{ color: '#EAB308', fontSize: '14px', margin: '5px 0' }}>This company name is already exist</p>
+            )}
           </Grid>
         </Grid>
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
@@ -149,7 +232,7 @@ function CompanyInformationForm ({
               onBlur={formik.handleBlur}
               error={compareCheck(formik.touched.companyNPWP, Boolean(formik.errors.companyNPWP))}
               helperText={ifThenElse(formik.touched.companyNPWP, formik.errors.companyNPWP, '')}
-              customLabel='Company Company NPWP'
+              customLabel='Company NPWP'
               withAsterisk={false}
               size='small'
               value={formik.values.companyNPWP}
@@ -247,7 +330,7 @@ function CompanyInformationForm ({
         </Grid>
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
-            <Typography component='h3' fontSize={18} color='primary'>Company Address</Typography>
+            <Typography component='h3' fontSize={18} color='primary' fontWeight={700}>Company Address</Typography>
           </Grid>
         </Grid>
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
@@ -374,7 +457,7 @@ function CompanyInformationForm ({
             </FormControl>
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
-            <FormControl fullWidth>
+            <FormControl fullWidth error={compareCheck(formik.touched.subDistrictCompanyAddress, Boolean(formik.errors.subDistrictCompanyAddress))}>
               <Typography sx={{ mb: '6px' }}>Sub-District<AsteriskComponent>*</AsteriskComponent></Typography>
               <Select
                 fullWidth
@@ -436,15 +519,54 @@ function CompanyInformationForm ({
           </Grid>
         </Grid>
         <NextBtnWrapper>
-          <Button onClick={() => { router.push('/company');}} fullWidth={false} size='small' label='Cancel' variant='outlined' sx={{ mr: '12px' }} color='primary'/>
-          <Button onClick={() => nextPage(1)} fullWidth={false} size='small' label='Next' color='primary'/>
+          <Button onClick={() => { router.push('/company'); }} fullWidth={false} size='small' label='Cancel' variant='outlined' sx={{ mr: '12px' }} color='primary' />
+          <Button onClick={handleNext} fullWidth={false} size='small' label='Next' color='primary' />
         </NextBtnWrapper>
       </form>
       <FileUploadModal
         open={open}
         handleClose={handleClose}
         onChange={(e) => formik.handleChange(convertImageParams('picture', !e.target.files ? null : e.target.files[0], setImages, handleClose))}
+        onCapture={handleOpenCamera}
       />
+      <Modal
+        open={openCamera}
+        onClose={handleCloseCamera}
+        keepMounted
+      >
+        <Box sx={modalStyleCamera}>
+          {
+            isCaptureEnable && (
+              <>
+                <Box sx={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'flex-end',
+                  marginBottom: '.5rem'
+                }}>
+                  <IconButton onClick={handleCloseCamera}>
+                    <Cancel />
+                  </IconButton>
+                </Box>
+                <Box sx={ContentCameraWrapper}>
+                  <Webcam
+                    audio={false}
+                    width={600}
+                    height={360}
+                    ref={webcamRef}
+                    screenshotFormat='image/jpeg'
+                    videoConstraints={videoConstraints}
+                  />
+                  <IconButton onClick={capture} sx={{ marginTop: '.5rem' }}>
+                    <CameraAlt sx={{ fontSize: '30px' }} />
+                  </IconButton>
+                </Box>
+              </>
+            )
+          }
+        </Box>
+      </Modal>
     </>
   );
 }
