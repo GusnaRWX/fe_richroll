@@ -353,24 +353,28 @@ export default function CreateLeaveApplicationComponent() {
                     <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
                       <Grid container>
                         <Grid item xs={5.5} sm={5.5} md={5.5} lg={5.5} xl={5.5}>
-                          
                           <FormControl
-                        fullWidth
-                        error={
-                          formik.touched.start_date && Boolean(formik.errors.start_date)
-                        }
-                      >
-                        <BasicDatePicker
-                            customLabel="Start Date"
-                            withAsterisk
-                          onChange={(value) =>
-                            formik.setFieldValue("start_date", dayjs(value).format('DD/MM/YYYY'))
-                          }
-                          />
-                        <FormHelperText>
-                          {formik.touched.start_date && formik.errors.start_date}
-                        </FormHelperText>
-                      </FormControl>
+                            fullWidth
+                            error={
+                              formik.touched.start_date &&
+                              Boolean(formik.errors.start_date)
+                            }
+                          >
+                            <BasicDatePicker
+                              customLabel="Start Date"
+                              withAsterisk
+                              onChange={(value) =>
+                                formik.setFieldValue(
+                                  "start_date",
+                                  dayjs(value).format("DD/MM/YYYY")
+                                )
+                              }
+                            />
+                            <FormHelperText>
+                              {formik.touched.start_date &&
+                                formik.errors.start_date}
+                            </FormHelperText>
+                          </FormControl>
                         </Grid>
                         <Grid
                           item
@@ -384,23 +388,28 @@ export default function CreateLeaveApplicationComponent() {
                           -
                         </Grid>
                         <Grid item xs={5.5} sm={5.5} md={5.5} lg={5.5} xl={5.5}>
-                         <FormControl
-                        fullWidth
-                        error={
-                          formik.touched.end_date && Boolean(formik.errors.end_date)
-                        }
-                      >
-                        <BasicDatePicker
-                            customLabel="Start Date"
-                            withAsterisk
-                          onChange={(value) =>
-                            formik.setFieldValue("end_date", dayjs(value).format('DD/MM/YYYY'))
-                          }
-                          />
-                        <FormHelperText>
-                          {formik.touched.end_date && formik.errors.end_date}
-                        </FormHelperText>
-                      </FormControl>
+                          <FormControl
+                            fullWidth
+                            error={
+                              formik.touched.end_date &&
+                              Boolean(formik.errors.end_date)
+                            }
+                          >
+                            <BasicDatePicker
+                              customLabel="Start Date"
+                              withAsterisk
+                              onChange={(value) =>
+                                formik.setFieldValue(
+                                  "end_date",
+                                  dayjs(value).format("DD/MM/YYYY")
+                                )
+                              }
+                            />
+                            <FormHelperText>
+                              {formik.touched.end_date &&
+                                formik.errors.end_date}
+                            </FormHelperText>
+                          </FormControl>
                         </Grid>
                       </Grid>
                     </Grid>
@@ -423,13 +432,18 @@ export default function CreateLeaveApplicationComponent() {
                   />
                 </Grid>
                 <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
-                  Browse For Upload File (On Progress)
-                  <div style={{ display: "flex" }} onClick={handleOpen}>
+                  <Typography style={{ fontSize: "14px", marginBottom: "6px" }}>
+                    Upload Supporting Document
+                  </Typography>
+                  <div
+                    style={{ display: "flex", marginBottom: "6px" }}
+                    onClick={handleOpen}
+                  >
                     <Input
                       inputProps={{ readOnly: true }}
                       size="small"
                       placeholder="Choose File"
-                      value={formik.values.files[formik.values.files.length - 1].fileName}
+                      value={formik.values.files[formik.values.files.length - 1]?.fileName}
                     ></Input>
                     <BrowseButton>
                       <Typography style={{ fontSize: "14px" }}>
@@ -449,28 +463,24 @@ export default function CreateLeaveApplicationComponent() {
               <FileUploadModal
                 open={open}
                 handleClose={handleClose}
-                onChange={(e) =>
-                  {
-                    e.preventDefault()
-                    const reader = new FileReader()
-                    let encodedFile: any
-                    reader.onload = () => {
-                      encodedFile = reader.result
-                      formik.setFieldValue(
-                        `files.${formik.values.files.length}.file`, encodedFile, false
-                      )
-                    }
-                    reader.readAsDataURL(e.target.files![0])
-                    console.log(e.target.files![0]);
-                    
+                onChange={(e) => {
+                  e.preventDefault();
+                  const reader = new FileReader();
+                  let encodedFile: any;
+                  reader.onload = () => {
+                    encodedFile = reader.result
                     formik.setFieldValue(
-                      `files.${formik.values.files.length}.fileName`,
-                      !e.target.files ? null : e.target.files[0].name,
-                      false
+                      `files.${formik.values.files.length}.file`, encodedFile, false
                     )
-                    handleClose()
                   }
-                }
+                  reader.readAsDataURL(e.target.files![0]);
+                  formik.setFieldValue(
+                    `files.${formik.values.files.length}.fileName`,
+                    !e.target.files ? null : e.target.files[0].name,
+                    false
+                  );
+                  handleClose();
+                }}
               />
             </Box>
           </Paper>
