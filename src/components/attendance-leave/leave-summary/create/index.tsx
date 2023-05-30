@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import {
   Button,
-  Form,
   IconButton,
   Input,
   Textarea,
@@ -21,6 +20,8 @@ import {
   Paper,
   Grid,
 } from "@mui/material";
+import { Download } from "@mui/icons-material";
+import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import BasicDatePicker from "@/components/_shared/form/DatePicker";
 import { ArrowBack } from "@mui/icons-material";
 import { useRouter } from "next/router";
@@ -101,6 +102,16 @@ export default function CreateLeaveApplicationComponent() {
     width: "88px",
     border: "1px solid #cbcbcb",
     backgroundColor: "#F4F5F7",
+  });
+
+  const FileItem = styled(Box)({
+    padding: "8px 9.5px",
+    backgroundColor: "#efefef",
+    borderRadius: "6px",
+    marginBottom: "6px",
+    display: "flex",
+    justifyContent: "space-between",
+    width: "286px",
   });
 
   const DummyEmployeeName = [
@@ -443,7 +454,10 @@ export default function CreateLeaveApplicationComponent() {
                       inputProps={{ readOnly: true }}
                       size="small"
                       placeholder="Choose File"
-                      value={formik.values.files[formik.values.files.length - 1]?.fileName}
+                      value={
+                        formik.values.files[formik.values.files.length - 1]
+                          ?.fileName
+                      }
                     ></Input>
                     <BrowseButton>
                       <Typography style={{ fontSize: "14px" }}>
@@ -451,13 +465,51 @@ export default function CreateLeaveApplicationComponent() {
                       </Typography>
                     </BrowseButton>
                   </div>
-                  <FieldArray name="files" render={(arrayHelper) => (
-                    <>
-                    {formik.values.files.map((item, i) => (
-                      <div key={i}>{item.fileName}</div> // edit this
-                    ))}
-                    </>
-                  )} />
+                  <Typography
+                    style={{
+                      fontSize: "14px",
+                      marginBottom: "6px",
+                      color: "#6B7280",
+                    }}
+                  >
+                    Maximum size 5MB
+                  </Typography>
+                  <FieldArray
+                    name="files"
+                    render={(arrayHelper) => (
+                      <>
+                        {formik.values.files.map((item, i) => (
+                          // <div key={i}>{item.fileName}</div>
+                          <FileItem>
+                            <Typography
+                              style={{
+                                fontSize: "12px",
+                                width: "160px",
+                                textOverflow: "ellipsis",
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                              }}
+                            >
+                              {item.fileName}
+                            </Typography>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                fontSize: "12px",
+                              }}
+                            >
+                              <InsertDriveFileIcon
+                                sx={{ fontSize: "12px", mr: "6px" }}
+                              />
+                              2MB
+                              <Download sx={{ fontSize: "14px", ml: "11px" }} />
+                            </Box>
+                          </FileItem>
+                        ))}
+                      </>
+                    )}
+                  />
                 </Grid>
               </Grid>
               <FileUploadModal
@@ -468,11 +520,13 @@ export default function CreateLeaveApplicationComponent() {
                   const reader = new FileReader();
                   let encodedFile: any;
                   reader.onload = () => {
-                    encodedFile = reader.result
+                    encodedFile = reader.result;
                     formik.setFieldValue(
-                      `files.${formik.values.files.length}.file`, encodedFile, false
-                    )
-                  }
+                      `files.${formik.values.files.length}.file`,
+                      encodedFile,
+                      false
+                    );
+                  };
                   reader.readAsDataURL(e.target.files![0]);
                   formik.setFieldValue(
                     `files.${formik.values.files.length}.fileName`,
