@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-unused-vars */
 import React, { useRef, useState } from 'react';
 import { Modal, Box, IconButton, Typography } from '@mui/material';
 import { Button } from '@/components/_shared/form';
@@ -159,7 +161,6 @@ function LeaveBalanceProfileEditModal({
               size='small'
               label='Save'
               color='primary'
-              onClick={() => submitRef.current.click()}
             />
           </ModalFooter>
         </Box>

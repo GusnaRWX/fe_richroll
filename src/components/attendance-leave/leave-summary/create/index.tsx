@@ -476,12 +476,12 @@ export default function CreateLeaveApplicationComponent() {
                   </Typography>
                   <FieldArray
                     name='files'
-                    // eslint-disable-next-line no-unused-vars
+                    // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
                     render={(arrayHelper) => (
                       <>
                         {formik.values.files.map((item, i) => (
                           // <div key={i}>{item.fileName}</div>
-                          <FileItem>
+                          <FileItem key={i}>
                             <Typography
                               style={{
                                 fontSize: '12px',

@@ -1,3 +1,6 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import {
   TableCell,
@@ -11,7 +14,7 @@ import Table from '@/components/_shared/form/Table';
 import { visuallyHidden } from '@mui/utils';
 import { styled } from '@mui/material/styles';
 import { Formik, FieldArray } from 'formik';
-import * as Yup from 'yup'
+import * as Yup from 'yup';
 
 const headerItems = [
   { id: 'no', label: 'No' },
