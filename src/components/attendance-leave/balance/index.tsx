@@ -44,8 +44,10 @@ function a11yProps(index: number) {
 }
 
 const LeaveBalanceComponent = () => {
+  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   const router = useRouter();
   const [value, setValue] = useState(0);
+  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   const [search, setSearch] = useState('');
 
   const TitleWrapper = styled.div`

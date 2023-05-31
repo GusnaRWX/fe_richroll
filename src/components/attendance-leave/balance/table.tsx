@@ -48,6 +48,7 @@ interface LeaveBalanceTableProps {
 
 type Order = 'asc' | 'desc';
 
+// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
 function LeaveBalanceTable({ tabValue }: LeaveBalanceTableProps) {
   const router = useRouter();
   const [rowsPerPage, setRowsPerPage] = useState(5);

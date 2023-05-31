@@ -34,6 +34,7 @@ interface LeaveBalanceHistoryTableProps {
 
 type Order = 'asc' | 'desc';
 
+// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
 function LeaveBalanceHistoryTable({ tabValue }: LeaveBalanceHistoryTableProps) {
   const router = useRouter();
   const [rowsPerPage, setRowsPerPage] = useState(5);

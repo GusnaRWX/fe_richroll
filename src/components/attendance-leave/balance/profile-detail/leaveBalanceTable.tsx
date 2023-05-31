@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import {
@@ -26,6 +28,7 @@ interface LeaveBalanceProfileDetailTableProps {
 type Order = 'asc' | 'desc';
 
 function LeaveBalanceProfileDetailTable({
+  // eslint-disable-next-line no-unused-vars
   tabValue,
 }: LeaveBalanceProfileDetailTableProps) {
   const router = useRouter();
