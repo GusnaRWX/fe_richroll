@@ -46,13 +46,13 @@ export default function UpdateCNBComponent() {
     name: Yup.string().required('This is required'),
     compensationComponentId: Yup.string().required('This is required'),
     period: Yup.string().required('This is required'),
-    rateOrAmount: Yup.string().required('This is required'),
+    rateOrAmount: Yup.number().required('This is required').positive('Must be positive').integer('Must be number'),
     taxStatus: Yup.string().required('This is required'),
     supplementary: Yup.array().of(
       Yup.object().shape({
         compensationComponentId: Yup.string().required('This is required'),
         period: Yup.string().required('This is required'),
-        rateOrAmount: Yup.string().required('This is required'),
+        rateOrAmount: Yup.number().required('This is required').positive('Must be positive').integer('Must be number'),
         taxStatus: Yup.string().required('This is required'),
       })
     ),
@@ -138,10 +138,26 @@ export default function UpdateCNBComponent() {
       backgroundColor: '#106ba3',
     },
   });
+  
+  interface SuplementType {
+    compensationComponentId: string;
+    taxStatus: string;
+    rateOrAmount: number | null;
+    period: string;
+  }
 
-  function UpdateCnbProfile(value: any) {
+  interface BaseType {
+    name: string;
+    compensationComponentId: string;
+    taxStatus: string;
+    rateOrAmount: number | string;
+    period: string;
+    supplementary: SuplementType[];
+  }
+
+  function UpdateCnbProfile(value: BaseType) {
     let supplement = true;
-    value.supplementary.map((item: any) => {
+    value.supplementary.map((item: SuplementType) => {
       if (value.supplementary.length === 0) {
         supplement = true;
         return false;
@@ -182,7 +198,7 @@ export default function UpdateCNBComponent() {
               value.compensationComponentId === '1' ? value.rateOrAmount : 0,
             period: value.period,
           },
-          supplementaryCompensations: value.supplementary.map((item: any) => ({
+          supplementaryCompensations: value.supplementary.map((item: SuplementType) => ({
             compensationComponentId: parseInt(item.compensationComponentId),
             taxStatus: item.taxStatus,
             amount:
@@ -197,12 +213,6 @@ export default function UpdateCNBComponent() {
     }
   }
 
-  interface SuplementType {
-    compensationComponentId: string;
-    taxStatus: string;
-    rateOrAmount: number | null;
-    period: string;
-  }
 
   const initialValues: {
     name: string;

@@ -54,8 +54,20 @@ export const Menus: CoreLayout.SidebarItem[] = [
         title: 'Leave Summary',
       },
       {
-        path: '/attendance-leave/settings',
-        title: 'Settings',
+        path: '/attendance-leave/configuration',
+        title: 'Configuration',
+      },
+      {
+        path: '/attendance-leave/balance',
+        title: 'Balance',
+      },
+      {
+        path: '/attendance-leave/off-in-lieu',
+        title: 'Off-in-lieu',
+      },
+      {
+        path: '/attendance-leave/enchasment',
+        title: 'Enchasment',
       },
     ],
   },

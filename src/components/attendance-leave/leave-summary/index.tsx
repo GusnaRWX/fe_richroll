@@ -74,7 +74,7 @@ const AttendanceAndLeaveComponent = () => {
         <div>
           <Button
             onClick={() =>
-              router.push('/attendance&leave/leave-summary/create')
+              router.push('/attendance-leave/leave-summary/create')
             }
             startIcon={<AddIcon />}
             label='Create New Leave Application'

@@ -41,6 +41,14 @@ const DetailCnb = ({ id, open }: DetailCNBProps) => {
     borderRadius: '4px',
   });
 
+  interface Supplement {
+    compensationComponent: { name: string };
+    taxStatus: boolean;
+    amount: number;
+    period: string;
+    rate: number;
+  }
+
   React.useEffect(() => {
     if (open) {
       dispatch({
@@ -119,7 +127,7 @@ const DetailCnb = ({ id, open }: DetailCNBProps) => {
             >
               <Grid item xs={6} display='flex' flexDirection='column' gap='6px'>
                 <TitleData>Compensation Component</TitleData>
-                <ItemData>Wage</ItemData>
+                <ItemData>{detail?.baseCompensation[0]?.compensationComponent?.name}</ItemData>
               </Grid>
               <Grid item xs={6} display='flex' flexDirection='column' gap='6px'>
                 <TitleData>Tax Status</TitleData>
@@ -147,7 +155,7 @@ const DetailCnb = ({ id, open }: DetailCNBProps) => {
 
           {/* Supplement */}
           {detail?.supplementaryCompensation.map(
-            (supplement: any, i: number) => (
+            (supplement: Supplement, i: number) => (
               <Grid
                 key={i}
                 container
@@ -175,7 +183,7 @@ const DetailCnb = ({ id, open }: DetailCNBProps) => {
                     gap='6px'
                   >
                     <TitleData>Compensation Component {i + 1}</TitleData>
-                    <ItemData>Transportation Allowance</ItemData>
+                    <ItemData>{supplement?.compensationComponent?.name}</ItemData>
                   </Grid>
                   <Grid
                     item

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import {
   TableCell,
   TableRow,
-  // Avatar,
+  Avatar,
   Box,
   TableSortLabel,
   Typography,
@@ -13,8 +14,6 @@ import styled from '@emotion/styled';
 import { visuallyHidden } from '@mui/utils';
 
 // Import Icon React Icon
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import { BsCheckLg } from 'react-icons/bs';
 import { HiPencilAlt } from 'react-icons/hi';
 
 const ButtonWrapper = styled.div`
@@ -35,31 +34,22 @@ const NameWrapper = styled.div`
 const headerItems = [
   { id: 'id', label: 'Request ID' },
   { id: 'name', label: 'Employee Name' },
-  { id: 'type', label: 'Type' },
-  { id: 'date', label: 'Date Requested' },
-  { id: 'period', label: 'Period' },
-  { id: 'duration', label: 'Duration' },
-  { id: 'note', label: 'Notes' },
+  { id: 'position', label: 'Position' },
+  { id: 'departement', label: 'Departement' },
+  { id: 'starting', label: 'Starting Balance' },
+  { id: 'leave', label: 'Leave Used' },
+  { id: 'remaining', label: 'Remaining Balance' },
   { id: 'action', label: '' },
 ];
 
-interface LeaveSummaryTableProps {
+interface LeaveBalanceTableProps {
   tabValue: number;
-  EditAction?: boolean;
-  ApproveAction?: boolean;
-  DeclineAction?: boolean;
-  ShowDetailAction?: boolean;
 }
 
 type Order = 'asc' | 'desc';
 
-function LeaveSummaryTable({
-  // tabValue,
-  EditAction,
-  ApproveAction,
-  DeclineAction,
-  ShowDetailAction,
-}: LeaveSummaryTableProps) {
+function LeaveBalanceTable({ tabValue }: LeaveBalanceTableProps) {
+  const router = useRouter();
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
   const [direction, setDirection] = useState<Order>('desc');
@@ -70,48 +60,53 @@ function LeaveSummaryTable({
     items: [
       {
         id: 1,
-        employeeName: 'Testing Employee',
-        type: 'Sick Leave',
-        date: '30/10/2022',
-        period: '3 Month',
-        Duration: '3 Month',
-        Notes: 'asdasd',
+        employeeImage: null,
+        employeeName: 'Mamank Racing',
+        position: 'Leader',
+        departement: 'PT. Mencari Jodoh',
+        starting_balance: '3 Month',
+        leave_used: '3 Month',
+        remaining_balance: '3 Month',
       },
       {
-        id: 1,
-        employeeName: 'Testing Employee',
-        type: 'Sick Leave',
-        date: '30/10/2022',
-        period: '3 Month',
-        Duration: '3 Month',
-        Notes: 'asdasd',
+        id: 2,
+        employeeImage: null,
+        employeeName: 'Agus Knalpot',
+        position: 'Leader',
+        departement: 'PT. Mencari Jodoh',
+        starting_balance: '3 Month',
+        leave_used: '3 Month',
+        remaining_balance: '3 Month',
       },
       {
-        id: 1,
-        employeeName: 'Testing Employee',
-        type: 'Sick Leave',
-        date: '30/10/2022',
-        period: '3 Month',
-        Duration: '3 Month',
-        Notes: 'asdasd',
+        id: 3,
+        employeeImage: null,
+        employeeName: 'Mimin wkwk.land',
+        position: 'Leader',
+        departement: 'PT. Mencari Jodoh',
+        starting_balance: '3 Month',
+        leave_used: '3 Month',
+        remaining_balance: '3 Month',
       },
       {
-        id: 1,
-        employeeName: 'Testing Employee',
-        type: 'Sick Leave',
-        date: '30/10/2022',
-        period: '3 Month',
-        Duration: '3 Month',
-        Notes: 'asdasd',
+        id: 4,
+        employeeImage: null,
+        employeeName: 'Rehan',
+        position: 'Leader',
+        departement: 'PT. Mencari Jodoh',
+        starting_balance: '3 Month',
+        leave_used: '3 Month',
+        remaining_balance: '3 Month',
       },
       {
-        id: 1,
-        employeeName: 'Testing Employee',
-        type: 'Sick Leave',
-        date: '30/10/2022',
-        period: '3 Month',
-        Duration: '3 Month',
-        Notes: 'asdasd',
+        id: 5,
+        employeeImage: null,
+        employeeName: 'Dapa anak baik',
+        position: 'Leader',
+        departement: 'PT. Mencari Jodoh',
+        starting_balance: '3 Month',
+        leave_used: '3 Month',
+        remaining_balance: '3 Month',
       },
     ],
     itemTotals: 5,
@@ -141,6 +136,13 @@ function LeaveSummaryTable({
   if (!hydrated) {
     return null;
   }
+
+  function OpenProfileDetail(employeeName: string, position: string) {
+    router.push(
+      `/attendance-leave/balance/profile-detail?name=${employeeName}&position=${position}`
+    );
+  }
+
   return (
     <>
       <Table
@@ -190,61 +192,42 @@ function LeaveSummaryTable({
                     <TableCell>{item.id}</TableCell>
                     <TableCell>
                       <NameWrapper>
-                        {/* <Avatar
+                        <Avatar
                           src={
-                            item?.user?.userInformation !== null
-                              ? item?.user?.userInformation.picture
-                              : item.user.name
+                            item.employeeImage !== null
+                              ? item.employeeImage
+                              : item.employeeName
                           }
                           alt={
-                            item?.user?.userInformation !== null
-                              ? item?.user?.userInformation.picture
-                              : item.user.name
+                            item.employeeImage !== null
+                              ? item.employeeImage
+                              : item.employeeName
                           }
                           sx={{
                             width: 24,
                             height: 24,
                           }}
-                        /> */}
+                        />
                         &nbsp;{item.employeeName}
                       </NameWrapper>
                     </TableCell>
-                    <TableCell>{item.type}</TableCell>
-                    <TableCell>{item.date}</TableCell>
-                    <TableCell>{item.period}</TableCell>
+                    <TableCell>{item.position}</TableCell>
+                    <TableCell>{item.departement}</TableCell>
+                    <TableCell>{item.starting_balance}</TableCell>
                     <TableCell>
                       {/* {dayjs(item.user.createdAt).format('YYYY-MM-DD H:m:s')} */}
-                      {item.Duration}
+                      {item.leave_used}
                     </TableCell>
-                    <TableCell>{item.Notes}</TableCell>
+                    <TableCell>{item.remaining_balance}</TableCell>
                     <TableCell>
                       <ButtonWrapper>
-                        {ApproveAction && (
-                          <IconButton
-                            parentColor='secondary.100'
-                            icons={<BsCheckLg fontSize={20} color='#223567' />}
-                          />
-                        )}
-                        {DeclineAction && (
-                          <IconButton
-                            parentColor='red.100'
-                            icons={<BsCheckLg fontSize={25} color='#EF4444' />}
-                          />
-                        )}
-                        {EditAction && (
-                          <IconButton
-                            parentColor='primary.50'
-                            icons={
-                              <HiPencilAlt fontSize={20} color='#223567' />
-                            }
-                          />
-                        )}
-                        {ShowDetailAction && (
-                          <IconButton
-                            parentColor='primary.50'
-                            icons={<VisibilityIcon sx={{ color: '#223567' }} />}
-                          />
-                        )}
+                        <IconButton
+                          parentColor='primary.50'
+                          icons={<HiPencilAlt fontSize={20} color='#223567' />}
+                          onClick={() =>
+                            OpenProfileDetail(item.employeeName, item.position)
+                          }
+                        />
                       </ButtonWrapper>
                     </TableCell>
                   </TableRow>
@@ -264,4 +247,4 @@ function LeaveSummaryTable({
   );
 }
 
-export default LeaveSummaryTable;
+export default LeaveBalanceTable;

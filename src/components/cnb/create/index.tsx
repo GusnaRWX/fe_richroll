@@ -45,13 +45,13 @@ export default function CreateCNBComponent() {
     name: Yup.string().required('This is required'),
     compensationComponentId: Yup.string().required('This is required'),
     period: Yup.string().required('This is required'),
-    rateOrAmount: Yup.string().required('This is required'),
+    rateOrAmount: Yup.number().required('This is required').positive('Must be positive').integer('Must be number'),
     taxStatus: Yup.string().required('This is required'),
     supplementary: Yup.array().of(
       Yup.object().shape({
         compensationComponentId: Yup.string().required('This is required'),
         period: Yup.string().required('This is required'),
-        rateOrAmount: Yup.string().required('This is required'),
+        rateOrAmount: Yup.number().required('This is required').positive('Must be positive').integer('Must be number'),
         taxStatus: Yup.string().required('This is required'),
       })
     ),
@@ -138,9 +138,25 @@ export default function CreateCNBComponent() {
     },
   });
 
-  function CreateNewCnbProfile(value: any) {
+  interface SuplementType {
+    compensationComponentId: string;
+    taxStatus: string;
+    rateOrAmount: number | null;
+    period: string;
+  }
+
+  interface BaseType {
+    name: string;
+    compensationComponentId: string;
+    taxStatus: string;
+    rateOrAmount: number | string;
+    period: string;
+    supplementary: SuplementType[];
+  }
+
+  function CreateNewCnbProfile(value: BaseType) {
     let supplement = true;
-    value.supplementary.map((item: any) => {
+    value.supplementary.map((item: SuplementType) => {
       if (value.supplementary.length === 0) {
         supplement = true;
         return false;
@@ -180,7 +196,7 @@ export default function CreateCNBComponent() {
               value.compensationComponentId === '1' ? value.rateOrAmount : 0,
             period: value.period,
           },
-          supplementaryCompensations: value.supplementary.map((item: any) => ({
+          supplementaryCompensations: value.supplementary.map((item: SuplementType) => ({
             compensationComponentId: parseInt(item.compensationComponentId),
             taxStatus: item.taxStatus,
             amount:
@@ -193,13 +209,6 @@ export default function CreateCNBComponent() {
     } else {
       alert('Please fill all field');
     }
-  }
-
-  interface SuplementType {
-    compensationComponentId: string | boolean;
-    taxStatus: string | boolean;
-    rateOrAmount: number | null | boolean;
-    period: string | boolean;
   }
 
   const initialValues: {
@@ -221,7 +230,7 @@ export default function CreateCNBComponent() {
   return (
     <Formik
       initialValues={initialValues}
-      onSubmit={(values: any) => {
+      onSubmit={(values: BaseType) => {
         CreateNewCnbProfile(values);
       }}
       validationSchema={validationSchecma}
