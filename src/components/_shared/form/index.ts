@@ -3,6 +3,7 @@ import Button from './Button';
 import IconButton from './IconButton';
 import Form from './Form';
 import DatePicker from './DatePicker';
+import DateRangePicker from './DateRangePicker';
 import RadioGroup from './RadioGroup';
 import Textarea from './Textarea';
 import Select from './Select';
@@ -15,6 +16,7 @@ export {
   IconButton,
   Form,
   DatePicker,
+  DateRangePicker,
   RadioGroup,
   Textarea,
   Select,

@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import {
   Grid,
+  Select,
+  MenuItem,
   TableCell,
   TableRow,
   Box,
   TableSortLabel,
   Typography
 } from '@mui/material';
-import { Input, IconButton, DateRangePicker } from '../_shared/form';
+import { Input, IconButton, DateRangePicker } from '@/components/_shared/form';
 import { Search  } from '@mui/icons-material';
-import Table from '../_shared/form/Table';
+import Table from '@/components/_shared/form/Table';
 import { BsTrashFill } from 'react-icons/bs';
 import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
@@ -25,22 +27,20 @@ const ButtonWrapper = styled.div`
 `;
 
 const headerItems = [
-  { id: 'user.name', label: 'Name' },
-  { id: 'dateRange', label: 'Date Range' },
-  { id: 'user.createdAt', label: 'Created on' },
-  { id: 'user.lastUpdated', label: 'Last Updated' },
+  { id: 'user.name', label: 'Employee Name' },
+  { id: 'dateRange', label: 'Attendance' },
+  { id: 'user.createdAt', label: 'Absent' },
+  { id: 'user.lastUpdated', label: 'Paid Leave' },
+  { id: 'user.lastUpdated', label: 'Unpaid Leave' },
+  { id: 'user.lastUpdated', label: 'Overtime Hours' },
+  { id: 'user.lastUpdated', label: 'Total Hours' },
+  { id: 'user.lastUpdated', label: 'Average hours work/day' },
   { id: 'action', label: '' },
 ];
 
-interface EmployeeTableProps {
-  tabValue: number
-}
-
 type Order = 'asc' | 'desc'
 
-function PayrollAssistantTable({
-  tabValue
-}: EmployeeTableProps) {
+function AttendanceTable() {
   const data = {
     items: [
       {
@@ -102,7 +102,6 @@ function PayrollAssistantTable({
     if (e.key === 'Enter') {
       // setSearch(e.target.value);
       console.log(e.target.value);
-      console.log(tabValue);
       
     }
   };
@@ -123,7 +122,7 @@ function PayrollAssistantTable({
   return (
     <>
       <Grid container spacing={2}>
-        <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+        <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
           <Input
             name='search'
             size='small'
@@ -136,6 +135,19 @@ function PayrollAssistantTable({
               )
             }}
           />
+        </Grid>
+        <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
+          <Select
+            fullWidth
+            variant='outlined'
+            size='small'
+            placeholder='Sort by Status'
+          >
+            <MenuItem value=''>All Status</MenuItem>
+            <MenuItem value='active'>Active</MenuItem>
+            <MenuItem value='inactive'>Inactive</MenuItem>
+            <MenuItem value='draft'>Draft</MenuItem>
+          </Select>
         </Grid>
         <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
           <DateRangePicker
@@ -217,4 +229,4 @@ function PayrollAssistantTable({
   );
 }
 
-export default PayrollAssistantTable;
+export default AttendanceTable;
