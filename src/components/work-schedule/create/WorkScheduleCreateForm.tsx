@@ -17,6 +17,7 @@ import WorkScheduleEditForm from '../WorkScheduleEditForm';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { postSimulationEventRequested } from '@/store/reducers/slice/company-management/work-schedule/workScheduleSlice';
 import { OverlayLoading } from '@/components/_shared/common';
+import { getCompanyData } from '@/utils/helper';
 
 
 const AsteriskComponent = styled('span')(({ theme }) => ({
@@ -31,7 +32,11 @@ const FlexBoxRow = styled('div')(() => ({
   gap: '1rem'
 }));
 
-function WorkScheduleCreateForm() {
+interface WorkScheduleFormProps {
+  setData: React.Dispatch<React.SetStateAction<workSchedule.PostWorkSchedulePayloadType>>;
+}
+
+function WorkScheduleCreateForm({setData}: WorkScheduleFormProps) {
   const calendarRef = useRef<SchedulerRef>(null);
   const dispatch = useAppDispatch();
   const { workSchedule } = useAppSelectors((state) => state);
@@ -76,40 +81,115 @@ function WorkScheduleCreateForm() {
     if (formik.dirty === true) {
       const payload = {
         name: data.profileName,
-        scheduleType: data.type,
+        scheduleType: parseInt(data.type),
         startHour: dayjs(data.fixedStartTime).format('YYYY-MM-DD HH:mm'),
         endHour: dayjs(data.fixedEndTime).format('YYYY-MM-DD HH:mm'),
         type: parseInt(data.fixedWorkDayType),
-        breakName: data.breakName,
+        breakHourName: data.breakName,
         breakDuration: data.breakDuration,
         specificBreakHour: data.specifyBreakHour,
-        specificBreakStartHour: dayjs(data.breakStartTime).format('YYYY-MM-DD HH:mm'),
-        specificBreakEndHour: dayjs(data.breakEndTime).format('YYYY-MM-DD HH:mm'),
+        specificBreakStartHour: data.spesifyBreakHour === true ? dayjs(data.breakStartTime).format('YYYY-MM-DD HH:mm') : data.breakDuration.toString(),
+        specificBreakEndHour: data.spesifyBreakHour === true ? dayjs(data.breakEndTime).format('YYYY-MM-DD HH:mm') : '',
         isWithBreak: data.breakName === '' ? false : true
       };
-      if (data.fixedWorkDayType === '4') {
-        const tempData = {
-          startDay: data.type === '0' ? parseInt(data.fixedStartDay) : parseInt(data.flexiWorkDay),
-          endDay: data.type === '0' ? parseInt(data.fixedEndDay) : '',
-        };
-        Object.assign(payload, tempData);
-      }else if (data.fixedWorkDayType === '0') {
-        const tempData = {
-          startDay: data.type === '0' ? parseInt(data.fixedStartDay) : parseInt(data.flexiWorkDay),
-        };
-        Object.assign(payload, tempData);
-      }
+      const payloadFlexi = {
+        name: data.profileName,
+        scheduleType: parseInt(data.type),
+        startHour: data.flexiWorkHour.toString(),
+        endHour: '',
+        type: 5,
+        startDay: parseInt(data.flexiWorkDay),
+        endDay: 0,
+        breakHourName: data.breakName,
+        breakDuration: data.breakDuration,
+        specificBreakHour: data.specifyBreakHour,
+        specificBreakStartHour: data.specifyBreakHour === true ? dayjs(data.breakStartTime).format('YYYY-MM-DD HH:mm') : data.breakDuration.toString(),
+        specificBreakEndHour: data.specifyBreakHour === true ? dayjs(data.breakEndTime).format('YYYY-MM-DD HH:mm') : '',
+        isWithBreak: data.breakName === '' ? false : true
+      };
+      handleDynamicDay(payload, data, data.fixedWorkDayType);
       dispatch({
         type: postSimulationEventRequested.toString(),
-        payload: payload
+        payload: data.type === '0' ? payload : payloadFlexi
       });
 
       setOPenForm(false);
       setIsCreate(true);
     }
   };
+
+  const handleDynamicDay = (payload, data, type) => {
+    switch(type) {
+      case '0': {
+        const tempData = {
+          startDay: data.type === '0' ? parseInt(data.fixedStartDay) : parseInt(data.flexiWorkDay),
+        };
+        return Object.assign(payload, tempData);
+      }
+        break;
+      case '1': {
+        const tempData = {
+          startDay: 0,
+          endDay: 6
+        };
+        return Object.assign(payload, tempData);
+      }
+        break;
+      case '2': {
+        const tempData = {
+          startDay: 7,
+          endDay: 0
+        };
+        return Object.assign(payload, tempData);
+      }
+        break;
+      case '3': {
+        const tempData = {
+          startDay: 8,
+          endDay: 0
+        };
+        return Object.assign(payload, tempData);
+      }
+        break;
+      case '4': {
+        const tempData = {
+          startDay: data.type === '0' ? parseInt(data.fixedStartDay) : parseInt(data.flexiWorkDay),
+          endDay: data.type === '0' ? parseInt(data.fixedEndDay) : 0,
+        };
+        return Object.assign(payload, tempData);
+      }
+        break;
+      default:
+        return null;
+    }
+  };
   useEffect(() => {
     calendarRef.current?.scheduler.confirmEvent(workSchedule?.events, 'create');
+    const dataValues: Array<workSchedule.ItemsWorkScheduleType> = [];
+    workSchedule?.events.map((item) => {
+      dataValues.push({
+        day: item.day,
+        eventId: item.event_id,
+        label: item.title,
+        name: item.name,
+        start: dayjs(item.start).format('YYYY-MM-DD HH:mm'),
+        end: dayjs(item.end).format('YYYY-MM-DD HH:mm'),
+        isBreak: item.isBreak,
+        isDuration: item.isDuration,
+        color: item.color,
+        duration: item.duration,
+        allDay: item.allDay,
+        scheduleType: item.scheduleType,
+        type: item.type
+      });
+    });
+    setData({
+      companyID: getCompanyData()?.id?.toString() as string,
+      name: formik.values.profileName,
+      grossHours: workSchedule?.grossHour,
+      netHours: workSchedule?.netHour,
+      items: dataValues
+    });
 
   }, [workSchedule?.events]);
 
@@ -410,8 +490,8 @@ function WorkScheduleCreateForm() {
                       { label: 'Friday', value: '4' },
                       { label: 'Saturday', value: '5' },
                       { label: 'Sunday', value: '6' },
-                      { label: 'Weekday (Monday - Fiday)', value: '7' },
-                      { label: 'Weekend (Saturday - Sunday)',  value: '8'},
+                      { label: 'Weekday (Saturday - Sunday)', value: '7' },
+                      { label: 'Weekend (Monday - Friday)',  value: '8'},
                       { label: 'Full Week', value: '9' }
                     ]}
                   />

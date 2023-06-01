@@ -26,8 +26,6 @@ const CnbCreateForm = dynamic(() => import('./CnbCreateForm'), {
   ssr: false
 });
 
-const WorkScheduleCreateForm = dynamic(() => import('@/components/work-schedule/create/WorkScheduleCreateForm'));
-
 const TopWrapper = styled.div`
  display: flex;
  flex-direction: row;
@@ -292,7 +290,7 @@ function EmployeeCreateComponent() {
             />
           </TabPanel>
           <TabPanel value={value} index={4}>
-            <WorkScheduleCreateForm />
+            <p>on Development</p>
           </TabPanel>
         </Box>
       </ContentWrapper>

@@ -1,22 +1,25 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { HYDRATE } from 'next-redux-wrapper';
 
+interface EventType {
+  day: number,
+  event_id: number,
+  title: string,
+  name: string,
+  start: Date,
+  end:Date,
+  isBreak?: boolean,
+  isDuration?: boolean,
+  color?: string,
+  duration?: number | string,
+  allDay?: boolean,
+  scheduleType?: string | number,
+  type?: number
+}
 
 interface WorkScheduleState {
   isLoading: boolean;
-  events: Array<{
-    day: number,
-    event_id: number,
-    title: string,
-    name: string,
-    start: Date,
-    end:Date,
-    isBreak?: boolean,
-    isDuration?: boolean,
-    color?: string,
-    duration?: number | string,
-    allDay?: boolean
-  }>,
+  events: Array<EventType>,
   grossHour: number,
   netHour: number
 }
@@ -37,11 +40,12 @@ export const workScheduleSlice = createSlice({
     },
     postSimulationEventSuccess: (state, action) => {
       state.isLoading = false;
+      const tempData: Array<EventType> = [];
       action?.payload?.events.map((item) => {
-        state.events.push({
-          day: item?.day,
+        tempData.push({
+          day: item.day,
           event_id: item.eventId,
-          title: item.label,
+          title: item.name,
           name: item.name,
           start: new Date(item.start),
           end: new Date(item.end),
@@ -49,9 +53,12 @@ export const workScheduleSlice = createSlice({
           isDuration: item.isDuration,
           color: item.color,
           duration: item.duration,
-          allDay: item.allDay
+          allDay: item.allDay,
+          scheduleType: item.scheduleType,
+          type: item.type
         });
       });
+      state.events = tempData;
     },
     postSimulationEventFailed: (state) => {
       state.isLoading = false;

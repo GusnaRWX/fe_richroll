@@ -138,6 +138,11 @@ const Layout = ({
           <Notify error={false} body={responser.message} footerMessage={responser?.footerMessage} />
         )
       }
+      {
+        ![200, 201, 0].includes(responser?.code) && (
+          <Notify error={true} body={responser?.message}/>
+        )
+      }
       <DrawerCore
         drawerwidth={drawerWidth}
         container={container}
