@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { IconButton } from '@/components/_shared/form';
 import { LocalizationsMenu } from './localization';
 import Image from 'next/image';
@@ -9,6 +9,7 @@ const LocalizationMenu = () => {
   const [selectedCountry, setSelectedCountry] = useState('EN');
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const isLanguageOpen = Boolean(anchorEl);
+  const [hydrated, setHaydrated] = useState(false);
 
   const handleLanguageMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -18,6 +19,14 @@ const LocalizationMenu = () => {
     setSelectedCountry(country);
     setAnchorEl(null);
   };
+
+  useEffect(() => {
+    setHaydrated(true);
+  }, []);
+
+  if (!hydrated) {
+    return null;
+  }
 
   const languageId = 'primary-language-menu';
 

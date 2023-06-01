@@ -63,4 +63,13 @@ export declare namespace workSchedule {
     netHours: string | number;
     items: Array<ItemsWorkScheduleType>;
   }
+
+  interface WorkScheduleParams {
+    page: number;
+    itemPerPage: number;
+    sort: string;
+    direction: boolean;
+    search: string;
+    companyID?: number;
+  }
 }

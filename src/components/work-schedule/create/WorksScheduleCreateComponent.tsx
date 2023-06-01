@@ -112,7 +112,7 @@ function WorksScheduleCreateComponent() {
             }
             onClick={() => { router.push('/company-management/employees'); }}
           />
-          <Typography component='h3' fontWeight='bold'>Add Employee</Typography>
+          <Typography component='h3' fontWeight='bold'>Create Work Schedule Profile</Typography>
         </BackWrapper>
         <ButtonWrapper>
           <MuiButton variant='outlined' size='small' onClick={() => handleOpen()}>Cancel</MuiButton>

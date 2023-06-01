@@ -21,20 +21,32 @@ interface WorkScheduleState {
   isLoading: boolean;
   events: Array<EventType>,
   grossHour: number,
-  netHour: number
+  netHour: number,
+  data: []
 }
 
 const initialState: WorkScheduleState = {
   isLoading: false,
   events: [],
   grossHour: 0,
-  netHour: 0
+  netHour: 0,
+  data: []
 };
 
 export const workScheduleSlice = createSlice({
   name: 'workSchedule',
   initialState,
   reducers: {
+    getListWorkScheduleRequested: (state) => {
+      state.isLoading = true;
+    },
+    getListWorkSchedulerSuccess: (state, action) => {
+      state.isLoading = false;
+      state.data = action.payload.data;
+    },
+    getListWorkSchedulerFailed: (state) => {
+      state.isLoading = false;
+    },
     postSimulationEventRequested: (state) => {
       state.isLoading = true;
     },
@@ -103,7 +115,10 @@ export const {
   postCalculateEventSuccess,
   postWorkScheduleFailed,
   postWorkScheduleRequested,
-  postWorkScheduleSuccess
+  postWorkScheduleSuccess,
+  getListWorkScheduleRequested,
+  getListWorkSchedulerFailed,
+  getListWorkSchedulerSuccess
 } = workScheduleSlice.actions;
 
 export default workScheduleSlice.reducer;

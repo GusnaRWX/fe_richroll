@@ -2,7 +2,8 @@ import { AnyAction } from '@reduxjs/toolkit';
 import {
   postSimulationEvent,
   postCalculateEvent,
-  postWorkSchedule
+  postWorkSchedule,
+  getListWorkSchedule
 } from '../saga-actions/company-management/workScheduleActions';
 import {
   postSimulationEventRequested,
@@ -13,13 +14,43 @@ import {
   postCalculateEventSuccess,
   postWorkScheduleFailed,
   postWorkScheduleRequested,
-  postWorkScheduleSuccess
+  postWorkScheduleSuccess,
+  getListWorkScheduleRequested,
+  getListWorkSchedulerFailed,
+  getListWorkSchedulerSuccess
 } from '@/store/reducers/slice/company-management/work-schedule/workScheduleSlice';
 import { call, put, takeEvery, delay } from 'redux-saga/effects';
 import { setResponserMessage } from '@/store/reducers/slice/responserSlice';
 import { Services } from '@/types/axios';
 import { AxiosError, AxiosResponse } from 'axios';
 import Router from 'next/router';
+
+function* fetchGetListWorkSchedule(action: AnyAction) {
+  try {
+    const res: AxiosResponse = yield call(getListWorkSchedule, action?.payload);
+    if (res.data.code === 200) {
+      yield put({
+        type: getListWorkSchedulerSuccess.toString(),
+        payload: {
+          data: res.data.data
+        }
+      });
+    }
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      yield put({ type: getListWorkSchedulerFailed.toString() });
+      yield delay(2000, true);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message,
+        }
+      });
+    }
+  }
+}
 
 function* fetchPostSimulationEvent(action: AnyAction) {
   try {
@@ -115,6 +146,7 @@ function* workScheduleSaga() {
   yield takeEvery(postSimulationEventRequested.toString(), fetchPostSimulationEvent);
   yield takeEvery(postCalculateEventRequested.toString(), fetchPostCalculateEvent);
   yield takeEvery(postWorkScheduleRequested.toString(), fetchPostWorkSchedule);
+  yield takeEvery(getListWorkScheduleRequested.toString(), fetchGetListWorkSchedule);
 }
 
 export default workScheduleSaga;
