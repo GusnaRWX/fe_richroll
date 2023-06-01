@@ -6,6 +6,8 @@ import { ArrowBack } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import { IconButton } from '@/components/_shared/form';
 import ConfirmationModal from '@/components/_shared/common/ConfirmationModal';
+import { useAppDispatch } from '@/hooks/index';
+import { postWorkScheduleRequested } from '@/store/reducers/slice/company-management/work-schedule/workScheduleSlice';
 
 const WorkScheduleCreateForm = dynamic(() => import('./WorkScheduleCreateForm'), {
   ssr: false
@@ -79,6 +81,8 @@ function a11yProps(index: number) {
 function WorksScheduleCreateComponent() {
   const [value, setValue] = useState(0);
   const [leave, setLeave] = useState(false);
+  const [data, setData] = useState({});
+  const dispatch = useAppDispatch();
   const router = useRouter();
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -89,6 +93,13 @@ function WorksScheduleCreateComponent() {
 
   const handleClose = () => {
     setLeave(false);
+  };
+
+  const handleSave = () => {
+    dispatch({
+      type: postWorkScheduleRequested.toString(),
+      payload: data
+    });
   };
   return (
     <>
@@ -105,7 +116,7 @@ function WorksScheduleCreateComponent() {
         </BackWrapper>
         <ButtonWrapper>
           <MuiButton variant='outlined' size='small' onClick={() => handleOpen()}>Cancel</MuiButton>
-          <MuiButton variant='contained' onClick={() => router.back()}size='small' color='primary'>Save</MuiButton>
+          <MuiButton variant='contained' onClick={handleSave}size='small' color='primary'>Save</MuiButton>
         </ButtonWrapper>
       </TopWrapper>
       <ContentWrapper>
@@ -116,7 +127,7 @@ function WorksScheduleCreateComponent() {
             </Tabs>
           </Box>
           <TabPanel value={value}  index={0}>
-            <WorkScheduleCreateForm />
+            <WorkScheduleCreateForm setData={setData}/>
           </TabPanel>
         </Box>
       </ContentWrapper>

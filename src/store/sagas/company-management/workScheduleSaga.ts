@@ -19,6 +19,7 @@ import { call, put, takeEvery, delay } from 'redux-saga/effects';
 import { setResponserMessage } from '@/store/reducers/slice/responserSlice';
 import { Services } from '@/types/axios';
 import { AxiosError, AxiosResponse } from 'axios';
+import Router from 'next/router';
 
 function* fetchPostSimulationEvent(action: AnyAction) {
   try {
@@ -83,7 +84,7 @@ function* fetchPostCalculateEvent(action: AnyAction) {
 function* fetchPostWorkSchedule (action: AnyAction) {
   try {
     const res: AxiosResponse = yield call(postWorkSchedule, action?.payload);
-    if (res.data.code === 200) {
+    if (res.data.code === 201) {
       yield put({ type: postWorkScheduleSuccess.toString() });
       yield put({
         type: setResponserMessage.toString(),
@@ -92,6 +93,7 @@ function* fetchPostWorkSchedule (action: AnyAction) {
           message: res.data.message
         }
       });
+      Router.push('/company-management/work-schedule');
     }
   } catch(err) {
     if (err instanceof AxiosError) {

@@ -40,11 +40,27 @@ export declare namespace workSchedule {
       specificBreakStartHour: string,
       specificBreakEndHour: string}>
   }
+  interface ItemsWorkScheduleType {
+    day: number,
+    eventId: number,
+    label: string,
+    name: string,
+    start: Date | string,
+    end:Date | string,
+    isBreak?: boolean,
+    isDuration?: boolean,
+    color?: string,
+    duration?: number | string,
+    allDay?: boolean
+    scheduleType?: string | number,
+    type?: number
+  }
+
   interface PostWorkSchedulePayloadType {
     companyID: string | number;
     name: string;
-    grossHour: string | number;
-    netHour: string | number;
-    items: Array<string>;
+    grossHours: string | number;
+    netHours: string | number;
+    items: Array<ItemsWorkScheduleType>;
   }
 }
