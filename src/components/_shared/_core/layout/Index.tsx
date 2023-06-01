@@ -31,7 +31,7 @@ const Layout = ({
   children,
 }: LayoutProps) => {
   const [mobileOpen, setMobileOpen] = useState<boolean>(false);
-  const [companyData, setCompanyData] = useState<CompanyDataParse|null>({});
+  const [companyData, setCompanyData] = useState<CompanyDataParse | null>({});
   const dispatch = useAppDispatch();
 
   const handleDrawerToggle = () => {
@@ -41,7 +41,7 @@ const Layout = ({
 
   useEffect(() => {
     const getUserProfile = getStorage('user');
-    const tempData:CompanyDataParse|null = getCompanyData();
+    const tempData: CompanyDataParse | null = getCompanyData();
     setCompanyData(tempData);
 
     if (getUserProfile) {
@@ -104,7 +104,7 @@ const Layout = ({
         component='div'
         sx={{ fontWeight: 400, px: '16px', mt: '8px', color: '#6B7280', width: '100%' }}
       >
-            Menus
+        Menus
       </Typography>
       <List>
         {
@@ -135,7 +135,7 @@ const Layout = ({
       />
       {
         [200, 201].includes(responser.code) && (
-          <Notify error={false} body={responser.message} />
+          <Notify error={false} body={responser.message} footerMessage={responser?.footerMessage} />
         )
       }
       <DrawerCore
