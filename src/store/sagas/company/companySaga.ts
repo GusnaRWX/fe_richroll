@@ -2,7 +2,7 @@ import { AnyAction } from '@reduxjs/toolkit';
 import { getCompaniesItem, getCompanyTypeItem, getCompanySectorItem, getBankItem, getPaymentMethodItem, postCompanyProfile, getCompanyDetail, patchCompanyProfile } from '../saga-actions/company/companyActions';
 import { takeEvery, call, put, delay } from 'redux-saga/effects';
 import { Company } from '@/types/company';
-import { 
+import {
   companiesRequested,
   companiesSuccess,
   companiesFailed,
@@ -42,7 +42,7 @@ import Router from 'next/router';
 
 function* fetchGetCompanies() {
   try {
-    const res:AxiosResponse = yield call(getCompaniesItem);
+    const res: AxiosResponse = yield call(getCompaniesItem);
     if (res.status === 200) {
       const { items } = res?.data?.data as Company.CompanyPayload;
       yield put({
@@ -77,7 +77,7 @@ function* fetchGetCompanies() {
 
 function* fetchGetCompanyType() {
   try {
-    const res:AxiosResponse = yield call(getCompanyTypeItem);
+    const res: AxiosResponse = yield call(getCompanyTypeItem);
     if (res.status === 200) {
       const { items } = res?.data?.data as Company.CompanyPayload;
       yield put({
@@ -112,7 +112,7 @@ function* fetchGetCompanyType() {
 
 function* fetchGetCompanySector() {
   try {
-    const res:AxiosResponse = yield call(getCompanySectorItem);
+    const res: AxiosResponse = yield call(getCompanySectorItem);
     if (res.status === 200) {
       const { items } = res?.data?.data as Company.CompanyPayload;
       yield put({
@@ -147,7 +147,7 @@ function* fetchGetCompanySector() {
 
 function* fetchGetBank() {
   try {
-    const res:AxiosResponse = yield call(getBankItem);
+    const res: AxiosResponse = yield call(getBankItem);
     if (res.status === 200) {
       const { items } = res?.data?.data as Company.CompanyPayload;
       yield put({
@@ -182,7 +182,7 @@ function* fetchGetBank() {
 
 function* fetchGetPaymentMethod() {
   try {
-    const res:AxiosResponse = yield call(getPaymentMethodItem);
+    const res: AxiosResponse = yield call(getPaymentMethodItem);
     if (res.status === 200) {
       const { items } = res?.data?.data as Company.CompanyPayload;
       yield put({
@@ -276,7 +276,8 @@ function* fetchPatchCompanyProfile(action: AnyAction) {
         type: setResponserMessage.toString(),
         payload: {
           code: res.data.code,
-          message: res.data.message
+          message: 'Successfully Saved',
+          footerMessage: 'Company profile has been updated'
         }
       });
       yield delay(2000);
