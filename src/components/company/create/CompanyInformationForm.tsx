@@ -163,7 +163,7 @@ function CompanyInformationForm({
 
   return (
     <>
-      {isError && duplicateCompany && (
+      {(isError || duplicateCompany) && (
         <Alert
           severity='error'
           content='Please fill in all the mandatory fields'
