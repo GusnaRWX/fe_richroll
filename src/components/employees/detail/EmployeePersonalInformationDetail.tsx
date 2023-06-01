@@ -18,7 +18,7 @@ interface PersonalInformationDetailProps {
       numberOfChildren: number | null;
       religion: number | null;
     },
-    citizen:{
+    citizen: {
       country: {
         code: string | number;
         name: string;
@@ -65,7 +65,7 @@ interface PersonalInformationDetailProps {
   }
 }
 
-const EmployeePersonalInformationDetail = ({data}: PersonalInformationDetailProps) => {
+const EmployeePersonalInformationDetail = ({ data }: PersonalInformationDetailProps) => {
   return (
     <>
       <Grid
@@ -163,7 +163,7 @@ const EmployeePersonalInformationDetail = ({data}: PersonalInformationDetailProp
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            {data.personal.country.name}
+            {data?.personal?.country.name}
           </Typography>
         </Grid>
         <Grid
@@ -213,7 +213,7 @@ const EmployeePersonalInformationDetail = ({data}: PersonalInformationDetailProp
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            {data.citizen.country.name}
+            {data?.citizen?.country.name}
           </Typography>
         </Grid>
         <Grid
@@ -229,7 +229,7 @@ const EmployeePersonalInformationDetail = ({data}: PersonalInformationDetailProp
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            {data.citizen.firstLevel.name}
+            {data?.citizen?.firstLevel?.name}
           </Typography>
         </Grid>
         <Grid
@@ -245,7 +245,7 @@ const EmployeePersonalInformationDetail = ({data}: PersonalInformationDetailProp
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            {data.citizen.secondLevel.name}
+            {data?.citizen?.secondLevel?.name}
           </Typography>
         </Grid>
         <Grid
@@ -261,7 +261,7 @@ const EmployeePersonalInformationDetail = ({data}: PersonalInformationDetailProp
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            {data.citizen.thirdLevel.name}
+            {data?.citizen?.thirdLevel?.name}
           </Typography>
         </Grid>
         <Grid
@@ -277,7 +277,7 @@ const EmployeePersonalInformationDetail = ({data}: PersonalInformationDetailProp
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            {data.citizen.address}
+            {data?.citizen?.address}
           </Typography>
         </Grid>
         <Grid
@@ -293,7 +293,7 @@ const EmployeePersonalInformationDetail = ({data}: PersonalInformationDetailProp
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            {data.citizen.zipCode}
+            {data?.citizen?.zipCode}
           </Typography>
         </Grid>
       </Grid>
@@ -327,7 +327,7 @@ const EmployeePersonalInformationDetail = ({data}: PersonalInformationDetailProp
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            {data.citizen.firstLevel.name}
+            {data?.citizen?.firstLevel?.name}
           </Typography>
         </Grid>
         <Grid
@@ -343,7 +343,7 @@ const EmployeePersonalInformationDetail = ({data}: PersonalInformationDetailProp
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            {data.citizen.firstLevel.name}
+            {data?.citizen?.firstLevel?.name}
           </Typography>
         </Grid>
         <Grid
@@ -359,7 +359,7 @@ const EmployeePersonalInformationDetail = ({data}: PersonalInformationDetailProp
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            {data.citizen.secondLevel.name}
+            {data?.citizen?.secondLevel?.name}
           </Typography>
         </Grid>
         <Grid
@@ -375,7 +375,7 @@ const EmployeePersonalInformationDetail = ({data}: PersonalInformationDetailProp
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            {data.citizen.thirdLevel.name}
+            {data?.citizen?.thirdLevel?.name}
           </Typography>
         </Grid>
         <Grid
@@ -391,7 +391,7 @@ const EmployeePersonalInformationDetail = ({data}: PersonalInformationDetailProp
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            {data.citizen.address}
+            {data?.citizen?.address}
           </Typography>
         </Grid>
         <Grid
@@ -407,7 +407,7 @@ const EmployeePersonalInformationDetail = ({data}: PersonalInformationDetailProp
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            {data.citizen.zipCode}
+            {data?.citizen?.zipCode}
           </Typography>
         </Grid>
       </Grid>
@@ -462,7 +462,7 @@ const EmployeePersonalInformationDetail = ({data}: PersonalInformationDetailProp
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            {data.identity.number}
+            {data?.identity?.number}
           </Typography>
         </Grid>
         <Grid
@@ -513,7 +513,7 @@ const EmployeePersonalInformationDetail = ({data}: PersonalInformationDetailProp
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            {data.bank.bank.name}
+            {data?.bank?.bank?.name}
           </Typography>
         </Grid>
         <Grid
@@ -529,7 +529,7 @@ const EmployeePersonalInformationDetail = ({data}: PersonalInformationDetailProp
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            {data.bank.holder}
+            {data?.bank?.holder}
           </Typography>
         </Grid>
         <Grid
@@ -550,7 +550,7 @@ const EmployeePersonalInformationDetail = ({data}: PersonalInformationDetailProp
               mb={0.5}
             />
             <Typography fontWeight={400} color='grey.600'>
-              {data.bank.accountNumber}
+              {data?.bank?.accountNumber}
             </Typography>
           </Grid>
           <Grid
@@ -566,7 +566,7 @@ const EmployeePersonalInformationDetail = ({data}: PersonalInformationDetailProp
               mb={0.5}
             />
             <Typography fontWeight={400} color='grey.600'>
-              {data.bank.bankCode}
+              {data?.bank?.bankCode}
             </Typography>
           </Grid>
           <Grid
@@ -582,7 +582,7 @@ const EmployeePersonalInformationDetail = ({data}: PersonalInformationDetailProp
               mb={0.5}
             />
             <Typography fontWeight={400} color='grey.600'>
-              {data.bank.branchCode}
+              {data?.bank?.branchCode}
             </Typography>
           </Grid>
         </Grid>
@@ -599,7 +599,7 @@ const EmployeePersonalInformationDetail = ({data}: PersonalInformationDetailProp
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            {data.bank.branchName}
+            {data?.bank?.branchName}
           </Typography>
         </Grid>
         <Grid
@@ -615,7 +615,7 @@ const EmployeePersonalInformationDetail = ({data}: PersonalInformationDetailProp
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            {data.bank.swiftCode}
+            {data?.bank?.swiftCode}
           </Typography>
         </Grid>
       </Grid>
