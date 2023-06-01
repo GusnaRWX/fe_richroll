@@ -7,15 +7,15 @@ import {
   FormHelperText,
   Box,
   MenuItem,
-  Alert,
   FormControl
 } from '@mui/material';
 import { Input, Button, CheckBox } from '@/components/_shared/form';
-import { Text } from '@/components/_shared/common';
+import { Text, Alert } from '@/components/_shared/common';
 import { styled as MuiStyled } from '@mui/material/styles';
 import { useRouter } from 'next/router';
 import { useAppSelectors } from '@/hooks/index';
 import { ifThenElse, compareCheck } from '@/utils/helper';
+import { Cancel } from '@mui/icons-material';
 
 
 const AsteriskComponent = MuiStyled('span')(({ theme }) => ({
@@ -61,6 +61,15 @@ function CompanyBankForm({ bank, paymentMethod, formik }: CompanyBankProps) {
 
   return (
     <>
+      {
+        formik.errors.bankBankInformation && formik.errors.bankAccountHolderNameBankInformation && formik.errors.bankAccoutNoBankInformation && (
+          <Alert
+            severity='error'
+            content='Please fill in all the mandatory fields'
+            icon={<Cancel />}
+          />
+        )
+      }
       <form>
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
           <Grid item xs={6} md={6} lg={6} xl={6}>

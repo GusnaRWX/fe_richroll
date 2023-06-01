@@ -1,7 +1,7 @@
 import axios, { AxiosHeaderValue, AxiosRequestHeaders, AxiosResponse } from 'axios';
 import { Logger } from '@/utils/logger';
 import { config } from '@config';
-import { getStorage } from './storage';
+import { getStorage, setStorages } from './storage';
 
 /**
  * Log Responser
@@ -36,6 +36,28 @@ const service = axios.create({
   }
 });
 
+// Function to refresh the access token
+async function refreshAccessToken() {
+  try {
+    // Make an API request to refresh the access token using the refresh token
+    const response = await service.post('/authentication/refresh', {
+      refreshToken: getStorage('refreshToken'),
+    });
+
+    // Update the access token in the storage
+    setStorages([{ name: 'accessToken', value: response.data.accessToken }]);
+
+    // Update the Authorization header for all subsequent requests
+    service.defaults.headers.Authorization = `Bearer ${response.data.accessToken}`;
+
+    // Return the new access token
+    return response.data.accessToken;
+  } catch (error) {
+    // Handle any error that occurred during the token refresh
+    console.error('Error refreshing access token:', error);
+    throw error;
+  }
+}
 
 // Add a response interceptor to handle unauthorized errors
 service.interceptors.response.use(
@@ -44,8 +66,24 @@ service.interceptors.response.use(
       logResponser(response);
     return response;
   },
-  (error) => {
+  async (error) => {
     if (config.MODE !== 'production') logResponser(error);
+
+    // Check if the error status is 401 
+    if(error.response && error.response.status === 401) {
+      try {
+        const accessToken = await refreshAccessToken();
+
+        // Retry the failed request with the new access token
+        error.config.headers.Authorization = `Bearer ${accessToken}`;
+        return axios(error.config);
+
+      } catch(refreshError) {
+        // Handle any error that occurred during the token refresh
+        console.error('Error refreshing access token:', refreshError);
+        return Promise.reject(refreshError);
+      }
+    }
     return Promise.reject(error);
   }
 );
