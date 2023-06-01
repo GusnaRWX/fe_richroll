@@ -44,10 +44,11 @@ interface CustomModalProps {
   title: string;
   children;
   width: string;
+  submitText?: string
 }
 
 
-function CustomModal({open, handleClose, handleConfirm, title, children, width}: CustomModalProps) {
+function CustomModal({open, handleClose, handleConfirm, title, children, width, submitText}: CustomModalProps) {
   return (
     <Modal
       open={open}
@@ -65,7 +66,7 @@ function CustomModal({open, handleClose, handleConfirm, title, children, width}:
         {children}
         <ModalFooter>
           <MuiButton variant='outlined' size='small' onClick={handleClose}>Cancel</MuiButton>
-          <MuiButton variant='contained' onClick={handleConfirm} size='small' color='primary'>Confirm</MuiButton>
+          <MuiButton variant='contained' onClick={handleConfirm} size='small' color='primary'>{submitText || 'Confirm'}</MuiButton>
         </ModalFooter>
       </Box>
     </Modal>
