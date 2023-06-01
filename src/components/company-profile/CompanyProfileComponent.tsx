@@ -65,7 +65,7 @@ function CompanyProfileComponent() {
 
   useEffect(() => {
     console.log(data);
-    
+
     dispatch({
       type: getCompanyDetailRequested.toString(),
       payload: {
@@ -107,7 +107,7 @@ function CompanyProfileComponent() {
           <TabPanel value={value} index={0}>
             <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
               <Grid item xs={12} md={12} lg={12} xl={12}>
-                <Typography component='h3' fontSize={18} color='primary'>Company Information</Typography>
+                <Typography component='h3' fontSize={18} color='primary' fontWeight={700}>Company Information</Typography>
               </Grid>
             </Grid>
             <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
@@ -155,7 +155,7 @@ function CompanyProfileComponent() {
             </Grid>
             <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
               <Grid item xs={12} md={12} lg={12} xl={12}>
-                <Typography component='h3' fontSize={18} color='primary'>Company Address</Typography>
+                <Typography component='h3' fontSize={18} color='primary' fontWeight={700}>Company Address</Typography>
               </Grid>
             </Grid>
             <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
@@ -192,7 +192,7 @@ function CompanyProfileComponent() {
           <TabPanel value={value} index={1}>
             <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
               <Grid item xs={12} md={12} lg={12} xl={12}>
-                <Typography component='h3' fontSize={18} color='primary'>Bank Information</Typography>
+                <Typography component='h3' fontSize={18} color='primary' fontWeight={700}>Bank Information</Typography>
               </Grid>
             </Grid>
             <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
@@ -231,7 +231,7 @@ function CompanyProfileComponent() {
             </Grid>
             <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
               <Grid item xs={12} md={12} lg={12} xl={12}>
-                <Typography component='h3' fontSize={18} color='primary'>Payment Information</Typography>
+                <Typography component='h3' fontSize={18} color='primary' fontWeight={700}>Payment Information</Typography>
               </Grid>
             </Grid>
             {!data?.payroll?.monthly && !data?.payroll?.weekly && !data?.payroll?.biweekly && (

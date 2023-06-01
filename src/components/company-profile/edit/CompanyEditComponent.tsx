@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Grid,
@@ -140,6 +140,7 @@ const CompanyEditComponent = ({ detail, companyType, companySector, bank, paymen
       phoneNumberPrefix: val.phoneNumberPrefix,
     };
 
+
     const addressData = {
       countryId: val.countryCompanyAddress,
       firstLevelCode: val.provinceCompanyAddress,
@@ -162,27 +163,39 @@ const CompanyEditComponent = ({ detail, companyType, companySector, bank, paymen
 
     let payrollData = {};
     if (val.isMonthly) {
-      payrollData = {...payrollData, ...{monthly: {
-        periodStart: val.monthlyPeriodStart,
-        periodEnd: val.monthlyPeriodEnd,
-        payrollDate: val.monthlyPayrollDate,
-        methodId: val.monthlyMethod,
-      }}};
+      payrollData = {
+        ...payrollData, ...{
+          monthly: {
+            periodStart: val.monthlyPeriodStart,
+            periodEnd: val.monthlyPeriodEnd,
+            payrollDate: val.monthlyPayrollDate,
+            methodId: val.monthlyMethod,
+          }
+        }
+      };
     }
 
     if (val.isWeekly) {
-      payrollData = {...payrollData, ...{weekly: {
-        period: val.weeklyPeriod,
-        methodId: val.weeklyMethod,
-      }}};
+      payrollData = {
+        ...payrollData, ...{
+          weekly: {
+            period: val.weeklyPeriod,
+            methodId: val.weeklyMethod,
+          }
+        }
+      };
     }
 
     if (val.isBiWeekly) {
-      payrollData = {...payrollData, ...{biWeekly: {
-        period: val.biWeeklyPeriod,
-        periodWeek: val.biWeeklyPeriodWeek,
-        methodId: val.biWeeklyMethod,
-      }}};
+      payrollData = {
+        ...payrollData, ...{
+          biWeekly: {
+            period: val.biWeeklyPeriod,
+            periodWeek: val.biWeeklyPeriodWeek,
+            methodId: val.biWeeklyMethod,
+          }
+        }
+      };
     }
 
     const inputData = new FormData();
@@ -191,10 +204,10 @@ const CompanyEditComponent = ({ detail, companyType, companySector, bank, paymen
     inputData.append('address', JSON.stringify(addressData));
     inputData.append('bank', JSON.stringify(bankData));
     inputData.append('payroll', JSON.stringify(payrollData));
-    
+
     dispatch({
       type: patchCompanyProfileRequested.toString(),
-      payload: {id: detail.id, data: inputData}
+      payload: { id: detail.id, data: inputData }
     });
   };
 
