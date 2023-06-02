@@ -194,7 +194,7 @@ function PayrollAssistantTable({
                         <ButtonWrapper>
                           <IconButton
                             parentColor='#FEE2E2'
-                            onClick={() => { router.push('/payroll-disbursement/payroll-assistant/' + item.id); }}
+                            onClick={() => { router.push('/payroll-disbursement/payroll-assistant/create'); }}
                             icons={
                               <BsTrashFill fontSize={20} color='#EF4444'/>
                             }

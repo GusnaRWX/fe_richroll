@@ -5,18 +5,23 @@ import {
   MenuItem,
   TableCell,
   TableRow,
+  Avatar,
   Box,
   TableSortLabel,
+  Button as MuiButton,
   Typography
 } from '@mui/material';
 import { Input, IconButton, DateRangePicker } from '@/components/_shared/form';
+import { Add } from '@mui/icons-material';
+import { Image as ImageType } from '@/utils/assetsConstant';
 import { Search  } from '@mui/icons-material';
 import Table from '@/components/_shared/form/Table';
-import { BsTrashFill } from 'react-icons/bs';
+import { FiCalendar } from 'react-icons/fi';
 import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
 import { compareCheck, ifThenElse } from '@/utils/helper';
 import { visuallyHidden } from '@mui/utils';
+import AddEmployeesModal from './AddEmployeesModal';
 
 const ButtonWrapper = styled.div`
  display: flex;
@@ -25,58 +30,85 @@ const ButtonWrapper = styled.div`
  justify-content: center;
  gap: .5rem;
 `;
+const NameWrapper = styled.div`
+ display: flex;
+ flex-direction: row;
+ align-items: center;
+ justify-content: flex-start;
+ margin: 0;
+`;
 
 const headerItems = [
   { id: 'user.name', label: 'Employee Name' },
-  { id: 'dateRange', label: 'Attendance' },
-  { id: 'user.createdAt', label: 'Absent' },
-  { id: 'user.lastUpdated', label: 'Paid Leave' },
-  { id: 'user.lastUpdated', label: 'Unpaid Leave' },
-  { id: 'user.lastUpdated', label: 'Overtime Hours' },
-  { id: 'user.lastUpdated', label: 'Total Hours' },
-  { id: 'user.lastUpdated', label: 'Average hours work/day' },
+  { id: 'attendance', label: 'Attendance' },
+  { id: 'absent', label: 'Absent' },
+  { id: 'paidLeave', label: 'Paid Leave' },
+  { id: 'unpaidLeave', label: 'Unpaid Leave' },
+  { id: 'overtime', label: 'Overtime Hours' },
+  { id: 'total', label: 'Total Hours' },
+  { id: 'average', label: 'Average hours work/day' },
   { id: 'action', label: '' },
 ];
 
 type Order = 'asc' | 'desc'
 
-function AttendanceTable() {
+function AttendanceContent() {
   const data = {
     items: [
       {
         id: 1,
-        name: 'Payroll 280123',
-        daterange: '1/03/2023 - 31/03/2023',
-        createdAt: '20/03/2023',
-        lastUpdated: '20/03/2023',
+        name: 'Budi Irawan',
+        attendance: '30 Days',
+        absent: '2 Days',
+        paidLeave: '3 Days',
+        unpaidLeave: '4 Days',
+        overtime: '8 Days',
+        totalHours: '175 Days',
+        averageHours: '30 Days',
       },
       {
         id: 2,
-        name: 'Payroll 280123',
-        daterange: '1/03/2023 - 31/03/2023',
-        createdAt: '20/03/2023',
-        lastUpdated: '20/03/2023',
+        name: 'Budi Irawan',
+        attendance: '30 Days',
+        absent: '2 Days',
+        paidLeave: '3 Days',
+        unpaidLeave: '4 Days',
+        overtime: '8 Days',
+        totalHours: '175 Days',
+        averageHours: '30 Days',
       },
       {
         id: 3,
-        name: 'Payroll 280123',
-        daterange: '1/03/2023 - 31/03/2023',
-        createdAt: '20/03/2023',
-        lastUpdated: '20/03/2023',
+        name: 'Budi Irawan',
+        attendance: '30 Days',
+        absent: '2 Days',
+        paidLeave: '3 Days',
+        unpaidLeave: '4 Days',
+        overtime: '8 Days',
+        totalHours: '175 Days',
+        averageHours: '30 Days',
       },
       {
         id: 4,
-        name: 'Payroll 280123',
-        daterange: '1/03/2023 - 31/03/2023',
-        createdAt: '20/03/2023',
-        lastUpdated: '20/03/2023',
+        name: 'Budi Irawan',
+        attendance: '30 Days',
+        absent: '2 Days',
+        paidLeave: '3 Days',
+        unpaidLeave: '4 Days',
+        overtime: '8 Days',
+        totalHours: '175 Days',
+        averageHours: '30 Days',
       },
       {
         id: 5,
-        name: 'Payroll 280123',
-        daterange: '1/03/2023 - 31/03/2023',
-        createdAt: '20/03/2023',
-        lastUpdated: '20/03/2023',
+        name: 'Budi Irawan',
+        attendance: '30 Days',
+        absent: '2 Days',
+        paidLeave: '3 Days',
+        unpaidLeave: '4 Days',
+        overtime: '8 Days',
+        totalHours: '175 Days',
+        averageHours: '30 Days',
       },
     ],
     itemTotals: 5
@@ -88,6 +120,7 @@ function AttendanceTable() {
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
   const [hydrated, setHaydrated] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -110,6 +143,10 @@ function AttendanceTable() {
     const isAsc = compareCheck(sort === headId, direction === 'asc');
     setDirection(ifThenElse(isAsc, 'desc', 'asc'));
     setSort(headId);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
   };
 
   useEffect(() => {
@@ -142,6 +179,7 @@ function AttendanceTable() {
             variant='outlined'
             size='small'
             placeholder='Sort by Status'
+            value={''}
           >
             <MenuItem value=''>All Status</MenuItem>
             <MenuItem value='active'>Active</MenuItem>
@@ -198,17 +236,32 @@ function AttendanceTable() {
                 ), (
                   data?.items?.map((item, index) => (
                     <TableRow key={index}>
-                      <TableCell>{item.name}</TableCell>
-                      <TableCell>{item.daterange}</TableCell>
-                      <TableCell>{item.createdAt}</TableCell>
-                      <TableCell>{item.lastUpdated}</TableCell>
+                      <TableCell>
+                        <NameWrapper>
+                          <Avatar
+                            src={ImageType.AVATAR_PLACEHOLDER}
+                            alt={item.name}
+                            sx={{
+                              width: 24, height: 24
+                            }}
+                          />
+                          &nbsp;{item.name}
+                        </NameWrapper>
+                      </TableCell>
+                      <TableCell>{item.attendance}</TableCell>
+                      <TableCell>{item.absent}</TableCell>
+                      <TableCell>{item.paidLeave}</TableCell>
+                      <TableCell>{item.unpaidLeave}</TableCell>
+                      <TableCell>{item.overtime}</TableCell>
+                      <TableCell>{item.totalHours}</TableCell>
+                      <TableCell>{item.averageHours}</TableCell>
                       <TableCell>
                         <ButtonWrapper>
                           <IconButton
-                            parentColor='#FEE2E2'
-                            onClick={() => { router.push('/payroll-disbursement/payroll-assistant/' + item.id); }}
+                            parentColor='#E9EFFF'
+                            onClick={() => { router.push('/payroll-disbursement/payroll-assistant/create'); }}
                             icons={
-                              <BsTrashFill fontSize={20} color='#EF4444'/>
+                              <FiCalendar fontSize={20} color='#223567'/>
                             }
                           />
                         </ButtonWrapper>
@@ -225,8 +278,23 @@ function AttendanceTable() {
           </>
         }
       />
+      <Grid container spacing={2}>
+        <Grid item xs={9} sm={9} md={9} lg={9} xl={9}></Grid>
+        <Grid item xs={3} sm={3} md={3} lg={3} xl={3} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <MuiButton
+            variant='contained'
+            size='small'
+            color='primary'
+            onClick={() => { setOpen(true); }}
+          ><Add fontSize='small' />&nbsp; Add Employee</MuiButton>
+        </Grid>
+      </Grid>
+      <AddEmployeesModal
+        open={open}
+        handleClose={handleClose}
+      />
     </>
   );
 }
 
-export default AttendanceTable;
+export default AttendanceContent;
