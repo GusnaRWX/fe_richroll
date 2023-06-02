@@ -54,7 +54,7 @@ function a11yProps(index: number) {
   };
 }
 
-function CompanyProfileComponent() {
+function PayrollAssistantComponent() {
   const router = useRouter();
   const [value, setValue] = useState(0);
   const [open, setOpen] = useState(false);
@@ -145,4 +145,4 @@ function CompanyProfileComponent() {
   );
 }
 
-export default CompanyProfileComponent;
+export default PayrollAssistantComponent;
