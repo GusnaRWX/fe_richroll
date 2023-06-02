@@ -1,10 +1,10 @@
 import React from 'react';
 import ResetPasswordContainer from '@/containers/auth/ResetPasswordContainer';
 
-function index() {
+function ResetPassword() {
   return (
     <ResetPasswordContainer />
   );
 }
 
-export default index;
+export default ResetPassword;

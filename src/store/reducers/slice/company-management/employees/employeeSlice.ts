@@ -5,12 +5,20 @@ interface EmployeeState {
   isLoading: boolean;
   data: [];
   employeeID: string | number;
+  employeeInformationDetail: object;
+  personalInformationDetail: object;
+  detailCnb: object;
+  emergencyContactDetail: object;
 }
 
 const initialState: EmployeeState = {
   isLoading: false,
   data: [],
-  employeeID: ''
+  employeeID: '',
+  employeeInformationDetail: {},
+  personalInformationDetail: {},
+  detailCnb: {},
+  emergencyContactDetail: {}
 };
 
 export const employeeSlice = createSlice({
@@ -54,6 +62,73 @@ export const employeeSlice = createSlice({
     },
     postPersonalInformationFailed: (state) => {
       state.isLoading = false;
+    },
+    employeeInfoDetailRequested: (state) => {
+      state.isLoading = true;
+    },
+    employeeInfoDetailSuccess: (state, action) => {
+      state.isLoading = false;
+      state.employeeInformationDetail = action?.payload?.data;
+    },
+    employeeInfoDetailFailed: (state) => {
+      state.isLoading = false;
+    },
+    personalInfoDetailRequested: (state) => {
+      state.isLoading = true;
+    },
+    personalInfoDetailSuccess: (state, action) => {
+      state.isLoading = false;
+      state.personalInformationDetail = action?.payload?.data;
+    },
+    personalInfoDetailFailed: (state) => {
+      state.isLoading = false;
+    },
+    getDetailCnbRequested: (state) => {
+      state.isLoading = true;
+    },
+    getDetailCnbSuccess: (state, action) => {
+      state.isLoading = false;
+      state.detailCnb = action?.payload?.data;
+    },
+    getDetailCnbFailed: (state) => {
+      state.isLoading = false;
+    },
+    postCnbEmplyeeRequested: (state) => {
+      state.isLoading = true;
+    },
+    postCnbEmployeeSuccess: (state) => {
+      state.isLoading = false;
+    },
+    postCnbEmployeeFailed: (state) => {
+      state.isLoading = false;
+    },
+    emergencyContactDetailRequested: (state) => {
+      state.isLoading = true;
+    },
+    emergencyContactDetailSuccess: (state, action) => {
+      state.isLoading = false;
+      state.emergencyContactDetail = action?.payload?.data;
+    },
+    emergencyContactDetailFailed: (state) => {
+      state.isLoading = false;
+    },
+    patchEmployeeInformationRequested: (state) => {
+      state.isLoading = true;
+    },
+    patchEmployeeInformationSuccess: (state) => {
+      state.isLoading = false;
+    },
+    patchEmployeeInformationFailed: (state) => {
+      state.isLoading = false;
+    },
+    patchEmergencyContactRequested: (state) => {
+      state.isLoading = true;
+    },
+    patchEmergencyContactSuccess: (state) => {
+      state.isLoading = false;
+    },
+    patchEmergencyContactFailed: (state) => {
+      state.isLoading = false;
     }
   },
   extraReducers: {
@@ -78,7 +153,28 @@ export const {
   postEmergencySuccess,
   postPersonalInformationRequested,
   postPersonalInformationSuccess,
-  postPersonalInformationFailed
+  postPersonalInformationFailed,
+  employeeInfoDetailRequested,
+  employeeInfoDetailFailed,
+  employeeInfoDetailSuccess,
+  personalInfoDetailRequested,
+  personalInfoDetailFailed,
+  personalInfoDetailSuccess,
+  getDetailCnbFailed,
+  getDetailCnbRequested,
+  getDetailCnbSuccess,
+  postCnbEmplyeeRequested,
+  postCnbEmployeeSuccess,
+  postCnbEmployeeFailed,
+  emergencyContactDetailFailed,
+  emergencyContactDetailRequested,
+  emergencyContactDetailSuccess,
+  patchEmployeeInformationRequested,
+  patchEmployeeInformationSuccess,
+  patchEmployeeInformationFailed,
+  patchEmergencyContactRequested,
+  patchEmergencyContactSuccess,
+  patchEmergencyContactFailed
 } = employeeSlice.actions;
 
 export default employeeSlice.reducer;

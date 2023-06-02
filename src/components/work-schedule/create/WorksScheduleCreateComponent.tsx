@@ -1,11 +1,17 @@
 import React, { useState } from 'react';
 import styled from '@emotion/styled';
+import dynamic from 'next/dynamic';
 import { Card, Typography, Button as MuiButton, Tab, Tabs, Box } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import { IconButton } from '@/components/_shared/form';
-import WorkScheduleCreateForm from './WorkScheduleCreateForm';
 import ConfirmationModal from '@/components/_shared/common/ConfirmationModal';
+import { useAppDispatch } from '@/hooks/index';
+import { postWorkScheduleRequested } from '@/store/reducers/slice/company-management/work-schedule/workScheduleSlice';
+
+const WorkScheduleCreateForm = dynamic(() => import('./WorkScheduleCreateForm'), {
+  ssr: false
+});
 
 const TopWrapper = styled.div`
  display: flex;
@@ -75,6 +81,8 @@ function a11yProps(index: number) {
 function WorksScheduleCreateComponent() {
   const [value, setValue] = useState(0);
   const [leave, setLeave] = useState(false);
+  const [data, setData] = useState({});
+  const dispatch = useAppDispatch();
   const router = useRouter();
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -85,6 +93,13 @@ function WorksScheduleCreateComponent() {
 
   const handleClose = () => {
     setLeave(false);
+  };
+
+  const handleSave = () => {
+    dispatch({
+      type: postWorkScheduleRequested.toString(),
+      payload: data
+    });
   };
   return (
     <>
@@ -97,22 +112,22 @@ function WorksScheduleCreateComponent() {
             }
             onClick={() => { router.push('/company-management/employees'); }}
           />
-          <Typography component='h3' fontWeight='bold'>Add Employee</Typography>
+          <Typography component='h3' fontWeight='bold'>Create Work Schedule Profile</Typography>
         </BackWrapper>
         <ButtonWrapper>
           <MuiButton variant='outlined' size='small' onClick={() => handleOpen()}>Cancel</MuiButton>
-          <MuiButton variant='contained' onClick={() => router.back()}size='small' color='primary'>Save</MuiButton>
+          <MuiButton variant='contained' onClick={handleSave}size='small' color='primary'>Save</MuiButton>
         </ButtonWrapper>
       </TopWrapper>
       <ContentWrapper>
         <Box sx={{ width: '100%' }}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <Tabs value={value} onChange={handleChange} aria-label='basic tabs'>
-              <Tab sx={{ textTransform: 'none' }} label='Employee Information' {...a11yProps(0)} />
+              <Tab sx={{ textTransform: 'none' }} label='Schedule Profile' {...a11yProps(0)} />
             </Tabs>
           </Box>
           <TabPanel value={value}  index={0}>
-            <WorkScheduleCreateForm />
+            <WorkScheduleCreateForm setData={setData}/>
           </TabPanel>
         </Box>
       </ContentWrapper>

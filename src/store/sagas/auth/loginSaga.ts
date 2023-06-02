@@ -5,7 +5,7 @@
  */
 
 import { AnyAction } from '@reduxjs/toolkit';
-import { loginService, postForgotPassword, postResetPassword } from '../saga-actions/auth/loginAction';
+import { loginService, postForgotPassword, postResetPassword, setNewPasswordEmployee } from '../saga-actions/auth/loginAction';
 import { call, delay, put, takeEvery } from 'redux-saga/effects';
 import {
   loginRequested,
@@ -28,7 +28,7 @@ import { Auth } from '@/types/authentication';
 import Router from 'next/router';
 import { getMeServices } from '../saga-actions/auth/meAction';
 import { meSuccessed } from '@/store/reducers/slice/auth/meSlice';
-import { setNewPasswordEmployee } from '../saga-actions/auth/loginAction';
+import { readValidationResponse } from '@/utils/helper';
 
 /**
  * Fetch Authentication (Login)
@@ -56,11 +56,14 @@ function* fetchAuthenticationLogin(action: AnyAction) {
   } catch (err) {
     if (err instanceof AxiosError) {
       const errorMessage = err?.response?.data as Services.ErrorResponse;
+      const errorValidationMessage = err?.response?.data as Services.ValidationResponse;
       yield put({
         type: setResponserMessage.toString(),
         payload: {
-          code: errorMessage?.code,
-          message: errorMessage?.message,
+          code: errorMessage?.code || errorValidationMessage?.code,
+          message: errorMessage.message === 'Invalid email and password' ?
+            'Incorrect email address or password' :
+            readValidationResponse(errorValidationMessage.error).map(errMessage => errMessage.replace(/"/g, ''))
         }
       });
       yield put({ type: loginFailured.toString() });
@@ -74,7 +77,7 @@ function* fetchAuthenticationLogin(action: AnyAction) {
  * @param action
  */
 
-function* fetchForgotPassword(action: AnyAction){
+function* fetchForgotPassword(action: AnyAction) {
   try {
     const res: AxiosResponse = yield call(postForgotPassword, action?.payload);
     if (res.status === 200 || res.status === 201) {
@@ -89,7 +92,8 @@ function* fetchForgotPassword(action: AnyAction){
         type: setResponserMessage.toString(),
         payload: {
           code: res.data.code,
-          message: res.data.message
+          message: 'Email sent successfully',
+          footerMessage: 'Please check your email to reset password'
         }
       });
       yield delay(2000);
@@ -159,7 +163,7 @@ function* fetchResetPassword(action: AnyAction) {
 }
 
 function* fetchSetNewPassword(action: AnyAction) {
-  try{
+  try {
     const res: AxiosResponse = yield call(setNewPasswordEmployee, action?.payload);
     if (res.status === 200 || res.status === 201) {
       yield put({ type: employeeSetNewPasswordSuccessed.toString() });
@@ -180,7 +184,7 @@ function* fetchSetNewPassword(action: AnyAction) {
       });
       Router.push('/login');
     }
-  }catch (err) {
+  } catch (err) {
     if (err instanceof AxiosError) {
       const errorMessage = err?.response?.data as Services.ErrorResponse;
       yield put({ type: employeeSetNewPasswordFailed.toString() });
@@ -196,11 +200,11 @@ function* fetchSetNewPassword(action: AnyAction) {
   }
 }
 
-function* authSaga() {
+function* loginSaga() {
   yield takeEvery(loginRequested.toString(), fetchAuthenticationLogin);
   yield takeEvery(forgotPasswordRequested.toString(), fetchForgotPassword);
   yield takeEvery(resetPasswordRequested.toString(), fetchResetPassword);
   yield takeEvery(employeeSetNewPasswordRequested.toString(), fetchSetNewPassword);
 }
 
-export default authSaga;
+export default loginSaga;

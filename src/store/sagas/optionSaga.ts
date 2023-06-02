@@ -6,7 +6,8 @@ import {
   getAdministrativeThirdLevel,
   getBanks,
   getListDepartment,
-  getListPosition
+  getListPosition,
+  getCnb
 } from './saga-actions/optionActions';
 import { takeEvery, call, put, delay } from 'redux-saga/effects';
 import { Option } from '@/types/option';
@@ -31,7 +32,19 @@ import {
   getListDepartmentFailed,
   getListPositionRequested,
   getListPositionSuccess,
-  getListPositionFailed
+  getListPositionFailed,
+  getSecondAdministrativeFirstLevelRequested,
+  getSecondAdministrativeFirstLevelSuccess,
+  getSecondAdministrativeFirstLevelFailed,
+  getSecondAdministrativeSecondLevelRequested,
+  getSecondAdministrativeSecondLevelSuccess,
+  getSecondAdministrativeSecondLevelFailed,
+  getSecondAdministrativeThirdLevelRequested,
+  getSecondAdministrativeThirdLevelSuccess,
+  getSecondAdministrativeThirdLevelFailed,
+  getListCnbRequested,
+  getListCnbFailed,
+  getListCnbSuccess
 } from '../reducers/slice/options/optionSlice';
 import { Services } from '@/types/axios';
 import { setResponserMessage } from '../reducers/slice/responserSlice';
@@ -241,11 +254,11 @@ function* fetchGetListDepartment() {
   }
 }
 
-function* fetchGetListPosition() {
+function* fetchGetListPosition(action: AnyAction) {
   try {
-    const res: AxiosResponse = yield call(getListPosition);
+    const res: AxiosResponse = yield call(getListPosition, action?.payload);
     if (res.status === 200) {
-      const { items } = res?.data?.data as Option.position;
+      const { items } = res?.data?.data as Option.Position;
 
       yield put({
         type: getListPositionSuccess.toString(),
@@ -271,6 +284,141 @@ function* fetchGetListPosition() {
   }
 }
 
+/**
+ * fetch Administirative level first
+ * @param action
+ */
+function* fetchSecondAdministrativeLevelFirst(action: AnyAction) {
+  try {
+    const res: AxiosResponse = yield call(getAdministrativeFirstLevel, action?.payload);
+    if (res.status === 200) {
+      const { items } = res?.data?.data as Option.AdministrativeLevel;
+      yield put({
+        type: getSecondAdministrativeFirstLevelSuccess.toString(),
+        payload: {
+          items: items
+        }
+      });
+    }
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      yield delay(2000, true);
+      yield put({ type: getSecondAdministrativeFirstLevelFailed.toString() });
+      yield delay(2000, true);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message,
+        }
+      });
+    }
+  }
+}
+
+/**
+ * Fetch adminstiirative level second
+ *
+ * @param action
+ */
+function* fetchSecondAdministrativeLevelSecond(action: AnyAction) {
+  try {
+    const res: AxiosResponse = yield call(getAdministrativeSecondLevel, action?.payload);
+    if (res.status === 200) {
+      const { items } = res?.data?.data as Option.AdministrativeLevel;
+
+      yield put({
+        type: getSecondAdministrativeSecondLevelSuccess.toString(),
+        payload: {
+          items: items
+        }
+      });
+    }
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      yield delay(2000, true);
+      yield put({ type: getSecondAdministrativeSecondLevelFailed.toString() });
+      yield delay(2000, true);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message,
+        }
+      });
+    }
+  }
+}
+
+/**
+ * Fetch Administritive Level third
+ *
+ * @param action
+ */
+function* fetchSecondAdministrativeLevelThird(action: AnyAction) {
+  try {
+    const res: AxiosResponse = yield call(getAdministrativeThirdLevel, action?.payload);
+
+    if (res.status === 200) {
+      const { items } = res?.data?.data as Option.AdministrativeLevel;
+
+      yield put({
+        type: getSecondAdministrativeThirdLevelSuccess.toString(),
+        payload: {
+          items: items
+        }
+      });
+    }
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      yield delay(2000, true);
+      yield put({ type: getSecondAdministrativeThirdLevelFailed.toString() });
+      yield delay(2000, true);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message,
+        }
+      });
+    }
+  }
+}
+
+function* fetchListCnb() {
+  try {
+    const res: AxiosResponse = yield call(getCnb);
+
+    if (res.status === 200) {
+      const { items } = res?.data?.data as Option.Cnb;
+
+      yield put({
+        type: getListCnbSuccess.toString(),
+        payload: {
+          items: items
+        }
+      });
+    }
+  } catch(err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      yield delay(2000, true);
+      yield put({ type: getListCnbFailed.toString() });
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message,
+        }
+      });
+    }
+  }
+}
+
+
 function* optionSaga() {
   yield takeEvery(countriesRequested.toString(), fetchGetCountries);
   yield takeEvery(administrativeFirstLevelRequested.toString(), fetchAdministrativeLevelFirst);
@@ -279,6 +427,10 @@ function* optionSaga() {
   yield takeEvery(getBanksRequested.toString(), fetchGetBanks);
   yield takeEvery(getListDepartmentRequested.toString(), fetchGetListDepartment);
   yield takeEvery(getListPositionRequested.toString(), fetchGetListPosition);
+  yield takeEvery(getSecondAdministrativeFirstLevelRequested.toString(), fetchSecondAdministrativeLevelFirst);
+  yield takeEvery(getSecondAdministrativeSecondLevelRequested.toString(), fetchSecondAdministrativeLevelSecond);
+  yield takeEvery(getSecondAdministrativeThirdLevelRequested.toString(), fetchSecondAdministrativeLevelThird);
+  yield takeEvery(getListCnbRequested.toString(), fetchListCnb);
 }
 
 export default optionSaga;

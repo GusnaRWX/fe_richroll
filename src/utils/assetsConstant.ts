@@ -31,18 +31,19 @@ export const Image: ImageType = {
   PLACEHOLDER: '/assets/images/image-upload-placeholder.png',
   ESTELER: '/assets/images/es-teler.png',
   ADD_COMPANY: '/assets/images/add-company.png',
-  PLACEHOLDER_COMPANY: '/assets/images/placeholder-company.svg'
+  PLACEHOLDER_COMPANY: '/assets/images/placeholder-company.svg',
+  AVATAR_PLACEHOLDER: '/assets/images/avatar-placeholder.png'
 };
 
 export const Icons: IconsType = {
-  SSO_GOOGLE: '/assets/icons/sso-google.png',
-  SSO_FACEBOOK: '/assets/icons/sso-facebook.png',
-  ABOUT_1: '/assets/icons/about-1.png',
-  ABOUT_2: '/assets/icons/about-2.png',
-  ABOUT_3: '/assets/icons/about-3.png',
-  WHY_1: '/assets/icons/why-1.png',
-  WHY_2: '/assets/icons/why-2.png',
-  WHY_3: '/assets/icons/why-3.png',
+  SSO_GOOGLE: '/assets/icons/sso-google.svg',
+  SSO_FACEBOOK: '/assets/icons/sso-facebook.svg',
+  ABOUT_1: '/assets/icons/about-1.svg',
+  ABOUT_2: '/assets/icons/about-2.svg',
+  ABOUT_3: '/assets/icons/about-3.svg',
+  WHY_1: '/assets/icons/why-1.svg',
+  WHY_2: '/assets/icons/why-2.svg',
+  WHY_3: '/assets/icons/why-3.svg',
   FOOTER_WHATSAPP: '/assets/icons/footer-whatsapp.png',
   FOOTER_INSTAGRAM: '/assets/icons/footer-instagram.png',
   FOOTER_LINKEDIN: '/assets/icons/footer-linkedin.png',

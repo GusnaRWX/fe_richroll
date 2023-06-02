@@ -1,6 +1,6 @@
 import { Box, Container, List, Toolbar, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import Appbar from '@/components/_shared/_core/appbar/Index';
+import Appbar from '@/components/_shared/_core/appbar/Appbar';
 import DrawerCore from '@/components/_shared/_core/drawer/Index';
 import { Menus } from '@/components/_shared/_core/drawer/menu';
 import { BoxProps } from '@mui/system';
@@ -12,7 +12,7 @@ import Notify from '../../common/Notify';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { getStorage } from '@/utils/storage';
 import { meSuccessed } from '@/store/reducers/slice/auth/meSlice';
-import { getCompanyData } from '@/utils/helper';
+import { getCompanyData, CompanyDataParse } from '@/utils/helper';
 
 export interface LayoutProps {
   children?: React.ReactNode;
@@ -31,8 +31,8 @@ const Layout = ({
   children,
 }: LayoutProps) => {
   const [mobileOpen, setMobileOpen] = useState<boolean>(false);
+  const [companyData, setCompanyData] = useState<CompanyDataParse | null>({});
   const dispatch = useAppDispatch();
-  const companyData = getCompanyData();
 
   const handleDrawerToggle = () => {
     setMobileOpen((mobile) => !mobile);
@@ -41,11 +41,13 @@ const Layout = ({
 
   useEffect(() => {
     const getUserProfile = getStorage('user');
+    const tempData: CompanyDataParse | null = getCompanyData();
+    setCompanyData(tempData);
 
     if (getUserProfile) {
       dispatch({
         type: meSuccessed.toString(),
-        payload: { ...JSON.parse(getUserProfile as string) }
+        payload: { ...JSON.parse(getUserProfile) }
       });
     }
   }, []);
@@ -66,6 +68,7 @@ const Layout = ({
             width={151}
             height={40}
             alt='kayaroll'
+            priority
           />
         </Box>
       </Toolbar>
@@ -75,7 +78,8 @@ const Layout = ({
             src={companyData?.imageUrl && companyData?.imageUrl.includes('http') ? companyData?.imageUrl : ImageType.PLACEHOLDER_COMPANY}
             fill={true}
             style={{ objectFit: 'contain' }}
-            alt={companyData?.name || 'image'}
+            sizes='(max-width: 60px) 100%, 60px'
+            alt='company-logo'
           />
         </Box>
         <Box component='div'>
@@ -100,7 +104,7 @@ const Layout = ({
         component='div'
         sx={{ fontWeight: 400, px: '16px', mt: '8px', color: '#6B7280', width: '100%' }}
       >
-            Menus
+        Menus
       </Typography>
       <List>
         {
@@ -131,11 +135,16 @@ const Layout = ({
       />
       {
         [200, 201].includes(responser.code) && (
-          <Notify error={false} body={responser.message} />
+          <Notify error={false} body={responser.message} footerMessage={responser?.footerMessage} />
+        )
+      }
+      {
+        ![200, 201, 0].includes(responser?.code) && (
+          <Notify error={true} body={responser?.message}/>
         )
       }
       <DrawerCore
-        drawerWidth={drawerWidth}
+        drawerwidth={drawerWidth}
         container={container}
         mobileOpen={mobileOpen}
         handleDrawerToggle={handleDrawerToggle}

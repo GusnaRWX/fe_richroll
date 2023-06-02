@@ -46,6 +46,7 @@ function Table({
       <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
         <TablePagination
           rowsPerPageOptions={rowsPerPageOptions}
+          component='div'
           count={count}
           page={page}
           rowsPerPage={rowsPerPage}

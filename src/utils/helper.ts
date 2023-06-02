@@ -37,11 +37,11 @@ export const getFileExtension = (filename: string): string => {
   return filename.substring(filename.lastIndexOf('.') + 1).toLowerCase();
 };
 
-interface CompanyDataParse {
-  id: string | null;
-  imageUrl: string | null;
-  name: string | null;
-  sector: string | null;
+export interface CompanyDataParse {
+  id?: string | null;
+  imageUrl?: string | null;
+  name?: string | null;
+  sector?: string | null;
 }
 
 export const getCompanyData = () => {
@@ -59,49 +59,60 @@ export const getCompanyData = () => {
 };
 
 export const convertValue = (name, event) => {
-  const obj = {
+  return {
     target: {
       name, value: event.target.value
     }
   };
-  return obj;
 };
 
 export const convertChecked = (event) => {
   const { name, checked } = event.target;
 
-  const obj = {
+  return {
     target: {
       name, value: checked
     }
   };
-  return obj;
 };
 
 export const convertDateValue = (name, event) => {
   console.log('helpers', event);
-  const obj = {
+  return {
     target: {
       name, value: event.$d
     }
   };
-  return obj;
 };
 
-export const convertImageParams = (name, value, callback, onClose) => {
+export const convertImageParams = (name, value, callback?, onClose?) => {
   const files = value;
   const reader = new FileReader();
   reader.readAsDataURL(value);
   reader.onloadend = function () {
     callback(reader.result as string);
   };
-  onClose();
-  const obj = {
+  if (onClose) {
+    onClose();
+  }
+
+  return {
     target: {
       name, value: [files]
     }
   };
-  return obj;
+};
+
+export const randomCode = (length: number) => {
+  let result = '';
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const charactersLength = characters.length;
+  let counter = 0;
+  while (counter < length) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    counter += 1;
+  }
+  return result;
 };
 
 export const base64ToFile = (base64String: string | undefined, fileName: string): File | null => {
@@ -121,7 +132,113 @@ export const base64ToFile = (base64String: string | undefined, fileName: string)
   const blob = new Blob([buffer as BlobPart], { type: mimeType });
 
   // Create a File from the Blob
-  const file = new File([blob], fileName);
+  return new File([blob], fileName);
+};
 
-  return file;
+/**
+ * Handle for read message from Validation response
+ *
+ */
+export const readValidationResponse = (validationResponse: Array<string>) => {
+  return validationResponse.flatMap(value => {
+    return Object.keys(value).length > 0 ? Object.values(value).join('') : [];
+  });
+};
+
+/**
+ * Check if object is empty
+ */
+export const checkObject = (obj) => {
+  for (const key in obj) {
+    // eslint-disable-next-line no-prototype-builtins
+    if (obj.hasOwnProperty(key)) {
+      if (!obj[key] || obj[key] === '') {
+        return true;
+      }
+    }
+  }
+  return false;
+};
+
+/**
+ * Handle simple If Then Else to reduce cognitive complexity
+ *
+ */
+export const ifThenElse = (condition, ifTrue, ifFalse) => {
+  if (!condition) {
+    return ifFalse;
+  } else {
+    return ifTrue;
+  }
+};
+
+/**
+ * Handle compare up to 3 variable
+ *
+ */
+export const compareCheck = (firstArg, secondArg = true, thirdArg = true) => {
+  return (firstArg && secondArg && thirdArg);
+};
+
+/**
+ * Handle replace if empty
+ *
+ */
+export const ifEmptyReplace = (condition, replace) => {
+  if (!condition || !condition.length) {
+    return replace;
+  } else {
+    return condition;
+  }
+};
+
+export const getGender = (id) => {
+  switch (id) {
+    case 1 :
+      return 'Male';
+    case 2 :
+      return 'Female';
+    default :
+      return '';
+  }
+};
+
+export const getReligion = (id) => {
+  switch (id) {
+    case 1 :
+      return 'Islam';
+    case 2 :
+      return 'Christian';
+    case 3 :
+      return 'Buddhist';
+    case 4 :
+      return 'Hindu';
+    case 5 :
+      return 'Catholic';
+    default :
+      return '';
+  }
+};
+
+export const getMaritalStatus = (id) => {
+  switch (id) {
+    case 1 :
+      return 'Single';
+    case 2 :
+      return 'Married';
+    case 3 :
+      return 'Divorced';
+    case 4 :
+      return 'Separated';
+    case 5 :
+      return 'Widowed';
+    case 6 :
+      return 'Domestic Partnership';
+    case 7 :
+      return 'Civil Union';
+    case 8 :
+      return 'Annuled';
+    default :
+      return '';
+  }
 };

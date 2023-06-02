@@ -40,16 +40,15 @@ border-top: 1px solid #E5E7EB;
 interface CustomModalProps {
   open: boolean;
   handleClose: () => void;
+  handleConfirm: () => void;
   title: string;
   children;
   width: string;
+  submitText?: string
 }
 
 
-function CustomModal({open, handleClose, title, children, width}: CustomModalProps) {
-  const handleClick = () => {
-    handleClose();
-  };
+function CustomModal({open, handleClose, handleConfirm, title, children, width, submitText}: CustomModalProps) {
   return (
     <Modal
       open={open}
@@ -67,7 +66,7 @@ function CustomModal({open, handleClose, title, children, width}: CustomModalPro
         {children}
         <ModalFooter>
           <MuiButton variant='outlined' size='small' onClick={handleClose}>Cancel</MuiButton>
-          <MuiButton variant='contained' onClick={handleClick} size='small' color='primary'>Confirm</MuiButton>
+          <MuiButton variant='contained' onClick={handleConfirm} size='small' color='primary'>{submitText || 'Confirm'}</MuiButton>
         </ModalFooter>
       </Box>
     </Modal>

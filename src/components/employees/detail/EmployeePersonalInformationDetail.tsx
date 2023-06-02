@@ -1,8 +1,71 @@
 import React from 'react';
 import { Text } from '@/components/_shared/common';
-import { Grid } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
+import dayjs from 'dayjs';
+import { ifThenElse } from '@/utils/helper';
+import { getGender, getMaritalStatus, getReligion } from '@/utils/helper';
 
-const EmployeePersonalInformationDetail = () => {
+interface PersonalInformationDetailProps {
+  data: {
+    personal: {
+      dateOfBirth: string | null;
+      gender: number | null;
+      maritalStatus: number | null;
+      country: {
+        id: string | number;
+        name: string;
+      };
+      numberOfChildren: number | null;
+      religion: number | null;
+    },
+    citizen: {
+      country: {
+        code: string | number;
+        name: string;
+      };
+      firstLevel: {
+        code: string | number;
+        name: string;
+      };
+      secondLevel: {
+        code: string | number;
+        name: string;
+      };
+      thirdLevel: {
+        code: string | number;
+        name: string;
+      };
+      fourthLevel: {
+        code: string | number | null;
+        name: string | null;
+      };
+      address: string | null;
+      zipCode: string | null;
+      isCitizen: boolean;
+      isResident: boolean;
+    },
+    identity: {
+      type: number | null;
+      number: number | null;
+      expiredAt: string | null;
+      isPermanent: boolean;
+    },
+    bank: {
+      bank: {
+        id: string | number;
+        name: string;
+      };
+      holder: string | null;
+      accountNumber: string | null;
+      bankCode: string | null;
+      branchCode: string | null;
+      branchName: string | null;
+      swiftCode: string | null;
+    }
+  }
+}
+
+const EmployeePersonalInformationDetail = ({ data }: PersonalInformationDetailProps) => {
   return (
     <>
       <Grid
@@ -35,11 +98,9 @@ const EmployeePersonalInformationDetail = () => {
             fontWeight={500}
             mb={0.5}
           />
-          <Text
-            title='07/10/1998'
-            color='grey.600'
-            fontWeight={400}
-          />
+          <Typography fontWeight={400} color='grey.600'>
+            {dayjs(data?.personal?.dateOfBirth).format('YYYY/MM/DD')}
+          </Typography>
         </Grid>
         <Grid
           item
@@ -53,11 +114,9 @@ const EmployeePersonalInformationDetail = () => {
             fontWeight={500}
             mb={0.5}
           />
-          <Text
-            title='Female'
-            color='grey.600'
-            fontWeight={400}
-          />
+          <Typography fontWeight={400} color='grey.600'>
+            {getGender(data?.personal?.gender)}
+          </Typography>
         </Grid>
         <Grid
           item
@@ -71,11 +130,9 @@ const EmployeePersonalInformationDetail = () => {
             fontWeight={500}
             mb={0.5}
           />
-          <Text
-            title='Single'
-            color='grey.600'
-            fontWeight={400}
-          />
+          <Typography fontWeight={400} color='grey.600'>
+            {getMaritalStatus(data?.personal?.maritalStatus)}
+          </Typography>
         </Grid>
         <Grid
           item
@@ -89,11 +146,9 @@ const EmployeePersonalInformationDetail = () => {
             fontWeight={500}
             mb={0.5}
           />
-          <Text
-            title='0'
-            color='grey.600'
-            fontWeight={400}
-          />
+          <Typography fontWeight={400} color='grey.600'>
+            {data?.personal?.numberOfChildren}
+          </Typography>
         </Grid>
         <Grid
           item
@@ -107,11 +162,9 @@ const EmployeePersonalInformationDetail = () => {
             fontWeight={500}
             mb={0.5}
           />
-          <Text
-            title='Indonesia'
-            color='grey.600'
-            fontWeight={400}
-          />
+          <Typography fontWeight={400} color='grey.600'>
+            {data?.personal?.country.name}
+          </Typography>
         </Grid>
         <Grid
           item
@@ -125,11 +178,9 @@ const EmployeePersonalInformationDetail = () => {
             fontWeight={500}
             mb={0.5}
           />
-          <Text
-            title='Islamic'
-            color='grey.600'
-            fontWeight={400}
-          />
+          <Typography fontWeight={400} color='grey.600'>
+            {getReligion(data?.personal?.religion)}
+          </Typography>
         </Grid>
       </Grid>
       <Grid
@@ -161,11 +212,9 @@ const EmployeePersonalInformationDetail = () => {
             fontWeight={500}
             mb={0.5}
           />
-          <Text
-            title='Indonesia'
-            color='grey.600'
-            fontWeight={400}
-          />
+          <Typography fontWeight={400} color='grey.600'>
+            {data?.citizen?.country.name}
+          </Typography>
         </Grid>
         <Grid
           item
@@ -179,11 +228,9 @@ const EmployeePersonalInformationDetail = () => {
             fontWeight={500}
             mb={0.5}
           />
-          <Text
-            title='DKI Jakarta'
-            color='grey.600'
-            fontWeight={400}
-          />
+          <Typography fontWeight={400} color='grey.600'>
+            {data?.citizen?.firstLevel?.name}
+          </Typography>
         </Grid>
         <Grid
           item
@@ -197,11 +244,9 @@ const EmployeePersonalInformationDetail = () => {
             fontWeight={500}
             mb={0.5}
           />
-          <Text
-            title='Jakarta Selatan'
-            color='grey.600'
-            fontWeight={400}
-          />
+          <Typography fontWeight={400} color='grey.600'>
+            {data?.citizen?.secondLevel?.name}
+          </Typography>
         </Grid>
         <Grid
           item
@@ -215,11 +260,9 @@ const EmployeePersonalInformationDetail = () => {
             fontWeight={500}
             mb={0.5}
           />
-          <Text
-            title='Kebayoran Baru'
-            color='grey.600'
-            fontWeight={400}
-          />
+          <Typography fontWeight={400} color='grey.600'>
+            {data?.citizen?.thirdLevel?.name}
+          </Typography>
         </Grid>
         <Grid
           item
@@ -233,11 +276,9 @@ const EmployeePersonalInformationDetail = () => {
             fontWeight={500}
             mb={0.5}
           />
-          <Text
-            title='Jl. Nipah XV, Jakarta Selatan'
-            color='grey.600'
-            fontWeight={400}
-          />
+          <Typography fontWeight={400} color='grey.600'>
+            {data?.citizen?.address}
+          </Typography>
         </Grid>
         <Grid
           item
@@ -251,11 +292,9 @@ const EmployeePersonalInformationDetail = () => {
             fontWeight={500}
             mb={0.5}
           />
-          <Text
-            title='88019'
-            color='grey.600'
-            fontWeight={400}
-          />
+          <Typography fontWeight={400} color='grey.600'>
+            {data?.citizen?.zipCode}
+          </Typography>
         </Grid>
       </Grid>
       <Grid
@@ -287,11 +326,9 @@ const EmployeePersonalInformationDetail = () => {
             fontWeight={500}
             mb={0.5}
           />
-          <Text
-            title='Indonesia'
-            color='grey.600'
-            fontWeight={400}
-          />
+          <Typography fontWeight={400} color='grey.600'>
+            {data?.citizen?.firstLevel?.name}
+          </Typography>
         </Grid>
         <Grid
           item
@@ -305,11 +342,9 @@ const EmployeePersonalInformationDetail = () => {
             fontWeight={500}
             mb={0.5}
           />
-          <Text
-            title='DKI Jakarta'
-            color='grey.600'
-            fontWeight={400}
-          />
+          <Typography fontWeight={400} color='grey.600'>
+            {data?.citizen?.firstLevel?.name}
+          </Typography>
         </Grid>
         <Grid
           item
@@ -323,11 +358,9 @@ const EmployeePersonalInformationDetail = () => {
             fontWeight={500}
             mb={0.5}
           />
-          <Text
-            title='Jakarta Selatan'
-            color='grey.600'
-            fontWeight={400}
-          />
+          <Typography fontWeight={400} color='grey.600'>
+            {data?.citizen?.secondLevel?.name}
+          </Typography>
         </Grid>
         <Grid
           item
@@ -341,11 +374,9 @@ const EmployeePersonalInformationDetail = () => {
             fontWeight={500}
             mb={0.5}
           />
-          <Text
-            title='Kebayoran Baru'
-            color='grey.600'
-            fontWeight={400}
-          />
+          <Typography fontWeight={400} color='grey.600'>
+            {data?.citizen?.thirdLevel?.name}
+          </Typography>
         </Grid>
         <Grid
           item
@@ -359,11 +390,9 @@ const EmployeePersonalInformationDetail = () => {
             fontWeight={500}
             mb={0.5}
           />
-          <Text
-            title='Jl. Nipah XV, Jakarta Selatan'
-            color='grey.600'
-            fontWeight={400}
-          />
+          <Typography fontWeight={400} color='grey.600'>
+            {data?.citizen?.address}
+          </Typography>
         </Grid>
         <Grid
           item
@@ -377,11 +406,9 @@ const EmployeePersonalInformationDetail = () => {
             fontWeight={500}
             mb={0.5}
           />
-          <Text
-            title='88019'
-            color='grey.600'
-            fontWeight={400}
-          />
+          <Typography fontWeight={400} color='grey.600'>
+            {data?.citizen?.zipCode}
+          </Typography>
         </Grid>
       </Grid>
       <Grid
@@ -414,11 +441,13 @@ const EmployeePersonalInformationDetail = () => {
             fontWeight={500}
             mb={0.5}
           />
-          <Text
-            title='KTP'
-            color='grey.600'
-            fontWeight={400}
-          />
+          <Typography fontWeight={400} color='grey.600'>
+            {ifThenElse(data.identity.type === 0, 'KTP', (
+              ifThenElse(data.identity.type === 1, 'Nomor wajib pajak', (
+                ifThenElse(data.identity.type === 2, 'Passport', '-')
+              ))
+            ))}
+          </Typography>
         </Grid>
         <Grid
           item
@@ -432,11 +461,9 @@ const EmployeePersonalInformationDetail = () => {
             fontWeight={500}
             mb={0.5}
           />
-          <Text
-            title='64040612381912'
-            color='grey.600'
-            fontWeight={400}
-          />
+          <Typography fontWeight={400} color='grey.600'>
+            {data?.identity?.number}
+          </Typography>
         </Grid>
         <Grid
           item
@@ -450,11 +477,9 @@ const EmployeePersonalInformationDetail = () => {
             fontWeight={500}
             mb={0.5}
           />
-          <Text
-            title='07/10/2025'
-            color='grey.600'
-            fontWeight={400}
-          />
+          <Typography fontWeight={400} color='grey.600'>
+            {ifThenElse(data.identity.expiredAt === null, '-', dayjs(data.identity.expiredAt).format('YYYY/MM/DD'))}
+          </Typography>
         </Grid>
       </Grid>
       <Grid
@@ -487,11 +512,9 @@ const EmployeePersonalInformationDetail = () => {
             fontWeight={500}
             mb={0.5}
           />
-          <Text
-            title='BCA'
-            color='grey.600'
-            fontWeight={400}
-          />
+          <Typography fontWeight={400} color='grey.600'>
+            {data?.bank?.bank?.name}
+          </Typography>
         </Grid>
         <Grid
           item
@@ -505,11 +528,9 @@ const EmployeePersonalInformationDetail = () => {
             fontWeight={500}
             mb={0.5}
           />
-          <Text
-            title='Ratna Sari'
-            color='grey.600'
-            fontWeight={400}
-          />
+          <Typography fontWeight={400} color='grey.600'>
+            {data?.bank?.holder}
+          </Typography>
         </Grid>
         <Grid
           container
@@ -528,11 +549,9 @@ const EmployeePersonalInformationDetail = () => {
               fontWeight={500}
               mb={0.5}
             />
-            <Text
-              title='40061231231'
-              color='grey.600'
-              fontWeight={400}
-            />
+            <Typography fontWeight={400} color='grey.600'>
+              {data?.bank?.accountNumber}
+            </Typography>
           </Grid>
           <Grid
             item
@@ -546,11 +565,9 @@ const EmployeePersonalInformationDetail = () => {
               fontWeight={500}
               mb={0.5}
             />
-            <Text
-              title='004'
-              color='grey.600'
-              fontWeight={400}
-            />
+            <Typography fontWeight={400} color='grey.600'>
+              {data?.bank?.bankCode}
+            </Typography>
           </Grid>
           <Grid
             item
@@ -564,11 +581,9 @@ const EmployeePersonalInformationDetail = () => {
               fontWeight={500}
               mb={0.5}
             />
-            <Text
-              title='014'
-              color='grey.600'
-              fontWeight={400}
-            />
+            <Typography fontWeight={400} color='grey.600'>
+              {data?.bank?.branchCode}
+            </Typography>
           </Grid>
         </Grid>
         <Grid
@@ -583,11 +598,9 @@ const EmployeePersonalInformationDetail = () => {
             fontWeight={500}
             mb={0.5}
           />
-          <Text
-            title='KCP kebayoran Baru'
-            color='grey.600'
-            fontWeight={400}
-          />
+          <Typography fontWeight={400} color='grey.600'>
+            {data?.bank?.branchName}
+          </Typography>
         </Grid>
         <Grid
           item
@@ -601,11 +614,9 @@ const EmployeePersonalInformationDetail = () => {
             fontWeight={500}
             mb={0.5}
           />
-          <Text
-            title='CAD1-AS-BG-123'
-            color='grey.600'
-            fontWeight={400}
-          />
+          <Typography fontWeight={400} color='grey.600'>
+            {data?.bank?.swiftCode}
+          </Typography>
         </Grid>
       </Grid>
     </>

@@ -1,5 +1,6 @@
 import { get } from '@/utils/services';
 import { AxiosResponse } from 'axios';
+import { getCompanyData } from '@/utils/helper';
 
 export const getCountriesItem = () => {
   return get('/countries?page=1&itemPerPage=1000');
@@ -22,9 +23,15 @@ export const getBanks = (): Promise<AxiosResponse> => {
 };
 
 export const getListDepartment = (): Promise<AxiosResponse> => {
-  return get('/departments?page=1&itemPerPage=10000');
+  const data =  getCompanyData();
+  return get(`/departments?page=1&itemPerPage=10000&companyID=${data?.id}`);
 };
 
-export const getListPosition = (): Promise<AxiosResponse> => {
-  return get('/positions?page=1&itemPerPage=10000');
+export const getListPosition = ({departmentID}): Promise<AxiosResponse> => {
+  return get(`/positions?page=1&itemPerPage=10000&departmentID=${departmentID}`);
+};
+
+export const getCnb = (): Promise<AxiosResponse> => {
+  const data =  getCompanyData();
+  return get(`compensation_benefits/${data?.id}`);
 };

@@ -1,8 +1,10 @@
 import React, { HTMLAttributes } from 'react';
-import { Grid, Typography, Chip  } from '@mui/material';
+import { Grid, Typography, Chip } from '@mui/material';
 import { Image as ImageType } from '@/utils/assetsConstant';
 import styled from '@emotion/styled';
 import { Text } from '@/components/_shared/common';
+import dayjs from 'dayjs';
+
 
 
 interface ImagePriviewProps extends HTMLAttributes<HTMLDivElement> {
@@ -10,7 +12,7 @@ interface ImagePriviewProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 const ImageReview = styled.div`
-  background-image: url(${({image}: ImagePriviewProps) => image});
+  background-image: url(${({ image }: ImagePriviewProps) => image});
   background-repeat: no-repeat;
   width: 102px;
   height: 102px;
@@ -29,12 +31,33 @@ const AdditionalWrapper = styled.div`
  margin-bottom: 2rem;
 `;
 
-function EmployeeInformationDetail() {
+interface EmployeeInformationDetailProps {
+  data: {
+    fullName: string | undefined;
+    department: string | undefined;
+    email: string | undefined;
+    endDate: string | null;
+    picture: string | null;
+    isPermanent: boolean;
+    isSelfService: boolean;
+    nickname: string | null;
+    phoneNumber: string | null;
+    position: string | null;
+    startDate: string | null;
+  }
+}
+
+function EmployeeInformationDetail({ data }: EmployeeInformationDetailProps) {
   return (
     <>
-      <Typography component='h3' fontWeight='bold' fontSize={18} color='primary'>Employee Information</Typography>
+      <Typography component='h3' fontWeight='bold' fontSize={18} color='primary' mb='1rem'>Employee Information</Typography>
       <form>
-        <ImageReview image={ImageType.EXAMPLE_USER} />
+        <Text
+          title='Employee Photo'
+          fontWeight={500}
+          color='grey.400'
+        />
+        <ImageReview image={data?.picture !== null ? data?.picture : ImageType.AVATAR_PLACEHOLDER} />
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Text
@@ -43,7 +66,7 @@ function EmployeeInformationDetail() {
               color='grey.400'
             />
             <Text
-              title='Budiawan'
+              title={data?.fullName}
               fontWeight={400}
               color='grey.600'
             />
@@ -54,11 +77,9 @@ function EmployeeInformationDetail() {
               fontWeight={500}
               color='grey.400'
             />
-            <Text
-              title='Budi'
-              fontWeight={400}
-              color='grey.600'
-            />
+            <Typography fontWeight={400} color='grey.600'>
+              {data?.nickname}
+            </Typography>
           </Grid>
         </Grid>
         <Grid container spacing={2}>
@@ -68,11 +89,9 @@ function EmployeeInformationDetail() {
               fontWeight={500}
               color='grey.400'
             />
-            <Text
-              title='+6281234568990'
-              fontWeight={400}
-              color='grey.600'
-            />
+            <Typography fontWeight={400} color='grey.600'>
+              {data?.phoneNumber}
+            </Typography>
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Text
@@ -80,11 +99,9 @@ function EmployeeInformationDetail() {
               fontWeight={500}
               color='grey.400'
             />
-            <Text
-              title='sultanarifma@gmail.com'
-              fontWeight={400}
-              color='grey.600'
-            />
+            <Typography fontWeight={400} color='grey.600'>
+              {data?.email}
+            </Typography>
           </Grid>
         </Grid>
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
@@ -94,11 +111,9 @@ function EmployeeInformationDetail() {
               fontWeight={500}
               color='grey.400'
             />
-            <Text
-              title='07/10/2020'
-              fontWeight={400}
-              color='grey.600'
-            />
+            <Typography fontWeight={400} color='grey.600'>
+              {dayjs(data?.startDate).format('YYYY/MM/DD')}
+            </Typography>
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Text
@@ -106,11 +121,9 @@ function EmployeeInformationDetail() {
               fontWeight={500}
               color='grey.400'
             />
-            <Text
-              title='07/10/2026'
-              fontWeight={400}
-              color='grey.600'
-            />
+            <Typography fontWeight={400} color='grey.600'>
+              {data?.endDate === null ? '-' : dayjs(data?.endDate).format('YYYY/MM/DD')}
+            </Typography>
           </Grid>
         </Grid>
         <Grid container spacing={2} sx={{ marginBottom: '2rem' }}>
@@ -120,11 +133,9 @@ function EmployeeInformationDetail() {
               fontWeight={500}
               color='grey.400'
             />
-            <Text
-              title='Management'
-              fontWeight={400}
-              color='grey.600'
-            />
+            <Typography fontWeight={400} color='grey.600'>
+              {data?.department}
+            </Typography>
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Text
@@ -132,11 +143,9 @@ function EmployeeInformationDetail() {
               fontWeight={500}
               color='grey.400'
             />
-            <Text
-              title='Assistant Manager'
-              fontWeight={400}
-              color='grey.600'
-            />
+            <Typography fontWeight={400} color='grey.600'>
+              {data?.position}
+            </Typography>
           </Grid>
         </Grid>
         <AdditionalWrapper>
@@ -146,7 +155,13 @@ function EmployeeInformationDetail() {
             fontWeight={700}
             color='primary.500'
           />
-          <Chip label='Disabled' sx={{ backgroundColor: '#E5E7EB', fontWeight: 'bold' }}/>
+          {
+            data?.isSelfService === false ? (
+              <Chip label='Disabled' sx={{ backgroundColor: '#E5E7EB', fontWeight: 'bold' }} />
+            ) : (
+              <Chip label='Enabled' sx={{ backgroundColor: '#DCFCE7', color: '#166534', fontWeight: 'bold' }} />
+            )
+          }
         </AdditionalWrapper>
         <AdditionalWrapper>
           <Text
@@ -155,7 +170,13 @@ function EmployeeInformationDetail() {
             fontWeight={700}
             color='primary.500'
           />
-          <Chip label='Active' sx={{ backgroundColor: '#DCFCE7', color: '#166534', fontWeight: 'bold' }}/>
+          {
+            data?.isPermanent === false ? (
+              <Chip label='Non Active' sx={{ backgroundColor: '#FEE2E2', color: '#166534', fontWeight: 'bold' }} />
+            ) : (
+              <Chip label='Active' sx={{ backgroundColor: '#DCFCE7', color: '#166534', fontWeight: 'bold' }} />
+            )
+          }
         </AdditionalWrapper>
       </form>
     </>

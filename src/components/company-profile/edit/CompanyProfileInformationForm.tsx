@@ -2,58 +2,27 @@
 import React, { HTMLAttributes, useState } from 'react';
 import {
   Grid,
-  Button as MuiButton,
-  IconButton,
   Typography,
-  Modal,
   Select,
-  Box,
+  FormHelperText,
   MenuItem,
   FormControl } from '@mui/material';
-import { Input, Button, Textarea } from '@/components/_shared/form';
+import { Input, Textarea, FileUploadModal } from '@/components/_shared/form';
+import { Text } from '@/components/_shared/common';
 import { styled as MuiStyled } from '@mui/material/styles';
 import { Image as ImageType } from '@/utils/assetsConstant';
-import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
-import { Close } from '@mui/icons-material';
-import { BsFileEarmarkPlus } from 'react-icons/bs';
-import { AiOutlineCamera } from 'react-icons/ai';
-import { CustomHooks } from '@/types/hooks';
+import { convertImageParams, ifThenElse, compareCheck } from '@/utils/helper';
+import { useAppDispatch, useAppSelectors } from '@/hooks/index';
+import {
+  administrativeFirstLevelRequested,
+  administrativeSecondLevelRequested,
+  administrativeThirdLevelRequsted
+} from '@/store/reducers/slice/options/optionSlice';
 
 
 const AsteriskComponent = MuiStyled('span')(({ theme }) => ({
   color: theme.palette.error.main
-}));
-
-const NextBtnWrapper = MuiStyled(Box)(({
-  width: '100%',
-  display: 'flex',
-  flexDirection: 'row',
-  alignItems: 'center',
-  justifyContent: 'flex-end',
-  marginTop: '2rem'
-}));
-
-const ModalHeader = MuiStyled(Box)(({
-  width: '100%',
-  display: 'flex',
-  flexDirection: 'row',
-  alignItems: 'center',
-  justifyContent: 'center',
-  fontWeight: 'bold',
-  fontSize: '18px',
-  borderBottom: '1px solid #E5E7EB',
-  paddingBottom: '1rem'
-}));
-
-const ModalBtnWrapper = MuiStyled(Box)(({
-  width: '100%',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
-  padding: '2rem',
-  gap: '.5rem'
 }));
 
 interface ImagePriviewProps extends HTMLAttributes<HTMLDivElement> {
@@ -71,47 +40,31 @@ const ImageReview = styled.div`
   cursor: pointer;
   `;
 
-const modalStyle = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: '284px',
-  bgcolor: 'background.paper',
-  border: '1px solid #E5E7EB',
-  borderRadius: '8px',
-  p: 2,
-};
-
 interface CompanyInfoProps {
-  nextPage: (_val: number) => void;
-  values;
-  errors;
-  handleInputChange: (_e: CustomHooks.HandleInput) => CustomHooks.HandleInput;
+  formik;
   companyType: [];
   companySector: [];
   countries: [];
-  administrativeFirst: [];
-  administrativeSecond: [];
-  administrativeThird: [];
+  images;
+  setImages;
 }
 
-function CompanyInformationForm ({
-  nextPage,
-  values,
-  errors,
-  handleInputChange,
+function CompanyProfileInformationForm ({
+  formik,
   companyType,
   companySector,
   countries,
-  administrativeFirst,
-  administrativeSecond,
-  administrativeThird
+  images,
+  setImages
 }:CompanyInfoProps) {
   const [open, setOpen] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [images, setImages] = useState<string | null>(null);
-  const router = useRouter();
+  const dispatch = useAppDispatch();
+
+  const {
+    administrativeFirst,
+    administrativeSecond,
+    administrativeThird
+  } = useAppSelectors(state => state.option);
 
   const handleOpen = () => {
     setOpen(true);
@@ -121,56 +74,56 @@ function CompanyInformationForm ({
     setOpen(false);
   };
 
-  const convertParams = (name, value) => {
-    const files = value;
-    const reader = new FileReader();
-    reader.readAsDataURL(value);
-    reader.onloadend = function () {
-      setImages(reader.result as string);
-    };
-    const obj = {
-      target: {
-        name, value: [files]
-      }
-    };
-    return obj;
-  };
-
   return (
     <>
       <Typography component='h3' fontSize={18} color='primary'>Company Information</Typography>
       <form>
         <Typography variant='text-sm' component='div' color='primary' sx={{ mt: '16px' }}>Company Logo</Typography>
-        <ImageReview image={!images ? ImageType.PLACEHOLDER : images} onClick={handleOpen}/>
+        <ImageReview image={ifThenElse(!images, ImageType.PLACEHOLDER, images)} onClick={handleOpen}/>
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
-            <FormControl fullWidth>
+            <FormControl fullWidth error={compareCheck(formik.touched.companyType, Boolean(formik.errors.companyType))}>
               <Typography sx={{ mb: '6px' }}>Company Type<AsteriskComponent>*</AsteriskComponent></Typography>
               <Select
                 fullWidth
+                displayEmpty
                 variant='outlined'
                 size='small'
-                value={values.companyType}
-                onChange={handleInputChange}
-                name='companyType'
                 placeholder='Select Company Type'
+                name='companyType'
+                value={formik.values.companyType}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                renderValue={(value: string) => {
+                  if (value?.length === 0) {
+                    return <Text title='Select Company Type' color='grey.400' />;
+                  }
+                  const selectedType = companyType.find(type => type?.['id'] === value);
+                  if (selectedType) {
+                    return `${selectedType?.['name']}`;
+                  }
+                  return null;
+                }}
               >
-                {companyType.map((val, idx) => (
+                {companyType?.map((val, idx) => (
                   <MenuItem key={idx} value={val?.['id']}>{val?.['name']}</MenuItem>
                 ))}
               </Select>
+              <FormHelperText>{ifThenElse(formik.touched.companyType, formik.errors.companyType, '')}</FormHelperText>
             </FormControl>
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Input
               name='companyName'
-              customLabel='Company Name'
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={compareCheck(formik.touched.companyName, Boolean(formik.errors.companyName))}
+              helperText={ifThenElse(formik.touched.companyName, formik.errors.companyName, '')}
+              customLabel='Company Company Name'
               withAsterisk={true}
-              onChange={handleInputChange}
               size='small'
+              value={formik.values.companyName}
               placeholder='Input Company Name'
-              value={values.companyName}
-              error={errors.companyName}
             />
           </Grid>
         </Grid>
@@ -178,30 +131,46 @@ function CompanyInformationForm ({
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Input
               name='companyNPWP'
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={compareCheck(formik.touched.companyNPWP, Boolean(formik.errors.companyNPWP))}
+              helperText={ifThenElse(formik.touched.companyNPWP, formik.errors.companyNPWP, '')}
               customLabel='Company NPWP'
-              withAsterisk={true}
-              onChange={handleInputChange}
+              withAsterisk={false}
               size='small'
+              value={formik.values.companyNPWP}
               placeholder='Input Company NPWP'
-              value={values.companyNPWP}
-              error={errors.companyNPWP}
             />
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
-            <FormControl fullWidth>
+            <FormControl fullWidth error={compareCheck(formik.touched.companySector, Boolean(formik.errors.companySector))}>
               <Typography sx={{ mb: '6px' }}>Company Sector<AsteriskComponent>*</AsteriskComponent></Typography>
               <Select
                 fullWidth
+                displayEmpty
                 variant='outlined'
                 size='small'
-                value={values.companySector}
-                onChange={handleInputChange}
+                placeholder='Select Company Sector'
                 name='companySector'
+                value={formik.values.companySector}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                renderValue={(value: string) => {
+                  if (value?.length === 0) {
+                    return <Text title='Select Company Sector' color='grey.400' />;
+                  }
+                  const selectedSector = companySector.find(type => type?.['id'] === value);
+                  if (selectedSector) {
+                    return `${selectedSector?.['name']}`;
+                  }
+                  return null;
+                }}
               >
-                {companySector.map((val, idx) => (
+                {companySector?.map((val, idx) => (
                   <MenuItem key={idx} value={val?.['id']}>{val?.['name']}</MenuItem>
                 ))}
               </Select>
+              <FormHelperText>{ifThenElse(formik.touched.companySector, formik.errors.companySector, '')}</FormHelperText>
             </FormControl>
           </Grid>
         </Grid>
@@ -209,13 +178,15 @@ function CompanyInformationForm ({
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Input
               name='companyEmail'
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={compareCheck(formik.touched.companyEmail, Boolean(formik.errors.companyEmail))}
+              helperText={ifThenElse(formik.touched.companyEmail, formik.errors.companyEmail, '')}
               customLabel='Company Email Address'
               withAsterisk={true}
               size='small'
-              onChange={handleInputChange}
-              placeholder='Company Email Address'
-              value={values.companyEmail}
-              error={errors.companyEmail}
+              value={formik.values.companyEmail}
+              placeholder='Input Email Address'
             />
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6} sx={{ marginBottom: '1.5rem', marginTop: '.3rem' }}>
@@ -223,12 +194,14 @@ function CompanyInformationForm ({
             <Grid container spacing={2}>
               <Grid item xs={1} sm={3} md={3} lg={3} xl={3}>
                 <Select
+                  fullWidth
+                  displayEmpty
                   variant='outlined'
                   size='small'
-                  fullWidth
-                  onChange={handleInputChange}
                   name='phoneNumberPrefix'
-                  value={values.phoneNumberPrefix}
+                  value={formik.values.phoneNumberPrefix}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                   MenuProps={{ disableAutoFocus: true }}
                   sx={{
                     backgroundColor: '#D9EFE7',
@@ -245,12 +218,14 @@ function CompanyInformationForm ({
                 <Input
                   name='phoneNumber'
                   type='number'
-                  placeholder='Input Correct Number'
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={compareCheck(formik.touched.phoneNumber, Boolean(formik.errors.phoneNumber))}
+                  helperText={ifThenElse(formik.touched.phoneNumber, formik.errors.phoneNumber, '')}
                   withAsterisk={true}
-                  onChange={handleInputChange}
                   size='small'
-                  value={values.phoneNumber}
-                  error={errors.phoneNumber}
+                  value={formik.values.phoneNumber}
+                  placeholder='Input Contact Number'
                 />
               </Grid>
             </Grid>
@@ -263,69 +238,156 @@ function CompanyInformationForm ({
         </Grid>
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
-            <FormControl fullWidth>
+            <FormControl fullWidth error={compareCheck(formik.touched.countryCompanyAddress, Boolean(formik.errors.countryCompanyAddress))}>
               <Typography sx={{ mb: '6px' }}>Country<AsteriskComponent>*</AsteriskComponent></Typography>
               <Select
+                fullWidth
+                displayEmpty
                 variant='outlined'
                 size='small'
+                placeholder='Select Country'
                 name='countryCompanyAddress'
-                value={values.countryCompanyAddress}
-                onChange={handleInputChange}
+                value={formik.values.countryCompanyAddress}
+                onChange={(e) => {
+                  formik.handleChange(e);
+                  dispatch({
+                    type: administrativeFirstLevelRequested.toString(),
+                    payload: {
+                      countryId: e.target.value
+                    }
+                  });
+                }}
+                onBlur={formik.handleBlur}
+                renderValue={(value: string) => {
+                  if (value?.length === 0) {
+                    return <Text title='Select Country' color='grey.400' />;
+                  }
+                  const selectedCountry = countries.find(type => type?.['value'] === value);
+                  if (selectedCountry) {
+                    return `${selectedCountry?.['label']}`;
+                  }
+                  return null;
+                }}
               >
                 {countries?.map(item => (
                   <MenuItem key={item?.['label']} value={item?.['value']}>{item?.['label']}</MenuItem>
                 ))}
               </Select>
+              <FormHelperText>{ifThenElse(formik.touched.countryCompanyAddress, formik.errors.countryCompanyAddress, '')}</FormHelperText>
             </FormControl>
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
-            <FormControl fullWidth>
+            <FormControl fullWidth error={compareCheck(formik.touched.provinceCompanyAddress, Boolean(formik.errors.provinceCompanyAddress))}>
               <Typography sx={{ mb: '6px' }}>Province<AsteriskComponent>*</AsteriskComponent></Typography>
               <Select
+                fullWidth
+                displayEmpty
                 variant='outlined'
                 size='small'
+                placeholder='Select Province'
                 name='provinceCompanyAddress'
-                value={values.provinceCompanyAddress}
-                onChange={handleInputChange}
+                value={formik.values.provinceCompanyAddress}
+                onChange={(e) => {
+                  formik.handleChange(e);
+                  dispatch({
+                    type: administrativeSecondLevelRequested.toString(),
+                    payload: {
+                      countryId: formik.values.countryCompanyAddress,
+                      firstLevelCode: e.target.value
+                    }
+                  });
+                }}
+                onBlur={formik.handleBlur}
+                renderValue={(value: string) => {
+                  if (value?.length === 0) {
+                    return <Text title='Select Province' color='grey.400' />;
+                  }
+                  const selectedProvince = administrativeFirst.find(type => type?.['value'] === value);
+                  if (selectedProvince) {
+                    return `${selectedProvince?.['label']}`;
+                  }
+                  return null;
+                }}
               >
-                {administrativeFirst.map(item => (
+                {administrativeFirst?.map(item => (
                   <MenuItem key={item?.['label']} value={item?.['value']}>{item?.['label']}</MenuItem>
                 ))}
               </Select>
+              <FormHelperText>{ifThenElse(formik.touched.provinceCompanyAddress, formik.errors.provinceCompanyAddress, '')}</FormHelperText>
             </FormControl>
           </Grid>
         </Grid>
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
-            <FormControl fullWidth>
+            <FormControl fullWidth error={compareCheck(formik.touched.cityCompanyAddress, Boolean(formik.errors.cityCompanyAddress))}>
               <Typography sx={{ mb: '6px' }}>City<AsteriskComponent>*</AsteriskComponent></Typography>
               <Select
+                fullWidth
+                displayEmpty
                 variant='outlined'
                 size='small'
+                placeholder='Select City'
                 name='cityCompanyAddress'
-                value={values.cityCompanyAddress}
-                onChange={handleInputChange}
+                value={formik.values.cityCompanyAddress}
+                onChange={(e) => {
+                  formik.handleChange(e);
+                  dispatch({
+                    type: administrativeThirdLevelRequsted.toString(),
+                    payload: {
+                      countryId: formik.values.countryCompanyAddress,
+                      firstLevelCode: formik.values.provinceCompanyAddress,
+                      secondLevelCode: e.target.value
+                    }
+                  });
+                }}
+                onBlur={formik.handleBlur}
+                renderValue={(value: string) => {
+                  if (value?.length === 0) {
+                    return <Text title='Select City' color='grey.400' />;
+                  }
+                  const selectedCity = administrativeSecond.find(type => type?.['value'] === value);
+                  if (selectedCity) {
+                    return `${selectedCity?.['label']}`;
+                  }
+                  return null;
+                }}
               >
                 {administrativeSecond?.map(item => (
                   <MenuItem key={item?.['label']} value={item?.['value']}>{item?.['label']}</MenuItem>
                 ))}
               </Select>
+              <FormHelperText>{ifThenElse(formik.touched.cityCompanyAddress, formik.errors.cityCompanyAddress, '')}</FormHelperText>
             </FormControl>
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <FormControl fullWidth>
               <Typography sx={{ mb: '6px' }}>Sub-District<AsteriskComponent>*</AsteriskComponent></Typography>
               <Select
+                fullWidth
+                displayEmpty
                 variant='outlined'
                 size='small'
+                placeholder='Select Sub-District'
                 name='subDistrictCompanyAddress'
-                value={values.subDistrictCompanyAddress}
-                onChange={handleInputChange}
+                value={formik.values.subDistrictCompanyAddress}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                renderValue={(value: string) => {
+                  if (value?.length === 0) {
+                    return <Text title='Select Sub-District' color='grey.400' />;
+                  }
+                  const selectedSubDistrict = administrativeThird.find(type => type?.['value'] === value);
+                  if (selectedSubDistrict) {
+                    return `${selectedSubDistrict?.['label']}`;
+                  }
+                  return null;
+                }}
               >
                 {administrativeThird?.map(item => (
                   <MenuItem key={item?.['label']} value={item?.['value']}>{item?.['label']}</MenuItem>
                 ))}
               </Select>
+              <FormHelperText>{ifThenElse(formik.touched.subDistrictCompanyAddress, formik.errors.subDistrictCompanyAddress, '')}</FormHelperText>
             </FormControl>
           </Grid>
         </Grid>
@@ -335,67 +397,38 @@ function CompanyInformationForm ({
               name='addressCompanyAddress'
               maxRows={5}
               minRows={3}
-              value={values.addressCompanyAddress}
-              onChange={handleInputChange}
-              error={errors.addressCompanyAddress}
-              withAsterisk
+              value={formik.values.addressCompanyAddress}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={ifThenElse(formik.touched.addressCompanyAddress, formik.errors.addressCompanyAddress, false)}
+              withAsterisk={true}
               customLabel='Street Name, Building Name'
+              placeholder='Input Address Details'
             />
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Input
               name='zipCodeCompanyAddress'
-              value={values.zipCodeCompanyAddress}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={compareCheck(formik.touched.zipCodeCompanyAddress, Boolean(formik.errors.zipCodeCompanyAddress))}
+              helperText={ifThenElse(formik.touched.zipCodeCompanyAddress, formik.errors.zipCodeCompanyAddress, '')}
               customLabel='ZIP Code'
               withAsterisk={true}
-              onChange={handleInputChange}
               size='small'
+              value={formik.values.zipCodeCompanyAddress}
               placeholder='Input ZIP Code'
-              error={errors.zipCodeCompanyAddress}
             />
           </Grid>
         </Grid>
-        <NextBtnWrapper>
-          <Button onClick={() => { router.push('/company');}} fullWidth={false} size='small' label='Cancel' variant='outlined' sx={{ mr: '12px' }} color='primary'/>
-          <Button onClick={() => nextPage(1)} fullWidth={false} size='small' label='Next' color='primary'/>
-        </NextBtnWrapper>
       </form>
-      <Modal
+      <FileUploadModal
         open={open}
-        onClose={handleClose}
-        keepMounted
-        disableAutoFocus
-      >
-        <Box sx={modalStyle}>
-          <ModalHeader>Choose an action</ModalHeader>
-          <IconButton onClick={handleClose} sx={{
-            position: 'fixed',
-            top: 10,
-            right: 0
-          }}>
-            <Close />
-          </IconButton>
-          <ModalBtnWrapper>
-            <input
-              id='input-file'
-              onChange={(e) => handleInputChange(convertParams('picture', !e.target.files ? null : e.target.files[0]))}
-              type='file'
-              style={{ display: 'none' }}
-              accept='image/'
-            />
-            <label htmlFor='input-file'>
-              <MuiButton component='span' fullWidth size='small' variant='outlined'>
-                <BsFileEarmarkPlus /> &nbsp; Browse File
-              </MuiButton>
-            </label>
-            <MuiButton size='small' variant='outlined'>
-              <AiOutlineCamera /> &nbsp; Take A Photo
-            </MuiButton>
-          </ModalBtnWrapper>
-        </Box>
-      </Modal>
+        handleClose={handleClose}
+        onChange={(e) => formik.handleChange(convertImageParams('picture', !e.target.files ? null : e.target.files[0], setImages, handleClose))}
+      />
     </>
   );
 }
 
-export default CompanyInformationForm;
+export default CompanyProfileInformationForm;

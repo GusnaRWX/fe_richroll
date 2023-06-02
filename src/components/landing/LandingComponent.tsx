@@ -13,6 +13,7 @@ import {
   IconButton,
   ImageList,
   ImageListItem,
+  Grid
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -22,8 +23,11 @@ import { Image as ImageType, Icons } from '@/utils/assetsConstant';
 import { ImageList as ImageListAll } from './ImageList';
 
 const WrapperContainer = styled(Box)<BoxProps>(({ theme }) => ({
-  [theme.breakpoints.up('md')]: {
+  [theme.breakpoints.up('lg')]: {
     padding: '80px 135px',
+  },
+  [theme.breakpoints.only('md')]: {
+    padding: '80px 45px',
   },
   [theme.breakpoints.down('md')]: {
     padding: '40px 24px',
@@ -34,8 +38,11 @@ const WrapperContainer = styled(Box)<BoxProps>(({ theme }) => ({
 }));
 
 const WrapperContainerSpotlight = styled(Box)<BoxProps>(({ theme }) => ({
-  [theme.breakpoints.up('md')]: {
+  [theme.breakpoints.up('lg')]: {
     padding: '80px 135px',
+  },
+  [theme.breakpoints.only('md')]: {
+    padding: '80px 45px',
   },
   [theme.breakpoints.down('md')]: {
     padding: '40px 24px',
@@ -170,7 +177,7 @@ const Navbar = () => {
               textTransform: 'none',
             }}
           >
-            Try for free
+            Sign up for free
           </Button>
         </Box>
       </WrapperNavbarContent>
@@ -178,7 +185,27 @@ const Navbar = () => {
   );
 };
 
+
+
+const imageComponent = (col:number, slice2:number|undefined) => {
+  return (
+    <ImageList cols={col} rowHeight={64}>
+      {ImageListAll.slice(col === 6 ? -6 : 0, slice2).map((item, id) => (
+        <ImageListItem sx={{ alignItems: 'center' }} key={id}>
+          <Image
+            src={item.img}
+            alt={item.alt}
+            height={64}
+            width={80}
+          />
+        </ImageListItem>
+      ))}
+    </ImageList>
+  );
+};
+
 const LandingComponent = () => {
+
   return (
     <Box component='div' sx={{ marginTop: '100px' }}>
       <Navbar />
@@ -186,15 +213,9 @@ const LandingComponent = () => {
       <WrapperContainer sx={{ justifyContent: {xs: 'center', md: 'space-between'}, flexDirection: {xs: 'column', md: 'row'} }}>
         <Box component='div'>
           <Typography
-            variant='text-lg'
-            component='div'
-            sx={{ marginBottom: '24px' }}
-          >
-            Payroll & HR Solutions Specially Curated For SMEs And Start-Ups
-          </Typography>
-          <Typography
             variant='text-5xl'
             component='div'
+            color='primary.main'
             sx={{ fontWeight: 700 }}
           >
             The Smoother The Better.
@@ -211,7 +232,7 @@ const LandingComponent = () => {
               variant='text-lg'
               sx={{ marginLeft: '8px' }}
             >
-              Easy Set Up
+              EASY TO USE
             </Typography>
           </Box>
           <Box component='div' sx={{ display: 'flex', alignItems: 'center' }}>
@@ -225,7 +246,7 @@ const LandingComponent = () => {
               variant='text-lg'
               sx={{ marginLeft: '8px' }}
             >
-              Friendly Customer Support
+              SAVE TIME
             </Typography>
           </Box>
           <Box component='div' sx={{ display: 'flex', alignItems: 'center' }}>
@@ -239,7 +260,7 @@ const LandingComponent = () => {
               variant='text-lg'
               sx={{ marginLeft: '8px' }}
             >
-              Cancel Anytime
+              FREE UP TO 50 EMPLOYEES
             </Typography>
           </Box>
 
@@ -251,10 +272,11 @@ const LandingComponent = () => {
             sx={{
               textTransform: 'none',
               marginTop: '40px',
+              fontSize: '18px',
               width: {xs: '100%', md: 'auto'}
             }}
           >
-            Get a Demo, Try Us!
+            Get a Free Demo
           </Button>
         </Box>
         <Box component='div' sx={{ position: 'relative', width: { xs: '100%', md: '40%' }, height: '320px', mt: {xs: '32px', md: '0px'} }}>
@@ -278,52 +300,19 @@ const LandingComponent = () => {
             We’ve helped 100+ SMEs and Startups
           </Typography>
           <Box component='div' sx={{ display: {xs: 'none', md: 'block'}, marginBottom: '40px', justifyContent: 'space-between', alignContent: 'center' }}>
-            <ImageList cols={7} rowHeight={64}>
-              {ImageListAll.slice(0, 7).map((item, id) => (
-                <ImageListItem sx={{ alignItems: 'center' }} key={id}>
-                  <Image
-                    src={item.img}
-                    alt={item.alt}
-                    height={64}
-                    width={80}
-                  />
-                </ImageListItem>
-              ))}
-            </ImageList>
+            {imageComponent(7, 7)}
           </Box>
           <Box component='div' sx={{ display: {xs: 'none', md: 'block'}, justifyContent: 'space-around', alignContent: 'center' }}>
-            <ImageList cols={6} rowHeight={64}>
-              {ImageListAll.slice(-6).map((item, id) => (
-                <ImageListItem sx={{ alignItems: 'center' }} key={id}>
-                  <Image
-                    src={item.img}
-                    alt={item.alt}
-                    height={64}
-                    width={80}
-                  />
-                </ImageListItem>
-              ))}
-            </ImageList>
+            {imageComponent(6, undefined)}
           </Box>
           <Box component='div' sx={{ display: {xs: 'block', md: 'none'}, justifyContent: 'space-between', alignContent: 'center' }}>
-            <ImageList cols={3} rowHeight={64}>
-              {ImageListAll.slice(0, 12).map((item, id) => (
-                <ImageListItem sx={{ alignItems: 'center' }} key={id}>
-                  <Image
-                    src={item.img}
-                    alt={item.alt}
-                    height={64}
-                    width={80}
-                  />
-                </ImageListItem>
-              ))}
-            </ImageList>
+            {imageComponent(3, 12)}
           </Box>
         </Box>
       </WrapperContainer>
 
       <WrapperContainerSpotlight sx={{ justifyContent: 'center' }}>
-        <Box component='div' sx={{ display: 'flex', flexDirection: 'column' }}>
+        <Box component='div' sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
           <Typography
             variant='text-4xl'
             component='div'
@@ -336,94 +325,89 @@ const LandingComponent = () => {
             component='div'
             sx={{ marginBottom: '24px', fontWeight: 400, textAlign: 'center' }}
           >
-            A friend to SMEs and Start‑ups, we’re here to help you keep payroll<br />processes simple, smooth and secure, so that you can focus on what’s<br />important!
+            A friend to SMEs and Start‑ups,<br />We’re here to help you keep payroll processes simple, smooth and secure,<br />So that you can focus on what’s important!
           </Typography>
 
-          <Box
-            sx={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              '& > :not(style)': {
-                m: 0.5,
-                width: {xs: '100%', md: 377},
-                padding: '24px',
-                textAlign: 'center'
-              },
-            }}
-          >
-            <Paper sx={{ display: {xs: 'flex', md: 'block'}, flexDirection: {xs: 'row', md: 'column'} }} elevation={0}>
-              <Image
-                src={Icons.ABOUT_1}
-                alt='about1'
-                height={80}
-                width={80}
-              />
-              <Box>
-                <Typography
-                  variant='text-lg'
-                  component='div'
-                  sx={{ fontWeight: 700 }}
-                >
-                  Founded in 2020
-                </Typography>
-                <Typography
-                  variant='text-base'
-                  component='div'
-                  sx={{ fontWeight: 400 }}
-                >
-                  We’re here to offer a Fresh Approach
-                </Typography>
-              </Box>
-            </Paper>
-            <Paper sx={{ display: {xs: 'flex', md: 'block'}, flexDirection: {xs: 'row', md: 'column'} }} elevation={0}>
-              <Image
-                src={Icons.ABOUT_2}
-                alt='about2'
-                height={80}
-                width={80}
-              />
-              <Box>
-                <Typography
-                  variant='text-lg'
-                  component='div'
-                  sx={{ fontWeight: 700 }}
-                >
+          <Grid container spacing={1}>
+            <Grid item xs={12} md={4} lg={4} xl={4}>
+              <Paper sx={{ padding: '36px 24px', display: 'flex', flexDirection: {xs: 'row', md: 'column'}, height: '100%', justifyContent: 'flex-start', alignItems: 'center', textAlign: 'center' }} elevation={0}>
+                <Image
+                  src={Icons.ABOUT_1}
+                  alt='about1'
+                  height={80}
+                  width={80}
+                />
+                <Box sx={{marginTop: {xs: '0px', md: '16px'}, width: '100%'}}>
+                  <Typography
+                    variant='text-lg'
+                    component='div'
+                    sx={{ fontWeight: 700 }}
+                  >
+                    Founded in 2020
+                  </Typography>
+                  <Typography
+                    variant='text-base'
+                    component='div'
+                    sx={{ fontWeight: 400 }}
+                  >
+                    We’re here to offer<br />A Fresh Approach
+                  </Typography>
+                </Box>
+              </Paper>
+            </Grid>
+            <Grid item xs={12} md={4} lg={4} xl={4}>
+              <Paper sx={{ padding: '36px 24px', display: 'flex', flexDirection: {xs: 'row', md: 'column'}, height: '100%', justifyContent: 'flex-start', alignItems: 'center', textAlign: 'center' }} elevation={0}>
+                <Image
+                  src={Icons.ABOUT_2}
+                  alt='about2'
+                  height={80}
+                  width={80}
+                />
+                <Box sx={{marginTop: {xs: '0px', md: '16px'}, width: '100%'}}>
+                  <Typography
+                    variant='text-lg'
+                    component='div'
+                    sx={{ fontWeight: 700 }}
+                  >
                   Singaporean Company
-                </Typography>
-                <Typography
-                  variant='text-base'
-                  component='div'
-                  sx={{ fontWeight: 400 }}
-                >
-                  We’re fully Homegrown
-                </Typography>
-              </Box>
-            </Paper>
-            <Paper sx={{ display: {xs: 'flex', md: 'block'}, flexDirection: {xs: 'row', md: 'column'} }} elevation={0}>
-              <Image
-                src={Icons.ABOUT_3}
-                alt='about3'
-                height={80}
-                width={80}
-              />
-              <Box>
-                <Typography
-                  variant='text-lg'
-                  component='div'
-                  sx={{ fontWeight: 700 }}
-                >
+                  </Typography>
+                  <Typography
+                    variant='text-base'
+                    component='div'
+                    sx={{ fontWeight: 400 }}
+                  >
+                  Fully Homegrown
+                  </Typography>
+                </Box>
+              </Paper>
+            </Grid>
+            <Grid item xs={12} md={4} lg={4} xl={4}>
+              <Paper sx={{ padding: '36px 24px', display: 'flex', flexDirection: {xs: 'row', md: 'column'}, height: '100%', justifyContent: 'flex-start', alignItems: 'center', textAlign: 'center' }} elevation={0}>
+                <Image
+                  src={Icons.ABOUT_3}
+                  alt='about3'
+                  height={80}
+                  width={80}
+                />
+                <Box sx={{marginTop: {xs: '0px', md: '16px'}, width: '100%'}}>
+                  <Typography
+                    variant='text-lg'
+                    component='div'
+                    sx={{ fontWeight: 700 }}
+                  >
                   SMEs Friendly
-                </Typography>
-                <Typography
-                  variant='text-base'
-                  component='div'
-                  sx={{ fontWeight: 400 }}
-                >
-                  We’re focussed on empowering SMEs and Startups
-                </Typography>
-              </Box>
-            </Paper>
-          </Box>
+                  </Typography>
+                  <Typography
+                    variant='text-base'
+                    component='div'
+                    sx={{ fontWeight: 400 }}
+                  >
+                  SME Friendly. We’re focused on Empowering SMEs and Start-ups
+                  </Typography>
+                </Box>
+              </Paper>
+            </Grid>
+          </Grid>
         </Box>
       </WrapperContainerSpotlight>
 
@@ -441,7 +425,7 @@ const LandingComponent = () => {
             component='div'
             sx={{ fontWeight: 400 }}
           >
-            Time-consuming payroll calculations and processes that take up critical resources.
+            Time-consuming payroll calculations and processes<br/>that take up critical resources.
           </Typography>
         </Box>
         <Box component='div' sx={{ position: 'relative', width: { xs: '30%', md: '50%' }, height: { xs: '90px', md: '275px' } }}>
@@ -478,7 +462,7 @@ const LandingComponent = () => {
             component='div'
             sx={{ fontWeight: 400 }}
           >
-            To any business, time is money. Digitalise to rid yourself of tedious paperwork, and improve efficiency.
+            To any business, time is money. Digitalize to rid yourself of tedious paperwork<br/>and improve efficiency.
           </Typography>
         </Box>
       </WrapperContainer>
@@ -512,7 +496,7 @@ const LandingComponent = () => {
       </WrapperContainer>
 
       <WrapperContainerSpotlight sx={{ justifyContent: 'center' }}>
-        <Box component='div' sx={{ display: 'flex', flexDirection: 'column' }}>
+        <Box component='div' sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
           <Typography
             variant='text-4xl'
             component='div'
@@ -521,64 +505,65 @@ const LandingComponent = () => {
             Why Choose Kayaroll?
           </Typography>
 
-          <Box
-            sx={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              '& > :not(style)': {
-                m: 0.5,
-                width: {xs: '100%', md: 377},
-                padding: '24px',
-                textAlign: 'center'
-              },
-            }}
-          >
-            <Paper sx={{ display: {xs: 'flex', md: 'block'}, flexDirection: {xs: 'row', md: 'column'} }} elevation={0}>
-              <Image
-                src={Icons.WHY_1}
-                alt='why1'
-                height={80}
-                width={80}
-              />
-              <Typography
-                variant='text-lg'
-                component='div'
-                sx={{ fontWeight: 700 }}
-              >
-                Simple and Intuitive User Interface
-              </Typography>
-            </Paper>
-            <Paper sx={{ display: {xs: 'flex', md: 'block'}, flexDirection: {xs: 'row', md: 'column'} }} elevation={0}>
-              <Image
-                src={Icons.WHY_2}
-                alt='why2'
-                height={80}
-                width={80}
-              />
-              <Typography
-                variant='text-lg'
-                component='div'
-                sx={{ fontWeight: 700 }}
-              >
-                RAS Integrated and Compliant
-              </Typography>
-            </Paper>
-            <Paper sx={{ display: {xs: 'flex', md: 'block'}, flexDirection: {xs: 'row', md: 'column'} }} elevation={0}>
-              <Image
-                src={Icons.WHY_3}
-                alt='why3'
-                height={80}
-                width={80}
-              />
-              <Typography
-                variant='text-lg'
-                component='div'
-                sx={{ fontWeight: 700 }}
-              >
-                Excellent Customer Support
-              </Typography>
-            </Paper>
-          </Box>
+          <Grid container spacing={1}>
+            <Grid item xs={12} md={4} lg={4} xl={4}>
+              <Paper sx={{ padding: '36px 24px', display: 'flex', flexDirection: {xs: 'row', md: 'column'}, height: '100%', justifyContent: 'flex-start', alignItems: 'center', textAlign: 'center' }} elevation={0}>
+                <Image
+                  src={Icons.WHY_1}
+                  alt='why1'
+                  height={80}
+                  width={80}
+                />
+                <Box sx={{marginTop: {xs: '0px', md: '16px'}, width: '100%'}}>
+                  <Typography
+                    variant='text-lg'
+                    component='div'
+                    sx={{ fontWeight: 700 }}
+                  >
+                    Simple and Intuitive User Interface
+                  </Typography>
+                </Box>
+              </Paper>
+            </Grid>
+            <Grid item xs={12} md={4} lg={4} xl={4}>
+              <Paper sx={{ padding: '36px 24px', display: 'flex', flexDirection: {xs: 'row', md: 'column'}, height: '100%', justifyContent: 'flex-start', alignItems: 'center', textAlign: 'center' }} elevation={0}>
+                <Image
+                  src={Icons.WHY_2}
+                  alt='why2'
+                  height={80}
+                  width={80}
+                />
+                <Box sx={{marginTop: {xs: '0px', md: '16px'}, width: '100%'}}>
+                  <Typography
+                    variant='text-lg'
+                    component='div'
+                    sx={{ fontWeight: 700 }}
+                  >
+                    RAS Integrated and Compliant
+                  </Typography>
+                </Box>
+              </Paper>
+            </Grid>
+            <Grid item xs={12} md={4} lg={4} xl={4}>
+              <Paper sx={{ padding: '36px 24px', display: 'flex', flexDirection: {xs: 'row', md: 'column'}, height: '100%', justifyContent: 'flex-start', alignItems: 'center', textAlign: 'center' }} elevation={0}>
+                <Image
+                  src={Icons.WHY_3}
+                  alt='why3'
+                  height={80}
+                  width={80}
+                />
+                <Box sx={{marginTop: {xs: '0px', md: '16px'}, width: '100%'}}>
+                  <Typography
+                    variant='text-lg'
+                    component='div'
+                    sx={{ fontWeight: 700 }}
+                  >
+                    Excellent Customer Support
+                  </Typography>
+                </Box>
+              </Paper>
+            </Grid>
+          </Grid>
         </Box>
       </WrapperContainerSpotlight>
 

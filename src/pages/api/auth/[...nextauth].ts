@@ -3,10 +3,6 @@ import NextAuth, { NextAuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import FacebookProvider from 'next-auth/providers/facebook';
 import { config } from '@config';
-// import { setCookie } from 'nookies';
-// import { post } from '@/utils/services';
-// import jwt from 'jsonwebtoken';
-// import { JWT } from 'next-auth/jwt';
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -38,8 +34,8 @@ export const authOptions: NextAuthOptions = {
 
 
       if (response.ok && user) {
-        const user = await response.json();
-        return Promise.resolve(`/auth/callback?token=${user.data.accessToken}`);
+        const userResponse = await response.json();
+        return Promise.resolve(`/auth/callback?token=${userResponse.data.accessToken}`);
       }
 
       return true;

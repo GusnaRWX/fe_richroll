@@ -1,5 +1,7 @@
 import dayjs from 'dayjs';
 
+type DayJS = dayjs.Dayjs | null | string;
+
 export declare namespace Employees {
   interface EmployeeParams {
     page: number;
@@ -19,6 +21,20 @@ export declare namespace Employees {
     phoneNumberPrefix: string;
     phoneNumber: string;
     email: string;
+    isPermanent: boolean;
+    department: string;
+    position: string;
+    isSelfService: boolean;
+  }
+
+  interface EmployeeInfoDetailPayload {
+    picture: string;
+    fullName: string;
+    nickname: string;
+    phoneNumber: string;
+    email: string;
+    startDate: string;
+    endDate: string | null;
     isPermanent: boolean;
     department: string;
     position: string;
@@ -77,11 +93,11 @@ export declare namespace Employees {
 
   interface PersonalValues {
     useResidentialAddress: boolean;
-    isPermanentPersonalID: boolean;
-    dateofBirthPersonalInformation: dayjs.Dayjs | null | string;
+    // isPermanentPersonalID: boolean;
+    dateofBirthPersonalInformation: DayJS;
     genderPersonalInformation: number;
     maritialStatusPersonalInformation: number;
-    numberOfDependantsPersonalInformation: number;
+    numberOfDependantsPersonalInformation: number | null;
     nationalityPersonalInformation: string;
     religionPersonalInformation: number
 
@@ -109,20 +125,29 @@ export declare namespace Employees {
 
     idTypePersonalID: string;
     idNumberPersonalID: string;
-    idExpirationDatePersonalID: dayjs.Dayjs | null | string
+    idExpirationDatePersonalID: DayJS
+  }
+
+  interface CnbValues {
+    profile: string;
+    baseCompensation: string;
+    baseTax: string;
+    baseRate: string;
+    basePeriod: string;
+    suplementary: Array<{ compensation: string | number; tax: string; rate: string | number; period: string | number }>
   }
 
   interface InformationValues {
-    companyID: string;
+    companyID?: string;
     images: string
-    picture: []
+    picture: unknown
     fullName: string
     nickname: string
     phoneNumberPrefix: string
     phoneNumber: string
     email: string
-    startDate: dayjs.Dayjs | null | string
-    endDate: dayjs.Dayjs | null | string
+    startDate: DayJS
+    endDate: DayJS
     isPermanent: boolean
     department: string
     position: string
@@ -130,7 +155,7 @@ export declare namespace Employees {
   }
 
   interface EmergencyContactValues {
-    employeeID: string;
+    // employeeID: string;
     fullNamePrimary: string;
     relationPrimary: string;
     phoneNumberPrefixPrimary: string;
@@ -151,4 +176,51 @@ export declare namespace Employees {
     phoneNumberPrefixSecondary?: string;
     phoneNumberSecondary?: string;
   }
+
+  interface CnbEmployeePayload {
+    employeeID: string;
+    compensationBenefitId: string;
+    compensationBenefit: {
+      companyId: number,
+      name: string,
+      baseCompensation: {
+        compensationComponentId: number,
+        taxStatus: boolean,
+        amount: number,
+        rate: number,
+        period: string
+      },
+      supplementaryCompensations?: Array<string>
+    }
+  }
+
+  interface PatchEmployeeInformation {
+    companyID: string;
+    picture?: unknown;
+    fullName: string;
+    nickname?: string;
+    phoneNumberPrefix: string;
+    phoneNumber: string;
+    email: string;
+    startDate: string;
+    endDate: string;
+    isPermanent: boolean;
+    department?: string;
+    position?: string;
+    isSelfService: boolean;
+  }
+
+  interface EmergencyContactPatchValues {
+    primaryId: string | number;
+    secondaryId: string | number;
+    fullNamePrimary: string;
+    relationPrimary: string;
+    phoneNumberPrefixPrimary: string;
+    phoneNumberPrimary: string;
+    fullNameSecondary: string;
+    relationSecondary: string;
+    phoneNumberPrefixSecondary: string;
+    phoneNumberSecondary: string;
+  }
 }
+

@@ -2,20 +2,18 @@ import React, { useState } from 'react';
 import styled from '@emotion/styled';
 import Image from 'next/image';
 import kayaroll from '../../../../public/images/kayaroll-logo.png';
-import LocalizationMenu from '@/components/_shared/_core/localization/Index';
+import LocalizationMenu from '@/components/_shared/_core/localization/LocalizationMenu';
 import { Card, CardContent, Typography, Box, Stack } from '@mui/material';
 import { Input, Button } from '@/components/_shared/form';
-import { useForm } from '@/hooks/index';
+import { useForm, useAppSelectors, useAppDispatch } from '@/hooks/index';
 import { checkRegulerExpression } from '@/utils/helper';
 import Link from 'next/link';
 import { styled as MuiStyled } from '@mui/material/styles';
 import { ArrowBack } from '@mui/icons-material';
-import { useAppSelectors, useAppDispatch } from '@/hooks/index';
 import Notify from '@/components/_shared/common/Notify';
-import { Alert } from '@/components/_shared/common';
+import { Alert, OverlayLoading } from '@/components/_shared/common';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { forgotPasswordRequested } from '@/store/reducers/slice/auth/loginSlice';
-import {OverlayLoading} from '@/components/_shared/common';
 
 const LinkComponent = MuiStyled(Link)(({ theme }) => ({
   color: theme.palette.primary.main,
@@ -64,7 +62,7 @@ function ForgotPasswordComponent() {
   });
 
   const validate = (fieldOfValues = values) => {
-    const temp = {...errors};
+    const temp = { ...errors };
     if ('email' in fieldOfValues) {
       const patternEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       const emailValue = fieldOfValues.email || '';
@@ -91,7 +89,7 @@ function ForgotPasswordComponent() {
     e.preventDefault();
     if (validate()) {
       dispatch({ type: forgotPasswordRequested.toString(), payload: { email: values.email } });
-      setInitialValues({email: ''});
+      setInitialValues({ email: '' });
     }
   };
   return (
@@ -99,7 +97,7 @@ function ForgotPasswordComponent() {
       <OverlayLoading open={login.isLoading} />
       <NavHead>
         <div>
-          <Image src={kayaroll} alt='logo' height={40} width={150}/>
+          <Image src={kayaroll} alt='logo' height={40} width={150} />
         </div>
         <div>
           <LocalizationMenu />
@@ -107,18 +105,18 @@ function ForgotPasswordComponent() {
       </NavHead>
       {
         [200, 201].includes(responser.code) && (
-          <Notify error={false} body={responser.message}/>
+          <Notify error={false} body={responser.message} footerMessage={responser?.footerMessage} />
         )
       }
       {
         [400, 401].includes(responser.code) && (
-          <Notify error={true} body='Please check your input or check your authorization'/>
+          <Notify error={true} body='Please check your input or check your authorization' />
         )
       }
       <Card sx={{ width: '585px', height: login.isError ? '80%' : '70%' }}>
         <CardContent sx={{ padding: '2rem' }}>
           <div style={{ marginBottom: '1rem' }}>
-            <Image src={kayaroll} alt='logo' height={56} width={211}/>
+            <Image src={kayaroll} alt='logo' height={56} width={211} />
           </div>
           <div style={{ marginBottom: '1rem' }}>
             <Typography component='h2' fontWeight='bold' fontSize='24px' color='primary'>Forgot your password?</Typography>

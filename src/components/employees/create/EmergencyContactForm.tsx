@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Typography, Box, Grid, FormControl, Select, MenuItem } from '@mui/material';
 import { Input, Button } from '@/components/_shared/form';
 import { styled as MuiStyled } from '@mui/material/styles';
-import { useForm, useAppSelectors } from '@/hooks/index';
+import { useAppSelectors } from '@/hooks/index';
 import { Alert, Text } from '@/components/_shared/common';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { Employees } from '@/types/employees';
+import { useFormik } from 'formik';
+import { validationSchemeEmployeeEmergencyContact } from './validate';
+import { relationshipItems } from '@/utils/options';
 
 const AsteriskComponent = MuiStyled('span')(({ theme }) => ({
   color: theme.palette.error.main
@@ -20,72 +23,71 @@ interface EmergencyProps {
 }
 
 function EmergencyContactForm({ refProp, nextPage, setValues, emergencyValues, setIsEmergencyValid }: EmergencyProps) {
-  const { employeeID } = useAppSelectors((state) => state.employee);
-  const [errorFields, setErrorFields] = useState(false);
-  const [initialValues] = useState({
-    employeeID: employeeID,
-    fullNamePrimary: emergencyValues?.fullNamePrimary,
-    relationPrimary: emergencyValues?.relationPrimary,
-    phoneNumberPrefixPrimary: emergencyValues?.phoneNumberPrefixPrimary,
-    phoneNumberPrimary: emergencyValues?.phoneNumberPrimary,
-    fullNameSecondary: emergencyValues?.fullNameSecondary,
-    relationSecondary: emergencyValues?.relationSecondary,
-    phoneNumberPrefixSecondary: emergencyValues?.phoneNumberPrefixSecondary,
-    phoneNumberSecondary: emergencyValues?.phoneNumberSecondary
-  });
-
-  const validate = (fieldOfValues = values) => {
-    const temp = { ...errors };
-
-    if ('fullNamePrimary' in fieldOfValues)
-      temp.fullNamePrimary = fieldOfValues.fullNamePrimary ? '' : 'This field is required';
-
-    if ('PhoneNumberPrimary' in fieldOfValues)
-      temp.phoneNumberPrimary = fieldOfValues.phoneNumberPrimary ? '' : 'This field is required';
-
-    setErrors({
-      ...temp
-    });
-
-    if (fieldOfValues === values)
-      return Object.values(temp).every(x => x === '');
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (validate()) {
-      setValues({ ...values });
+  const { responser } = useAppSelectors(state => state);
+  const formik = useFormik({
+    initialValues: {
+      // employeeID: employeeID,
+      fullNamePrimary: emergencyValues?.fullNamePrimary,
+      relationPrimary: emergencyValues?.relationPrimary,
+      phoneNumberPrefixPrimary: emergencyValues?.phoneNumberPrefixPrimary,
+      phoneNumberPrimary: emergencyValues?.phoneNumberPrimary,
+      fullNameSecondary: emergencyValues?.fullNameSecondary,
+      relationSecondary: emergencyValues?.relationSecondary,
+      phoneNumberPrefixSecondary: emergencyValues?.phoneNumberPrefixSecondary,
+      phoneNumberSecondary: emergencyValues?.phoneNumberSecondary
+    },
+    validationSchema: validationSchemeEmployeeEmergencyContact,
+    onSubmit: (values, { setErrors }) => {
+      const emergencyLastValue = {
+        ...values,
+        phoneNumberPrimary: String(formik.values.phoneNumberPrimary)
+      };
+      setValues(emergencyLastValue);
       nextPage(3);
       setIsEmergencyValid(true);
-      setErrorFields(false);
-    } else {
-      setErrorFields(true);
-      setIsEmergencyValid(false);
+      setErrors({});
     }
-  };
+  });
 
   const handleBack = (e) => {
     e.preventDefault();
-    if (validate()) {
-      setValues({ ...values });
+    if (formik.isValid) {
+      setValues({ ...formik.values });
       nextPage(1);
       setIsEmergencyValid(true);
-      setErrorFields(false);
     } else {
-      setErrorFields(true);
       setIsEmergencyValid(false);
     }
 
   };
 
-  const { values, errors, setErrors, handleInputChange } = useForm(initialValues, true, validate);
+  const checkRelationship = (value: unknown) => {
+    if ((value as string).length === 0) {
+      return <Text title='Select Relationship' color='grey.400' />;
+    }
+    const selected = relationshipItems.find(item => item.value === value);
+    if (selected) {
+      return `${selected.label}`;
+    }
+    return null;
+  };
+
   return (
     <>
       {
-        errorFields && (
+        Object.keys(formik.errors).length > 0 && (
           <Alert
             severity='error'
             content='Please fill in all the mandatory fields'
+            icon={<CancelIcon />}
+          />
+        )
+      }
+      {
+        ![200, 201, 0].includes(responser?.code) && (
+          <Alert
+            severity='error'
+            content={responser?.message}
             icon={<CancelIcon />}
           />
         )
@@ -100,7 +102,7 @@ function EmergencyContactForm({ refProp, nextPage, setValues, emergencyValues, s
           mb='16px'
         />
       </Box>
-      <form ref={refProp} onSubmit={(e) => handleSubmit(e)}>
+      <form ref={refProp} onSubmit={formik.handleSubmit}>
         <Box sx={{ marginBottom: '3rem', width: '100%' }}>
           <Typography component='h3' fontSize={18} color='primary'>Primary</Typography>
           <Grid container spacing={2} sx={{ marginBottom: '1.5rem', marginTop: '1rem' }}>
@@ -109,11 +111,13 @@ function EmergencyContactForm({ refProp, nextPage, setValues, emergencyValues, s
                 name='fullNamePrimary'
                 customLabel='Full Name'
                 withAsterisk={true}
-                onChange={handleInputChange}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
                 size='small'
-                value={values.fullNamePrimary}
+                value={formik.values.fullNamePrimary}
                 placeholder='Input Full Name'
-                error={errors.fullNamePrimary}
+                error={formik.touched.fullNamePrimary && Boolean(formik.errors.fullNamePrimary)}
+                helperText={formik.touched.fullNamePrimary && formik.errors.fullNamePrimary}
               />
             </Grid>
             <Grid item xs={6} md={6} lg={6} xl={6}>
@@ -123,14 +127,19 @@ function EmergencyContactForm({ refProp, nextPage, setValues, emergencyValues, s
                   fullWidth
                   variant='outlined'
                   size='small'
-                  onChange={handleInputChange}
-                  value={values.relationPrimary}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.relationPrimary}
                   name='relationPrimary'
+                  displayEmpty
+                  renderValue={(value: unknown) => {
+                    return checkRelationship(value);
+                  }}
                 >
                   <MenuItem value='1'>Parent</MenuItem>
                   <MenuItem value='2'>Sibling</MenuItem>
                   <MenuItem value='3'>Spouse</MenuItem>
-                  <MenuItem value='4'>Others</MenuItem>
+                  <MenuItem value='0'>Others</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
@@ -144,8 +153,9 @@ function EmergencyContactForm({ refProp, nextPage, setValues, emergencyValues, s
                     variant='outlined'
                     size='small'
                     fullWidth
-                    onChange={handleInputChange}
-                    value={values.phoneNumberPrefixPrimary}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.phoneNumberPrefixPrimary}
                     name='phoneNumberPrefixPrimary'
                     MenuProps={{ disableAutoFocus: true }}
                     sx={{
@@ -163,13 +173,15 @@ function EmergencyContactForm({ refProp, nextPage, setValues, emergencyValues, s
                 <Grid item xs={9} sm={9} md={9} lg={9} xl={10} alignSelf='flex-end'>
                   <Input
                     name='phoneNumberPrimary'
-                    placeholder='Input Correct Number'
+                    placeholder='Input contact number'
                     withAsterisk={true}
                     size='small'
                     type='number'
-                    error={errors.phoneNumberPrimary}
-                    onChange={handleInputChange}
-                    value={values.phoneNumberPrimary}
+                    error={formik.touched.phoneNumberPrimary && Boolean(formik.errors.phoneNumberPrimary)}
+                    helperText={formik.touched.phoneNumberPrimary && formik.errors.phoneNumberPrimary}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.phoneNumberPrimary}
                   />
                 </Grid>
               </Grid>
@@ -186,9 +198,10 @@ function EmergencyContactForm({ refProp, nextPage, setValues, emergencyValues, s
                 customLabel='Full Name'
                 withAsterisk={false}
                 size='small'
-                onChange={handleInputChange}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
                 placeholder='Input Full Name'
-                value={values.fullNameSecondary}
+                value={formik.values.fullNameSecondary}
               />
             </Grid>
             <Grid item xs={6} md={6} lg={6} xl={6} spacing={2}>
@@ -198,14 +211,19 @@ function EmergencyContactForm({ refProp, nextPage, setValues, emergencyValues, s
                   fullWidth
                   variant='outlined'
                   size='small'
-                  onChange={handleInputChange}
-                  value={values.relationSecondary}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.relationSecondary}
                   name='relationSecondary'
+                  displayEmpty
+                  renderValue={(value: unknown) => {
+                    return checkRelationship(value);
+                  }}
                 >
                   <MenuItem value='1'>Parent</MenuItem>
                   <MenuItem value='2'>Sibling</MenuItem>
                   <MenuItem value='3'>Spouse</MenuItem>
-                  <MenuItem value='4'>Others</MenuItem>
+                  <MenuItem value='0'>Others</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
@@ -219,8 +237,9 @@ function EmergencyContactForm({ refProp, nextPage, setValues, emergencyValues, s
                     variant='outlined'
                     size='small'
                     fullWidth
-                    onChange={handleInputChange}
-                    value={values.phoneNumberPrefixSecondary}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.phoneNumberPrefixSecondary}
                     name='phoneNumberPrefixSecondary'
                     MenuProps={{ disableAutoFocus: true }}
                     sx={{
@@ -238,11 +257,12 @@ function EmergencyContactForm({ refProp, nextPage, setValues, emergencyValues, s
                 <Grid item xs={9} sm={9} md={9} lg={9} xl={10} alignSelf='flex-end'>
                   <Input
                     name='phoneNumberSecondary'
-                    placeholder='Input Correct Number'
+                    placeholder='Input contact number'
                     withAsterisk={true}
                     size='small'
-                    onChange={handleInputChange}
-                    value={values.phoneNumberSecondary}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.phoneNumberSecondary}
                   />
                 </Grid>
               </Grid>

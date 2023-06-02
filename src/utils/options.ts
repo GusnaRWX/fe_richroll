@@ -12,7 +12,7 @@ export const maritialStatus: Array<Option.Mapper> = [
 ];
 
 export const religions: Array<Option.Mapper> = [
-  { label: 'Islamic', value: '1' },
+  { label: 'Islam', value: '1' },
   { label: 'Christian', value: '2' },
   { label: 'Buddhist', value: '3' },
   { label: 'Hindu', value: '4' },
@@ -30,4 +30,11 @@ export const employeeItems: Array<Option.Mapper> = [
   { label: '< 25', value: '2' },
   { label: '< 50', value: '3' },
   { label: '> 50', value: '4' }
+];
+
+export const relationshipItems: Array<Option.Mapper> = [
+  { label: 'Parent', value: '1' },
+  { label: 'Sibling', value: '2' },
+  { label: 'Spouse', value: '3' },
+  { label: 'Others', value: '0' }
 ];

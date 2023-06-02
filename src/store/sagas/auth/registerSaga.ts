@@ -1,14 +1,12 @@
 import { AnyAction } from '@reduxjs/toolkit';
 import { postRegister, sendEmail } from '../saga-actions/auth/regsiterAction';
 import { call, put, takeEvery, delay } from 'redux-saga/effects';
-import { registerRequested, registerFailed, registerSuccess, sendEmailRequested, sendEmailFailed, sendEmailSuccess} from '@/store/reducers/slice/auth/registerSlice';
+import { registerRequested, registerFailed, registerSuccess, sendEmailRequested, sendEmailFailed, sendEmailSuccess } from '@/store/reducers/slice/auth/registerSlice';
 import { setResponserMessage } from '@/store/reducers/slice/responserSlice';
 import { Services } from '@/types/axios';
 import { AxiosError, AxiosResponse } from 'axios';
 import { Auth } from '@/types/authentication';
 import Router from 'next/router';
-
-
 
 function* fetchPostRegister(action: AnyAction) {
   try {
@@ -25,13 +23,15 @@ function* fetchPostRegister(action: AnyAction) {
         payload: accessToken
       };
       yield call(fetchSendEmail, body);
-      Router.push('/send-email-verification');
+      Router.push({
+        pathname: '/send-email-verification',
+        query: { email: action?.payload?.email }
+      }, '/send-email-verification');
     }
-  }catch(err) {
+  } catch (err) {
     if (err instanceof AxiosError) {
       const errorMessage = err?.response?.data as Services.ErrorResponse;
       yield put({ type: registerFailed.toString() });
-      yield delay(2000, true);
       yield put({
         type: setResponserMessage.toString(),
         payload: {
@@ -49,7 +49,7 @@ function* fetchSendEmail(action: AnyAction) {
     if (res.status === 200) {
       yield put({ type: sendEmailSuccess.toString() });
     }
-  }catch(err) {
+  } catch (err) {
     if (err instanceof AxiosError) {
       const errorMessage = err?.response?.data as Services.ErrorResponse;
       yield put({ type: sendEmailFailed.toString() });

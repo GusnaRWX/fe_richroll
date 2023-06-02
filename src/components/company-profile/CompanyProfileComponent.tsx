@@ -7,7 +7,7 @@ import { Edit } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { getCompanyDetailRequested } from '@/store/reducers/slice/company/companySlice';
-import { getCompanyData } from '@/utils/helper';
+import { getCompanyData, ifEmptyReplace } from '@/utils/helper';
 
 const ButtonWrapper = styled(Box)(({
   display: 'flex',
@@ -65,7 +65,7 @@ function CompanyProfileComponent() {
 
   useEffect(() => {
     console.log(data);
-    
+
     dispatch({
       type: getCompanyDetailRequested.toString(),
       payload: {
@@ -107,7 +107,7 @@ function CompanyProfileComponent() {
           <TabPanel value={value} index={0}>
             <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
               <Grid item xs={12} md={12} lg={12} xl={12}>
-                <Typography component='h3' fontSize={18} color='primary'>Company Information</Typography>
+                <Typography component='h3' fontSize={18} color='primary' fontWeight={700}>Company Information</Typography>
               </Grid>
             </Grid>
             <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
@@ -118,7 +118,7 @@ function CompanyProfileComponent() {
                     src={data?.information?.imageUrl && data?.information?.imageUrl.includes('http') ? data?.information?.imageUrl : ImageType.PLACEHOLDER_COMPANY}
                     fill={true}
                     style={{ objectFit: 'contain' }}
-                    alt={companyData?.name || 'image'}
+                    alt={'company logo'}
                   />
                 </Box>
               </Grid>
@@ -126,112 +126,112 @@ function CompanyProfileComponent() {
             <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
               <Grid item xs={6} md={6} lg={6} xl={6}>
                 <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Company Type</Typography>
-                <Typography component='div' variant='text-sm' color='#4B5563'>{data?.information?.type?.name || '-'}</Typography>
+                <Typography component='div' variant='text-sm' color='#4B5563'>{ifEmptyReplace(data?.information?.type?.name, '-')}</Typography>
               </Grid>
               <Grid item xs={6} md={6} lg={6} xl={6}>
                 <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Company Name</Typography>
-                <Typography component='div' variant='text-sm' color='#4B5563'>{data?.information?.name || '-'}</Typography>
+                <Typography component='div' variant='text-sm' color='#4B5563'>{ifEmptyReplace(data?.information?.name, '-')}</Typography>
               </Grid>
             </Grid>
             <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
               <Grid item xs={6} md={6} lg={6} xl={6}>
                 <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Company NPWP</Typography>
-                <Typography component='div' variant='text-sm' color='#4B5563'>{data?.information?.npwp || '-'}</Typography>
+                <Typography component='div' variant='text-sm' color='#4B5563'>{ifEmptyReplace(data?.information?.npwp, '-')}</Typography>
               </Grid>
               <Grid item xs={6} md={6} lg={6} xl={6}>
                 <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Company Sector</Typography>
-                <Typography component='div' variant='text-sm' color='#4B5563'>{data?.information?.sector?.name || '-'}</Typography>
+                <Typography component='div' variant='text-sm' color='#4B5563'>{ifEmptyReplace(data?.information?.sector?.name, '-')}</Typography>
               </Grid>
             </Grid>
             <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
               <Grid item xs={6} md={6} lg={6} xl={6}>
                 <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Company Email</Typography>
-                <Typography component='div' variant='text-sm' color='#4B5563'>{data?.information?.email || '-'}</Typography>
+                <Typography component='div' variant='text-sm' color='#4B5563'>{ifEmptyReplace(data?.information?.email, '-')}</Typography>
               </Grid>
               <Grid item xs={6} md={6} lg={6} xl={6}>
                 <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Contact Number</Typography>
-                <Typography component='div' variant='text-sm' color='#4B5563'>{data?.information?.contact || '-'}</Typography>
+                <Typography component='div' variant='text-sm' color='#4B5563'>{ifEmptyReplace(data?.information?.phoneNumberPrefix, '-')} {ifEmptyReplace(data?.information?.phoneNumber, '-')}</Typography>
               </Grid>
             </Grid>
             <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
               <Grid item xs={12} md={12} lg={12} xl={12}>
-                <Typography component='h3' fontSize={18} color='primary'>Company Address</Typography>
+                <Typography component='h3' fontSize={18} color='primary' fontWeight={700}>Company Address</Typography>
               </Grid>
             </Grid>
             <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
               <Grid item xs={6} md={6} lg={6} xl={6}>
                 <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Country</Typography>
-                <Typography component='div' variant='text-sm' color='#4B5563'>{data?.address?.country?.name || '-'}</Typography>
+                <Typography component='div' variant='text-sm' color='#4B5563'>{ifEmptyReplace(data?.address?.country?.name, '-')}</Typography>
               </Grid>
               <Grid item xs={6} md={6} lg={6} xl={6}>
                 <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Province</Typography>
-                <Typography component='div' variant='text-sm' color='#4B5563'>{data?.address?.firstLevel?.name || '-'}</Typography>
+                <Typography component='div' variant='text-sm' color='#4B5563'>{ifEmptyReplace(data?.address?.firstLevel?.name, '-')}</Typography>
               </Grid>
             </Grid>
             <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
               <Grid item xs={6} md={6} lg={6} xl={6}>
                 <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>City</Typography>
-                <Typography component='div' variant='text-sm' color='#4B5563'>{data?.address?.secondLevel?.name || '-'}</Typography>
+                <Typography component='div' variant='text-sm' color='#4B5563'>{ifEmptyReplace(data?.address?.secondLevel?.name, '-')}</Typography>
               </Grid>
               <Grid item xs={6} md={6} lg={6} xl={6}>
                 <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Sub-district</Typography>
-                <Typography component='div' variant='text-sm' color='#4B5563'>{data?.address?.thirdLevel?.name || '-'}</Typography>
+                <Typography component='div' variant='text-sm' color='#4B5563'>{ifEmptyReplace(data?.address?.thirdLevel?.name, '-')}</Typography>
               </Grid>
             </Grid>
             <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
               <Grid item xs={6} md={6} lg={6} xl={6}>
                 <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Street Name, Building Name</Typography>
-                <Typography component='div' variant='text-sm' color='#4B5563'>{data?.address?.address || '-'}</Typography>
+                <Typography component='div' variant='text-sm' color='#4B5563'>{ifEmptyReplace(data?.address?.address, '-')}</Typography>
               </Grid>
               <Grid item xs={6} md={6} lg={6} xl={6}>
                 <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Zip Code</Typography>
-                <Typography component='div' variant='text-sm' color='#4B5563'>{data?.address?.zipCode || '-'}</Typography>
+                <Typography component='div' variant='text-sm' color='#4B5563'>{ifEmptyReplace(data?.address?.zipCode, '-')}</Typography>
               </Grid>
             </Grid>
           </TabPanel>
           <TabPanel value={value} index={1}>
             <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
               <Grid item xs={12} md={12} lg={12} xl={12}>
-                <Typography component='h3' fontSize={18} color='primary'>Bank Information</Typography>
+                <Typography component='h3' fontSize={18} color='primary' fontWeight={700}>Bank Information</Typography>
               </Grid>
             </Grid>
             <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
               <Grid item xs={6} md={6} lg={6} xl={6}>
                 <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Bank</Typography>
-                <Typography component='div' variant='text-sm' color='#4B5563'>{data?.bank?.bank?.name || '-'}</Typography>
+                <Typography component='div' variant='text-sm' color='#4B5563'>{ifEmptyReplace(data?.bank?.bank?.name, '-')}</Typography>
               </Grid>
               <Grid item xs={6} md={6} lg={6} xl={6}>
                 <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Bank Account Holder&apos;s Name</Typography>
-                <Typography component='div' variant='text-sm' color='#4B5563'>{data?.bank?.accountName || '-'}</Typography>
+                <Typography component='div' variant='text-sm' color='#4B5563'>{ifEmptyReplace(data?.bank?.accountName, '-')}</Typography>
               </Grid>
             </Grid>
             <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
               <Grid item xs={6} md={6} lg={6} xl={6}>
                 <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Bank Account No</Typography>
-                <Typography component='div' variant='text-sm' color='#4B5563'>{data?.bank?.accountNumber || '-'}</Typography>
+                <Typography component='div' variant='text-sm' color='#4B5563'>{ifEmptyReplace(data?.bank?.accountNumber, '-')}</Typography>
               </Grid>
               <Grid item xs={3} md={3} lg={3} xl={3}>
                 <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Bank Code</Typography>
-                <Typography component='div' variant='text-sm' color='#4B5533'>{data?.bank?.bankCode || '-'}</Typography>
+                <Typography component='div' variant='text-sm' color='#4B5533'>{ifEmptyReplace(data?.bank?.bankCode, '-')}</Typography>
               </Grid>
               <Grid item xs={3} md={3} lg={3} xl={3}>
                 <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Branch Code</Typography>
-                <Typography component='div' variant='text-sm' color='#4B5563'>{data?.bank?.branchCode || '-'}</Typography>
+                <Typography component='div' variant='text-sm' color='#4B5563'>{ifEmptyReplace(data?.bank?.branchCode, '-')}</Typography>
               </Grid>
             </Grid>
             <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
               <Grid item xs={6} md={6} lg={6} xl={6}>
                 <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Branch Name</Typography>
-                <Typography component='div' variant='text-sm' color='#4B5563'>{data?.bank?.branchName || '-'}</Typography>
+                <Typography component='div' variant='text-sm' color='#4B5563'>{ifEmptyReplace(data?.bank?.branchName, '-')}</Typography>
               </Grid>
               <Grid item xs={6} md={6} lg={6} xl={6}>
                 <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Swift Code</Typography>
-                <Typography component='div' variant='text-sm' color='#4B5563'>{data?.bank?.swiftCode || '-'}</Typography>
+                <Typography component='div' variant='text-sm' color='#4B5563'>{ifEmptyReplace(data?.bank?.swiftCode, '-')}</Typography>
               </Grid>
             </Grid>
             <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
               <Grid item xs={12} md={12} lg={12} xl={12}>
-                <Typography component='h3' fontSize={18} color='primary'>Payment Information</Typography>
+                <Typography component='h3' fontSize={18} color='primary' fontWeight={700}>Payment Information</Typography>
               </Grid>
             </Grid>
             {!data?.payroll?.monthly && !data?.payroll?.weekly && !data?.payroll?.biweekly && (
@@ -252,11 +252,11 @@ function CompanyProfileComponent() {
                 <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
                   <Grid item xs={6} md={6} lg={6} xl={6}>
                     <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Pay Period (includes overtime)</Typography>
-                    <Typography component='div' variant='text-sm' color='#4B5563'>{data?.payroll?.monthly?.periodStart || '-'} to {data?.payroll?.monthly?.periodEnd || '-'}</Typography>
+                    <Typography component='div' variant='text-sm' color='#4B5563'>{data?.payroll?.monthly?.periodStart} to {data?.payroll?.monthly?.periodEnd}</Typography>
                   </Grid>
                   <Grid item xs={6} md={6} lg={6} xl={6}>
                     <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Default Payment Mode</Typography>
-                    <Typography component='div' variant='text-sm' color='#4B5563'>{data?.payroll?.monthly?.method?.name || '-'}</Typography>
+                    <Typography component='div' variant='text-sm' color='#4B5563'>{data?.payroll?.monthly?.method?.name}</Typography>
                   </Grid>
                 </Grid>
               </>
@@ -272,11 +272,11 @@ function CompanyProfileComponent() {
                 <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
                   <Grid item xs={6} md={6} lg={6} xl={6}>
                     <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Pay Period (includes overtime)</Typography>
-                    <Typography component='div' variant='text-sm' color='#4B5563'>{data?.payroll?.weekly?.period || '-'}</Typography>
+                    <Typography component='div' variant='text-sm' color='#4B5563'>{data?.payroll?.weekly?.period}</Typography>
                   </Grid>
                   <Grid item xs={6} md={6} lg={6} xl={6}>
                     <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Default Payment Mode</Typography>
-                    <Typography component='div' variant='text-sm' color='#4B5563'>{data?.payroll?.weekly?.method?.name || '-'}</Typography>
+                    <Typography component='div' variant='text-sm' color='#4B5563'>{data?.payroll?.weekly?.method?.name}</Typography>
                   </Grid>
                 </Grid>
               </>
@@ -292,11 +292,11 @@ function CompanyProfileComponent() {
                 <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
                   <Grid item xs={6} md={6} lg={6} xl={6}>
                     <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Pay Period (includes overtime)</Typography>
-                    <Typography component='div' variant='text-sm' color='#4B5563'>{data?.payroll?.biWeekly?.period || '-'} on {data?.payroll?.biWeekly?.periodWeek || '-'}</Typography>
+                    <Typography component='div' variant='text-sm' color='#4B5563'>{data?.payroll?.biWeekly?.period} on {data?.payroll?.biWeekly?.periodWeek}</Typography>
                   </Grid>
                   <Grid item xs={6} md={6} lg={6} xl={6}>
                     <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Default Payment Mode</Typography>
-                    <Typography component='div' variant='text-sm' color='#4B5563'>{data?.payroll?.biWeekly?.method?.name || '-'}</Typography>
+                    <Typography component='div' variant='text-sm' color='#4B5563'>{data?.payroll?.biWeekly?.method?.name}</Typography>
                   </Grid>
                 </Grid>
               </>
