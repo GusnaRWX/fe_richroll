@@ -44,15 +44,15 @@ const headerItemsEmployees = [
 
 type Order = 'asc' | 'desc'
 
-interface AddEmployeesModalProp {
+interface AttendanceModalProp {
   open: boolean;
   handleClose: () => void;
 }
 
-function AddEmployeesModal({
+function AttendanceModal({
   open,
   handleClose,
-}: AddEmployeesModalProp) {
+}: AttendanceModalProp) {
   const dataEmployees = {
     items: [
       {
@@ -217,4 +217,4 @@ function AddEmployeesModal({
   );
 }
 
-export default AddEmployeesModal;
+export default AttendanceModal;

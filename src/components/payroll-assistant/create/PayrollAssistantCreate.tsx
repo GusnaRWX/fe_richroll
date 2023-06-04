@@ -12,6 +12,7 @@ import { styled } from '@mui/material/styles';
 import { useRouter } from 'next/router';
 import AttendanceContent from './AttendanceContent';
 import GrossContent from './GrossContent';
+import NetContent from './NetContent';
 import CustomModal from '@/components/_shared/common/CustomModal';
 import { ifThenElse } from '@/utils/helper';
 
@@ -41,7 +42,7 @@ const ContentWrapper = styled(Card)(({
 
 function PayrollAssistantCreate() {
   const router = useRouter();
-  const [value, setValue] = useState(2);
+  const [value, setValue] = useState(1);
   const [open, setOpen] = useState(false);
   const [isExit, setIsExit] = useState(true);
 
@@ -145,7 +146,7 @@ function PayrollAssistantCreate() {
       
       {value == 1 && <AttendanceContent />}
       {value == 2 && <GrossContent />}
-      {value == 3 && <AttendanceContent />}
+      {value == 3 && <NetContent />}
       {value == 4 && <AttendanceContent />}
       {value == 5 && <AttendanceContent />}
 

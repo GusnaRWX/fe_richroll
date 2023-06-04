@@ -13,7 +13,7 @@ import Table from '@/components/_shared/form/Table';
 import styled from '@emotion/styled';
 import { compareCheck, ifThenElse } from '@/utils/helper';
 import { visuallyHidden } from '@mui/utils';
-import GrossRow from './GrossRow';
+import NetRow from './NetRow';
 
 const ContentWrapper = styled(Card)(({
   padding: '1rem',
@@ -22,10 +22,12 @@ const ContentWrapper = styled(Card)(({
 
 const headerItems = [
   { id: 'user.name', label: 'Full Name' },
-  { id: 'attendance', label: 'Base Compensation' },
-  { id: 'absent', label: 'Supplementary Compensation' },
-  { id: 'paidLeave', label: 'Ad Hoc Compensation' },
-  { id: 'unpaidLeave', label: 'Gross Compensation' },
+  { id: 'attendance', label: 'Gross Payroll' },
+  { id: 'absent', label: 'Satutory Benefit' },
+  { id: 'paidLeave', label: 'Tax' },
+  { id: 'unpaidLeave', label: 'Gross After Tax' },
+  { id: 'nonTax', label: 'Non-Taxable Deduction' },
+  { id: 'netSalary', label: 'Net Salary' },
   { id: 'action', label: '' },
 ];
 
@@ -36,48 +38,58 @@ const data = {
     {
       id: 1,
       name: 'Budi Irawan',
-      attendance: 'Rp 5.000.000,00',
-      absent: 'Rp 2.500.000,00',
-      paidLeave: 'Rp 2.000.000,00',
-      unpaidLeave: 'Rp 9.500.000,00',
+      attendance: 'Rp 9.500.000,00',
+      absent: 'Rp 524.000,00',
+      paidLeave: 'Rp 237.000,00',
+      unpaidLeave: 'Rp 9.886.000,00',
+      nonTax: 'Rp 50.000,00',
+      netSalary: 'Rp 9.936.000,00',
     },
     {
       id: 2,
       name: 'Budi Irawan',
-      attendance: 'Rp 5.000.000,00',
-      absent: 'Rp 2.500.000,00',
-      paidLeave: 'Rp 2.000.000,00',
-      unpaidLeave: 'Rp 9.500.000,00',
+      attendance: 'Rp 9.500.000,00',
+      absent: 'Rp 524.000,00',
+      paidLeave: 'Rp 237.000,00',
+      unpaidLeave: 'Rp 9.886.000,00',
+      nonTax: 'Rp 50.000,00',
+      netSalary: 'Rp 9.936.000,00',
     },
     {
       id: 3,
       name: 'Budi Irawan',
-      attendance: 'Rp 5.000.000,00',
-      absent: 'Rp 2.500.000,00',
-      paidLeave: 'Rp 2.000.000,00',
-      unpaidLeave: 'Rp 9.500.000,00',
+      attendance: 'Rp 9.500.000,00',
+      absent: 'Rp 524.000,00',
+      paidLeave: 'Rp 237.000,00',
+      unpaidLeave: 'Rp 9.886.000,00',
+      nonTax: 'Rp 50.000,00',
+      netSalary: 'Rp 9.936.000,00',
     },
     {
       id: 4,
       name: 'Budi Irawan',
-      attendance: 'Rp 5.000.000,00',
-      absent: 'Rp 2.500.000,00',
-      paidLeave: 'Rp 2.000.000,00',
-      unpaidLeave: 'Rp 9.500.000,00',
+      attendance: 'Rp 9.500.000,00',
+      absent: 'Rp 524.000,00',
+      paidLeave: 'Rp 237.000,00',
+      unpaidLeave: 'Rp 9.886.000,00',
+      nonTax: 'Rp 50.000,00',
+      netSalary: 'Rp 9.936.000,00',
     },
     {
       id: 5,
       name: 'Budi Irawan',
-      attendance: 'Rp 5.000.000,00',
-      absent: 'Rp 2.500.000,00',
-      paidLeave: 'Rp 2.000.000,00',
-      unpaidLeave: 'Rp 9.500.000,00',
+      attendance: 'Rp 9.500.000,00',
+      absent: 'Rp 524.000,00',
+      paidLeave: 'Rp 237.000,00',
+      unpaidLeave: 'Rp 9.886.000,00',
+      nonTax: 'Rp 50.000,00',
+      netSalary: 'Rp 9.936.000,00',
     },
   ],
   itemTotals: 5
 };
 
-function GrossContent() {
+function NetContent() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
   const [direction, setDirection] = useState<Order>('desc');
@@ -113,21 +125,29 @@ function GrossContent() {
           <SimpleAccordion title='Operational Department'>
             <ContentWrapper>
               <Grid container spacing={2}>
-                <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
-                  <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>Total Base Compensation</Typography>
-                  <Typography component='div' variant='text-sm' fontWeight='500' color='#1F2937'>Rp 10.000.000</Typography>
-                </Grid>
-                <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
-                  <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>Total Supplementary Compensation</Typography>
-                  <Typography component='div' variant='text-sm' fontWeight='500' color='#1F2937'>Rp 5.000.000</Typography>
-                </Grid>
-                <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
-                  <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>Total Ad Hoc Compensation</Typography>
-                  <Typography component='div' variant='text-sm' fontWeight='500' color='#1F2937'>Rp 2.000.000</Typography>
-                </Grid>
-                <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
+                <Grid item xs={2}>
                   <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>Total Gross Payroll</Typography>
                   <Typography component='div' variant='text-sm' fontWeight='500' color='#1F2937'>Rp 17.000.000</Typography>
+                </Grid>
+                <Grid item xs={2}>
+                  <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>Total Satutory Benefits</Typography>
+                  <Typography component='div' variant='text-sm' fontWeight='500' color='#1F2937'>Rp 1.048.000</Typography>
+                </Grid>
+                <Grid item xs={2}>
+                  <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>Total Tax</Typography>
+                  <Typography component='div' variant='text-sm' fontWeight='500' color='#1F2937'>Rp 474.280</Typography>
+                </Grid>
+                <Grid item xs={2}>
+                  <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>Total Gross After Tax</Typography>
+                  <Typography component='div' variant='text-sm' fontWeight='500' color='#1F2937'>Rp 19.773.000</Typography>
+                </Grid>
+                <Grid item xs={2}>
+                  <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>Total Non-Taxable Deduction</Typography>
+                  <Typography component='div' variant='text-sm' fontWeight='500' color='#1F2937'>Rp 50.000</Typography>
+                </Grid>
+                <Grid item xs={2}>
+                  <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>Total Net Payroll</Typography>
+                  <Typography component='div' variant='text-sm' fontWeight='500' color='#1F2937'>Rp 19.823.000</Typography>
                 </Grid>
               </Grid>
             </ContentWrapper>
@@ -171,7 +191,7 @@ function GrossContent() {
                         </TableRow>
                       ), (
                         data?.items?.map((item, index) => (
-                          <GrossRow key={index} item={item} />
+                          <NetRow key={index} item={item} />
                         ))
                       ))
                     ), (
@@ -192,21 +212,29 @@ function GrossContent() {
           <SimpleAccordion title='Delivery Department'>
             <ContentWrapper>
               <Grid container spacing={2}>
-                <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
-                  <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>Total Base Compensation</Typography>
-                  <Typography component='div' variant='text-sm' fontWeight='500' color='#1F2937'>Rp 10.000.000</Typography>
-                </Grid>
-                <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
-                  <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>Total Supplementary Compensation</Typography>
-                  <Typography component='div' variant='text-sm' fontWeight='500' color='#1F2937'>Rp 5.000.000</Typography>
-                </Grid>
-                <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
-                  <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>Total Ad Hoc Compensation</Typography>
-                  <Typography component='div' variant='text-sm' fontWeight='500' color='#1F2937'>Rp 2.000.000</Typography>
-                </Grid>
-                <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
+                <Grid item xs={2}>
                   <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>Total Gross Payroll</Typography>
                   <Typography component='div' variant='text-sm' fontWeight='500' color='#1F2937'>Rp 17.000.000</Typography>
+                </Grid>
+                <Grid item xs={2}>
+                  <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>Total Satutory Benefits</Typography>
+                  <Typography component='div' variant='text-sm' fontWeight='500' color='#1F2937'>Rp 1.048.000</Typography>
+                </Grid>
+                <Grid item xs={2}>
+                  <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>Total Tax</Typography>
+                  <Typography component='div' variant='text-sm' fontWeight='500' color='#1F2937'>Rp 474.280</Typography>
+                </Grid>
+                <Grid item xs={2}>
+                  <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>Total Gross After Tax</Typography>
+                  <Typography component='div' variant='text-sm' fontWeight='500' color='#1F2937'>Rp 19.773.000</Typography>
+                </Grid>
+                <Grid item xs={2}>
+                  <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>Total Non-Taxable Deduction</Typography>
+                  <Typography component='div' variant='text-sm' fontWeight='500' color='#1F2937'>Rp 50.000</Typography>
+                </Grid>
+                <Grid item xs={2}>
+                  <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>Total Net Payroll</Typography>
+                  <Typography component='div' variant='text-sm' fontWeight='500' color='#1F2937'>Rp 19.823.000</Typography>
                 </Grid>
               </Grid>
             </ContentWrapper>
@@ -250,7 +278,7 @@ function GrossContent() {
                         </TableRow>
                       ), (
                         data?.items?.map((item, index) => (
-                          <GrossRow key={index} item={item} />
+                          <NetRow key={index} item={item} />
                         ))
                       ))
                     ), (
@@ -269,4 +297,4 @@ function GrossContent() {
   );
 }
 
-export default GrossContent;
+export default NetContent;
