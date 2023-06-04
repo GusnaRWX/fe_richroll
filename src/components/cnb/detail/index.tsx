@@ -5,6 +5,8 @@ import BorderColorIcon from '@mui/icons-material/BorderColor';
 import { getDetailRequested } from '@/store/reducers/slice/cnb/compensationSlice';
 import { numberFormat } from '@/utils/format';
 import { useRouter } from 'next/router';
+import dayjs from 'dayjs';
+import { Text } from '@/components/_shared/common';
 
 export interface DetailCNBProps {
   id: unknown,
@@ -42,11 +44,15 @@ const DetailCnb = ({ id, open }: DetailCNBProps) => {
   });
 
   interface Supplement {
-    compensationComponent: { name: string };
-    taxStatus: boolean;
+    id: string;
     amount: number;
-    period: string;
-    rate: number;
+    amountType: number;
+    component: { id: string; name: string; type: number };
+    isBase: boolean;
+    isTaxable: boolean;
+    rate?: number;
+    rateType?: number;
+    term: { id: string, name: string }
   }
 
   React.useEffect(() => {
@@ -57,6 +63,8 @@ const DetailCnb = ({ id, open }: DetailCNBProps) => {
       });
     }
   }, [id, open]);
+
+  const baseComponent = Object.assign({}, detail?.base);
 
   return (
     <>
@@ -98,11 +106,11 @@ const DetailCnb = ({ id, open }: DetailCNBProps) => {
           >
             <Grid item xs={6} display='flex' flexDirection='column' gap='6px'>
               <TitleData>Date Created</TitleData>
-              <ItemData>01/02/23, 12:00</ItemData>
+              <ItemData>{dayjs(detail?.createdAt).isValid() ? dayjs(detail?.createdAt).format('DD/MM/YY hh:mm') : '-'}</ItemData>
             </Grid>
             <Grid item xs={6} display='flex' flexDirection='column' gap='6px'>
               <TitleData>Last Updated</TitleData>
-              <ItemData>01/02/22</ItemData>
+              <ItemData>{dayjs(detail?.updatedAt).isValid() ? dayjs(detail?.updatedAt).format('DD/MM/YY') : '-'}</ItemData>
             </Grid>
           </Grid>
 
@@ -127,48 +135,39 @@ const DetailCnb = ({ id, open }: DetailCNBProps) => {
             >
               <Grid item xs={6} display='flex' flexDirection='column' gap='6px'>
                 <TitleData>Compensation Component</TitleData>
-                <ItemData>{detail?.baseCompensation[0]?.compensationComponent?.name}</ItemData>
+                <ItemData>{baseComponent ? baseComponent?.component?.name : '-'}</ItemData>
               </Grid>
               <Grid item xs={6} display='flex' flexDirection='column' gap='6px'>
                 <TitleData>Tax Status</TitleData>
-                <TaxData>
-                  {detail?.baseCompensation[0]?.taxStatus
-                    ? 'Taxable'
-                    : 'NTaxable'}
-                </TaxData>
+                <TaxData>{baseComponent ? (baseComponent?.isTaxable ? 'Taxable' : 'NTaxable') : '-'}</TaxData>
               </Grid>
             </Grid>
             <Grid display='flex' flexDirection='column' gap='6px'>
               <TitleData>
-                {detail?.baseCompensation[0]?.amount ? 'Amount' : 'Rate'}&nbsp;
-                {detail?.baseCompensation[0].period}
+                {baseComponent?.amount !== null ? 'Amount' : 'Rate'}&nbsp; per &nbsp;
+                {baseComponent?.term ? baseComponent?.term.name : '-'}
               </TitleData>
               <ItemData>
                 Rp&nbsp;
-                {numberFormat(
-                  Math.round(detail?.baseCompensation[0]?.amount)
-                ) ||
-                  numberFormat(Math.round(detail?.baseCompensation[0]?.rate))}
+                {numberFormat(baseComponent?.amount !== null ? (baseComponent?.amount !== null ? baseComponent?.amount : baseComponent?.rate) : 0)}
               </ItemData>
             </Grid>
           </Grid>
 
           {/* Supplement */}
-          {detail?.supplementaryCompensation.map(
-            (supplement: Supplement, i: number) => (
-              <Grid
-                key={i}
-                container
-                direction='column'
-                justifyContent='space-between'
-                alignItems='flex-start'
-                gap='16px'
-              >
-                <Grid item>
-                  <Typography fontWeight={700} color='#223567'>
-                    Supplementary
-                  </Typography>
-                </Grid>
+          {detail?.supplementaries?.map((supplement: Supplement, index: number) => (
+            <Grid
+              key={supplement.id}
+              container
+              direction='column'
+              justifyContent='space-between'
+              alignItems='flex-start'
+              gap='16px'
+            >
+              <Grid item>
+                <Text title='Supplementary' fontWeight={700} color='#223567' />
+              </Grid>
+              <Grid item width='100%'>
                 <Grid
                   container
                   direction='row'
@@ -182,8 +181,8 @@ const DetailCnb = ({ id, open }: DetailCNBProps) => {
                     flexDirection='column'
                     gap='6px'
                   >
-                    <TitleData>Compensation Component {i + 1}</TitleData>
-                    <ItemData>{supplement?.compensationComponent?.name}</ItemData>
+                    <TitleData>Compensation Component {index + 1}</TitleData>
+                    <ItemData>{supplement?.component?.name}</ItemData>
                   </Grid>
                   <Grid
                     item
@@ -194,24 +193,23 @@ const DetailCnb = ({ id, open }: DetailCNBProps) => {
                   >
                     <TitleData>Tax Status</TitleData>
                     <TaxData>
-                      {supplement?.taxStatus ? 'Taxable' : 'NTaxable'}
+                      {supplement?.isTaxable ? 'Taxable' : 'NTaxable'}
                     </TaxData>
                   </Grid>
                 </Grid>
-                <Grid display='flex' flexDirection='column' gap='6px'>
+                <Grid display='flex' flexDirection='column' gap='6px' >
                   <TitleData>
                     {supplement?.amount ? 'Amount' : 'Rate'}&nbsp;
-                    {supplement?.period}
+                    {supplement?.term?.name ?? '-'}
                   </TitleData>
                   <ItemData>
                     Rp&nbsp;
-                    {numberFormat(Math.round(supplement?.amount)) ||
-                      numberFormat(Math.round(supplement?.rate))}
+                    {numberFormat(supplement?.amount !== null ? (supplement?.amount ? supplement?.amount : supplement.rate) : 0)}
                   </ItemData>
                 </Grid>
               </Grid>
-            )
-          )}
+            </Grid>
+          ))}
         </Grid>
       ) : (
         <Skeleton variant='rounded' height={100} />
