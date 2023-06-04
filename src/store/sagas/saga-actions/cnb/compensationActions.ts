@@ -19,7 +19,7 @@ export const getCompensationComponentOption = () => {
 };
 // Create New CNB Profile
 export const postNewCnbProfile = (Payload: Object) => {
-  return post(`compensation_benefits`, Payload);
+  return post(`compensations`, Payload);
 };
 // Delete CNB
 export const deleteCnbProfile = (Id: string) => {
