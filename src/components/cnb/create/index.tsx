@@ -24,22 +24,23 @@ import {
 import { ArrowBack } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import {
-  getCompensationComponentOptionRequested,
   postNewCnbProfileRequested,
 } from '@/store/reducers/slice/cnb/compensationSlice';
+import {Input} from '@/components/_shared/form';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
-import { getCompanyData } from '@/utils/helper';
+import { getCompanyData, getPaymentType } from '@/utils/helper';
 import { FieldArray, Form as FormikForm, Formik } from 'formik';
 import * as Yup from 'yup';
+import { getListTerminReqeusted, getListSuppTerminRequested, removeListSuppTermin } from '@/store/reducers/slice/options/optionSlice';
 
 export default function CreateCNBComponent() {
   const router = useRouter();
   const companyData = getCompanyData();
   const dispatch = useAppDispatch();
-  const compensationComponentOption = useAppSelectors(
-    (state) => state.compensation?.compensationComponentOption?.data?.items
-  );
+  const { listCompensation, listTermin, listSuppTermin } = useAppSelectors((state) => state.option);
   const [openMsg, setOpenMsg] = React.useState(false);
+  const [title, setTitle] = React.useState('Amount');
+  const [withPercentage, setWithPercentage] = React.useState(false);
 
   const validationSchecma = Yup.object().shape({
     name: Yup.string().required('This is required'),
@@ -49,19 +50,15 @@ export default function CreateCNBComponent() {
     taxStatus: Yup.string().required('This is required'),
     supplementary: Yup.array().of(
       Yup.object().shape({
+        withPercentage: Yup.boolean(),
         compensationComponentId: Yup.string().required('This is required'),
         period: Yup.string().required('This is required'),
         rateOrAmount: Yup.number().required('This is required').positive('Must be positive').integer('Must be number'),
         taxStatus: Yup.string().required('This is required'),
+        percentage: Yup.number().typeError('This field is required').when('withPercentage', { is: true, then: (schema) => schema.required('This field is required') })
       })
     ),
   });
-
-  React.useEffect(() => {
-    dispatch({
-      type: getCompensationComponentOptionRequested.toString(),
-    });
-  }, []);
 
   const AddButton = styled(Button)({
     color: 'white',
@@ -143,6 +140,9 @@ export default function CreateCNBComponent() {
     taxStatus: string;
     rateOrAmount: number | null;
     period: string;
+    titleRate?: string;
+    withPercentage?: boolean;
+    percentage?: string | number;
   }
 
   interface BaseType {
@@ -216,6 +216,7 @@ export default function CreateCNBComponent() {
     compensationComponentId: string;
     period: string;
     rateOrAmount: string;
+    percentage: string | number | null;
     taxStatus: string;
     supplementary: SuplementType[];
   } = {
@@ -223,6 +224,7 @@ export default function CreateCNBComponent() {
     compensationComponentId: '',
     period: '',
     rateOrAmount: '',
+    percentage: '',
     taxStatus: '',
     supplementary: [],
   };
@@ -284,8 +286,10 @@ export default function CreateCNBComponent() {
               <Grid container>
                 <Grid item xs={6} md={6} lg={6} xl={6}>
                   <TextField
+                    sx={{ marginTop: '.4rem' }}
                     fullWidth
                     required
+                    size='small'
                     placeholder='Sales'
                     error={formik.touched.name && Boolean(formik.errors.name)}
                     helperText={formik.touched.name && formik.errors.name}
@@ -324,7 +328,7 @@ export default function CreateCNBComponent() {
                 <Grid container spacing={2}>
                   <Grid item xs={6} md={6} lg={6} xl={6}>
                     <div style={{ marginBottom: '16px' }}>
-                      <Typography style={{ fontSize: '14px' }}>
+                      <Typography>
                         Compensation Component
                         <span style={{ color: 'red' }}>*</span>
                       </Typography>
@@ -336,18 +340,27 @@ export default function CreateCNBComponent() {
                         }
                       >
                         <Select
+                          sx={{ marginTop: '.4rem' }}
                           fullWidth
+                          size='small'
                           value={formik.values.compensationComponentId}
-                          onChange={(e) =>
+                          onChange={(e) =>{
                             formik.setFieldValue(
                               'compensationComponentId',
                               e.target.value
-                            )
+                            );
+                            dispatch({
+                              type: getListTerminReqeusted.toString(),
+                              payload: e.target.value
+                            });
+                            setTitle(getPaymentType(e.target.value, listCompensation)?.title);
+                            setWithPercentage(getPaymentType(e.target.value, listCompensation)?.withPercentage);
+                          }
                           }
                         >
-                          {compensationComponentOption?.map((Option, i) => (
-                            <MenuItem key={i} value={Option.id}>
-                              {Option.name}
+                          {listCompensation?.map((item, i) => (
+                            <MenuItem key={i} value={item.value}>
+                              {item.label}
                             </MenuItem>
                           ))}
                         </Select>
@@ -359,7 +372,7 @@ export default function CreateCNBComponent() {
                     </div>
                   </Grid>
                   <Grid item xs={6} md={6} lg={6} xl={6}>
-                    <Typography style={{ fontSize: '14px' }}>
+                    <Typography>
                       Tax Status<span style={{ color: 'red' }}>*</span>
                     </Typography>
                     <FormControl
@@ -404,17 +417,17 @@ export default function CreateCNBComponent() {
                   </Grid>
                 </Grid>
                 <Grid container>
-                  <Typography>
-                    {formik.values.compensationComponentId === '1'
-                      ? 'Rate'
-                      : 'Amount'}
-                    <span style={{ color: 'red' }}>*</span>
-                  </Typography>
                   <Grid container spacing={2}>
                     <Grid item xs={3} md={3} lg={3} xl={3}>
+                      <Typography>
+                        {title}
+                        <span style={{ color: 'red' }}>*</span>
+                      </Typography>
                       <TextField
+                        sx={{ marginTop: '.4rem' }}
                         fullWidth
                         type='number'
+                        size='small'
                         error={
                           formik.touched.rateOrAmount &&
                           Boolean(formik.errors.rateOrAmount)
@@ -437,6 +450,26 @@ export default function CreateCNBComponent() {
                         }}
                       />
                     </Grid>
+                    {
+                      withPercentage === true && (
+                        <Grid item xs={3} md={3} lg={3} xl={3}>
+                          <FormControl fullWidth>
+                            <Input
+                              fullWidth
+                              customLabel='Rate'
+                              variant='outlined'
+                              type='number'
+                              size='small'
+                              InputProps={{
+                                endAdornment: (
+                                  <InputAdornment position='end'>%</InputAdornment>
+                                )
+                              }}
+                            />
+                          </FormControl>
+                        </Grid>
+                      )
+                    }
                     <Grid item xs={3} md={3} lg={3} xl={3}>
                       <FormControl
                         fullWidth
@@ -445,15 +478,19 @@ export default function CreateCNBComponent() {
                         }
                       >
                         <Select
+                          sx={{ marginTop: '1.8rem' }}
                           fullWidth
+                          size='small'
                           value={formik.values.period}
                           onChange={(e) =>
                             formik.setFieldValue('period', e.target.value)
                           }
                         >
-                          <MenuItem value='Per Week'>per Week</MenuItem>
-                          <MenuItem value='Per Month'>per Month</MenuItem>
-                          <MenuItem value='Per Year'>per Year</MenuItem>
+                          {listTermin?.map((item) => (
+                            <MenuItem key={item.label} value={item.value}>
+                              {item.label}
+                            </MenuItem>
+                          ))}
                         </Select>
                         <FormHelperText>
                           {formik.touched.period && formik.errors.period}
@@ -487,7 +524,7 @@ export default function CreateCNBComponent() {
                               <Grid container spacing={2}>
                                 <Grid item xs={6} md={6} lg={6} xl={6}>
                                   <div style={{ marginBottom: '16px' }}>
-                                    <Typography style={{ fontSize: '14px' }}>
+                                    <Typography>
                                       Compensation Component {i + 1}
                                       <span style={{ color: 'red' }}>*</span>
                                     </Typography>
@@ -508,25 +545,38 @@ export default function CreateCNBComponent() {
                                       })}
                                     >
                                       <Select
+                                        sx={{ marginTop: '.4rem' }}
                                         fullWidth
+                                        size='small'
                                         value={
                                           formik.values.supplementary[i]
                                             ?.compensationComponentId
                                         }
-                                        onChange={(e) =>
+                                        onChange={(e) => {
                                           formik.setFieldValue(
                                             `supplementary.${i}.compensationComponentId`,
                                             e.target.value
-                                          )
+                                          );
+                                          dispatch({
+                                            type: getListSuppTerminRequested.toString(),
+                                            payload: e.target.value
+                                          });
+                                          formik.setFieldValue(
+                                            `supplementary.${i}.titleRate`,
+                                            getPaymentType(e.target.value, listCompensation)?.title
+                                          );
+                                          formik.setFieldValue(
+                                            `supplementary.${i}.withPercentage`,
+                                            getPaymentType(e.target.value, listCompensation)?.withPercentage
+                                          );
+                                        }
                                         }
                                       >
-                                        {compensationComponentOption?.map(
-                                          (Option, i) => (
-                                            <MenuItem key={i} value={Option.id}>
-                                              {Option.name}
-                                            </MenuItem>
-                                          )
-                                        )}
+                                        {listCompensation?.map((item, i) => (
+                                          <MenuItem key={i} value={item.value}>
+                                            {item.label}
+                                          </MenuItem>
+                                        ))}
                                       </Select>
                                       {formik.touched?.supplementary &&
                                         formik.errors?.supplementary && (
@@ -544,7 +594,7 @@ export default function CreateCNBComponent() {
                                   </div>
                                 </Grid>
                                 <Grid item xs={6} md={6} lg={6} xl={6}>
-                                  <Typography style={{ fontSize: '14px' }}>
+                                  <Typography>
                                     Tax Status
                                     <span style={{ color: 'red' }}>*</span>
                                   </Typography>
@@ -624,23 +674,28 @@ export default function CreateCNBComponent() {
                                         color='red'
                                         startIcon={<DeleteIcon />}
                                         label='Delete'
-                                        onClick={() => arrayHelper.remove(i)}
+                                        onClick={() => {
+                                          arrayHelper.remove(i);
+                                          dispatch({
+                                            type: removeListSuppTermin.toString(),
+                                            payload: i
+                                          });
+                                        }}
                                       />
                                     </Box>
                                   </Box>
                                 </Grid>
                               </Grid>
-                              <Typography>
-                                {formik.values.supplementary[i]
-                                  ?.compensationComponentId === '1'
-                                  ? 'Rate'
-                                  : 'Amount'}
-                                <span style={{ color: 'red' }}>*</span>
-                              </Typography>
                               <Grid container spacing={2}>
                                 <Grid item xs={3} md={3} lg={3} xl={3}>
+                                  <Typography>
+                                    {formik.values.supplementary[i].titleRate}
+                                    <span style={{ color: 'red' }}>*</span>
+                                  </Typography>
                                   <TextField
+                                    sx={{ marginTop: '.4rem' }}
                                     fullWidth
+                                    size='small'
                                     type='number'
                                     {...(formik.touched?.supplementary &&
                                       formik.errors?.supplementary && {
@@ -690,6 +745,30 @@ export default function CreateCNBComponent() {
                                     }}
                                   />
                                 </Grid>
+                                {
+                                  formik.values.supplementary[i].withPercentage === true && (
+                                    <Grid item xs={3} md={3} lg={3} xl={3}>
+                                      <FormControl fullWidth>
+                                        <Input
+                                          fullWidth
+                                          customLabel='Rate'
+                                          variant='outlined'
+                                          type='number'
+                                          size='small'
+                                          name='percentage'
+                                          value={formik.values.supplementary[i]?.percentage}
+                                          onChange={formik.handleChange}
+                                          onBlur={formik.handleBlur}
+                                          InputProps={{
+                                            endAdornment: (
+                                              <InputAdornment position='end'>%</InputAdornment>
+                                            )
+                                          }}
+                                        />
+                                      </FormControl>
+                                    </Grid>
+                                  )
+                                }
                                 <Grid item xs={3} md={3} lg={3} xl={3}>
                                   <FormControl
                                     fullWidth
@@ -708,7 +787,9 @@ export default function CreateCNBComponent() {
                                     })}
                                   >
                                     <Select
+                                      sx={{ marginTop: '1.8rem' }}
                                       fullWidth
+                                      size='small'
                                       value={
                                         formik.values.supplementary[i]?.period
                                       }
@@ -719,15 +800,13 @@ export default function CreateCNBComponent() {
                                         )
                                       }
                                     >
-                                      <MenuItem value='Per Week'>
-                                        per Week
-                                      </MenuItem>
-                                      <MenuItem value='Per Month'>
-                                        per Month
-                                      </MenuItem>
-                                      <MenuItem value='Per Year'>
-                                        per Year
-                                      </MenuItem>
+                                      {
+                                        listSuppTermin[i]?.map((item) => (
+                                          <MenuItem key={item.label} value={item.value}>
+                                            {item.label}
+                                          </MenuItem>
+                                        ))
+                                      }
                                     </Select>
                                     {formik.touched?.supplementary &&
                                       formik.errors?.supplementary && (
@@ -761,6 +840,8 @@ export default function CreateCNBComponent() {
                             period: '',
                             rateOrAmount: '',
                             taxStatus: '',
+                            titleRate: 'Amount',
+
                           }
                         )
                       }

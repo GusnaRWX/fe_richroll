@@ -14,6 +14,9 @@ interface OptionState {
   listDepartment: Array<{ label: string, value: string }>
   listPosition: Array<{ label: string, value: string }>
   listCnb: Array<{label: string, value: number| string}>
+  listCompensation: Array<{label: string, value: string | number, type: string | number }>
+  listTermin: Array<{label: string, value: string | number}>
+  listSuppTermin: Array<Array<{label: string | number, value: string | number}>>
 }
 
 const initialState: OptionState = {
@@ -28,7 +31,10 @@ const initialState: OptionState = {
   secondAdministrativeFirst: [],
   secondAdministrativeSecond: [],
   secondAdministrativeThird: [],
-  listCnb: []
+  listCnb: [],
+  listCompensation: [],
+  listTermin: [],
+  listSuppTermin: [[]]
 };
 
 const returnNameId = (item) => {
@@ -42,6 +48,14 @@ const returnNameCode = (item) => {
   return {
     label: item.name,
     value: item.code
+  };
+};
+
+const returnCompensationId = (item) => {
+  return {
+    label: item.name,
+    value: item.id,
+    type: item.type
   };
 };
 
@@ -183,6 +197,61 @@ export const optionSlice = createSlice({
     },
     getListCnbFailed: (state) => {
       state.loading = false;
+    },
+    getListCompensationRequested: (state) => {
+      state.loading = true;
+    },
+    getListCompensationSuccess: (state, action) => {
+      state.loading = false;
+      state.listCompensation = action?.payload?.items?.map(item => {
+        return returnCompensationId(item);
+      });
+    },
+    getListCompensationFailed: (state) => {
+      state.loading = false;
+    },
+    getListTerminReqeusted: (state) => {
+      state.loading = true;
+    },
+    getListTerminSuccess: (state, action) => {
+      state.loading = false;
+      state.listTermin = action?.payload?.items?.map(item => {
+        return returnNameId(item);
+      });
+    },
+    getListTerminFailed: (state) => {
+      state.loading = false;
+    },
+    getListSuppTerminRequested: (state) => {
+      state.loading = true;
+    },
+    getListSuppTerminSuccess: (state, action) => {
+      const data: Array<{label: string | number, value: string | number}> = [];
+      state.loading = false;
+      if (state.listSuppTermin[0].length === 0){
+        state.listSuppTermin.splice(0, 1);
+        action?.payload?.items?.map((item) => {
+          data.push({
+            label: item.name,
+            value: item.id
+          });
+        });
+        state.listSuppTermin.push(data);
+      }else{
+        action?.payload?.items?.map(item => {
+          data.push({
+            label: item.name,
+            value: item.id
+          });
+        });
+        state.listSuppTermin.push(data);
+      }
+    },
+    getListSuppTerminFailed: (state) => {
+      state.loading = false;
+    },
+    removeListSuppTermin: (state, action)  => {
+      state.listSuppTermin.slice(action?.payload, 1);
     }
   },
   extraReducers: {
@@ -228,7 +297,17 @@ export const {
   getSecondAdministrativeThirdLevelFailed,
   getListCnbRequested,
   getListCnbFailed,
-  getListCnbSuccess
+  getListCnbSuccess,
+  getListCompensationFailed,
+  getListCompensationSuccess,
+  getListCompensationRequested,
+  getListTerminFailed,
+  getListTerminReqeusted,
+  getListTerminSuccess,
+  getListSuppTerminFailed,
+  getListSuppTerminRequested,
+  getListSuppTerminSuccess,
+  removeListSuppTermin
 } = optionSlice.actions;
 
 export default optionSlice.reducer;
