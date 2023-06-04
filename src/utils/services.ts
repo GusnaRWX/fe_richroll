@@ -70,7 +70,7 @@ service.interceptors.response.use(
     if (config.MODE !== 'production') logResponser(error);
 
     // Check if the error status is 401 
-    if(error.response && error.response.status === 401) {
+    if (error.response && error.response.status === 401) {
       try {
         const accessToken = await refreshAccessToken();
 
@@ -78,7 +78,7 @@ service.interceptors.response.use(
         error.config.headers.Authorization = `Bearer ${accessToken}`;
         return axios(error.config);
 
-      } catch(refreshError) {
+      } catch (refreshError) {
         // Handle any error that occurred during the token refresh
         console.error('Error refreshing access token:', refreshError);
         return Promise.reject(refreshError);
@@ -125,7 +125,7 @@ export const patch = <T>(url: string, body: T) => {
  * @param {String} url
  * @param {*} params
  */
-export const del = (url: string, params: string) => {
+export const del = (url: string, params?: string) => {
   return service.delete(`${url}`, {
     params
   });
