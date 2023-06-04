@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   Grid,
+  Card,
   Select,
   MenuItem,
   TableCell,
@@ -23,6 +24,11 @@ import { compareCheck, ifThenElse } from '@/utils/helper';
 import { visuallyHidden } from '@mui/utils';
 import AddEmployeesModal from './AddEmployeesModal';
 
+const ContentWrapper = styled(Card)(({
+  padding: '1rem',
+  marginBottom: '1rem'
+}));
+
 const ButtonWrapper = styled.div`
  display: flex;
  flex-direction: row;
@@ -30,6 +36,7 @@ const ButtonWrapper = styled.div`
  justify-content: center;
  gap: .5rem;
 `;
+
 const NameWrapper = styled.div`
  display: flex;
  flex-direction: row;
@@ -157,143 +164,145 @@ function AttendanceContent() {
     return null;
   }
   return (
-    <>
-      <Grid container spacing={2}>
-        <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
-          <Input
-            name='search'
-            size='small'
-            placeholder='Search'
-            onKeyDown={(e) => handleSearch(e)}
-            type='text'
-            InputProps={{
-              startAdornment: (
-                <Search sx={{ color: '#9CA3AF' }}/>
-              )
-            }}
-          />
+    <ContentWrapper>
+      <Box sx={{ width: '100%' }}>
+        <Grid container spacing={2}>
+          <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
+            <Input
+              name='search'
+              size='small'
+              placeholder='Search'
+              onKeyDown={(e) => handleSearch(e)}
+              type='text'
+              InputProps={{
+                startAdornment: (
+                  <Search sx={{ color: '#9CA3AF' }}/>
+                )
+              }}
+            />
+          </Grid>
+          <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
+            <Select
+              fullWidth
+              variant='outlined'
+              size='small'
+              placeholder='Sort by Status'
+              value={''}
+            >
+              <MenuItem value=''>All Status</MenuItem>
+              <MenuItem value='active'>Active</MenuItem>
+              <MenuItem value='inactive'>Inactive</MenuItem>
+              <MenuItem value='draft'>Draft</MenuItem>
+            </Select>
+          </Grid>
+          <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+            <DateRangePicker
+              withAsterisk
+              // value={formik.values.startDate as unknown as Date}
+              onChange={(date: unknown) => console.log(date)}
+              // error={formik.touched.startDate && formik.errors.startDate ? String(formik.errors.startDate) : ''}
+            />
+          </Grid>
         </Grid>
-        <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
-          <Select
-            fullWidth
-            variant='outlined'
-            size='small'
-            placeholder='Sort by Status'
-            value={''}
-          >
-            <MenuItem value=''>All Status</MenuItem>
-            <MenuItem value='active'>Active</MenuItem>
-            <MenuItem value='inactive'>Inactive</MenuItem>
-            <MenuItem value='draft'>Draft</MenuItem>
-          </Select>
-        </Grid>
-        <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
-          <DateRangePicker
-            withAsterisk
-            // value={formik.values.startDate as unknown as Date}
-            onChange={(date: unknown) => console.log(date)}
-            // error={formik.touched.startDate && formik.errors.startDate ? String(formik.errors.startDate) : ''}
-          />
-        </Grid>
-      </Grid>
-      <Table
-        count={data?.itemTotals}
-        rowsPerPageOptions={[5, 10, 15]}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onChangePage={handleChangePage}
-        onRowsPerPagesChange={(e) =>handleChangeRowsPerPage(e)}
-        headChildren={
-          <TableRow>
-            {
-              headerItems.map((item) => (
-                <TableCell key={item.id} sortDirection={ifThenElse(sort === item.id, direction, false)}>
-                  <TableSortLabel
-                    active={sort === item.id}
-                    direction={sort === item.id ? direction : 'asc'}
-                    onClick={(e) => handleRequestSort(e, item.id)}
-                  >
-                    {item.label}
-                    {sort === item.id ? (
-                      <Box component='span' sx={visuallyHidden}>
-                        {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
-                      </Box>
-                    ): null}
-                  </TableSortLabel>
-                </TableCell>
-              ))
-            }
-          </TableRow>
-        }
-        bodyChildren={
-          <>
-            {
-              ifThenElse(typeof data?.items !== 'undefined', (
-                ifThenElse(data?.items?.length === 0, (
+        <Table
+          count={data?.itemTotals}
+          rowsPerPageOptions={[5, 10, 15]}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onChangePage={handleChangePage}
+          onRowsPerPagesChange={(e) =>handleChangeRowsPerPage(e)}
+          headChildren={
+            <TableRow>
+              {
+                headerItems.map((item) => (
+                  <TableCell key={item.id} sortDirection={ifThenElse(sort === item.id, direction, false)}>
+                    <TableSortLabel
+                      active={sort === item.id}
+                      direction={sort === item.id ? direction : 'asc'}
+                      onClick={(e) => handleRequestSort(e, item.id)}
+                    >
+                      {item.label}
+                      {sort === item.id ? (
+                        <Box component='span' sx={visuallyHidden}>
+                          {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
+                        </Box>
+                      ): null}
+                    </TableSortLabel>
+                  </TableCell>
+                ))
+              }
+            </TableRow>
+          }
+          bodyChildren={
+            <>
+              {
+                ifThenElse(typeof data?.items !== 'undefined', (
+                  ifThenElse(data?.items?.length === 0, (
+                    <TableRow>
+                      <TableCell colSpan={12} align='center'><Typography>Data not found</Typography></TableCell>
+                    </TableRow>
+                  ), (
+                    data?.items?.map((item, index) => (
+                      <TableRow key={index}>
+                        <TableCell>
+                          <NameWrapper>
+                            <Avatar
+                              src={ImageType.AVATAR_PLACEHOLDER}
+                              alt={item.name}
+                              sx={{
+                                width: 24, height: 24
+                              }}
+                            />
+                            &nbsp;{item.name}
+                          </NameWrapper>
+                        </TableCell>
+                        <TableCell>{item.attendance}</TableCell>
+                        <TableCell>{item.absent}</TableCell>
+                        <TableCell>{item.paidLeave}</TableCell>
+                        <TableCell>{item.unpaidLeave}</TableCell>
+                        <TableCell>{item.overtime}</TableCell>
+                        <TableCell>{item.totalHours}</TableCell>
+                        <TableCell>{item.averageHours}</TableCell>
+                        <TableCell>
+                          <ButtonWrapper>
+                            <IconButton
+                              parentColor='#E9EFFF'
+                              onClick={() => { router.push('/payroll-disbursement/payroll-assistant/create'); }}
+                              icons={
+                                <FiCalendar fontSize={20} color='#223567'/>
+                              }
+                            />
+                          </ButtonWrapper>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  ))
+                ), (
                   <TableRow>
                     <TableCell colSpan={12} align='center'><Typography>Data not found</Typography></TableCell>
                   </TableRow>
-                ), (
-                  data?.items?.map((item, index) => (
-                    <TableRow key={index}>
-                      <TableCell>
-                        <NameWrapper>
-                          <Avatar
-                            src={ImageType.AVATAR_PLACEHOLDER}
-                            alt={item.name}
-                            sx={{
-                              width: 24, height: 24
-                            }}
-                          />
-                          &nbsp;{item.name}
-                        </NameWrapper>
-                      </TableCell>
-                      <TableCell>{item.attendance}</TableCell>
-                      <TableCell>{item.absent}</TableCell>
-                      <TableCell>{item.paidLeave}</TableCell>
-                      <TableCell>{item.unpaidLeave}</TableCell>
-                      <TableCell>{item.overtime}</TableCell>
-                      <TableCell>{item.totalHours}</TableCell>
-                      <TableCell>{item.averageHours}</TableCell>
-                      <TableCell>
-                        <ButtonWrapper>
-                          <IconButton
-                            parentColor='#E9EFFF'
-                            onClick={() => { router.push('/payroll-disbursement/payroll-assistant/create'); }}
-                            icons={
-                              <FiCalendar fontSize={20} color='#223567'/>
-                            }
-                          />
-                        </ButtonWrapper>
-                      </TableCell>
-                    </TableRow>
-                  ))
                 ))
-              ), (
-                <TableRow>
-                  <TableCell colSpan={12} align='center'><Typography>Data not found</Typography></TableCell>
-                </TableRow>
-              ))
-            }
-          </>
-        }
-      />
-      <Grid container spacing={2}>
-        <Grid item xs={9} sm={9} md={9} lg={9} xl={9}></Grid>
-        <Grid item xs={3} sm={3} md={3} lg={3} xl={3} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <MuiButton
-            variant='contained'
-            size='small'
-            color='primary'
-            onClick={() => { setOpen(true); }}
-          ><Add fontSize='small' />&nbsp; Add Employee</MuiButton>
+              }
+            </>
+          }
+        />
+        <Grid container spacing={2}>
+          <Grid item xs={9} sm={9} md={9} lg={9} xl={9}></Grid>
+          <Grid item xs={3} sm={3} md={3} lg={3} xl={3} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <MuiButton
+              variant='contained'
+              size='small'
+              color='primary'
+              onClick={() => { setOpen(true); }}
+            ><Add fontSize='small' />&nbsp; Add Employee</MuiButton>
+          </Grid>
         </Grid>
-      </Grid>
-      <AddEmployeesModal
-        open={open}
-        handleClose={handleClose}
-      />
-    </>
+        <AddEmployeesModal
+          open={open}
+          handleClose={handleClose}
+        />
+      </Box>
+    </ContentWrapper>
   );
 }
 
