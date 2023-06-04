@@ -10,7 +10,7 @@ import { Employees } from '@/types/employees';
 import dayjs from 'dayjs';
 import { getCompanyData, ifThenElse } from '@/utils/helper';
 import { useAppSelectors, useAppDispatch } from '@/hooks/index';
-import { patchEmergencyContactRequested, patchEmployeeInformationRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
+import { patchEmergencyContactRequested, patchEmployeeInformationRequested, patchPersonalRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
 
 
 const EmployeeInformationEdit = dynamic(() => import('./EmployeeInformationEdit'), {
@@ -234,8 +234,21 @@ function EmployeeEditComponent() {
     });
   };
 
+  const handleClickPersonal = () => {
+    dispatch({
+      type: patchPersonalRequested.toString(),
+      payload: {
+        employeePersonal: {
+          employeeID: router.query.id,
+          personalPayload: personalInformationValue
+        }
+      }
+    });
+  };
+
   const handleSave = {
     0: handleClick,
+    1: handleClickPersonal,
     2: handleClickEmergencyContact
   };
 
@@ -290,6 +303,7 @@ function EmployeeEditComponent() {
               setValues={setPersonalInformationValue}
               personalValues={personalInformationValue}
               setIsPersonalInformationValid={setIsPersonalInformationValid}
+              handleSecondPersonal={handleClickPersonal}
             />
           </TabPanel>
           <TabPanel value={value} index={2}>
