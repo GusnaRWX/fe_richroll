@@ -11,6 +11,7 @@ import {
 import { styled } from '@mui/material/styles';
 import { useRouter } from 'next/router';
 import AttendanceContent from './AttendanceContent';
+import GrossContent from './GrossContent';
 import CustomModal from '@/components/_shared/common/CustomModal';
 import { ifThenElse } from '@/utils/helper';
 
@@ -34,12 +35,13 @@ const ButtonWrapper = styled(Box)(({
 
 const ContentWrapper = styled(Card)(({
   padding: '1rem',
+  borderRadius: '0px',
   marginBottom: '1rem'
 }));
 
 function PayrollAssistantCreate() {
   const router = useRouter();
-  const [value, setValue] = useState(1);
+  const [value, setValue] = useState(2);
   const [open, setOpen] = useState(false);
   const [isExit, setIsExit] = useState(true);
 
@@ -90,6 +92,7 @@ function PayrollAssistantCreate() {
           </ButtonWrapper>
         </Grid>
       </Grid>
+
       <ContentWrapper>
         <Box sx={{ width: '100%' }}>
           <Stepper activeStep={value} alternativeLabel sx={{ marginTop: '45px' }}>
@@ -140,15 +143,11 @@ function PayrollAssistantCreate() {
         </Box>
       </ContentWrapper>
       
-      <ContentWrapper>
-        <Box sx={{ width: '100%' }}>
-          {value == 1 && <AttendanceContent />}
-          {value == 2 && <AttendanceContent />}
-          {value == 3 && <AttendanceContent />}
-          {value == 4 && <AttendanceContent />}
-          {value == 5 && <AttendanceContent />}
-        </Box>
-      </ContentWrapper>
+      {value == 1 && <AttendanceContent />}
+      {value == 2 && <GrossContent />}
+      {value == 3 && <AttendanceContent />}
+      {value == 4 && <AttendanceContent />}
+      {value == 5 && <AttendanceContent />}
 
       <CustomModal
         open={open}
