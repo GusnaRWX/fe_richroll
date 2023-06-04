@@ -8,17 +8,20 @@ import {
   Typography
 } from '@mui/material';
 import { Input, IconButton } from '../_shared/form';
-import { Search, Visibility  } from '@mui/icons-material';
+import { Search, Visibility } from '@mui/icons-material';
 import Table from '../_shared/form/Table';
 import { HiPencilAlt } from 'react-icons/hi';
 import { BsTrashFill } from 'react-icons/bs';
 import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
-import { getTableRequested } from '@/store/reducers/slice/cnb/compensationSlice';
+import { deleteCompensationRequested, getTableRequested } from '@/store/reducers/slice/cnb/compensationSlice';
 import { compareCheck, ifThenElse } from '@/utils/helper';
 import dayjs from 'dayjs';
 import { visuallyHidden } from '@mui/utils';
+import DetailModal from './modal';
+import DetailCnb from './detail';
+import ConfirmationModal from '../_shared/common/ConfirmationModal';
 
 const ButtonWrapper = styled.div`
  display: flex;
@@ -33,7 +36,7 @@ const headerItems = [
   { id: 'base', label: 'Base Compensation' },
   { id: 'supplementaries', label: 'Supplement' },
   { id: 'createdAt', label: 'Date Created' },
-  { id: 'updatedAt', label: 'Last Updated' }
+  { id: 'updatedAt', label: 'Last Updated' },
 ];
 
 type Order = 'asc' | 'desc'
@@ -49,6 +52,8 @@ function EnhancedTable() {
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
   const [hydrated, setHaydrated] = useState(false);
+  const [detailOpen, setDetailOpen] = useState({ id: 0, open: false });
+  const [deleteConfirmation, setDeleteConfirmation] = useState({ id: 0, open: false });
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
@@ -62,11 +67,27 @@ function EnhancedTable() {
     }
   };
   const handleRequestSort = (event: React.MouseEvent<unknown>, headId: string) => {
-    if (headId !== 'base' && headId !== 'supplementaries'){
+    if (headId !== 'base' && headId !== 'supplementaries') {
       const isAsc = compareCheck(sort === headId, direction === 'asc');
       setDirection(ifThenElse(isAsc, 'desc', 'asc'));
       setSort(headId);
     }
+  };
+
+  const deleteCnb = (Id: string | number) => {
+    dispatch({
+      type: deleteCompensationRequested.toString(),
+      Id: Id
+    });
+    router.reload();
+  };
+
+  const handleDeleteOpen = (id) => {
+    setDeleteConfirmation({ id: id, open: true });
+  };
+
+  const handleDeleteClose = () => {
+    setDeleteConfirmation({ id: 0, open: false });
   };
 
   useEffect(() => {
@@ -103,7 +124,7 @@ function EnhancedTable() {
             type='text'
             InputProps={{
               startAdornment: (
-                <Search sx={{ color: '#9CA3AF' }}/>
+                <Search sx={{ color: '#9CA3AF' }} />
               )
             }}
           />
@@ -115,7 +136,7 @@ function EnhancedTable() {
         rowsPerPage={rowsPerPage}
         page={page}
         onChangePage={handleChangePage}
-        onRowsPerPagesChange={(e) =>handleChangeRowsPerPage(e)}
+        onRowsPerPagesChange={(e) => handleChangeRowsPerPage(e)}
         headChildren={
           <TableRow>
             {
@@ -131,7 +152,7 @@ function EnhancedTable() {
                       <Box component='span' sx={visuallyHidden}>
                         {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
                       </Box>
-                    ): null}
+                    ) : null}
                   </TableSortLabel>
                 </TableCell>
               ))
@@ -166,19 +187,21 @@ function EnhancedTable() {
                           <IconButton
                             parentColor='primary.50'
                             icons={<Visibility sx={{ color: '#223567' }} />}
+                            onClick={() => setDetailOpen({ id: item.id, open: true })}
                           />
                           <IconButton
-                            onClick={() => router.push('/compensation-benefits')}
+                            onClick={() => router.push(`/compensation-benefits/update/${item.id}`)}
                             parentColor='primary.50'
                             icons={
-                              <HiPencilAlt fontSize={20} color='#223567'/>
+                              <HiPencilAlt fontSize={20} color='#223567' />
                             }
                           />
                           <IconButton
                             parentColor='red.100'
                             icons={
-                              <BsTrashFill fontSize={20} color='#EF4444'/>
+                              <BsTrashFill fontSize={20} color='#EF4444' />
                             }
+                            onClick={() => handleDeleteOpen(item.id)}
                           />
                         </ButtonWrapper>
                       </TableCell>
@@ -191,6 +214,23 @@ function EnhancedTable() {
                 </TableRow>
               ))
             }
+            <ConfirmationModal
+              open={deleteConfirmation.open}
+              handleClose={handleDeleteClose}
+              title='Are you sure you want to delete this record?'
+              content='Any unsaved changes will be discarded. This cannot be undone'
+              withCallback
+              noChange={true}
+              callback={() => deleteCnb(deleteConfirmation.id)}
+            />
+            <DetailModal
+              open={detailOpen.open}
+              handleClose={() => setDetailOpen({ id: 0, open: false })}
+              title='CnB Profile Detail'
+              content={
+                <DetailCnb id={detailOpen.id} open={detailOpen.open} />
+              }
+            />
           </>
         }
       />

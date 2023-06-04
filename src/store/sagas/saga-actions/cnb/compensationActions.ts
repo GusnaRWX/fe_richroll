@@ -15,7 +15,7 @@ export const getDataTable = (payload: CnbParams) => {
 };
 // Get Compensation Component Option
 export const getCompensationComponentOption = () => {
-  return get(`compensation_components`);
+  return get(`compensation-components?page=1&itemPerPage=5`);
 };
 // Create New CNB Profile
 export const postNewCnbProfile = (Payload: Object) => {
@@ -27,7 +27,7 @@ export const deleteCnbProfile = (Id: string) => {
 };
 // Get Detail
 export const getDetailCnb = (Id: string) => {
-  return get(`compensation_benefits/detail/${Id}`);
+  return get(`compensations/${Id}`);
 };
 // Update CNB Profile
 export const putCnbProfile = (Payload: Object, Id: number) => {

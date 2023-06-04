@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/indent */
 import React from 'react';
 import { Button, Form, IconButton } from '@/components/_shared/form';
 import AddIcon from '@mui/icons-material/Add';
@@ -55,6 +56,7 @@ export default function UpdateCNBComponent() {
         period: Yup.string().required('This is required'),
         rateOrAmount: Yup.number().required('This is required').positive('Must be positive').integer('Must be number'),
         taxStatus: Yup.string().required('This is required'),
+        percentage: Yup.number().typeError('This field is required').when('withPercentage', { is: true, then: (schema) => schema.required('This field is required') })
       })
     ),
   });
@@ -321,7 +323,7 @@ export default function UpdateCNBComponent() {
                         }
                       >
                         <Typography>
-                        Compensation Component
+                          Compensation Component
                           <span style={{ color: 'red' }}>*</span>
                         </Typography>
                         <Select
@@ -507,15 +509,13 @@ export default function UpdateCNBComponent() {
                                       {...(formik.touched?.supplementary &&
                                         formik.errors?.supplementary && {
                                         error:
-                                            formik.touched?.supplementary[i]
-                                              ?.compensationComponentId &&
-                                            Boolean(
-                                              (
-                                                formik.errors?.supplementary[
-                                                  i
-                                                ] as unknown as SuplementType
-                                              )?.compensationComponentId
-                                            ),
+                                          formik.touched?.supplementary[i]
+                                            ?.compensationComponentId &&
+                                          Boolean(
+                                            (
+                                              formik.errors?.supplementary[i] as unknown as SuplementType
+                                            )?.compensationComponentId
+                                          ),
                                       })}
                                     >
                                       <Select
@@ -543,16 +543,11 @@ export default function UpdateCNBComponent() {
                                       </Select>
                                       {formik.touched?.supplementary &&
                                         formik.errors?.supplementary && (
-                                        <FormHelperText>
-                                          {formik.touched?.supplementary[i]
-                                            ?.compensationComponentId &&
-                                              (
-                                                formik.errors?.supplementary[
-                                                  i
-                                                ] as unknown as SuplementType
-                                              )?.compensationComponentId}
-                                        </FormHelperText>
-                                      )}
+                                          <FormHelperText>
+                                            {formik.touched?.supplementary[i]
+                                              ?.compensationComponentId && (formik.errors?.supplementary[i] as unknown as SuplementType)?.compensationComponentId}
+                                          </FormHelperText>
+                                        )}
                                     </FormControl>
                                   </div>
                                 </Grid>
@@ -574,15 +569,15 @@ export default function UpdateCNBComponent() {
                                       {...(formik.touched?.supplementary &&
                                         formik.errors?.supplementary && {
                                         error:
-                                            formik.touched?.supplementary[i]
-                                              ?.period &&
-                                            Boolean(
-                                              (
-                                                formik.errors?.supplementary[
-                                                  i
-                                                ] as unknown as SuplementType
-                                              )?.period
-                                            ),
+                                          formik.touched?.supplementary[i]
+                                            ?.period &&
+                                          Boolean(
+                                            (
+                                              formik.errors?.supplementary[
+                                              i
+                                              ] as unknown as SuplementType
+                                            )?.period
+                                          ),
                                       })}
                                     >
                                       <RadioGroup
@@ -621,16 +616,16 @@ export default function UpdateCNBComponent() {
                                       </RadioGroup>
                                       {formik.touched?.supplementary &&
                                         formik.errors?.supplementary && (
-                                        <FormHelperText>
-                                          {formik.touched?.supplementary[i]
-                                            ?.taxStatus &&
+                                          <FormHelperText>
+                                            {formik.touched?.supplementary[i]
+                                              ?.taxStatus &&
                                               (
                                                 formik.errors?.supplementary[
-                                                  i
+                                                i
                                                 ] as unknown as SuplementType
                                               )?.taxStatus}
-                                        </FormHelperText>
-                                      )}
+                                          </FormHelperText>
+                                        )}
                                     </FormControl>
                                     <Box>
                                       <Button
@@ -660,26 +655,26 @@ export default function UpdateCNBComponent() {
                                     {...(formik.touched?.supplementary &&
                                       formik.errors?.supplementary && {
                                       error:
-                                          formik.touched?.supplementary[i]
-                                            ?.rateOrAmount &&
-                                          Boolean(
-                                            (
-                                              formik.errors?.supplementary[
-                                                i
-                                              ] as unknown as SuplementType
-                                            )?.rateOrAmount
-                                          ),
+                                        formik.touched?.supplementary[i]
+                                          ?.rateOrAmount &&
+                                        Boolean(
+                                          (
+                                            formik.errors?.supplementary[
+                                            i
+                                            ] as unknown as SuplementType
+                                          )?.rateOrAmount
+                                        ),
                                     })}
                                     {...(formik.touched?.supplementary &&
                                       formik.errors?.supplementary && {
                                       helperText:
-                                          formik.touched?.supplementary[i]
-                                            ?.rateOrAmount &&
-                                          (
-                                            formik.errors?.supplementary[
-                                              i
-                                            ] as unknown as SuplementType
-                                          )?.rateOrAmount,
+                                        formik.touched?.supplementary[i]
+                                          ?.rateOrAmount &&
+                                        (
+                                          formik.errors?.supplementary[
+                                          i
+                                          ] as unknown as SuplementType
+                                        )?.rateOrAmount,
                                     })}
                                     value={
                                       formik.values.supplementary[i]
@@ -727,15 +722,15 @@ export default function UpdateCNBComponent() {
                                     {...(formik.touched?.supplementary &&
                                       formik.errors?.supplementary && {
                                       error:
-                                          formik.touched?.supplementary[i]
-                                            ?.period &&
-                                          Boolean(
-                                            (
-                                              formik.errors?.supplementary[
-                                                i
-                                              ] as unknown as SuplementType
-                                            )?.period
-                                          ),
+                                        formik.touched?.supplementary[i]
+                                          ?.period &&
+                                        Boolean(
+                                          (
+                                            formik.errors?.supplementary[
+                                            i
+                                            ] as unknown as SuplementType
+                                          )?.period
+                                        ),
                                     })}
                                   >
                                     <Select
@@ -764,16 +759,16 @@ export default function UpdateCNBComponent() {
                                     </Select>
                                     {formik.touched?.supplementary &&
                                       formik.errors?.supplementary && (
-                                      <FormHelperText>
-                                        {formik.touched?.supplementary[i]
-                                          ?.period &&
+                                        <FormHelperText>
+                                          {formik.touched?.supplementary[i]
+                                            ?.period &&
                                             (
                                               formik.errors?.supplementary[
-                                                i
+                                              i
                                               ] as unknown as SuplementType
                                             )?.period}
-                                      </FormHelperText>
-                                    )}
+                                        </FormHelperText>
+                                      )}
                                   </FormControl>
                                 </Grid>
                               </Grid>
