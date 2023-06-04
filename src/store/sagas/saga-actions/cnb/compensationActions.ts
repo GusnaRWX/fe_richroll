@@ -1,9 +1,17 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import { post, get, patch, del } from '@/utils/services';
 
+interface CnbParams {
+  page: number;
+  itemPerPage: number;
+  sort: string;
+  direction: boolean;
+  search: string;
+}
 // Get Table Data
-export const getDataTable = (companyId: string) => {
-  return get(`compensation_benefits/${companyId}`);
+export const getDataTable = (payload: CnbParams) => {
+  const { page, itemPerPage, sort, direction, search } = payload;
+  return get(`compensations?page=${page}&itemPerPage=${itemPerPage}&sort=${sort}&direction=${direction}&search=${search}`);
 };
 // Get Compensation Component Option
 export const getCompensationComponentOption = () => {

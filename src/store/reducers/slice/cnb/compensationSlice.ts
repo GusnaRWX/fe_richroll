@@ -29,7 +29,7 @@ export const cnbSlice = createSlice({
     },
     getTableSuccess: (state, action) => {
       state.loading = false;
-      state.dataTable = action.payload;
+      state.dataTable = action?.payload?.data;
     },
     getTableFailed: (state) => {
       state.loading = false;
