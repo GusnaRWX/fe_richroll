@@ -1,427 +1,201 @@
-/* eslint-disable @typescript-eslint/indent */
-/* eslint-disable no-unused-vars */
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
-  Box,
-  Table,
-  TableBody,
+  Grid,
   TableCell,
-  TableContainer,
-  TableHead,
-  TablePagination,
   TableRow,
+  Box,
   TableSortLabel,
-  Paper,
-  TextField,
-  InputAdornment,
-} from '@mui/material/';
-import ConfirmationModal from '../_shared/common/ConfirmationModal';
-import SearchIcon from '@mui/icons-material/Search';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import DeleteIcon from '@mui/icons-material/Delete';
-import BorderColorIcon from '@mui/icons-material/BorderColor';
-
-import { styled } from '@mui/material/styles';
-import { TextFieldProps } from '@mui/material/';
-import { IconButton } from '../_shared/form';
-import { useAppDispatch } from '@/hooks/index';
-import {
-  deleteCompensationRequested,
-  getDetailRequested,
-} from '@/store/reducers/slice/cnb/compensationSlice';
+  Typography
+} from '@mui/material';
+import { Input, IconButton } from '../_shared/form';
+import { Search, Visibility  } from '@mui/icons-material';
+import Table from '../_shared/form/Table';
+import { HiPencilAlt } from 'react-icons/hi';
+import { BsTrashFill } from 'react-icons/bs';
+import { useRouter } from 'next/router';
+import styled from '@emotion/styled';
+import { useAppDispatch, useAppSelectors } from '@/hooks/index';
+import { getTableRequested } from '@/store/reducers/slice/cnb/compensationSlice';
+import { compareCheck, ifThenElse } from '@/utils/helper';
 import dayjs from 'dayjs';
-import DetailModal from './modal';
-import DetailCnb from './detail';
+import { visuallyHidden } from '@mui/utils';
 
-interface Data {
-  name: string;
-  baseCompensation: string | string[];
-  supplementaryCompensation: string | string[];
-  createdAt: string;
-  updatedAt: string;
-  id: string;
-}
+const ButtonWrapper = styled.div`
+ display: flex;
+ flex-direction: row;
+ align-items: center;
+ justify-content: center;
+ gap: .5rem;
+`;
 
-function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
-
-type Order = 'asc' | 'desc';
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function getComparator<Key extends keyof any>(
-  order: Order,
-  orderBy: Key
-): (
-  _a: { [key in Key]: number | string },
-  _b: { [key in Key]: number | string }
-) => number {
-  return order === 'desc'
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-function stableSort<T>(
-  array: readonly T[],
-  comparator: (a: T, b: T) => number
-) {
-  const stabilizedThis = array?.map((el, index) => [el, index] as [T, number]);
-  stabilizedThis?.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) {
-      return order;
-    }
-    return a[1] - b[1];
-  });
-  return stabilizedThis?.map((el) => el[0]);
-}
-
-interface HeadCell {
-  disablePadding: boolean;
-  id: keyof Data;
-  label: string;
-  numeric: boolean;
-}
-
-const headCells: readonly HeadCell[] = [
-  {
-    id: 'name',
-    numeric: false,
-    disablePadding: false,
-    label: 'Profile Name',
-  },
-  {
-    id: 'baseCompensation',
-    numeric: false,
-    disablePadding: false,
-    label: 'Base Compensation',
-  },
-  {
-    id: 'supplementaryCompensation',
-    numeric: false,
-    disablePadding: false,
-    label: 'Supplement Compensation',
-  },
-  {
-    id: 'createdAt',
-    numeric: false,
-    disablePadding: false,
-    label: 'Date Created',
-  },
-  {
-    id: 'updatedAt',
-    numeric: false,
-    disablePadding: false,
-    label: 'Last Updated',
-  },
+const headerItems = [
+  { id: 'name', label: 'Profile Name' },
+  { id: 'base', label: 'Base Compensation' },
+  { id: 'supplementaries', label: 'Supplement' },
+  { id: 'createdAt', label: 'Date Created' },
+  { id: 'updatedAt', label: 'Last Updated' }
 ];
 
-interface EnhancedTableProps {
-  onRequestSort: (
-    event: React.MouseEvent<unknown>,
-    property: keyof Data
-  ) => void;
-  order: Order;
-  orderBy: string;
-}
+type Order = 'asc' | 'desc'
 
-const SearchTable = styled(TextField)<TextFieldProps>(({ theme }) => ({
-  marginTop: '16px',
-  marginLeft: '16px',
-  marginBottom: '1rem',
-  [theme.breakpoints.down('md')]: {
-    maxWidth: '200px',
-  },
-  [theme.breakpoints.up('md')]: {
-    maxWidth: '300px',
-  },
-}));
 
-function EnhancedTableHead(props: EnhancedTableProps) {
-  const { order, orderBy, onRequestSort } = props;
-  const createSortHandler =
-    (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
-      onRequestSort(event, property);
-    };
-
-  return (
-    <TableHead>
-      <TableRow>
-        {headCells.map((headCell) => (
-          <TableCell
-            key={headCell.id}
-            align={headCell.numeric ? 'right' : 'left'}
-            padding={headCell.disablePadding ? 'none' : 'normal'}
-            sortDirection={orderBy === headCell.id ? order : false}
-          >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : 'asc'}
-              onClick={createSortHandler(headCell.id)}
-            >
-              {headCell.label}
-            </TableSortLabel>
-          </TableCell>
-        ))}
-        <TableCell />
-      </TableRow>
-    </TableHead>
-  );
-}
-
-interface Items {
-  name: string;
-  baseCompensation: string;
-  createdAt: string;
-  updatedAt: string;
-  id: number;
-  supplementaryCompensation: string;
-}
-
-interface Rows {
-  rows: {
-    items: Items[];
-  }
-}
-
-export default function EnhancedTable(rows: Rows) {
+function EnhancedTable() {
   const dispatch = useAppDispatch();
-  const [order, setOrder] = React.useState<Order>('asc');
-  const [orderBy, setOrderBy] = React.useState<keyof Data>('createdAt');
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
-  const deleteCnb = (Id: string | number) => {
-    dispatch({
-      type: deleteCompensationRequested.toString(),
-      Id: Id,
-    });
-  };
-
-  const editCnb = (rowId: number) => {
-    dispatch({
-      type: getDetailRequested.toString(),
-      Id: rowId,
-      changePage: true,
-    });
-  };
-
-  const handleRequestSort = (
-    event: React.MouseEvent<unknown>,
-    property: keyof Data
-  ) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(property);
-  };
-
+  const data = useAppSelectors(state => state.compensation.dataTable);
+  const router = useRouter();
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [page, setPage] = useState(0);
+  const [search, setSearch] = useState('');
+  const [direction, setDirection] = useState<Order>('desc');
+  const [sort, setSort] = useState('');
+  const [hydrated, setHaydrated] = useState(false);
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
-
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 0));
     setPage(0);
   };
-
-  // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows =
-    page > 0
-      ? Math.max(0, (1 + page) * rowsPerPage - rows?.rows?.items.length)
-      : 0;
-
-  const visibleRows = React.useMemo(
-    () =>
-      stableSort(rows?.rows?.items, getComparator(order, orderBy))?.slice(
-        page * rowsPerPage,
-        page * rowsPerPage + rowsPerPage
-      ),
-    [order, orderBy, page, rowsPerPage]
-  );
-
-  const [DeleteConfirmation, setDeleteConfirmation] = React.useState({
-    open: false,
-    id: 0,
-  });
-  const handleOpen = (id: number) => {
-    setDeleteConfirmation({ open: true, id: id });
-  };
-  const handleClose = () => {
-    setDeleteConfirmation({ open: false, id: 0 });
-  };
-
-  const [detailOpen, setDetailOpen] = React.useState({ id: 0, open: false });
-
-  const handleKeyDown = (e) => {
+  const handleSearch = (e) => {
     if (e.key === 'Enter') {
-      console.log(e.target.value);
+      setSearch(e.target.value);
+    }
+  };
+  const handleRequestSort = (event: React.MouseEvent<unknown>, headId: string) => {
+    if (headId !== 'base' && headId !== 'supplementaries'){
+      const isAsc = compareCheck(sort === headId, direction === 'asc');
+      setDirection(ifThenElse(isAsc, 'desc', 'asc'));
+      setSort(headId);
     }
   };
 
-  return (
-    <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '100%', mb: 2 }}>
-        <SearchTable
-          id='search-table'
-          placeholder='Search'
-          variant='outlined'
-          fullWidth
-          size='small'
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position='start'>
-                <SearchIcon />
-              </InputAdornment>
-            ),
-          }}
-          onKeyDown={handleKeyDown}
-        />
-        <TableContainer>
-          <Table sx={{ minWidth: 750 }} aria-labelledby='tableTitle'>
-            <EnhancedTableHead
-              order={order}
-              orderBy={orderBy}
-              onRequestSort={handleRequestSort}
-            />
-            <TableBody>
-              {rows?.rows?.items.length !== 0 &&
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                visibleRows?.map((row: any, index) => {
-                  const labelId = `enhanced-table-checkbox-${index}`;
+  useEffect(() => {
+    dispatch({
+      type: getTableRequested.toString(),
+      payload: {
+        page: page + 1,
+        itemPerPage: rowsPerPage,
+        sort: sort,
+        direction: direction.toUpperCase(),
+        search: search
+      }
+    });
+  }, [rowsPerPage, page, search, sort, direction]);
 
-                  return (
-                    <TableRow hover role='checkbox' tabIndex={-1} key={index}>
-                      <TableCell
-                        component='th'
-                        id={labelId}
-                        scope='row'
-                        padding='normal'
-                      >
-                        {row.name}
-                      </TableCell>
-                      <TableCell>{row.baseCompensation[0]}</TableCell>
+  useEffect(() => {
+    setHaydrated(true);
+  }, []);
+
+  if (!hydrated) {
+    return null;
+  }
+
+
+  return (
+    <>
+      <Grid container spacing={2}>
+        <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
+          <Input
+            name='search'
+            size='small'
+            placeholder='search'
+            onKeyDown={(e) => handleSearch(e)}
+            type='text'
+            InputProps={{
+              startAdornment: (
+                <Search sx={{ color: '#9CA3AF' }}/>
+              )
+            }}
+          />
+        </Grid>
+      </Grid>
+      <Table
+        count={data?.itemTotals}
+        rowsPerPageOptions={[5, 10, 15]}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onChangePage={handleChangePage}
+        onRowsPerPagesChange={(e) =>handleChangeRowsPerPage(e)}
+        headChildren={
+          <TableRow>
+            {
+              headerItems.map((item) => (
+                <TableCell key={item.id} sortDirection={ifThenElse(sort === item.id, direction, false)}>
+                  <TableSortLabel
+                    active={sort === item.id}
+                    direction={sort === item.id ? direction : 'asc'}
+                    onClick={(e) => handleRequestSort(e, item.id)}
+                  >
+                    {item.label}
+                    {sort === item.id ? (
+                      <Box component='span' sx={visuallyHidden}>
+                        {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
+                      </Box>
+                    ): null}
+                  </TableSortLabel>
+                </TableCell>
+              ))
+            }
+          </TableRow>
+        }
+        bodyChildren={
+          <>
+            {
+              ifThenElse(typeof data?.items !== 'undefined', (
+                ifThenElse(data?.items?.length === 0, (
+                  <TableRow>
+                    <TableCell colSpan={12} align='center'><Typography>Data not found</Typography></TableCell>
+                  </TableRow>
+                ), (
+                  data?.items?.map((item, index) => (
+                    <TableRow key={index}>
+                      <TableCell>{item?.name}</TableCell>
+                      <TableCell>{item?.base?.component.name}</TableCell>
                       <TableCell>
-                        {row.supplementaryCompensation.map(
-                          (item: string, i: number) => (
-                            <div key={i}>{item}</div>
-                          )
-                        )}
+                        {
+                          item?.supplementaries.length === 0 ? '-' :
+                            item?.supplementaries.map((supp) => (
+                              <p key={supp}>{supp?.component?.name} {item?.supplementaries.length > 1 ? ', ' : ''}</p>
+                            ))
+                        }
                       </TableCell>
+                      <TableCell>{dayjs(item.createdAt).format('YYYY-MM-DD H:m:s')}</TableCell>
+                      <TableCell>{dayjs(item.updatedAt).format('YYYY-MM-DD H:m:s')}</TableCell>
                       <TableCell>
-                        {dayjs(row.createdAt).format('DD/MM/YY')}
-                      </TableCell>
-                      <TableCell>
-                        {dayjs(row.updatedAt).format('DD/MM/YY')}
-                      </TableCell>
-                      <TableCell>
-                        <div style={{ display: 'flex', gap: '8px' }}>
+                        <ButtonWrapper>
                           <IconButton
                             parentColor='primary.50'
-                            icons={<VisibilityIcon sx={{ color: '#223567' }} />}
-                            onClick={() =>
-                              setDetailOpen({ id: row.id, open: true })
-                            }
+                            icons={<Visibility sx={{ color: '#223567' }} />}
                           />
                           <IconButton
+                            onClick={() => router.push('/compensation-benefits')}
                             parentColor='primary.50'
                             icons={
-                              <BorderColorIcon sx={{ color: '#223567' }} />
+                              <HiPencilAlt fontSize={20} color='#223567'/>
                             }
-                            onClick={() => editCnb(row.id)}
                           />
                           <IconButton
                             parentColor='red.100'
-                            icons={<DeleteIcon sx={{ color: '#EF4444' }} />}
-                            onClick={() => handleOpen(row.id)}
+                            icons={
+                              <BsTrashFill fontSize={20} color='#EF4444'/>
+                            }
                           />
-                        </div>
+                        </ButtonWrapper>
                       </TableCell>
                     </TableRow>
-                  );
-                })}
-              {/* Delete */}
-              <ConfirmationModal
-                open={DeleteConfirmation.open}
-                handleClose={handleClose}
-                title='Are you sure you want to delete this record?'
-                content='Any unsaved changes will be discarded. This cannot be undone'
-                withCallback
-                noChange={true}
-                callback={() => deleteCnb(DeleteConfirmation.id)}
-              />
-
-              {/* Detail */}
-              <DetailModal
-                open={detailOpen.open}
-                handleClose={() => setDetailOpen({ id: 0, open: false })}
-                title='CnB Profile Detail'
-                content={
-                  <DetailCnb id={detailOpen.id} open={detailOpen.open} />
-                }
-              />
-              {rows?.rows?.items.length === undefined && (
+                  ))
+                ))
+              ), (
                 <TableRow>
-                  <TableCell colSpan={5} align='center'>
-                    No Data
-                  </TableCell>
+                  <TableCell colSpan={12} align='center'><Typography>Data not found</Typography></TableCell>
                 </TableRow>
-              )}
-              {emptyRows > 0 && (
-                <TableRow
-                  style={{
-                    height: 53 * emptyRows,
-                  }}
-                >
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        {rows?.rows?.items.length !== undefined && (
-          <TablePagination
-            rowsPerPageOptions={[5, 10]}
-            component='div'
-            count={rows?.rows?.items.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-            labelRowsPerPage='Record per pages'
-            sx={{
-              '.MuiTablePagination-toolbar': {
-                paddingRight: '24px',
-              },
-              '.MuiTablePagination-spacer': {
-                display: 'none',
-              },
-              '.MuiTablePagination-selectLabel': {
-                order: 2,
-                marginRight: '16px',
-              },
-              '.mui-style-t2m9id-MuiInputBase-root-MuiTablePagination-select': {
-                order: 1,
-                marginRight: '8px',
-              },
-              '.MuiTablePagination-displayedRows': {
-                order: 3,
-              },
-              '.MuiTablePagination-actions': {
-                order: 4,
-                marginLeft: 'auto !important',
-              },
-            }}
-          />
-        )}
-      </Paper>
-    </Box>
+              ))
+            }
+          </>
+        }
+      />
+    </>
   );
 }
+
+export default EnhancedTable;
