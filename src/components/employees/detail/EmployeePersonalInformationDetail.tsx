@@ -442,9 +442,9 @@ const EmployeePersonalInformationDetail = ({ data }: PersonalInformationDetailPr
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            {ifThenElse(data.identity.type === 0, 'KTP', (
-              ifThenElse(data.identity.type === 1, 'Nomor wajib pajak', (
-                ifThenElse(data.identity.type === 2, 'Passport', '-')
+            {ifThenElse(data?.identity?.type === 0, 'KTP', (
+              ifThenElse(data?.identity?.type === 1, 'Nomor wajib pajak', (
+                ifThenElse(data?.identity?.type === 2, 'Passport', '-')
               ))
             ))}
           </Typography>

@@ -129,6 +129,15 @@ export const employeeSlice = createSlice({
     },
     patchEmergencyContactFailed: (state) => {
       state.isLoading = false;
+    },
+    patchPersonalRequested: (state) => {
+      state.isLoading = true;
+    },
+    patchPersonalSuccess: (state) => {
+      state.isLoading = false;
+    },
+    patchPersonalFailed: (state) => {
+      state.isLoading = false;
     }
   },
   extraReducers: {
@@ -174,7 +183,10 @@ export const {
   patchEmployeeInformationFailed,
   patchEmergencyContactRequested,
   patchEmergencyContactSuccess,
-  patchEmergencyContactFailed
+  patchEmergencyContactFailed,
+  patchPersonalRequested,
+  patchPersonalSuccess,
+  patchPersonalFailed
 } = employeeSlice.actions;
 
 export default employeeSlice.reducer;

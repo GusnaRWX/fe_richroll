@@ -10,7 +10,8 @@ import {
   postEmployeeCNB,
   getEmployeeEmergencyDetail,
   patchEmployeeInformation,
-  patchEmergencyContact
+  patchEmergencyContact,
+  patchEmployeePersonal
 } from '../saga-actions/company-management/employeeActions';
 import { call, put, takeEvery, delay } from 'redux-saga/effects';
 import {
@@ -46,7 +47,10 @@ import {
   patchEmployeeInformationFailed,
   patchEmergencyContactFailed,
   patchEmergencyContactRequested,
-  patchEmergencyContactSuccess
+  patchEmergencyContactSuccess,
+  patchPersonalRequested,
+  patchPersonalSuccess,
+  patchPersonalFailed
 } from '@/store/reducers/slice/company-management/employees/employeeSlice';
 import { setResponserMessage } from '@/store/reducers/slice/responserSlice';
 import { Services } from '@/types/axios';
@@ -591,6 +595,120 @@ function* fetchPatchEmergencyContact(action: AnyAction) {
   }
 }
 
+function* fetchPatchEmployeePersonal(action: AnyAction) {
+  console.log(action);
+  try {
+    const citizen = {
+      countryID: action?.payload?.employeePersonal.personalPayload.countryCitizenAddress,
+      firstLevelCode: action?.payload?.employeePersonal.personalPayload.provinceCitizenAddress,
+      secondLevelCode: action?.payload?.employeePersonal.personalPayload.cityCitizenAddress,
+      thirdLevelCode: action?.payload?.employeePersonal.personalPayload.subDistrictCitizenAddress,
+      address: action?.payload?.employeePersonal.personalPayload.addressCitizenAddress,
+      zipCode: action?.payload?.employeePersonal.personalPayload.zipCodeCitizenAddress,
+      isCitizen: true,
+      // isResident: action?.payload?.employeePersonal ? personalPayload..useResidentialAddress,
+      isResident: action?.payload?.employeePersonal.personalPayload.useResidentialAddress
+    };
+
+    const personal = {
+      dateOfBirth: dayjs(action?.payload?.employeePersonal.personalPayload.dateofBirthPersonalInformation).format('YYYY-MM-DD'),
+      gender: action?.payload?.employeePersonal.personalPayload.genderPersonalInformation === 'male' ? 1 : 2,
+      maritalStatus: +action?.payload?.employeePersonal.personalPayload.maritialStatusPersonalInformation,
+      numberOfChildren: +action?.payload?.employeePersonal.personalPayload.numberOfDependantsPersonalInformation,
+      countryID: action?.payload?.employeePersonal.personalPayload.nationalityPersonalInformation,
+      religion: +action?.payload?.employeePersonal.personalPayload.religionPersonalInformation
+    };
+
+    const bank = {
+      bankID: action?.payload?.employeePersonal.personalPayload.bankBankInformation,
+      holder: action?.payload?.employeePersonal.personalPayload.bankAccountHolderNameBankInformation,
+      accountNumber: action?.payload?.employeePersonal.personalPayload.bankAccoutNoBankInformation,
+      bankCode: action?.payload?.employeePersonal.personalPayload.bankCodeBankInformation,
+      branchCode: action?.payload?.employeePersonal.personalPayload.branchCodeBankInformation,
+      branchName: action?.payload?.employeePersonal.personalPayload.branchNameBankInformation,
+      swiftCode: action?.payload?.employeePersonal.personalPayload.swiftCodeBankInformation
+    };
+
+    const identity = {
+      type: +action?.payload?.employeePersonal.personalPayload.idTypePersonalID,
+      number: +action?.payload?.employeePersonal.personalPayload.idNumberPersonalID,
+      // expiredAt: dayjs(action?.payload?.employeePersonal ? personalPayload..idExpirationDatePersonalID).format('YYYY-MM-DD'),
+      expiredAt: dayjs(action?.payload?.employeePersonal?.personalPayload.idExpirationDatePersonalID).format('YYYY-MM-DD'),
+      isPermanent: false
+    };
+
+    const residential = {
+      countryID: action?.payload?.employeePersonal.personalPayload.countryResidentialAddress,
+      firstLevelCode: action?.payload?.employeePersonal.personalPayload.provinceResidentialAddress,
+      secondLevelCode: action?.payload?.employeePersonal.personalPayload.cityResidentialAddress,
+      thirdLevelCode: action?.payload?.employeePersonal.personalPayload.subDistrictResidentialAddress,
+      address: action?.payload?.employeePersonal.personalPayload.addressResidentialAddress,
+      zipCode: action?.payload?.employeePersonal.personalPayload.zipCodeResidentialAddress,
+      isCitizen: false,
+      // isResident: action?.payload?.employeePersonal ? personalPayload..useResidentialAddress
+      isResident: action?.payload?.employeePersonal.personalPayload?.useResidentialAddress
+    };
+
+    let payload = {};
+    if (checkObject(bank)) {
+      payload = {
+        ...payload,
+        employeeID: action?.payload?.employeePersonal.employeeID,
+        companyID: String(getCompanyData()?.id),
+        citizen: citizen,
+        personal: personal,
+        identity: identity,
+        residential: residential,
+      };
+    } else {
+      payload = {
+        ...payload,
+        employeeID: action?.payload?.employeePersonal.employeeID,
+        companyID: String(getCompanyData()?.id),
+        citizen: citizen,
+        personal: personal,
+        identity: identity,
+        residential: residential,
+        bank: bank
+      };
+    }
+    const res: AxiosResponse = yield call(patchEmployeePersonal, payload);
+
+    if (res.data.code) {
+      yield put({ type: patchPersonalSuccess.toString() });
+      yield delay(2000);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: res?.data?.code,
+          message: res?.data?.message
+        }
+      });
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: 0,
+          message: null
+        }
+      });
+    }
+
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      yield put({ type: patchPersonalFailed.toString() });
+      yield delay(2000, true);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message
+        }
+      });
+    }
+  }
+}
+
 function* employeeSaga() {
   yield takeEvery(getEmployeeRequested.toString(), fetchGetEmployee);
   yield takeEvery(postEmployeeInfoRequested.toString(), fetchPostEmployeeInfo);
@@ -603,6 +721,7 @@ function* employeeSaga() {
   yield takeEvery(emergencyContactDetailRequested.toString(), fetchGetEmergencyContactDetail);
   yield takeEvery(patchEmployeeInformationRequested.toString(), fetchPatchEmployeeInformation);
   yield takeEvery(patchEmergencyContactRequested.toString(), fetchPatchEmergencyContact);
+  yield takeEvery(patchPersonalRequested.toString(), fetchPatchEmployeePersonal);
 }
 
 export default employeeSaga;
