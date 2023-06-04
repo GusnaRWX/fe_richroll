@@ -22,7 +22,7 @@ import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
 import { compareCheck, ifThenElse } from '@/utils/helper';
 import { visuallyHidden } from '@mui/utils';
-import AddEmployeesModal from './AddEmployeesModal';
+import AddEmployeesModal from './AttendanceModal';
 
 const ContentWrapper = styled(Card)(({
   padding: '1rem',
