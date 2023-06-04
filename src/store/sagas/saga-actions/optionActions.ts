@@ -35,3 +35,15 @@ export const getCnb = (): Promise<AxiosResponse> => {
   const data =  getCompanyData();
   return get(`compensation_benefits/${data?.id}`);
 };
+
+export const getListCompensation = (): Promise<AxiosResponse> => {
+  return get(`compensation-components?page=1&itemPerPage=10000&direction=DESC`);
+};
+
+export const getListTermin = (payload: number): Promise<AxiosResponse> => {
+  return get(`term-compensations?page=-1&itemPerPage=0&direction=DESC&componentID=${payload}`);
+};
+
+export const getListSuppTermin = (payload: number): Promise<AxiosResponse> => {
+  return get(`term-compensations?page=-1&itemPerPage=0&direction=DESC&componentID=${payload}`);
+};

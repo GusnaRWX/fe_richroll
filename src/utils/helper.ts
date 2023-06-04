@@ -242,3 +242,38 @@ export const getMaritalStatus = (id) => {
       return '';
   }
 };
+
+export const getPaymentType = (id, arrData) => {
+  const tempId = arrData.find((el) => el.value === id);
+  switch(tempId.type) {
+    case 0 :
+      return {
+        title: 'Amount',
+        withPercentage: false
+      };
+      break;
+    case 1 :
+      return {
+        title: 'Rate',
+        withPercentage: false
+      };
+      break;
+    case 2:
+      return {
+        title: 'Expected Amount (currency)',
+        withPercentage: true
+      };
+      break;
+    case 3:
+      return {
+        title: 'Expected Rate (pcs)',
+        withPercentage: true
+      };
+      break;
+    default:
+      return {
+        title: 'Amount',
+        withPercentage: false
+      };
+  }
+};

@@ -29,6 +29,7 @@ import { getCompanyData } from '@/utils/helper';
 import { FieldArray, Form as FormikForm, Formik } from 'formik';
 import * as Yup from 'yup';
 import ConfirmationModal from '@/components/_shared/common/ConfirmationModal';
+import { Input } from '@/components/_shared/form';
 
 export default function UpdateCNBComponent() {
   const router = useRouter();
@@ -138,7 +139,7 @@ export default function UpdateCNBComponent() {
       backgroundColor: '#106ba3',
     },
   });
-  
+
   interface SuplementType {
     compensationComponentId: string;
     taxStatus: string;
@@ -270,6 +271,8 @@ export default function UpdateCNBComponent() {
               <Grid container>
                 <Grid item xs={6} md={6} lg={6} xl={6}>
                   <TextField
+                    sx={{ marginTop: '.4rem' }}
+                    size='small'
                     fullWidth
                     required
                     placeholder='Sales'
@@ -310,10 +313,6 @@ export default function UpdateCNBComponent() {
                 <Grid container spacing={2}>
                   <Grid item xs={6} md={6} lg={6} xl={6}>
                     <div style={{ marginBottom: '16px' }}>
-                      <Typography style={{ fontSize: '14px' }}>
-                        Compensation Component
-                        <span style={{ color: 'red' }}>*</span>
-                      </Typography>
                       <FormControl
                         fullWidth
                         error={
@@ -321,7 +320,13 @@ export default function UpdateCNBComponent() {
                           Boolean(formik.errors.compensationComponentId)
                         }
                       >
+                        <Typography>
+                        Compensation Component
+                          <span style={{ color: 'red' }}>*</span>
+                        </Typography>
                         <Select
+                          size='small'
+                          sx={{ marginTop: '.4rem' }}
                           fullWidth
                           value={formik.values.compensationComponentId}
                           onChange={(e) =>
@@ -345,7 +350,7 @@ export default function UpdateCNBComponent() {
                     </div>
                   </Grid>
                   <Grid item xs={6} md={6} lg={6} xl={6}>
-                    <Typography style={{ fontSize: '14px' }}>
+                    <Typography>
                       Tax Status<span style={{ color: 'red' }}>*</span>
                     </Typography>
                     <FormControl
@@ -390,15 +395,17 @@ export default function UpdateCNBComponent() {
                   </Grid>
                 </Grid>
                 <Grid container>
-                  <Typography>
-                    {formik.values.compensationComponentId === '1'
-                      ? 'Rate'
-                      : 'Amount'}
-                    <span style={{ color: 'red' }}>*</span>
-                  </Typography>
                   <Grid container spacing={2}>
                     <Grid item xs={3} md={3} lg={3} xl={3}>
+                      <Typography>
+                        {formik.values.compensationComponentId === '1'
+                          ? 'Rate'
+                          : 'Amount'}
+                        <span style={{ color: 'red' }}>*</span>
+                      </Typography>
                       <TextField
+                        sx={{ marginTop: '.4rem' }}
+                        size='small'
                         fullWidth
                         type='number'
                         error={
@@ -424,6 +431,22 @@ export default function UpdateCNBComponent() {
                       />
                     </Grid>
                     <Grid item xs={3} md={3} lg={3} xl={3}>
+                      <FormControl fullWidth>
+                        <Input
+                          fullWidth
+                          customLabel='Commission Rate'
+                          variant='outlined'
+                          type='number'
+                          size='small'
+                          InputProps={{
+                            endAdornment: (
+                              <InputAdornment position='end'>%</InputAdornment>
+                            )
+                          }}
+                        />
+                      </FormControl>
+                    </Grid>
+                    <Grid item xs={3} md={3} lg={3} xl={3}>
                       <FormControl
                         fullWidth
                         error={
@@ -431,6 +454,8 @@ export default function UpdateCNBComponent() {
                         }
                       >
                         <Select
+                          sx={{ marginTop: '1.8rem' }}
+                          size='small'
                           fullWidth
                           value={formik.values.period}
                           onChange={(e) =>
@@ -473,7 +498,7 @@ export default function UpdateCNBComponent() {
                               <Grid container spacing={2}>
                                 <Grid item xs={6} md={6} lg={6} xl={6}>
                                   <div style={{ marginBottom: '16px' }}>
-                                    <Typography style={{ fontSize: '14px' }}>
+                                    <Typography>
                                       Compensation Component {i + 1}
                                       <span style={{ color: 'red' }}>*</span>
                                     </Typography>
@@ -494,6 +519,8 @@ export default function UpdateCNBComponent() {
                                       })}
                                     >
                                       <Select
+                                        sx={{ marginTop: '.4rem' }}
+                                        size='small'
                                         fullWidth
                                         value={
                                           formik.values.supplementary[i]
@@ -530,7 +557,7 @@ export default function UpdateCNBComponent() {
                                   </div>
                                 </Grid>
                                 <Grid item xs={6} md={6} lg={6} xl={6}>
-                                  <Typography style={{ fontSize: '14px' }}>
+                                  <Typography>
                                     Tax Status
                                     <span style={{ color: 'red' }}>*</span>
                                   </Typography>
@@ -616,16 +643,18 @@ export default function UpdateCNBComponent() {
                                   </Box>
                                 </Grid>
                               </Grid>
-                              <Typography>
-                                {formik.values.supplementary[i]
-                                  ?.compensationComponentId === '1'
-                                  ? 'Rate'
-                                  : 'Amount'}
-                                <span style={{ color: 'red' }}>*</span>
-                              </Typography>
                               <Grid container spacing={2}>
                                 <Grid item xs={3} md={3} lg={3} xl={3}>
+                                  <Typography>
+                                    {formik.values.supplementary[i]
+                                      ?.compensationComponentId === '1'
+                                      ? 'Rate'
+                                      : 'Amount'}
+                                    <span style={{ color: 'red' }}>*</span>
+                                  </Typography>
                                   <TextField
+                                    sx={{ marginTop: '.4rem' }}
+                                    size='small'
                                     fullWidth
                                     type='number'
                                     {...(formik.touched?.supplementary &&
@@ -677,6 +706,22 @@ export default function UpdateCNBComponent() {
                                   />
                                 </Grid>
                                 <Grid item xs={3} md={3} lg={3} xl={3}>
+                                  <FormControl fullWidth>
+                                    <Input
+                                      fullWidth
+                                      customLabel='Commission Rate'
+                                      variant='outlined'
+                                      type='number'
+                                      size='small'
+                                      InputProps={{
+                                        endAdornment: (
+                                          <InputAdornment position='end'>%</InputAdornment>
+                                        )
+                                      }}
+                                    />
+                                  </FormControl>
+                                </Grid>
+                                <Grid item xs={3} md={3} lg={3} xl={3}>
                                   <FormControl
                                     fullWidth
                                     {...(formik.touched?.supplementary &&
@@ -694,6 +739,8 @@ export default function UpdateCNBComponent() {
                                     })}
                                   >
                                     <Select
+                                      sx={{ marginTop: '1.8rem' }}
+                                      size='small'
                                       fullWidth
                                       value={
                                         formik.values.supplementary[i]?.period

@@ -7,7 +7,10 @@ import {
   getBanks,
   getListDepartment,
   getListPosition,
-  getCnb
+  getCnb,
+  getListCompensation,
+  getListTermin,
+  getListSuppTermin
 } from './saga-actions/optionActions';
 import { takeEvery, call, put, delay } from 'redux-saga/effects';
 import { Option } from '@/types/option';
@@ -44,7 +47,16 @@ import {
   getSecondAdministrativeThirdLevelFailed,
   getListCnbRequested,
   getListCnbFailed,
-  getListCnbSuccess
+  getListCnbSuccess,
+  getListCompensationFailed,
+  getListCompensationRequested,
+  getListCompensationSuccess,
+  getListTerminFailed,
+  getListTerminReqeusted,
+  getListTerminSuccess,
+  getListSuppTerminFailed,
+  getListSuppTerminRequested,
+  getListSuppTerminSuccess
 } from '../reducers/slice/options/optionSlice';
 import { Services } from '@/types/axios';
 import { setResponserMessage } from '../reducers/slice/responserSlice';
@@ -418,6 +430,96 @@ function* fetchListCnb() {
   }
 }
 
+function* fetchListCompensation() {
+  try {
+    const res: AxiosResponse = yield call(getListCompensation);
+
+    if (res.status === 200) {
+      const { items } = res?.data?.data as Option.Compensation;
+
+      yield put({
+        type: getListCompensationSuccess.toString(),
+        payload: {
+          items: items
+        }
+      });
+    }
+  } catch(err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      yield delay(2000, true);
+      yield put({ type: getListCompensationFailed.toString() });
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message,
+        }
+      });
+    }
+  }
+}
+
+function* fetchListTermin(action: AnyAction) {
+  try {
+    const res: AxiosResponse = yield call(getListTermin, action?.payload);
+
+    if (res.status === 200) {
+      const { items } = res?.data?.data as Option.Termin;
+
+      yield put({
+        type: getListTerminSuccess.toString(),
+        payload: {
+          items: items
+        }
+      });
+    }
+  } catch(err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      yield delay(2000, true);
+      yield put({ type: getListTerminFailed.toString() });
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message,
+        }
+      });
+    }
+  }
+}
+
+function* fetchListSuppTermin(action: AnyAction) {
+  try {
+    const res: AxiosResponse = yield call(getListSuppTermin, action?.payload);
+
+    if (res.status === 200) {
+      const { items } = res?.data?.data as Option.Termin;
+
+      yield put({
+        type: getListSuppTerminSuccess.toString(),
+        payload: {
+          items: items
+        }
+      });
+    }
+  } catch(err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      yield delay(2000, true);
+      yield put({ type: getListSuppTerminFailed.toString() });
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message,
+        }
+      });
+    }
+  }
+}
+
 
 function* optionSaga() {
   yield takeEvery(countriesRequested.toString(), fetchGetCountries);
@@ -431,6 +533,9 @@ function* optionSaga() {
   yield takeEvery(getSecondAdministrativeSecondLevelRequested.toString(), fetchSecondAdministrativeLevelSecond);
   yield takeEvery(getSecondAdministrativeThirdLevelRequested.toString(), fetchSecondAdministrativeLevelThird);
   yield takeEvery(getListCnbRequested.toString(), fetchListCnb);
+  yield takeEvery(getListCompensationRequested.toString(), fetchListCompensation);
+  yield takeEvery(getListTerminReqeusted.toString(), fetchListTermin);
+  yield takeEvery(getListSuppTerminRequested.toString(), fetchListSuppTermin);
 }
 
 export default optionSaga;

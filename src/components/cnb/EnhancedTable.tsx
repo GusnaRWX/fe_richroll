@@ -134,6 +134,7 @@ interface EnhancedTableProps {
 const SearchTable = styled(TextField)<TextFieldProps>(({ theme }) => ({
   marginTop: '16px',
   marginLeft: '16px',
+  marginBottom: '1rem',
   [theme.breakpoints.down('md')]: {
     maxWidth: '200px',
   },
@@ -273,6 +274,7 @@ export default function EnhancedTable(rows: Rows) {
           placeholder='Search'
           variant='outlined'
           fullWidth
+          size='small'
           InputProps={{
             startAdornment: (
               <InputAdornment position='start'>
