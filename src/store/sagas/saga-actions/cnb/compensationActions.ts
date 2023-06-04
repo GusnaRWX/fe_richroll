@@ -1,19 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import { post, get, patch } from '@/utils/services';
-import axios, { AxiosHeaderValue } from 'axios';
-import { config } from '@config';
-import { getStorage } from '@/utils/storage';
-
-const service = axios.create({
-  baseURL: config.API_URL || 'http://localhost',
-  headers: {
-    Authorization: {
-      toString() {
-        return `Bearer ${getStorage('accessToken')}`;
-      },
-    } as AxiosHeaderValue,
-  },
-});
+import { post, get, patch, del } from '@/utils/services';
 
 // Get Table Data
 export const getDataTable = (companyId: string) => {
@@ -29,7 +15,7 @@ export const postNewCnbProfile = (Payload: Object) => {
 };
 // Delete CNB
 export const deleteCnbProfile = (Id: string) => {
-  return service.delete(`compensation_benefits/${Id}`);
+  return del(`compensations/${Id}`);
 };
 // Get Detail
 export const getDetailCnb = (Id: string) => {
