@@ -16,10 +16,7 @@ import {
   Grid,
   Paper,
   FormControl,
-  FormHelperText,
-  Snackbar,
-  Alert,
-  AlertTitle,
+  FormHelperText
 } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import { useRouter } from 'next/router';
@@ -28,7 +25,7 @@ import {
 } from '@/store/reducers/slice/cnb/compensationSlice';
 import {Input} from '@/components/_shared/form';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
-import { getCompanyData, getPaymentType } from '@/utils/helper';
+import { getCompanyData, getPaymentType, dynamicPayloadBaseCnb } from '@/utils/helper';
 import { FieldArray, Form as FormikForm, Formik } from 'formik';
 import * as Yup from 'yup';
 import { getListTerminReqeusted, getListSuppTerminRequested, removeListSuppTermin } from '@/store/reducers/slice/options/optionSlice';
@@ -38,7 +35,6 @@ export default function CreateCNBComponent() {
   const companyData = getCompanyData();
   const dispatch = useAppDispatch();
   const { listCompensation, listTermin, listSuppTermin } = useAppSelectors((state) => state.option);
-  const [openMsg, setOpenMsg] = React.useState(false);
   const [title, setTitle] = React.useState('Amount');
   const [withPercentage, setWithPercentage] = React.useState(false);
 
@@ -50,12 +46,10 @@ export default function CreateCNBComponent() {
     taxStatus: Yup.string().required('This is required'),
     supplementary: Yup.array().of(
       Yup.object().shape({
-        withPercentage: Yup.boolean(),
         compensationComponentId: Yup.string().required('This is required'),
         period: Yup.string().required('This is required'),
         rateOrAmount: Yup.number().required('This is required').positive('Must be positive').integer('Must be number'),
-        taxStatus: Yup.string().required('This is required'),
-        percentage: Yup.number().typeError('This field is required').when('withPercentage', { is: true, then: (schema) => schema.required('This field is required') })
+        taxStatus: Yup.string().required('This is required')
       })
     ),
   });
@@ -143,6 +137,8 @@ export default function CreateCNBComponent() {
     titleRate?: string;
     withPercentage?: boolean;
     percentage?: string | number;
+    amountType?: string | number;
+    rateType?: string | number;
   }
 
   interface BaseType {
@@ -181,33 +177,26 @@ export default function CreateCNBComponent() {
       value.taxStatus !== '' &&
       supplement
     ) {
-      setOpenMsg(true);
+      const tempBase = dynamicPayloadBaseCnb(listCompensation, value.compensationComponentId, value);
+      const tempSupplementary: any = [];
+      if (value.supplementary.length > 0){
+        for (let i = 0; i <= value.supplementary.length; i++) {
+          if (typeof value.supplementary[i] !== 'undefined'){
+            const tempData = dynamicPayloadBaseCnb(listCompensation, value.supplementary[i].compensationComponentId, value.supplementary[i]);
+            tempSupplementary.push(tempData);
+          }
+        }
+      }
+
       dispatch({
         type: postNewCnbProfileRequested.toString(),
         Payload: {
-          companyId: companyData?.id,
+          companyID: companyData?.id?.toString(),
           name: value.name,
-          baseCompensation: {
-            compensationComponentId: parseInt(value.compensationComponentId),
-            taxStatus: value.taxStatus,
-            amount:
-              value.compensationComponentId === '1' ? 0 : value.rateOrAmount,
-            rate:
-              value.compensationComponentId === '1' ? value.rateOrAmount : 0,
-            period: value.period,
-          },
-          supplementaryCompensations: value.supplementary.map((item: SuplementType) => ({
-            compensationComponentId: parseInt(item.compensationComponentId),
-            taxStatus: item.taxStatus,
-            amount:
-              item.compensationComponentId === '1' ? 0 : item.rateOrAmount,
-            rate: item.compensationComponentId === '1' ? item.rateOrAmount : 0,
-            period: item.period,
-          })),
-        },
+          base: tempBase,
+          supplementaries: tempSupplementary
+        }
       });
-    } else {
-      alert('Please fill all field');
     }
   }
 
@@ -234,6 +223,7 @@ export default function CreateCNBComponent() {
       initialValues={initialValues}
       onSubmit={(values: BaseType) => {
         CreateNewCnbProfile(values);
+        console.log('here');
       }}
       validationSchema={validationSchecma}
     >
@@ -289,6 +279,7 @@ export default function CreateCNBComponent() {
                     sx={{ marginTop: '.4rem' }}
                     fullWidth
                     required
+                    type='text'
                     size='small'
                     placeholder='Sales'
                     error={formik.touched.name && Boolean(formik.errors.name)}
@@ -851,17 +842,6 @@ export default function CreateCNBComponent() {
               }}
             />
           </Paper>
-          <Snackbar
-            open={openMsg}
-            autoHideDuration={2000}
-            onClose={() => setOpenMsg(false)}
-            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-          >
-            <Alert>
-              <AlertTitle>Successfully Saved!</AlertTitle>
-              New Compensation and Benefits Profile has been created
-            </Alert>
-          </Snackbar>
         </FormikForm>
       )}
     </Formik>

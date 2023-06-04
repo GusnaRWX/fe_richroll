@@ -150,15 +150,21 @@ function* deleteCnb(action: AnyAction) {
 function* fetchPostNewCnbProfile(action: AnyAction) {
   try {
     const res: AxiosResponse = yield call(postNewCnbProfile, action?.Payload);
-    if (res.status === 200) {
+    if (res.status === 201) {
       yield put({
         type: postNewCnbProfileSuccess.toString(),
         payload: {
           data: res.data.data,
         },
       });
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: res.data.code,
+          message: res.data.message
+        }
+      });
       yield Router.push('/compensation-benefits');
-      yield delay(1000);
     }
   } catch (err) {
     if (err instanceof AxiosError) {

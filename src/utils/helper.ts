@@ -277,3 +277,49 @@ export const getPaymentType = (id, arrData) => {
       };
   }
 };
+
+export const dynamicPayloadBaseCnb = (arrData, id, value) => {
+  const tempId = arrData.find((el) => el.value === id);
+  switch(tempId.type) {
+    case 0 :
+      return {
+        componentID: value.compensationComponentId,
+        isTaxable: value.taxStatus,
+        termID: value.period,
+        amount: value.rateOrAmount,
+        amountType: 0,
+      };
+      break;
+    case 1 :
+      return {
+        componentID: value.compensationComponentId,
+        isTaxable: value.taxStatus,
+        termID: value.period,
+        rate: value.rateOrAmount,
+        rateType: 0,
+      };
+      break;
+    case 2 :
+      return {
+        componentID: value.compensationComponentId,
+        isTaxable: value.taxStatus,
+        termID: value.period,
+        amount: value.rateOrAmount,
+        amountType: 0,
+        rate: value.percentage,
+        rateType: 1,
+      };
+      break;
+    case 3 :
+      return {
+        componentID: value.compensationComponentId,
+        isTaxable: value.taxStatus,
+        termID: value.period,
+        amount: value.rateOrAmount,
+        amountType: 0,
+        rate: value.percentage,
+        rateType: 0,
+      };
+      break;
+  }
+};
