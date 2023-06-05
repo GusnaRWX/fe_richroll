@@ -87,7 +87,7 @@ const DetailCnb = ({ id, open }: DetailCNBProps) => {
               startIcon={<BorderColorIcon sx={{ color: 'white' }} />}
               onClick={() =>
                 router.push(
-                  `/compensation-benefits/update?cnb=${id}&id=${detail?.baseCompensation[0].id}`
+                  `/compensation-benefits/update/${id}`
                 )
               }
             >
