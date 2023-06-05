@@ -88,8 +88,8 @@ function WorkScheduleCreateForm({setData}: WorkScheduleFormProps) {
         breakHourName: data.breakName,
         breakDuration: data.breakDuration,
         specificBreakHour: data.specifyBreakHour,
-        specificBreakStartHour: data.spesifyBreakHour === true ? dayjs(data.breakStartTime).format('YYYY-MM-DD HH:mm') : data.breakDuration.toString(),
-        specificBreakEndHour: data.spesifyBreakHour === true ? dayjs(data.breakEndTime).format('YYYY-MM-DD HH:mm') : '',
+        specificBreakStartHour: data.specifyBreakHour === true ? dayjs(data.breakStartTime).format('YYYY-MM-DD HH:mm') : data.breakDuration.toString(),
+        specificBreakEndHour: data.specifyBreakHour === true ? dayjs(data.breakEndTime).format('YYYY-MM-DD HH:mm') : '',
         isWithBreak: data.breakName === '' ? false : true
       };
       const payloadFlexi = {
