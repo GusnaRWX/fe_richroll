@@ -284,7 +284,7 @@ export const dynamicPayloadBaseCnb = (arrData, id, value) => {
     case 0:
       return {
         componentID: value.compensationComponentId,
-        isTaxable: value.taxStatus,
+        isTaxable: Boolean(value.taxStatus),
         termID: value.period,
         amount: value.rateOrAmount,
         amountType: 0,
@@ -293,7 +293,7 @@ export const dynamicPayloadBaseCnb = (arrData, id, value) => {
     case 1:
       return {
         componentID: value.compensationComponentId,
-        isTaxable: value.taxStatus,
+        isTaxable: Boolean(value.taxStatus),
         termID: value.period,
         rate: value.rateOrAmount,
         rateType: 0,
@@ -302,7 +302,7 @@ export const dynamicPayloadBaseCnb = (arrData, id, value) => {
     case 2:
       return {
         componentID: value.compensationComponentId,
-        isTaxable: value.taxStatus,
+        isTaxable: Boolean(value.taxStatus),
         termID: value.period,
         amount: value.rateOrAmount,
         amountType: 0,
@@ -313,7 +313,7 @@ export const dynamicPayloadBaseCnb = (arrData, id, value) => {
     case 3:
       return {
         componentID: value.compensationComponentId,
-        isTaxable: value.taxStatus,
+        isTaxable: Boolean(value.taxStatus),
         termID: value.period,
         amount: value.rateOrAmount,
         amountType: 0,
