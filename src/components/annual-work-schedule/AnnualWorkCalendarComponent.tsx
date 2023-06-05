@@ -7,6 +7,8 @@ import { IconButton } from '../_shared/form';
 import { HiPencilAlt } from 'react-icons/hi';
 import { BsTrashFill } from 'react-icons/bs';
 import AnnualWorkCalendarCreateForm from './create/AnnualWorkCalendarCreateForm';
+import AnnualWorkCalendarUpdateForm from './update/AnnualWorkCalendarUpdateForm';
+import ConfirmationModal from '../_shared/common/ConfirmationModal';
 
 const ContentWrapper = styled(Card)(({
   padding: '2rem'
@@ -67,6 +69,8 @@ const ListWrapper = styled.div`
 
 function AnnualWorkCalendarComponent() {
   const [openCreateForm, setOpenCreateForm] = useState(false);
+  const [openUpdateForm, setOpenUpdateForm] = useState(false);
+  const [deleteConfirmation, setDeleteConfirmation] = useState(false);
   return (
     <>
       <TopWrapper>
@@ -103,12 +107,14 @@ function AnnualWorkCalendarComponent() {
                   <ButtonWrapper>
                     <IconButton
                       parentColor='primary.50'
+                      onClick={() => setOpenUpdateForm(true)}
                       icons={
                         <HiPencilAlt fontSize={20} color='#223567'/>
                       }
                     />
                     <IconButton
                       parentColor='red.100'
+                      onClick={() => setDeleteConfirmation(true)}
                       icons={
                         <BsTrashFill fontSize={20} color='#EF4444'/>
                       }
@@ -177,6 +183,20 @@ function AnnualWorkCalendarComponent() {
         open={openCreateForm}
         handleClose={() => setOpenCreateForm(false)}
         handleConfirm={() => setOpenCreateForm(false)}
+      />
+      <AnnualWorkCalendarUpdateForm
+        open={openUpdateForm}
+        handleClose={() => setOpenUpdateForm(false)}
+        handleConfirm={() => setOpenUpdateForm(false)}
+      />
+      <ConfirmationModal
+        open={deleteConfirmation}
+        handleClose={() => setDeleteConfirmation(false)}
+        title='Delete Event from Annual Work Calendar'
+        content='You are about to delete this event from the Annual Work Calendar. This action cannot be undone.'
+        withCallback
+        noChange={true}
+        callback={() => setDeleteConfirmation(false)}
       />
     </>
   );
