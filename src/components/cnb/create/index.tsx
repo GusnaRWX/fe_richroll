@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/indent */
 import React from 'react';
 import { Button, Form, IconButton } from '@/components/_shared/form';
 import AddIcon from '@mui/icons-material/Add';
@@ -23,7 +24,7 @@ import { useRouter } from 'next/router';
 import {
   postNewCnbProfileRequested,
 } from '@/store/reducers/slice/cnb/compensationSlice';
-import {Input} from '@/components/_shared/form';
+import { Input } from '@/components/_shared/form';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { getCompanyData, getPaymentType, dynamicPayloadBaseCnb } from '@/utils/helper';
 import { FieldArray, Form as FormikForm, Formik } from 'formik';
@@ -179,9 +180,9 @@ export default function CreateCNBComponent() {
     ) {
       const tempBase = dynamicPayloadBaseCnb(listCompensation, value.compensationComponentId, value);
       const tempSupplementary: any = [];
-      if (value.supplementary.length > 0){
+      if (value.supplementary.length > 0) {
         for (let i = 0; i <= value.supplementary.length; i++) {
-          if (typeof value.supplementary[i] !== 'undefined'){
+          if (typeof value.supplementary[i] !== 'undefined') {
             const tempData = dynamicPayloadBaseCnb(listCompensation, value.supplementary[i].compensationComponentId, value.supplementary[i]);
             tempSupplementary.push(tempData);
           }
@@ -228,6 +229,7 @@ export default function CreateCNBComponent() {
       validationSchema={validationSchecma}
     >
       {(formik) => (
+        console.log(formik.values),
         <FormikForm>
           <Header>
             <HeaderPageTitle>
@@ -335,7 +337,7 @@ export default function CreateCNBComponent() {
                           fullWidth
                           size='small'
                           value={formik.values.compensationComponentId}
-                          onChange={(e) =>{
+                          onChange={(e) => {
                             formik.setFieldValue(
                               'compensationComponentId',
                               e.target.value
@@ -524,15 +526,15 @@ export default function CreateCNBComponent() {
                                       {...(formik.touched?.supplementary &&
                                         formik.errors?.supplementary && {
                                         error:
-                                            formik.touched?.supplementary[i]
-                                              ?.compensationComponentId &&
-                                            Boolean(
-                                              (
-                                                formik.errors?.supplementary[
-                                                  i
-                                                ] as unknown as SuplementType
-                                              )?.compensationComponentId
-                                            ),
+                                          formik.touched?.supplementary[i]
+                                            ?.compensationComponentId &&
+                                          Boolean(
+                                            (
+                                              formik.errors?.supplementary[
+                                              i
+                                              ] as unknown as SuplementType
+                                            )?.compensationComponentId
+                                          ),
                                       })}
                                     >
                                       <Select
@@ -571,16 +573,16 @@ export default function CreateCNBComponent() {
                                       </Select>
                                       {formik.touched?.supplementary &&
                                         formik.errors?.supplementary && (
-                                        <FormHelperText>
-                                          {formik.touched?.supplementary[i]
-                                            ?.compensationComponentId &&
+                                          <FormHelperText>
+                                            {formik.touched?.supplementary[i]
+                                              ?.compensationComponentId &&
                                               (
                                                 formik.errors?.supplementary[
-                                                  i
+                                                i
                                                 ] as unknown as SuplementType
                                               )?.compensationComponentId}
-                                        </FormHelperText>
-                                      )}
+                                          </FormHelperText>
+                                        )}
                                     </FormControl>
                                   </div>
                                 </Grid>
@@ -602,15 +604,15 @@ export default function CreateCNBComponent() {
                                       {...(formik.touched?.supplementary &&
                                         formik.errors?.supplementary && {
                                         error:
-                                            formik.touched?.supplementary[i]
-                                              ?.period &&
-                                            Boolean(
-                                              (
-                                                formik.errors?.supplementary[
-                                                  i
-                                                ] as unknown as SuplementType
-                                              )?.period
-                                            ),
+                                          formik.touched?.supplementary[i]
+                                            ?.period &&
+                                          Boolean(
+                                            (
+                                              formik.errors?.supplementary[
+                                              i
+                                              ] as unknown as SuplementType
+                                            )?.period
+                                          ),
                                       })}
                                     >
                                       <RadioGroup
@@ -649,16 +651,16 @@ export default function CreateCNBComponent() {
                                       </RadioGroup>
                                       {formik.touched?.supplementary &&
                                         formik.errors?.supplementary && (
-                                        <FormHelperText>
-                                          {formik.touched?.supplementary[i]
-                                            ?.taxStatus &&
+                                          <FormHelperText>
+                                            {formik.touched?.supplementary[i]
+                                              ?.taxStatus &&
                                               (
                                                 formik.errors?.supplementary[
-                                                  i
+                                                i
                                                 ] as unknown as SuplementType
                                               )?.taxStatus}
-                                        </FormHelperText>
-                                      )}
+                                          </FormHelperText>
+                                        )}
                                     </FormControl>
                                     <Box>
                                       <Button
@@ -691,26 +693,26 @@ export default function CreateCNBComponent() {
                                     {...(formik.touched?.supplementary &&
                                       formik.errors?.supplementary && {
                                       error:
-                                          formik.touched?.supplementary[i]
-                                            ?.rateOrAmount &&
-                                          Boolean(
-                                            (
-                                              formik.errors?.supplementary[
-                                                i
-                                              ] as unknown as SuplementType
-                                            )?.rateOrAmount
-                                          ),
+                                        formik.touched?.supplementary[i]
+                                          ?.rateOrAmount &&
+                                        Boolean(
+                                          (
+                                            formik.errors?.supplementary[
+                                            i
+                                            ] as unknown as SuplementType
+                                          )?.rateOrAmount
+                                        ),
                                     })}
                                     {...(formik.touched?.supplementary &&
                                       formik.errors?.supplementary && {
                                       helperText:
-                                          formik.touched?.supplementary[i]
-                                            ?.rateOrAmount &&
-                                          (
-                                            formik.errors?.supplementary[
-                                              i
-                                            ] as unknown as SuplementType
-                                          )?.rateOrAmount,
+                                        formik.touched?.supplementary[i]
+                                          ?.rateOrAmount &&
+                                        (
+                                          formik.errors?.supplementary[
+                                          i
+                                          ] as unknown as SuplementType
+                                        )?.rateOrAmount,
                                     })}
                                     value={
                                       formik.values.supplementary[i]
@@ -766,15 +768,15 @@ export default function CreateCNBComponent() {
                                     {...(formik.touched?.supplementary &&
                                       formik.errors?.supplementary && {
                                       error:
-                                          formik.touched?.supplementary[i]
-                                            ?.period &&
-                                          Boolean(
-                                            (
-                                              formik.errors?.supplementary[
-                                                i
-                                              ] as unknown as SuplementType
-                                            )?.period
-                                          ),
+                                        formik.touched?.supplementary[i]
+                                          ?.period &&
+                                        Boolean(
+                                          (
+                                            formik.errors?.supplementary[
+                                            i
+                                            ] as unknown as SuplementType
+                                          )?.period
+                                        ),
                                     })}
                                   >
                                     <Select
@@ -801,16 +803,16 @@ export default function CreateCNBComponent() {
                                     </Select>
                                     {formik.touched?.supplementary &&
                                       formik.errors?.supplementary && (
-                                      <FormHelperText>
-                                        {formik.touched?.supplementary[i]
-                                          ?.period &&
+                                        <FormHelperText>
+                                          {formik.touched?.supplementary[i]
+                                            ?.period &&
                                             (
                                               formik.errors?.supplementary[
-                                                i
+                                              i
                                               ] as unknown as SuplementType
                                             )?.period}
-                                      </FormHelperText>
-                                    )}
+                                        </FormHelperText>
+                                      )}
                                   </FormControl>
                                 </Grid>
                               </Grid>
