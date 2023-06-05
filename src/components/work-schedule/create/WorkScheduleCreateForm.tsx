@@ -102,9 +102,9 @@ function WorkScheduleCreateForm({setData}: WorkScheduleFormProps) {
         endDay: 0,
         breakHourName: data.breakName,
         breakDuration: data.breakDuration,
-        specificBreakHour: data.specifyBreakHour,
-        specificBreakStartHour: data.specifyBreakHour === true ? dayjs(data.breakStartTime).format('YYYY-MM-DD HH:mm') : data.breakDuration.toString(),
-        specificBreakEndHour: data.specifyBreakHour === true ? dayjs(data.breakEndTime).format('YYYY-MM-DD HH:mm') : '',
+        specificBreakHour: false,
+        specificBreakStartHour: data.breakDuration.toString(),
+        specificBreakEndHour: '',
         isWithBreak: data.breakName === '' ? false : true
       };
       handleDynamicDay(payload, data, data.fixedWorkDayType);
@@ -500,7 +500,7 @@ function WorkScheduleCreateForm({setData}: WorkScheduleFormProps) {
             </>
           )
         }
-        <Typography mb='12px' fontWeight='bold' color='primary'>Add Break</Typography>
+        <Typography mt='12px' mb='12px' fontWeight='bold' color='primary'>Add Break</Typography>
         <Grid container spacing={2}>
           <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
             <Input
@@ -535,46 +535,52 @@ function WorkScheduleCreateForm({setData}: WorkScheduleFormProps) {
             />
           </Grid>
         </Grid>
-        <CheckBox
-          customLabel='Specify Break Hour'
-          name='specifyBreakHour'
-          value={formik.values.specifyBreakHour}
-          onChange={formik.handleChange}
-        />
         {
-          formik.values.specifyBreakHour === true && (
-            <Grid container spacing={2}>
-              <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <TimePicker
-                    value={formik.values.breakStartTime}
-                    onChange={(val) => formik.setFieldValue('breakStartTime', val, true)}
-                    sx={{
-                      '& .MuiOutlinedInput-input': {
-                        padding: '8.5px 14px',
-                        border: 'none !important'
-                      },
-                      width: '100%'
-                    }}
-                  />
-                </LocalizationProvider>
-              </Grid>
-              <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <TimePicker
-                    value={formik.values.breakEndTime}
-                    onChange={(val) => formik.setFieldValue('breakEndTime', val, true)}
-                    sx={{
-                      '& .MuiOutlinedInput-input': {
-                        padding: '8.5px 14px',
-                        border: 'none !important'
-                      },
-                      width: '100%'
-                    }}
-                  />
-                </LocalizationProvider>
-              </Grid>
-            </Grid>
+          formik.values.type === '0' && (
+            <>
+              <CheckBox
+                customLabel='Specify Break Hour'
+                name='specifyBreakHour'
+                value={formik.values.specifyBreakHour}
+                onChange={formik.handleChange}
+              />
+              {
+                formik.values.specifyBreakHour === true && (
+                  <Grid container spacing={2}>
+                    <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <TimePicker
+                          value={formik.values.breakStartTime}
+                          onChange={(val) => formik.setFieldValue('breakStartTime', val, true)}
+                          sx={{
+                            '& .MuiOutlinedInput-input': {
+                              padding: '8.5px 14px',
+                              border: 'none !important'
+                            },
+                            width: '100%'
+                          }}
+                        />
+                      </LocalizationProvider>
+                    </Grid>
+                    <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <TimePicker
+                          value={formik.values.breakEndTime}
+                          onChange={(val) => formik.setFieldValue('breakEndTime', val, true)}
+                          sx={{
+                            '& .MuiOutlinedInput-input': {
+                              padding: '8.5px 14px',
+                              border: 'none !important'
+                            },
+                            width: '100%'
+                          }}
+                        />
+                      </LocalizationProvider>
+                    </Grid>
+                  </Grid>
+                )
+              }
+            </>
           )
         }
       </CustomModal>
