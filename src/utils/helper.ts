@@ -194,65 +194,65 @@ export const ifEmptyReplace = (condition, replace) => {
 
 export const getGender = (id) => {
   switch (id) {
-    case 1 :
+    case 1:
       return 'Male';
-    case 2 :
+    case 2:
       return 'Female';
-    default :
+    default:
       return '';
   }
 };
 
 export const getReligion = (id) => {
   switch (id) {
-    case 1 :
+    case 1:
       return 'Islam';
-    case 2 :
+    case 2:
       return 'Christian';
-    case 3 :
+    case 3:
       return 'Buddhist';
-    case 4 :
+    case 4:
       return 'Hindu';
-    case 5 :
+    case 5:
       return 'Catholic';
-    default :
+    default:
       return '';
   }
 };
 
 export const getMaritalStatus = (id) => {
   switch (id) {
-    case 1 :
+    case 1:
       return 'Single';
-    case 2 :
+    case 2:
       return 'Married';
-    case 3 :
+    case 3:
       return 'Divorced';
-    case 4 :
+    case 4:
       return 'Separated';
-    case 5 :
+    case 5:
       return 'Widowed';
-    case 6 :
+    case 6:
       return 'Domestic Partnership';
-    case 7 :
+    case 7:
       return 'Civil Union';
-    case 8 :
+    case 8:
       return 'Annuled';
-    default :
+    default:
       return '';
   }
 };
 
 export const getPaymentType = (id, arrData) => {
   const tempId = arrData.find((el) => el.value === id);
-  switch(tempId.type) {
-    case 0 :
+  switch (tempId?.type) {
+    case 0:
       return {
         title: 'Amount',
         withPercentage: false
       };
       break;
-    case 1 :
+    case 1:
       return {
         title: 'Rate',
         withPercentage: false
@@ -280,8 +280,8 @@ export const getPaymentType = (id, arrData) => {
 
 export const dynamicPayloadBaseCnb = (arrData, id, value) => {
   const tempId = arrData.find((el) => el.value === id);
-  switch(tempId.type) {
-    case 0 :
+  switch (tempId.type) {
+    case 0:
       return {
         componentID: value.compensationComponentId,
         isTaxable: value.taxStatus,
@@ -290,7 +290,7 @@ export const dynamicPayloadBaseCnb = (arrData, id, value) => {
         amountType: 0,
       };
       break;
-    case 1 :
+    case 1:
       return {
         componentID: value.compensationComponentId,
         isTaxable: value.taxStatus,
@@ -299,7 +299,7 @@ export const dynamicPayloadBaseCnb = (arrData, id, value) => {
         rateType: 0,
       };
       break;
-    case 2 :
+    case 2:
       return {
         componentID: value.compensationComponentId,
         isTaxable: value.taxStatus,
@@ -310,7 +310,7 @@ export const dynamicPayloadBaseCnb = (arrData, id, value) => {
         rateType: 1,
       };
       break;
-    case 3 :
+    case 3:
       return {
         componentID: value.compensationComponentId,
         isTaxable: value.taxStatus,

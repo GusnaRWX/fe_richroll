@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/indent */
-import React from 'react';
-import { Button, Form, IconButton } from '@/components/_shared/form';
+import React, { useEffect } from 'react';
+import { Button, Form, IconButton, Input } from '@/components/_shared/form';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { styled } from '@mui/material/styles';
@@ -22,28 +22,29 @@ import {
 import { ArrowBack } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import {
-  getCompensationComponentOptionRequested,
   putUpdateRequested,
 } from '@/store/reducers/slice/cnb/compensationSlice';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
-import { getCompanyData } from '@/utils/helper';
+import { dynamicPayloadBaseCnb, getCompanyData, getPaymentType } from '@/utils/helper';
 import { FieldArray, Form as FormikForm, Formik } from 'formik';
 import * as Yup from 'yup';
 import ConfirmationModal from '@/components/_shared/common/ConfirmationModal';
-import { Input } from '@/components/_shared/form';
+import { getListCompensationRequested, getListSuppTerminRequested, getListTerminReqeusted, removeListSuppTermin } from '@/store/reducers/slice/options/optionSlice';
+import { Text } from '@/components/_shared/common';
 
 export default function UpdateCNBComponent() {
   const router = useRouter();
   const companyData = getCompanyData();
   const dispatch = useAppDispatch();
-  const compensationComponentOption = useAppSelectors(
-    (state) => state.compensation?.compensationComponentOption?.data?.items
-  );
+  const { listCompensation, listTermin, listSuppTermin } = useAppSelectors(state => state.option);
+  console.log(listCompensation);
   const detailLoading = useAppSelectors(
     (state) => state.compensation?.detailLoading
   );
+  const cnbDetail = useAppSelectors(state => state?.compensation?.detail?.data);
   const [openMsg, setOpenMsg] = React.useState(false);
-
+  const [title, setTitle] = React.useState('');
+  const [withPercentage, setWithPercentage] = React.useState(false);
   const validationSchecma = Yup.object().shape({
     name: Yup.string().required('This is required'),
     compensationComponentId: Yup.string().required('This is required'),
@@ -52,18 +53,17 @@ export default function UpdateCNBComponent() {
     taxStatus: Yup.string().required('This is required'),
     supplementary: Yup.array().of(
       Yup.object().shape({
-        compensationComponentId: Yup.string().required('This is required'),
-        period: Yup.string().required('This is required'),
-        rateOrAmount: Yup.number().required('This is required').positive('Must be positive').integer('Must be number'),
-        taxStatus: Yup.string().required('This is required'),
-        percentage: Yup.number().typeError('This field is required').when('withPercentage', { is: true, then: (schema) => schema.required('This field is required') })
+        compensationComponentId: Yup.string(),
+        period: Yup.string(),
+        rateOrAmount: Yup.number().positive('Must be positive').integer('Must be number'),
+        taxStatus: Yup.string(),
       })
     ),
   });
 
   React.useEffect(() => {
     dispatch({
-      type: getCompensationComponentOptionRequested.toString(),
+      type: getListCompensationRequested.toString()
     });
   }, []);
 
@@ -147,6 +147,11 @@ export default function UpdateCNBComponent() {
     taxStatus: string;
     rateOrAmount: number | null;
     period: string;
+    titleRate?: string;
+    withPercentage?: boolean;
+    percentage?: string | number;
+    amountType?: string | number;
+    rateType?: string | number;
   }
 
   interface BaseType {
@@ -160,6 +165,7 @@ export default function UpdateCNBComponent() {
 
   function UpdateCnbProfile(value: BaseType) {
     let supplement = true;
+    console.log(value, 'adas');
     value.supplementary.map((item: SuplementType) => {
       if (value.supplementary.length === 0) {
         supplement = true;
@@ -182,40 +188,32 @@ export default function UpdateCNBComponent() {
       value.compensationComponentId !== '' &&
       value.period !== '' &&
       value.rateOrAmount !== '' &&
-      value.taxStatus !== '' &&
+      // value.taxStatus !== '' &&
       supplement
     ) {
+      const tempBase = dynamicPayloadBaseCnb(listCompensation, value.compensationComponentId, value);
+
+      const tempSupplementary: any = [];
+      if (value.supplementary.length > 0) {
+        for (let i = 0; i <= value.supplementary.length; i++) {
+          if (typeof value.supplementary[i] !== 'undefined') {
+            const tempData = dynamicPayloadBaseCnb(listCompensation, value.supplementary[i].compensationComponentId, value.supplementary[i]);
+            tempSupplementary.push(tempData);
+          }
+        }
+      }
       dispatch({
         type: putUpdateRequested.toString(),
-        Id: router.query.cnb,
+        Id: router.query.id,
         Payload: {
-          companyId: companyData?.id,
+          companyID: companyData?.id?.toString(),
           name: value.name,
-          baseCompensation: {
-            id: router.query.id,
-            compensationComponentId: parseInt(value.compensationComponentId),
-            taxStatus: value.taxStatus,
-            amount:
-              value.compensationComponentId === '1' ? 0 : value.rateOrAmount,
-            rate:
-              value.compensationComponentId === '1' ? value.rateOrAmount : 0,
-            period: value.period,
-          },
-          supplementaryCompensations: value.supplementary.map((item: SuplementType) => ({
-            compensationComponentId: parseInt(item.compensationComponentId),
-            taxStatus: item.taxStatus,
-            amount:
-              item.compensationComponentId === '1' ? 0 : item.rateOrAmount,
-            rate: item.compensationComponentId === '1' ? item.rateOrAmount : 0,
-            period: item.period,
-          })),
-        },
+          base: tempBase,
+          supplementaries: tempSupplementary
+        }
       });
-    } else {
-      alert('Please fill all field');
     }
   }
-
 
   const initialValues: {
     name: string;
@@ -225,18 +223,41 @@ export default function UpdateCNBComponent() {
     taxStatus: string;
     supplementary: SuplementType[];
   } = {
-    name: '',
-    compensationComponentId: '',
-    period: '',
-    rateOrAmount: '',
-    taxStatus: '',
-    supplementary: [],
+    name: cnbDetail?.name || '',
+    compensationComponentId: cnbDetail?.base?.component?.id,
+    period: cnbDetail?.base?.term?.id,
+    taxStatus: cnbDetail?.base?.isTaxable,
+    rateOrAmount: cnbDetail?.base?.amount,
+    supplementary: cnbDetail?.supplementaries?.map(val => {
+      return {
+        compensationComponentId: val.component?.id,
+        period: val?.term?.id,
+        rateOrAmount: getPaymentType(val?.component?.id, listCompensation)?.withPercentage ? val?.rate : val?.amount,
+        taxStatus: val?.isTaxable,
+
+      };
+    })
   };
+
+  console.log(cnbDetail?.base);
+
+  useEffect(() => {
+
+    setTitle(getPaymentType(cnbDetail?.base?.component?.id, listCompensation)?.title);
+    setWithPercentage(getPaymentType(cnbDetail?.base?.component?.id, listCompensation)?.withPercentage);
+
+    dispatch({
+      type: getListTerminReqeusted.toString(),
+      payload: cnbDetail?.base?.component?.id
+    });
+
+  }, []);
 
   return (
     <Formik
       initialValues={initialValues}
       onSubmit={() => {
+        // UpdateCnbProfile(values);
         setOpenMsg(true);
       }}
       validationSchema={validationSchecma}
@@ -331,16 +352,34 @@ export default function UpdateCNBComponent() {
                           sx={{ marginTop: '.4rem' }}
                           fullWidth
                           value={formik.values.compensationComponentId}
-                          onChange={(e) =>
+                          onChange={(e) => {
                             formik.setFieldValue(
                               'compensationComponentId',
                               e.target.value
-                            )
+                            );
+                            dispatch({
+                              type: getListSuppTerminRequested.toString(),
+                              payload: e.target.value
+                            });
+                            setTitle(getPaymentType(e.target.value, listCompensation)?.title);
+                            setWithPercentage(getPaymentType(e.target.value, listCompensation)?.withPercentage);
                           }
+                          }
+                          displayEmpty
+                          renderValue={(value: unknown) => {
+                            if ((value as string)?.length === 0) {
+                              return <Text title='Select Compensation' color='grey.400' />;
+                            }
+                            const selected = listCompensation.find(list => list.value === value);
+                            if (selected) {
+                              return `${selected.label}`;
+                            }
+                            return null;
+                          }}
                         >
-                          {compensationComponentOption?.map((Option, i) => (
-                            <MenuItem key={i} value={Option.id}>
-                              {Option.name}
+                          {listCompensation?.map((Option, i) => (
+                            <MenuItem key={i} value={Option.value}>
+                              {Option.label}
                             </MenuItem>
                           ))}
                         </Select>
@@ -400,9 +439,7 @@ export default function UpdateCNBComponent() {
                   <Grid container spacing={2}>
                     <Grid item xs={3} md={3} lg={3} xl={3}>
                       <Typography>
-                        {formik.values.compensationComponentId === '1'
-                          ? 'Rate'
-                          : 'Amount'}
+                        {title}
                         <span style={{ color: 'red' }}>*</span>
                       </Typography>
                       <TextField
@@ -432,22 +469,27 @@ export default function UpdateCNBComponent() {
                         }}
                       />
                     </Grid>
-                    <Grid item xs={3} md={3} lg={3} xl={3}>
-                      <FormControl fullWidth>
-                        <Input
-                          fullWidth
-                          customLabel='Commission Rate'
-                          variant='outlined'
-                          type='number'
-                          size='small'
-                          InputProps={{
-                            endAdornment: (
-                              <InputAdornment position='end'>%</InputAdornment>
-                            )
-                          }}
-                        />
-                      </FormControl>
-                    </Grid>
+                    {
+                      withPercentage && (
+                        <Grid item xs={3} md={3} lg={3} xl={3}>
+                          <FormControl fullWidth>
+                            <Input
+                              fullWidth
+                              customLabel='Rate'
+                              variant='outlined'
+                              type='number'
+                              size='small'
+                              InputProps={{
+                                endAdornment: (
+                                  <InputAdornment position='end'>%</InputAdornment>
+                                )
+                              }}
+                            />
+                          </FormControl>
+                        </Grid>
+                      )
+                    }
+
                     <Grid item xs={3} md={3} lg={3} xl={3}>
                       <FormControl
                         fullWidth
@@ -463,10 +505,23 @@ export default function UpdateCNBComponent() {
                           onChange={(e) =>
                             formik.setFieldValue('period', e.target.value)
                           }
+                          displayEmpty
+                          renderValue={(value: unknown) => {
+                            if ((value as string)?.length === 0) {
+                              return <Text title='Select Period' color='grey.400' />;
+                            }
+                            const selected = listTermin?.find(list => list.value === value);
+                            if (selected) {
+                              return `${selected.label}`;
+                            }
+                            return null;
+                          }}
                         >
-                          <MenuItem value='Per Week'>per Week</MenuItem>
-                          <MenuItem value='Per Month'>per Month</MenuItem>
-                          <MenuItem value='Per Year'>per Year</MenuItem>
+                          {listTermin?.map(item => (
+                            <MenuItem key={item.label} value={item.value}>
+                              {item.label}
+                            </MenuItem>
+                          ))}
                         </Select>
                         <FormHelperText>
                           {formik.touched.period && formik.errors.period}
@@ -482,7 +537,7 @@ export default function UpdateCNBComponent() {
               render={(arrayHelper) => {
                 return (
                   <div>
-                    {formik.values.supplementary.length > 0 && (
+                    {formik?.values?.supplementary?.length > 0 && (
                       <>
                         <Typography
                           style={{
@@ -495,7 +550,7 @@ export default function UpdateCNBComponent() {
                           Suplementary
                         </Typography>
                         <Form>
-                          {formik.values.supplementary.map((suplement, i) => (
+                          {formik.values.supplementary.map((suplement: any, i) => (
                             <div key={i} style={{ marginBottom: '33px' }}>
                               <Grid container spacing={2}>
                                 <Grid item xs={6} md={6} lg={6} xl={6}>
@@ -525,15 +580,40 @@ export default function UpdateCNBComponent() {
                                         value={
                                           formik.values.supplementary[i]
                                             ?.compensationComponentId
+                                          ||
+                                          suplement?.compensationComponentId
                                         }
-                                        onChange={(e) =>
+                                        onChange={(e) => {
                                           formik.setFieldValue(
                                             `supplementary.${i}.compensationComponentId`,
                                             e.target.value
-                                          )
+                                          );
+                                          dispatch({
+                                            type: getListSuppTerminRequested.toString(),
+                                            pauload: e?.target?.value
+                                          });
+                                          formik.setFieldValue(`supplementary.${i}.titleRate`,
+                                            getPaymentType(e?.target?.value, listCompensation)?.title
+                                          );
+                                          formik.setFieldValue(
+                                            `supplementary.${i}.withPercentage`,
+                                            getPaymentType(e?.target?.value, listCompensation)?.withPercentage
+                                          );
                                         }
+                                        }
+                                        displayEmpty
+                                        renderValue={(value: unknown) => {
+                                          if ((value as string)?.length === 0) {
+                                            return <Text title='Select Compensation' color='grey.400' />;
+                                          }
+                                          const selected = listCompensation.find(list => list.value === value);
+                                          if (selected) {
+                                            return `${selected.label}`;
+                                          }
+                                          return null;
+                                        }}
                                       >
-                                        {compensationComponentOption?.map(
+                                        {listCompensation?.map(
                                           (Option, i) => (
                                             <MenuItem key={i} value={Option.id}>
                                               {Option.name}
@@ -582,10 +662,7 @@ export default function UpdateCNBComponent() {
                                     >
                                       <RadioGroup
                                         row
-                                        value={
-                                          formik.values.supplementary[i]
-                                            ?.taxStatus
-                                        }
+                                        value={suplement?.isTaxable || formik?.values?.supplementary[i]?.taxStatus}
                                         onChange={(e) =>
                                           formik.setFieldValue(
                                             `supplementary.${i}.taxStatus`,
@@ -632,7 +709,13 @@ export default function UpdateCNBComponent() {
                                         color='red'
                                         startIcon={<DeleteIcon />}
                                         label='Delete'
-                                        onClick={() => arrayHelper.remove(i)}
+                                        onClick={() => {
+                                          arrayHelper.remove(i);
+                                          dispatch({
+                                            type: removeListSuppTermin.toString(),
+                                            payload: i
+                                          });
+                                        }}
                                       />
                                     </Box>
                                   </Box>
@@ -641,10 +724,7 @@ export default function UpdateCNBComponent() {
                               <Grid container spacing={2}>
                                 <Grid item xs={3} md={3} lg={3} xl={3}>
                                   <Typography>
-                                    {formik.values.supplementary[i]
-                                      ?.compensationComponentId === '1'
-                                      ? 'Rate'
-                                      : 'Amount'}
+                                    {getPaymentType(suplement?.compensationComponentId, listCompensation)?.title}
                                     <span style={{ color: 'red' }}>*</span>
                                   </Typography>
                                   <TextField
@@ -676,10 +756,7 @@ export default function UpdateCNBComponent() {
                                           ] as unknown as SuplementType
                                         )?.rateOrAmount,
                                     })}
-                                    value={
-                                      formik.values.supplementary[i]
-                                        ?.rateOrAmount
-                                    }
+                                    value={suplement?.rateOrAmount || formik.values.supplementary[i].rateOrAmount}
                                     onChange={(e) =>
                                       formik.setFieldValue(
                                         `supplementary.${i}.rateOrAmount`,
@@ -700,22 +777,31 @@ export default function UpdateCNBComponent() {
                                     }}
                                   />
                                 </Grid>
-                                <Grid item xs={3} md={3} lg={3} xl={3}>
-                                  <FormControl fullWidth>
-                                    <Input
-                                      fullWidth
-                                      customLabel='Commission Rate'
-                                      variant='outlined'
-                                      type='number'
-                                      size='small'
-                                      InputProps={{
-                                        endAdornment: (
-                                          <InputAdornment position='end'>%</InputAdornment>
-                                        )
-                                      }}
-                                    />
-                                  </FormControl>
-                                </Grid>
+                                {
+                                  formik.values.supplementary[i].withPercentage === true && (
+                                    <Grid item xs={3} md={3} lg={3} xl={3}>
+                                      <FormControl fullWidth>
+                                        <Input
+                                          fullWidth
+                                          customLabel='Rate'
+                                          variant='outlined'
+                                          type='number'
+                                          size='small'
+                                          name='percentage'
+                                          value={formik.values.supplementary[i]?.percentage}
+                                          onChange={formik.handleChange}
+                                          onBlur={formik.handleBlur}
+                                          InputProps={{
+                                            endAdornment: (
+                                              <InputAdornment position='end'>%</InputAdornment>
+                                            )
+                                          }}
+                                        />
+                                      </FormControl>
+                                    </Grid>
+                                  )
+                                }
+
                                 <Grid item xs={3} md={3} lg={3} xl={3}>
                                   <FormControl
                                     fullWidth
@@ -737,25 +823,30 @@ export default function UpdateCNBComponent() {
                                       sx={{ marginTop: '1.8rem' }}
                                       size='small'
                                       fullWidth
-                                      value={
-                                        formik.values.supplementary[i]?.period
-                                      }
+                                      value={suplement?.term?.id || formik.values.supplementary[i]?.period}
                                       onChange={(e) =>
                                         formik.setFieldValue(
                                           `supplementary.${i}.period`,
                                           e.target.value
                                         )
                                       }
+                                      displayEmpty
+                                      renderValue={(value: unknown) => {
+                                        if ((value as string)?.length === 0) {
+                                          return <Text title='Select Period' color='grey.400' />;
+                                        }
+                                        const selected = listTermin?.find(list => list.value === value);
+                                        if (selected) {
+                                          return `${selected.label}`;
+                                        }
+                                        return null;
+                                      }}
                                     >
-                                      <MenuItem value='Per Week'>
-                                        per Week
-                                      </MenuItem>
-                                      <MenuItem value='Per Month'>
-                                        per Month
-                                      </MenuItem>
-                                      <MenuItem value='Per Year'>
-                                        per Year
-                                      </MenuItem>
+                                      {listSuppTermin[i]?.map(item => (
+                                        <MenuItem key={item.label} value={item.value}>
+                                          {item.label}
+                                        </MenuItem>
+                                      ))}
                                     </Select>
                                     {formik.touched?.supplementary &&
                                       formik.errors?.supplementary && (
@@ -790,6 +881,8 @@ export default function UpdateCNBComponent() {
                               period: '',
                               rateOrAmount: '',
                               taxStatus: '',
+                              titleRate: 'Amount',
+
                             }
                           )
                         }

@@ -90,6 +90,7 @@ function* fetchGetCompensationComponentOption() {
 
 // Get Detail CnB
 function* fetchCompensationDetail(action: AnyAction) {
+  console.log(action, 'action');
   try {
     const res: AxiosResponse = yield call(getDetailCnb, action?.Id);
     if (res.status === 200) {
@@ -196,8 +197,16 @@ function* patchCnbProfile(action: AnyAction) {
           data: res.data.data,
         },
       });
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: res?.data?.code,
+          message: 'Successfully Saved!',
+          footerMessage: 'Compensation and Benefits Profile has been successfully updated'
+        }
+      });
       yield Router.push('/compensation-benefits');
-      yield delay(1000);
+      // yield delay(1000);
     }
   } catch (err) {
     if (err instanceof AxiosError) {

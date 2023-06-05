@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import { post, get, patch, del } from '@/utils/services';
+import { post, get, del, put } from '@/utils/services';
 
 interface CnbParams {
   page: number;
@@ -31,5 +31,5 @@ export const getDetailCnb = (Id: string) => {
 };
 // Update CNB Profile
 export const putCnbProfile = (Payload: Object, Id: number) => {
-  return patch(`compensation_benefits/${Id}`, Payload);
+  return put(`compensations/${Id}`, Payload);
 };
