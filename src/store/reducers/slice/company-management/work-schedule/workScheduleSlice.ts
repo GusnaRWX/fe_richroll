@@ -94,6 +94,11 @@ export const workScheduleSlice = createSlice({
     },
     postWorkScheduleFailed: (state) => {
       state.isLoading = false;
+    },
+    clearState: (state) => {
+      state.events = [];
+      state.grossHour = 0;
+      state.netHour = 0;
     }
   },
   extraReducers: {
@@ -118,7 +123,8 @@ export const {
   postWorkScheduleSuccess,
   getListWorkScheduleRequested,
   getListWorkSchedulerFailed,
-  getListWorkSchedulerSuccess
+  getListWorkSchedulerSuccess,
+  clearState
 } = workScheduleSlice.actions;
 
 export default workScheduleSlice.reducer;

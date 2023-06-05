@@ -17,7 +17,8 @@ import {
   postWorkScheduleSuccess,
   getListWorkScheduleRequested,
   getListWorkSchedulerFailed,
-  getListWorkSchedulerSuccess
+  getListWorkSchedulerSuccess,
+  clearState
 } from '@/store/reducers/slice/company-management/work-schedule/workScheduleSlice';
 import { call, put, takeEvery, delay } from 'redux-saga/effects';
 import { setResponserMessage } from '@/store/reducers/slice/responserSlice';
@@ -125,6 +126,7 @@ function* fetchPostWorkSchedule (action: AnyAction) {
         }
       });
       Router.push('/company-management/work-schedule');
+      yield put({ type: clearState.toString() });
     }
   } catch(err) {
     if (err instanceof AxiosError) {
