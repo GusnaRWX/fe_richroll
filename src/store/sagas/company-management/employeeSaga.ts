@@ -631,7 +631,7 @@ function* fetchPatchEmployeePersonal(action: AnyAction) {
 
     const identity = {
       type: +action?.payload?.employeePersonal.personalPayload.idTypePersonalID,
-      number: +action?.payload?.employeePersonal.personalPayload.idNumberPersonalID,
+      number: String(action?.payload?.employeePersonal.personalPayload.idNumberPersonalID),
       // expiredAt: dayjs(action?.payload?.employeePersonal ? personalPayload..idExpirationDatePersonalID).format('YYYY-MM-DD'),
       expiredAt: dayjs(action?.payload?.employeePersonal?.personalPayload.idExpirationDatePersonalID).format('YYYY-MM-DD'),
       isPermanent: false
@@ -674,7 +674,7 @@ function* fetchPatchEmployeePersonal(action: AnyAction) {
     }
     const res: AxiosResponse = yield call(patchEmployeePersonal, payload);
 
-    if (res.data.code) {
+    if (res.data.code === 200) {
       yield put({ type: patchPersonalSuccess.toString() });
       yield delay(2000);
       yield put({
@@ -684,6 +684,7 @@ function* fetchPatchEmployeePersonal(action: AnyAction) {
           message: res?.data?.message
         }
       });
+      yield delay(2000);
       yield put({
         type: setResponserMessage.toString(),
         payload: {

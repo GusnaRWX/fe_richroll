@@ -210,7 +210,6 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
     }
     return null;
   };
-  console.log(formik.errors);
   return (
     <form onSubmit={formik.handleSubmit} ref={refProp}>
       {Object.keys(formik.errors).length > 0 && (
