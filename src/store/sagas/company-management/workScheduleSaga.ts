@@ -122,10 +122,11 @@ function* fetchPostWorkSchedule (action: AnyAction) {
         type: setResponserMessage.toString(),
         payload: {
           code: res.data.code,
-          message: res.data.message
+          message: 'Successfully saved!',
+          footerMessage: `New Work Schedule Profile ${action.payload.name} has been created`
         }
       });
-      Router.push('/company-management/work-schedule');
+      yield Router.push('/company-management/work-schedule');
       yield put({ type: clearState.toString() });
     }
   } catch(err) {

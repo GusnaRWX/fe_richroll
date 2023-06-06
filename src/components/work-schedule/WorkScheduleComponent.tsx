@@ -31,10 +31,10 @@ const ButtonWrapper = styled.div`
 
 const headerItems = [
   { id: 'name', label: 'Profile Name' },
-  { id: 'grossHours', label: 'Weekly Gross(hours)' },
-  { id: 'netHours', label: 'Weekly Net(hours)' },
+  { id: 'grossHours', label: 'Weekly Gross (hours)' },
+  { id: 'netHours', label: 'Weekly Net (hours)' },
   { id: 'createdAt', label: 'Date Created' },
-  { id: 'updatedAt', label: 'Last_Updated' }
+  { id: 'updatedAt', label: 'Last Updated' }
 ];
 
 type Order = 'asc' | 'desc'
