@@ -547,22 +547,22 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
             </EmployeeSelfWrapper>
           </Grid>
           <Grid item xs={12} sm={12} md={8} lg={8} xl={8}>
-          <Text
-            variant='text-lg'
-            title='Employee Status'
-            fontWeight={700}
-            color='primary.500'
-          />
-          {
-            data?.isPermanent === false ? (
-              <Chip label='Non Active' sx={{ backgroundColor: '#FEE2E2', color: '#166534', fontWeight: 'bold' }} />
-            ) : (
-              <Chip label='Active' sx={{ backgroundColor: '#DCFCE7', color: '#166534', fontWeight: 'bold' }} />
-            )
-          }
+            <Text
+              variant='text-lg'
+              title='Employee Status'
+              fontWeight={700}
+              color='primary.500'
+            />
+            {
+              data?.isPermanent === false ? (
+                <Chip label='Non Active' sx={{ backgroundColor: '#FEE2E2', color: '#166534', fontWeight: 'bold' }} />
+              ) : (
+                <Chip label='Active' sx={{ backgroundColor: '#DCFCE7', color: '#166534', fontWeight: 'bold' }} />
+              )
+            }
           </Grid>
           <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-          <TerminateAccount />
+            <TerminateAccount />
           </Grid>
         </Grid>
         <NextBtnWrapper>
