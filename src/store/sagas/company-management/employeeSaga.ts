@@ -246,7 +246,7 @@ function* fetchPostPersonalInformation(action: AnyAction) {
 
     const identity = {
       type: +action?.payload?.data.idTypePersonalID,
-      number: +action?.payload?.data.idNumberPersonalID,
+      number: String(action?.payload?.data.idNumberPersonalID),
       expiredAt: dayjs(action?.payload?.data?.idExpirationDatePersonalID).format('YYYY-MM-DD'),
       isPermanent: false
     };
