@@ -163,6 +163,42 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
     }
   }, [useResidentialAddress]);
 
+  useEffect(() => {
+    formik.setFieldValue('countryCitizenAddress', formik.values.countryCitizenAddress);
+    dispatch({
+      type: administrativeFirstLevelRequested.toString(),
+      payload: {
+        countryId: formik.values.countryCitizenAddress
+      }
+    });
+    formik.setFieldValue('provinceCitizenAddress', formik.values.provinceCitizenAddress);
+    setTimeout(() => {
+      dispatch({
+        type: administrativeSecondLevelRequested.toString(),
+        payload: {
+          countryId: formik.values.countryCitizenAddress,
+          firstLevelCode: formik.values.provinceCitizenAddress
+        }
+      });
+    }, 3000);
+
+    formik.setFieldValue('cityCitizenAddress', formik.values.cityCitizenAddress);
+    setTimeout(() => {
+      dispatch({
+        type: administrativeThirdLevelRequsted.toString(),
+        payload: {
+          countryId: formik.values.countryCitizenAddress,
+          firstLevelCode: formik.values.provinceCitizenAddress,
+          secondLevelCode: formik.values.cityCitizenAddress
+        }
+      });
+    }, 3500);
+
+    formik.setFieldValue('subDistrictCitizenAddress', formik.values.subDistrictCitizenAddress);
+    formik.setFieldValue('addressCitizenAddress', formik.values.addressCitizenAddress);
+    formik.setFieldValue('zipCodeCitizenAddress', formik.values.zipCodeCitizenAddress);
+  }, []);
+
 
   const checkCountry = (value: unknown) => {
     if ((value as string).length === 0) {
@@ -174,7 +210,6 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
     }
     return null;
   };
-
   return (
     <form onSubmit={formik.handleSubmit} ref={refProp}>
       {Object.keys(formik.errors).length > 0 && (
@@ -234,7 +269,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
                 { label: 'Male', value: 'male' },
                 { label: 'Female', value: 'female' }
               ]}
-              value={formik.values.genderPersonalInformation}
+              value={formik.values.genderPersonalInformation === 1 || (formik.values.genderPersonalInformation as any) === 'male' ? 'male' : 'female'}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               error={ifThenElse(compareCheck(formik.touched.genderPersonalInformation, Boolean(formik.errors.genderPersonalInformation)), formik.errors.genderPersonalInformation, '')}
@@ -261,7 +296,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               onBlur={formik.handleBlur}
               options={maritialStatus}
               name='maritialStatusPersonalInformation'
-              value={formik.values.maritialStatusPersonalInformation}
+              value={String(formik.values.maritialStatusPersonalInformation)}
               customLabel='Maritial Status'
               withAsterisk
               displayEmpty
@@ -359,7 +394,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               variant='outlined'
               size='small'
               name='religionPersonalInformation'
-              value={formik.values.religionPersonalInformation}
+              value={String(formik.values.religionPersonalInformation)}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               options={religions}
@@ -849,7 +884,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               variant='outlined'
               size='small'
               name='idTypePersonalID'
-              value={formik.values.idTypePersonalID}
+              value={String(formik.values.idTypePersonalID)}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               options={IDTypes}

@@ -47,5 +47,6 @@ export const patchEmergencyContact = (payload) => {
 };
 
 export const patchEmployeePersonal = (payload) => {
-  return patch(`employees/personal/${payload.employeeID}`, payload.personal);
+  const {employeeID, ...restPayload} = payload;
+  return patch(`employees/personal/${employeeID}`, restPayload);
 };
