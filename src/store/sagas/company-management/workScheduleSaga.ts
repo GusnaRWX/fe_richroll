@@ -123,7 +123,7 @@ function* fetchPostWorkSchedule (action: AnyAction) {
         payload: {
           code: res.data.code,
           message: 'Successfully saved!',
-          footerMessage: `New Work Schedule Profile ${action.payload.name} has been created`
+          footerMessage: `New Work Schedule Profile "${action.payload.name}" has been created`
         }
       });
       yield Router.push('/company-management/work-schedule');
