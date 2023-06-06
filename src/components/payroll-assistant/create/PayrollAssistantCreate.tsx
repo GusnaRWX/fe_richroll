@@ -13,6 +13,8 @@ import { useRouter } from 'next/router';
 import AttendanceContent from './AttendanceContent';
 import GrossContent from './GrossContent';
 import NetContent from './NetContent';
+import DisbursementContent from './DisbursementContent';
+import CompleteContent from './CompleteContent';
 import CustomModal from '@/components/_shared/common/CustomModal';
 import { ifThenElse } from '@/utils/helper';
 
@@ -147,8 +149,8 @@ function PayrollAssistantCreate() {
       {value == 1 && <AttendanceContent />}
       {value == 2 && <GrossContent />}
       {value == 3 && <NetContent />}
-      {value == 4 && <AttendanceContent />}
-      {value == 5 && <AttendanceContent />}
+      {value == 4 && <DisbursementContent />}
+      {value == 5 && <CompleteContent />}
 
       <CustomModal
         open={open}

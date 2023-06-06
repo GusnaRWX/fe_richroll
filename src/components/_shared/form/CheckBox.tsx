@@ -7,7 +7,8 @@ function CheckBox({
   customLabel,
   name,
   checked,
-  onChange
+  onChange,
+  disabled
 }: SharedComponent.CheckboxInput) {
   return (
     <>
@@ -15,7 +16,7 @@ function CheckBox({
         sx={{ marginTop: '.5rem', marginBottom: '.5rem' }}
         label={<Text title={customLabel} fontWeight={500} />}
         control={
-          <Checkbox name={name} checked={checked} onChange={onChange} />
+          <Checkbox name={name} checked={checked} onChange={onChange} disabled={disabled} />
         }
         labelPlacement='end'
       />
