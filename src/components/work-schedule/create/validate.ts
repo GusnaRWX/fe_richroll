@@ -1,6 +1,7 @@
 import * as Yup from 'yup';
 
 export const validationSchemaWorkScheduler = Yup.object({
+  profileName: Yup.string().required('This field is required'),
   type: Yup.string(),
   flexiWorkHour: Yup.string().typeError('This field is required').when('type', {is: '1', then: (schema) => schema.required('This field is required')}),
   flexiWorkDay: Yup.string().typeError('This field is required').when('type', { is: '1', then: (schema) => schema.required('This field is required')}),
