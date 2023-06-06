@@ -17,7 +17,7 @@ import WorkScheduleEditForm from '../WorkScheduleEditForm';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { postSimulationEventRequested } from '@/store/reducers/slice/company-management/work-schedule/workScheduleSlice';
 import { OverlayLoading } from '@/components/_shared/common';
-import { getCompanyData } from '@/utils/helper';
+import { compareCheck, getCompanyData, ifThenElse } from '@/utils/helper';
 
 
 const AsteriskComponent = styled('span')(({ theme }) => ({
@@ -69,7 +69,12 @@ function WorkScheduleCreateForm({setData}: WorkScheduleFormProps) {
 
 
   const handleFormOpen = () => {
-    setOPenForm(true);
+    if(!formik.errors.profileName && formik.values.profileName !== '')  {
+      setOPenForm(true);
+    } else {
+      formik.setFieldError('profileName', 'This field is required');
+      formik.setFieldTouched('profileName', true, true);
+    }
   };
 
   const handleFormClose = () => {
@@ -203,7 +208,7 @@ function WorkScheduleCreateForm({setData}: WorkScheduleFormProps) {
   return (
     <>
       <OverlayLoading open={workSchedule?.isLoading}/>
-      <Grid container spacing={4} mb='1rem' alignItems='flex-end'>
+      <Grid container spacing={4} mb='1rem' alignItems='center'>
         <Grid item xs={10} sm={10} md={10} lg={10} xl={10}>
           <Input
             name='profileName'
@@ -214,9 +219,11 @@ function WorkScheduleCreateForm({setData}: WorkScheduleFormProps) {
             value={formik.values.profileName}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
+            error={compareCheck(formik.touched.profileName, Boolean(formik.errors.profileName))}
+            helperText={ifThenElse(formik.touched.profileName, formik.errors.profileName, '')}
           />
         </Grid>
-        <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
+        <Grid item xs={2} sm={2} md={2} lg={2} xl={2} mt={formik.errors.profileName ? '0px' : '28px'}>
           <MuiButton onClick={handleFormOpen} variant='contained' disabled={isCreate === true} size='small' sx={{ height: '2.5rem' }}><Add />&nbsp; Create Schedule</MuiButton>
         </Grid>
       </Grid>
