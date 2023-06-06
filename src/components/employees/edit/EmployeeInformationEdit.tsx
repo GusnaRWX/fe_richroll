@@ -29,6 +29,8 @@ import { AiOutlinePlus } from 'react-icons/ai';
 import { BsTrash3 } from 'react-icons/bs';
 import Webcam from 'react-webcam';
 import { CameraAlt } from '@mui/icons-material';
+import {Chip} from '@mui/material';
+import TerminateAccount from '../options/TerminateAccount';
 
 const AsteriskComponent = MuiStyled('span')(({ theme }) => ({
   color: theme.palette.error.main
@@ -105,8 +107,24 @@ interface EmployeeProps {
   handleFirstInformation: () => void;
 }
 
+interface EmployeeInformationDetailProps {
+  data: {
+    fullName: string | undefined;
+    department: string | undefined;
+    email: string | undefined;
+    endDate: string | null;
+    picture: string | null;
+    isPermanent: boolean;
+    isSelfService: boolean;
+    nickname: string | null;
+    phoneNumber: string | null;
+    position: string | null;
+    startDate: string | null;
+  }
+}
 
-function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, setIsInformationValid, handleFirstInformation }: EmployeeProps) {
+
+function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, setIsInformationValid, handleFirstInformation }: EmployeeProps, { data }: EmployeeInformationDetailProps) {
   const [isCaptureEnable, setCaptureEnable] = useState<boolean>(false);
   const webcamRef = useRef<Webcam>(null);
   const [openCamera, setOpenCamera] = useState(false);
@@ -527,6 +545,24 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
               />
               <Typography>Activate button to send account activation link via email. Employee Self Service enables self-data filling.</Typography>
             </EmployeeSelfWrapper>
+          </Grid>
+          <Grid item xs={12} sm={12} md={8} lg={8} xl={8}>
+          <Text
+            variant='text-lg'
+            title='Employee Status'
+            fontWeight={700}
+            color='primary.500'
+          />
+          {
+            data?.isPermanent === false ? (
+              <Chip label='Non Active' sx={{ backgroundColor: '#FEE2E2', color: '#166534', fontWeight: 'bold' }} />
+            ) : (
+              <Chip label='Active' sx={{ backgroundColor: '#DCFCE7', color: '#166534', fontWeight: 'bold' }} />
+            )
+          }
+          </Grid>
+          <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+          <TerminateAccount />
           </Grid>
         </Grid>
         <NextBtnWrapper>
