@@ -148,7 +148,7 @@ function NetRow (row) {
                   value='9.500.000'
                   onKeyDown={(e) => console.log(e)}
                   type='text'
-                  customLabel='Base Compensation'
+                  customLabel='Gross Payroll'
                   disabled
                   InputProps={{
                     startAdornment: ('Rp'),
