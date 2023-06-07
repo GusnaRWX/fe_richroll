@@ -23,4 +23,26 @@ export declare namespace AnnualWorkSchedule {
     endHours: string;
     notes: string;
   }
+
+  interface PayloadSagaAnnualSchedule {
+    companyID: string | number;
+    name: string | number;
+    eventType: number | string;
+    startDate: string | DayJS;
+    endDate: string | DayJS;
+    startHour: string | DayJS;
+    endHour: string | DayJS;
+    isWithTime: boolean;
+    note: string;
+  }
+
+  interface AnnualScheduleParams {
+    page: number;
+    itemPerPage: number;
+    sort: string;
+    direction: boolean;
+    search: string;
+    start: string;
+    end: string;
+  }
 }
