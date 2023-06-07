@@ -7,22 +7,12 @@ import {
   TableSortLabel,
   Typography
 } from '@mui/material';
-import { Input, IconButton, DateRangePicker } from '../_shared/form';
+import { Input, DateRangePicker } from '../_shared/form';
 import { Search  } from '@mui/icons-material';
 import Table from '../_shared/form/Table';
-import { BsTrashFill } from 'react-icons/bs';
-import { useRouter } from 'next/router';
-import styled from '@emotion/styled';
 import { compareCheck, ifThenElse } from '@/utils/helper';
 import { visuallyHidden } from '@mui/utils';
-
-const ButtonWrapper = styled.div`
- display: flex;
- flex-direction: row;
- align-items: center;
- justify-content: center;
- gap: .5rem;
-`;
+import PayrollAssistantRow from './PayrollAssistantRow';
 
 const headerItems = [
   { id: 'user.name', label: 'Name' },
@@ -81,7 +71,6 @@ function PayrollAssistantTable({
     ],
     itemTotals: 5
   };
-  const router = useRouter();
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
   // const [search, setSearch] = useState('');
@@ -185,23 +174,7 @@ function PayrollAssistantTable({
                   </TableRow>
                 ), (
                   data?.items?.map((item, index) => (
-                    <TableRow key={index}>
-                      <TableCell>{item.name}</TableCell>
-                      <TableCell>{item.daterange}</TableCell>
-                      <TableCell>{item.createdAt}</TableCell>
-                      <TableCell>{item.lastUpdated}</TableCell>
-                      <TableCell>
-                        <ButtonWrapper>
-                          <IconButton
-                            parentColor='#FEE2E2'
-                            onClick={() => { router.push('/payroll-disbursement/payroll-assistant/create'); }}
-                            icons={
-                              <BsTrashFill fontSize={20} color='#EF4444'/>
-                            }
-                          />
-                        </ButtonWrapper>
-                      </TableCell>
-                    </TableRow>
+                    <PayrollAssistantRow key={index} item={item} tabValue={tabValue} />
                   ))
                 ))
               ), (
