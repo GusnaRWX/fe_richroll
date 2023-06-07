@@ -8,7 +8,10 @@ import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { useFormik } from 'formik';
 import { AnnualWorkSchedule } from '@/types/annualWorkSchedule';
 import { validationCreateAnnualWorkCalendar } from './validate';
+import { useAppDispatch } from '@/hooks/index';
+import { postAnnualScheduleRequested } from '@/store/reducers/slice/company-management/annual-work-schedule/annualSchedule';
 import dayjs from 'dayjs';
+import { getCompanyData } from '@/utils/helper';
 
 
 
@@ -19,6 +22,7 @@ interface AnnualWorkCalendarCreateProps {
 }
 
 function AnnualWorkCalendarCreateForm({open, handleClose, handleConfirm}: AnnualWorkCalendarCreateProps) {
+  const dispatch = useAppDispatch();
   const formik = useFormik({
     initialValues: {
       name: '',
@@ -31,7 +35,21 @@ function AnnualWorkCalendarCreateForm({open, handleClose, handleConfirm}: Annual
     } as AnnualWorkSchedule.InitialValues,
     validationSchema: validationCreateAnnualWorkCalendar,
     onSubmit: (values) => {
-      console.log(values);
+      dispatch({
+        type: postAnnualScheduleRequested.toString(),
+        payload: {
+          companyID: getCompanyData()?.id?.toString(),
+          name: values?.name,
+          eventType: values?.type as number,
+          startDate: dayjs(values?.startDate).format('YYYY-MM-DD'),
+          endDate: dayjs(values?.endDate).format('YYYY-MM-DD'),
+          startHour: dayjs(values?.startHours).format('HH:mm:ss'),
+          endHour: dayjs(values?.endHours).format('HH:mm:ss'),
+          isWithTime: true,
+          note: values.notes
+        }
+      });
+      formik.resetForm();
       handleConfirm();
     }
   });

@@ -1,0 +1,23 @@
+import { post, get, del, put } from '@/utils/services';
+import { AnnualWorkSchedule } from '@/types/annualWorkSchedule';
+
+export const getListAnnualSchedule = (payload: AnnualWorkSchedule.AnnualScheduleParams) => {
+  const { page, itemPerPage, sort, direction, search, start, end} = payload;
+  return get(`annual-work-calendars?page=${page}&itemPerPage=${itemPerPage}&sort=${sort}&direction=${direction}&search=${search}&start=${start}&end=${end}`);
+};
+
+export const postAnnualSchedule = (payload: AnnualWorkSchedule.PayloadSagaAnnualSchedule) => {
+  return post('annual-work-calendars', payload);
+};
+
+export const updateAnnualSchedule = (payload) => {
+  return put(`annual-work-calendars/${payload.id}`, payload.data as AnnualWorkSchedule.PayloadSagaAnnualSchedule);
+};
+
+export const deleteAnnualSchedule = (id: number) => {
+  return del(`annual-work-calendars/${id}`);
+};
+
+export const getListEventSchedule = () => {
+  return get(`annual-work-calendars?page=1&itemPerPage=10000000&sort=&direction=DESC&search=&start=&end=`);
+};
