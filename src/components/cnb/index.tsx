@@ -5,6 +5,7 @@ import styled from '@emotion/styled';
 import { Button } from '../_shared/form';
 import AddIcon from '@mui/icons-material/Add';
 import { useRouter } from 'next/router';
+import { Card } from '../_shared/common';
 
 
 const CNBComponent = () => {
@@ -28,7 +29,9 @@ const CNBComponent = () => {
           />
         </div>
       </TitleWrapper>
-      <EnhancedTable/>
+      <Card>
+        <EnhancedTable/>
+      </Card>
     </>
   );
 };

@@ -162,7 +162,8 @@ function* fetchPostNewCnbProfile(action: AnyAction) {
         type: setResponserMessage.toString(),
         payload: {
           code: res.data.code,
-          message: res.data.message
+          message: 'Successfully Saved!',
+          footerMessage: 'New Compensation and Benefits Profile has been created'
         }
       });
       yield Router.push('/compensation-benefits');

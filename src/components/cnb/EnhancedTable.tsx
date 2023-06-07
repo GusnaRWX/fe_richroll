@@ -32,9 +32,9 @@ const ButtonWrapper = styled.div`
 `;
 
 const headerItems = [
-  { id: 'name', label: 'Profile Name' },
+  { id: 'name', label: 'CnB Profile Name' },
   { id: 'base', label: 'Base Compensation' },
-  { id: 'supplementaries', label: 'Supplement' },
+  { id: 'supplementaries', label: 'Supplementary Compensation' },
   { id: 'createdAt', label: 'Date Created' },
   { id: 'updatedAt', label: 'Last Updated' },
 ];
