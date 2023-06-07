@@ -57,9 +57,11 @@ function* fetchPostSimulationEvent(action: AnyAction) {
   try {
     const res: AxiosResponse = yield call(postSimulationEvent, action?.payload);
     if (res.data.code === 200) {
-      yield put({ type: postSimulationEventSuccess.toString(), payload: {
-        events: res.data.data
-      } });
+      yield put({
+        type: postSimulationEventSuccess.toString(), payload: {
+          events: res.data.data
+        }
+      });
       const data = {
         type: postCalculateEventRequested.toString(),
         payload: {
@@ -69,7 +71,7 @@ function* fetchPostSimulationEvent(action: AnyAction) {
       yield call(fetchPostCalculateEvent, data);
 
     }
-  } catch(err) {
+  } catch (err) {
     if (err instanceof AxiosError) {
       const error = err?.response?.data as Services.ErrorResponse;
       yield put({ type: postSimulationEventFailed.toString() });
@@ -113,7 +115,7 @@ function* fetchPostCalculateEvent(action: AnyAction) {
   }
 }
 
-function* fetchPostWorkSchedule (action: AnyAction) {
+function* fetchPostWorkSchedule(action: AnyAction) {
   try {
     const res: AxiosResponse = yield call(postWorkSchedule, action?.payload);
     if (res.data.code === 201) {
@@ -123,13 +125,13 @@ function* fetchPostWorkSchedule (action: AnyAction) {
         payload: {
           code: res.data.code,
           message: 'Successfully saved!',
-          footerMessage: `New Work Schedule Profile "${action.payload.name}" has been created`
+          footerMessage: `New Work Schedule Profile "${action?.payload?.name}" has been created`
         }
       });
       yield Router.push('/company-management/work-schedule');
       yield put({ type: clearState.toString() });
     }
-  } catch(err) {
+  } catch (err) {
     if (err instanceof AxiosError) {
       const error = err?.response?.data as Services.ErrorResponse;
       yield put({ type: postWorkScheduleFailed.toString() });

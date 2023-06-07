@@ -36,7 +36,7 @@ interface WorkScheduleFormProps {
   setData: React.Dispatch<React.SetStateAction<workSchedule.PostWorkSchedulePayloadType>>;
 }
 
-function WorkScheduleCreateForm({setData}: WorkScheduleFormProps) {
+function WorkScheduleCreateForm({ setData }: WorkScheduleFormProps) {
   const calendarRef = useRef<SchedulerRef>(null);
   const dispatch = useAppDispatch();
   const { workSchedule } = useAppSelectors((state) => state);
@@ -69,7 +69,7 @@ function WorkScheduleCreateForm({setData}: WorkScheduleFormProps) {
 
 
   const handleFormOpen = () => {
-    if(!formik.errors.profileName && formik.values.profileName !== '')  {
+    if (!formik.errors.profileName && formik.values.profileName !== '') {
       setOPenForm(true);
     } else {
       formik.setFieldError('profileName', 'This field is required');
@@ -124,7 +124,7 @@ function WorkScheduleCreateForm({setData}: WorkScheduleFormProps) {
   };
 
   const handleDynamicDay = (payload, data, type) => {
-    switch(type) {
+    switch (type) {
       case '0': {
         const tempData = {
           startDay: data.type === '0' ? parseInt(data.fixedStartDay) : parseInt(data.flexiWorkDay),
@@ -207,7 +207,7 @@ function WorkScheduleCreateForm({setData}: WorkScheduleFormProps) {
   }
   return (
     <>
-      <OverlayLoading open={workSchedule?.isLoading}/>
+      <OverlayLoading open={workSchedule?.isLoading} />
       <Grid container spacing={4} mb='1rem' alignItems='center'>
         <Grid item xs={10} sm={10} md={10} lg={10} xl={10}>
           <Input
@@ -275,11 +275,11 @@ function WorkScheduleCreateForm({setData}: WorkScheduleFormProps) {
         navigation={false}
         day={null}
         customEditor={(scheduler) => (
-          <WorkScheduleEditForm scheduler={scheduler}/>
+          <WorkScheduleEditForm scheduler={scheduler} />
         )}
         month={null}
         week={{
-          weekDays: [0, 1,2,3,4,5,6],
+          weekDays: [0, 1, 2, 3, 4, 5, 6],
           weekStartOn: 1,
           startHour: 1,
           endHour: 23,
@@ -389,7 +389,7 @@ function WorkScheduleCreateForm({setData}: WorkScheduleFormProps) {
                       { label: 'Wendesday', value: '2' },
                       { label: 'Thursday', value: '3' },
                       { label: 'Friday', value: '4' },
-                      {label: 'Saturday', value: '5'},
+                      { label: 'Saturday', value: '5' },
                       { label: 'Sunday', value: '6' }
                     ]}
                     sx={{
@@ -413,7 +413,7 @@ function WorkScheduleCreateForm({setData}: WorkScheduleFormProps) {
                       { label: 'Wendesday', value: '2' },
                       { label: 'Thursday', value: '3' },
                       { label: 'Friday', value: '4' },
-                      {label: 'Saturday', value: '5'},
+                      { label: 'Saturday', value: '5' },
                       { label: 'Sunday', value: '6' }
                     ]}
                     sx={{
@@ -498,7 +498,7 @@ function WorkScheduleCreateForm({setData}: WorkScheduleFormProps) {
                       { label: 'Saturday', value: '5' },
                       { label: 'Sunday', value: '6' },
                       { label: 'Weekday (Saturday - Sunday)', value: '7' },
-                      { label: 'Weekend (Monday - Friday)',  value: '8'},
+                      { label: 'Weekend (Monday - Friday)', value: '8' },
                       { label: 'Full Week', value: '9' }
                     ]}
                   />

@@ -43,15 +43,15 @@ async function refreshAccessToken() {
     const response = await service.post('/authentication/refresh', {
       refreshToken: getStorage('refreshToken'),
     });
-
+    // console.log(response, 'response');
     // Update the access token in the storage
-    setStorages([{ name: 'accessToken', value: response.data.accessToken }]);
+    // setStorages([{ name: 'accessTokenasd', value: response.data.accessToken }]);
 
     // Update the Authorization header for all subsequent requests
     service.defaults.headers.Authorization = `Bearer ${response.data.accessToken}`;
 
     // Return the new access token
-    return response.data.accessToken;
+    return response.data;
   } catch (error) {
     // Handle any error that occurred during the token refresh
     console.error('Error refreshing access token:', error);
@@ -73,9 +73,12 @@ service.interceptors.response.use(
     if (error.response && error.response.status === 401) {
       try {
         const accessToken = await refreshAccessToken();
-
         // Retry the failed request with the new access token
-        error.config.headers.Authorization = `Bearer ${accessToken}`;
+        error.config.headers.Authorization = `Bearer ${accessToken?.data?.accessToken}`;
+        setStorages([
+          { name: 'accessToken', value: accessToken.data.accessToken },
+          { name: 'refreshToken', value: accessToken.data.refreshToken }
+        ]);
         return axios(error.config);
 
       } catch (refreshError) {

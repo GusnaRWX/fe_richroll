@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 import { IconButton } from '@/components/_shared/form';
 import ConfirmationModal from '@/components/_shared/common/ConfirmationModal';
 import { useAppDispatch } from '@/hooks/index';
-import { postWorkScheduleRequested } from '@/store/reducers/slice/company-management/work-schedule/workScheduleSlice';
+import { postWorkScheduleRequested, clearState } from '@/store/reducers/slice/company-management/work-schedule/workScheduleSlice';
 
 const WorkScheduleCreateForm = dynamic(() => import('./WorkScheduleCreateForm'), {
   ssr: false
@@ -95,6 +95,8 @@ function WorksScheduleCreateComponent() {
     setLeave(false);
   };
 
+  const resetState = () => dispatch({ type: clearState.toString() });
+
   const handleSave = () => {
     dispatch({
       type: postWorkScheduleRequested.toString(),
@@ -116,7 +118,7 @@ function WorksScheduleCreateComponent() {
         </BackWrapper>
         <ButtonWrapper>
           <MuiButton variant='outlined' size='small' onClick={() => handleOpen()}>Cancel</MuiButton>
-          <MuiButton variant='contained' onClick={handleSave}size='small' color='primary'>Save</MuiButton>
+          <MuiButton variant='contained' onClick={handleSave} size='small' color='primary'>Save</MuiButton>
         </ButtonWrapper>
       </TopWrapper>
       <ContentWrapper>
@@ -126,8 +128,8 @@ function WorksScheduleCreateComponent() {
               <Tab sx={{ textTransform: 'none' }} label='Schedule Profile' {...a11yProps(0)} />
             </Tabs>
           </Box>
-          <TabPanel value={value}  index={0}>
-            <WorkScheduleCreateForm setData={setData}/>
+          <TabPanel value={value} index={0}>
+            <WorkScheduleCreateForm setData={setData} />
           </TabPanel>
         </Box>
       </ContentWrapper>
@@ -136,6 +138,8 @@ function WorksScheduleCreateComponent() {
         handleClose={handleClose}
         title='Are you sure you want to leave?'
         content='Any unsaved changes will be discarded. This cannot be undone'
+        withCallback
+        callback={resetState}
       />
     </>
   );
