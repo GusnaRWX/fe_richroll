@@ -7,15 +7,17 @@ export const getEmployee = (payload: Employees.EmployeeParams) => {
 };
 
 export const postEmployeeInfo = (payload: Employees.EmployeeInfoPayload) => {
-  return post('employees/information', payload);
+  return post('employees', payload);
 };
 
 export const postEmergency = (payload) => {
-  return post('employees/emergency', payload);
+  const { employeeID, ...restPayload } = payload;
+  return post(`employees/${employeeID}/emergency`, restPayload);
 };
 
-export const postPersonalInformation = (payload: Employees.PersonalInformationPayload | unknown) => {
-  return post('employees/personal', payload);
+export const postPersonalInformation = (payload) => {
+  const { employeeID, ...restPayload } = payload;
+  return post(`employees/${employeeID as string}/personal`, restPayload as Employees.PersonalInformationPayload);
 };
 
 export const getDetailEmployeeInformation = (payload: number | string) => {
@@ -47,6 +49,6 @@ export const patchEmergencyContact = (payload) => {
 };
 
 export const patchEmployeePersonal = (payload) => {
-  const {employeeID, ...restPayload} = payload;
+  const { employeeID, ...restPayload } = payload;
   return patch(`employees/personal/${employeeID}`, restPayload);
 };
