@@ -284,6 +284,7 @@ export default function UpdateCNBComponent() {
                     router.push('/compensation-benefits');
                   }}
                 />
+
                 <Typography
                   style={{
                     color: '#223567',
@@ -292,7 +293,7 @@ export default function UpdateCNBComponent() {
                     width: '250px',
                   }}
                 >
-                  Update Profile
+                  Update Profile <br /> <Text title={companyData?.name as string} fontWeight={400} fontSize={14} />
                 </Typography>
               </HeaderPageTitle>
             </Header>
