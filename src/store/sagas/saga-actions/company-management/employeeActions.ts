@@ -7,23 +7,25 @@ export const getEmployee = (payload: Employees.EmployeeParams) => {
 };
 
 export const postEmployeeInfo = (payload: Employees.EmployeeInfoPayload) => {
-  return post('employees/information', payload);
+  return post('employees', payload);
 };
 
 export const postEmergency = (payload) => {
-  return post('employees/emergency', payload);
+  const { employeeID, ...restPayload } = payload;
+  return post(`employees/${employeeID}/emergency`, restPayload);
 };
 
-export const postPersonalInformation = (payload: Employees.PersonalInformationPayload | unknown) => {
-  return post('employees/personal', payload);
+export const postPersonalInformation = (payload) => {
+  const { employeeID, ...restPayload } = payload;
+  return post(`employees/${employeeID as string}/personal`, restPayload as Employees.PersonalInformationPayload);
 };
 
 export const getDetailEmployeeInformation = (payload: number | string) => {
-  return get('employees/information/' + payload);
+  return get(`employees/${payload}/information`);
 };
 
 export const getDetailPersonalInformation = (payload: number | string) => {
-  return get('employees/personal/' + payload);
+  return get(`employees/${payload}/personal`);
 };
 
 export const getDetailCnb = (payload: number | string) => {
@@ -35,18 +37,21 @@ export const postEmployeeCNB = (payload: Employees.CnbEmployeePayload) => {
 };
 
 export const getEmployeeEmergencyDetail = (payload: string) => {
-  return get(`employees/emergency/${payload}`);
+  return get(`employees/${payload}/emergency`);
 };
 
 export const patchEmployeeInformation = (payload) => {
-  return patch(`employees/information/${payload.employeeID}`, payload.information as Employees.PatchEmployeeInformation);
+  const { employeeID, information } = payload;
+  return patch(`employees/${employeeID}`, information as Employees.PatchEmployeeInformation);
 };
 
 export const patchEmergencyContact = (payload) => {
-  return patch(`employees/emergency/${payload.employeeID}`, payload.emergency as Employees.EmergencyContactValues);
+  const { employeeID, ...restPayload } = payload;
+  console.log(restPayload);
+  return patch(`employees/${employeeID}/emergency`, restPayload as Employees.EmergencyContactValues);
 };
 
 export const patchEmployeePersonal = (payload) => {
-  const {employeeID, ...restPayload} = payload;
-  return patch(`employees/personal/${employeeID}`, restPayload);
+  const { employeeID, ...restPayload } = payload;
+  return patch(`employees/${employeeID}/personal`, restPayload);
 };
