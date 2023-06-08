@@ -71,3 +71,28 @@ export const validationSchemeEmployeeEmergencyContact = Yup.object({
   phoneNumberPrefixSecondary: Yup.string().notRequired(),
   phoneNumberSecondary: Yup.string().notRequired()
 });
+
+export const validationSchemeCompensationBenefits = Yup.object({
+  templateID: Yup.string(),
+  name: Yup.string().required('This field is required'),
+  base: Yup.object().shape({
+    componentID: Yup.string().required('This field is required'),
+    termID: Yup.string().required('This field is required'),
+    isTaxable: Yup.boolean().required('This field is required'),
+    amount: Yup.string().required('This field is required'),
+    amountType: Yup.string().required('This field is required'),
+    rate: Yup.string().required('This field is required'),
+    rateType: Yup.string().required('This field is required'),
+  }),
+  supplementaries: Yup.array().of(
+    Yup.object().shape({
+      componentID: Yup.string().required('This field is required'),
+      termID: Yup.string().required('This field is required'),
+      isTaxable: Yup.boolean().required('This field is required'),
+      amount: Yup.string().required('This field is required'),
+      amountType: Yup.string().required('This field is required'),
+      rate: Yup.string().required('This field is required'),
+      rateType: Yup.string().required('This field is required'),
+    })
+  ),
+});

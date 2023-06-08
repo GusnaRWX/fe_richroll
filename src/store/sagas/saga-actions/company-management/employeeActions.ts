@@ -30,8 +30,9 @@ export const getDetailCnb = (payload: number | string) => {
   return get('compensation_benefits/detail/' + payload);
 };
 
-export const postEmployeeCNB = (payload: Employees.CnbEmployeePayload) => {
-  return post('employees/compensation-benefit', payload);
+export const postEmployeeCNB = (payload) => {
+  const { employeeID, ...restPayload } = payload;
+  return post(`employees/${employeeID as string}/compensations`, restPayload as Employees.CnbEmployeePayload);
 };
 
 export const getEmployeeEmergencyDetail = (payload: string) => {
@@ -47,6 +48,6 @@ export const patchEmergencyContact = (payload) => {
 };
 
 export const patchEmployeePersonal = (payload) => {
-  const {employeeID, ...restPayload} = payload;
+  const { employeeID, ...restPayload } = payload;
   return patch(`employees/personal/${employeeID}`, restPayload);
 };

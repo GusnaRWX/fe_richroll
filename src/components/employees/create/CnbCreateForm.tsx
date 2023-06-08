@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import {
   Grid,
   Typography,
-  Button as MuiButton,
   Box,
   Chip,
   SelectChangeEvent,
@@ -13,11 +12,15 @@ import { useFormik } from 'formik';
 import { styled as MuiStyled } from '@mui/material/styles';
 import { HiPencilAlt } from 'react-icons/hi';
 import { useAppSelectors, useAppDispatch } from '@/hooks/index';
-import { Select, Input, RadioGroup } from '@/components/_shared/form';
+import { Select, Input, RadioGroup, Button } from '@/components/_shared/form';
 import { Employees } from '@/types/employees';
 import { Add, Delete } from '@mui/icons-material';
 import { getDetailCnbRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
 import { numberFormat } from '@/utils/format';
+import { validationSchemeCompensationBenefits } from './validate';
+import { Text } from '@/components/_shared/common';
+import { compareCheck, getPaymentTypeWithoutData, ifThenElse } from '@/utils/helper';
+import { getDetailRequested } from '@/store/reducers/slice/cnb/compensationSlice';
 
 const ContentWrapper = MuiStyled(Box)(() => ({
   padding: '1rem',
@@ -43,34 +46,47 @@ interface TempSuplementaryType {
 }
 
 interface CnbEmployeeProps {
-  cnbValues: any,
-  setValues: React.Dispatch<React.SetStateAction<any>>
+  refProp: React.Ref<HTMLFormElement>,
+  cnbValues: Employees.CnbEmployeePayload,
+  setValues: React.Dispatch<React.SetStateAction<Employees.CnbEmployeePayload>>
 }
 
 function CnbCreateForm({
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  refProp,
   cnbValues,
   setValues
 }: CnbEmployeeProps) {
+  console.log(cnbValues, 'cnb values');
   const [isEdit, setIsEdit] = useState(false);
-  const { option, employee } = useAppSelectors((state) => state);
+  const [modeEdit, setModeEdit] = useState(false);
+  const { option, employee, compensation } = useAppSelectors((state) => state);
   const dispatch = useAppDispatch();
   const [suplementary, setSuplementary] = useState<Array<TempSuplementaryType>>([]);
-  const compensationComponentOption = useAppSelectors(
-    (state) => state.compensation?.compensationComponentOption?.data?.items
-  );
-  const [compensation, setCompensation] = useState<Array<{ label: string, value: string }>>([]);
-
 
   const formik = useFormik({
     initialValues: {
-      profile: '',
-      baseCompensation: '',
-      baseTax: '',
-      baseRate: '',
-      basePeriod: '',
-      suplementary: suplementary
+      templateID: cnbValues?.templateID,
+      name: cnbValues?.name,
+      base: {
+        componentID: cnbValues?.base?.componentID,
+        termID: cnbValues?.base?.termID,
+        isTaxable: cnbValues?.base?.isTaxable,
+        amount: cnbValues?.base?.amount,
+        amountType: cnbValues?.base?.amountType,
+        rate: cnbValues?.base?.rate,
+        rateType: cnbValues?.base?.rateType
+      },
+      supplementaries: [{
+        componentID: cnbValues?.supplementaries?.componentID,
+        termID: cnbValues?.supplementaries?.termID,
+        isTaxable: cnbValues?.supplementaries?.isTaxable,
+        amount: cnbValues?.supplementaries?.amount,
+        amountType: cnbValues?.supplementaries?.amountType,
+        rate: cnbValues?.supplementaries?.rate,
+        rateType: cnbValues?.supplementaries?.rateType
+      }]
     } as Employees.CnbValues,
+    validationSchema: validationSchemeCompensationBenefits,
     onSubmit: (_values) => {
       handleSubmit();
     }
@@ -131,17 +147,241 @@ function CnbCreateForm({
       formik.setFieldValue('suplementary', temp);
     }
     const tempItems: Array<{ label: string, value: string }> = [];
-    compensationComponentOption.map((item) => {
-      tempItems.push({
-        label: item.name,
-        value: item?.id
-      });
-    });
-    setCompensation(tempItems);
+    // compensationComponentOption.map((item) => {
+    //   tempItems.push({
+    //     label: item.name,
+    //     value: item?.id
+    //   });
+    // });
+    // setCompensation(tempItems);
   }, [isEdit]);
+
   return (
     <>
-      <Grid container mb='2rem'>
+      <form ref={refProp}>
+        <Grid container>
+          <Grid
+            item
+          >
+            <Select
+              fullWidth
+              name='name'
+              onChange={(e) => {
+                formik.handleChange(e);
+                dispatch({
+                  type: getDetailRequested.toString(),
+                  Id: e.target.value
+                });
+                setModeEdit(false);
+              }}
+              onBlur={formik.handleBlur}
+              value={formik.values.name}
+              customLabel='Compensations and Benefits Profile'
+              withAsterisk
+              variant='outlined'
+              size='small'
+              options={option?.listCnb}
+              displayEmpty
+              renderValue={(value: unknown) => {
+                if ((value as string)?.length === 0) {
+                  return <Text title='Select existing profile' color='grey.400' />;
+                }
+                const selected = option?.listCnb?.find(cnb => cnb.value === value);
+                if (selected) {
+                  return `${selected.label}`;
+                }
+                return null;
+              }}
+              error={compareCheck(formik.touched.name, Boolean(formik.errors.name))}
+              helperText={ifThenElse(compareCheck(formik.touched.name, Boolean(formik.errors.name)), formik.errors.name, '')}
+            />
+          </Grid>
+        </Grid>
+      </form>
+      {formik.values.name !== '' && !modeEdit && (
+        <Box sx={{
+          background: '#F9FAFB',
+          padding: '16px 16px',
+          borderRadius: '5px',
+          boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.06), 0px 1px 3px rgba(0, 0, 0, 0.1)',
+          marginTop: '14px'
+        }}>
+          <Box>
+            <Grid container justifyContent='space-between' alignItems='baseline'>
+              <Grid item md={11}>
+                <Text title='Base' color='primary.500' fontWeight='bold' />
+              </Grid>
+              <Grid item md={1}>
+                <Button
+                  label='Edit'
+                  color='secondary'
+                  size='small'
+                  sx={{ color: 'white' }}
+                  startIcon={<HiPencilAlt />}
+                  onClick={() => { setModeEdit(true); }}
+                />
+              </Grid>
+            </Grid>
+            {Object.keys(compensation?.detail?.data?.base || {}).length > 0 && (
+              <Grid container mt='16px' justifyContent='space-between' wrap='wrap'>
+                <Grid
+                  item
+                  md={6}
+                  mb='22px'
+                >
+                  <Text
+                    title='Compensation Component'
+                    color='grey.400'
+                    mb='8px'
+                  />
+                  <Text
+                    title={compensation?.detail?.data?.base?.component?.name}
+                    color='grey.600'
+                    fontWeight={400}
+                  />
+                </Grid>
+                <Grid
+                  item
+                  md={6}
+                  mb='22px'
+                >
+                  <Text
+                    title='Tax Status'
+                    color='grey.400'
+                    mb='8px'
+                  />
+                  <Box sx={{
+                    backgroundColor: '#E5E7EB',
+                    borderRadius: '4px',
+                    padding: '3px 12px',
+                    width: '110px'
+                  }}>
+                    <Text
+                      title={compensation?.detail?.data?.base?.isTaxable ? 'Taxable' : 'Non-Taxable'}
+                      fontWeight={500}
+                      fontSize='14px'
+                      textAlign='center'
+                    />
+                  </Box>
+                </Grid>
+                <Grid
+                  item
+                  md={6}
+                  mb='22px'
+                >
+                  <Text
+                    title={getPaymentTypeWithoutData(compensation?.detail?.data?.base?.component?.type)?.title}
+                    color='grey.400'
+                  />
+                  <Text
+                    title={
+                      [0, 1, 2].includes(compensation?.detail?.data?.base?.component?.type)
+                        ? 'Rp' + numberFormat(compensation?.detail?.data?.base?.amount) + ' ' + compensation?.detail?.data?.base?.term?.name.toString() ?? ''
+                        : 'Rp' + numberFormat(compensation?.detail?.data?.base?.rate) + ' ' + compensation?.detail?.data?.base?.term?.name.toString() ?? ''
+                    }
+                    color='grey.400'
+                  />
+                </Grid>
+              </Grid>
+            )}
+            {compensation?.detail?.data?.supplementaries.length > 0 && (
+              compensation?.detail?.data?.supplementaries?.map((supplement, index) => (
+                <Grid
+                  container
+                  mt='16px'
+                  justifyContent='space-between'
+                  wrap='wrap'
+                  key={index}
+
+                >
+                  <Grid
+                    item
+                    md={6}
+                    mb='22px'
+                  >
+                    <Text
+                      title='Compensation Component'
+                      color='grey.400'
+                      mb='8px'
+                    />
+                    <Text
+                      title={supplement.component?.name}
+                      color='grey.600'
+                      fontWeight={400}
+                    />
+                  </Grid>
+                  <Grid
+                    item
+                    md={6}
+                    mb='22px'
+                  >
+                    <Text
+                      title='Tax Status'
+                      color='grey.400'
+                      mb='8px'
+                    />
+                    <Box sx={{
+                      backgroundColor: '#E5E7EB',
+                      borderRadius: '4px',
+                      padding: '3px 12px',
+                      width: '110px'
+                    }}>
+                      <Text
+                        title={supplement.isTaxable ? 'Taxable' : 'Non-Taxable'}
+                        fontWeight={500}
+                        fontSize='14px'
+                        textAlign='center'
+                      />
+                    </Box>
+                  </Grid>
+                  <Grid
+                    item
+                    md={6}
+                    mb='22px'
+                  >
+                    <Text
+                      title={getPaymentTypeWithoutData(supplement?.component?.type)?.title}
+                      color='grey.400'
+                    />
+                    <Text
+                      title={
+                        [0, 1, 2].includes(supplement?.component?.type)
+                          ? 'Rp' + numberFormat(supplement.amount) + ' per ' + supplement.term?.name.toString() ?? ''
+                          : 'Rp' + numberFormat(supplement.rate) + ' per ' + supplement.term?.name.toString() ?? ''
+                      }
+                      color='grey.400'
+                    />
+                  </Grid>
+                </Grid>
+              ))
+            )}
+          </Box>
+        </Box>
+      )}
+      {modeEdit && (
+        <Box sx={{
+          background: '#F9FAFB',
+          padding: '16px 16px',
+          borderRadius: '5px',
+          boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.06), 0px 1px 3px rgba(0, 0, 0, 0.1)',
+          marginTop: '14px'
+        }}>
+          <Box>
+            <Grid container justifyContent='space-between' alignItems='baseline'>
+              <Grid item>
+                <Text title='Base' color='primary.500' fontWeight='bold' />
+              </Grid>
+            </Grid>
+            {Object.keys(compensation?.detail?.data?.base || {}).length > 0 && (
+              <Grid container mt='16px' justifyContent='space-between' wrap='wrap'>
+
+              </Grid>
+            )}
+          </Box>
+        </Box>
+      )}
+      {/* {formik.values.name !== ''  ? } */}
+      {/* <Grid container mb='2rem'>
         <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
           <Select
             fullWidth
@@ -405,7 +645,7 @@ function CnbCreateForm({
             </MuiButton>
           </>
         )
-      }
+      } */}
     </>
   );
 }

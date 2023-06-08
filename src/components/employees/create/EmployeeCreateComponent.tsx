@@ -99,6 +99,7 @@ function EmployeeCreateComponent() {
   const employeeRef = useRef<HTMLFormElement>(null);
   const emergencyRef = useRef<HTMLFormElement>(null);
   const personalInformationRef = useRef<HTMLFormElement>(null);
+  const compensationBenefitsRef = useRef<HTMLFormElement>(null);
   const [informationValue, setInformationValue] = useState<Employees.InformationValues>({
     companyID: '',
     department: '',
@@ -163,9 +164,21 @@ function EmployeeCreateComponent() {
     idNumberPersonalID: '',
     idTypePersonalID: ''
   });
+  const [compensationBenefitsValue, setCompensationBenefitsValue] = useState<Employees.CnbEmployeePayload>({
+    templateID: '',
+    name: '',
+    base: {
+      componentID: '',
+      termID: '',
+      isTaxable: false,
+      amount: '',
+      amountType: '',
+      rate: '',
+      rateType: ''
+    },
+    supplementaries: { componentID: '', termID: '', isTaxable: false, amount: '', amountType: '', rate: '', rateType: '' }
+  });
 
-  const [cnbEmployeeValues, setCnbEmployeeValues] = useState();
-  console.log(cnbEmployeeValues);
   const [isInformationValid, setIsInformationValid] = useState(false);
   const [isPersonalInformationValid, setIsPersonalInformationValid] = useState(false);
   const [isEmergencyValid, setIsEmergencyValid] = useState(false);
@@ -207,7 +220,7 @@ function EmployeeCreateComponent() {
         personalValue: personalInformationValue,
         isEmergencyValid,
         emergencyContactValue: emergencyValue,
-        cnbValue: cnbEmployeeValues
+        cnbValue: []
       }
     });
     router.push('/company-management/employees');
@@ -285,8 +298,9 @@ function EmployeeCreateComponent() {
           </TabPanel>
           <TabPanel value={value} index={3}>
             <CnbCreateForm
-              cnbValues={cnbEmployeeValues}
-              setValues={setCnbEmployeeValues}
+              refProp={compensationBenefitsRef}
+              cnbValues={compensationBenefitsValue}
+              setValues={setCompensationBenefitsValue}
             />
           </TabPanel>
           <TabPanel value={value} index={4}>

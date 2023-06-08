@@ -129,12 +129,26 @@ export declare namespace Employees {
   }
 
   interface CnbValues {
-    profile: string;
-    baseCompensation: string;
-    baseTax: string;
-    baseRate: string;
-    basePeriod: string;
-    suplementary: Array<{ compensation: string | number; tax: string; rate: string | number; period: string | number }>
+    templateID: string;
+    name: string;
+    base: {
+      componentID: string;
+      termID: string;
+      isTaxable: boolean;
+      amount?: number | string;
+      amountType?: number | string;
+      rate?: number | string;
+      rateType?: number | string;
+    },
+    supplementaries: Array<{
+      componentID: string;
+      termID: string;
+      isTaxable: boolean;
+      amount?: number | string;
+      amountType?: number | string;
+      rate?: number | string;
+      rateType?: number | string;
+    }>
   }
 
   interface InformationValues {
@@ -178,20 +192,18 @@ export declare namespace Employees {
   }
 
   interface CnbEmployeePayload {
-    employeeID: string;
-    compensationBenefitId: string;
-    compensationBenefit: {
-      companyId: number,
-      name: string,
-      baseCompensation: {
-        compensationComponentId: number,
-        taxStatus: boolean,
-        amount: number,
-        rate: number,
-        period: string
-      },
-      supplementaryCompensations?: Array<string>
-    }
+    templateID: string;
+    name: string;
+    base: {
+      componentID: string;
+      termID: string;
+      isTaxable: boolean;
+      amount?: number | string;
+      amountType?: number | string;
+      rate?: number | string;
+      rateType?: number | string;
+    },
+    supplementaries: any
   }
 
   interface PatchEmployeeInformation {

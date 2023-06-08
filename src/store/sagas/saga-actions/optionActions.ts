@@ -23,17 +23,16 @@ export const getBanks = (): Promise<AxiosResponse> => {
 };
 
 export const getListDepartment = (): Promise<AxiosResponse> => {
-  const data =  getCompanyData();
+  const data = getCompanyData();
   return get(`/departments?page=1&itemPerPage=10000&companyID=${data?.id}`);
 };
 
-export const getListPosition = ({departmentID}): Promise<AxiosResponse> => {
+export const getListPosition = ({ departmentID }): Promise<AxiosResponse> => {
   return get(`/positions?page=1&itemPerPage=10000&departmentID=${departmentID}`);
 };
 
 export const getCnb = (): Promise<AxiosResponse> => {
-  const data =  getCompanyData();
-  return get(`compensation_benefits/${data?.id}`);
+  return get(`compensations?page=1&itemPerPage=1000`);
 };
 
 export const getListCompensation = (): Promise<AxiosResponse> => {
