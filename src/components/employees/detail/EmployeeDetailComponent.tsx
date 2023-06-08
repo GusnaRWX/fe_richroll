@@ -107,6 +107,7 @@ function EmployeeDetailComponent() {
                 color='#FFF'
               />
             }
+            sx={{ color: 'white' }}
             size='small'
           />
         </ButtonWrapper>
