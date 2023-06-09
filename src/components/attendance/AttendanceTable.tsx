@@ -244,7 +244,7 @@ function AttendanceTable({
                             <>
                               <IconButton
                                 parentColor='#E9EFFF'
-                                onClick={() => {router.push('/payroll-disbursement/payroll-assistant/view');}}
+                                onClick={() => { router.push('/payroll-disbursement/payroll/generate-gross/employee'); }}
                                 icons={
                                   <TbFileImport fontSize={20} color='#223567'/>
                                 }
