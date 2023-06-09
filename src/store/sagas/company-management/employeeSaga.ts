@@ -902,6 +902,7 @@ function* fetchGetViewWorkSchedule(action: AnyAction) {
         type: getViewWorkScheduleSuccess.toString(),
         payload: {
           id: res?.data?.data?.company_work_schedule_id,
+          name: res?.data?.data?.name,
           grossHour: res?.data?.data?.grossHours,
           netHour: res?.data?.data?.netHours,
           events: res?.data?.data?.items

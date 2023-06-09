@@ -46,6 +46,7 @@ function EmployeeWorkScheduleDetail() {
             customLabel='Schedule Profile Name'
             size='small'
             fullWidth
+            disabled={true}
             value={employee?.workScheduleDetail.workScheduleId}
             options={listWorkSchedule}
           />
