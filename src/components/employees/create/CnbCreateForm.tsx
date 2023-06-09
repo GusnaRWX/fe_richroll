@@ -91,7 +91,7 @@ function CnbCreateForm({
     const formatedPayload = {
       ...val,
       name: option?.listCnb?.find(item => item.value === val.name)?.label,
-      supplementaries: { ...val.suplementaries, ...val.base }
+      supplementaries: val.supplementaries
     };
     dispatch({
       type: postCnbEmployeeRequested.toString(),
@@ -115,8 +115,22 @@ function CnbCreateForm({
         formik.setFieldValue('base.termID', compensation?.detail?.data?.base?.term?.id);
       }, 2000);
       formik.setFieldValue('base.amount', compensation?.detail?.data?.base?.amount);
+
+      if (compensation?.detail?.data?.supplementaries?.length > 0) {
+        compensation?.detail?.data?.supplementaries?.forEach((suplementary, index) => {
+          formik.setFieldValue(`supplementaries[${index}].componentID`, suplementary?.component?.id);
+          formik.setFieldValue(`supplementaries[${index}].termID`, suplementary?.term?.id);
+          formik.setFieldValue(`supplementaries[${index}].isTaxable`, suplementary?.isTaxable);
+          formik.setFieldValue(`supplementaries[${index}].amount`, suplementary?.amount);
+          formik.setFieldValue(`supplementaries[${index}].amountType`, suplementary?.amountType);
+          formik.setFieldValue(`supplementaries[${index}].rate`, suplementary?.rate);
+          formik.setFieldValue(`supplementaries[${index}].rateType`, suplementary?.rateType);
+        });
+      }
     }
   }, [modeEdit]);
+
+  console.log(formik.values);
 
   return (
     <form ref={refProp} onSubmit={formik.handleSubmit}>
@@ -325,77 +339,158 @@ function CnbCreateForm({
 
               </>
             )}
-            {compensation?.detail?.data?.supplementaries.length > 0 && (
-              compensation?.detail?.data?.supplementaries?.map((supplement, index) => (
-                <Grid
-                  container
-                  mt='16px'
-                  justifyContent='space-between'
-                  wrap='wrap'
-                  key={index}
+            {compensation?.detail?.data?.supplementaries?.length > 0 &&
+              compensation?.detail?.data?.supplementaries?.map((value, index) => (
+                <>
+                  {modeEdit ? (
+                    <>
+                      <Grid container justifyContent='space-between' mt='32px'>
+                        <Grid item md={7} mb='22px'>
+                          <Select
+                            fullWidth
+                            customLabel={`Compensation Component ${index + 1}`}
+                            withAsterisk
+                            options={option?.listCnb}
+                            variant='outlined'
+                            size='small'
+                            name={`supplementaries[${index}].componentID`}
+                            onBlur={formik.handleBlur}
+                            onChange={formik.handleChange}
+                            renderValue={(value: unknown) => {
+                              const selected = option?.listCnb?.find(cnb => cnb.value === value);
+                              if (selected) {
+                                return `${selected.label}`;
+                              }
+                              return null;
+                            }}
+                            sx={{ backgroundColor: '#fff' }}
+                            value={formik.values.supplementaries[index].componentID}
+                          />
+                        </Grid>
+                        <Grid item md={4} mb='22px'>
+                          <RadioGroup
+                            withAsterisk
+                            name={`supplementaries[${index}].isTaxable`}
+                            label='Tax Status'
+                            row
+                            options={[
+                              { label: 'Taxable', value: 'taxable' },
+                              { label: 'Non-Taxable', value: 'non-taxable' }
+                            ]}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            value={formik.values.base.isTaxable ? 'taxable' : 'non-taxable'}
+                          />
+                        </Grid>
+                      </Grid>
+                      <Grid container alignItems='flex-end' gap={5}>
+                        <Grid item md={3}>
+                          <Input
+                            withAsterisk
+                            customLabel={getPaymentTypeWithoutData(value?.component?.type)?.title}
+                            size='small'
+                            name={`supplementaries[${index}].amount`}
+                            value={formik.values.supplementaries[index].amount}
+                          />
+                        </Grid>
+                        <Grid item md={3}>
+                          <Select
+                            fullWidth
+                            customLabel=''
+                            variant='outlined'
+                            size='small'
+                            options={option?.listTermin}
+                            name={`supplementaries[${index}].termID`}
+                            value={formik.values.supplementaries[index].termID}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            displayEmpty
+                            renderValue={(value: unknown) => {
+                              const selected = option?.listTermin?.find(item => item.value === value);
+                              if (selected) {
+                                return `${selected?.label}`;
+                              }
+                              return null;
+                            }}
+                            sx={{ backgroundColor: '#FFF' }}
+                          />
+                        </Grid>
+                      </Grid>
+                    </>
+                  ) : (
+                    compensation?.detail?.data?.supplementaries?.map((supplement, index) => (
+                      <Grid
+                        container
+                        mt='16px'
+                        justifyContent='space-between'
+                        wrap='wrap'
+                        key={index}
 
-                >
-                  <Grid
-                    item
-                    md={6}
-                    mb='22px'
-                  >
-                    <Text
-                      title='Compensation Component'
-                      color='grey.400'
-                      mb='8px'
-                    />
-                    <Text
-                      title={supplement.component?.name}
-                      color='grey.600'
-                      fontWeight={400}
-                    />
-                  </Grid>
-                  <Grid
-                    item
-                    md={6}
-                    mb='22px'
-                  >
-                    <Text
-                      title='Tax Status'
-                      color='grey.400'
-                      mb='8px'
-                    />
-                    <Box sx={{
-                      backgroundColor: '#E5E7EB',
-                      borderRadius: '4px',
-                      padding: '3px 12px',
-                      width: '110px'
-                    }}>
-                      <Text
-                        title={supplement.isTaxable ? 'Taxable' : 'Non-Taxable'}
-                        fontWeight={500}
-                        fontSize='14px'
-                        textAlign='center'
-                      />
-                    </Box>
-                  </Grid>
-                  <Grid
-                    item
-                    md={6}
-                    mb='22px'
-                  >
-                    <Text
-                      title={getPaymentTypeWithoutData(supplement?.component?.type)?.title}
-                      color='grey.400'
-                    />
-                    <Text
-                      title={
-                        [0, 1, 2].includes(supplement?.component?.type)
-                          ? 'Rp' + numberFormat(supplement.amount) + ' per ' + supplement.term?.name.toString() ?? ''
-                          : 'Rp' + numberFormat(supplement.rate) + ' per ' + supplement.term?.name.toString() ?? ''
-                      }
-                      color='grey.400'
-                    />
-                  </Grid>
-                </Grid>
+                      >
+                        <Grid
+                          item
+                          md={6}
+                          mb='22px'
+                        >
+                          <Text
+                            title='Compensation Component'
+                            color='grey.400'
+                            mb='8px'
+                          />
+                          <Text
+                            title={supplement.component?.name}
+                            color='grey.600'
+                            fontWeight={400}
+                          />
+                        </Grid>
+                        <Grid
+                          item
+                          md={6}
+                          mb='22px'
+                        >
+                          <Text
+                            title='Tax Status'
+                            color='grey.400'
+                            mb='8px'
+                          />
+                          <Box sx={{
+                            backgroundColor: '#E5E7EB',
+                            borderRadius: '4px',
+                            padding: '3px 12px',
+                            width: '110px'
+                          }}>
+                            <Text
+                              title={supplement.isTaxable ? 'Taxable' : 'Non-Taxable'}
+                              fontWeight={500}
+                              fontSize='14px'
+                              textAlign='center'
+                            />
+                          </Box>
+                        </Grid>
+                        <Grid
+                          item
+                          md={6}
+                          mb='22px'
+                        >
+                          <Text
+                            title={getPaymentTypeWithoutData(supplement?.component?.type)?.title}
+                            color='grey.400'
+                          />
+                          <Text
+                            title={
+                              [0, 1, 2].includes(supplement?.component?.type)
+                                ? 'Rp' + numberFormat(supplement.amount) + ' per ' + supplement.term?.name.toString() ?? ''
+                                : 'Rp' + numberFormat(supplement.rate) + ' per ' + supplement.term?.name.toString() ?? ''
+                            }
+                            color='grey.400'
+                          />
+                        </Grid>
+                      </Grid>
+                    ))
+                  )}
+                </>
               ))
-            )}
+            }
           </Box>
           <Button label='sUBMIT' onClick={() => { handleSubmit(formik.values); }} />
         </Box>
