@@ -943,7 +943,7 @@ export default function UpdateCNBComponent() {
         content='Any unsaved changes will be discarded'
         withCallback
         callback={() => {
-          router.push('/compensation/benefits');
+          router.push('/compensation-benefits');
           dispatch({
             type: resetResponserMessage.toString()
           });
