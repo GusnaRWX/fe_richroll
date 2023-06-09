@@ -182,6 +182,7 @@ function EmployeeCreateComponent() {
   const [isInformationValid, setIsInformationValid] = useState(false);
   const [isPersonalInformationValid, setIsPersonalInformationValid] = useState(false);
   const [isEmergencyValid, setIsEmergencyValid] = useState(false);
+  const [isCnbValid, setIsCnbValid] = useState(false);
   const dispatch = useAppDispatch();
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -220,12 +221,13 @@ function EmployeeCreateComponent() {
         personalValue: personalInformationValue,
         isEmergencyValid,
         emergencyContactValue: emergencyValue,
-        cnbValue: []
+        isCnbValid: isCnbValid,
+        cnbValue: compensationBenefitsValue
       }
     });
     router.push('/company-management/employees');
   };
-
+  console.log(compensationBenefitsValue);
   const handleOpen = () => {
     setLeave(true);
   };
@@ -298,9 +300,11 @@ function EmployeeCreateComponent() {
           </TabPanel>
           <TabPanel value={value} index={3}>
             <CnbCreateForm
+              nextPage={setValue}
               refProp={compensationBenefitsRef}
               cnbValues={compensationBenefitsValue}
               setValues={setCompensationBenefitsValue}
+              setIsCnbValid={setIsCnbValid}
             />
           </TabPanel>
           <TabPanel value={value} index={4}>

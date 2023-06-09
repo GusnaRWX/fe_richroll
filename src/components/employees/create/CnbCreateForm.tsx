@@ -5,57 +5,37 @@ import {
   Box,
 } from '@mui/material';
 import { useFormik } from 'formik';
-// import { styled as MuiStyled } from '@mui/material/styles';
 import { HiPencilAlt } from 'react-icons/hi';
 import { useAppSelectors, useAppDispatch } from '@/hooks/index';
 import { Select, Input, RadioGroup, Button } from '@/components/_shared/form';
 import { Employees } from '@/types/employees';
-// import { Add, Delete } from '@mui/icons-material';
-// import { getDetailCnbRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
+import { Delete, Add } from '@mui/icons-material';
 import { numberFormat } from '@/utils/format';
 import { validationSchemeCompensationBenefits } from './validate';
 import { Text } from '@/components/_shared/common';
 import { compareCheck, getPaymentTypeWithoutData, ifThenElse } from '@/utils/helper';
 import { getDetailRequested } from '@/store/reducers/slice/cnb/compensationSlice';
-import { getListTerminReqeusted } from '@/store/reducers/slice/options/optionSlice';
-import { postCnbEmployeeRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
-
-// const ContentWrapper = MuiStyled(Box)(() => ({
-//   padding: '1rem',
-//   borderRadius: '5px',
-//   backgroundColor: '#F9FAFB',
-//   width: '100%'
-// }));
-
-// const TopWrapper = MuiStyled(Box)(() => ({
-//   display: 'flex',
-//   flexDirection: 'row',
-//   alignItems: 'center',
-//   justifyContent: 'space-between',
-//   width: '100%',
-//   marginBottom: '1rem'
-// }));
-
-// interface TempSuplementaryType {
-//   compensation: string | number;
-//   tax: string;
-//   rate: string | number;
-//   period: string | number;
-// }
+import { getListCompensationRequested, getListTerminReqeusted } from '@/store/reducers/slice/options/optionSlice';
 
 interface CnbEmployeeProps {
   refProp: React.Ref<HTMLFormElement>,
   cnbValues: Employees.CnbEmployeePayload,
-  setValues: React.Dispatch<React.SetStateAction<Employees.CnbEmployeePayload>>
+  setValues: React.Dispatch<React.SetStateAction<Employees.CnbEmployeePayload>>,
+  setIsCnbValid: React.Dispatch<React.SetStateAction<boolean>>,
+  nextPage: (_val: number) => void
 }
 
 function CnbCreateForm({
   refProp,
   cnbValues,
-  // setValues
+  setValues,
+  setIsCnbValid,
+  nextPage
 }: CnbEmployeeProps) {
   const [modeEdit, setModeEdit] = useState(false);
+  const [modeNormal, setModeNormal] = useState(false);
   const { option, compensation } = useAppSelectors((state) => state);
+  const [tempSupplementaries, setTempSupplementaries] = useState([]);
   const dispatch = useAppDispatch();
 
   const formik = useFormik({
@@ -88,25 +68,64 @@ function CnbCreateForm({
   });
 
   const handleSubmit = (val) => {
-    const formatedPayload = {
-      ...val,
-      name: option?.listCnb?.find(item => item.value === val.name)?.label,
-      supplementaries: val.supplementaries
+    let payload: any = {
+      templateID: val.templateID,
+      name: val.name,
+      base: {
+        componentID: val.base?.componentID,
+        termID: val.base?.termID,
+        isTaxable: val.base?.isTaxable === 'taxable' ? true : false,
+        amount: val.base?.amount !== '' ? +val?.base?.amount : 0,
+        amountType: 0,
+        rate: val.base?.rate !== '' ? +val?.base?.rate : 0,
+        rateType: 0
+      },
+      supplementaries: tempSupplementaries.map((v: any) => {
+        return {
+          amount: +v?.amount,
+          amountType: 0,
+          componentID: +v?.component?.id,
+          isTaxable: v?.isTaxable === 'taxable' ? true : false,
+          rate: +v?.rate,
+          rateType: 0,
+          termID: v?.term?.id
+        };
+      })
     };
+
+    if (tempSupplementaries.length > 0) {
+      payload = { ...payload };
+    } else {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { supplementaries, ...rest } = payload;
+      payload = { ...rest };
+    }
+    setValues(payload);
+    nextPage(4);
+    setIsCnbValid(true);
+  };
+
+  useEffect(() => {
     dispatch({
-      type: postCnbEmployeeRequested.toString(),
-      payload: {
-        employeeID: 1,
-        data: formatedPayload
-      }
+      type: getListCompensationRequested.toString()
     });
+  }, []);
+
+  const handleDeleteEditRow = (id: string) => {
+    const result = tempSupplementaries?.filter((item: any) => item.id !== id);
+    setTempSupplementaries(result);
+  };
+
+  const handleAddEditRow = () => {
+    console.log('here');
   };
 
   useEffect(() => {
     if (modeEdit) {
       formik.setFieldValue('templateID', compensation?.detail?.data?.base?.component?.id);
+      // formik.setFieldValue('name', compensation?.detail?.data?.base?.component?.id);
       formik.setFieldValue('base.componentID', compensation?.detail?.data?.base?.component.id);
-      formik.setFieldValue('base.isTaxable', compensation?.detail?.data?.base?.isTaxable);
+      formik.setFieldValue('base.isTaxable', compensation?.detail?.data?.base?.isTaxable ? 'taxable' : 'non-taxable');
       setTimeout(() => {
         dispatch({
           type: getListTerminReqeusted.toString(),
@@ -120,17 +139,55 @@ function CnbCreateForm({
         compensation?.detail?.data?.supplementaries?.forEach((suplementary, index) => {
           formik.setFieldValue(`supplementaries[${index}].componentID`, suplementary?.component?.id);
           formik.setFieldValue(`supplementaries[${index}].termID`, suplementary?.term?.id);
-          formik.setFieldValue(`supplementaries[${index}].isTaxable`, suplementary?.isTaxable);
+          formik.setFieldValue(`supplementaries[${index}].isTaxable`, suplementary?.isTaxable ? 'taxable' : 'non-taxable');
           formik.setFieldValue(`supplementaries[${index}].amount`, suplementary?.amount);
           formik.setFieldValue(`supplementaries[${index}].amountType`, suplementary?.amountType);
           formik.setFieldValue(`supplementaries[${index}].rate`, suplementary?.rate);
           formik.setFieldValue(`supplementaries[${index}].rateType`, suplementary?.rateType);
         });
+        setTempSupplementaries(compensation?.detail?.data?.supplementaries);
       }
-    }
-  }, [modeEdit]);
 
-  console.log(formik.values);
+    }
+  }, [modeEdit, formik.values]);
+
+  useEffect(() => {
+    if (modeNormal) {
+      formik.setFieldValue('templateID', compensation?.detail?.data?.base?.component?.id);
+      // formik.setFieldValue('name', compensation?.detail?.data?.base?.component?.id);
+      formik.setFieldValue('base.componentID', compensation?.detail?.data?.base?.component.id);
+      formik.setFieldValue('base.isTaxable', compensation?.detail?.data?.base?.isTaxable ? 'taxable' : 'non-taxable');
+      setTimeout(() => {
+        dispatch({
+          type: getListTerminReqeusted.toString(),
+          payload: formik.values.base.componentID
+        });
+        formik.setFieldValue('base.termID', compensation?.detail?.data?.base?.term?.id);
+      }, 2000);
+      formik.setFieldValue('base.amount', compensation?.detail?.data?.base?.amount);
+
+      if (compensation?.detail?.data?.supplementaries?.length > 0) {
+        compensation?.detail?.data?.supplementaries?.forEach((suplementary, index) => {
+          formik.setFieldValue(`supplementaries[${index}].componentID`, suplementary?.component?.id);
+          formik.setFieldValue(`supplementaries[${index}].termID`, suplementary?.term?.id);
+          formik.setFieldValue(`supplementaries[${index}].isTaxable`, suplementary?.isTaxable ? 'taxable' : 'non-taxable');
+          formik.setFieldValue(`supplementaries[${index}].amount`, suplementary?.amount);
+          formik.setFieldValue(`supplementaries[${index}].amountType`, suplementary?.amountType);
+          formik.setFieldValue(`supplementaries[${index}].rate`, suplementary?.rate);
+          formik.setFieldValue(`supplementaries[${index}].rateType`, suplementary?.rateType);
+        });
+        setTempSupplementaries(compensation?.detail?.data?.supplementaries);
+      }
+
+    }
+  }, [modeNormal, formik.values]);
+
+  useEffect(() => {
+    if (!!modeNormal || !!modeEdit) {
+      setIsCnbValid(true);
+      setValues(formik.values);
+    }
+  }, [modeEdit, modeNormal, formik.values]);
 
   return (
     <form ref={refProp} onSubmit={formik.handleSubmit}>
@@ -140,17 +197,19 @@ function CnbCreateForm({
         >
           <Select
             fullWidth
-            name='name'
+            name='templateID'
             onChange={(e) => {
               formik.handleChange(e);
               dispatch({
                 type: getDetailRequested.toString(),
                 Id: e.target.value
               });
+              formik.setFieldValue('name', option?.listCnb?.find(cnb => cnb.value === e.target.value)?.label);
               setModeEdit(false);
+              setModeNormal(true);
             }}
             onBlur={formik.handleBlur}
-            value={formik.values.name}
+            value={formik.values.templateID}
             customLabel='Compensations and Benefits Profile'
             withAsterisk
             variant='outlined'
@@ -162,14 +221,13 @@ function CnbCreateForm({
                 return <Text title='Select existing profile' color='grey.400' />;
               }
               const selected = option?.listCnb?.find(cnb => cnb.value === value);
-              console.log(selected, 'here');
               if (selected) {
                 return `${selected.label}`;
               }
               return null;
             }}
-            error={compareCheck(formik.touched.name, Boolean(formik.errors.name))}
-            helperText={ifThenElse(compareCheck(formik.touched.name, Boolean(formik.errors.name)), formik.errors.name, '')}
+            error={compareCheck(formik.touched.templateID, Boolean(formik.errors.templateID))}
+            helperText={ifThenElse(compareCheck(formik.touched.templateID, Boolean(formik.errors.templateID)), formik.errors.name, '')}
           />
         </Grid>
       </Grid>
@@ -194,7 +252,7 @@ function CnbCreateForm({
                   size='small'
                   sx={{ color: 'white' }}
                   startIcon={<HiPencilAlt />}
-                  onClick={() => { setModeEdit((prev) => !prev); }}
+                  onClick={() => { setModeEdit((prev) => !prev); setModeNormal(false); }}
                 />
               </Grid>
             </Grid>
@@ -208,7 +266,7 @@ function CnbCreateForm({
                           fullWidth
                           customLabel='Compensation Component'
                           withAsterisk
-                          options={option?.listCnb}
+                          options={option?.listCompensation}
                           variant='outlined'
                           size='small'
                           name='base.componentID'
@@ -216,7 +274,7 @@ function CnbCreateForm({
                           onBlur={formik.handleBlur}
                           onChange={formik.handleChange}
                           renderValue={(value: unknown) => {
-                            const selected = option?.listCnb?.find(cnb => cnb.value === value);
+                            const selected = option?.listCompensation.find(cnb => cnb.value === value);
                             if (selected) {
                               return `${selected.label}`;
                             }
@@ -236,7 +294,8 @@ function CnbCreateForm({
                           ]}
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
-                          value={formik.values.base.isTaxable ? 'taxable' : 'non-taxable'}
+                          value={formik.values.base.isTaxable}
+                          name='base.isTaxable'
                         />
                       </Grid>
                     </Grid>
@@ -248,6 +307,8 @@ function CnbCreateForm({
                           size='small'
                           name='base.amount'
                           value={formik.values.base.amount}
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
                         />
                       </Grid>
                       <Grid item md={3}>
@@ -336,28 +397,27 @@ function CnbCreateForm({
                     </Grid>
                   </Grid>
                 )}
-
               </>
             )}
-            {compensation?.detail?.data?.supplementaries?.length > 0 &&
-              compensation?.detail?.data?.supplementaries?.map((value, index) => (
+            {tempSupplementaries?.length > 0 &&
+              tempSupplementaries?.map((value: any, index) => (
                 <>
                   {modeEdit ? (
                     <>
                       <Grid container justifyContent='space-between' mt='32px'>
-                        <Grid item md={7} mb='22px'>
+                        <Grid item md={6} mb='22px'>
                           <Select
                             fullWidth
                             customLabel={`Compensation Component ${index + 1}`}
                             withAsterisk
-                            options={option?.listCnb}
+                            options={option?.listCompensation}
                             variant='outlined'
                             size='small'
                             name={`supplementaries[${index}].componentID`}
                             onBlur={formik.handleBlur}
                             onChange={formik.handleChange}
                             renderValue={(value: unknown) => {
-                              const selected = option?.listCnb?.find(cnb => cnb.value === value);
+                              const selected = option?.listCompensation?.find(cnb => cnb.value === value);
                               if (selected) {
                                 return `${selected.label}`;
                               }
@@ -367,7 +427,7 @@ function CnbCreateForm({
                             value={formik.values.supplementaries[index].componentID}
                           />
                         </Grid>
-                        <Grid item md={4} mb='22px'>
+                        <Grid item md={3} mb='22px'>
                           <RadioGroup
                             withAsterisk
                             name={`supplementaries[${index}].isTaxable`}
@@ -380,6 +440,22 @@ function CnbCreateForm({
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                             value={formik.values.base.isTaxable ? 'taxable' : 'non-taxable'}
+                          />
+                        </Grid>
+                        <Grid item md='auto' mb='22px'>
+                          <Button
+                            startIcon={<Delete />}
+                            label='Delete'
+                            sx={{
+                              background: '#FEE2E2',
+                              color: '#B91C1C',
+                              '&:hover': {
+                                background: '#FEE2E2',
+                                color: '#B91C1C',
+                                boxShadow: 'none',
+                              }
+                            }}
+                            onClick={() => { handleDeleteEditRow(value.id); }}
                           />
                         </Grid>
                       </Grid>
@@ -413,6 +489,17 @@ function CnbCreateForm({
                               return null;
                             }}
                             sx={{ backgroundColor: '#FFF' }}
+                          />
+                        </Grid>
+                      </Grid>
+                      <Grid container mt='32px'>
+                        <Grid item md={3}>
+                          <Button
+                            startIcon={<Add />}
+                            label='Add Supplementary Compensation'
+                            color='secondary'
+                            sx={{ color: 'white' }}
+                            onClick={handleAddEditRow}
                           />
                         </Grid>
                       </Grid>
@@ -492,9 +579,22 @@ function CnbCreateForm({
               ))
             }
           </Box>
-          <Button label='sUBMIT' onClick={() => { handleSubmit(formik.values); }} />
         </Box>
       )}
+      {/* <Grid
+        container
+        justifyContent='flex-end'
+        alignItems='end'
+        gap={2}
+        mt='10px'
+      >
+        <Grid item>
+          <Button onClick={handleBack} label='Back' variant='outlined' />
+        </Grid>
+        <Grid item>
+          <Button fullWidth={false} size='small' color='primary' type='submit' label='Next' />
+        </Grid>
+      </Grid> */}
     </form>
   );
 }

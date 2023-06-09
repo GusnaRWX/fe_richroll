@@ -129,14 +129,16 @@ function* fetchPostEmployeeInfo(action: AnyAction) {
         yield call(fetchPostEmergency, body);
       }
 
-      // const body = {
-      //   type: postCnbEmplyeeRequested.toString(),
-      //   payload: {
-      //     employeeID: res?.data?.data,
-      //     data: action?.payload?.cnbValue
-      //   }
-      // };
-      // yield call(fetchPostCnbEmployee, body);
+      if (action?.payload?.isCnbValid) {
+        const body = {
+          type: postCnbEmployeeRequested.toString(),
+          payload: {
+            employeeID: res?.data?.data,
+            data: action?.payload?.cnbValue
+          }
+        };
+        yield call(fetchPostCnbEmployee, body);
+      }
     }
   } catch (err) {
     if (err instanceof AxiosError) {
@@ -329,12 +331,47 @@ function* fetchPostPersonalInformation(action: AnyAction) {
  * @param action
  */
 function* fetchPostCnbEmployee(action: AnyAction) {
-  console.log(action, 'action ini');
   try {
-    const payload = {
-      employeeID: action?.payload?.employeeID,
-      data: action?.payload?.data
+    console.log(action, 'acitons');
+    let payload = {};
+    const employeeID = action?.payload?.employeeID;
+    const base = {
+      componentID: action?.payload?.data?.base?.componentID,
+      termID: action?.payload?.data?.base?.termID,
+      isTaxable: action?.payload?.data?.base?.isTaxable === 'taxable' ? true : false,
+      amount: +action?.payload?.data?.base?.amount || 0,
+      amountType: 0,
+      rate: +action?.payload?.data?.base?.rate || 0,
+      rateType: 0
     };
+
+    const supplementaries = action?.payload?.data?.supplementaries?.map(v => {
+      return {
+        amount: +v?.amount,
+        amountType: 0,
+        componentID: +v?.component?.id,
+        isTaxable: v?.isTaxable === 'taxable' ? true : false,
+        rate: +v?.rate,
+        rateType: 0,
+        termID: v?.term?.id
+      };
+    });
+    if (action?.payload?.data?.supplementaries.length > 0) {
+      payload = {
+        ...payload,
+        employeeID,
+        data: {
+          base: base,
+          supplementaries: supplementaries
+        }
+      };
+    } else {
+      payload = {
+        ...payload,
+        employeeID,
+        data: { base: base }
+      };
+    }
 
     const res: AxiosResponse = yield call(postEmployeeCNB, payload);
 

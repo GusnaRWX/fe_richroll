@@ -74,25 +74,25 @@ export const validationSchemeEmployeeEmergencyContact = Yup.object({
 
 export const validationSchemeCompensationBenefits = Yup.object({
   templateID: Yup.string(),
-  name: Yup.string().required('This field is required'),
+  name: Yup.string(),
   base: Yup.object().shape({
-    componentID: Yup.string().required('This field is required'),
-    termID: Yup.string().required('This field is required'),
-    isTaxable: Yup.boolean().required('This field is required'),
-    amount: Yup.string().required('This field is required'),
-    amountType: Yup.string().required('This field is required'),
-    rate: Yup.string().required('This field is required'),
-    rateType: Yup.string().required('This field is required'),
+    componentID: Yup.string(),
+    termID: Yup.string(),
+    isTaxable: Yup.boolean(),
+    amount: Yup.string(),
+    amountType: Yup.string(),
+    rate: Yup.string(),
+    rateType: Yup.string(),
   }),
   supplementaries: Yup.array().of(
     Yup.object().shape({
-      componentID: Yup.string().required('This field is required'),
-      termID: Yup.string().required('This field is required'),
-      isTaxable: Yup.boolean().required('This field is required'),
-      amount: Yup.string().required('This field is required'),
-      amountType: Yup.string().required('This field is required'),
-      rate: Yup.string().required('This field is required'),
-      rateType: Yup.string().required('This field is required'),
+      componentID: Yup.string().nullable(),
+      termID: Yup.string().nullable(),
+      isTaxable: Yup.boolean().nullable(),
+      amount: Yup.string().nullable(),
+      amountType: Yup.string().nullable(),
+      rate: Yup.string().nullable(),
+      rateType: Yup.string().nullable(),
     })
   ),
 });
