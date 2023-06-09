@@ -11,7 +11,11 @@ import {
   getEmployeeEmergencyDetail,
   patchEmployeeInformation,
   patchEmergencyContact,
-  patchEmployeePersonal
+  patchEmployeePersonal,
+  getDetailWorkSchedule,
+  postCalculateEvent,
+  postSimulationEvent,
+  postWorkSchedule
 } from '../saga-actions/company-management/employeeActions';
 import { call, put, takeEvery, delay } from 'redux-saga/effects';
 import {
@@ -50,7 +54,19 @@ import {
   patchEmergencyContactSuccess,
   patchPersonalRequested,
   patchPersonalSuccess,
-  patchPersonalFailed
+  patchPersonalFailed,
+  postCalculateEventFailed,
+  postCalculateEventRequested,
+  postCalculateEventSuccess,
+  postSimulationEventFailed,
+  postSimulationEventRequested,
+  postSimulationEventSuccess,
+  postWorkScheduleFailed,
+  postWorkScheduleRequested,
+  postWorkScheduleSuccess,
+  getDetailWorkScheduleRequested,
+  getDetailWorkSchedulerFailed,
+  getDetailWorkSchedulerSuccess
 } from '@/store/reducers/slice/company-management/employees/employeeSlice';
 import { setResponserMessage } from '@/store/reducers/slice/responserSlice';
 import { Services } from '@/types/axios';
@@ -137,6 +153,14 @@ function* fetchPostEmployeeInfo(action: AnyAction) {
         }
       };
       yield call(fetchPostCnbEmployee, body);
+
+      yield put({
+        type: postWorkScheduleRequested.toString(),
+        payload: {
+          id: res?.data?.data,
+          workSchedule: action?.payload?.workSchedule
+        }
+      });
     }
   } catch (err) {
     if (err instanceof AxiosError) {
@@ -308,7 +332,7 @@ function* fetchPostPersonalInformation(action: AnyAction) {
     }
   } catch (err) {
 
-    if (err instanceof AxiosError<Services.ValidationResponse>) {
+    if (err instanceof AxiosError) {
       console.log(err, 'error');
       const errorMessage = err?.response?.data as Services.ErrorResponse;
       yield put({ type: postPersonalInformationFailed.toString() });
@@ -710,6 +734,128 @@ function* fetchPatchEmployeePersonal(action: AnyAction) {
   }
 }
 
+function* fetchGetDetailWorkSchedule(action: AnyAction) {
+  try {
+    const res: AxiosResponse = yield call(getDetailWorkSchedule, action?.payload);
+    if (res.data.code === 200) {
+      yield put({
+        type: getDetailWorkSchedulerSuccess.toString(),
+        payload: {
+          id: res?.data?.data?.id,
+          grossHour: res?.data?.data?.grossHours,
+          netHour: res?.data?.data?.netHours,
+          events: res?.data?.data?.items
+        }
+      });
+    }
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      yield put({ type: getDetailWorkSchedulerFailed.toString() });
+      yield delay(2000, true);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message,
+        }
+      });
+    }
+  }
+}
+
+function* fetchPostSimulationEvent(action: AnyAction) {
+  try {
+    const res: AxiosResponse = yield call(postSimulationEvent, action?.payload);
+    if (res.data.code === 200) {
+      yield put({
+        type: postSimulationEventSuccess.toString(), payload: {
+          events: res.data.data
+        }
+      });
+      const data = {
+        type: postCalculateEventRequested.toString(),
+        payload: {
+          items: [...res.data.data]
+        }
+      };
+      yield call(fetchPostCalculateEvent, data);
+
+    }
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const error = err?.response?.data as Services.ErrorResponse;
+      yield put({ type: postSimulationEventFailed.toString() });
+      yield delay(2000, true);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: error?.code,
+          message: error?.message
+        }
+      });
+    }
+  }
+}
+
+function* fetchPostCalculateEvent(action: AnyAction) {
+  try {
+    const res: AxiosResponse = yield call(postCalculateEvent, action?.payload);
+    if (res.data.code === 200) {
+      yield put({
+        type: postCalculateEventSuccess.toString(),
+        payload: {
+          grossHour: res.data.data.gross,
+          netHour: res.data.data.net
+        }
+      });
+    }
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const error = err?.response?.data as Services.ErrorResponse;
+      yield put({ type: postCalculateEventFailed.toString() });
+      yield delay(2000, true);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: error?.code,
+          message: error?.message
+        }
+      });
+    }
+  }
+}
+
+function* fetchPostWorkSchedule(action: AnyAction) {
+  try {
+    const res: AxiosResponse = yield call(postWorkSchedule, action?.payload);
+    if (res.data.code === 201) {
+      yield put({ type: postWorkScheduleSuccess.toString() });
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: res.data.code,
+          message: 'Successfully saved!',
+          footerMessage: `New Work Schedule Profile "${action?.payload?.name}" has been created`
+        }
+      });
+    }
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const error = err?.response?.data as Services.ErrorResponse;
+      yield put({ type: postWorkScheduleFailed.toString() });
+      yield delay(2000, true);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: error?.code,
+          message: error?.message
+        }
+      });
+    }
+  }
+}
+
 function* employeeSaga() {
   yield takeEvery(getEmployeeRequested.toString(), fetchGetEmployee);
   yield takeEvery(postEmployeeInfoRequested.toString(), fetchPostEmployeeInfo);
@@ -723,6 +869,10 @@ function* employeeSaga() {
   yield takeEvery(patchEmployeeInformationRequested.toString(), fetchPatchEmployeeInformation);
   yield takeEvery(patchEmergencyContactRequested.toString(), fetchPatchEmergencyContact);
   yield takeEvery(patchPersonalRequested.toString(), fetchPatchEmployeePersonal);
+  yield takeEvery(getDetailWorkScheduleRequested.toString(), fetchGetDetailWorkSchedule);
+  yield takeEvery(postSimulationEventRequested.toString(), fetchPostSimulationEvent);
+  yield takeEvery(postCalculateEventRequested.toString(), fetchPostCalculateEvent);
+  yield takeEvery(postWorkScheduleRequested.toString(), fetchPostWorkSchedule);
 }
 
 export default employeeSaga;

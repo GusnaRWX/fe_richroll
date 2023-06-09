@@ -1,6 +1,22 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { HYDRATE } from 'next-redux-wrapper';
 
+interface EventType {
+  day: number,
+  event_id: number,
+  title: string,
+  name: string,
+  start: Date,
+  end:Date,
+  isBreak?: boolean,
+  isDuration?: boolean,
+  color?: string,
+  duration?: number | string,
+  allDay?: boolean,
+  scheduleType?: string | number,
+  type?: number
+}
+
 interface EmployeeState {
   isLoading: boolean;
   data: [];
@@ -9,6 +25,10 @@ interface EmployeeState {
   personalInformationDetail: object;
   detailCnb: object;
   emergencyContactDetail: object;
+  events: Array<EventType>;
+  grossHour: number;
+  netHour: number;
+  workScheduleId: string | number;
 }
 
 const initialState: EmployeeState = {
@@ -18,7 +38,11 @@ const initialState: EmployeeState = {
   employeeInformationDetail: {},
   personalInformationDetail: {},
   detailCnb: {},
-  emergencyContactDetail: {}
+  emergencyContactDetail: {},
+  events: [],
+  grossHour: 0,
+  netHour: 0,
+  workScheduleId: ''
 };
 
 export const employeeSlice = createSlice({
@@ -138,6 +162,90 @@ export const employeeSlice = createSlice({
     },
     patchPersonalFailed: (state) => {
       state.isLoading = false;
+    },
+    getDetailWorkScheduleRequested: (state) => {
+      state.isLoading = true;
+    },
+    getDetailWorkSchedulerSuccess: (state, action) => {
+      state.isLoading = false;
+      state.workScheduleId = action?.payload?.id;
+      state.grossHour = action?.payload?.grossHour;
+      state.netHour = action?.payload?.netHour;
+      const tempData: Array<EventType> = [];
+      action?.payload?.events.map((item) => {
+        tempData.push({
+          day: item.day,
+          event_id: item.eventId,
+          title: item.name,
+          name: item.name,
+          start: new Date(item.start),
+          end: new Date(item.end),
+          isBreak: item.isBreak,
+          isDuration: item.isDuration,
+          color: item.color,
+          duration: item.duration,
+          allDay: item.allDay,
+          scheduleType: item.scheduleType,
+          type: item.type
+        });
+      });
+      state.events = tempData;
+    },
+    getDetailWorkSchedulerFailed: (state) => {
+      state.isLoading = false;
+    },
+    postSimulationEventRequested: (state) => {
+      state.isLoading = true;
+    },
+    postSimulationEventSuccess: (state, action) => {
+      state.isLoading = false;
+      const tempData: Array<EventType> = [];
+      action?.payload?.events.map((item) => {
+        tempData.push({
+          day: item.day,
+          event_id: item.eventId,
+          title: item.name,
+          name: item.name,
+          start: new Date(item.start),
+          end: new Date(item.end),
+          isBreak: item.isBreak,
+          isDuration: item.isDuration,
+          color: item.color,
+          duration: item.duration,
+          allDay: item.allDay,
+          scheduleType: item.scheduleType,
+          type: item.type
+        });
+      });
+      state.events = tempData;
+    },
+    postSimulationEventFailed: (state) => {
+      state.isLoading = false;
+    },
+    postCalculateEventRequested: (state) => {
+      state.isLoading = true;
+    },
+    postCalculateEventSuccess: (state, action) => {
+      state.isLoading = false;
+      state.grossHour = action?.payload?.grossHour;
+      state.netHour = action?.payload?.netHour;
+    },
+    postCalculateEventFailed: (state) => {
+      state.isLoading = false;
+    },
+    postWorkScheduleRequested: (state) => {
+      state.isLoading = true;
+    },
+    postWorkScheduleSuccess: (state) => {
+      state.isLoading = false;
+    },
+    postWorkScheduleFailed: (state) => {
+      state.isLoading = false;
+    },
+    clearWorkScheduleState: (state) => {
+      state.events = [];
+      state.grossHour = 0;
+      state.netHour = 0;
     }
   },
   extraReducers: {
@@ -186,7 +294,20 @@ export const {
   patchEmergencyContactFailed,
   patchPersonalRequested,
   patchPersonalSuccess,
-  patchPersonalFailed
+  patchPersonalFailed,
+  postSimulationEventFailed,
+  postSimulationEventRequested,
+  postSimulationEventSuccess,
+  postCalculateEventRequested,
+  postCalculateEventFailed,
+  postCalculateEventSuccess,
+  postWorkScheduleFailed,
+  postWorkScheduleRequested,
+  postWorkScheduleSuccess,
+  getDetailWorkScheduleRequested,
+  getDetailWorkSchedulerFailed,
+  getDetailWorkSchedulerSuccess,
+  clearWorkScheduleState
 } = employeeSlice.actions;
 
 export default employeeSlice.reducer;

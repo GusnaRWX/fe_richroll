@@ -26,6 +26,10 @@ const CnbCreateForm = dynamic(() => import('./CnbCreateForm'), {
   ssr: false
 });
 
+const WorkScheduleForm = dynamic(() => import('./WorkScheduleForm'), {
+  ssr: false
+});
+
 const TopWrapper = styled.div`
  display: flex;
  flex-direction: row;
@@ -165,6 +169,7 @@ function EmployeeCreateComponent() {
   });
 
   const [cnbEmployeeValues, setCnbEmployeeValues] = useState();
+  const [valueWorkSchedule, setValueWorkSchedule] = useState({});
   console.log(cnbEmployeeValues);
   const [isInformationValid, setIsInformationValid] = useState(false);
   const [isPersonalInformationValid, setIsPersonalInformationValid] = useState(false);
@@ -207,7 +212,8 @@ function EmployeeCreateComponent() {
         personalValue: personalInformationValue,
         isEmergencyValid,
         emergencyContactValue: emergencyValue,
-        cnbValue: cnbEmployeeValues
+        cnbValue: cnbEmployeeValues,
+        workSchedule: valueWorkSchedule
       }
     });
     router.push('/company-management/employees');
@@ -290,7 +296,7 @@ function EmployeeCreateComponent() {
             />
           </TabPanel>
           <TabPanel value={value} index={4}>
-            <p>on Development</p>
+            <WorkScheduleForm setData={setValueWorkSchedule}/>
           </TabPanel>
         </Box>
       </ContentWrapper>
