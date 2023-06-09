@@ -70,17 +70,19 @@ function* fetchPostAnnualSchedule(action: AnyAction) {
           search: '',
           start: '',
           end: ''
-        } });
+        }
+      });
       yield put({ type: getListEventRequested.toString() });
       yield put({
         type: setResponserMessage.toString(),
         payload: {
           code: res.data.code,
-          message: res.data.message
+          message: 'Successfully Saved!',
+          footerMessage: `${action?.payload?.name || ''}has been added to the Annual Work Calendar`
         }
       });
     }
-  } catch(err) {
+  } catch (err) {
     if (err instanceof AxiosError) {
       const error = err?.response?.data as Services.ErrorResponse;
       yield put({ type: postAnnualScheduleFailed.toString() });
@@ -109,7 +111,7 @@ function* fetchUpdateAnnualSchedule(action: AnyAction) {
         }
       });
     }
-  } catch(err) {
+  } catch (err) {
     if (err instanceof AxiosError) {
       const error = err?.response?.data as Services.ErrorResponse;
       yield put({ type: updateAnnualScheduleFailed.toString() });
@@ -126,7 +128,7 @@ function* fetchUpdateAnnualSchedule(action: AnyAction) {
 }
 
 function* fetchDeleteAnnualSchedule(action: AnyAction) {
-  try{
+  try {
     const res: AxiosResponse = yield call(deleteAnnualSchedule, action?.payload);
     if (res.data.code === 200) {
       yield put({ type: deleteAnnualScheduleSuccess.toString() });
@@ -140,7 +142,8 @@ function* fetchDeleteAnnualSchedule(action: AnyAction) {
           search: '',
           start: '',
           end: ''
-        } });
+        }
+      });
       yield put({ type: getListEventRequested.toString() });
       yield put({
         type: setResponserMessage.toString(),

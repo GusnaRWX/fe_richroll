@@ -6,6 +6,7 @@ import { InfoRounded, Add, Download } from '@mui/icons-material';
 import { FaFolderOpen } from 'react-icons/fa';
 import EmployeesTable from './EmployeesTable';
 import { useRouter } from 'next/router';
+import { Text } from '../_shared/common';
 
 const InfoComponent = styled(Box)<BoxProps>(({ theme }) => ({
   backgroundColor: theme.palette.secondary[100],
@@ -76,7 +77,8 @@ function EmployeesComponent() {
     <>
       <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
         <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
-          <Typography variant='h5' color='primary.main'>Employees</Typography>
+          {/* <Typography variant='h5' color='primary.main'>Employees</Typography> */}
+          <Text title='Employees' fontWeight='bold' color='primary.main' fontSize='24px' />
         </Grid>
         <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
           <InfoComponent>
@@ -123,10 +125,10 @@ function EmployeesComponent() {
             </Tabs>
           </Box>
           <TabPanel value={value} index={0}>
-            <EmployeesTable tabValue={value}/>
+            <EmployeesTable tabValue={value} />
           </TabPanel>
           <TabPanel value={value} index={1}>
-            <EmployeesTable tabValue={value}/>
+            <EmployeesTable tabValue={value} />
           </TabPanel>
         </Box>
       </ContentWrapper>

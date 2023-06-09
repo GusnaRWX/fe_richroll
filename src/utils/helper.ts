@@ -145,6 +145,17 @@ export const readValidationResponse = (validationResponse: Array<string>) => {
   });
 };
 
+export const getErrorMessage = (error) => {
+  let result = '';
+  // console.log(error);
+  error?.forEach(val => {
+    Object.keys(val).forEach(v => {
+      result = val[v].join('');
+    });
+  });
+  return result;
+};
+
 /**
  * Check if object is empty
  */

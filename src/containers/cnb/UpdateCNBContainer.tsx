@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import Layout from '@/components/_shared/_core/layout/Index';
 import UpdateCNBComponent from '@/components/cnb/update';
 import { useAppDispatch } from '@/hooks/index';
@@ -10,12 +10,15 @@ const UpdateCNBContainer = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if(!router.isReady) return; 
-    dispatch({
-      type: getDetailRequested.toString(),
-      Id: router.query.id
-    });
-  }, []);
+    if (!router.isReady) return;
+    const fetchData = () => {
+      dispatch({
+        type: getDetailRequested.toString(),
+        Id: router.query.id
+      });
+    };
+    fetchData();
+  }, [router]);
   return (
     <Layout>
       <UpdateCNBComponent />

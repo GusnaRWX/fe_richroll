@@ -170,8 +170,8 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, set
       value: '+62'
     },
     {
-      label: '+62',
-      value: '+62'
+      label: '+44',
+      value: '+44'
     }
   ];
 

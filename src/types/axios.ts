@@ -10,6 +10,7 @@ export declare namespace Services {
     code: number;
     status: string;
     message: string;
+    error?: []
   }
 
   export interface ValidationResponse {
