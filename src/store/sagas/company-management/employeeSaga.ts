@@ -40,7 +40,7 @@ import {
   getDetailCnbFailed,
   getDetailCnbRequested,
   getDetailCnbSuccess,
-  postCnbEmplyeeRequested,
+  postCnbEmployeeRequested,
   postCnbEmployeeSuccess,
   postCnbEmployeeFailed,
   emergencyContactDetailFailed,
@@ -145,14 +145,24 @@ function* fetchPostEmployeeInfo(action: AnyAction) {
         yield call(fetchPostEmergency, body);
       }
 
-      const body = {
-        type: postCnbEmplyeeRequested.toString(),
-        payload: {
-          employeeID: res?.data?.data,
-          data: action?.payload?.cnbValue
-        }
-      };
-      yield call(fetchPostCnbEmployee, body);
+      if (action?.payload?.isCnbValid) {
+        const body = {
+          type: postCnbEmployeeRequested.toString(),
+          payload: {
+            employeeID: res?.data?.data,
+            data: action?.payload?.cnbValue
+          }
+        };
+        yield call(fetchPostCnbEmployee, body);
+      }
+      // const body = {
+      //   type: postCnbEmplyeeRequested.toString(),
+      //   payload: {
+      //     employeeID: res?.data?.data,
+      //     data: action?.payload?.cnbValue
+      //   }
+      // };
+      // yield call(fetchPostCnbEmployee, body);
 
       yield put({
         type: postWorkScheduleRequested.toString(),
@@ -354,22 +364,46 @@ function* fetchPostPersonalInformation(action: AnyAction) {
  */
 function* fetchPostCnbEmployee(action: AnyAction) {
   try {
-    const payload = {
-      employeeID: action?.payload?.employeeID,
-      compensationBenefitId: action?.payload?.data?.compensationBenefitId,
-      compensationBenefit: {
-        companyId: Number(getCompanyData()?.id),
-        name: 'PT Teknologi Cibaduyut',
-        baseCompensation: {
-          compensationComponentId: +action?.payload?.data?.baseCompensation?.compensationComponent?.id,
-          taxStatus: action?.payload?.data?.baseCompensation?.taxStatus || false,
-          amount: action?.payload?.data?.baseCompensation?.amount || 10000,
-          rate: action?.payload?.data?.baseCompensation?.rate === null ? 0 : action?.payload?.data?.baseCompensation?.rate,
-          period: action?.payload?.data?.baseCompensation?.period || 'per Hour'
-        },
-        supplementaryCompensations: ['']
-      }
+    console.log(action, 'acitons');
+    let payload = {};
+    const employeeID = action?.payload?.employeeID;
+    const base = {
+      componentID: action?.payload?.data?.base?.componentID,
+      termID: action?.payload?.data?.base?.termID,
+      isTaxable: action?.payload?.data?.base?.isTaxable === 'taxable' ? true : false,
+      amount: +action?.payload?.data?.base?.amount || 0,
+      amountType: 0,
+      rate: +action?.payload?.data?.base?.rate || 0,
+      rateType: 0
     };
+
+    const supplementaries = action?.payload?.data?.supplementaries?.map(v => {
+      return {
+        amount: +v?.amount,
+        amountType: 0,
+        componentID: +v?.component?.id,
+        isTaxable: v?.isTaxable === 'taxable' ? true : false,
+        rate: +v?.rate,
+        rateType: 0,
+        termID: v?.term?.id
+      };
+    });
+    if (action?.payload?.data?.supplementaries.length > 0) {
+      payload = {
+        ...payload,
+        employeeID,
+        data: {
+          base: base,
+          supplementaries: supplementaries
+        }
+      };
+    } else {
+      payload = {
+        ...payload,
+        employeeID,
+        data: { base: base }
+      };
+    }
 
     const res: AxiosResponse = yield call(postEmployeeCNB, payload);
 
@@ -864,7 +898,7 @@ function* employeeSaga() {
   yield takeEvery(employeeInfoDetailRequested.toString(), fetchGetEmployeeInformation);
   yield takeEvery(personalInfoDetailRequested.toString(), fetchGetPersonalInformationDetail);
   yield takeEvery(getDetailCnbRequested.toString(), fetchGetDetailCnb);
-  yield takeEvery(postCnbEmplyeeRequested.toString(), fetchPostCnbEmployee);
+  yield takeEvery(postCnbEmployeeRequested.toString(), fetchPostCnbEmployee);
   yield takeEvery(emergencyContactDetailRequested.toString(), fetchGetEmergencyContactDetail);
   yield takeEvery(patchEmployeeInformationRequested.toString(), fetchPatchEmployeeInformation);
   yield takeEvery(patchEmergencyContactRequested.toString(), fetchPatchEmergencyContact);

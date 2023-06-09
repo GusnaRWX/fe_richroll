@@ -117,7 +117,7 @@ export const employeeSlice = createSlice({
     getDetailCnbFailed: (state) => {
       state.isLoading = false;
     },
-    postCnbEmplyeeRequested: (state) => {
+    postCnbEmployeeRequested: (state) => {
       state.isLoading = true;
     },
     postCnbEmployeeSuccess: (state) => {
@@ -280,7 +280,7 @@ export const {
   getDetailCnbFailed,
   getDetailCnbRequested,
   getDetailCnbSuccess,
-  postCnbEmplyeeRequested,
+  postCnbEmployeeRequested,
   postCnbEmployeeSuccess,
   postCnbEmployeeFailed,
   emergencyContactDetailFailed,

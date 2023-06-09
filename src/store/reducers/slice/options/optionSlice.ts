@@ -13,11 +13,21 @@ interface OptionState {
   banks: Array<{ label: string, value: string }>
   listDepartment: Array<{ label: string, value: string }>
   listPosition: Array<{ label: string, value: string }>
-  listCnb: Array<{label: string, value: number| string}>
-  listCompensation: Array<{label: string, value: string | number, type: string | number }>
-  listTermin: Array<{label: string, value: string | number}>
-  listSuppTermin: Array<Array<{label: string | number, value: string | number}>>
-  listWorkSchedule: Array<{label: string, value: string | number}>
+  listCnb: Array<{ label: string, value: number | string }>
+  listCompensation: Array<{ label: string, value: string | number, type: string | number }>
+  listTermin: Array<{ label: string, value: string | number }>
+  listSuppTermin: Array<Array<{ label: string | number, value: string | number }>>,
+  listCompensationBenefits: {
+    label?: string,
+    value?: string,
+    base?: [],
+    supplementaries?: []
+  }
+  // listCnb: Array<{label: string, value: number| string}>
+  // listCompensation: Array<{label: string, value: string | number, type: string | number }>
+  // listTermin: Array<{label: string, value: string | number}>
+  // listSuppTermin: Array<Array<{label: string | number, value: string | number}>>
+  listWorkSchedule: Array<{ label: string, value: string | number }>
 }
 
 const initialState: OptionState = {
@@ -36,6 +46,7 @@ const initialState: OptionState = {
   listCompensation: [],
   listTermin: [],
   listSuppTermin: [[]],
+  listCompensationBenefits: {},
   listWorkSchedule: []
 };
 
@@ -196,6 +207,14 @@ export const optionSlice = createSlice({
       state.listCnb = action?.payload?.items?.map(item => {
         return returnNameId(item);
       });
+      state.listCompensationBenefits = action?.payload?.items?.map(item => {
+        return {
+          label: item.name,
+          value: item.id,
+          base: item.base,
+          supplementaries: item.supplementaries
+        };
+      });
     },
     getListCnbFailed: (state) => {
       state.loading = false;
@@ -228,9 +247,9 @@ export const optionSlice = createSlice({
       state.loading = true;
     },
     getListSuppTerminSuccess: (state, action) => {
-      const data: Array<{label: string | number, value: string | number}> = [];
+      const data: Array<{ label: string | number, value: string | number }> = [];
       state.loading = false;
-      if (state.listSuppTermin[0].length === 0){
+      if (state.listSuppTermin[0].length === 0) {
         state.listSuppTermin.splice(0, 1);
         action?.payload?.items?.map((item) => {
           data.push({
@@ -239,7 +258,7 @@ export const optionSlice = createSlice({
           });
         });
         state.listSuppTermin.push(data);
-      }else{
+      } else {
         action?.payload?.items?.map(item => {
           data.push({
             label: item.name,
@@ -252,14 +271,14 @@ export const optionSlice = createSlice({
     getListSuppTerminFailed: (state) => {
       state.loading = false;
     },
-    removeListSuppTermin: (state, action)  => {
+    removeListSuppTermin: (state, action) => {
       state.listSuppTermin.slice(action?.payload, 1);
     },
     getListOptionWorkScheduleRequested: (state) => {
       state.loading = true;
     },
     getListOptionWorkScheduleSuccess: (state, action) => {
-      const data: Array<{label: string , value: string | number}> = [];
+      const data: Array<{ label: string, value: string | number }> = [];
       action?.payload?.items?.map(item => {
         data.push({
           label: item.name,

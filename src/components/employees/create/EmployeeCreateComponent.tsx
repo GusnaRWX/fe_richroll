@@ -103,6 +103,7 @@ function EmployeeCreateComponent() {
   const employeeRef = useRef<HTMLFormElement>(null);
   const emergencyRef = useRef<HTMLFormElement>(null);
   const personalInformationRef = useRef<HTMLFormElement>(null);
+  const compensationBenefitsRef = useRef<HTMLFormElement>(null);
   const [informationValue, setInformationValue] = useState<Employees.InformationValues>({
     companyID: '',
     department: '',
@@ -167,13 +168,28 @@ function EmployeeCreateComponent() {
     idNumberPersonalID: '',
     idTypePersonalID: ''
   });
+  const [compensationBenefitsValue, setCompensationBenefitsValue] = useState<Employees.CnbEmployeePayload>({
+    templateID: '',
+    name: '',
+    base: {
+      componentID: '',
+      termID: '',
+      isTaxable: false,
+      amount: '',
+      amountType: '',
+      rate: '',
+      rateType: ''
+    },
+    supplementaries: { componentID: '', termID: '', isTaxable: false, amount: '', amountType: '', rate: '', rateType: '' }
+  });
 
-  const [cnbEmployeeValues, setCnbEmployeeValues] = useState();
+  // const [cnbEmployeeValues, setCnbEmployeeValues] = useState();
   const [valueWorkSchedule, setValueWorkSchedule] = useState({});
-  console.log(cnbEmployeeValues);
+  // console.log(cnbEmployeeValues);
   const [isInformationValid, setIsInformationValid] = useState(false);
   const [isPersonalInformationValid, setIsPersonalInformationValid] = useState(false);
   const [isEmergencyValid, setIsEmergencyValid] = useState(false);
+  const [isCnbValid, setIsCnbValid] = useState(false);
   const dispatch = useAppDispatch();
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -212,13 +228,14 @@ function EmployeeCreateComponent() {
         personalValue: personalInformationValue,
         isEmergencyValid,
         emergencyContactValue: emergencyValue,
-        cnbValue: cnbEmployeeValues,
+        isCnbValid: isCnbValid,
+        cnbValue: compensationBenefitsValue,
         workSchedule: valueWorkSchedule
       }
     });
     router.push('/company-management/employees');
   };
-
+  console.log(compensationBenefitsValue);
   const handleOpen = () => {
     setLeave(true);
   };
@@ -291,12 +308,15 @@ function EmployeeCreateComponent() {
           </TabPanel>
           <TabPanel value={value} index={3}>
             <CnbCreateForm
-              cnbValues={cnbEmployeeValues}
-              setValues={setCnbEmployeeValues}
+              nextPage={setValue}
+              refProp={compensationBenefitsRef}
+              cnbValues={compensationBenefitsValue}
+              setValues={setCompensationBenefitsValue}
+              setIsCnbValid={setIsCnbValid}
             />
           </TabPanel>
           <TabPanel value={value} index={4}>
-            <WorkScheduleForm setData={setValueWorkSchedule}/>
+            <WorkScheduleForm setData={setValueWorkSchedule} />
           </TabPanel>
         </Box>
       </ContentWrapper>
