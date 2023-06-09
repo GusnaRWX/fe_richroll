@@ -8,6 +8,7 @@ import { useRouter } from 'next/router';
 import EmployeePersonalInformationDetail from './EmployeePersonalInformationDetail';
 import EmployeeInformationDetail from './EmployeeInformationDetail';
 import EmergencyContactDetail from './EmergencyContactDetail';
+import EmployeeWorkScheduleDetail from './EmployeeWorkScheduleDetail';
 import { useAppSelectors } from '@/hooks/index';
 
 const TopWrapper = styled.div`
@@ -136,7 +137,7 @@ function EmployeeDetailComponent() {
             on Development
           </TabPanel>
           <TabPanel value={value} index={4}>
-            on Development
+            <EmployeeWorkScheduleDetail />
           </TabPanel>
         </Box>
       </ContentWrapper>

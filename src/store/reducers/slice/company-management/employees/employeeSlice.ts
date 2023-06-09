@@ -29,6 +29,12 @@ interface EmployeeState {
   grossHour: number;
   netHour: number;
   workScheduleId: string | number;
+  workScheduleDetail: {
+    events: Array<EventType>;
+    grossHour: number;
+    netHour: number;
+    workScheduleId: string | number;
+  }
 }
 
 const initialState: EmployeeState = {
@@ -42,7 +48,13 @@ const initialState: EmployeeState = {
   events: [],
   grossHour: 0,
   netHour: 0,
-  workScheduleId: ''
+  workScheduleId: '',
+  workScheduleDetail: {
+    events: [],
+    grossHour: 0,
+    netHour: 0,
+    workScheduleId: ''
+  }
 };
 
 export const employeeSlice = createSlice({
@@ -242,6 +254,37 @@ export const employeeSlice = createSlice({
     postWorkScheduleFailed: (state) => {
       state.isLoading = false;
     },
+    getViewWorkScheduleRequested: (state) => {
+      state.isLoading = true;
+    },
+    getViewWorkScheduleSuccess: (state, action) => {
+      state.isLoading = false;
+      state.workScheduleDetail.workScheduleId = action?.payload?.id;
+      state.workScheduleDetail.grossHour = action?.payload?.grossHour;
+      state.workScheduleDetail.netHour = action?.payload?.netHour;
+      const tempData: Array<EventType> = [];
+      action?.payload?.events.map((item) => {
+        tempData.push({
+          day: item.day,
+          event_id: item.eventId,
+          title: item.name,
+          name: item.name,
+          start: new Date(item.start),
+          end: new Date(item.end),
+          isBreak: item.isBreak,
+          isDuration: item.isDuration,
+          color: item.color,
+          duration: item.duration,
+          allDay: item.allDay,
+          scheduleType: item.scheduleType,
+          type: item.type
+        });
+      });
+      state.workScheduleDetail.events = tempData;
+    },
+    getViewWorkScheduleFailed: (state) => {
+      state.isLoading = false;
+    },
     clearWorkScheduleState: (state) => {
       state.events = [];
       state.grossHour = 0;
@@ -307,6 +350,9 @@ export const {
   getDetailWorkScheduleRequested,
   getDetailWorkSchedulerFailed,
   getDetailWorkSchedulerSuccess,
+  getViewWorkScheduleFailed,
+  getViewWorkScheduleRequested,
+  getViewWorkScheduleSuccess,
   clearWorkScheduleState
 } = employeeSlice.actions;
 

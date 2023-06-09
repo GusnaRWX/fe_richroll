@@ -5,9 +5,11 @@ import { useAppDispatch } from '@/hooks/index';
 import {
   employeeInfoDetailRequested,
   personalInfoDetailRequested,
-  emergencyContactDetailRequested
+  emergencyContactDetailRequested,
 } from '@/store/reducers/slice/company-management/employees/employeeSlice';
+import { getListOptionWorkScheduleRequested } from '@/store/reducers/slice/options/optionSlice';
 import { useRouter } from 'next/router';
+import { getCompanyData } from '@/utils/helper';
 
 function EmployeeDetailContainer() {
   const dispatch = useAppDispatch();
@@ -26,6 +28,10 @@ function EmployeeDetailContainer() {
       dispatch({
         type: emergencyContactDetailRequested.toString(),
         payload: router.query.id
+      });
+      dispatch({
+        type: getListOptionWorkScheduleRequested.toString(),
+        payload: getCompanyData()?.id
       });
     };
     fetchData();
