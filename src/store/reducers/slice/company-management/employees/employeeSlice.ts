@@ -32,6 +32,7 @@ interface EmployeeState {
   workScheduleDetail: {
     events: Array<EventType>;
     grossHour: number;
+    name: string;
     netHour: number;
     workScheduleId: string | number;
   }
@@ -51,6 +52,7 @@ const initialState: EmployeeState = {
   workScheduleId: '',
   workScheduleDetail: {
     events: [],
+    name: '',
     grossHour: 0,
     netHour: 0,
     workScheduleId: ''
@@ -262,6 +264,9 @@ export const employeeSlice = createSlice({
       state.workScheduleDetail.workScheduleId = action?.payload?.id;
       state.workScheduleDetail.grossHour = action?.payload?.grossHour;
       state.workScheduleDetail.netHour = action?.payload?.netHour;
+      state.workScheduleDetail.name = action?.payload?.name;
+      state.grossHour = action?.payload?.grossHour;
+      state.netHour = action?.payload?.netHour;
       const tempData: Array<EventType> = [];
       action?.payload?.events.map((item) => {
         tempData.push({

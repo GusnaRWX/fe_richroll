@@ -10,7 +10,7 @@ import { Employees } from '@/types/employees';
 import dayjs from 'dayjs';
 import { getCompanyData, ifThenElse } from '@/utils/helper';
 import { useAppSelectors, useAppDispatch } from '@/hooks/index';
-import { patchEmergencyContactRequested, patchEmployeeInformationRequested, patchPersonalRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
+import { patchEmergencyContactRequested, patchEmployeeInformationRequested, patchPersonalRequested, postWorkScheduleRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
 
 
 const EmployeeInformationEdit = dynamic(() => import('./EmployeeInformationEdit'), {
@@ -20,6 +20,10 @@ const PersonalInformationEdit = dynamic(() => import('./PersonalInformationEdit'
   ssr: false
 });
 const EmergencyContactEdit = dynamic(() => import('./EmergencyContactEdit'), {
+  ssr: false
+});
+
+const EmployeeWorkScheduleEdit = dynamic(() => import('./EmployeeWorkScheduleEdit'), {
   ssr: false
 });
 
@@ -175,6 +179,8 @@ function EmployeeEditComponent() {
     phoneNumberSecondary: dataEmergencyContact?.secondary?.phoneNumber
   });
 
+  const [valueWorkSchedule, setValueWorkSchedule] = useState({});
+
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
@@ -246,10 +252,21 @@ function EmployeeEditComponent() {
     });
   };
 
+  const handleClickUpdateWorkSchedule = () => {
+    dispatch({
+      type: postWorkScheduleRequested.toString(),
+      payload: {
+        id: router.query.id,
+        workSchedule: valueWorkSchedule
+      }
+    });
+  };
+
   const handleSave = {
     0: handleClick,
     1: handleClickPersonal,
-    2: handleClickEmergencyContact
+    2: handleClickEmergencyContact,
+    4: handleClickUpdateWorkSchedule
   };
 
   return (
@@ -320,7 +337,7 @@ function EmployeeEditComponent() {
             on Development
           </TabPanel>
           <TabPanel value={value} index={4}>
-            on Development
+            <EmployeeWorkScheduleEdit setData={setValueWorkSchedule}/>
           </TabPanel>
         </Box>
       </ContentWrapper>
