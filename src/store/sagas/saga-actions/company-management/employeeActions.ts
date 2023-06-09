@@ -58,7 +58,11 @@ export const patchEmployeePersonal = (payload) => {
 };
 
 export const getDetailWorkSchedule = (payload) => {
-  return get(`work-schedules/${payload}`);
+  return get(`work-schedules/${payload}/`);
+};
+
+export const getViewWorkSchedule = (payload) => {
+  return get(`employees/${payload}/work-schedules`);
 };
 
 export const postSimulationEvent = (payload: Employees.InitialValuesWorkScheduleForm) => {
