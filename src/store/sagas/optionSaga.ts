@@ -10,7 +10,8 @@ import {
   getCnb,
   getListCompensation,
   getListTermin,
-  getListSuppTermin
+  getListSuppTermin,
+  getListWorkSchedule
 } from './saga-actions/optionActions';
 import { takeEvery, call, put, delay } from 'redux-saga/effects';
 import { Option } from '@/types/option';
@@ -56,7 +57,10 @@ import {
   getListTerminSuccess,
   getListSuppTerminFailed,
   getListSuppTerminRequested,
-  getListSuppTerminSuccess
+  getListSuppTerminSuccess,
+  getListOptionWorkScheduleFailed,
+  getListOptionWorkScheduleRequested,
+  getListOptionWorkScheduleSuccess
 } from '../reducers/slice/options/optionSlice';
 import { Services } from '@/types/axios';
 import { setResponserMessage } from '../reducers/slice/responserSlice';
@@ -520,6 +524,36 @@ function* fetchListSuppTermin(action: AnyAction) {
   }
 }
 
+function* fetchListOptionWorkSchedule(action: AnyAction) {
+  try {
+    const res: AxiosResponse = yield call(getListWorkSchedule, action?.payload);
+
+    if (res.status === 200) {
+      const { items } = res?.data?.data as Option.WorkSchedule;
+
+      yield put({
+        type: getListOptionWorkScheduleSuccess.toString(),
+        payload: {
+          items: items
+        }
+      });
+    }
+  } catch(err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      yield delay(2000, true);
+      yield put({ type: getListOptionWorkScheduleFailed.toString() });
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message,
+        }
+      });
+    }
+  }
+}
+
 
 function* optionSaga() {
   yield takeEvery(countriesRequested.toString(), fetchGetCountries);
@@ -536,6 +570,7 @@ function* optionSaga() {
   yield takeEvery(getListCompensationRequested.toString(), fetchListCompensation);
   yield takeEvery(getListTerminReqeusted.toString(), fetchListTermin);
   yield takeEvery(getListSuppTerminRequested.toString(), fetchListSuppTermin);
+  yield takeEvery(getListOptionWorkScheduleRequested.toString(), fetchListOptionWorkSchedule);
 }
 
 export default optionSaga;

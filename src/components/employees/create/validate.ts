@@ -71,3 +71,13 @@ export const validationSchemeEmployeeEmergencyContact = Yup.object({
   phoneNumberPrefixSecondary: Yup.string().notRequired(),
   phoneNumberSecondary: Yup.string().notRequired()
 });
+
+export const validationSchemaWorkScheduler = Yup.object({
+  workScheduleID: Yup.string().required('This field is required'),
+  type: Yup.string(),
+  flexiWorkHour: Yup.string().typeError('This field is required').when('type', {is: '1', then: (schema) => schema.required('This field is required')}),
+  flexiWorkDay: Yup.string().typeError('This field is required').when('type', { is: '1', then: (schema) => schema.required('This field is required')}),
+  fixedStartTime: Yup.string().typeError('This field is required').when('type', {is: '0', then: (schema) => schema.required('This field is required')}),
+  fixedEndTime: Yup.string().typeError('This field is required').when('type', {is: '0', then: (schema) => schema.required('This field is required')}),
+  fixedWorkDayType: Yup.string().typeError('This field is required').when('type', {is: '0', then: (schema) => schema.required('This field is required')}),
+});

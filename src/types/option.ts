@@ -31,6 +31,10 @@ export declare namespace Option {
     items: Array<{id: string | number, name: string}>
   }
 
+  export interface WorkSchedule {
+    items: Array<{id: string | number, createdAt: string, updatedAt: string, name: string, grossHours: number, netHours: number}>
+  }
+
   export interface Mapper {
     label: string;
     value: string;
