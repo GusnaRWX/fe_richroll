@@ -20,7 +20,7 @@ import Table from '@/components/_shared/form/Table';
 import { Image as ImageType } from '@/utils/assetsConstant';
 import { Search, ArrowBack } from '@mui/icons-material';
 import { FiCalendar } from 'react-icons/fi';
-import AddEmployeesModal from '../../payroll-assistant/create/AttendanceModal';
+import AddEmployeesModal from '../payroll-assistant/create/AttendanceModal';
 import { compareCheck, ifThenElse } from '@/utils/helper';
 import { visuallyHidden } from '@mui/utils';
 
@@ -129,7 +129,7 @@ const data = {
   itemTotals: 5
 };
 
-function GenerateAttendanceComponent() {
+function AttendanceGenerateComponent() {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -353,4 +353,4 @@ function GenerateAttendanceComponent() {
   );
 }
 
-export default GenerateAttendanceComponent;
+export default AttendanceGenerateComponent;

@@ -16,7 +16,6 @@ import { visuallyHidden } from '@mui/utils';
 import { IconButton } from '@/components/_shared/form';
 import { BsTrashFill, BsFillEyeFill } from 'react-icons/bs';
 import { FiDownload } from 'react-icons/fi';
-import { TbFileImport } from 'react-icons/tb';
 import { HiOutlineInboxIn } from 'react-icons/hi';
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
@@ -30,9 +29,9 @@ const ButtonWrapper = styled.div`
 `;
 
 const TypeComponent = styled.div`
- background: #E0F2FE;
+ background: #FFEDD5;
  border-radius: 4px;
- color: #075985;
+ color: #9A3412;
  padding: 3px 12px;
  text-align: center;
 `;
@@ -53,7 +52,7 @@ interface EmployeeTableProps {
 
 type Order = 'asc' | 'desc'
 
-function AttendanceTable({
+function DisbursementTable({
   tabValue
 }: EmployeeTableProps) {
   const data = {
@@ -62,7 +61,7 @@ function AttendanceTable({
         id: 1,
         name: 'Payroll February 2023',
         daterange: '1/03/2023 - 31/03/2023',
-        type: 'Attendance Report',
+        type: 'Disbursement Receipt',
         createdAt: '20/03/2023',
         lastUpdated: '20/03/2023',
       },
@@ -70,7 +69,7 @@ function AttendanceTable({
         id: 2,
         name: 'Payroll February 2023',
         daterange: '1/03/2023 - 31/03/2023',
-        type: 'Attendance Report',
+        type: 'Disbursement Receipt',
         createdAt: '20/03/2023',
         lastUpdated: '20/03/2023',
       },
@@ -78,7 +77,7 @@ function AttendanceTable({
         id: 3,
         name: 'Payroll February 2023',
         daterange: '1/03/2023 - 31/03/2023',
-        type: 'Attendance Report',
+        type: 'Disbursement Receipt',
         createdAt: '20/03/2023',
         lastUpdated: '20/03/2023',
       },
@@ -86,7 +85,7 @@ function AttendanceTable({
         id: 4,
         name: 'Payroll February 2023',
         daterange: '1/03/2023 - 31/03/2023',
-        type: 'Attendance Report',
+        type: 'Disbursement Receipt',
         createdAt: '20/03/2023',
         lastUpdated: '20/03/2023',
       },
@@ -94,7 +93,7 @@ function AttendanceTable({
         id: 5,
         name: 'Payroll February 2023',
         daterange: '1/03/2023 - 31/03/2023',
-        type: 'Attendance Report',
+        type: 'Disbursement Receipt',
         createdAt: '20/03/2023',
         lastUpdated: '20/03/2023',
       },
@@ -219,7 +218,7 @@ function AttendanceTable({
                           sx={{ color: '#111827' }}
                           onClick={() => { console.log(true); }}
                         >
-                          Attendance report.pdf &nbsp;<FiDownload fontSize='small' />
+                          Disbursement Receipt.pdf &nbsp;<FiDownload fontSize='small' />
                         </MuiButton>
                       </TableCell>
                       <TableCell>
@@ -228,9 +227,9 @@ function AttendanceTable({
                             <>
                               <IconButton
                                 parentColor='#E9EFFF'
-                                onClick={() => { router.push('/payroll-disbursement/payroll/generate-gross/employee'); }}
+                                onClick={() => {router.push('/payroll-disbursement/disbursement/generate');}}
                                 icons={
-                                  <TbFileImport fontSize={20} color='#223567'/>
+                                  <BsFillEyeFill fontSize={20} color='#223567'/>
                                 }
                               />
                               <IconButton
@@ -245,9 +244,8 @@ function AttendanceTable({
                             <>
                               <IconButton
                                 parentColor='#E9EFFF'
-                                onClick={() => {router.push('/payroll-disbursement/payroll-assistant/view');}}
                                 icons={
-                                  <BsFillEyeFill fontSize={20} color='#223567'/>
+                                  <HiOutlineInboxIn fontSize={20} color='#223567'/>
                                 }
                               />
                               <IconButton
@@ -262,24 +260,6 @@ function AttendanceTable({
                             <>
                               <IconButton
                                 parentColor='#E9EFFF'
-                                onClick={() => {router.push('/payroll-disbursement/payroll-assistant/view');}}
-                                icons={
-                                  <HiOutlineInboxIn fontSize={20} color='#223567'/>
-                                }
-                              />
-                              <IconButton
-                                parentColor='#FEE2E2'
-                                icons={
-                                  <BsTrashFill fontSize={20} color='#EF4444'/>
-                                }
-                              />
-                            </>
-                          )}
-                          {tabValue === 3 && (
-                            <>
-                              <IconButton
-                                parentColor='#E9EFFF'
-                                onClick={() => {router.push('/payroll-disbursement/payroll-assistant/view');}}
                                 icons={
                                   <BsFillEyeFill fontSize={20} color='#223567'/>
                                 }
@@ -304,4 +284,4 @@ function AttendanceTable({
   );
 }
 
-export default AttendanceTable;
+export default DisbursementTable;

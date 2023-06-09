@@ -4,8 +4,6 @@ import {
   TableCell,
   TableRow,
   Box,
-  Select,
-  MenuItem,
   TableSortLabel,
   Typography,
   Button as MuiButton
@@ -158,7 +156,7 @@ function PayrollTable({
   return (
     <>
       <Grid container spacing={2}>
-        <Grid item xs={3}>
+        <Grid item xs={6}>
           <Input
             name='search'
             size='small'
@@ -171,20 +169,6 @@ function PayrollTable({
               )
             }}
           />
-        </Grid>
-        <Grid item xs={3}>
-          <Select
-            fullWidth
-            variant='outlined'
-            size='small'
-            placeholder='Sort by Status'
-            value={''}
-          >
-            <MenuItem value=''>All Status</MenuItem>
-            <MenuItem value='active'>Active</MenuItem>
-            <MenuItem value='inactive'>Inactive</MenuItem>
-            <MenuItem value='draft'>Draft</MenuItem>
-          </Select>
         </Grid>
         <Grid item xs={6}>
           <DateRangePicker
