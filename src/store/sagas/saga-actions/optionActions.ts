@@ -46,3 +46,7 @@ export const getListTermin = (payload: number): Promise<AxiosResponse> => {
 export const getListSuppTermin = (payload: number): Promise<AxiosResponse> => {
   return get(`term-compensations?page=-1&itemPerPage=0&direction=DESC&componentID=${payload}`);
 };
+
+export const getListWorkSchedule = (payload: number) => {
+  return get(`work-schedules?page=-1&itemPerPage=&sort=&direction=&search=&companyID=${payload}`);
+};

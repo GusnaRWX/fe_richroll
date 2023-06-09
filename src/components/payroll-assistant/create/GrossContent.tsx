@@ -77,7 +77,8 @@ const data = {
   itemTotals: 5
 };
 
-function GrossContent() {
+function GrossContent(att) {
+  const { isPreview } = att;
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
   const [direction, setDirection] = useState<Order>('desc');
@@ -171,7 +172,7 @@ function GrossContent() {
                         </TableRow>
                       ), (
                         data?.items?.map((item, index) => (
-                          <GrossRow key={index} item={item} />
+                          <GrossRow key={index} isPreview={isPreview} item={item} />
                         ))
                       ))
                     ), (
@@ -250,7 +251,7 @@ function GrossContent() {
                         </TableRow>
                       ), (
                         data?.items?.map((item, index) => (
-                          <GrossRow key={index} item={item} />
+                          <GrossRow key={index} isPreview={isPreview} item={item} />
                         ))
                       ))
                     ), (

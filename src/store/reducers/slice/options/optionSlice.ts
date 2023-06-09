@@ -23,6 +23,11 @@ interface OptionState {
     base?: [],
     supplementaries?: []
   }
+  // listCnb: Array<{label: string, value: number| string}>
+  // listCompensation: Array<{label: string, value: string | number, type: string | number }>
+  // listTermin: Array<{label: string, value: string | number}>
+  // listSuppTermin: Array<Array<{label: string | number, value: string | number}>>
+  listWorkSchedule: Array<{ label: string, value: string | number }>
 }
 
 const initialState: OptionState = {
@@ -41,7 +46,8 @@ const initialState: OptionState = {
   listCompensation: [],
   listTermin: [],
   listSuppTermin: [[]],
-  listCompensationBenefits: {}
+  listCompensationBenefits: {},
+  listWorkSchedule: []
 };
 
 const returnNameId = (item) => {
@@ -267,6 +273,26 @@ export const optionSlice = createSlice({
     },
     removeListSuppTermin: (state, action) => {
       state.listSuppTermin.slice(action?.payload, 1);
+    },
+    getListOptionWorkScheduleRequested: (state) => {
+      state.loading = true;
+    },
+    getListOptionWorkScheduleSuccess: (state, action) => {
+      const data: Array<{ label: string, value: string | number }> = [];
+      action?.payload?.items?.map(item => {
+        data.push({
+          label: item.name,
+          value: item.id
+        });
+      });
+      data.push({
+        label: 'Custom Profile',
+        value: 0
+      });
+      state.listWorkSchedule = data;
+    },
+    getListOptionWorkScheduleFailed: (state) => {
+      state.loading = false;
     }
   },
   extraReducers: {
@@ -322,7 +348,10 @@ export const {
   getListSuppTerminFailed,
   getListSuppTerminRequested,
   getListSuppTerminSuccess,
-  removeListSuppTermin
+  removeListSuppTermin,
+  getListOptionWorkScheduleFailed,
+  getListOptionWorkScheduleRequested,
+  getListOptionWorkScheduleSuccess
 } = optionSlice.actions;
 
 export default optionSlice.reducer;

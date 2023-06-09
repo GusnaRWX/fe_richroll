@@ -147,7 +147,7 @@ function PayrollAssistantCreate() {
       </ContentWrapper>
       
       {value == 1 && <AttendanceContent />}
-      {value == 2 && <GrossContent />}
+      {value == 2 && <GrossContent isPreview={false} />}
       {value == 3 && <NetContent />}
       {value == 4 && <DisbursementContent />}
       {value == 5 && <CompleteContent />}

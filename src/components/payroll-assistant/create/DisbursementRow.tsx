@@ -28,8 +28,8 @@ const NameWrapper = styled.div`
  margin: 0;
 `;
 
-function DisbursementRow (row) {
-  const { item } = row;
+function DisbursementRow (att) {
+  const { item } = att;
   const [open, setOpen] = useState(false);
 
   return (

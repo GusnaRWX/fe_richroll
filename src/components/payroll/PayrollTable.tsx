@@ -4,8 +4,6 @@ import {
   TableCell,
   TableRow,
   Box,
-  Select,
-  MenuItem,
   TableSortLabel,
   Typography,
   Button as MuiButton
@@ -31,10 +29,18 @@ const ButtonWrapper = styled.div`
  gap: .5rem;
 `;
 
-const TypeComponent = styled.div`
- background: #E0F2FE;
+const GrossComponent = styled.div`
+ background: #FEF9C3;
  border-radius: 4px;
- color: #075985;
+ color: #854D0E;
+ padding: 3px 12px;
+ text-align: center;
+`;
+
+const NetComponent = styled.div`
+ background: #DCFCE7;
+ border-radius: 4px;
+ color: #166534;
  padding: 3px 12px;
  text-align: center;
 `;
@@ -55,7 +61,7 @@ interface EmployeeTableProps {
 
 type Order = 'asc' | 'desc'
 
-function AttendanceTable({
+function PayrollTable({
   tabValue
 }: EmployeeTableProps) {
   const data = {
@@ -64,7 +70,8 @@ function AttendanceTable({
         id: 1,
         name: 'Payroll February 2023',
         daterange: '1/03/2023 - 31/03/2023',
-        type: 'Attendance Report',
+        reportType: 'gross',
+        reportName: 'Gross Payroll Report',
         createdAt: '20/03/2023',
         lastUpdated: '20/03/2023',
       },
@@ -72,7 +79,8 @@ function AttendanceTable({
         id: 2,
         name: 'Payroll February 2023',
         daterange: '1/03/2023 - 31/03/2023',
-        type: 'Attendance Report',
+        reportType: 'net',
+        reportName: 'Net Payroll Report',
         createdAt: '20/03/2023',
         lastUpdated: '20/03/2023',
       },
@@ -80,7 +88,8 @@ function AttendanceTable({
         id: 3,
         name: 'Payroll February 2023',
         daterange: '1/03/2023 - 31/03/2023',
-        type: 'Attendance Report',
+        reportType: 'gross',
+        reportName: 'Gross Payroll Report',
         createdAt: '20/03/2023',
         lastUpdated: '20/03/2023',
       },
@@ -88,7 +97,8 @@ function AttendanceTable({
         id: 4,
         name: 'Payroll February 2023',
         daterange: '1/03/2023 - 31/03/2023',
-        type: 'Attendance Report',
+        reportType: 'net',
+        reportName: 'Net Payroll Report',
         createdAt: '20/03/2023',
         lastUpdated: '20/03/2023',
       },
@@ -96,7 +106,8 @@ function AttendanceTable({
         id: 5,
         name: 'Payroll February 2023',
         daterange: '1/03/2023 - 31/03/2023',
-        type: 'Attendance Report',
+        reportType: 'gross',
+        reportName: 'Gross Payroll Report',
         createdAt: '20/03/2023',
         lastUpdated: '20/03/2023',
       },
@@ -145,7 +156,7 @@ function AttendanceTable({
   return (
     <>
       <Grid container spacing={2}>
-        <Grid item xs={3}>
+        <Grid item xs={6}>
           <Input
             name='search'
             size='small'
@@ -158,20 +169,6 @@ function AttendanceTable({
               )
             }}
           />
-        </Grid>
-        <Grid item xs={3}>
-          <Select
-            fullWidth
-            variant='outlined'
-            size='small'
-            placeholder='Sort by Status'
-            value={''}
-          >
-            <MenuItem value=''>All Status</MenuItem>
-            <MenuItem value='active'>Active</MenuItem>
-            <MenuItem value='inactive'>Inactive</MenuItem>
-            <MenuItem value='draft'>Draft</MenuItem>
-          </Select>
         </Grid>
         <Grid item xs={6}>
           <DateRangePicker
@@ -224,7 +221,7 @@ function AttendanceTable({
                     <TableRow key={index}>
                       <TableCell>{item.name}</TableCell>
                       <TableCell>{item.daterange}</TableCell>
-                      <TableCell><TypeComponent>{item.type}</TypeComponent></TableCell>
+                      <TableCell>{ifThenElse(item.reportType === 'gross',<GrossComponent>{item.reportName}</GrossComponent>,<NetComponent>{item.reportName}</NetComponent>)}</TableCell>
                       <TableCell>{item.createdAt}</TableCell>
                       <TableCell>{item.lastUpdated}</TableCell>
                       <TableCell>
@@ -235,7 +232,7 @@ function AttendanceTable({
                           sx={{ color: '#111827' }}
                           onClick={() => { console.log(true); }}
                         >
-                          Attendance report.pdf &nbsp;<FiDownload fontSize='small' />
+                          {ifThenElse(item.reportType === 'gross','Gross Payroll Report.pdf','Net Payroll Report.pdf')} &nbsp;<FiDownload fontSize='small' />
                         </MuiButton>
                       </TableCell>
                       <TableCell>
@@ -244,7 +241,7 @@ function AttendanceTable({
                             <>
                               <IconButton
                                 parentColor='#E9EFFF'
-                                onClick={() => {router.push('/payroll-disbursement/payroll-assistant/view');}}
+                                onClick={() => {item.reportType === 'gross' ? router.push('/payroll-disbursement/payroll/gross-detail') : router.push('/payroll-disbursement/payroll/net-detail');}}
                                 icons={
                                   <TbFileImport fontSize={20} color='#223567'/>
                                 }
@@ -261,7 +258,6 @@ function AttendanceTable({
                             <>
                               <IconButton
                                 parentColor='#E9EFFF'
-                                onClick={() => {router.push('/payroll-disbursement/payroll-assistant/view');}}
                                 icons={
                                   <BsFillEyeFill fontSize={20} color='#223567'/>
                                 }
@@ -278,7 +274,6 @@ function AttendanceTable({
                             <>
                               <IconButton
                                 parentColor='#E9EFFF'
-                                onClick={() => {router.push('/payroll-disbursement/payroll-assistant/view');}}
                                 icons={
                                   <HiOutlineInboxIn fontSize={20} color='#223567'/>
                                 }
@@ -295,7 +290,6 @@ function AttendanceTable({
                             <>
                               <IconButton
                                 parentColor='#E9EFFF'
-                                onClick={() => {router.push('/payroll-disbursement/payroll-assistant/view');}}
                                 icons={
                                   <BsFillEyeFill fontSize={20} color='#223567'/>
                                 }
@@ -320,4 +314,4 @@ function AttendanceTable({
   );
 }
 
-export default AttendanceTable;
+export default PayrollTable;

@@ -56,3 +56,19 @@ export const patchEmployeePersonal = (payload) => {
   const { employeeID, ...restPayload } = payload;
   return patch(`employees/${employeeID}/personal`, restPayload);
 };
+
+export const getDetailWorkSchedule = (payload) => {
+  return get(`work-schedules/${payload}`);
+};
+
+export const postSimulationEvent = (payload: Employees.InitialValuesWorkScheduleForm) => {
+  return post('work-schedules/simulation', payload);
+};
+
+export const postCalculateEvent = (payload: Employees.PostCalculateEventPayloadType) => {
+  return post('work-schedules/calculate', payload);
+};
+
+export const postWorkSchedule = (payload) => {
+  return post(`employees/${payload?.id}/work-schedules`, payload?.workSchedule);
+};
