@@ -25,8 +25,8 @@ const NameWrapper = styled.div`
  margin: 0;
 `;
 
-function CompleteRow (row) {
-  const { item } = row;
+function CompleteRow (att) {
+  const { item } = att;
 
   return (
     <React.Fragment>

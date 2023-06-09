@@ -36,8 +36,8 @@ const NameWrapper = styled.div`
  margin: 0;
 `;
 
-function NetRow (row) {
-  const { item } = row;
+function NetRow (att) {
+  const { item } = att;
   const [open, setOpen] = useState(false);
 
   return (

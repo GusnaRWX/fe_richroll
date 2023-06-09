@@ -122,7 +122,7 @@ function AttendanceComponent() {
                 variant='contained'
                 size='small'
                 color='primary'
-                onClick={() => { setOpen(true); }}
+                onClick={() => { router.push('/payroll-disbursement/payroll/generate-gross/employee'); }}
               >Generate Gross Payroll</MuiButton>
             </Grid>
           </Grid>
