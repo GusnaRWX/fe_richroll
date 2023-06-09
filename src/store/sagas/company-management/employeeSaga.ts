@@ -36,7 +36,7 @@ import {
   getDetailCnbFailed,
   getDetailCnbRequested,
   getDetailCnbSuccess,
-  postCnbEmplyeeRequested,
+  postCnbEmployeeRequested,
   postCnbEmployeeSuccess,
   postCnbEmployeeFailed,
   emergencyContactDetailFailed,
@@ -129,14 +129,14 @@ function* fetchPostEmployeeInfo(action: AnyAction) {
         yield call(fetchPostEmergency, body);
       }
 
-      const body = {
-        type: postCnbEmplyeeRequested.toString(),
-        payload: {
-          employeeID: res?.data?.data,
-          data: action?.payload?.cnbValue
-        }
-      };
-      yield call(fetchPostCnbEmployee, body);
+      // const body = {
+      //   type: postCnbEmplyeeRequested.toString(),
+      //   payload: {
+      //     employeeID: res?.data?.data,
+      //     data: action?.payload?.cnbValue
+      //   }
+      // };
+      // yield call(fetchPostCnbEmployee, body);
     }
   } catch (err) {
     if (err instanceof AxiosError) {
@@ -329,22 +329,11 @@ function* fetchPostPersonalInformation(action: AnyAction) {
  * @param action
  */
 function* fetchPostCnbEmployee(action: AnyAction) {
+  console.log(action, 'action ini');
   try {
     const payload = {
       employeeID: action?.payload?.employeeID,
-      compensationBenefitId: action?.payload?.data?.compensationBenefitId,
-      compensationBenefit: {
-        companyId: Number(getCompanyData()?.id),
-        name: 'PT Teknologi Cibaduyut',
-        baseCompensation: {
-          compensationComponentId: +action?.payload?.data?.baseCompensation?.compensationComponent?.id,
-          taxStatus: action?.payload?.data?.baseCompensation?.taxStatus || false,
-          amount: action?.payload?.data?.baseCompensation?.amount || 10000,
-          rate: action?.payload?.data?.baseCompensation?.rate === null ? 0 : action?.payload?.data?.baseCompensation?.rate,
-          period: action?.payload?.data?.baseCompensation?.period || 'per Hour'
-        },
-        supplementaryCompensations: ['']
-      }
+      data: action?.payload?.data
     };
 
     const res: AxiosResponse = yield call(postEmployeeCNB, payload);
@@ -541,23 +530,23 @@ function* fetchPatchEmergencyContact(action: AnyAction) {
   try {
     const payload = {
       employeeID: action?.payload?.emergencyContactPatch?.employeeID,
-      emergency: {
-        employeeID: action?.payload?.emergencyContactPatch?.employeeID,
-        primary: {
-          id: action?.payload?.emergencyContactPatch?.emergency?.primaryId,
-          name: action?.payload?.emergencyContactPatch?.emergency?.fullNamePrimary,
-          relationship: +action?.payload?.emergencyContactPatch?.emergency?.relationPrimary,
-          phoneNumberPrefix: action?.payload?.emergencyContactPatch?.emergency?.phoneNumberPrefixPrimary,
-          phoneNumber: action?.payload?.emergencyContactPatch?.emergency?.phoneNumberPrimary
-        },
-        secondary: {
-          id: action?.payload?.emergencyContactPatch?.emergency?.secondaryId,
-          name: action?.payload?.emergencyContactPatch?.emergency?.fullNameSecondary,
-          relationship: +action?.payload?.emergencyContactPatch?.emergency?.relationSecondary,
-          phoneNumberPrefix: action?.payload?.emergencyContactPatch?.emergency?.phoneNumberPrefixSecondary,
-          phoneNumber: action?.payload?.emergencyContactPatch?.emergency?.phoneNumberSecondary
-        }
+      // emergency: {
+      // employeeID: action?.payload?.emergencyContactPatch?.employeeID,
+      primary: {
+        id: action?.payload?.emergencyContactPatch?.emergency?.primaryId,
+        name: action?.payload?.emergencyContactPatch?.emergency?.fullNamePrimary,
+        relationship: +action?.payload?.emergencyContactPatch?.emergency?.relationPrimary,
+        phoneNumberPrefix: action?.payload?.emergencyContactPatch?.emergency?.phoneNumberPrefixPrimary,
+        phoneNumber: action?.payload?.emergencyContactPatch?.emergency?.phoneNumberPrimary
+      },
+      secondary: {
+        id: action?.payload?.emergencyContactPatch?.emergency?.secondaryId,
+        name: action?.payload?.emergencyContactPatch?.emergency?.fullNameSecondary,
+        relationship: +action?.payload?.emergencyContactPatch?.emergency?.relationSecondary,
+        phoneNumberPrefix: action?.payload?.emergencyContactPatch?.emergency?.phoneNumberPrefixSecondary,
+        phoneNumber: action?.payload?.emergencyContactPatch?.emergency?.phoneNumberSecondary
       }
+      // }
     };
     const res: AxiosResponse = yield call(patchEmergencyContact, payload);
     if (res.data.code) {
@@ -718,7 +707,7 @@ function* employeeSaga() {
   yield takeEvery(employeeInfoDetailRequested.toString(), fetchGetEmployeeInformation);
   yield takeEvery(personalInfoDetailRequested.toString(), fetchGetPersonalInformationDetail);
   yield takeEvery(getDetailCnbRequested.toString(), fetchGetDetailCnb);
-  yield takeEvery(postCnbEmplyeeRequested.toString(), fetchPostCnbEmployee);
+  yield takeEvery(postCnbEmployeeRequested.toString(), fetchPostCnbEmployee);
   yield takeEvery(emergencyContactDetailRequested.toString(), fetchGetEmergencyContactDetail);
   yield takeEvery(patchEmployeeInformationRequested.toString(), fetchPatchEmployeeInformation);
   yield takeEvery(patchEmergencyContactRequested.toString(), fetchPatchEmergencyContact);
