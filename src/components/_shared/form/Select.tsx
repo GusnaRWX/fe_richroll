@@ -39,6 +39,16 @@ function Select(
         name={name}
         {...props}
         error={error}
+        MenuProps={{
+          PaperProps: {
+            sx: {
+              '& .MuiMenuItem-root:hover': {
+                backgroundColor: '#223567',
+                color: 'white'
+              }
+            }
+          }
+        }}
       >
         {
           typeof options !== 'undefined' && (
