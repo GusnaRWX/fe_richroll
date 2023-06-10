@@ -117,13 +117,15 @@ export declare namespace CoreLayout {
 
   export interface SidebarItem {
     key: string;
-    title: string;
+    title: Array<{ key: string, title: string }>;
     path: string;
     icons: IconType;
     hasChild?: boolean;
+    roles: Array<string>
     child?: Array<{
       title: string;
       path: string;
+      roles?: Array<string>
     }>
   }
 }
@@ -144,7 +146,7 @@ export declare namespace SharedComponent {
   export type ComponentButton = ButtonProps & {
     label: string;
     isLoading?: boolean;
-    buttonIcon?:unknown;
+    buttonIcon?: unknown;
   }
 
   export type CheckboxInput = CheckboxProps & {

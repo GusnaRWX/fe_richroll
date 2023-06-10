@@ -116,6 +116,7 @@ const Layout = ({
               icons={menu.icons}
               hasChild={menu.hasChild}
               child={menu.child}
+              roles={menu.roles}
             />
           ))
         }
@@ -140,7 +141,7 @@ const Layout = ({
       }
       {
         ![200, 201, 0].includes(responser?.code) && (
-          <Notify error={true} body={responser?.message}/>
+          <Notify error={true} body={responser?.message} />
         )
       }
       <DrawerCore

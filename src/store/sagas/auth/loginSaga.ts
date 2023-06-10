@@ -51,7 +51,12 @@ function* fetchAuthenticationLogin(action: AnyAction) {
         type: meSuccessed.toString(),
         payload: { ...profile?.data?.data as Auth.Me }
       });
-      yield Router.push('/company');
+      const roles = profile?.data?.data?.roles;
+      if (roles?.includes('Employee')) {
+        yield Router.push('/employe/employement/profile-information');
+      } else {
+        yield Router.push('/company');
+      }
     }
   } catch (err) {
     if (err instanceof AxiosError) {
