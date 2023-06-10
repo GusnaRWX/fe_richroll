@@ -32,7 +32,8 @@ export const Image: ImageType = {
   ESTELER: '/assets/images/es-teler.png',
   ADD_COMPANY: '/assets/images/add-company.png',
   PLACEHOLDER_COMPANY: '/assets/images/placeholder-company.svg',
-  AVATAR_PLACEHOLDER: '/assets/images/avatar-placeholder.png'
+  AVATAR_PLACEHOLDER: '/assets/images/avatar-placeholder.png',
+  EXAMPLE_EMPLOYE: '/assets/images/example-employe.jpg'
 };
 
 export const Icons: IconsType = {
