@@ -58,6 +58,25 @@ export const getCompanyData = () => {
   return null;
 };
 
+export interface UserDataParse {
+  email?: string | null;
+  name?: string | null;
+  roles?: string[];
+}
+
+export const getUserData = () => {
+  if (typeof window !== 'undefined') {
+    const user = getStorage('user');
+    let parse: UserDataParse;
+    if (user) {
+      parse = JSON.parse(user);
+      return parse;
+    }else{
+      return null;
+    }
+  }
+};
+
 export const convertValue = (name, event) => {
   return {
     target: {
