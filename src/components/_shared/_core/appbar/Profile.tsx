@@ -12,20 +12,21 @@ import { HiOutlineLogout } from 'react-icons/hi';
 import { HiBuildingOffice } from 'react-icons/hi2';
 import { Text } from '../../common';
 import PersonIcon from '@mui/icons-material/Person';
+import { Roles, renderProfile } from '@/utils/roles';
 
 const Profile = () => {
   const router = useRouter();
   const { profile } = useAppSelectors(state => state.me);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-
+  const checkRoles = Roles?.map(role => profile?.roles?.includes(role) && role);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
-
+  console.log(checkRoles);
   const handleRemoveToken = async (type: string) => {
     switch (type) {
       case 'logout':
@@ -103,6 +104,21 @@ const Profile = () => {
           'aria-labelledby': 'menu-button',
         }}
       >
+        {renderProfile?.map(profile => (
+          checkRoles?.find(role => role === profile.key) && (
+            profile?.menu?.map(menu => (
+              <MenuItem key={profile.key}>
+                <menu.icon?.icon/>
+              </MenuItem>
+            ))
+            // <MenuItem key={profile.key}>
+            //   {profile.menu}
+            // </MenuItem>
+          )
+        ))}
+        {/* {
+          checkRoles && 
+        } */}
         <MenuItem onClick={() => { handleRemoveToken('profile'); }}>
           <PersonIcon width={20} fontSize='small' />
           <Text variant='text-sm' title='Profile' ml='10px' />
