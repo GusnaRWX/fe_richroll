@@ -238,6 +238,7 @@ function EmployeeWorkScheduleEdit({ setData }: WorkScheduleFormProps) {
         name: formik.values.profileName,
         grossHours: employee?.grossHour,
         netHours: employee?.netHour,
+        isCustom: isCustom === '' || isCustom === '1' ? false : true,
         items: dataValues
       });
     }else {
@@ -245,6 +246,7 @@ function EmployeeWorkScheduleEdit({ setData }: WorkScheduleFormProps) {
         name: formik.values.profileName,
         grossHours: employee?.grossHour,
         netHours: employee?.netHour,
+        isCustom: isCustom === '' || isCustom === '1' ? false : true,
         items: dataValues
       });
     }

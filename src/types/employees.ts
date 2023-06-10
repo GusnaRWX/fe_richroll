@@ -301,6 +301,7 @@ export declare namespace Employees {
     name: string;
     grossHours: string | number;
     netHours: string | number;
+    isCustom?: boolean,
     items: Array<ItemsWorkScheduleType>;
   }
 
