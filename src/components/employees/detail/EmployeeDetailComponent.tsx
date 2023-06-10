@@ -10,6 +10,7 @@ import EmployeeInformationDetail from './EmployeeInformationDetail';
 import EmergencyContactDetail from './EmergencyContactDetail';
 import EmployeeWorkScheduleDetail from './EmployeeWorkScheduleDetail';
 import { useAppSelectors } from '@/hooks/index';
+import { getUserData } from '@/utils/helper';
 
 const TopWrapper = styled.div`
  display: flex;
@@ -36,6 +37,11 @@ const ButtonWrapper = styled.div`
  gap: 1rem;
  margin-top: 10px;
  margin-bottom: 1rem;
+`;
+
+const TitleWrapper = styled.div`
+ display: flex;
+ flex-direction: column;
 `;
 
 const ContentWrapper = styled(Card)(({
@@ -95,7 +101,10 @@ function EmployeeDetailComponent() {
             }
             onClick={() => { router.push('/company-management/employees'); }}
           />
-          <Typography component='h3' fontWeight='bold'>Employee Profile</Typography>
+          <TitleWrapper>
+            <Typography component='h3' fontWeight='bold'>Employee Profile</Typography>
+            <Typography component='span' fontSize='12px' sx={{ color: '#4B5563' }}>{getUserData()?.name}</Typography>
+          </TitleWrapper>
         </BackWrapper>
         <ButtonWrapper>
           <Button

@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 import ConfirmationModal from '@/components/_shared/common/ConfirmationModal';
 import { Employees } from '@/types/employees';
 import dayjs from 'dayjs';
-import { getCompanyData, ifThenElse } from '@/utils/helper';
+import { getCompanyData, ifThenElse, getUserData } from '@/utils/helper';
 import { useAppSelectors, useAppDispatch } from '@/hooks/index';
 import { patchEmergencyContactRequested, patchEmployeeInformationRequested, patchPersonalRequested, postWorkScheduleRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
 
@@ -42,6 +42,11 @@ const BackWrapper = styled.div`
  align-items: center;
  justify-content: flex-start;
  gap: 1rem;
+`;
+
+const TitleWrapper = styled.div`
+ display: flex;
+ flex-direction: column;
 `;
 
 const ButtonWrapper = styled.div`
@@ -280,7 +285,10 @@ function EmployeeEditComponent() {
             }
             onClick={() => { router.back(); }}
           />
-          <Typography component='h3' fontWeight='bold'>Employee Profile</Typography>
+          <TitleWrapper>
+            <Typography component='h3' fontWeight='bold'>Employee Profile</Typography>
+            <Typography component='span' fontSize='12px' sx={{ color: '#4B5563' }}>{getUserData()?.name}</Typography>
+          </TitleWrapper>
         </BackWrapper>
         <ButtonWrapper>
           <MuiButton variant='outlined' size='small' onClick={() => handleOpen()}>Cancel</MuiButton>
