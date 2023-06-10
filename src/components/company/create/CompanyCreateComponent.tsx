@@ -177,21 +177,21 @@ const CompanyCreateComponent = ({ companyType, companySector, bank, paymentMetho
     const convertToBase64 = base64ToFile(images as string, 'example.png');
 
     const informationData = {
-      typeId: val.companyType,
+      typeID: val.companyType,
       name: val.companyName,
-      npwp: val.companyNPWP,
-      sectorId: val.companySector,
+      taxIDNumber: val.companyNPWP,
+      sectorID: val.companySector,
       email: val.companyEmail,
       phoneNumber: val.phoneNumber.toString(),
       phoneNumberPrefix: val.phoneNumberPrefix,
     };
 
     const addressData = {
-      countryId: val.countryCompanyAddress,
+      countryID: val.countryCompanyAddress,
       firstLevelCode: val.provinceCompanyAddress,
       secondLevelCode: val.cityCompanyAddress,
       thirdLevelCode: val.subDistrictCompanyAddress,
-      fourthLevelCode: null,
+      fourthLevelCode: '',
       address: val.addressCompanyAddress,
       zipCode: val.zipCodeCompanyAddress,
     };
@@ -211,10 +211,11 @@ const CompanyCreateComponent = ({ companyType, companySector, bank, paymentMetho
       payrollData = {
         ...payrollData, ...{
           monthly: {
-            periodStart: val.monthlyPeriodStart,
-            periodEnd: val.monthlyPeriodEnd,
+            start: val.monthlyPeriodStart,
+            end: val.monthlyPeriodEnd,
             payrollDate: val.monthlyPayrollDate,
-            methodId: val.monthlyMethod,
+            methodID: val.monthlyMethod,
+            type: 1
           }
         }
       };
@@ -223,8 +224,9 @@ const CompanyCreateComponent = ({ companyType, companySector, bank, paymentMetho
       payrollData = {
         ...payrollData, ...{
           weekly: {
-            period: val.weeklyPeriod,
-            methodId: val.weeklyMethod,
+            start: val.weeklyPeriod,
+            methodID: val.weeklyMethod,
+            type: 1
           }
         }
       };
@@ -233,24 +235,31 @@ const CompanyCreateComponent = ({ companyType, companySector, bank, paymentMetho
       payrollData = {
         ...payrollData, ...{
           biWeekly: {
-            period: val.biWeeklyPeriod,
-            periodWeek: val.biWeeklyPeriodWeek,
-            methodId: val.biWeeklyMethod,
+            start: val.biWeeklyPeriod,
+            end: val.biWeeklyPeriodWeek,
+            methodID: val.biWeeklyMethod,
+            type: 2
           }
         }
       };
     }
 
     const inputData = new FormData();
-    inputData.append('picture', val?.picture?.length ? val.picture[0] : convertToBase64);
-    inputData.append('information', JSON.stringify(informationData));
+    inputData.append('logo', val?.picture?.length ? val.picture[0] : convertToBase64);
+    for (const key in informationData) {
+      inputData.append(`${key}`, informationData[key]);
+    }
     inputData.append('address', JSON.stringify(addressData));
-    inputData.append('bank', JSON.stringify(bankData));
-    inputData.append('payroll', JSON.stringify(payrollData));
 
     dispatch({
       type: postCompanyProfileRequested.toString(),
-      payload: inputData
+      payload: {
+        companyProfile: inputData,
+        payments: {
+          bank: bankData,
+          payrolls: payrollData
+        }
+      }
     });
   };
 
