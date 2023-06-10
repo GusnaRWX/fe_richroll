@@ -11,7 +11,7 @@ interface CompanyState {
   detail: object
 }
 
-const initialState:CompanyState = {
+const initialState: CompanyState = {
   loading: false,
   companies: [],
   companyType: [],
@@ -102,6 +102,15 @@ export const companySlice = createSlice({
     },
     patchCompanyProfileFailed: (state) => {
       state.loading = false;
+    },
+    postCompanyPaymentsRequested: (state) => {
+      state.loading = true;
+    },
+    postCompanyPaymentsSuccess: (state) => {
+      state.loading = false;
+    },
+    postCompanyPaymentsFailed: (state) => {
+      state.loading = false;
     }
   },
   extraReducers: {
@@ -138,7 +147,10 @@ export const {
   postCompanyProfileFailed,
   patchCompanyProfileRequested,
   patchCompanyProfileSuccess,
-  patchCompanyProfileFailed
+  patchCompanyProfileFailed,
+  postCompanyPaymentsRequested,
+  postCompanyPaymentsSuccess,
+  postCompanyPaymentsFailed
 } = companySlice.actions;
 
 export default companySlice.reducer;

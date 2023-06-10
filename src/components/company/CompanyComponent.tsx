@@ -140,7 +140,7 @@ const CompanyComponent = ({ companies }: Company.Component) => {
   const router = useRouter();
   const handleClick = (val, path) => {
     setStorages([
-      { name: 'kaya_company', value: JSON.stringify({ id: val?.id, imageUrl: val?.imageUrl || '', name: val?.name, sector: val?.sector || '-' }) }
+      { name: 'kaya_company', value: JSON.stringify({ id: val?.id, imageUrl: val?.logo || '', name: val?.name, sector: val?.type?.name || '-' }) }
     ]);
     router.push(path);
   };
@@ -172,12 +172,12 @@ const CompanyComponent = ({ companies }: Company.Component) => {
               Choose the company you want to manage. You can add a maximum of 5 companies
             </Typography>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: '25px', mt: '16px', height: '221px' }}>
-              {companies.map((val: object, idx) => (
+              {companies?.slice(0, 5)?.map((val: object, idx) => (
                 // <WrapperCardItem key={idx} onClick={() => { router.push(`/company/${val?.['id']}`);}}>
                 <WrapperCardItem key={idx} onClick={() => { handleClick(val, '/dashboard'); }}>
                   <Box component='div' sx={{ position: 'relative', width: '178px', height: '142px' }}>
                     <Image
-                      src={val?.['imageUrl']?.includes('http') ? val?.['imageUrl'] : ImageType.PLACEHOLDER_COMPANY}
+                      src={val?.['logo']?.includes('http') ? val?.['logo'] : ImageType.PLACEHOLDER_COMPANY}
                       fill={true}
                       style={{ objectFit: 'contain' }}
                       alt={val?.['name']}
@@ -195,7 +195,7 @@ const CompanyComponent = ({ companies }: Company.Component) => {
                     component='div'
                     sx={{ fontWeight: 500, width: '100%' }}
                   >
-                    {val?.['sector']}
+                    {val?.['type']?.['name']}
                   </Typography>
                 </WrapperCardItem>
               ))}
