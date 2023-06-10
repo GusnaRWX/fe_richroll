@@ -100,6 +100,16 @@ function CompanyBankForm({ bank, paymentMethod, formik }: CompanyBankProps) {
                   }
                   return null;
                 }}
+                MenuProps={{
+                  PaperProps: {
+                    sx: {
+                      '& .MuiMenuItem-root:hover': {
+                        backgroundColor: '#223567',
+                        color: 'white'
+                      }
+                    }
+                  }
+                }}
               >
                 {bank?.map((val, idx) => (
                   <MenuItem key={idx} value={val?.['id']}>{val?.['name']}</MenuItem>
@@ -298,6 +308,16 @@ function CompanyBankForm({ bank, paymentMethod, formik }: CompanyBankProps) {
                   renderValue={(value: string) => {
                     return checkPaymentMethod(value);
                   }}
+                  MenuProps={{
+                    PaperProps: {
+                      sx: {
+                        '& .MuiMenuItem-root:hover': {
+                          backgroundColor: '#223567',
+                          color: 'white'
+                        }
+                      }
+                    }
+                  }}
                 >
                   {paymentMethod?.map((val, idx) => (
                     <MenuItem key={idx} value={val?.['id']}>{val?.['name']}</MenuItem>
@@ -321,6 +341,16 @@ function CompanyBankForm({ bank, paymentMethod, formik }: CompanyBankProps) {
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   name='weeklyPeriod'
+                  MenuProps={{
+                    PaperProps: {
+                      sx: {
+                        '& .MuiMenuItem-root:hover': {
+                          backgroundColor: '#223567',
+                          color: 'white'
+                        }
+                      }
+                    }
+                  }}
                 >
                   <MenuItem value='Sunday'>Sunday</MenuItem>
                   <MenuItem value='Monday'>Monday</MenuItem>
@@ -347,6 +377,16 @@ function CompanyBankForm({ bank, paymentMethod, formik }: CompanyBankProps) {
                   renderValue={(value: string) => {
                     return checkPaymentMethod(value);
                   }}
+                  MenuProps={{
+                    PaperProps: {
+                      sx: {
+                        '& .MuiMenuItem-root:hover': {
+                          backgroundColor: '#223567',
+                          color: 'white'
+                        }
+                      }
+                    }
+                  }}
                 >
                   {paymentMethod?.map((val, idx) => (
                     <MenuItem key={idx} value={val?.['id']}>{val?.['name']}</MenuItem>
@@ -371,6 +411,16 @@ function CompanyBankForm({ bank, paymentMethod, formik }: CompanyBankProps) {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     name='biWeeklyPeriod'
+                    MenuProps={{
+                      PaperProps: {
+                        sx: {
+                          '& .MuiMenuItem-root:hover': {
+                            backgroundColor: '#223567',
+                            color: 'white'
+                          }
+                        }
+                      }
+                    }}
                   >
                     <MenuItem value='Sunday'>Sunday</MenuItem>
                     <MenuItem value='Monday'>Monday</MenuItem>
@@ -390,6 +440,16 @@ function CompanyBankForm({ bank, paymentMethod, formik }: CompanyBankProps) {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     name='biWeeklyPeriodWeek'
+                    MenuProps={{
+                      PaperProps: {
+                        sx: {
+                          '& .MuiMenuItem-root:hover': {
+                            backgroundColor: '#223567',
+                            color: 'white'
+                          }
+                        }
+                      }
+                    }}
                   >
                     <MenuItem value='First Week'>First Week</MenuItem>
                     <MenuItem value='Second Week'>Second Week</MenuItem>
@@ -412,6 +472,16 @@ function CompanyBankForm({ bank, paymentMethod, formik }: CompanyBankProps) {
                   onBlur={formik.handleBlur}
                   renderValue={(value: string) => {
                     return checkPaymentMethod(value);
+                  }}
+                  MenuProps={{
+                    PaperProps: {
+                      sx: {
+                        '& .MuiMenuItem-root:hover': {
+                          backgroundColor: '#223567',
+                          color: 'white'
+                        }
+                      }
+                    }
                   }}
                 >
                   {paymentMethod?.map((val, idx) => (

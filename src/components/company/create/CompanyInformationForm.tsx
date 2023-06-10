@@ -198,6 +198,16 @@ function CompanyInformationForm({
                   }
                   return null;
                 }}
+                MenuProps={{
+                  PaperProps: {
+                    sx: {
+                      '& .MuiMenuItem-root:hover': {
+                        backgroundColor: '#223567',
+                        color: 'white'
+                      }
+                    }
+                  }
+                }}
               >
                 {companyType?.map((val, idx) => (
                   <MenuItem key={idx} value={val?.['id']}>{val?.['name']}</MenuItem>
@@ -262,6 +272,16 @@ function CompanyInformationForm({
                   }
                   return null;
                 }}
+                MenuProps={{
+                  PaperProps: {
+                    sx: {
+                      '& .MuiMenuItem-root:hover': {
+                        backgroundColor: '#223567',
+                        color: 'white'
+                      }
+                    }
+                  }
+                }}
               >
                 {companySector?.map((val, idx) => (
                   <MenuItem key={idx} value={val?.['id']}>{val?.['name']}</MenuItem>
@@ -299,7 +319,17 @@ function CompanyInformationForm({
                   value={formik.values.phoneNumberPrefix}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  MenuProps={{ disableAutoFocus: true }}
+                  MenuProps={{
+                    disableAutoFocus: true,
+                    PaperProps: {
+                      sx: {
+                        '& .MuiMenuItem-root:hover': {
+                          backgroundColor: '#223567',
+                          color: 'white'
+                        }
+                      }
+                    }
+                  }}
                   sx={{
                     backgroundColor: '#D9EFE7',
                     border: '1px solid #D9EFE7',
@@ -365,6 +395,16 @@ function CompanyInformationForm({
                   }
                   return null;
                 }}
+                MenuProps={{
+                  PaperProps: {
+                    sx: {
+                      '& .MuiMenuItem-root:hover': {
+                        backgroundColor: '#223567',
+                        color: 'white'
+                      }
+                    }
+                  }
+                }}
               >
                 {countries?.map(item => (
                   <MenuItem key={item?.['label']} value={item?.['value']}>{item?.['label']}</MenuItem>
@@ -404,6 +444,16 @@ function CompanyInformationForm({
                     return `${selectedProvince?.['label']}`;
                   }
                   return null;
+                }}
+                MenuProps={{
+                  PaperProps: {
+                    sx: {
+                      '& .MuiMenuItem-root:hover': {
+                        backgroundColor: '#223567',
+                        color: 'white'
+                      }
+                    }
+                  }
                 }}
               >
                 {administrativeFirst?.map(item => (
@@ -448,6 +498,16 @@ function CompanyInformationForm({
                   }
                   return null;
                 }}
+                MenuProps={{
+                  PaperProps: {
+                    sx: {
+                      '& .MuiMenuItem-root:hover': {
+                        backgroundColor: '#223567',
+                        color: 'white'
+                      }
+                    }
+                  }
+                }}
               >
                 {administrativeSecond?.map(item => (
                   <MenuItem key={item?.['label']} value={item?.['value']}>{item?.['label']}</MenuItem>
@@ -478,6 +538,16 @@ function CompanyInformationForm({
                     return `${selectedSubDistrict?.['label']}`;
                   }
                   return null;
+                }}
+                MenuProps={{
+                  PaperProps: {
+                    sx: {
+                      '& .MuiMenuItem-root:hover': {
+                        backgroundColor: '#223567',
+                        color: 'white'
+                      }
+                    }
+                  }
                 }}
               >
                 {administrativeThird?.map(item => (
