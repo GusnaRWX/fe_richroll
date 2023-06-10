@@ -6,7 +6,8 @@ import {
   Select,
   FormHelperText,
   MenuItem,
-  FormControl } from '@mui/material';
+  FormControl
+} from '@mui/material';
 import { Input, Textarea, FileUploadModal } from '@/components/_shared/form';
 import { Text } from '@/components/_shared/common';
 import { styled as MuiStyled } from '@mui/material/styles';
@@ -30,7 +31,7 @@ interface ImagePriviewProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 const ImageReview = styled.div`
-  background-image: url(${({image}: ImagePriviewProps) => image});
+  background-image: url(${({ image }: ImagePriviewProps) => image});
   background-repeat: no-repeat;
   width: 102px;
   height: 102px;
@@ -49,14 +50,14 @@ interface CompanyInfoProps {
   setImages;
 }
 
-function CompanyProfileInformationForm ({
+function CompanyProfileInformationForm({
   formik,
   companyType,
   companySector,
   countries,
   images,
   setImages
-}:CompanyInfoProps) {
+}: CompanyInfoProps) {
   const [open, setOpen] = useState(false);
   const dispatch = useAppDispatch();
 
@@ -79,7 +80,7 @@ function CompanyProfileInformationForm ({
       <Typography component='h3' fontSize={18} color='primary'>Company Information</Typography>
       <form>
         <Typography variant='text-sm' component='div' color='primary' sx={{ mt: '16px' }}>Company Logo</Typography>
-        <ImageReview image={ifThenElse(!images, ImageType.PLACEHOLDER, images)} onClick={handleOpen}/>
+        <ImageReview image={ifThenElse(!images, ImageType.PLACEHOLDER, images)} onClick={handleOpen} />
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <FormControl fullWidth error={compareCheck(formik.touched.companyType, Boolean(formik.errors.companyType))}>
@@ -103,6 +104,16 @@ function CompanyProfileInformationForm ({
                     return `${selectedType?.['name']}`;
                   }
                   return null;
+                }}
+                MenuProps={{
+                  PaperProps: {
+                    sx: {
+                      '& .MuiMenuItem-root:hover': {
+                        backgroundColor: '#223567',
+                        color: 'white'
+                      }
+                    }
+                  }
                 }}
               >
                 {companyType?.map((val, idx) => (
@@ -165,6 +176,16 @@ function CompanyProfileInformationForm ({
                   }
                   return null;
                 }}
+                MenuProps={{
+                  PaperProps: {
+                    sx: {
+                      '& .MuiMenuItem-root:hover': {
+                        backgroundColor: '#223567',
+                        color: 'white'
+                      }
+                    }
+                  }
+                }}
               >
                 {companySector?.map((val, idx) => (
                   <MenuItem key={idx} value={val?.['id']}>{val?.['name']}</MenuItem>
@@ -202,7 +223,17 @@ function CompanyProfileInformationForm ({
                   value={formik.values.phoneNumberPrefix}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  MenuProps={{ disableAutoFocus: true }}
+                  MenuProps={{
+                    disableAutoFocus: true,
+                    PaperProps: {
+                      sx: {
+                        '& .MuiMenuItem-root:hover': {
+                          backgroundColor: '#223567',
+                          color: 'white'
+                        }
+                      }
+                    }
+                  }}
                   sx={{
                     backgroundColor: '#D9EFE7',
                     border: '1px solid #D9EFE7',
@@ -268,6 +299,16 @@ function CompanyProfileInformationForm ({
                   }
                   return null;
                 }}
+                MenuProps={{
+                  PaperProps: {
+                    sx: {
+                      '& .MuiMenuItem-root:hover': {
+                        backgroundColor: '#223567',
+                        color: 'white'
+                      }
+                    }
+                  }
+                }}
               >
                 {countries?.map(item => (
                   <MenuItem key={item?.['label']} value={item?.['value']}>{item?.['label']}</MenuItem>
@@ -307,6 +348,16 @@ function CompanyProfileInformationForm ({
                     return `${selectedProvince?.['label']}`;
                   }
                   return null;
+                }}
+                MenuProps={{
+                  PaperProps: {
+                    sx: {
+                      '& .MuiMenuItem-root:hover': {
+                        backgroundColor: '#223567',
+                        color: 'white'
+                      }
+                    }
+                  }
                 }}
               >
                 {administrativeFirst?.map(item => (
@@ -351,6 +402,16 @@ function CompanyProfileInformationForm ({
                   }
                   return null;
                 }}
+                MenuProps={{
+                  PaperProps: {
+                    sx: {
+                      '& .MuiMenuItem-root:hover': {
+                        backgroundColor: '#223567',
+                        color: 'white'
+                      }
+                    }
+                  }
+                }}
               >
                 {administrativeSecond?.map(item => (
                   <MenuItem key={item?.['label']} value={item?.['value']}>{item?.['label']}</MenuItem>
@@ -381,6 +442,16 @@ function CompanyProfileInformationForm ({
                     return `${selectedSubDistrict?.['label']}`;
                   }
                   return null;
+                }}
+                MenuProps={{
+                  PaperProps: {
+                    sx: {
+                      '& .MuiMenuItem-root:hover': {
+                        backgroundColor: '#223567',
+                        color: 'white'
+                      }
+                    }
+                  }
                 }}
               >
                 {administrativeThird?.map(item => (
@@ -421,7 +492,7 @@ function CompanyProfileInformationForm ({
             />
           </Grid>
         </Grid>
-      </form>
+      </form >
       <FileUploadModal
         open={open}
         handleClose={handleClose}
