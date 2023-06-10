@@ -249,8 +249,6 @@ export default function UpdateCNBComponent() {
     })
   };
 
-  console.log(cnbDetail?.base);
-
   useEffect(() => {
 
     setTitle(getPaymentType(cnbDetail?.base?.component?.id, listCompensation)?.title);
@@ -627,8 +625,8 @@ export default function UpdateCNBComponent() {
                                         >
                                           {listCompensation?.map(
                                             (Option, i) => (
-                                              <MenuItem key={i} value={Option.id}>
-                                                {Option.name}
+                                              <MenuItem key={i} value={Option.value}>
+                                                {Option.label}
                                               </MenuItem>
                                             )
                                           )}
