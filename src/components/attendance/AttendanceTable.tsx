@@ -20,6 +20,7 @@ import { TbFileImport } from 'react-icons/tb';
 import { HiOutlineInboxIn } from 'react-icons/hi';
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
+import { ConfirmationModal } from '@/components/_shared/common';
 
 const ButtonWrapper = styled.div`
  display: flex;
@@ -107,6 +108,7 @@ function AttendanceTable({
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
   const [hydrated, setHaydrated] = useState(false);
+  const [deleteConfirmation, setDeleteConfirmation] = useState(false);
   const router = useRouter();
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -235,6 +237,7 @@ function AttendanceTable({
                               />
                               <IconButton
                                 parentColor='#FEE2E2'
+                                onClick={() => setDeleteConfirmation(true)}
                                 icons={
                                   <BsTrashFill fontSize={20} color='#EF4444'/>
                                 }
@@ -245,13 +248,14 @@ function AttendanceTable({
                             <>
                               <IconButton
                                 parentColor='#E9EFFF'
-                                onClick={() => {router.push('/payroll-disbursement/payroll-assistant/view');}}
+                                onClick={() => {router.push('/payroll-disbursement/attendance/generate');}}
                                 icons={
                                   <BsFillEyeFill fontSize={20} color='#223567'/>
                                 }
                               />
                               <IconButton
                                 parentColor='#FEE2E2'
+                                onClick={() => setDeleteConfirmation(true)}
                                 icons={
                                   <BsTrashFill fontSize={20} color='#EF4444'/>
                                 }
@@ -262,13 +266,13 @@ function AttendanceTable({
                             <>
                               <IconButton
                                 parentColor='#E9EFFF'
-                                onClick={() => {router.push('/payroll-disbursement/payroll-assistant/view');}}
                                 icons={
                                   <HiOutlineInboxIn fontSize={20} color='#223567'/>
                                 }
                               />
                               <IconButton
                                 parentColor='#FEE2E2'
+                                onClick={() => setDeleteConfirmation(true)}
                                 icons={
                                   <BsTrashFill fontSize={20} color='#EF4444'/>
                                 }
@@ -279,7 +283,7 @@ function AttendanceTable({
                             <>
                               <IconButton
                                 parentColor='#E9EFFF'
-                                onClick={() => {router.push('/payroll-disbursement/payroll-assistant/view');}}
+                                onClick={() => {router.push('/payroll-disbursement/attendance/generate');}}
                                 icons={
                                   <BsFillEyeFill fontSize={20} color='#223567'/>
                                 }
@@ -299,6 +303,15 @@ function AttendanceTable({
             }
           </>
         }
+      />
+      <ConfirmationModal
+        open={deleteConfirmation}
+        handleClose={() => setDeleteConfirmation(false)}
+        title='Delete Attendance from Payroll Operation?'
+        content='You are about to delete this attendance report. This action cannot be undone.'
+        withCallback
+        noChange={true}
+        callback={() => setDeleteConfirmation(false)}
       />
     </>
   );

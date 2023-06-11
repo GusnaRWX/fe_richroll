@@ -12,6 +12,7 @@ import { BsTrashFill, BsFillEyeFill } from 'react-icons/bs';
 import { FiFile, FiDownload } from 'react-icons/fi';
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
+import { ConfirmationModal } from '@/components/_shared/common';
 
 const ButtonWrapper = styled.div`
  display: flex;
@@ -24,6 +25,7 @@ const ButtonWrapper = styled.div`
 function PayrollAssistantRow (row) {
   const { item, tabValue } = row;
   const [open, setOpen] = useState(false);
+  const [deleteConfirmation, setDeleteConfirmation] = useState(false);
   const router = useRouter();
 
   return (
@@ -38,6 +40,7 @@ function PayrollAssistantRow (row) {
             {tabValue === 0 && (
               <IconButton
                 parentColor='#FEE2E2'
+                onClick={() => setDeleteConfirmation(true)}
                 icons={
                   <BsTrashFill fontSize={20} color='#EF4444'/>
                 }
@@ -63,6 +66,7 @@ function PayrollAssistantRow (row) {
                 />
                 <IconButton
                   parentColor='#FEE2E2'
+                  onClick={() => setDeleteConfirmation(true)}
                   icons={
                     <BsTrashFill fontSize={20} color='#EF4444'/>
                   }
@@ -148,6 +152,16 @@ function PayrollAssistantRow (row) {
           </Collapse>
         </TableCell>
       </TableRow>
+
+      <ConfirmationModal
+        open={deleteConfirmation}
+        handleClose={() => setDeleteConfirmation(false)}
+        title='Delete Payroll Operation from Payroll Assistant?'
+        content='You are about to delete this payroll report. This action cannot be undone.'
+        withCallback
+        noChange={true}
+        callback={() => setDeleteConfirmation(false)}
+      />
     </React.Fragment>
   );
 }

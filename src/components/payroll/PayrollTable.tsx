@@ -20,6 +20,7 @@ import { TbFileImport } from 'react-icons/tb';
 import { HiOutlineInboxIn } from 'react-icons/hi';
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
+import { ConfirmationModal } from '@/components/_shared/common';
 
 const ButtonWrapper = styled.div`
  display: flex;
@@ -120,6 +121,7 @@ function PayrollTable({
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
   const [hydrated, setHaydrated] = useState(false);
+  const [deleteConfirmation, setDeleteConfirmation] = useState(false);
   const router = useRouter();
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -248,6 +250,7 @@ function PayrollTable({
                               />
                               <IconButton
                                 parentColor='#FEE2E2'
+                                onClick={() => setDeleteConfirmation(true)}
                                 icons={
                                   <BsTrashFill fontSize={20} color='#EF4444'/>
                                 }
@@ -258,12 +261,14 @@ function PayrollTable({
                             <>
                               <IconButton
                                 parentColor='#E9EFFF'
+                                onClick={() => {item.reportType === 'gross' ? router.push('/payroll-disbursement/payroll/gross-detail') : router.push('/payroll-disbursement/payroll/net-detail');}}
                                 icons={
                                   <BsFillEyeFill fontSize={20} color='#223567'/>
                                 }
                               />
                               <IconButton
                                 parentColor='#FEE2E2'
+                                onClick={() => setDeleteConfirmation(true)}
                                 icons={
                                   <BsTrashFill fontSize={20} color='#EF4444'/>
                                 }
@@ -280,6 +285,7 @@ function PayrollTable({
                               />
                               <IconButton
                                 parentColor='#FEE2E2'
+                                onClick={() => setDeleteConfirmation(true)}
                                 icons={
                                   <BsTrashFill fontSize={20} color='#EF4444'/>
                                 }
@@ -290,6 +296,7 @@ function PayrollTable({
                             <>
                               <IconButton
                                 parentColor='#E9EFFF'
+                                onClick={() => {item.reportType === 'gross' ? router.push('/payroll-disbursement/payroll/gross-detail') : router.push('/payroll-disbursement/payroll/net-detail');}}
                                 icons={
                                   <BsFillEyeFill fontSize={20} color='#223567'/>
                                 }
@@ -309,6 +316,15 @@ function PayrollTable({
             }
           </>
         }
+      />
+      <ConfirmationModal
+        open={deleteConfirmation}
+        handleClose={() => setDeleteConfirmation(false)}
+        title='Delete Payroll from Payroll Operation?'
+        content='You are about to delete this payroll report. This action cannot be undone.'
+        withCallback
+        noChange={true}
+        callback={() => setDeleteConfirmation(false)}
       />
     </>
   );
