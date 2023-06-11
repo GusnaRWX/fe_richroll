@@ -10,7 +10,8 @@ const AsteriskComponent = styled('span')(({ theme }) => ({
 }));
 
 type DatePickerType = DatePickerProps<Date> & {
-  customLabel?: string;
+  customLabelStart?: string;
+  customLabelEnd?: string;
   withAsterisk?: boolean;
   value?: Date;
   onChange?: React.Dispatch<Date | null>;
@@ -18,7 +19,8 @@ type DatePickerType = DatePickerProps<Date> & {
 };
 
 const DateRangePicker = ({
-  customLabel,
+  customLabelStart,
+  customLabelEnd,
   onChange,
   value,
   withAsterisk,
@@ -26,81 +28,89 @@ const DateRangePicker = ({
   ...props
 }: DatePickerType) => {
   return (
-    <Box sx={{border: '1px solid rgba(0, 0, 0, 0.23)', padding: '3px 14px', borderRadius: '4px'}}>
-      <LocalizationProvider
-        dateAdapter={AdapterDayjs}
-      >
-        {customLabel !== undefined && (
-          <Typography mb='6px'>
-            {customLabel}{' '}
-            {withAsterisk && <AsteriskComponent>*</AsteriskComponent>}
-          </Typography>
+    <>
+      <Box sx={{width: '100%', display: 'flex'}}>
+        {customLabelStart !== undefined && (
+          <Box sx={{width: '50%'}}>
+            <Typography mb='6px'>
+              {customLabelStart}{' '}
+              {withAsterisk && <AsteriskComponent>*</AsteriskComponent>}
+            </Typography>
+          </Box>
         )}
-        <CommonDatePicker
-          format='DD/MM/YYYY'
-          value={value}
-          onChange={onChange}
-          slotProps={{ textField: { variant: 'standard' } }}
-          slots={{
-            openPickerIcon: BsArrowRight
-          }}
-          {...props}
-          sx={{
-            '& .MuiOutlinedInput-input': {
-              padding: '8.5px 14px',
-              border: 'none !important',
-            },
-            '> .MuiInput-underline': {
-              border: 'none !important',
-              paddingRight: '10px',
-            },
-            '> .MuiInput-underline:before': {
-              border: 'none !important',
-            },
-            width: '50%',
-            border: 'none !important',
-          }}
-        />
-        {error && (
-          <FormHelperText sx={{ color: '#EF4444' }}>{error}</FormHelperText>
+        {customLabelEnd !== undefined && (
+          <Box sx={{width: '50%'}}>
+            <Typography mb='6px'>
+              {customLabelEnd}{' '}
+              {withAsterisk && <AsteriskComponent>*</AsteriskComponent>}
+            </Typography>
+          </Box>
         )}
-      </LocalizationProvider>
-      <LocalizationProvider
-        dateAdapter={AdapterDayjs}
-        sx={{ border: 'none !important' }}
-      >
-        {customLabel !== undefined && (
-          <Typography mb='6px'>
-            {customLabel}{' '}
-            {withAsterisk && <AsteriskComponent>*</AsteriskComponent>}
-          </Typography>
-        )}
-        <CommonDatePicker
-          format='DD/MM/YYYY'
-          value={value}
-          onChange={onChange}
-          slotProps={{ textField: { variant: 'standard', } }}
-          {...props}
-          sx={{
-            '& .MuiOutlinedInput-input': {
-              padding: '8.5px 14px',
+      </Box>
+      <Box sx={{border: '1px solid rgba(0, 0, 0, 0.23)', padding: '3px 14px', borderRadius: '4px'}}>
+        <LocalizationProvider
+          dateAdapter={AdapterDayjs}
+        >
+          <CommonDatePicker
+            format='DD/MM/YYYY'
+            value={value}
+            onChange={onChange}
+            slotProps={{ textField: { variant: 'standard' } }}
+            slots={{
+              openPickerIcon: BsArrowRight
+            }}
+            {...props}
+            sx={{
+              '& .MuiOutlinedInput-input': {
+                padding: '8.5px 14px',
+                border: 'none !important',
+              },
+              '> .MuiInput-underline': {
+                border: 'none !important',
+                paddingRight: '10px',
+              },
+              '> .MuiInput-underline:before': {
+                border: 'none !important',
+              },
+              width: '50%',
               border: 'none !important',
-            },
-            '> .MuiInput-underline': {
+            }}
+          />
+          {error && (
+            <FormHelperText sx={{ color: '#EF4444' }}>{error}</FormHelperText>
+          )}
+        </LocalizationProvider>
+        <LocalizationProvider
+          dateAdapter={AdapterDayjs}
+          sx={{ border: 'none !important' }}
+        >
+          <CommonDatePicker
+            format='DD/MM/YYYY'
+            value={value}
+            onChange={onChange}
+            slotProps={{ textField: { variant: 'standard', } }}
+            {...props}
+            sx={{
+              '& .MuiOutlinedInput-input': {
+                padding: '8.5px 14px',
+                border: 'none !important',
+              },
+              '> .MuiInput-underline': {
+                border: 'none !important',
+              },
+              '> .MuiInput-underline:before': {
+                border: 'none !important',
+              },
+              width: '50%',
               border: 'none !important',
-            },
-            '> .MuiInput-underline:before': {
-              border: 'none !important',
-            },
-            width: '50%',
-            border: 'none !important',
-          }}
-        />
-        {error && (
-          <FormHelperText sx={{ color: '#EF4444' }}>{error}</FormHelperText>
-        )}
-      </LocalizationProvider>
-    </Box>
+            }}
+          />
+          {error && (
+            <FormHelperText sx={{ color: '#EF4444' }}>{error}</FormHelperText>
+          )}
+        </LocalizationProvider>
+      </Box>
+    </>
   );
 };
 
