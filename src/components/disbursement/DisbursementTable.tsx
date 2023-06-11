@@ -19,6 +19,7 @@ import { FiDownload } from 'react-icons/fi';
 import { HiOutlineInboxIn } from 'react-icons/hi';
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
+import { ConfirmationModal } from '@/components/_shared/common';
 
 const ButtonWrapper = styled.div`
  display: flex;
@@ -106,6 +107,7 @@ function DisbursementTable({
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
   const [hydrated, setHaydrated] = useState(false);
+  const [deleteConfirmation, setDeleteConfirmation] = useState(false);
   const router = useRouter();
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -234,6 +236,7 @@ function DisbursementTable({
                               />
                               <IconButton
                                 parentColor='#FEE2E2'
+                                onClick={() => setDeleteConfirmation(true)}
                                 icons={
                                   <BsTrashFill fontSize={20} color='#EF4444'/>
                                 }
@@ -250,6 +253,7 @@ function DisbursementTable({
                               />
                               <IconButton
                                 parentColor='#FEE2E2'
+                                onClick={() => setDeleteConfirmation(true)}
                                 icons={
                                   <BsTrashFill fontSize={20} color='#EF4444'/>
                                 }
@@ -260,6 +264,7 @@ function DisbursementTable({
                             <>
                               <IconButton
                                 parentColor='#E9EFFF'
+                                onClick={() => {router.push('/payroll-disbursement/disbursement/generate');}}
                                 icons={
                                   <BsFillEyeFill fontSize={20} color='#223567'/>
                                 }
@@ -279,6 +284,15 @@ function DisbursementTable({
             }
           </>
         }
+      />
+      <ConfirmationModal
+        open={deleteConfirmation}
+        handleClose={() => setDeleteConfirmation(false)}
+        title='Delete Disbursement Receipt from Payroll Operation?'
+        content='You are about to delete this disbursement receipt. This action cannot be undone.'
+        withCallback
+        noChange={true}
+        callback={() => setDeleteConfirmation(false)}
       />
     </>
   );

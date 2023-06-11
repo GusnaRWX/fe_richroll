@@ -5,7 +5,7 @@ import { styled } from '@mui/material/styles';
 import { Add } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import PayrollAssistantTable from './PayrollAssistantTable';
-import CustomModal from '@/components/_shared/common/CustomModal';
+import { CustomModal } from '@/components/_shared/common';
 
 const ButtonWrapper = styled(Box)(({
   display: 'flex',
