@@ -17,7 +17,9 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import Webcam from 'react-webcam';
 import { CameraAlt } from '@mui/icons-material';
 import { validationSchemeEmployeeInformation } from './validate';
+import { useAppSelectors } from '@/hooks/index';
 import dayjs from 'dayjs';
+import { ifThenElse } from '@/utils/helper';
 
 
 const AsteriskComponent = MuiStyled('span')(({ theme }) => ({
@@ -81,6 +83,7 @@ const EmploymentEditInformation = ({ refProp, setValues, infoValues, handleFirst
   const [openCamera, setOpenCamera] = useState(false);
   const [images, setImages] = useState<string | null>(infoValues?.images);
   const [open, setOpen] = useState(false);
+  const { detailInformation, detailCnb } = useAppSelectors((state) => state.employment);
   const handleCloseCamera = () => {
     setCaptureEnable(false);
     setOpenCamera(false);
@@ -275,19 +278,19 @@ const EmploymentEditInformation = ({ refProp, setValues, infoValues, handleFirst
           <Grid container rowGap={3}>
             <Grid item md={6}>
               <Text title='Start Date' fontWeight={400} color='grey.400' fontSize='14px' />
-              <Text title='07/10/2020' fontWeight={400} color='grey.600' fontSize='14px' />
+              <Text title={dayjs(formik.values.startDate).format('DD/MM/YYYY')} fontWeight={400} color='grey.600' fontSize='14px' />
             </Grid>
             <Grid item md={6}>
               <Text title='End Date' fontWeight={400} color='grey.400' fontSize='14px' />
-              <Text title='07/10/2020' fontWeight={400} color='grey.600' fontSize='14px' />
+              <Text title={detailInformation?.endDate === null ? '-' : dayjs(detailInformation.endDate).format('DD/MM/YYYY')} fontWeight={400} color='grey.600' fontSize='14px' />
             </Grid>
             <Grid item md={6}>
               <Text title='Department' fontWeight={400} color='grey.400' fontSize='14px' />
-              <Text title='Manajer' fontWeight={400} color='grey.600' fontSize='14px' />
+              <Text title={formik.values.department} fontWeight={400} color='grey.600' fontSize='14px' />
             </Grid>
             <Grid item md={6}>
               <Text title='Position' fontWeight={400} color='grey.400' fontSize='14px' />
-              <Text title='Asisten Manager' fontWeight={400} color='grey.600' fontSize='14px' />
+              <Text title={formik.values.position} fontWeight={400} color='grey.600' fontSize='14px' />
             </Grid>
           </Grid >
         </form>
@@ -349,90 +352,112 @@ const EmploymentEditInformation = ({ refProp, setValues, infoValues, handleFirst
           fontSize='16px'
           mb='16px'
         />
-        <Grid container>
-          <Grid item md={6}>
-            <Text
-              title='Base'
-              color='primary.500'
-              fontWeight={700}
-              fontSize='16px'
-            />
-            <Grid container alignItems='center' mt='16px'>
-              <Grid item md={4}>
-                <Text
-                  title='Salary'
-                  fontSize='14px'
-                  fontWeight={700}
-                  color='primary.700'
-                />
+        {
+          ifThenElse(detailCnb === null, (
+            <>
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'center' }}
+              >
+                <h3>Data Not Found</h3>
+              </Box>
+            </>
+          ), (
+            <>
+              <Grid container>
+                <Grid item md={6}>
+                  <Text
+                    title='Base'
+                    color='primary.500'
+                    fontWeight={700}
+                    fontSize='16px'
+                  />
+                  <Grid container alignItems='center' mt='16px'>
+                    <Grid item md={4}>
+                      <Text
+                        title={detailCnb?.base?.component?.name}
+                        fontSize='14px'
+                        fontWeight={700}
+                        color='primary.700'
+                      />
+                    </Grid>
+                    <Grid item md={4}>
+                      <Text
+                        title='Amount'
+                        mb='14px'
+                        fontSize='14px'
+                        fontWeight={400}
+                        color='grey.400'
+                      />
+                      <Text
+                        title={detailCnb?.base?.amount}
+                        fontSize='14px'
+                        fontWeight={400}
+                        color='grey.700'
+                      />
+                    </Grid>
+                    <Grid item md={4}>
+                      <Text
+                        title={'Per' + ' ' + detailCnb?.base?.term?.name }
+                        fontSize='14px'
+                        fontWeight={400}
+                        color='grey.700'
+                      />
+                    </Grid>
+                  </Grid>
+                </Grid>
+                <Grid item md={6}>
+                  <Text
+                    title='Supplementary'
+                    color='primary.500'
+                    fontWeight={700}
+                    fontSize='16px'
+                  />
+                  {
+                    detailCnb?.supplementaries?.map((item, index) => (
+                      <Grid key={index} container alignItems='center' mt='16px'>
+                        <Grid item md={4}>
+                          <Text
+                            title={item?.component?.name}
+                            fontSize='14px'
+                            fontWeight={700}
+                            color='primary.700'
+                          />
+                        </Grid>
+                        <Grid item md={4}>
+                          <Text
+                            title='Amount'
+                            mb='14px'
+                            fontSize='14px'
+                            fontWeight={400}
+                            color='grey.400'
+                          />
+                          <Text
+                            title={item?.amount}
+                            fontSize='14px'
+                            fontWeight={400}
+                            color='grey.700'
+                          />
+                        </Grid>
+                        <Grid item md={4}>
+                          <Text
+                            title={'Per' + ' ' + item?.term?.name }
+                            fontSize='14px'
+                            fontWeight={400}
+                            color='grey.700'
+                          />
+                        </Grid>
+                      </Grid>
+                    ))
+                  }
+                </Grid>
               </Grid>
-              <Grid item md={4}>
-                <Text
-                  title='Amount'
-                  mb='14px'
-                  fontSize='14px'
-                  fontWeight={400}
-                  color='grey.400'
-                />
-                <Text
-                  title='Rp. 500.000 IDR'
-                  fontSize='14px'
-                  fontWeight={400}
-                  color='grey.700'
-                />
-              </Grid>
-              <Grid item md={4}>
-                <Text
-                  title='Per Month'
-                  fontSize='14px'
-                  fontWeight={400}
-                  color='grey.700'
-                />
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item md={6}>
-            <Text
-              title='Supplementary'
-              color='primary.500'
-              fontWeight={700}
-              fontSize='16px'
-            />
-            <Grid container alignItems='center' mt='16px'>
-              <Grid item md={4}>
-                <Text
-                  title='Transportation Allowance'
-                  fontSize='14px'
-                  fontWeight={700}
-                  color='primary.700'
-                />
-              </Grid>
-              <Grid item md={4}>
-                <Text
-                  title='Amount'
-                  mb='14px'
-                  fontSize='14px'
-                  fontWeight={400}
-                  color='grey.400'
-                />
-                <Text
-                  title='Rp. 500.000 IDR'
-                  fontSize='14px'
-                  fontWeight={400}
-                  color='grey.700'
-                />
-              </Grid>
-              <Grid item md={4}>
-                <Text
-                  title='Per Month'
-                  fontSize='14px'
-                  fontWeight={400}
-                  color='grey.700'
-                />
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
+            </>
+          ))
+        }
       </Box>
     </>
   );

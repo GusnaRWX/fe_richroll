@@ -43,6 +43,8 @@ const EmploymentEditPersonalInfo = ({ refProp, setValues, personalValues, handle
     banks
   } = useAppSelectors(state => state.option);
 
+  console.log(banks);
+
   const { responser } = useAppSelectors(state => state);
 
   const [useResidentialAddress, setUseResidentialAddress] = useState(personalValues?.useResidentialAddress);

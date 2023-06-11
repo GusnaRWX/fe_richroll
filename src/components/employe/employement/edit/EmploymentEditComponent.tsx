@@ -2,7 +2,7 @@ import React, { ReactNode, useState, useRef } from 'react';
 import { Box, Card, Tab, Tabs, Button as MuiButton } from '@mui/material';
 import styled from '@emotion/styled';
 import { Text } from '@/components/_shared/common';
-import { useAppSelectors } from '@/hooks/index';
+import { useAppSelectors, useAppDispatch } from '@/hooks/index';
 import { useRouter } from 'next/router';
 import { Employment } from '@/types/employment';
 import PersonalWorkSchedule from '../personal-information/PersonalWorkSchedule';
@@ -10,6 +10,13 @@ import ConfirmationModal from '@/components/_shared/common/ConfirmationModal';
 import EmploymentEditInformation from './EmploymentEditInformation';
 import EmploymentEditPersonalInfo from './EmploymentEditPersonalInfo';
 import EmploymentEditEmergencyContact from './EmploymentEditEmergencyContact';
+import { getCompanyData, ifThenElse } from '@/utils/helper';
+import {
+  patchDetailEmergencyContactRequested,
+  patchDetailInformationRequested,
+  patchDetailPersonalInfoRequested
+} from '@/store/reducers/slice/employment/employmentSlice';
+import dayjs from 'dayjs';
 
 const TopWrapper = styled.div`
  display: flex;
@@ -85,73 +92,76 @@ function EmploymentEditComponent() {
   const [value, setValue] = useState(0);
   const [leave, setLeave] = useState(false);
   const router = useRouter();
+  const dispatch = useAppDispatch();
+  const {detailEmergencyContact, detailPersonalInfo, detailInformation} = useAppSelectors((state) => state.employment);
   const informationRef = useRef<HTMLFormElement>(null);
   const personalInformationRef = useRef<HTMLFormElement>(null);
   const emergencyRef = useRef<HTMLFormElement>(null);
+  const phoneNumberPrefix = ifThenElse(typeof detailInformation.phoneNumber !== 'undefined', detailInformation?.phoneNumber?.split('')?.slice(0, 3).join(''), '');
+  const phoneNumber = ifThenElse(typeof detailInformation.phoneNumber !== 'undefined', detailInformation?.phoneNumber?.slice(3), '');
   const [informationValue, setInformationValue] = useState<Employment.InformationPayload>({
-    companyID: '',
-    department: '',
-    email: '',
-    endDate: '',
-    fullName: '',
-    images: '',
-    isPermanent: false,
-    isSelfService: false,
-    nickname: '',
-    phoneNumber: '',
-    phoneNumberPrefix: '',
+    companyID: getCompanyData()?.id as string,
+    department: detailInformation?.department,
+    email: detailInformation?.email,
+    endDate: ifThenElse(detailInformation?.endDate !== null, dayjs(detailInformation?.endDate).format('YYYY/MM/DD'), null),
+    fullName: detailInformation?.fullName,
+    images: ifThenElse(detailInformation?.picture !== null, detailInformation?.picture, ''),
+    isPermanent: detailInformation?.isPermanent,
+    isSelfService: detailInformation?.isSelfService,
+    nickname: detailInformation?.nickname,
+    phoneNumber: phoneNumber,
+    phoneNumberPrefix: phoneNumberPrefix,
     picture: [],
-    position: '',
-    startDate: ''
+    position: detailInformation?.position,
+    startDate: ifThenElse(detailInformation?.startDate !== null, dayjs(detailInformation?.startDate).format('YYYY/MM/DD'), null)
   });
   const [personalInformationValue, setPersonalInformationValue] = useState<Employment.PersonalValues>({
-    dateofBirthPersonalInformation: null,
-    genderPersonalInformation: 0,
-    maritialStatusPersonalInformation: 0,
-    numberOfDependantsPersonalInformation: null,
-    nationalityPersonalInformation: '',
-    religionPersonalInformation: 0,
+    dateofBirthPersonalInformation: ifThenElse(detailPersonalInfo?.personal?.dateOfBirth !== null, dayjs(detailPersonalInfo?.personal?.dateOfBirth).format('YYYY/MM/DD'), null),
+    genderPersonalInformation: detailPersonalInfo?.personal?.gender,
+    maritialStatusPersonalInformation: detailPersonalInfo?.personal?.maritalStatus,
+    numberOfDependantsPersonalInformation: detailPersonalInfo?.personal?.numberOfChildren,
+    nationalityPersonalInformation: detailPersonalInfo?.personal?.country.id,
+    religionPersonalInformation: detailPersonalInfo?.personal?.religion,
 
-    countryCitizenAddress: '',
-    provinceCitizenAddress: '',
-    cityCitizenAddress: '',
-    subDistrictCitizenAddress: '',
-    addressCitizenAddress: '',
-    zipCodeCitizenAddress: '',
+    provinceCitizenAddress: detailPersonalInfo?.citizen?.firstLevel.code,
+    countryCitizenAddress: detailPersonalInfo?.citizen?.country.id,
+    cityCitizenAddress: detailPersonalInfo?.citizen?.secondLevel.code,
+    subDistrictCitizenAddress: detailPersonalInfo?.citizen?.thirdLevel.code,
+    addressCitizenAddress: detailPersonalInfo?.citizen?.address,
+    zipCodeCitizenAddress: detailPersonalInfo?.citizen?.zipCode,
 
-    countryResidentialAddress: '',
-    provinceResidentialAddress: '',
-    cityResidentialAddress: '',
-    subDistrictResidentialAddress: '',
-    addressResidentialAddress: '',
-    zipCodeResidentialAddress: '',
+    countryResidentialAddress: detailPersonalInfo?.citizen?.country.id,
+    provinceResidentialAddress: detailPersonalInfo?.citizen?.firstLevel.code,
+    cityResidentialAddress: detailPersonalInfo?.citizen?.secondLevel.code,
+    subDistrictResidentialAddress: detailPersonalInfo?.citizen?.thirdLevel.code,
+    addressResidentialAddress: detailPersonalInfo?.citizen?.address,
+    zipCodeResidentialAddress: detailPersonalInfo?.citizen?.zipCode,
 
-    bankBankInformation: '',
-    bankAccountHolderNameBankInformation: '',
-    bankAccoutNoBankInformation: '',
-    bankCodeBankInformation: '',
-    branchCodeBankInformation: '',
-    branchNameBankInformation: '',
-    swiftCodeBankInformation: '',
+    bankBankInformation: detailPersonalInfo?.bank?.bank.id,
+    bankAccountHolderNameBankInformation: detailPersonalInfo?.bank?.holder,
+    bankAccoutNoBankInformation: detailPersonalInfo?.bank?.accountNumber,
+    bankCodeBankInformation: detailPersonalInfo?.bank?.bankCode,
+    branchCodeBankInformation: detailPersonalInfo?.bank?.branchCode,
+    branchNameBankInformation: detailPersonalInfo?.bank?.branchName,
+    swiftCodeBankInformation: detailPersonalInfo?.bank?.swiftCode,
 
-    useResidentialAddress: false,
-    // isPermanentPersonalID: false,
+    useResidentialAddress: detailPersonalInfo?.citizen?.isResident,
 
-    idExpirationDatePersonalID: '',
-    idNumberPersonalID: '',
-    idTypePersonalID: ''
+    idExpirationDatePersonalID: detailPersonalInfo?.identity?.expiredAt,
+    idNumberPersonalID: detailPersonalInfo?.identity?.number,
+    idTypePersonalID: detailPersonalInfo?.identity?.type
   });
   const [emergencyValue, setEmergencyValue] = useState<Employment.EmergencyContactPatchValues>({
-    primaryId: '',
-    secondaryId: '',
-    fullNamePrimary: '',
-    relationPrimary: '',
-    phoneNumberPrefixPrimary: '',
-    phoneNumberPrimary: '',
-    fullNameSecondary: '',
-    relationSecondary: '',
-    phoneNumberPrefixSecondary: '',
-    phoneNumberSecondary: ''
+    primaryId: detailEmergencyContact?.primary?.id,
+    secondaryId: detailEmergencyContact?.secondary?.id,
+    fullNamePrimary: detailEmergencyContact?.primary?.name,
+    relationPrimary: detailEmergencyContact?.primary?.relationship,
+    phoneNumberPrefixPrimary: detailEmergencyContact?.primary?.phoneNumberPrefix,
+    phoneNumberPrimary: detailEmergencyContact?.primary?.phoneNumber,
+    fullNameSecondary: detailEmergencyContact?.secondary?.name,
+    relationSecondary: detailEmergencyContact?.secondary?.relationship,
+    phoneNumberPrefixSecondary: detailEmergencyContact?.secondary?.phoneNumberPrefix,
+    phoneNumberSecondary: detailEmergencyContact?.secondary?.phoneNumber
   });
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -167,14 +177,70 @@ function EmploymentEditComponent() {
   const { me: { profile } } = useAppSelectors(state => state);
 
   const handleSaveInformation = () => {
-    console.log('here');
+    const inputData = new FormData();
+    inputData.append('companyID', getCompanyData()?.id as string);
+    if ((informationValue.picture as []).length > 0) {
+      inputData.append('picture', (informationValue.picture as File)[0]);
+    }
+    inputData.append('fullName', informationValue.fullName);
+    inputData.append('nickname', informationValue.nickname);
+    inputData.append('phoneNumberPrefix', informationValue.phoneNumberPrefix);
+    inputData.append('phoneNumber', informationValue.phoneNumber);
+    inputData.append('email', informationValue.email);
+    inputData.append('startDate', dayjs(informationValue.startDate).format('YYYY-MM-DD'));
+    if (!informationValue.isPermanent) {
+      inputData.append('endDate', dayjs(informationValue.endDate).format('YYYY-MM-DD'));
+    }
+    inputData.append('isPermanent', ifThenElse(informationValue.isPermanent, 'true', 'false'));
+    if (informationValue.department !== '') {
+      inputData.append('department', informationValue.department);
+    }
+    if (informationValue.position !== '') {
+      inputData.append('position', informationValue.position);
+    }
+    inputData.append('isSelfService', ifThenElse(informationValue.isSelfService, 'true', 'false'));
+
+    dispatch({
+      type: patchDetailInformationRequested.toString(),
+      payload: {
+        employeeInformationPatch: {
+          information: inputData
+        }
+      }
+    });
   };
+
+
   const handleSavePersonal = () => {
-    console.log('here');
+    dispatch({
+      type: patchDetailPersonalInfoRequested.toString(),
+      payload: {
+        employeePersonal: {
+          personalPayload: personalInformationValue
+        }
+      }
+    });
   };
+
+
   const handleSaveEmergencyContact = () => {
-    console.log('here');
+    dispatch({
+      type: patchDetailEmergencyContactRequested.toString(),
+      payload: {
+        emergencyContactPatch: {
+          emergency: emergencyValue
+        }
+      }
+    });
   };
+
+  const handleSave = {
+    0: handleSaveInformation,
+    1: handleSavePersonal,
+    2: handleSaveEmergencyContact
+  };
+
+
   return (
     <>
       <TopWrapper>
@@ -191,7 +257,13 @@ function EmploymentEditComponent() {
         </BackWrapper>
         <ButtonWrapper>
           <MuiButton variant='outlined' size='small' onClick={() => handleOpen()}>Cancel</MuiButton>
-          <MuiButton variant='contained'  size='small' color='primary' onClick={() => { router.push('/employe/employement/profile-information'); }}>Save</MuiButton>
+          <MuiButton variant='contained'  size='small' color='primary' onClick={() => {
+            handleSave[value]();
+            setTimeout(() => {
+              router.push('/employe/employement/profile-information');
+            }, 2000);
+
+          }}>Save</MuiButton>
         </ButtonWrapper>
       </TopWrapper>
       <ContentWrapper>

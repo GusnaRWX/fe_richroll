@@ -8,6 +8,8 @@ import {
   getDetailInformationRequested,
   getDetailPersonalInfoRequested
 } from '@/store/reducers/slice/employment/employmentSlice';
+import { getListDepartmentRequested, getListPositionRequested } from '@/store/reducers/slice/options/optionSlice';
+import { getCompanyData } from '@/utils/helper';
 import { useRouter } from 'next/router';
 
 function EmploymentEditContainer() {
@@ -24,6 +26,16 @@ function EmploymentEditContainer() {
       });
       dispatch({
         type: getDetailInformationRequested.toString()
+      });
+      dispatch({
+        type: getListDepartmentRequested.toString(),
+        payload: getCompanyData()?.id
+      });
+      dispatch({
+        type: getListPositionRequested.toString(),
+        payload: {
+          departmentID: getCompanyData()?.id
+        }
       });
       dispatch({
         type: getDetailPersonalInfoRequested.toString()
