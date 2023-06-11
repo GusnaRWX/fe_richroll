@@ -8,7 +8,9 @@ import {
   postCompanyProfile,
   getCompanyDetail,
   patchCompanyProfile,
-  postCompanyPayments
+  postCompanyPayments,
+  getCompanyPayments,
+  patchCompanyPayments
 } from '../saga-actions/company/companyActions';
 import { takeEvery, call, put, delay } from 'redux-saga/effects';
 import { Company } from '@/types/company';
@@ -39,7 +41,13 @@ import {
   patchCompanyProfileFailed,
   postCompanyPaymentsRequested,
   postCompanyPaymentsSuccess,
-  postCompanyPaymentsFailed
+  postCompanyPaymentsFailed,
+  patchCompanyPaymentsRequested,
+  patchCompanyPaymentsSuccess,
+  patchCompanyPaymentsFailed,
+  getCompanyProfilePaymentsRequested,
+  getCompanyProfilePaymentsSuccess,
+  getCompanyProfilePaymentsFailed
 } from '@/store/reducers/slice/company/companySlice';
 import { Services } from '@/types/axios';
 import { setResponserMessage } from '@/store/reducers/slice/responserSlice';
@@ -270,7 +278,8 @@ function* fetchPostCompanyPayments(action: AnyAction) {
     const bankPayload = {
       bankID: action?.payload?.payments?.bank?.bankId,
       holder: action?.payload?.payments?.bank?.accountName,
-      accountNumber: action?.payload?.payments?.bank?.bankCode,
+      accountNumber: action?.payload?.payments?.bank?.accountNumber ?? '',
+      bankCode: action?.payload?.payments?.bank?.bankCode,
       branchCode: action?.payload?.payments?.bank?.branchCode,
       branchName: action?.payload?.payments?.bank?.branchName,
       swiftCode: action?.payload?.payments?.bank?.swiftCode
@@ -316,6 +325,12 @@ function* fetchGetCompanyDetail(action: AnyAction) {
     const res: AxiosResponse = yield call(getCompanyDetail, action?.payload);
     if (res.data.code === 200) {
       yield put({ type: getCompanyDetailSuccess.toString(), payload: res.data.data });
+      // yield delay(2000, true);
+      const body = {
+        type: getCompanyProfilePaymentsRequested.toString(),
+        payload: action?.payload
+      };
+      yield call(fetchGetCompanyPaymentDetail, body);
     }
   } catch (err) {
     if (err instanceof AxiosError) {
@@ -333,20 +348,65 @@ function* fetchGetCompanyDetail(action: AnyAction) {
   }
 }
 
-function* fetchPatchCompanyProfile(action: AnyAction) {
+function* fetchGetCompanyPaymentDetail(action: AnyAction) {
   try {
-    const res: AxiosResponse = yield call(patchCompanyProfile, action?.payload);
+    const res: AxiosResponse = yield call(getCompanyPayments, action?.payload?.id);
     if (res.data.code === 200) {
-      yield put({ type: patchCompanyProfileSuccess.toString(), payload: res.data.data });
-      Router.back();
+      yield put({
+        type: getCompanyProfilePaymentsSuccess.toString(),
+        payload: {
+          companyPayments: res?.data?.data
+        }
+      });
+    }
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      yield put({ type: getCompanyProfilePaymentsFailed.toString() });
+      yield delay(2000, true);
       yield put({
         type: setResponserMessage.toString(),
         payload: {
-          code: res.data.code,
-          message: 'Successfully Saved',
-          footerMessage: 'Company profile has been updated'
+          code: errorMessage?.code,
+          message: errorMessage?.message
         }
       });
+    }
+  }
+}
+
+function* fetchPatchCompanyProfile(action: AnyAction) {
+  try {
+    const payload = {
+      id: action?.payload?.id,
+      companyProfile: action?.payload?.companyProfile
+    };
+    const res: AxiosResponse = yield call(patchCompanyProfile, payload);
+    if (res.data.code === 200) {
+      yield put({ type: patchCompanyProfileSuccess.toString(), payload: res.data.data });
+      // Router.back();
+      // yield put({
+      //   type: setResponserMessage.toString(),
+      //   payload: {
+      //     code: res.data.code,
+      //     message: 'Successfully Saved',
+      //     footerMessage: 'Company profile has been updated'
+      //   }
+      // });
+      // const body = {
+      //   type: patchCompanyPaymentsRequested.toString(),
+      //   payload: {
+
+      //   }
+      // }
+      const body = {
+        type: patchCompanyPaymentsRequested.toString(),
+        payload: {
+          id: payload.id,
+          payments: action?.payload?.payments
+        }
+      };
+      yield call(fetchPatchCompanyPayments, body);
       yield delay(2000);
       yield put({
         type: setResponserMessage.toString(),
@@ -366,6 +426,55 @@ function* fetchPatchCompanyProfile(action: AnyAction) {
         payload: {
           code: errorMessage?.code,
           message: errorMessage?.message,
+        }
+      });
+    }
+  }
+}
+
+function* fetchPatchCompanyPayments(action: AnyAction) {
+  try {
+    const bankPayload = {
+      bankID: action?.payload?.payments?.bank?.bankId,
+      holder: action?.payload?.payments?.bank?.accountName,
+      accountNumber: action?.payload?.payments?.bank?.accountNumber,
+      bankCode: action?.payload?.payments?.bank?.bankCode ?? '',
+      branchCode: action?.payload?.payments?.bank?.branchCode,
+      branchName: action?.payload?.payments?.bank?.branchName,
+      swiftCode: action?.payload?.payments?.bank?.swiftCode
+    };
+    const payrollsPayload = action?.payload?.payments?.payrolls;
+    const payload = {
+      bank: bankPayload,
+      payrolls: Object.values(payrollsPayload)
+    };
+    const res: AxiosResponse = yield call(patchCompanyPayments,
+      action?.payload?.id,
+      payload
+    );
+    if (res) {
+      yield put({ type: patchCompanyPaymentsSuccess.toString() });
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: res.data.code,
+          message: 'Successfully Saved',
+          footerMessage: 'Company profile has been updated'
+        }
+      });
+      yield Router.push('/company-management/company-profile');
+    }
+
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      yield put({ type: patchCompanyPaymentsFailed.toString() });
+      yield Router.push('/company-management/company-profile');
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message
         }
       });
     }

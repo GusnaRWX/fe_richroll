@@ -8,7 +8,8 @@ interface CompanyState {
   companySector: [],
   bank: [],
   paymentMethod: [],
-  detail: object
+  detail: object,
+  companyPayment: object,
 }
 
 const initialState: CompanyState = {
@@ -18,7 +19,8 @@ const initialState: CompanyState = {
   companySector: [],
   bank: [],
   paymentMethod: [],
-  detail: {}
+  detail: {},
+  companyPayment: {}
 };
 
 export const companySlice = createSlice({
@@ -111,6 +113,25 @@ export const companySlice = createSlice({
     },
     postCompanyPaymentsFailed: (state) => {
       state.loading = false;
+    },
+    patchCompanyPaymentsRequested: (state) => {
+      state.loading = true;
+    },
+    patchCompanyPaymentsSuccess: (state) => {
+      state.loading = false;
+    },
+    patchCompanyPaymentsFailed: (state) => {
+      state.loading = false;
+    },
+    getCompanyProfilePaymentsRequested: (state) => {
+      state.loading = true;
+    },
+    getCompanyProfilePaymentsSuccess: (state, action) => {
+      state.loading = false;
+      state.companyPayment = action?.payload?.companyPayments;
+    },
+    getCompanyProfilePaymentsFailed: (state) => {
+      state.loading = false;
     }
   },
   extraReducers: {
@@ -150,7 +171,13 @@ export const {
   patchCompanyProfileFailed,
   postCompanyPaymentsRequested,
   postCompanyPaymentsSuccess,
-  postCompanyPaymentsFailed
+  postCompanyPaymentsFailed,
+  patchCompanyPaymentsRequested,
+  patchCompanyPaymentsSuccess,
+  patchCompanyPaymentsFailed,
+  getCompanyProfilePaymentsRequested,
+  getCompanyProfilePaymentsSuccess,
+  getCompanyProfilePaymentsFailed
 } = companySlice.actions;
 
 export default companySlice.reducer;
