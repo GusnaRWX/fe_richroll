@@ -9,7 +9,7 @@ export const validationSchemeCompanyProfile = Yup.object({
   companyEmail: Yup.string().email('Email should be valid').required('Email is required'),
   phoneNumberPrefix: Yup.string().required(),
   phoneNumber: Yup.string()
-    .matches(/^\d{12,13}$/, 'Phone number should have 12 or 13 digits')
+    .matches(/^\d{11}$/, 'Phone number should have 12 or 13 digits')
     .required('Phone number is required')
     .typeError('Phone number should be a number'),
 
