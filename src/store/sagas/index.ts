@@ -8,6 +8,7 @@ import companySaga from './company/companySaga';
 import cnbSaga from './cnb/compensationSaga';
 import workScheduleSaga from './company-management/workScheduleSaga';
 import annualScheduleSaga from './company-management/annualScheduleSaga';
+import employmentSaga from './employment/employmentSaga';
 
 export default function* rootSaga() {
   yield all([
@@ -19,6 +20,7 @@ export default function* rootSaga() {
     companySaga(),
     cnbSaga(),
     workScheduleSaga(),
-    annualScheduleSaga()
+    annualScheduleSaga(),
+    employmentSaga()
   ]);
 }

@@ -1,8 +1,12 @@
 import { Text } from '@/components/_shared/common';
 import { Grid, Typography } from '@mui/material';
 import React from 'react';
+import { useAppSelectors } from '@/hooks/index';
+import dayjs from 'dayjs';
+import { getGender, getMaritalStatus, getReligion, ifThenElse } from '@/utils/helper';
 
 const PersonalInformationPersonalTabComponent = () => {
+  const { detailPersonalInfo } = useAppSelectors((state) => state.employment);
   return (
     <>
       <Grid
@@ -36,8 +40,7 @@ const PersonalInformationPersonalTabComponent = () => {
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            07/11/2022
-
+            {dayjs(detailPersonalInfo?.personal?.dateOfBirth).format('DD/MM/YYYY')}
           </Typography>
         </Grid>
         <Grid
@@ -53,8 +56,7 @@ const PersonalInformationPersonalTabComponent = () => {
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            Female
-
+            {getGender(detailPersonalInfo?.personal?.gender)}
           </Typography>
         </Grid>
         <Grid
@@ -70,8 +72,7 @@ const PersonalInformationPersonalTabComponent = () => {
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-
-            Single
+            {getMaritalStatus(detailPersonalInfo?.personal?.maritalStatus)}
           </Typography>
         </Grid>
         <Grid
@@ -87,8 +88,7 @@ const PersonalInformationPersonalTabComponent = () => {
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-
-            2
+            {detailPersonalInfo?.personal?.numberOfChildren}
           </Typography>
         </Grid>
         <Grid
@@ -104,8 +104,7 @@ const PersonalInformationPersonalTabComponent = () => {
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-
-            Indonesia
+            {detailPersonalInfo?.personal?.country?.name}
           </Typography>
         </Grid>
         <Grid
@@ -121,8 +120,7 @@ const PersonalInformationPersonalTabComponent = () => {
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            Islamic
-
+            {getReligion(detailPersonalInfo?.personal?.religion)}
           </Typography>
         </Grid>
       </Grid>
@@ -156,8 +154,7 @@ const PersonalInformationPersonalTabComponent = () => {
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            Indoensia
-
+            {detailPersonalInfo?.citizen.country?.name}
           </Typography>
         </Grid>
         <Grid
@@ -173,8 +170,7 @@ const PersonalInformationPersonalTabComponent = () => {
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            Kabupaten gaurt
-
+            {detailPersonalInfo?.citizen?.firstLevel?.name}
           </Typography>
         </Grid>
         <Grid
@@ -190,8 +186,7 @@ const PersonalInformationPersonalTabComponent = () => {
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            Garut
-
+            {detailPersonalInfo?.citizen?.secondLevel?.name}
           </Typography>
         </Grid>
         <Grid
@@ -207,8 +202,7 @@ const PersonalInformationPersonalTabComponent = () => {
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            Paledang
-            {/* {data?.citizen?.thirdLevel?.name} */}
+            {detailPersonalInfo?.citizen?.thirdLevel?.name}
           </Typography>
         </Grid>
         <Grid
@@ -224,8 +218,7 @@ const PersonalInformationPersonalTabComponent = () => {
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            Jln.Garut
-            {/* {data?.citizen?.address} */}
+            {detailPersonalInfo?.citizen?.address}
           </Typography>
         </Grid>
         <Grid
@@ -241,8 +234,7 @@ const PersonalInformationPersonalTabComponent = () => {
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            123822
-            {/* {data?.citizen?.zipCode} */}
+            {detailPersonalInfo?.citizen?.zipCode}
           </Typography>
         </Grid>
       </Grid>
@@ -276,8 +268,7 @@ const PersonalInformationPersonalTabComponent = () => {
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            {/* {data?.citizen?.firstLevel?.name} */}
-            Garut
+            {detailPersonalInfo?.residential.country?.name}
           </Typography>
         </Grid>
         <Grid
@@ -293,8 +284,7 @@ const PersonalInformationPersonalTabComponent = () => {
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            Garut
-            {/* {data?.citizen?.firstLevel?.name} */}
+            {detailPersonalInfo?.residential?.firstLevel?.name}
           </Typography>
         </Grid>
         <Grid
@@ -310,8 +300,7 @@ const PersonalInformationPersonalTabComponent = () => {
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            Ciawstra
-            {/* {data?.citizen?.secondLevel?.name} */}
+            {detailPersonalInfo?.residential?.secondLevel?.name}
           </Typography>
         </Grid>
         <Grid
@@ -327,8 +316,7 @@ const PersonalInformationPersonalTabComponent = () => {
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            Garut
-            {/* {data?.citizen?.thirdLevel?.name} */}
+            {detailPersonalInfo?.residential?.thirdLevel?.name}
           </Typography>
         </Grid>
         <Grid
@@ -344,8 +332,7 @@ const PersonalInformationPersonalTabComponent = () => {
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            Jl.Paledang
-
+            {detailPersonalInfo?.residential?.address}
           </Typography>
         </Grid>
         <Grid
@@ -361,8 +348,7 @@ const PersonalInformationPersonalTabComponent = () => {
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            99212
-
+            {detailPersonalInfo?.residential?.zipCode}
           </Typography>
         </Grid>
       </Grid>
@@ -397,7 +383,11 @@ const PersonalInformationPersonalTabComponent = () => {
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            KTP
+            {ifThenElse(detailPersonalInfo?.identity?.type === 0, 'KTP', (
+              ifThenElse(detailPersonalInfo?.identity?.type === 1, 'Nomor wajib pajak', (
+                ifThenElse(detailPersonalInfo?.identity?.type === 2, 'Passport', '-')
+              ))
+            ))}
           </Typography>
         </Grid>
         <Grid
@@ -413,7 +403,7 @@ const PersonalInformationPersonalTabComponent = () => {
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            12312312321
+            {detailPersonalInfo?.identity?.number}
           </Typography>
         </Grid>
         <Grid
@@ -429,8 +419,7 @@ const PersonalInformationPersonalTabComponent = () => {
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            09/11/2022
-
+            {dayjs(detailPersonalInfo?.identity?.expiredAt).format('DD/MM/YYYY')}
           </Typography>
         </Grid>
       </Grid>
@@ -465,8 +454,7 @@ const PersonalInformationPersonalTabComponent = () => {
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-
-            BCA
+            {ifThenElse(detailPersonalInfo?.bank?.bank?.name === null, '-', detailPersonalInfo?.bank?.bank?.name)}
           </Typography>
         </Grid>
         <Grid
@@ -482,8 +470,7 @@ const PersonalInformationPersonalTabComponent = () => {
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-
-            BCA Garut
+            {ifThenElse(detailPersonalInfo?.bank?.holder === null, '-', detailPersonalInfo?.bank?.holder)}
           </Typography>
         </Grid>
         <Grid
@@ -504,8 +491,7 @@ const PersonalInformationPersonalTabComponent = () => {
               mb={0.5}
             />
             <Typography fontWeight={400} color='grey.600'>
-              123123123
-
+              {ifThenElse(detailPersonalInfo?.bank?.accountNumber === null, '-', detailPersonalInfo?.bank?.accountNumber)}
             </Typography>
           </Grid>
           <Grid
@@ -521,8 +507,7 @@ const PersonalInformationPersonalTabComponent = () => {
               mb={0.5}
             />
             <Typography fontWeight={400} color='grey.600'>
-              12312312
-
+              {ifThenElse(detailPersonalInfo?.bank?.bankCode === null, '-', detailPersonalInfo?.bank?.bankCode)}
             </Typography>
           </Grid>
           <Grid
@@ -538,8 +523,7 @@ const PersonalInformationPersonalTabComponent = () => {
               mb={0.5}
             />
             <Typography fontWeight={400} color='grey.600'>
-              KCP Garut
-
+              {ifThenElse(detailPersonalInfo?.bank?.branchCode === null, '-', detailPersonalInfo?.bank?.branchCode)}
             </Typography>
           </Grid>
         </Grid>
@@ -556,8 +540,7 @@ const PersonalInformationPersonalTabComponent = () => {
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-
-            KCP GARUT
+            {ifThenElse(detailPersonalInfo?.bank?.branchName === null, '-', detailPersonalInfo?.bank?.branchName)}
           </Typography>
         </Grid>
         <Grid
@@ -573,7 +556,7 @@ const PersonalInformationPersonalTabComponent = () => {
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            1231312
+            {ifThenElse(detailPersonalInfo?.bank?.swiftCode === null, '-', detailPersonalInfo?.bank?.swiftCode)}
           </Typography>
         </Grid>
       </Grid>

@@ -1,8 +1,15 @@
 import { Text } from '@/components/_shared/common';
 import { Box, Grid, Typography } from '@mui/material';
 import React from 'react';
+import { useAppSelectors } from '@/hooks/index';
+import { relationshipItems } from '@/utils/options';
 
 const PersonalInformationEmergencyTabComponent = () => {
+  const { detailEmergencyContact } = useAppSelectors((state) => state.employment);
+  console.log(detailEmergencyContact);
+  const checkRelationshipItems = (relationship: number) => {
+    return relationshipItems.find(item => +item.value === relationship)?.label;
+  };
   return (
     <>
       <Typography component='h3' fontWeight='bold' fontSize={18} color='primary'>Emergency Contact</Typography>
@@ -16,7 +23,7 @@ const PersonalInformationEmergencyTabComponent = () => {
               color='grey.400'
             />
             <Text
-              title={'Sumanya'}
+              title={detailEmergencyContact?.primary?.name}
               fontWeight={400}
               color='grey.600'
             />
@@ -28,7 +35,7 @@ const PersonalInformationEmergencyTabComponent = () => {
               color='grey.400'
             />
             <Text
-              title={'Parent'}
+              title={checkRelationshipItems(detailEmergencyContact?.primary?.relationship)}
               fontWeight={400}
               color='grey.600'
             />
@@ -42,7 +49,7 @@ const PersonalInformationEmergencyTabComponent = () => {
               color='grey.400'
             />
             <Text
-              title={'12313123123'}
+              title={detailEmergencyContact?.primary?.phoneNumberPrefix + detailEmergencyContact?.primary?.phoneNumber}
               fontWeight={400}
               color='grey.600'
             />
@@ -59,7 +66,7 @@ const PersonalInformationEmergencyTabComponent = () => {
               color='grey.400'
             />
             <Text
-              title={'Sumanya'}
+              title={detailEmergencyContact?.secondary?.name}
               fontWeight={400}
               color='grey.600'
             />
@@ -71,7 +78,7 @@ const PersonalInformationEmergencyTabComponent = () => {
               color='grey.400'
             />
             <Text
-              title={'Parent'}
+              title={checkRelationshipItems(detailEmergencyContact?.secondary?.relationship)}
               fontWeight={400}
               color='grey.600'
             />
@@ -85,7 +92,7 @@ const PersonalInformationEmergencyTabComponent = () => {
               color='grey.400'
             />
             <Text
-              title='1230131'
+              title={detailEmergencyContact?.secondary?.phoneNumberPrefix + detailEmergencyContact?.secondary?.phoneNumber}
               fontWeight={400}
               color='grey.600'
             />
