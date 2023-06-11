@@ -7,7 +7,9 @@ import { FiEdit } from 'react-icons/fi';
 import PersonalInformationTabComponent from './PersonalInformationTabComponent';
 import PersonalInformationPersonalTabComponent from './PersonalInformationPersonalTabComponent';
 import PersonalInformationEmergencyTabComponent from './PersonalInformationEmergencyTabComponent';
+import PersonalWorkSchedule from './PersonalWorkSchedule';
 import { useAppSelectors } from '@/hooks/index';
+import { useRouter } from 'next/router';
 
 const TopWrapper = styled.div`
  display: flex;
@@ -81,8 +83,12 @@ function TabPanel(props: TabPanelProps) {
 
 const PersonalInformationComponent = () => {
   const [value, setValue] = useState(0);
+  const router = useRouter();
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
+  };
+  const handleChangePage = (path) => {
+    router.push(path);
   };
   const { me: { profile } } = useAppSelectors(state => state);
   return (
@@ -111,6 +117,7 @@ const PersonalInformationComponent = () => {
             }
             sx={{ color: 'white' }}
             size='small'
+            onClick={() => {handleChangePage('/employe/employement/profile-information/edit');}}
           />
         </ButtonWrapper>
       </TopWrapper>
@@ -132,6 +139,9 @@ const PersonalInformationComponent = () => {
           </TabPanel>
           <TabPanel value={value} index={2}>
             <PersonalInformationEmergencyTabComponent />
+          </TabPanel>
+          <TabPanel value={value} index={3}>
+            <PersonalWorkSchedule />
           </TabPanel>
         </Box>
       </ContentWrapper>
