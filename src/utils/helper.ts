@@ -71,7 +71,7 @@ export const getUserData = () => {
     if (user) {
       parse = JSON.parse(user);
       return parse;
-    }else{
+    } else {
       return null;
     }
   }
@@ -378,5 +378,26 @@ export const dynamicPayloadBaseCnb = (arrData, id, value) => {
         rateType: 0,
       };
       break;
+  }
+};
+
+export const getPeriod = (period: number) => {
+  switch (period) {
+    case 0:
+      return 'Sunday';
+    case 1:
+      return 'Monday';
+    case 2:
+      return 'Tuesday';
+    case 3:
+      return 'Thursday';
+    case 4:
+      return 'Wednesday';
+    case 5:
+      return 'Friday';
+    case 6:
+      return 'Saturday';
+    default:
+      return 'Sunday';
   }
 };

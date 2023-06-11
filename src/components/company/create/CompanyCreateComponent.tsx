@@ -215,7 +215,7 @@ const CompanyCreateComponent = ({ companyType, companySector, bank, paymentMetho
             end: val.monthlyPeriodEnd,
             payrollDate: val.monthlyPayrollDate,
             methodID: val.monthlyMethod,
-            type: 1
+            type: 0
           }
         }
       };

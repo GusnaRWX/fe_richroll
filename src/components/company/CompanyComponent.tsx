@@ -140,7 +140,7 @@ const CompanyComponent = ({ companies }: Company.Component) => {
   const router = useRouter();
   const handleClick = (val, path) => {
     setStorages([
-      { name: 'kaya_company', value: JSON.stringify({ id: val?.id, imageUrl: val?.logo || '', name: val?.name, sector: val?.type?.name || '-' }) }
+      { name: 'kaya_company', value: JSON.stringify({ id: val?.id, imageUrl: val?.logo || '', name: val?.name, sector: val?.sector?.name || '-' }) }
     ]);
     router.push(path);
   };
@@ -195,7 +195,7 @@ const CompanyComponent = ({ companies }: Company.Component) => {
                     component='div'
                     sx={{ fontWeight: 500, width: '100%' }}
                   >
-                    {val?.['type']?.['name']}
+                    {val?.['sector']?.['name']}
                   </Typography>
                 </WrapperCardItem>
               ))}

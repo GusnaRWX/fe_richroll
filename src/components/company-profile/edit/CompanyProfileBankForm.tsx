@@ -332,12 +332,13 @@ function CompanyProfileBankForm({ bank, paymentMethod, formik }: CompanyBankProp
                     }
                   }}
                 >
-                  <MenuItem value='Sunday'>Sunday</MenuItem>
-                  <MenuItem value='Monday'>Monday</MenuItem>
-                  <MenuItem value='Thursday'>Thursday</MenuItem>
-                  <MenuItem value='Wednesday'>Wednesday</MenuItem>
-                  <MenuItem value='Friday'>Friday</MenuItem>
-                  <MenuItem value='Saturday'>Saturday</MenuItem>
+                  <MenuItem value='0'>Sunday</MenuItem>
+                  <MenuItem value='1'>Monday</MenuItem>
+                  <MenuItem value='2'>Tuesday</MenuItem>
+                  <MenuItem value='3'>Thursday</MenuItem>
+                  <MenuItem value='4'>Wednesday</MenuItem>
+                  <MenuItem value='5'>Friday</MenuItem>
+                  <MenuItem value='6'>Saturday</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
@@ -402,12 +403,13 @@ function CompanyProfileBankForm({ bank, paymentMethod, formik }: CompanyBankProp
                       }
                     }}
                   >
-                    <MenuItem value='Sunday'>Sunday</MenuItem>
-                    <MenuItem value='Monday'>Monday</MenuItem>
-                    <MenuItem value='Thursday'>Thursday</MenuItem>
-                    <MenuItem value='Wednesday'>Wednesday</MenuItem>
-                    <MenuItem value='Friday'>Friday</MenuItem>
-                    <MenuItem value='Saturday'>Saturday</MenuItem>
+                    <MenuItem value='0'>Sunday</MenuItem>
+                    <MenuItem value='1'>Monday</MenuItem>
+                    <MenuItem value='2'>Tuesday</MenuItem>
+                    <MenuItem value='3'>Thursday</MenuItem>
+                    <MenuItem value='4'>Wednesday</MenuItem>
+                    <MenuItem value='5'>Friday</MenuItem>
+                    <MenuItem value='6'>Saturday</MenuItem>
                   </Select>
                 </FormControl>
                 <Typography component='div' variant='text-base'> - </Typography>
@@ -431,8 +433,8 @@ function CompanyProfileBankForm({ bank, paymentMethod, formik }: CompanyBankProp
                       }
                     }}
                   >
-                    <MenuItem value='First Week'>First Week</MenuItem>
-                    <MenuItem value='Second Week'>Second Week</MenuItem>
+                    <MenuItem value='0'>First Week</MenuItem>
+                    <MenuItem value='1'>Second Week</MenuItem>
                   </Select>
                 </FormControl>
               </Box>

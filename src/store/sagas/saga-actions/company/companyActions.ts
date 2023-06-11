@@ -30,11 +30,19 @@ export const postCompanyProfile = (payload: object) => {
   return post('companies', payload);
 };
 
-export const patchCompanyProfile = (payload: Company.CompanyParams) => {
-  const { id, data } = payload;
-  return patch(`companies/${id}`, data);
+export const patchCompanyProfile = (payload: { id: string, companyProfile: object }) => {
+  // const { id, data } = payload;
+  return patch(`companies/${payload.id}`, payload.companyProfile);
 };
 
 export const postCompanyPayments = (id: string, payload: object) => {
   return post(`companies/${id}/payments`, payload);
+};
+
+export const getCompanyPayments = (id: string | number) => {
+  return get(`companies/${id}/payments`);
+};
+
+export const patchCompanyPayments = (id: string | number, payload: object) => {
+  return patch(`companies/${id}/payments`, payload);
 };

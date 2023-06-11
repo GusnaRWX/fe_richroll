@@ -12,7 +12,7 @@ import { styled } from '@mui/material/styles';
 import { Company, CompanyEdit } from '@/types/component';
 import CompanyInformationForm from './CompanyProfileInformationForm';
 import CompanyBankForm from './CompanyProfileBankForm';
-import { useAppDispatch } from '@/hooks/index';
+import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { patchCompanyProfileRequested } from '@/store/reducers/slice/company/companySlice';
 import { useRouter } from 'next/router';
 import { getCompanyData, ifEmptyReplace, ifThenElse } from '@/utils/helper';
@@ -73,8 +73,10 @@ function a11yProps(index: number) {
 
 const CompanyEditComponent = ({ detail, companyType, companySector, bank, paymentMethod, countries }: CompanyEdit.Component) => {
   const [tabSelected, setTabSelected] = useState(0);
+  const companyPayments = useAppSelectors(state => state.company.companyPayment);
+  console.log(companyPayments);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [images, setImages] = useState<string | null>(detail?.information?.imageUrl);
+  const [images, setImages] = useState<string | null>(detail?.logo);
   const companyData = getCompanyData();
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -84,13 +86,13 @@ const CompanyEditComponent = ({ detail, companyType, companySector, bank, paymen
       picture: [],
 
       // Group Company Information
-      companyType: detail?.information?.type?.id,
-      companyName: detail?.information?.name,
-      companyNPWP: detail?.information?.npwp,
-      companySector: detail?.information?.sector?.id,
-      companyEmail: detail?.information?.email,
-      phoneNumberPrefix: detail?.information?.phoneNumberPrefix,
-      phoneNumber: detail?.information?.phoneNumber,
+      companyType: detail?.type?.id,
+      companyName: detail?.name,
+      companyNPWP: detail?.taxIDNumber,
+      companySector: detail?.sector?.id,
+      companyEmail: detail?.email,
+      phoneNumberPrefix: detail?.phoneNumberPrefix,
+      phoneNumber: detail?.phoneNumber,
 
       // Group Company Address
       countryCompanyAddress: detail?.address?.country?.id,
@@ -101,27 +103,27 @@ const CompanyEditComponent = ({ detail, companyType, companySector, bank, paymen
       zipCodeCompanyAddress: detail?.address?.zipCode,
 
       // Group Bank Information
-      bankBankInformation: detail?.bank?.bank?.id,
-      bankAccountHolderNameBankInformation: detail?.bank?.accountName,
-      bankAccoutNoBankInformation: detail?.bank?.accountNumber,
-      bankCodeBankInformation: detail?.bank?.bankCode,
-      branchCodeBankInformation: detail?.bank?.branchCode,
-      branchNameBankInformation: detail?.bank?.branchName,
-      swiftCodeBankInformation: detail?.bank?.swiftCode,
+      bankBankInformation: companyPayments?.bank?.bank?.id,
+      bankAccountHolderNameBankInformation: companyPayments?.bank?.holder,
+      bankAccoutNoBankInformation: companyPayments?.bank?.accountNumber,
+      bankCodeBankInformation: companyPayments?.bank?.bankCode || '',
+      branchCodeBankInformation: companyPayments?.bank?.branchCode,
+      branchNameBankInformation: companyPayments?.bank?.branchName,
+      swiftCodeBankInformation: companyPayments?.bank?.swiftCode,
 
       // Group Payroll Information
-      isMonthly: !!detail?.payroll?.monthly,
-      isWeekly: !!detail?.payroll?.weekly,
-      isBiWeekly: !!detail?.payroll?.biWeekly,
-      monthlyPeriodStart: ifThenElse(!!detail?.payroll?.monthly, detail?.payroll?.monthly?.periodStart, ''),
-      monthlyPeriodEnd: ifThenElse(!!detail?.payroll?.monthly, detail?.payroll?.monthly?.periodEnd, ''),
-      monthlyPayrollDate: ifThenElse(!!detail?.payroll?.monthly, detail?.payroll?.monthly?.payrollDate, ''),
-      monthlyMethod: ifThenElse(!!detail?.payroll?.monthly, detail?.payroll?.monthly?.method?.id, ''),
-      weeklyPeriod: ifThenElse(!!detail?.payroll?.weekly, detail?.payroll?.weekly?.period, ''),
-      weeklyMethod: ifThenElse(!!detail?.payroll?.weekly, detail?.payroll?.weekly?.method?.id, ''),
-      biWeeklyPeriod: ifThenElse(!!detail?.payroll?.biWeekly, detail?.payroll?.biWeekly?.period, ''),
-      biWeeklyPeriodWeek: ifThenElse(!!detail?.payroll?.biWeekly, detail?.payroll?.biWeekly?.periodWeek, ''),
-      biWeeklyMethod: ifThenElse(!!detail?.payroll?.biWeekly, detail?.payroll?.biWeekly?.method?.id, '')
+      isMonthly: companyPayments?.payrolls?.some(v => v.type === 0),
+      isWeekly: companyPayments?.payrolls?.some(v => v.type === 1),
+      isBiWeekly: companyPayments?.payrolls?.some(v => v.type === 2),
+      monthlyPeriodStart: ifThenElse(companyPayments?.payrolls?.some(v => v.type === 0), companyPayments?.payrolls?.find(v => v.type === 0)?.start, ''),
+      monthlyPeriodEnd: ifThenElse(companyPayments?.payrolls?.some(v => v.type === 0), companyPayments?.payrolls?.find(v => v.type === 0)?.end, ''),
+      monthlyPayrollDate: ifThenElse(companyPayments?.payrolls?.some(v => v.type === 0), companyPayments?.payrolls?.find(v => v.type === 0)?.payrollDate, ''),
+      monthlyMethod: ifThenElse(companyPayments?.payrolls?.some(v => v.type === 0), companyPayments?.payrolls?.find(v => v.type === 0)?.method?.id, ''),
+      weeklyPeriod: ifThenElse(companyPayments?.payrolls?.some(v => v.type === 1), companyPayments?.payrolls?.find(v => v.type === 1)?.start, ''),
+      weeklyMethod: ifThenElse(companyPayments?.payrolls?.some(v => v.type === 1), companyPayments?.payrolls?.find(v => v.type === 1)?.method?.id, ''),
+      biWeeklyPeriod: ifThenElse(companyPayments?.payrolls?.some(v => v.type === 2), companyPayments?.payrolls?.find(v => v.type === 2)?.start, ''),
+      biWeeklyPeriodWeek: ifThenElse(companyPayments?.payrolls?.some(v => v.type === 2), companyPayments?.payrolls?.find(v => v.type === 2)?.end, ''),
+      biWeeklyMethod: ifThenElse(companyPayments?.payrolls?.some(v => v.type === 2), companyPayments?.payrolls?.find(v => v.type === 2)?.method?.id, '')
     } as Company.Detail,
     validationSchema: validationSchemeCompanyProfile,
     onSubmit: (values) => {
@@ -129,12 +131,14 @@ const CompanyEditComponent = ({ detail, companyType, companySector, bank, paymen
     }
   });
 
+  console.log(formik.values.weeklyPeriod);
+
   const handleSubmit = (val) => {
     const informationData = {
-      typeId: val.companyType,
+      typeID: val.companyType,
       name: val.companyName,
-      npwp: ifEmptyReplace(val.companyNPWP, null),
-      sectorId: val.companySector,
+      taxIDNumber: ifEmptyReplace(val.companyNPWP, null),
+      sectorID: val.companySector,
       email: val.companyEmail,
       phoneNumber: val.phoneNumber.toString(),
       phoneNumberPrefix: val.phoneNumberPrefix,
@@ -142,11 +146,11 @@ const CompanyEditComponent = ({ detail, companyType, companySector, bank, paymen
 
 
     const addressData = {
-      countryId: val.countryCompanyAddress,
+      countryID: val.countryCompanyAddress,
       firstLevelCode: val.provinceCompanyAddress,
       secondLevelCode: val.cityCompanyAddress,
       thirdLevelCode: val.subDistrictCompanyAddress,
-      fourthLevelCode: null,
+      fourthLevelCode: '',
       address: val.addressCompanyAddress,
       zipCode: val.zipCodeCompanyAddress,
     };
@@ -166,10 +170,11 @@ const CompanyEditComponent = ({ detail, companyType, companySector, bank, paymen
       payrollData = {
         ...payrollData, ...{
           monthly: {
-            periodStart: val.monthlyPeriodStart,
-            periodEnd: val.monthlyPeriodEnd,
-            payrollDate: val.monthlyPayrollDate,
-            methodId: val.monthlyMethod,
+            start: +val.monthlyPeriodStart,
+            end: +val.monthlyPeriodEnd,
+            payrollDate: +val.monthlyPayrollDate,
+            methodID: val.monthlyMethod,
+            type: 0
           }
         }
       };
@@ -179,8 +184,9 @@ const CompanyEditComponent = ({ detail, companyType, companySector, bank, paymen
       payrollData = {
         ...payrollData, ...{
           weekly: {
-            period: val.weeklyPeriod,
-            methodId: val.weeklyMethod,
+            start: +val.weeklyPeriod,
+            methodID: val.weeklyMethod,
+            type: 1
           }
         }
       };
@@ -190,24 +196,32 @@ const CompanyEditComponent = ({ detail, companyType, companySector, bank, paymen
       payrollData = {
         ...payrollData, ...{
           biWeekly: {
-            period: val.biWeeklyPeriod,
-            periodWeek: val.biWeeklyPeriodWeek,
-            methodId: val.biWeeklyMethod,
+            start: +val.biWeeklyPeriod,
+            end: +val.biWeeklyPeriodWeek,
+            methodID: val.biWeeklyMethod,
+            type: 2
           }
         }
       };
     }
 
     const inputData = new FormData();
-    inputData.append('picture', ifThenElse(val?.picture?.length, val?.picture[0], detail?.information?.imageUrl));
-    inputData.append('information', JSON.stringify(informationData));
+    inputData.append('logo', ifThenElse(val?.picture?.length, val?.picture[0], detail?.logo));
+    for (const key in informationData) {
+      inputData.append(`${key}`, informationData[key]);
+    }
     inputData.append('address', JSON.stringify(addressData));
-    inputData.append('bank', JSON.stringify(bankData));
-    inputData.append('payroll', JSON.stringify(payrollData));
 
     dispatch({
       type: patchCompanyProfileRequested.toString(),
-      payload: { id: detail.id, data: inputData }
+      payload: {
+        id: companyData?.id,
+        companyProfile: inputData,
+        payments: {
+          bank: bankData,
+          payrolls: payrollData
+        }
+      }
     });
   };
 
