@@ -3,10 +3,26 @@ import { Grid, Typography, Button } from '@mui/material';
 import { Scheduler } from '@aldabil/react-scheduler';
 import { Text } from '@/components/_shared/common';
 import type { SchedulerRef } from '@aldabil/react-scheduler/types';
+import { useAppDispatch, useAppSelectors } from '@/hooks/index';
+import { getUserWorkScheduleRequested } from '@/store/reducers/slice/employment/employmentSlice';
+
 
 function PersonalWorkSchedule() {
   const calendarRef = useRef<SchedulerRef>(null);
   const [hydrated, setHydrated] = useState(false);
+  const dispatch = useAppDispatch();
+  const { profileName, grossHour, netHour, events } = useAppSelectors((state) => state.employment);
+
+  useEffect(() => {
+    dispatch({
+      type: getUserWorkScheduleRequested.toString()
+    });
+  }, []);
+  console.log(events);
+
+  useEffect(() => {
+    calendarRef?.current?.scheduler?.confirmEvent(events, 'create');
+  }, [events]);
 
   useEffect(() => {
     setHydrated(true);
@@ -44,8 +60,7 @@ function PersonalWorkSchedule() {
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            Day Shift
-
+            {profileName}
           </Typography>
         </Grid>
         <Grid
@@ -62,7 +77,7 @@ function PersonalWorkSchedule() {
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            40 Hours
+            {grossHour + ' '}Hours
           </Typography>
         </Grid>
         <Grid
@@ -79,16 +94,16 @@ function PersonalWorkSchedule() {
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            40 Hours
+            {netHour + ' '}Hours
           </Typography>
         </Grid>
       </Grid>
       <Scheduler
         view='week'
-        disableViewNavigator={false}
+        disableViewNavigator={true}
         ref={calendarRef}
         events={[]}
-        navigation={false}
+        navigation={true}
         editable={false}
         deletable={false}
         day={null}
