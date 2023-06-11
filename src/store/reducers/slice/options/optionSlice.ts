@@ -131,7 +131,7 @@ export const optionSlice = createSlice({
       state.loading = false;
       state.banks = action?.payload?.items.map(item => {
         return {
-          label: item.alias,
+          label: item.name,
           value: item.id
         };
       });

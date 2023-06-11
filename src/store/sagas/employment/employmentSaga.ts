@@ -153,7 +153,7 @@ function* fetchGetEmploymentCnb() {
 
 function* fetchPatchEmploymentInformation(action: AnyAction) {
   try {
-    const res: AxiosResponse = yield call(patchInformation, action?.payload);
+    const res: AxiosResponse = yield call(patchInformation, action?.payload?.employeeInformationPatch);
     if (res.data.code === '200' || res.data.code === '201') {
       yield put({ type: patchDetailInformationSuccess.toString() });
       yield put({
