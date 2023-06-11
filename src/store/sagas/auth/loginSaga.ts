@@ -53,7 +53,7 @@ function* fetchAuthenticationLogin(action: AnyAction) {
       });
       const roles = profile?.data?.data?.roles;
       if (roles?.includes('Employee')) {
-        yield Router.push('/employe/employement/profile-information');
+        yield Router.push('/employe/company');
       } else {
         yield Router.push('/company');
       }
