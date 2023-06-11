@@ -12,7 +12,7 @@ import { HiOutlineLogout } from 'react-icons/hi';
 import { HiBuildingOffice } from 'react-icons/hi2';
 import { Text } from '../../common';
 import PersonIcon from '@mui/icons-material/Person';
-import { Roles, renderProfile } from '@/utils/roles';
+import { Roles } from '@/utils/roles';
 
 const Profile = () => {
   const router = useRouter();
@@ -26,8 +26,8 @@ const Profile = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  console.log(checkRoles);
-  const handleRemoveToken = async (type: string) => {
+
+  const handleRemoveToken = async (type?: string) => {
     switch (type) {
       case 'logout':
         clearStorages(['accessToken', 'refreshToken', 'user']);
@@ -46,7 +46,6 @@ const Profile = () => {
         break;
     }
   };
-
 
   return (
     <Grid
@@ -102,37 +101,50 @@ const Profile = () => {
         onClose={handleClose}
         MenuListProps={{
           'aria-labelledby': 'menu-button',
+
+          sx: {
+            '& .MuiMenuItem-root:hover': {
+              backgroundColor: '#223567',
+              color: 'white !important'
+            }
+          }
         }}
       >
-        {renderProfile?.map(profile => (
-          checkRoles?.find(role => role === profile.key) && (
-            profile?.menu?.map(menu => (
-              <MenuItem key={profile.key}>
-                <menu.icon?.icon/>
+        {
+          checkRoles?.includes('HR Admin') && (
+            <div>
+              <MenuItem onClick={() => { handleRemoveToken('profile'); }}>
+                <PersonIcon width={20} fontSize='small' />
+                <Text variant='text-sm' title='Profile' ml='10px' />
               </MenuItem>
-            ))
-            // <MenuItem key={profile.key}>
-            //   {profile.menu}
-            // </MenuItem>
+              <Divider />
+              <MenuItem onClick={() => { handleRemoveToken('company'); }}>
+                <HiBuildingOffice />
+                <Text variant='text-sm' title='Change Company' ml='10px' />
+              </MenuItem>
+              <Divider />
+              <MenuItem onClick={() => { handleRemoveToken('logout'); }} >
+                <HiOutlineLogout color='#DC2626' fontSize={20} />
+                <Text variant='text-sm' title='Logout' color='red.600' ml='10px' />
+              </MenuItem>
+            </div>
           )
-        ))}
-        {/* {
-          checkRoles && 
-        } */}
-        <MenuItem onClick={() => { handleRemoveToken('profile'); }}>
-          <PersonIcon width={20} fontSize='small' />
-          <Text variant='text-sm' title='Profile' ml='10px' />
-        </MenuItem>
-        <Divider />
-        <MenuItem onClick={() => { handleRemoveToken('company'); }}>
-          <HiBuildingOffice />
-          <Text variant='text-sm' title='Change Company' ml='10px' />
-        </MenuItem>
-        <Divider />
-        <MenuItem onClick={() => { handleRemoveToken('logout'); }} >
-          <HiOutlineLogout color='#DC2626' fontSize={20} />
-          <Text variant='text-sm' title='Logout' color='red.600' ml='10px' />
-        </MenuItem>
+        }
+        {
+          checkRoles?.includes('Employee') && (
+            <div>
+              <MenuItem>
+                <Text title='Account Settings' />
+              </MenuItem>
+              <MenuItem>
+                <Text title='Support' />
+              </MenuItem>
+              <MenuItem onClick={() => { handleRemoveToken('logout'); }}>
+                <Text title='Sign Out' />
+              </MenuItem>
+            </div>
+          )
+        }
       </Menu>
     </Grid>
   );
