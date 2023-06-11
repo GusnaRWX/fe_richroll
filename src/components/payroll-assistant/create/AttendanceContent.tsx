@@ -16,11 +16,11 @@ import { Image as ImageType } from '@/utils/assetsConstant';
 import { Search  } from '@mui/icons-material';
 import Table from '@/components/_shared/form/Table';
 import { FiCalendar } from 'react-icons/fi';
-import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
 import { compareCheck, ifThenElse } from '@/utils/helper';
 import { visuallyHidden } from '@mui/utils';
 import AddEmployeesModal from './AttendanceModal';
+import AttendanceCalendarModal from './AttendanceCalendar';
 
 const ContentWrapper = styled(Card)(({
   padding: '1rem',
@@ -118,7 +118,6 @@ function AttendanceContent() {
     ],
     itemTotals: 5
   };
-  const router = useRouter();
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
   // const [search, setSearch] = useState('');
@@ -126,6 +125,7 @@ function AttendanceContent() {
   const [sort, setSort] = useState('');
   const [hydrated, setHaydrated] = useState(false);
   const [open, setOpen] = useState(false);
+  const [openCal, setOpenCal] = useState(false);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -251,7 +251,7 @@ function AttendanceContent() {
                           <ButtonWrapper>
                             <IconButton
                               parentColor='#E9EFFF'
-                              onClick={() => { router.push('/payroll-disbursement/payroll-assistant/create'); }}
+                              onClick={() => { setOpenCal(true); }}
                               icons={
                                 <FiCalendar fontSize={20} color='#223567'/>
                               }
@@ -281,6 +281,13 @@ function AttendanceContent() {
             ><Add fontSize='small' />&nbsp; Add Employee</MuiButton>
           </Grid>
         </Grid>
+
+        <AttendanceCalendarModal
+          open={openCal}
+          handleClose={() => setOpenCal(false)}
+          handleConfirm={() => setOpenCal(false)}
+        />
+
         <AddEmployeesModal
           open={open}
           handleClose={handleClose}
