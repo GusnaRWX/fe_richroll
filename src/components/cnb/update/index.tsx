@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/indent */
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Form, IconButton, Input } from '@/components/_shared/form';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -33,6 +33,36 @@ import { getListCompensationRequested, getListSuppTerminRequested, getListTermin
 import { Text } from '@/components/_shared/common';
 import { resetResponserMessage } from '@/store/reducers/slice/responserSlice';
 
+interface SuplementType {
+  compensationComponentId: string;
+  taxStatus: string;
+  rateOrAmount: number | null;
+  period: string;
+  titleRate?: string;
+  withPercentage?: boolean;
+  percentage?: string | number;
+  amountType?: string | number;
+  rateType?: string | number;
+}
+
+interface BaseType {
+  name: string;
+  compensationComponentId: string;
+  taxStatus: string;
+  rateOrAmount: number | string;
+  period: string;
+  supplementary: SuplementType[];
+}
+
+type InitialValues = {
+  name: string;
+  compensationComponentId: string;
+  period: string;
+  rateOrAmount: string;
+  taxStatus: string;
+  supplementary: SuplementType[];
+}
+
 export default function UpdateCNBComponent() {
   const router = useRouter();
   const companyData = getCompanyData();
@@ -42,6 +72,15 @@ export default function UpdateCNBComponent() {
   const detailLoading = useAppSelectors(
     (state) => state.compensation?.detailLoading
   );
+  const [initialValues, setInitialValues] = useState<InitialValues>({
+    name: '',
+    compensationComponentId: '',
+    period: '',
+    taxStatus: '',
+    rateOrAmount: '',
+    supplementary: []
+  });
+  const [isDataReady, setIsDataReady] = useState(false);
   const cnbDetail = useAppSelectors(state => state?.compensation?.detail?.data);
   const [openMsg, setOpenMsg] = React.useState(false);
   const [title, setTitle] = React.useState('');
@@ -152,26 +191,7 @@ export default function UpdateCNBComponent() {
     },
   });
 
-  interface SuplementType {
-    compensationComponentId: string;
-    taxStatus: string;
-    rateOrAmount: number | null;
-    period: string;
-    titleRate?: string;
-    withPercentage?: boolean;
-    percentage?: string | number;
-    amountType?: string | number;
-    rateType?: string | number;
-  }
 
-  interface BaseType {
-    name: string;
-    compensationComponentId: string;
-    taxStatus: string;
-    rateOrAmount: number | string;
-    period: string;
-    supplementary: SuplementType[];
-  }
 
   function UpdateCnbProfile(value: BaseType) {
     let supplement = true;
@@ -225,41 +245,46 @@ export default function UpdateCNBComponent() {
     }
   }
 
-  const initialValues: {
-    name: string;
-    compensationComponentId: string;
-    period: string;
-    rateOrAmount: string;
-    taxStatus: string;
-    supplementary: SuplementType[];
-  } = {
-    name: cnbDetail?.name || '',
-    compensationComponentId: cnbDetail?.base?.component?.id,
-    period: cnbDetail?.base?.term?.id,
-    taxStatus: cnbDetail?.base?.isTaxable,
-    rateOrAmount: cnbDetail?.base?.amount,
-    supplementary: cnbDetail?.supplementaries?.map(val => {
-      return {
-        compensationComponentId: val.component?.id,
-        period: val?.term?.id,
-        rateOrAmount: getPaymentType(val?.component?.id, listCompensation)?.withPercentage ? val?.rate : val?.amount,
-        taxStatus: val?.isTaxable,
+  useEffect(() => {
+    const fetchData = async () => {
+      if (cnbDetail?.base?.component?.id) {
+        setTitle(getPaymentType(cnbDetail.base.component.id, listCompensation)?.title);
+        setWithPercentage(getPaymentType(cnbDetail.base.component.id, listCompensation)?.withPercentage);
 
-      };
-    })
-  };
+        dispatch({
+          type: getListTerminReqeusted.toString(),
+          payload: cnbDetail.base.component.id
+        });
+      }
+    };
+
+    fetchData();
+  }, [cnbDetail, listCompensation]);
 
   useEffect(() => {
+    if (cnbDetail) {
+      setInitialValues({
+        name: cnbDetail.name || '',
+        compensationComponentId: cnbDetail.base?.component?.id || '',
+        period: cnbDetail.base?.term?.id || '',
+        taxStatus: cnbDetail.base?.isTaxable || '',
+        rateOrAmount: cnbDetail.base?.amount || '',
+        supplementary: cnbDetail.supplementaries?.map(val => {
+          return {
+            compensationComponentId: val.component?.id || '',
+            period: val.term?.id || '',
+            rateOrAmount: getPaymentType(val.component?.id, listCompensation)?.withPercentage ? val.rate : val.amount || '',
+            taxStatus: val.isTaxable || '',
+          };
+        }) || [],
+      });
+      setIsDataReady(true);
+    }
+  }, [cnbDetail]);
 
-    setTitle(getPaymentType(cnbDetail?.base?.component?.id, listCompensation)?.title);
-    setWithPercentage(getPaymentType(cnbDetail?.base?.component?.id, listCompensation)?.withPercentage);
-
-    dispatch({
-      type: getListTerminReqeusted.toString(),
-      payload: cnbDetail?.base?.component?.id
-    });
-
-  }, []);
+  if (!isDataReady) {
+    return <div></div>;
+  }
 
   return (
     <>

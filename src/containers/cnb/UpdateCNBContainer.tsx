@@ -8,17 +8,21 @@ import { getDetailRequested } from '@/store/reducers/slice/cnb/compensationSlice
 const UpdateCNBContainer = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const { id } = router.query;
 
   useEffect(() => {
-    if (!router.isReady) return;
+    if (!id) {
+      return;
+    }
     const fetchData = () => {
       dispatch({
         type: getDetailRequested.toString(),
-        Id: router.query.id
+        Id: id
       });
     };
     fetchData();
-  }, [router]);
+  }, [id]);
+  console.log(id, 'id');
   return (
     <Layout>
       <UpdateCNBComponent />
