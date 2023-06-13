@@ -571,7 +571,8 @@ function* fetchPatchEmployeeInformation(action: AnyAction) {
         type: setResponserMessage.toString(),
         payload: {
           code: res?.data?.code,
-          message: res?.data?.message
+          message: 'Successfully Saved!',
+          footerMessage: 'Employee Profile has been updated'
         }
       });
       yield delay(1000);
@@ -629,7 +630,8 @@ function* fetchPatchEmergencyContact(action: AnyAction) {
         type: setResponserMessage.toString(),
         payload: {
           code: res?.data?.code,
-          message: res?.data?.message
+          message: 'Successfully Saved!',
+          footerMessage: 'Employee Profile has been updated'
         }
       });
       yield delay(1000);
@@ -743,7 +745,8 @@ function* fetchPatchEmployeePersonal(action: AnyAction) {
         type: setResponserMessage.toString(),
         payload: {
           code: res?.data?.code,
-          message: res?.data?.message
+          message: 'Successfully Saved!',
+          footerMessage: 'Employee Profile has been updated'
         }
       });
       yield delay(2000);

@@ -78,7 +78,7 @@ function* fetchPostAnnualSchedule(action: AnyAction) {
         payload: {
           code: res.data.code,
           message: 'Successfully Saved!',
-          footerMessage: `${action?.payload?.name || ''}has been added to the Annual Work Calendar`
+          footerMessage: `${action?.payload?.name || ''} has been added to the Annual Work Calendar`
         }
       });
     }
