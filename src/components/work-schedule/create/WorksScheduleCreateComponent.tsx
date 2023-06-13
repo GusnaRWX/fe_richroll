@@ -6,7 +6,7 @@ import { ArrowBack } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import { IconButton } from '@/components/_shared/form';
 import ConfirmationModal from '@/components/_shared/common/ConfirmationModal';
-import { useAppDispatch } from '@/hooks/index';
+import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { postWorkScheduleRequested, clearState } from '@/store/reducers/slice/company-management/work-schedule/workScheduleSlice';
 
 const WorkScheduleCreateForm = dynamic(() => import('./WorkScheduleCreateForm'), {
@@ -83,6 +83,7 @@ function WorksScheduleCreateComponent() {
   const [leave, setLeave] = useState(false);
   const [data, setData] = useState({});
   const dispatch = useAppDispatch();
+  const { workSchedule } = useAppSelectors(state => state);
   const router = useRouter();
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -98,9 +99,14 @@ function WorksScheduleCreateComponent() {
   const resetState = () => dispatch({ type: clearState.toString() });
 
   const handleSave = () => {
+    const payload = {
+      ...data,
+      grossHours: workSchedule?.grossHour,
+      netHours: workSchedule?.netHour
+    };
     dispatch({
       type: postWorkScheduleRequested.toString(),
-      payload: data
+      payload: payload
     });
   };
   return (
@@ -112,7 +118,10 @@ function WorksScheduleCreateComponent() {
             icons={
               <ArrowBack sx={{ color: '#FFFFFF' }} />
             }
-            onClick={() => { router.push('/company-management/employees'); }}
+            onClick={() => {
+              router.push('/company-management/employees');
+              resetState();
+            }}
           />
           <Typography component='h3' fontWeight='bold'>Create Work Schedule Profile</Typography>
         </BackWrapper>
