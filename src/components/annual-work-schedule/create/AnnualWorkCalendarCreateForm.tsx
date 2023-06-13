@@ -26,7 +26,7 @@ function AnnualWorkCalendarCreateForm({open, handleClose, handleConfirm}: Annual
   const formik = useFormik({
     initialValues: {
       name: '',
-      type: '',
+      type: '0',
       startDate: dayjs(new Date()),
       endDate: dayjs(new Date()),
       startHours: dayjs(new Date()),

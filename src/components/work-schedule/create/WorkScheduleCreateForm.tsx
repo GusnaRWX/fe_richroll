@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Input, Select, RadioGroup, CheckBox } from '@/components/_shared/form';
-import { Button as MuiButton, Grid, InputAdornment, Typography, Button } from '@mui/material';
+import { Button as MuiButton, Grid, InputAdornment, Typography, Button, FormHelperText } from '@mui/material';
 import { Add } from '@mui/icons-material';
 import { Scheduler } from '@aldabil/react-scheduler';
 import CustomModal from '@/components/_shared/common/CustomModal';
@@ -422,7 +422,7 @@ function WorkScheduleCreateForm({ setData }: WorkScheduleFormProps) {
                   />
                 </Grid>
               </Grid>
-              <Grid container spacing={2} alignItems='end' mb='1rem'>
+              <Grid container spacing={2} mb='2rem' sx={{ height: '100px' }}>
                 <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
                   <Typography width='150px' fontSize='16px'>Work Hours</Typography>
                   <FlexBoxRow>
@@ -453,8 +453,14 @@ function WorkScheduleCreateForm({ setData }: WorkScheduleFormProps) {
                       />
                     </LocalizationProvider>
                   </FlexBoxRow>
+                  {
+                    formik.errors.fixedStartTime && formik.errors.fixedEndTime && (
+                      <FormHelperText sx={{ color: '#EF4444 !important' }}>This field is required</FormHelperText>
+                    )
+                  }
+
                 </Grid>
-                <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+                <Grid mt='1.5rem' item xs={6} sm={6} md={6} lg={6} xl={6}>
                   <Select
                     variant='outlined'
                     size='small'
@@ -462,6 +468,8 @@ function WorkScheduleCreateForm({ setData }: WorkScheduleFormProps) {
                     name='fixedWorkDayType'
                     value={formik.values.fixedWorkDayType}
                     onChange={formik.handleChange}
+                    error={compareCheck(formik.touched.fixedWorkDayType, Boolean(formik.errors.fixedWorkDayType))}
+                    helperText={ifThenElse(formik.touched.fixedWorkDayType, formik.errors.fixedWorkDayType, '')}
                     options={[
                       { label: 'This Day Only', value: '0' },
                       { label: 'Full Week', value: '1' },
@@ -507,7 +515,7 @@ function WorkScheduleCreateForm({ setData }: WorkScheduleFormProps) {
             </>
           )
         }
-        <Typography mt='12px' mb='12px' fontWeight='bold' color='primary'>Add Break</Typography>
+        <Typography mb='12px' fontWeight='bold' color='primary'>Add Break</Typography>
         <Grid container spacing={2}>
           <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
             <Input
