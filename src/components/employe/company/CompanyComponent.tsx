@@ -18,7 +18,7 @@ import { IconButton } from '@/components/_shared/form';
 import { BsBellFill } from 'react-icons/bs';
 import LocalizationMenu from '@/components/_shared/_core/localization/LocalizationMenu';
 import Profile from '@/components/_shared/_core/appbar/Profile';
-import { getUserData } from '@/utils/helper';
+import { getUserData, ifThenElse } from '@/utils/helper';
 
 const WrapperAuth = styled(Box)<BoxProps>(({ theme }) => ({
   background: theme.palette.secondary[100],
@@ -113,30 +113,34 @@ function CompanyComponent() {
           The employer you work for will be displayed here.
             </Typography>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: '25px', mt: '16px', height: '221px' }}>
-              <WrapperCardItem onClick={() => router.push('/dashboard')}>
-                <Box component={'div'} sx={{ position: 'relative', width: '178px', height: '142px' }}>
-                  <Image
-                    src={ImageType.PLACEHOLDER_COMPANY}
-                    fill={true}
-                    style={{ objectFit: 'contain' }}
-                    alt={'test'}
-                  />
-                </Box>
-                <Typography
-                  variant='text-lg'
-                  component='div'
-                  sx={{ fontWeight: 700, mb: '4px', mt: '8px', width: '100%' }}
-                >
-                    Yor Company
-                </Typography>
-                <Typography
-                  variant='text-xs'
-                  component='div'
-                  sx={{ fontWeight: 500, width: '100%' }}
-                >
-                  {'Sector'}
-                </Typography>
-              </WrapperCardItem>
+              {
+                getUserData()?.employee?.companies.map((item, index) => (
+                  <WrapperCardItem key={index} onClick={() => router.push('/dashboard')}>
+                    <Box component={'div'} sx={{ position: 'relative', width: '178px', height: '142px' }}>
+                      <Image
+                        src={ifThenElse(item?.logo === null, ImageType.PLACEHOLDER_COMPANY, item?.logo)}
+                        fill={true}
+                        style={{ objectFit: 'contain' }}
+                        alt={'test'}
+                      />
+                    </Box>
+                    <Typography
+                      variant='text-lg'
+                      component='div'
+                      sx={{ fontWeight: 700, mb: '4px', mt: '8px', width: '100%' }}
+                    >
+                      {item?.name}
+                    </Typography>
+                    <Typography
+                      variant='text-xs'
+                      component='div'
+                      sx={{ fontWeight: 500, width: '100%' }}
+                    >
+                      {ifThenElse(item?.sector === null, '-', item?.sector)}
+                    </Typography>
+                  </WrapperCardItem>
+                ))
+              }
             </Box>
           </WrapperCardContent>
         </WrapperCard>

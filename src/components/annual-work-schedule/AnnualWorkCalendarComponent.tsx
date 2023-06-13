@@ -158,7 +158,6 @@ function AnnualWorkCalendarComponent() {
               deletable={false}
               editable={false}
               viewerExtraComponent={(fields, events) => {
-                console.log(events);
                 return (
                   <div>
                     <p>Notes: {events?.note}</p>
@@ -188,14 +187,14 @@ function AnnualWorkCalendarComponent() {
                 {
                   data?.items?.map((item) => (
                     <>
-                      <Typography mb='.5rem'>{dayjs(item.start).format('DD-MM-YYYY')}</Typography>
+                      <Typography mb='.5rem'>{dayjs(item.start).format('DD MMM YYYY')}</Typography>
                       <BoxWrapper>
                         <LeftWrapper>
                           <Dots color={item?.eventType === 0 ? '#7C3AED' : '#D97706'}/>
                           <ListWrapper>
                             <Typography fontSize='14px' fontWeight='bold' color='primary'>{item?.name}</Typography>
                             <Typography fontSize='12px' fontWeight='bold' color='gray'>
-                              {dayjs(item?.start).format('DD-MM-YYYY')} - {dayjs(item?.start).format('HH:mm:ss')} - {dayjs(item?.end).format('HH:mm:ss')}</Typography>
+                              {dayjs(item?.start).format('MMM D, YYYY ')} - {dayjs(item?.start).format('HH:mm A')} - {dayjs(item?.end).format('HH:mm A')}</Typography>
                           </ListWrapper>
                         </LeftWrapper>
                         <ButtonWrapper>
