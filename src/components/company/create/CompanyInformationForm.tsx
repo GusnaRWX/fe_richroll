@@ -152,8 +152,9 @@ function CompanyInformationForm({
   };
 
   const handleNext = () => {
-    formik.handleSubmit();
-    if (Object.keys(formik.errors).length === 3 && !duplicateCompany) {
+    // formik.handleSubmit();
+    // if (Object.keys(formik.errors).length === 3 && !duplicateCompany) {
+    if (!duplicateCompany) {
       nextPage(1);
       setIsError(false);
     } else {
@@ -567,7 +568,7 @@ function CompanyInformationForm({
               value={formik.values.addressCompanyAddress}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={ifThenElse(formik.touched.addressCompanyAddress, formik.errors.addressCompanyAddress, false)}
+              error={compareCheck(formik.touched.addressCompanyAddress, Boolean(formik.errors.addressCompanyAddress))}
               withAsterisk={true}
               customLabel='Street Name, Building Name'
               placeholder='Input Address Details'
