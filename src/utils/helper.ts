@@ -343,7 +343,7 @@ export const dynamicPayloadBaseCnb = (arrData, id, value) => {
         componentID: value.compensationComponentId,
         isTaxable: value.taxStatus === 'true' ? true : false,
         termID: value.period,
-        amount: value.rateOrAmount,
+        amount: +value.rateOrAmount,
         amountType: 0,
       };
       break;
@@ -361,7 +361,7 @@ export const dynamicPayloadBaseCnb = (arrData, id, value) => {
         componentID: value.compensationComponentId,
         isTaxable: value.taxStatus === 'true' ? true : false,
         termID: value.period,
-        amount: value.rateOrAmount,
+        amount: +value.rateOrAmount,
         amountType: 0,
         rate: value.percentage,
         rateType: 1,
@@ -372,7 +372,7 @@ export const dynamicPayloadBaseCnb = (arrData, id, value) => {
         componentID: value.compensationComponentId,
         isTaxable: value.taxStatus === 'true' ? true : false,
         termID: value.period,
-        amount: value.rateOrAmount,
+        amount: +value.rateOrAmount,
         amountType: 0,
         rate: value.percentage,
         rateType: 0,
