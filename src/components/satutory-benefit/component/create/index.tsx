@@ -22,6 +22,9 @@ import {
 import { ArrowBack } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 
+// Import Create Component
+import CreateBasicDetailComponent from './CreateBasicDetail';
+
 export default function CreateNewComponent() {
   const router = useRouter();
 
@@ -149,7 +152,7 @@ export default function CreateNewComponent() {
           </Tabs>
         </Box>
         <TabPanel value={value} index={0}>
-          1
+          <CreateBasicDetailComponent />
         </TabPanel>
         <TabPanel value={value} index={1}>
           2
