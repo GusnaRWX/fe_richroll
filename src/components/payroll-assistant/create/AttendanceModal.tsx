@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, Dispatch, SetStateAction } from 'react';
 import {
   Grid,
-  Select,
-  MenuItem,
+  Checkbox,
   TableCell,
   TableRow,
   Avatar,
@@ -10,21 +9,19 @@ import {
   TableSortLabel,
   Typography
 } from '@mui/material';
-import { IconButton } from '@/components/_shared/form';
 import CustomModal from '@/components/_shared/common/CustomModal';
-import { Image as ImageType } from '@/utils/assetsConstant';
 import Table from '@/components/_shared/form/Table';
-import { FiCalendar } from 'react-icons/fi';
-import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
-import { compareCheck, ifThenElse } from '@/utils/helper';
+import { useAppDispatch, useAppSelectors } from '@/hooks/index';
+import { getEmployeeRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
+import { getCompanyData, compareCheck, ifThenElse } from '@/utils/helper';
 import { visuallyHidden } from '@mui/utils';
 
 const ButtonWrapper = styled.div`
  display: flex;
  flex-direction: row;
  align-items: center;
- justify-content: center;
+ justify-content: flex-end;
  gap: .5rem;
 `;
 
@@ -47,52 +44,25 @@ type Order = 'asc' | 'desc'
 interface AttendanceModalProp {
   open: boolean;
   handleClose: () => void;
+  selected: Array<object>;
+  setSelected: Dispatch<SetStateAction<Array<object>>>;
 }
 
 function AttendanceModal({
   open,
   handleClose,
+  selected,
+  setSelected
 }: AttendanceModalProp) {
-  const dataEmployees = {
-    items: [
-      {
-        id: 1,
-        name: 'Budi Irawan',
-        position: 'Prep-Cook',
-        department: 'Kitchen',
-      },
-      {
-        id: 2,
-        name: 'Budi Irawan',
-        position: 'Prep-Cook',
-        department: 'Kitchen',
-      },
-      {
-        id: 3,
-        name: 'Budi Irawan',
-        position: 'Prep-Cook',
-        department: 'Kitchen',
-      },
-      {
-        id: 4,
-        name: 'Budi Irawan',
-        position: 'Prep-Cook',
-        department: 'Kitchen',
-      },
-      {
-        id: 5,
-        name: 'Budi Irawan',
-        position: 'Prep-Cook',
-        department: 'Kitchen',
-      },
-    ],
-    itemTotals: 5
-  };
-  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const data = useAppSelectors(state => state.employee.data);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
+  const [hydrated, setHaydrated] = useState(false);
+  const [selectedTemp, setSelectedTemp] = useState(selected);
+  const companyData = getCompanyData();
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -109,20 +79,64 @@ function AttendanceModal({
     setSort(headId);
   };
 
+  const onSelected = (item, e) => {
+    if (e.target.checked) {
+      const temp = [...selectedTemp, { id: item.id, picture: item?.user?.userInformation?.picture, name: item.user.name }];
+      setSelectedTemp(temp);
+    } else {
+      const temp = selectedTemp.filter(v => v['id'] !== item.id);
+      setSelectedTemp(temp);
+    }
+  };
+
+  const checkVal = (id) => {
+    return selectedTemp.some(v => v['id'] === id);
+  };
+
+  const onConfirm = () => {
+    setSelected(selectedTemp);
+    handleClose();
+  };
+
+  useEffect(() => {
+    console.log(companyData);
+
+    dispatch({
+      type: getEmployeeRequested.toString(),
+      payload: {
+        page: page + 1,
+        itemPerPage: rowsPerPage,
+        sort: sort,
+        direction: direction.toUpperCase(),
+        search: '',
+        isActive: true,
+        companyID: companyData?.id
+      }
+    });
+  }, [rowsPerPage, page, sort, direction]);
+
+  useEffect(() => {
+    setHaydrated(true);
+  }, []);
+
+  if (!hydrated) {
+    return null;
+  }
+
   return (
     <CustomModal
       open={open}
       handleClose={handleClose}
       title='Select Employees'
       width='640px'
-      handleConfirm={handleClose}
+      handleConfirm={onConfirm}
       submitText='Add Employee'
     >
       <Grid container>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <Table
-            count={dataEmployees?.itemTotals}
-            rowsPerPageOptions={[5, 10, 15]}
+            count={data?.itemTotals}
+            rowsPerPageOptions={[5]}
             rowsPerPage={rowsPerPage}
             page={page}
             onChangePage={handleChangePage}
@@ -147,56 +161,37 @@ function AttendanceModal({
                     </TableCell>
                   ))
                 }
-                <TableCell>
-                  <Select
-                    fullWidth
-                    variant='outlined'
-                    size='small'
-                    placeholder='Sort by Status'
-                    value={''}
-                  >
-                    <MenuItem value=''>All Status</MenuItem>
-                    <MenuItem value='active'>Active</MenuItem>
-                    <MenuItem value='inactive'>Inactive</MenuItem>
-                    <MenuItem value='draft'>Draft</MenuItem>
-                  </Select>
-                </TableCell>
+                <TableCell></TableCell>
               </TableRow>
             }
             bodyChildren={
               <>
                 {
-                  ifThenElse(typeof dataEmployees?.items !== 'undefined', (
-                    ifThenElse(dataEmployees?.items?.length === 0, (
+                  ifThenElse(typeof data?.items !== 'undefined', (
+                    ifThenElse(data?.items?.length === 0, (
                       <TableRow>
                         <TableCell colSpan={12} align='center'><Typography>Data not found</Typography></TableCell>
                       </TableRow>
                     ), (
-                      dataEmployees?.items?.map((item, index) => (
+                      data?.items?.map((item, index) => (
                         <TableRow key={index}>
                           <TableCell>
                             <NameWrapper>
                               <Avatar
-                                src={ImageType.AVATAR_PLACEHOLDER}
-                                alt={item.name}
+                                src={ifThenElse(item?.user?.userInformation !== null, item?.user?.userInformation?.picture, item.user.name)}
+                                alt={ifThenElse(item?.user?.userInformation !== null, item?.user?.userInformation?.picture, item.user.name)}
                                 sx={{
                                   width: 24, height: 24
                                 }}
                               />
-                              &nbsp;{item.name}
+                              &nbsp;{item.user.name}
                             </NameWrapper>
                           </TableCell>
-                          <TableCell>{item.position}</TableCell>
-                          <TableCell>{item.department}</TableCell>
+                          <TableCell>{item.position.name}</TableCell>
+                          <TableCell>{item.department.name}</TableCell>
                           <TableCell>
                             <ButtonWrapper>
-                              <IconButton
-                                parentColor='#E9EFFF'
-                                onClick={() => { router.push('/payroll-disbursement/payroll-assistant/create'); }}
-                                icons={
-                                  <FiCalendar fontSize={20} color='#223567'/>
-                                }
-                              />
+                              <Checkbox onChange={(e) => onSelected(item, e)} checked={checkVal(item.id)} />
                             </ButtonWrapper>
                           </TableCell>
                         </TableRow>

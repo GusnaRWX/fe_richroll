@@ -17,10 +17,10 @@ import { useRouter } from 'next/router';
 import { Input, IconButton, DateRangePicker } from '@/components/_shared/form';
 import { Add } from '@mui/icons-material';
 import Table from '@/components/_shared/form/Table';
-import { Image as ImageType } from '@/utils/assetsConstant';
 import { Search, ArrowBack } from '@mui/icons-material';
 import { FiCalendar } from 'react-icons/fi';
 import AddEmployeesModal from '../payroll-assistant/create/AttendanceModal';
+import AttendanceCalendarModal from '../payroll-assistant/create/AttendanceCalendar';
 import { compareCheck, ifThenElse } from '@/utils/helper';
 import { visuallyHidden } from '@mui/utils';
 
@@ -68,76 +68,78 @@ const headerItems = [
 
 type Order = 'asc' | 'desc'
 
-const data = {
-  items: [
-    {
-      id: 1,
-      name: 'Budi Irawan',
-      attendance: '30 Days',
-      absent: '2 Days',
-      paidLeave: '3 Days',
-      unpaidLeave: '4 Days',
-      overtime: '8 Days',
-      totalHours: '175 Days',
-      averageHours: '30 Days',
-    },
-    {
-      id: 2,
-      name: 'Budi Irawan',
-      attendance: '30 Days',
-      absent: '2 Days',
-      paidLeave: '3 Days',
-      unpaidLeave: '4 Days',
-      overtime: '8 Days',
-      totalHours: '175 Days',
-      averageHours: '30 Days',
-    },
-    {
-      id: 3,
-      name: 'Budi Irawan',
-      attendance: '30 Days',
-      absent: '2 Days',
-      paidLeave: '3 Days',
-      unpaidLeave: '4 Days',
-      overtime: '8 Days',
-      totalHours: '175 Days',
-      averageHours: '30 Days',
-    },
-    {
-      id: 4,
-      name: 'Budi Irawan',
-      attendance: '30 Days',
-      absent: '2 Days',
-      paidLeave: '3 Days',
-      unpaidLeave: '4 Days',
-      overtime: '8 Days',
-      totalHours: '175 Days',
-      averageHours: '30 Days',
-    },
-    {
-      id: 5,
-      name: 'Budi Irawan',
-      attendance: '30 Days',
-      absent: '2 Days',
-      paidLeave: '3 Days',
-      unpaidLeave: '4 Days',
-      overtime: '8 Days',
-      totalHours: '175 Days',
-      averageHours: '30 Days',
-    },
-  ],
-  itemTotals: 5
-};
+// const data = {
+//   items: [
+//     {
+//       id: 1,
+//       name: 'Budi Irawan',
+//       attendance: '30 Days',
+//       absent: '2 Days',
+//       paidLeave: '3 Days',
+//       unpaidLeave: '4 Days',
+//       overtime: '8 Days',
+//       totalHours: '175 Days',
+//       averageHours: '30 Days',
+//     },
+//     {
+//       id: 2,
+//       name: 'Budi Irawan',
+//       attendance: '30 Days',
+//       absent: '2 Days',
+//       paidLeave: '3 Days',
+//       unpaidLeave: '4 Days',
+//       overtime: '8 Days',
+//       totalHours: '175 Days',
+//       averageHours: '30 Days',
+//     },
+//     {
+//       id: 3,
+//       name: 'Budi Irawan',
+//       attendance: '30 Days',
+//       absent: '2 Days',
+//       paidLeave: '3 Days',
+//       unpaidLeave: '4 Days',
+//       overtime: '8 Days',
+//       totalHours: '175 Days',
+//       averageHours: '30 Days',
+//     },
+//     {
+//       id: 4,
+//       name: 'Budi Irawan',
+//       attendance: '30 Days',
+//       absent: '2 Days',
+//       paidLeave: '3 Days',
+//       unpaidLeave: '4 Days',
+//       overtime: '8 Days',
+//       totalHours: '175 Days',
+//       averageHours: '30 Days',
+//     },
+//     {
+//       id: 5,
+//       name: 'Budi Irawan',
+//       attendance: '30 Days',
+//       absent: '2 Days',
+//       paidLeave: '3 Days',
+//       unpaidLeave: '4 Days',
+//       overtime: '8 Days',
+//       totalHours: '175 Days',
+//       averageHours: '30 Days',
+//     },
+//   ],
+//   itemTotals: 5
+// };
 
 function AttendanceGenerateComponent() {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
+  const [selected, setSelected] = useState(Array<object>);
   // const [search, setSearch] = useState('');
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
   const [hydrated, setHaydrated] = useState(false);
+  const [openCal, setOpenCal] = useState(false);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -251,7 +253,7 @@ function AttendanceGenerateComponent() {
             </Grid>
           </Grid>
           <Table
-            count={data?.itemTotals}
+            count={selected.length}
             rowsPerPageOptions={[5, 10, 15]}
             rowsPerPage={rowsPerPage}
             page={page}
@@ -282,38 +284,38 @@ function AttendanceGenerateComponent() {
             bodyChildren={
               <>
                 {
-                  ifThenElse(typeof data?.items !== 'undefined', (
-                    ifThenElse(data?.items?.length === 0, (
+                  ifThenElse(typeof selected !== 'undefined', (
+                    ifThenElse(selected?.length === 0, (
                       <TableRow>
                         <TableCell colSpan={12} align='center'><Typography>Data not found</Typography></TableCell>
                       </TableRow>
                     ), (
-                      data?.items?.map((item, index) => (
+                      selected?.map((item, index) => (
                         <TableRow key={index}>
                           <TableCell>
                             <NameWrapper>
                               <Avatar
-                                src={ImageType.AVATAR_PLACEHOLDER}
-                                alt={item.name}
+                                src={item['picture']}
+                                alt={item['name']}
                                 sx={{
                                   width: 24, height: 24
                                 }}
                               />
-                              &nbsp;{item.name}
+                              &nbsp;{item['name']}
                             </NameWrapper>
                           </TableCell>
-                          <TableCell>{item.attendance}</TableCell>
-                          <TableCell>{item.absent}</TableCell>
-                          <TableCell>{item.paidLeave}</TableCell>
-                          <TableCell>{item.unpaidLeave}</TableCell>
-                          <TableCell>{item.overtime}</TableCell>
-                          <TableCell>{item.totalHours}</TableCell>
-                          <TableCell>{item.averageHours}</TableCell>
+                          <TableCell>{item['attendance']}</TableCell>
+                          <TableCell>{item['absent']}</TableCell>
+                          <TableCell>{item['paidLeave']}</TableCell>
+                          <TableCell>{item['unpaidLeave']}</TableCell>
+                          <TableCell>{item['overtime']}</TableCell>
+                          <TableCell>{item['totalHours']}</TableCell>
+                          <TableCell>{item['averageHours']}</TableCell>
                           <TableCell>
                             <ButtonWrapper>
                               <IconButton
                                 parentColor='#E9EFFF'
-                                onClick={() => { router.push('/payroll-disbursement/payroll-assistant/create'); }}
+                                onClick={() => { setOpenCal(true); }}
                                 icons={
                                   <FiCalendar fontSize={20} color='#223567'/>
                                 }
@@ -345,9 +347,18 @@ function AttendanceGenerateComponent() {
           </Grid>
         </Box>
       </ContentWrapper>
+
+      <AttendanceCalendarModal
+        open={openCal}
+        handleClose={() => setOpenCal(false)}
+        handleConfirm={() => setOpenCal(false)}
+      />
+
       <AddEmployeesModal
         open={open}
         handleClose={handleClose}
+        selected={selected}
+        setSelected={setSelected}
       />
     </>
   );
