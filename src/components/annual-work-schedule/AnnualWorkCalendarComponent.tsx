@@ -155,7 +155,16 @@ function AnnualWorkCalendarComponent() {
               disableViewNavigator={true}
               view='month'
               day={null}
-              deletable={true}
+              deletable={false}
+              editable={false}
+              viewerExtraComponent={(fields, events) => {
+                console.log(events);
+                return (
+                  <div>
+                    <p>Notes: {events?.note}</p>
+                  </div>
+                );
+              }}
               week={null}
               month={{
                 weekDays: [0, 1,2,3,4,5,6],

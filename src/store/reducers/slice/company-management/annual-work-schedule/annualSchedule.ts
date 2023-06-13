@@ -10,7 +10,8 @@ interface EventType {
   color: string,
   type: number,
   isWithTime: boolean,
-  deletable: boolean
+  deletable: boolean,
+  note: string
 }
 
 interface AnnualScheduleState {
@@ -58,7 +59,8 @@ export const annualScheduleSlice = createSlice({
           color: item?.eventType === 0 ? '#7C3AED' : '#D97706',
           type: item?.eventType,
           isWithTime: item?.isWithTime,
-          deletable: true
+          deletable: false,
+          note: item?.note
         });
       });
       state.events = tempData;
