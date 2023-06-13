@@ -1,14 +1,16 @@
 import React, { useEffect } from 'react';
 import EmployeeEditComponent from '@/components/employees/edit/EmployeeEditComponent';
 import Layout from '@/components/_shared/_core/layout/Index';
-import { useAppDispatch } from '@/hooks/index';
+import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { getListDepartmentRequested, getListPositionRequested, getListOptionWorkScheduleRequested } from '@/store/reducers/slice/options/optionSlice';
 import { employeeInfoDetailRequested, personalInfoDetailRequested, emergencyContactDetailRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
 import { useRouter } from 'next/router';
 import { getCompanyData } from '@/utils/helper';
+import { OverlayLoading } from '@/components/_shared/common';
 
 function EmployeeEditContainer() {
   const dispatch = useAppDispatch();
+  const { isLoading } = useAppSelectors(state => state.employee);
   const router = useRouter();
   useEffect(() => {
     dispatch({
@@ -40,6 +42,7 @@ function EmployeeEditContainer() {
   }, []);
   return (
     <Layout>
+      <OverlayLoading open={isLoading} />
       <EmployeeEditComponent />
     </Layout>
   );
