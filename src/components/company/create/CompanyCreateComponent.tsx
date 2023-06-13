@@ -130,7 +130,7 @@ const CompanyCreateComponent = ({ companyType, companySector, bank, paymentMetho
       // Group Company Information
       companyType: '',
       companyName: '',
-      companyNPWP: null,
+      companyNPWP: '',
       companySector: '',
       companyEmail: '',
       phoneNumberPrefix: '',
@@ -148,10 +148,10 @@ const CompanyCreateComponent = ({ companyType, companySector, bank, paymentMetho
       bankBankInformation: '',
       bankAccountHolderNameBankInformation: '',
       bankAccoutNoBankInformation: '',
-      bankCodeBankInformation: null,
-      branchCodeBankInformation: null,
-      branchNameBankInformation: null,
-      swiftCodeBankInformation: null,
+      bankCodeBankInformation: '',
+      branchCodeBankInformation: '',
+      branchNameBankInformation: '',
+      swiftCodeBankInformation: '',
 
       // Group Payroll Information
       isMonthly: true,
@@ -245,9 +245,10 @@ const CompanyCreateComponent = ({ companyType, companySector, bank, paymentMetho
     }
 
     const inputData = new FormData();
-    inputData.append('logo', val?.picture?.length ? val.picture[0] : convertToBase64);
+    const logoTemp = val?.picture?.length ? val.picture[0] : convertToBase64;
+    if (logoTemp) inputData.append('logo', logoTemp);
     for (const key in informationData) {
-      inputData.append(`${key}`, informationData[key]);
+      if (informationData[key]) inputData.append(`${key}`, informationData[key]);
     }
     inputData.append('address', JSON.stringify(addressData));
 
