@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import {
   TableCell,
   TableRow,
-  // Avatar,
   Box,
   TableSortLabel,
   Typography,
@@ -25,13 +24,6 @@ const ButtonWrapper = styled.div`
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-`;
-const NameWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  margin: 0;
 `;
 
 const headerItems = [
