@@ -76,7 +76,7 @@ const SatutoryBenefitProfile = () => {
         <div>
           <Button
             onClick={() =>
-              router.push('/satutory-benefit/component/add-new-component')
+              router.push('/satutory-benefit/profile/add-new-profile')
             }
             startIcon={<AddIcon />}
             label='Add New Profile'

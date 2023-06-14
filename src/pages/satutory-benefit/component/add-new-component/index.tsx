@@ -5,7 +5,7 @@ import CreateNewComponentContainer from '@/containers/satutory-benefit/CreateNew
 export default function Index() {
   return (
     <>
-      <MetaHead title='Satutory Benefit - Create Component' />
+      <MetaHead title='Satutory Benefit - Add Component' />
       <CreateNewComponentContainer />
     </>
   );

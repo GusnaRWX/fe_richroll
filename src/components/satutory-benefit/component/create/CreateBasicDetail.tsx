@@ -76,7 +76,7 @@ export default function CreateBasicDetailComponent() {
         <Grid item xs={6} md={6} lg={6} xl={6}></Grid>
         <Grid item xs={6} md={6} lg={6} xl={6}>
           <Textarea
-            customLabel='Citation'
+            customLabel='Internal Notes'
             minRows={4}
             style={{ resize: 'vertical' }}
           />
@@ -92,7 +92,7 @@ export default function CreateBasicDetailComponent() {
         </Grid>
         <Grid item xs={6} md={6} lg={6} xl={6}>
           <Textarea
-            customLabel='Citation'
+            customLabel='External Notes'
             minRows={4}
             style={{ resize: 'vertical' }}
           />
