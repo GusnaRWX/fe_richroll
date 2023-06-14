@@ -27,12 +27,21 @@ const ButtonWrapper = styled.div`
 `;
 
 const headerItems = [
-  { id: 'name', label: 'Company Name' },
+    { id: 'name', label: 'Profile Name' },
+    { id: 'country', label: 'Country' },
+    { id: 'province', label: 'Province' },
+    { id: 'eperiod', label: 'Effective Period' },
+    { id: 'created', label: 'Created On' },
+    { id: 'last_update', label: 'last Updated' },
+    { id: 'action', label: '' },
+  ];
+
+const DraftHeaderItems = [
+  { id: 'name', label: 'Name' },
   { id: 'country', label: 'Country' },
-  { id: 'contributor', label: 'Contributor(s)' },
-  { id: 'type', label: 'Rate Type' },
-  { id: 'created', label: 'Created On' },
-  { id: 'last_update', label: 'last Updated' },
+    { id: 'eperiod', label: 'Effective Period' },
+    { id: 'created', label: 'Created On' },
+    { id: 'last_update', label: 'last Updated' },
   { id: 'action', label: '' },
 ];
 
@@ -43,6 +52,7 @@ interface SutatoryBenefitProfileTableProps {
   CopyAction?: boolean;
   ActivateAction?: boolean;
   ArchivedAction?: boolean;
+  Draft?: boolean;
 }
 
 type Order = 'asc' | 'desc';
@@ -54,6 +64,7 @@ function SutatoryBenefitProfileTable({
   CopyAction,
   ActivateAction,
   ArchivedAction,
+  Draft,
 }: SutatoryBenefitProfileTableProps) {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
@@ -65,46 +76,46 @@ function SutatoryBenefitProfileTable({
     items: [
       {
         id: 1,
-        companyName: 'PT. Cari Jodoh Sejahterah',
-        country: 'Indonesian',
-        contributors: 'Employee',
-        type: 'Fixed rate',
+        name: 'Venti',
+        country: 'Teyvat',
+        province: 'Monstad',
+        effective_period: '20/20/2020',
         created: '20/20/2020',
         last_update: '20/20/2020',
       },
       {
-        id: 1,
-        companyName: 'PT. Cari Jodoh Sejahterah',
-        country: 'Indonesian',
-        contributors: 'Employee',
-        type: 'Fixed rate',
+        id: 2,
+        name: 'Zhongli',
+        country: 'Teyvat',
+        province: 'Liyue',
+        effective_period: '20/20/2020',
         created: '20/20/2020',
         last_update: '20/20/2020',
       },
       {
-        id: 1,
-        companyName: 'PT. Cari Jodoh Sejahterah',
-        country: 'Indonesian',
-        contributors: 'Employee',
-        type: 'Fixed rate',
+        id: 3,
+        name: 'Raiden Ei',
+        country: 'Teyvat',
+        province: 'Inazuma',
+        effective_period: '20/20/2020',
         created: '20/20/2020',
         last_update: '20/20/2020',
       },
       {
-        id: 1,
-        companyName: 'PT. Cari Jodoh Sejahterah',
-        country: 'Indonesian',
-        contributors: 'Employee',
-        type: 'Fixed rate',
+        id: 4,
+        name: 'Nahida',
+        country: 'Teyvat',
+        province: 'Sumeru',
+        effective_period: '20/20/2020',
         created: '20/20/2020',
         last_update: '20/20/2020',
       },
       {
-        id: 1,
-        companyName: 'PT. Cari Jodoh Sejahterah',
-        country: 'Indonesian',
-        contributors: 'Employee',
-        type: 'Fixed rate',
+        id: 5,
+        name: 'Aether',
+        country: 'Unknown',
+        province: 'Unknown',
+        effective_period: '20/20/2020',
         created: '20/20/2020',
         last_update: '20/20/2020',
       },
@@ -146,8 +157,9 @@ function SutatoryBenefitProfileTable({
         onChangePage={handleChangePage}
         onRowsPerPagesChange={(e) => handleChangeRowsPerPage(e)}
         headChildren={
+          Draft ?
           <TableRow>
-            {headerItems.map((item) => (
+            {DraftHeaderItems.map((item) => (
               <TableCell
                 key={item.id}
                 sortDirection={sort === item.id ? direction : false}
@@ -169,6 +181,29 @@ function SutatoryBenefitProfileTable({
               </TableCell>
             ))}
           </TableRow>
+          : <TableRow>
+          {headerItems.map((item) => (
+            <TableCell
+              key={item.id}
+              sortDirection={sort === item.id ? direction : false}
+            >
+              <TableSortLabel
+                active={sort === item.id}
+                direction={sort === item.id ? direction : 'asc'}
+                onClick={(e) => handleRequestSort(e, item.id)}
+              >
+                {item.label}
+                {sort === item.id ? (
+                  <Box component='span' sx={visuallyHidden}>
+                    {direction === 'asc'
+                      ? 'sorted descending'
+                      : 'sorted ascending'}
+                  </Box>
+                ) : null}
+              </TableSortLabel>
+            </TableCell>
+          ))}
+        </TableRow>
         }
         bodyChildren={
           <>
@@ -182,12 +217,24 @@ function SutatoryBenefitProfileTable({
               ) : (
                 data?.items.map((item, index) => (
                   <TableRow key={index}>
-                    <TableCell>{item.companyName}</TableCell>
-                    <TableCell>{item.country}</TableCell>
-                    <TableCell>{item.contributors}</TableCell>
-                    <TableCell>{item.type}</TableCell>
-                    <TableCell>{item.created}</TableCell>
-                    <TableCell>{item.last_update}</TableCell>
+                    {Draft ?
+                    <>
+                        <TableCell>{item.name}</TableCell>
+                        <TableCell>{item.country}</TableCell>
+                        <TableCell>{item.effective_period}</TableCell>
+                        <TableCell>{item.created}</TableCell>
+                        <TableCell>{item.last_update}</TableCell>
+                    </>
+                    :
+                    <>
+                        <TableCell>{item.name}</TableCell>
+                        <TableCell>{item.country}</TableCell>
+                        <TableCell>{item.province}</TableCell>
+                        <TableCell>{item.effective_period}</TableCell>
+                        <TableCell>{item.created}</TableCell>
+                        <TableCell>{item.last_update}</TableCell>
+                    </>
+                    }
                     <TableCell>
                       <ButtonWrapper>
                         {ActivateAction && (

@@ -145,7 +145,7 @@ const SatutoryBenefitProfile = () => {
           </Grid>
         </Grid>
         <TabPanel value={value} index={0}>
-            <SutatoryBenefitProfileTable tabValue={value} DeleteAction EditAction ActivateAction CopyAction />
+            <SutatoryBenefitProfileTable tabValue={value} DeleteAction EditAction ActivateAction CopyAction Draft/>
         </TabPanel>
         <TabPanel value={value} index={1}>
             <SutatoryBenefitProfileTable tabValue={value} ArchivedAction />
