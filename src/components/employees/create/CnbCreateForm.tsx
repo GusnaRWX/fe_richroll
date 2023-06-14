@@ -4,7 +4,7 @@
 import React, { useEffect, useState } from 'react';
 import { Form as FormikForm, Formik, FieldArray } from 'formik';
 import { validationSchemeCompensationBenefits } from './validate';
-import { Autocomplete, Box, FormControl, Grid, InputAdornment, TextField, createFilterOptions, Select as MuiSelect, MenuItem, FormHelperText, Typography, RadioGroup as MuiRadio, FormControlLabel, Radio } from '@mui/material';
+import { Autocomplete, Box, FormControl, Grid, InputAdornment, TextField, createFilterOptions, Select as MuiSelect, MenuItem, FormHelperText, Typography, RadioGroup as MuiRadio, FormControlLabel, Radio, Chip } from '@mui/material';
 import { Text } from '@/components/_shared/common';
 import { useAppSelectors, useAppDispatch } from '@/hooks/index';
 import { AiOutlinePlus } from 'react-icons/ai';
@@ -14,6 +14,9 @@ import { compareCheck, dynamicPayloadBaseCnb, getPaymentType, ifThenElse } from 
 import { styled } from '@mui/material/styles';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
+import { getDetailRequested } from '@/store/reducers/slice/cnb/compensationSlice';
+import { numberFormat } from '@/utils/format';
+import { FiEdit } from 'react-icons/fi';
 
 interface SuplementType {
   compensationComponentId: string;
@@ -104,6 +107,7 @@ const CnbCreateForm = ({
   const dispatch = useAppDispatch();
   const [custom, setCustom] = useState(false);
   const [title, setTitle] = useState('Amount');
+  const [titleView, setTitleView] = useState('');
   const [withPercentage, setWithPercentage] = useState(false);
   const [initialValues, setInitialValues] = useState<InitialValues>({
     templateID: '',
@@ -115,7 +119,8 @@ const CnbCreateForm = ({
     taxStatus: '',
     supplementary: [],
   });
-
+  const [isEdit, setIsEdit] = useState(false);
+  const cnbDetail = useAppSelectors(state => state?.compensation?.detail?.data);
   const filter: any = createFilterOptions();
 
   useEffect(() => {
@@ -170,6 +175,14 @@ const CnbCreateForm = ({
 
   }, [initialValues]);
 
+  useEffect(() => {
+    const fetchData = () => {
+      if (cnbDetail?.base?.component?.id) {
+        setTitleView(getPaymentType(cnbDetail?.base?.component?.id, option?.listCompensation)?.title);
+      }
+    };
+    fetchData();
+  }, []);
   return (
     <Formik
       initialValues={initialValues}
@@ -193,13 +206,20 @@ const CnbCreateForm = ({
                   onChange={(event, newValue: any) => {
                     if (typeof newValue === 'string') {
                       setCustom(false);
+                      setIsEdit(false);
                       formik.setFieldValue('name', newValue, false);
                     } else if (newValue && newValue.inputValue) {
                       setCustom(true);
+                      setIsEdit(false);
                       formik.setFieldValue('templateID', '', false);
                       formik.setFieldValue('name', newValue.inputValue, false);
                     } else {
                       setCustom(false);
+                      setIsEdit(true);
+                      dispatch({
+                        type: getDetailRequested.toString(),
+                        Id: newValue?.value
+                      });
                       formik.setFieldValue('name', newValue?.label);
                     }
                   }}
@@ -257,6 +277,58 @@ const CnbCreateForm = ({
                 />
               </Grid>
             </Grid>
+            {isEdit && (
+              <Box sx={{
+                backgroundColor: '#F9FAFB',
+                padding: '16px 16px',
+                borderRadius: '6px',
+                marginTop: '16px'
+              }}>
+                <Grid container justifyContent='space-between'>
+                  <Grid item md={6}>
+                    <Text title='Base' fontWeight={700} fontSize='16px' color='primary.500' />
+                  </Grid>
+                  <Grid item md={1}>
+                    <Button label='Edit' color='secondary' sx={{ color: 'white' }} startIcon={<FiEdit />} />
+                  </Grid>
+                </Grid>
+                <Grid container mt='16px' mb='32px'>
+                  <Grid item md={6}>
+                    <Text title='Compensation Component' color='grey.400' fontWeight={500} fontSize='14px' />
+                    <Text title={cnbDetail?.base?.component?.name || ''} />
+                  </Grid>
+                  <Grid item md={6}>
+                    <Text title='Tax Status' color='grey.400' fontWeight={500} fontSize='14px' />
+                    <Chip label={cnbDetail?.base?.isTaxable ? 'Taxable' : 'Non-Taxable'} />
+                  </Grid>
+                  <Grid item md={6}>
+                    <Text title={titleView || ''} color='grey.400' fontWeight={500} fontSize='14px' />
+                    <Text title={`Rp.${numberFormat(cnbDetail?.base?.amount) ?? ''} per ${cnbDetail?.base?.term?.name ?? ''}`} />
+                  </Grid>
+                </Grid>
+                {cnbDetail?.supplementaries?.length > 0 && (
+                  cnbDetail?.supplementaries?.map((suplement, index) => (
+                    <>
+                      <Text title='Supplementary' fontWeight={700} fontSize='16px' color='primary.500' />
+                      <Grid container key={index}>
+                        <Grid item md={6}>
+                          <Text title={`Compensation Component ${index + 1}`} color='grey.400' fontWeight={500} fontSize='14px' />
+                          <Text title={suplement?.component?.name ?? ''} />
+                        </Grid>
+                        <Grid item md={6}>
+                          <Text title='Tax Status' color='grey.400' fontWeight={500} fontSize='14px' />
+                          <Chip label={suplement?.isTaxable ? 'Taxable' : 'Non-Taxable'} />
+                        </Grid>
+                        <Grid item md={6}>
+                          <Text title={getPaymentType(suplement?.component?.id, option?.listCompensation)?.title} color='grey.400' fontWeight={500} fontSize='14px' />
+                          <Text title={`Rp.${numberFormat(suplement?.amount) ?? ''} per ${suplement?.term?.name ?? ''}`} />
+                        </Grid>
+                      </Grid>
+                    </>
+                  ))
+                )}
+              </Box>
+            )}
             {custom && (
               <>
                 <Text
