@@ -70,7 +70,9 @@ const SatutoryBenefitProfile = () => {
   return (
     <>
       <TitleWrapper>
-        <Typography variant='h5'>Statutory Benefits Profile Dashboard</Typography>
+        <Typography variant='h5'>
+          Statutory Benefits Profile Dashboard
+        </Typography>
         <div>
           <Button
             onClick={() =>
@@ -81,16 +83,22 @@ const SatutoryBenefitProfile = () => {
           />
         </div>
       </TitleWrapper>
-      <Paper sx={{pt:'2px'}}>
-      <Box sx={{  px:3 }}>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider', marginBottom:'33px' }}>
-          <Tabs value={value} onChange={handleChange} aria-label='basic tabs'>
-            <Tab label='Draft' {...a11yProps(0)} />
-            <Tab label='Active' {...a11yProps(1)} />
-            <Tab label='Archived' {...a11yProps(2)} />
-          </Tabs>
+      <Paper sx={{ pt: '2px' }}>
+        <Box sx={{ px: 3 }}>
+          <Box
+            sx={{
+              borderBottom: 1,
+              borderColor: 'divider',
+              marginBottom: '33px',
+            }}
+          >
+            <Tabs value={value} onChange={handleChange} aria-label='basic tabs'>
+              <Tab label='Draft' {...a11yProps(0)} />
+              <Tab label='Active' {...a11yProps(1)} />
+              <Tab label='Archived' {...a11yProps(2)} />
+            </Tabs>
+          </Box>
         </Box>
-      </Box>
         <Grid
           container
           spacing={2}
@@ -145,13 +153,20 @@ const SatutoryBenefitProfile = () => {
           </Grid>
         </Grid>
         <TabPanel value={value} index={0}>
-            <SutatoryBenefitProfileTable tabValue={value} DeleteAction EditAction ActivateAction CopyAction Draft/>
+          <SutatoryBenefitProfileTable
+            tabValue={value}
+            DeleteAction
+            EditAction
+            ActivateAction
+            CopyAction
+            Draft
+          />
         </TabPanel>
         <TabPanel value={value} index={1}>
-            <SutatoryBenefitProfileTable tabValue={value} ArchivedAction />
+          <SutatoryBenefitProfileTable tabValue={value} ArchivedAction />
         </TabPanel>
         <TabPanel value={value} index={2}>
-            <SutatoryBenefitProfileTable tabValue={value} DeleteAction/>
+          <SutatoryBenefitProfileTable tabValue={value} DeleteAction />
         </TabPanel>
       </Paper>
     </>
