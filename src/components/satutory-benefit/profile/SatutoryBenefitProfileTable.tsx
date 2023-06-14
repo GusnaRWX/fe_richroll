@@ -8,13 +8,16 @@ import {
   Typography,
 } from '@mui/material';
 import Table from '@/components/_shared/form/Table';
-import { IconButton } from '@/components/_shared/form';
+import { IconButton, Button } from '@/components/_shared/form';
 import styled from '@emotion/styled';
 import { visuallyHidden } from '@mui/utils';
 
 // Import Icon React Icon
 import DeleteIcon from '@mui/icons-material/Delete';
 import { HiPencilAlt } from 'react-icons/hi';
+import { FiCopy } from 'react-icons/fi';
+import { HiUpload } from 'react-icons/hi';
+import { HiOutlineArchive } from 'react-icons/hi';
 
 const ButtonWrapper = styled.div`
   display: flex;
@@ -41,15 +44,25 @@ const headerItems = [
   { id: 'action', label: '' },
 ];
 
-interface SutatoryBenefitComponentTableProps {
+interface SutatoryBenefitProfileTableProps {
   tabValue: number;
+  DeleteAction?: boolean;
+  EditAction?: boolean;
+  CopyAction?: boolean;
+  ActivateAction?: boolean;
+  ArchivedAction?: boolean;
 }
 
 type Order = 'asc' | 'desc';
 
-function SutatoryBenefitComponentTable({
+function SutatoryBenefitProfileTable({
   // tabValue,
-}: SutatoryBenefitComponentTableProps) {
+  DeleteAction,
+  EditAction,
+  CopyAction,
+  ActivateAction,
+  ArchivedAction,
+}: SutatoryBenefitProfileTableProps) {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
   const [direction, setDirection] = useState<Order>('desc');
@@ -134,7 +147,7 @@ function SutatoryBenefitComponentTable({
   return (
     <>
       <Table
-        count={data?.items.length}
+        count={data?.itemTotals}
         rowsPerPageOptions={[5, 10, 15]}
         rowsPerPage={rowsPerPage}
         page={page}
@@ -185,14 +198,45 @@ function SutatoryBenefitComponentTable({
                     <TableCell>{item.last_update}</TableCell>
                     <TableCell>
                       <ButtonWrapper>
-                        <IconButton
-                          parentColor='primary.50'
-                          icons={<HiPencilAlt fontSize={20} color='#223567' />}
-                        />
-                        <IconButton
-                          parentColor='red.100'
-                          icons={<DeleteIcon sx={{ color: '#EF4444' }} />}
-                        />
+                        {ActivateAction && (
+                          <Button
+                            color='green'
+                            sx={{ bgcolor: '#DCFCE7', color: '#16A34A' }}
+                            startIcon={<HiUpload />}
+                            label='Activate'
+                          />
+                        )}
+                        {CopyAction && (
+                          <IconButton
+                            parentColor='base'
+                            sx={{
+                              boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.05)',
+                            }}
+                            icons={<FiCopy fontSize={20} color='#374151' />}
+                          />
+                        )}
+                        {EditAction && (
+                          <IconButton
+                            parentColor='primary.50'
+                            icons={
+                              <HiPencilAlt fontSize={20} color='#223567' />
+                            }
+                          />
+                        )}
+                        {DeleteAction && (
+                          <IconButton
+                            parentColor='red.100'
+                            icons={<DeleteIcon sx={{ color: '#EF4444' }} />}
+                          />
+                        )}
+                        {ArchivedAction && (
+                          <Button
+                            color='orange'
+                            sx={{ bgcolor: '#FFEDD5', color: '#F97316' }}
+                            startIcon={<HiOutlineArchive />}
+                            label='Archive'
+                          />
+                        )}
                       </ButtonWrapper>
                     </TableCell>
                   </TableRow>
@@ -212,4 +256,4 @@ function SutatoryBenefitComponentTable({
   );
 }
 
-export default SutatoryBenefitComponentTable;
+export default SutatoryBenefitProfileTable;
