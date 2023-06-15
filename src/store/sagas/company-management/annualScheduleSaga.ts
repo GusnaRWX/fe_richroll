@@ -4,7 +4,8 @@ import {
   postAnnualSchedule,
   updateAnnualSchedule,
   deleteAnnualSchedule,
-  getListEventSchedule
+  getListEventSchedule,
+  getViewAnnualSchedule
 } from '../saga-actions/company-management/annualScheduleActions';
 import {
   getListAnnualScheduleFailed,
@@ -21,7 +22,10 @@ import {
   deleteAnnualScheduleSuccess,
   getListEventFailed,
   getListEventRequested,
-  getListEventSuccess
+  getListEventSuccess,
+  getViewAnnualScheduleFailed,
+  getViewAnnualScheduleRequested,
+  getViewAnnualScheduleSuccess
 } from '@/store/reducers/slice/company-management/annual-work-schedule/annualSchedule';
 import { call, put, takeEvery, delay } from 'redux-saga/effects';
 import { setResponserMessage } from '@/store/reducers/slice/responserSlice';
@@ -101,8 +105,21 @@ function* fetchPostAnnualSchedule(action: AnyAction) {
 function* fetchUpdateAnnualSchedule(action: AnyAction) {
   try {
     const res: AxiosResponse = yield call(updateAnnualSchedule, action?.payload);
-    if (res.data.code === 201) {
+    if (res.data.code === 200) {
       yield put({ type: updateAnnualScheduleSuccess.toString() });
+      yield put({
+        type: getListAnnualScheduleRequested.toString(),
+        payload: {
+          page: 1,
+          itemPerPage: 5,
+          sort: '',
+          direction: 'DESC',
+          search: '',
+          start: '',
+          end: ''
+        }
+      });
+      yield put({ type: getListEventRequested.toString() });
       yield put({
         type: setResponserMessage.toString(),
         payload: {
@@ -196,12 +213,40 @@ function* fetchListEventSchedule() {
   }
 }
 
+function* fetchGetViewSchedule(action: AnyAction) {
+  try {
+    const res: AxiosResponse = yield call(getViewAnnualSchedule, action?.payload);
+    if (res.data.code === 200){
+      yield put({
+        type: getViewAnnualScheduleSuccess.toString(),
+        payload: {
+          data: res?.data?.data
+        }
+      });
+    }
+  }catch(err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      yield put({ type: getViewAnnualScheduleFailed.toString() });
+      yield delay(2000, true);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message,
+        }
+      });
+    }
+  }
+}
+
 function* annualScheduleSaga() {
   yield takeEvery(getListAnnualScheduleRequested.toString(), fetchGetListAnnualSchedule);
   yield takeEvery(postAnnualScheduleRequested.toString(), fetchPostAnnualSchedule);
   yield takeEvery(updateAnnualScheduleRequested.toString(), fetchUpdateAnnualSchedule);
   yield takeEvery(deleteAnnualScheduleRequested.toString(), fetchDeleteAnnualSchedule);
   yield takeEvery(getListEventRequested.toString(), fetchListEventSchedule);
+  yield takeEvery(getViewAnnualScheduleRequested.toString(), fetchGetViewSchedule);
 }
 
 export default annualScheduleSaga;

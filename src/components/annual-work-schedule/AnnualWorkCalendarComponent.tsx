@@ -5,10 +5,16 @@ import styled from '@emotion/styled';
 import { Add } from '@mui/icons-material';
 import { IconButton } from '../_shared/form';
 import { BsTrashFill } from 'react-icons/bs';
+import { HiPencilAlt } from 'react-icons/hi';
 import AnnualWorkCalendarCreateForm from './create/AnnualWorkCalendarCreateForm';
 import AnnualWorkCalendarUpdateForm from './update/AnnualWorkCalendarUpdateForm';
 import ConfirmationModal from '../_shared/common/ConfirmationModal';
-import { getListAnnualScheduleRequested, getListEventRequested, deleteAnnualScheduleRequested } from '@/store/reducers/slice/company-management/annual-work-schedule/annualSchedule';
+import {
+  getListAnnualScheduleRequested,
+  getListEventRequested,
+  deleteAnnualScheduleRequested,
+  getViewAnnualScheduleRequested
+} from '@/store/reducers/slice/company-management/annual-work-schedule/annualSchedule';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import dayjs from 'dayjs';
 import type { SchedulerRef } from '@aldabil/react-scheduler/types';
@@ -132,6 +138,17 @@ function AnnualWorkCalendarComponent() {
     }
   }, [events]);
 
+  const handleViewUpdate = (id) => {
+    dispatch({
+      type: getViewAnnualScheduleRequested.toString(),
+      payload: id
+    });
+    setTimeout(() => {
+      setOpenUpdateForm(true);
+    }, 1000);
+
+  };
+
 
 
   return (
@@ -199,6 +216,13 @@ function AnnualWorkCalendarComponent() {
                         </LeftWrapper>
                         <ButtonWrapper>
                           <IconButton
+                            parentColor='primary.50'
+                            onClick={() => { handleViewUpdate(item?.id); }}
+                            icons={
+                              <HiPencilAlt fontSize={20} color='#223567'/>
+                            }
+                          />
+                          <IconButton
                             parentColor='red.100'
                             onClick={() => {
                               setDeleteConfirmation(true);
@@ -234,7 +258,10 @@ function AnnualWorkCalendarComponent() {
       <AnnualWorkCalendarUpdateForm
         open={openUpdateForm}
         handleClose={() => setOpenUpdateForm(false)}
-        handleConfirm={() => setOpenUpdateForm(false)}
+        handleConfirm={() => {
+          setOpenUpdateForm(false);
+          handleDelete();
+        }}
       />
       <ConfirmationModal
         open={deleteConfirmation}

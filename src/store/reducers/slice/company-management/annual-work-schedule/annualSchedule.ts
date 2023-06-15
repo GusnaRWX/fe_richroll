@@ -18,14 +18,16 @@ interface AnnualScheduleState {
   isLoading: boolean,
   data: [],
   events: Array<EventType>,
-  totalPages: number
+  totalPages: number,
+  detailAnnual: object
 }
 
 const initialState: AnnualScheduleState = {
   isLoading: false,
   data: [],
   events: [],
-  totalPages: 0
+  totalPages: 0,
+  detailAnnual: {}
 };
 
 export const annualScheduleSlice = createSlice({
@@ -60,7 +62,7 @@ export const annualScheduleSlice = createSlice({
           type: item?.eventType,
           isWithTime: item?.isWithTime,
           deletable: false,
-          note: item?.note
+          note: item?.notenvm
         });
       });
       state.events = tempData;
@@ -75,6 +77,16 @@ export const annualScheduleSlice = createSlice({
       state.isLoading = false;
     },
     postAnnualScheduleFailed: (state) => {
+      state.isLoading = false;
+    },
+    getViewAnnualScheduleRequested: (state) => {
+      state.isLoading = true;
+    },
+    getViewAnnualScheduleSuccess: (state, action) => {
+      state.isLoading = false;
+      state.detailAnnual = action?.payload?.data;
+    },
+    getViewAnnualScheduleFailed: (state) => {
       state.isLoading = false;
     },
     updateAnnualScheduleRequested: (state) => {
@@ -125,7 +137,10 @@ export const {
   clearState,
   getListEventFailed,
   getListEventRequested,
-  getListEventSuccess
+  getListEventSuccess,
+  getViewAnnualScheduleFailed,
+  getViewAnnualScheduleRequested,
+  getViewAnnualScheduleSuccess
 } = annualScheduleSlice.actions;
 
 export default annualScheduleSlice.reducer;
