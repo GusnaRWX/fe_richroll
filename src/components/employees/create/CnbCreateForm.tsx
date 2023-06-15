@@ -109,6 +109,8 @@ const CnbCreateForm = ({
   const [title, setTitle] = useState('Amount');
   const [titleView, setTitleView] = useState('');
   const [withPercentage, setWithPercentage] = useState(false);
+  const [isView, setIsView] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
   const [initialValues, setInitialValues] = useState<InitialValues>({
     templateID: '',
     name: '',
@@ -119,7 +121,7 @@ const CnbCreateForm = ({
     taxStatus: '',
     supplementary: [],
   });
-  const [isEdit, setIsEdit] = useState(false);
+
   const cnbDetail = useAppSelectors(state => state?.compensation?.detail?.data);
   const filter: any = createFilterOptions();
 
@@ -131,7 +133,7 @@ const CnbCreateForm = ({
 
   useEffect(() => {
     let supplement = false;
-    initialValues.supplementary.map(item => {
+    initialValues?.supplementary?.map(item => {
       if (initialValues.supplementary.length === 0) {
         supplement = true;
         return false;
@@ -151,7 +153,6 @@ const CnbCreateForm = ({
     if (initialValues.name !== '' &&
       initialValues.compensationComponentId !== ''
       && initialValues.period !== '' &&
-      initialValues.taxStatus !== '' &&
       supplement
     ) {
       const tempBase = dynamicPayloadBaseCnb(option?.listCompensation, initialValues.compensationComponentId, initialValues);
@@ -183,6 +184,7 @@ const CnbCreateForm = ({
     };
     fetchData();
   }, []);
+
   return (
     <Formik
       initialValues={initialValues}
@@ -206,21 +208,30 @@ const CnbCreateForm = ({
                   onChange={(event, newValue: any) => {
                     if (typeof newValue === 'string') {
                       setCustom(false);
+                      setIsView(false);
                       setIsEdit(false);
                       formik.setFieldValue('name', newValue, false);
                     } else if (newValue && newValue.inputValue) {
                       setCustom(true);
+                      setIsView(false);
                       setIsEdit(false);
                       formik.setFieldValue('templateID', '', false);
                       formik.setFieldValue('name', newValue.inputValue, false);
                     } else {
                       setCustom(false);
-                      setIsEdit(true);
+                      setIsEdit(false);
+                      setIsView(true);
                       dispatch({
                         type: getDetailRequested.toString(),
                         Id: newValue?.value
                       });
                       formik.setFieldValue('name', newValue?.label);
+                      formik.setFieldValue('templateID', newValue?.value);
+                      formik.setFieldValue('compensationComponentId', cnbDetail?.base?.component?.id);
+                      formik.setFieldValue('period', cnbDetail?.base?.term?.id);
+                      formik.setFieldValue('rateOrAmount', isNaN(cnbDetail?.base?.amount) ? +cnbDetail?.base?.rate : +cnbDetail?.base?.amount);
+                      formik.setFieldValue('taxStatus', cnbDetail?.base?.isTaxable ? 'true' : 'false');
+                      formik.setFieldValue('supplementary', cnbDetail?.supplementaries);
                     }
                   }}
                   size='small'
@@ -277,7 +288,7 @@ const CnbCreateForm = ({
                 />
               </Grid>
             </Grid>
-            {isEdit && (
+            {isView && (
               <Box sx={{
                 backgroundColor: '#F9FAFB',
                 padding: '16px 16px',
@@ -289,7 +300,10 @@ const CnbCreateForm = ({
                     <Text title='Base' fontWeight={700} fontSize='16px' color='primary.500' />
                   </Grid>
                   <Grid item md={1}>
-                    <Button label='Edit' color='secondary' sx={{ color: 'white' }} startIcon={<FiEdit />} />
+                    <Button label='Edit' color='secondary' sx={{ color: 'white' }} startIcon={<FiEdit />} onClick={() => {
+                      setIsView(false);
+                      setIsEdit(true);
+                    }} />
                   </Grid>
                 </Grid>
                 <Grid container mt='16px' mb='32px'>
@@ -327,6 +341,81 @@ const CnbCreateForm = ({
                     </>
                   ))
                 )}
+              </Box>
+            )}
+            {isEdit && (
+              <Box sx={{
+                backgroundColor: '#F9FAFB',
+                padding: '16px 16px',
+                borderRadius: '6px',
+                marginTop: '16px'
+              }}>
+                <Grid container justifyContent='space-between'>
+                  <Grid item md={6}>
+                    <Text title='Base' fontWeight={700} fontSize='16px' color='primary.500' />
+                  </Grid>
+                  <Grid item md={1}>
+                    <Button label='Edit' color='secondary' sx={{ color: 'white' }} startIcon={<FiEdit />} onClick={() => {
+                      setIsView(true);
+                      setIsEdit(false);
+                    }} />
+                  </Grid>
+                </Grid>
+                <Grid container alignItems='baseline' mt='16px' justifyContent='space-between'>
+                  <Grid item md={4}>
+                    <Select
+                      name='compensationComponentID'
+                      size='small'
+                      fullWidth
+                      customLabel='Compensation Component'
+                      withAsterisk
+                      value={formik.values.compensationComponentId}
+                      onChange={(e) => {
+                        formik.setFieldValue(
+                          'compensationComponentId',
+                          e.target.value
+                        );
+                        dispatch({
+                          type: getListTerminReqeusted.toString(),
+                          payload: e.target.value
+                        });
+                        setTitle(getPaymentType(e.target.value, option?.listCompensation)?.title);
+                        setWithPercentage(getPaymentType(e.target.value, option?.listCompensation)?.withPercentage);
+                      }}
+                      displayEmpty
+                      renderValue={(value: unknown) => {
+                        if ((value as string)?.length === 0) {
+                          return <Text title='Select base compensation component' color='grey.400' />;
+                        }
+                        const selected = option?.listCompensation?.find(item => item.value === value);
+                        if (selected) {
+                          return `${selected?.label}`;
+                        }
+                        return null;
+                      }}
+                      options={option?.listCompensation}
+                      variant='outlined'
+                      error={compareCheck(formik.touched.compensationComponentId, Boolean(formik.errors.compensationComponentId))}
+                      helperText={ifThenElse(compareCheck(formik.touched.compensationComponentId, Boolean(formik.errors.compensationComponentId)), formik.errors.compensationComponentId, '')}
+                    />
+                  </Grid>
+                  <Grid item md={6}>
+                    <RadioGroup
+                      withAsterisk
+                      label='Tax Status'
+                      name='taxStatus'
+                      options={[
+                        { label: 'Taxable', value: 'true' },
+                        { label: 'Non-Taxable', value: 'false' }
+                      ]}
+                      value={formik.values.taxStatus}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      row
+                      error={ifThenElse(compareCheck(formik.touched.taxStatus, Boolean(formik.errors.taxStatus)), formik.errors.taxStatus, '')}
+                    />
+                  </Grid>
+                </Grid>
               </Box>
             )}
             {custom && (
@@ -471,7 +560,7 @@ const CnbCreateForm = ({
               render={(arrayHelper) => {
                 return (
                   <div style={{ marginTop: '16px' }}>
-                    {formik.values.supplementary.length > 0 && (
+                    {formik?.values?.supplementary?.length > 0 ? (
                       <>
                         <Text
                           title='Supplementary'
@@ -480,7 +569,7 @@ const CnbCreateForm = ({
                           fontSize='16px'
                           marginBottom='17px'
                         />
-                        {formik.values.supplementary.map((suplement, i) => (
+                        {formik?.values?.supplementary?.map((suplement, i) => (
                           <div key={i} style={{ marginBottom: '33px' }}>
                             <Grid container spacing={2}>
                               <Grid item xs={6}>
@@ -756,7 +845,7 @@ const CnbCreateForm = ({
                           </div>
                         ))}
                       </>
-                    )}
+                    ) : null}
                     {formik.values.compensationComponentId !== '' && (
                       <AddButton
                         color='secondary'
