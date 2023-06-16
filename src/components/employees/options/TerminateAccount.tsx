@@ -3,8 +3,13 @@ import { Card, Text, CustomModal } from '@/components/_shared/common';
 import { Textarea, Button } from '@/components/_shared/form';
 import { BsTrashFill } from 'react-icons/bs';
 import { Box } from '@mui/material';
+import { useAppDispatch } from '@/hooks/index';
+import { postTerminateEmployeeRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
+import { useRouter } from 'next/router';
 
 const TerminateAccount = () => {
+  const dispatch = useAppDispatch()
+  const router = useRouter()
   const [Open, setOpen] = useState(false);
   const [Note, setNote] = useState('');
 
@@ -17,6 +22,15 @@ const TerminateAccount = () => {
   };
 
   const handleConfirmation = () => {
+    const payload = {
+      terminateDate: Date(),
+      terminateNote: Note,
+    }
+    dispatch({
+      type: postTerminateEmployeeRequested.toString(),
+      id: router.query.id,
+      payload: payload,
+    })
     setNote('')
     setOpen(false);
   };
@@ -83,6 +97,7 @@ const TerminateAccount = () => {
             minRows={6}
             style={{ resize: 'vertical' }}
             onChange={(e) => setNote(e.target.value)}
+            value={Note}
           />
         </Box>
       </CustomModal>

@@ -306,8 +306,8 @@ export declare namespace Employees {
   }
   
   interface PostTerminateEmployee {
-    status?: string;
     terminateDate: string;
+    terminateNote: string;
   }
 
 }

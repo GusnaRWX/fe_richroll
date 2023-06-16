@@ -78,7 +78,5 @@ export const postWorkSchedule = (payload) => {
 };
 
 export const postTerminateEmployee = (payload, id) => {
-  console.log(payload);
-  
   return post(`employees/${id as string}/terminate`, payload as Employees.PostTerminateEmployee);
 };
