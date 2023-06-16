@@ -1,12 +1,12 @@
 import React from 'react';
-import SatutoryComponentContainer from '@/containers/satutory-benefit/SatutoryComponentContainer';
+import SatutoryBenefitComponentContainer from '@/containers/satutory-benefit/SatutoryBenefitComponentContainer';
 import MetaHead from '@/components/_shared/_core/layout/MetaHead';
 
 export default function Index() {
   return (
     <>
-      <MetaHead title='Satutory Benefit - Component' />
-      <SatutoryComponentContainer />
+      <MetaHead title='Satutory Benefit - Component Dashboard' />
+      <SatutoryBenefitComponentContainer />
     </>
   );
 }

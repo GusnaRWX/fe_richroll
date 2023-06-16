@@ -255,7 +255,7 @@ export default function CreateLeaveApplicationComponent() {
                       ))}
                     </Select>
                     <FormHelperText>
-                      {formik.touched.name && formik.errors.name}
+                      {formik.touched.name && formik.errors.name as unknown as React.ReactNode}
                     </FormHelperText>
                   </FormControl>
                 </Grid>
@@ -288,7 +288,7 @@ export default function CreateLeaveApplicationComponent() {
                           ))}
                         </Select>
                         <FormHelperText>
-                          {formik.touched.type && formik.errors.type}
+                          {formik.touched.type && formik.errors.type as unknown as React.ReactNode}
                         </FormHelperText>
                       </FormControl>
                     </Grid>
@@ -383,7 +383,7 @@ export default function CreateLeaveApplicationComponent() {
                             />
                             <FormHelperText>
                               {formik.touched.start_date &&
-                                formik.errors.start_date}
+                                formik.errors.start_date as unknown as React.ReactNode}
                             </FormHelperText>
                           </FormControl>
                         </Grid>
@@ -418,7 +418,7 @@ export default function CreateLeaveApplicationComponent() {
                             />
                             <FormHelperText>
                               {formik.touched.end_date &&
-                                formik.errors.end_date}
+                                formik.errors.end_date as unknown as React.ReactNode}
                             </FormHelperText>
                           </FormControl>
                         </Grid>
