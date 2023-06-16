@@ -1,13 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Input } from '@/components/_shared/form';
 import { Text, Card } from '@/components/_shared/common';
-import { Theme, useTheme, styled } from '@mui/material/styles';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
 import {
   MenuItem,
-  Icon,
-  Typography,
   FormGroup,
   FormControlLabel,
   Checkbox,
@@ -17,7 +14,6 @@ import {
   InputAdornment,
   Button,
 } from '@mui/material';
-import { useRouter } from 'next/router';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 const rates = ['6,0', '7,0', '8,0', '9,0', '10,0'];
