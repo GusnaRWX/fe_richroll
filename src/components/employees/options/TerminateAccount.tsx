@@ -1,10 +1,19 @@
-import React from 'react';
-import { Card, Text } from '@/components/_shared/common';
+import React, {useState} from 'react';
+import { Card, Text, CustomModal } from '@/components/_shared/common';
 import { Box } from '@mui/material';
 import { Button } from '@/components/_shared/form';
 import { BsTrashFill } from 'react-icons/bs';
 
 const TerminateAccount = () => {
+  const [leave, setLeave] = useState(false);
+  const handleOpen = () => {
+    setLeave(true);
+  };
+
+  const handleClose = () => {
+    setLeave(false);
+  };
+
   return (
     <Card
       sx={{
@@ -49,7 +58,14 @@ const TerminateAccount = () => {
           }
         }}
         startIcon={<BsTrashFill size={12} />}
+        onClick={() => handleOpen}
       />
+      <CustomModal
+      open={leave}
+      handleClose={handleClose}
+      title='Update Event'
+      width='758px'
+    />
     </Card>
   );
 };

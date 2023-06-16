@@ -16,7 +16,8 @@ import {
   postCalculateEvent,
   postSimulationEvent,
   postWorkSchedule,
-  getViewWorkSchedule
+  getViewWorkSchedule,
+  postTerminateEmployee
 } from '../saga-actions/company-management/employeeActions';
 import { call, put, takeEvery, delay } from 'redux-saga/effects';
 import {
@@ -70,7 +71,10 @@ import {
   getDetailWorkSchedulerSuccess,
   getViewWorkScheduleFailed,
   getViewWorkScheduleRequested,
-  getViewWorkScheduleSuccess
+  getViewWorkScheduleSuccess,
+  postTerminateEmployeeRequested,
+  postTerminateEmployeeSuccess,
+  postTerminateEmployeeFailed,
 } from '@/store/reducers/slice/company-management/employees/employeeSlice';
 import { setResponserMessage } from '@/store/reducers/slice/responserSlice';
 import { Services } from '@/types/axios';
@@ -891,6 +895,35 @@ function* fetchGetViewWorkSchedule(action: AnyAction) {
   }
 }
 
+function* fetchPostTerminateEmployee(action: AnyAction) {
+  try {
+    const res: AxiosResponse = yield call(postTerminateEmployee, action?.payload);
+    if (res.data.code === 200) {
+      yield put({
+        type: postTerminateEmployeeSuccess.toString(),
+        payload: {
+          id: res?.data?.data?.company_work_schedule_id,
+          status: res?.data?.data?.status,
+          message: res?.data?.data?.messages,
+        }
+      });
+    }
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      yield put({ type: postCalculateEventFailed.toString() });
+      yield delay(2000, true);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message,
+        }
+      });
+    }
+  }
+}
+
 function* employeeSaga() {
   yield takeEvery(getEmployeeRequested.toString(), fetchGetEmployee);
   yield takeEvery(postEmployeeInfoRequested.toString(), fetchPostEmployeeInfo);
@@ -909,6 +942,8 @@ function* employeeSaga() {
   yield takeEvery(postCalculateEventRequested.toString(), fetchPostCalculateEvent);
   yield takeEvery(postWorkScheduleRequested.toString(), fetchPostWorkSchedule);
   yield takeEvery(getViewWorkScheduleRequested.toString(), fetchGetViewWorkSchedule);
+  yield takeEvery(getViewWorkScheduleRequested.toString(), fetchGetViewWorkSchedule);
+  yield takeEvery(postTerminateEmployeeRequested.toString(), fetchPostTerminateEmployee);
 }
 
 export default employeeSaga;
