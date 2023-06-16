@@ -1,4 +1,4 @@
-import { Input } from "@/components/_shared/form";
+import { Input, Button } from "@/components/_shared/form";
 import { InfoOutlined } from "@mui/icons-material";
 import {
   Box,
@@ -7,16 +7,18 @@ import {
   Radio,
   Select,
   Typography,
+  RadioGroup,
+  FormControlLabel,
+  Grid,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import React, { useState } from "react";
 
-export default function CreateDesignedTransferAccount() {
-  const [selectedAccountValue, setSelectedAccountValue] = useState("company");
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedAccountValue(event.target.value);
-  };
+export default function CreateDesignedTransferAccount() {
+  const [account, setAccount] = useState("central");
 
   const CustomWrappperParentForm = styled("div")(({ theme }) => ({
     [theme.breakpoints.down("md")]: {
@@ -31,6 +33,38 @@ export default function CreateDesignedTransferAccount() {
     color: theme.palette.error.main,
   }));
 
+  const validationSchema = Yup.object({
+    bank: Yup.string().required("This Field is Required"),
+    holder: Yup.string().required("This Field is Required"),
+    no: Yup.string().required("This Field is Required"),
+    bankCode: Yup.string(),
+    branchCode: Yup.string(),
+    branchName: Yup.string(),
+    swiftCode: Yup.string(),
+    notes: Yup.string(),
+  });
+
+  const formik = useFormik({
+    initialValues: {
+      bank: "",
+      holder: "",
+      no: "",
+      bankCode: "",
+      branchCode: "",
+      branchName: "",
+      swiftCode: "",
+      notes: "",
+    },
+    validationSchema: validationSchema,
+    onSubmit: (values) => {
+      console.log(values);
+    },
+  });
+
+  const handleChange = (e) => {
+    setAccount(e.target.value);
+  };
+
   return (
     <Box component="div" sx={{ marginTop: "17px" }}>
       <Typography
@@ -43,43 +77,23 @@ export default function CreateDesignedTransferAccount() {
         sx={{ display: " flex", gap: "32px", marginTop: "27px" }}
       >
         <Box component="div" sx={{ display: "flex", alignItems: "center" }}>
-          <Radio
-            checked={selectedAccountValue === "central"}
-            onChange={handleChange}
-            value="central"
-            name="radio-buttons"
-          />
-          <Typography
-            style={{ color: "#223567", fontWeight: 500, fontSize: "16px" }}
-          >
-            Central Account
-          </Typography>
-        </Box>
-        <Box component="div" sx={{ display: "flex", alignItems: "center" }}>
-          <Radio
-            checked={selectedAccountValue === "individual"}
-            onChange={handleChange}
-            value="individual"
-            name="radio-buttons"
-          />
-          <Typography
-            style={{ color: "#223567", fontWeight: 500, fontSize: "16px" }}
-          >
-            Individual Account
-          </Typography>
-        </Box>
-        <Box component="div" sx={{ display: "flex", alignItems: "center" }}>
-          <Radio
-            checked={selectedAccountValue === "company"}
-            onChange={handleChange}
-            value="company"
-            name="radio-buttons"
-          />
-          <Typography
-            style={{ color: "#223567", fontWeight: 500, fontSize: "16px" }}
-          >
-            Company Account Only
-          </Typography>
+          <RadioGroup row value={account} onChange={handleChange}>
+            <FormControlLabel
+              value="central"
+              control={<Radio />}
+              label="Central Account"
+            />
+            <FormControlLabel
+              value="individual"
+              control={<Radio />}
+              label="Individual Account"
+            />
+            <FormControlLabel
+              value="company"
+              control={<Radio />}
+              label="Company Account Only"
+            />
+          </RadioGroup>
         </Box>
       </Box>
       <Box
@@ -108,7 +122,7 @@ export default function CreateDesignedTransferAccount() {
         </Typography>
       </Box>
 
-      <CustomWrappperParentForm
+      <Box
         sx={{
           marginTop: "16px",
         }}
@@ -125,7 +139,17 @@ export default function CreateDesignedTransferAccount() {
             fullWidth
             placeholder="Select Bank"
             size="small"
-            sx={{ backgroundColor: "#F3F4F6", color: "#6B7280" }}
+            disabled={account !== "central"}
+            sx={
+              account !== "central"
+                ? {
+                    backgroundColor: "#F3F4F6",
+                    color: "#6B7280",
+                  }
+                : null
+            }
+            value={formik.values.bank}
+            onChange={(e) => formik.setFieldValue("bank", e.target.value)}
           >
             <MenuItem value="1">1</MenuItem>
             <MenuItem value="2">2</MenuItem>
@@ -137,21 +161,26 @@ export default function CreateDesignedTransferAccount() {
             component="div"
             sx={{ color: "#374151", fontWeight: 400 }}
           >
-            Bank Account Holder`s Name {""}
+            Bank Account Holder`s Name &nbsp;
             <AsteriskComponent>*</AsteriskComponent>
           </Typography>
           <Input
             size="small"
             placeholder="Input Bank Account Holders Name"
-            required
-            sx={{
-              backgroundColor: "#F3F4F6",
-              color: "#6B7280",
-              borderColor: "#E5E7EB",
-            }}
+            disabled={account !== "central"}
+            sx={
+              account !== "central"
+                ? {
+                    backgroundColor: "#F3F4F6",
+                    color: "#6B7280",
+                  }
+                : null
+            }
+            value={formik.values.holder}
+            onChange={(e) => formik.setFieldValue("holder", e.target.value)}
           />
         </Box>
-      </CustomWrappperParentForm>
+      </Box>
 
       <CustomWrappperParentForm
         sx={{
@@ -168,12 +197,17 @@ export default function CreateDesignedTransferAccount() {
           <Input
             size="small"
             placeholder="Input Bank Account No."
-            required
-            sx={{
-              backgroundColor: "#F3F4F6",
-              color: "#6B7280",
-              borderColor: "#E5E7EB",
-            }}
+            disabled={account !== "central"}
+            sx={
+              account !== "central"
+                ? {
+                    backgroundColor: "#F3F4F6",
+                    color: "#6B7280",
+                  }
+                : null
+            }
+            value={formik.values.no}
+            onChange={(e) => formik.setFieldValue("no", e.target.value)}
           />
         </Box>
 
@@ -195,12 +229,15 @@ export default function CreateDesignedTransferAccount() {
             <Input
               size="small"
               placeholder="Input Bank Code"
-              required
-              sx={{
-                backgroundColor: "#F3F4F6",
-                color: "#6B7280",
-                borderColor: "#E5E7EB",
-              }}
+              disabled={account !== "central"}
+              sx={
+                account !== "central"
+                  ? {
+                      backgroundColor: "#F3F4F6",
+                      color: "#6B7280",
+                    }
+                  : null
+              }
             />
           </Box>
 
@@ -214,12 +251,19 @@ export default function CreateDesignedTransferAccount() {
             <Input
               size="small"
               placeholder="Input Branch Code"
-              required
-              sx={{
-                backgroundColor: "#F3F4F6",
-                color: "#6B7280",
-                borderColor: "#E5E7EB",
-              }}
+              disabled={account !== "central"}
+              sx={
+                account !== "central"
+                  ? {
+                      backgroundColor: "#F3F4F6",
+                      color: "#6B7280",
+                    }
+                  : null
+              }
+              value={formik.values.branchCode}
+              onChange={(e) =>
+                formik.setFieldValue("branchCode", e.target.value)
+              }
             />
           </Box>
         </Box>
@@ -241,12 +285,17 @@ export default function CreateDesignedTransferAccount() {
           <Input
             size="small"
             placeholder="Input Branch Name"
-            required
-            sx={{
-              backgroundColor: "#F3F4F6",
-              color: "#6B7280",
-              borderColor: "#E5E7EB",
-            }}
+            disabled={account !== "central"}
+            sx={
+              account !== "central"
+                ? {
+                    backgroundColor: "#F3F4F6",
+                    color: "#6B7280",
+                  }
+                : null
+            }
+            value={formik.values.branchName}
+            onChange={(e) => formik.setFieldValue("branchName", e.target.value)}
           />
         </Box>
         <Box sx={{ width: { xs: "100%", md: "50%" } }}>
@@ -260,12 +309,17 @@ export default function CreateDesignedTransferAccount() {
           <Input
             size="small"
             placeholder="Input Swift Code"
-            required
-            sx={{
-              backgroundColor: "#F3F4F6",
-              color: "#6B7280",
-              borderColor: "#E5E7EB",
-            }}
+            disabled={account !== "central"}
+            sx={
+              account !== "central"
+                ? {
+                    backgroundColor: "#F3F4F6",
+                    color: "#6B7280",
+                  }
+                : null
+            }
+            value={formik.values.swiftCode}
+            onChange={(e) => formik.setFieldValue("swiftCode", e.target.value)}
           />
         </Box>
       </CustomWrappperParentForm>
@@ -285,12 +339,24 @@ export default function CreateDesignedTransferAccount() {
             color: "#6B7280",
             borderColor: "#E5E7EB",
           }}
+          value={formik.values.notes}
+          onChange={(e) => formik.setFieldValue("notes", e.target.value)}
         />
         <FormHelperText
           sx={{ fontWeight: 500, color: "#6B7280", fontSize: "14px" }}
         >
           Max.100 Character
         </FormHelperText>
+        <Grid item xs={12} md={12} lg={12} xl={12}>
+          <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+            <Button
+              color="primary"
+              label="Next"
+              sx={{ width: "63px" }}
+              onClick={() => formik.submitForm()}
+            />
+          </Box>
+        </Grid>
       </Box>
     </Box>
   );
