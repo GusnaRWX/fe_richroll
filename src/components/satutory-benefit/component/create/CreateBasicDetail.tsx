@@ -1,6 +1,8 @@
 import React from 'react';
 import { Grid, Box, Typography } from '@mui/material';
 import { Button, Input, Select, Textarea } from '@/components/_shared/form';
+import { useFormik } from 'formik';
+import * as Yup from 'yup'
 
 export default function CreateBasicDetailComponent() {
   const Dummyoption = [
@@ -8,6 +10,33 @@ export default function CreateBasicDetailComponent() {
     { value: '2', label: 'Dummy 2' },
     { value: '3', label: 'Dummy 3' },
   ];
+  
+  const validationSchema = Yup.object({
+    componentName: Yup.string().required(),
+    country: Yup.string().required(),
+    province: Yup.string(),
+    city: Yup.string(),
+    subDistrict: Yup.string(),
+    citation: Yup.string(),
+    internalNotes: Yup.string(),
+    externalNotes: Yup.string(),
+  })
+
+  const formik = useFormik({
+    initialValues: {
+      componentName: '',
+      country: '',
+      province: '',
+      city: '',
+      subDistrict: '',
+      citation: '',
+      internalNotes: '',
+      externalNotes: '',
+    },
+    validationSchema: validationSchema,
+    onSubmit: (values) => console.log(values)
+  })
+
   return (
     <>
       <Grid container spacing={2} rowSpacing={4}>
@@ -17,6 +46,8 @@ export default function CreateBasicDetailComponent() {
             customLabel='Component Name'
             withAsterisk
             size='small'
+            value={formik.values.componentName}
+            onChange={(e) => formik.setFieldValue('componentName', e.target.value)}
           />
         </Grid>
         <Grid item xs={6} md={6} lg={6} xl={6}></Grid>
@@ -28,24 +59,30 @@ export default function CreateBasicDetailComponent() {
             size='small'
             fullWidth
             options={Dummyoption}
+            value={formik.values.country}
+            onChange={(e) => formik.setFieldValue('country', e.target.value)}
           />
         </Grid>
         <Grid item xs={6} md={6} lg={6} xl={6}>
           <Select
-            placeholder='Select Country'
+            placeholder='Select Province'
             customLabel='Province'
             size='small'
             fullWidth
             options={Dummyoption}
+            value={formik.values.province}
+            onChange={(e) => formik.setFieldValue('province', e.target.value)}
           />
         </Grid>
         <Grid item xs={6} md={6} lg={6} xl={6}>
           <Select
-            placeholder='Select Country'
+            placeholder='Select City'
             customLabel='City'
             size='small'
             fullWidth
             options={Dummyoption}
+            value={formik.values.city}
+            onChange={(e) => formik.setFieldValue('city', e.target.value)}
           />
         </Grid>
         <Grid item xs={6} md={6} lg={6} xl={6}>
@@ -55,6 +92,8 @@ export default function CreateBasicDetailComponent() {
             size='small'
             fullWidth
             options={Dummyoption}
+            value={formik.values.subDistrict}
+            onChange={(e) => formik.setFieldValue('subDistrict', e.target.value)}
           />
         </Grid>
         <Grid item xs={6} md={6} lg={6} xl={6}>
@@ -62,6 +101,8 @@ export default function CreateBasicDetailComponent() {
             customLabel='Citation'
             minRows={4}
             style={{ resize: 'vertical' }}
+            value={formik.values.citation}
+            onChange={(e) => formik.setFieldValue('citation', e.target.value)}
           />
           <Typography
             style={{
@@ -79,6 +120,8 @@ export default function CreateBasicDetailComponent() {
             customLabel='Internal Notes'
             minRows={4}
             style={{ resize: 'vertical' }}
+            value={formik.values.internalNotes}
+            onChange={(e) => formik.setFieldValue('internalNotes', e.target.value)}
           />
           <Typography
             style={{
@@ -95,6 +138,8 @@ export default function CreateBasicDetailComponent() {
             customLabel='External Notes'
             minRows={4}
             style={{ resize: 'vertical' }}
+            value={formik.values.externalNotes}
+            onChange={(e) => formik.setFieldValue('externalNotes', e.target.value)}
           />
           <Typography
             style={{
@@ -112,7 +157,8 @@ export default function CreateBasicDetailComponent() {
               color='primary'
               label='Next'
               sx={{ width: '63px' }}
-            ></Button>
+              onClick={() => {formik.submitForm()}}
+            />
           </Box>
         </Grid>
       </Grid>
