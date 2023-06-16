@@ -24,6 +24,7 @@ import { useRouter } from 'next/router';
 
 // Import Create Component
 import CreateBasicDetailComponent from './CreateBasicDetail';
+import CreateRates from './CreateRates';
 
 export default function CreateNewComponent() {
   const router = useRouter();
@@ -79,7 +80,7 @@ export default function CreateNewComponent() {
       width: 16,
       height: 16,
       backgroundImage: 'radial-gradient(#fff,#fff 28%,transparent 32%)',
-      content: '""',
+      content: '',
     },
     'input:hover ~ &': {
       backgroundColor: '#106ba3',
@@ -158,7 +159,7 @@ export default function CreateNewComponent() {
           2
         </TabPanel>
         <TabPanel value={value} index={2}>
-          3
+          <CreateRates />
         </TabPanel>
       </Paper>
     </>
