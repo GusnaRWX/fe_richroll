@@ -1,17 +1,24 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { Card, Text, CustomModal } from '@/components/_shared/common';
-import { Box } from '@mui/material';
-import { Button } from '@/components/_shared/form';
+import { Textarea, Button } from '@/components/_shared/form';
 import { BsTrashFill } from 'react-icons/bs';
+import { Box } from '@mui/material';
 
 const TerminateAccount = () => {
-  const [leave, setLeave] = useState(false);
+  const [Open, setOpen] = useState(false);
+  const [Note, setNote] = useState('');
+
   const handleOpen = () => {
-    setLeave(true);
+    setOpen(true);
   };
 
   const handleClose = () => {
-    setLeave(false);
+    setOpen(false);
+  };
+
+  const handleConfirmation = () => {
+    setNote('')
+    setOpen(false);
   };
 
   return (
@@ -19,7 +26,7 @@ const TerminateAccount = () => {
       sx={{
         padding: '10px 20px',
         mb: '20px',
-        border:'1px solid #DC2626'
+        border: '1px solid #DC2626',
       }}
     >
       <Box mb='17px'>
@@ -55,17 +62,30 @@ const TerminateAccount = () => {
           ':hover': {
             color: '#DC2626',
             background: '#FECACA',
-          }
+          },
         }}
         startIcon={<BsTrashFill size={12} />}
-        onClick={() => handleOpen}
+        onClick={handleOpen}
       />
+
       <CustomModal
-      open={leave}
-      handleClose={handleClose}
-      title='Update Event'
-      width='758px'
-    />
+        open={Open}
+        handleClose={handleClose}
+        handleConfirm={handleConfirmation}
+        title='Confirmation Terminate Account'
+        width='543px'
+        ConfirmationDisable={Note === ''}
+      >
+        <Box sx={{ my: 2 }}>
+          <Textarea
+            customLabel='Please input your notes : '
+            withAsterisk
+            minRows={6}
+            style={{ resize: 'vertical' }}
+            onChange={(e) => setNote(e.target.value)}
+          />
+        </Box>
+      </CustomModal>
     </Card>
   );
 };
