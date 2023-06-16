@@ -63,9 +63,15 @@ export default function CreateDesignedTransferAccount({ setValue }) {
     },
   });
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAccount(e.target.value);
   };
+
+  React.useEffect(() => {
+    if (account !== "central") {
+      formik.resetForm();
+    }
+  }, [account]);
 
   return (
     <Box component="div" sx={{ marginTop: "17px" }}>
