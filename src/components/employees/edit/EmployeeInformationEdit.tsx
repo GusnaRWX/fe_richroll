@@ -13,7 +13,7 @@ import { Input, Button, Select as CustomSelect, CheckBox, DatePicker, FileUpload
 import { styled as MuiStyled } from '@mui/material/styles';
 import { Image as ImageType } from '@/utils/assetsConstant';
 import styled from '@emotion/styled';
-import { useAppSelectors } from '@/hooks/index';
+import { useAppSelectors, useAppDispatch } from '@/hooks/index';
 import {
   base64ToFile,
   convertImageParams, randomCode,
@@ -31,6 +31,7 @@ import Webcam from 'react-webcam';
 import { CameraAlt } from '@mui/icons-material';
 import {Chip} from '@mui/material';
 import TerminateAccount from '../options/TerminateAccount';
+import { getListPositionRequested } from '@/store/reducers/slice/options/optionSlice';
 
 const AsteriskComponent = MuiStyled('span')(({ theme }) => ({
   color: theme.palette.error.main
@@ -126,6 +127,7 @@ interface EmployeeInformationDetailProps {
 
 function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, setIsInformationValid, handleFirstInformation }: EmployeeProps, { data }: EmployeeInformationDetailProps) {
   const [isCaptureEnable, setCaptureEnable] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
   const webcamRef = useRef<Webcam>(null);
   const [openCamera, setOpenCamera] = useState(false);
 
@@ -218,6 +220,11 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
 
   const [mappedDepartment, setMappedDeparment] = useState(listDepartment);
   const [mappedListPosition, setMappedListPosition] = useState(listPosition);
+
+  useEffect(() => {
+    setMappedDeparment(listDepartment);
+    setMappedListPosition(listPosition);
+  }, [listDepartment, listPosition]);
 
   const handleDelete = (id: number) => {
     const temp = [...mappedDepartment];
@@ -391,6 +398,12 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
                   }]);
                 } else {
                   formik.setFieldValue('department', newValue?.label);
+                  dispatch({
+                    type: getListPositionRequested.toString(),
+                    payload: {
+                      departmentID: newValue?.value
+                    }
+                  });
                 }
               }}
               size='small'

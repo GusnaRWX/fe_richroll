@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { HTMLAttributes, useState, useCallback, useRef } from 'react';
+import React, { HTMLAttributes, useState, useCallback, useRef, useEffect } from 'react';
 import {
   Grid,
   Typography,
@@ -15,7 +15,7 @@ import { Input, Button, Select as CustomSelect, CheckBox, DatePicker, FileUpload
 import { styled as MuiStyled } from '@mui/material/styles';
 import { Image as ImageType } from '@/utils/assetsConstant';
 import styled from '@emotion/styled';
-import { useAppSelectors } from '@/hooks/index';
+import { useAppSelectors, useAppDispatch } from '@/hooks/index';
 import dayjs from 'dayjs';
 import { Alert, Text } from '@/components/_shared/common';
 import { CameraAlt, Cancel } from '@mui/icons-material';
@@ -23,6 +23,7 @@ import { Employees } from '@/types/employees';
 import { validationSchemeEmployeeInformation } from './validate';
 import { useFormik } from 'formik';
 import { convertImageParams, getCompanyData, base64ToFile, randomCode } from '@/utils/helper';
+import { getListPositionRequested } from '@/store/reducers/slice/options/optionSlice';
 import { Option } from '@/types/option';
 import { BsTrash3 } from 'react-icons/bs';
 import { AiOutlinePlus } from 'react-icons/ai';
@@ -103,6 +104,7 @@ interface EmployeeProps {
 
 function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, setIsInformationValid }: EmployeeProps) {
   const [isCaptureEnable, setCaptureEnable] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
   const webcamRef = useRef<Webcam>(null);
   const [openCamera, setOpenCamera] = useState(false);
   const capture = useCallback(() => {
@@ -189,6 +191,11 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, set
 
   const [mappedDepartment, setMappedDepartment] = useState(listDepartment);
   const [mappedListPosition, setMappedListPosition] = useState(listPosition);
+
+  useEffect(() => {
+    setMappedDepartment(listDepartment);
+    setMappedListPosition(listPosition);
+  }, [listDepartment, listPosition]);
 
   const handleDelete = (id: number) => {
     const temp = mappedDepartment.filter(item => +item.id !== +id);
@@ -371,6 +378,12 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, set
                   }]);
                 } else {
                   formik.setFieldValue('department', newValue?.label);
+                  dispatch({
+                    type: getListPositionRequested.toString(),
+                    payload: {
+                      departmentID: newValue?.value
+                    }
+                  });
                 }
               }}
               size='small'
