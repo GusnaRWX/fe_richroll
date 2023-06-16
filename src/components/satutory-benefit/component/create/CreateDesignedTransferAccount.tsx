@@ -17,21 +17,22 @@ import React, { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
-export default function CreateDesignedTransferAccount() {
+export default function CreateDesignedTransferAccount({ setValue }) {
   const [account, setAccount] = useState("central");
-
-  const CustomWrappperParentForm = styled("div")(({ theme }) => ({
-    [theme.breakpoints.down("md")]: {
-      flexDirection: "column",
-    },
-    display: "flex",
-    flexDirection: "row",
-    gap: "15px",
-  }));
 
   const AsteriskComponent = styled("span")(({ theme }) => ({
     color: theme.palette.error.main,
   }));
+
+  const boxStyle = {
+    display: "flex",
+    gap: "15px",
+    flexDirection: {
+      xs: "column",
+      md: "row",
+    },
+    marginTop: "32px",
+  };
 
   const validationSchema = Yup.object({
     bank: Yup.string().required("This Field is Required"),
@@ -58,6 +59,7 @@ export default function CreateDesignedTransferAccount() {
     validationSchema: validationSchema,
     onSubmit: (values) => {
       console.log(values);
+      setValue(2);
     },
   });
 
@@ -122,11 +124,7 @@ export default function CreateDesignedTransferAccount() {
         </Typography>
       </Box>
 
-      <Box
-        sx={{
-          marginTop: "16px",
-        }}
-      >
+      <Box sx={boxStyle}>
         <Box sx={{ width: { xs: "100%", md: "50%" } }}>
           <Typography
             component="div"
@@ -182,11 +180,7 @@ export default function CreateDesignedTransferAccount() {
         </Box>
       </Box>
 
-      <CustomWrappperParentForm
-        sx={{
-          marginTop: "32px",
-        }}
-      >
+      <Box sx={boxStyle}>
         <Box sx={{ width: { xs: "100%", md: "50%" } }}>
           <Typography
             component="div"
@@ -267,13 +261,9 @@ export default function CreateDesignedTransferAccount() {
             />
           </Box>
         </Box>
-      </CustomWrappperParentForm>
+      </Box>
 
-      <CustomWrappperParentForm
-        sx={{
-          marginTop: "32px",
-        }}
-      >
+      <Box sx={boxStyle}>
         <Box sx={{ width: { xs: "100%", md: "50%" } }}>
           <Typography
             component="div"
@@ -322,7 +312,7 @@ export default function CreateDesignedTransferAccount() {
             onChange={(e) => formik.setFieldValue("swiftCode", e.target.value)}
           />
         </Box>
-      </CustomWrappperParentForm>
+      </Box>
 
       <Box component="div" sx={{ marginTop: "32px" }}>
         <Typography
