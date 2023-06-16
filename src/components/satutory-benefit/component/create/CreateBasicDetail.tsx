@@ -4,7 +4,7 @@ import { Button, Input, Select, Textarea } from '@/components/_shared/form';
 import { useFormik } from 'formik';
 import * as Yup from 'yup'
 
-export default function CreateBasicDetailComponent() {
+export default function CreateBasicDetailComponent({setValue}) {
   const Dummyoption = [
     { value: '1', label: 'Dummy 1' },
     { value: '2', label: 'Dummy 2' },
@@ -34,7 +34,10 @@ export default function CreateBasicDetailComponent() {
       externalNotes: '',
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => console.log(values)
+    onSubmit: (values) => {
+      console.log(values)
+      setValue(1)
+    }
   })
 
   return (
@@ -157,7 +160,7 @@ export default function CreateBasicDetailComponent() {
               color='primary'
               label='Next'
               sx={{ width: '63px' }}
-              onClick={() => {formik.submitForm()}}
+              onClick={() => formik.submitForm()}
             />
           </Box>
         </Grid>

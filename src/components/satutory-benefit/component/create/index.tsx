@@ -144,7 +144,7 @@ export default function CreateNewComponent() {
           </Tabs>
         </Box>
         <TabPanel value={value} index={0}>
-          <CreateBasicDetailComponent />
+          <CreateBasicDetailComponent setValue={setValue} />
         </TabPanel>
         <TabPanel value={value} index={1}>
           <CreateDesignedTransferAccount />
