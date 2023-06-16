@@ -897,7 +897,7 @@ function* fetchGetViewWorkSchedule(action: AnyAction) {
 
 function* fetchPostTerminateEmployee(action: AnyAction) {
   try {
-    const res: AxiosResponse = yield call(postTerminateEmployee, action?.payload);
+    const res: AxiosResponse = yield call(postTerminateEmployee, action?.payload, action?.id);
     if (res.data.code === 200) {
       yield put({
         type: postTerminateEmployeeSuccess.toString(),
