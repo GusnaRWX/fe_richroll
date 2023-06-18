@@ -29,9 +29,10 @@ import { AiOutlinePlus } from 'react-icons/ai';
 import { BsTrash3 } from 'react-icons/bs';
 import Webcam from 'react-webcam';
 import { CameraAlt } from '@mui/icons-material';
-import {Chip} from '@mui/material';
+import { Chip } from '@mui/material';
 import TerminateAccount from '../options/TerminateAccount';
 import { getListPositionRequested } from '@/store/reducers/slice/options/optionSlice';
+import { FiTrash2 } from 'react-icons/fi';
 
 const AsteriskComponent = MuiStyled('span')(({ theme }) => ({
   color: theme.palette.error.main
@@ -238,6 +239,10 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
     setMappedListPosition(temp);
   };
 
+  const resetImages = () => {
+    setImages(null);
+  };
+
   return (
     <>
       {
@@ -264,7 +269,29 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
             title='Employee Photo'
             color='primary.500'
           />
-          <ImageReview image={!images ? ImageType.PLACEHOLDER : images} onClick={handleOpen} />
+          <div style={{ position: 'relative' }}>
+            <ImageReview image={!images ? ImageType.PLACEHOLDER : images} onClick={handleOpen} />
+            {images && (
+              <IconButton
+                sx={{
+                  position: 'absolute',
+                  border: '1px solid red',
+                  backgroundColor: 'white',
+                  borderRadius: '3px',
+                  left: '65px',
+                  height: '33px',
+                  width: '33px',
+                  ':hover': {
+                    backgroundColor: 'white'
+                  },
+                  bottom: '5px'
+                }}
+                onClick={resetImages}
+              >
+                <FiTrash2 style={{ zIndex: '999', color: 'red' }} />
+              </IconButton>
+            )}
+          </div>
           {
             formik.errors.picture && (
               <Typography component='span' fontSize='12px' color='red.500'>This field is required</Typography>

@@ -27,6 +27,7 @@ import { getListPositionRequested } from '@/store/reducers/slice/options/optionS
 import { Option } from '@/types/option';
 import { BsTrash3 } from 'react-icons/bs';
 import { AiOutlinePlus } from 'react-icons/ai';
+import { FiTrash2 } from 'react-icons/fi';
 
 const videoConstraints = {
   width: 500,
@@ -207,6 +208,10 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, set
     setMappedListPosition(temp);
   };
 
+  const resetPicture = () => {
+    setImages(null);
+  };
+
   return (
     <div>
       {
@@ -242,7 +247,30 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, set
             title='Employee Photo'
             color='primary.500'
           />
-          <ImageReview image={!images ? ImageType.PLACEHOLDER : images} onClick={handleOpen} />
+          <div style={{ position: 'relative' }}>
+            <ImageReview image={!images ? ImageType.PLACEHOLDER : images} onClick={handleOpen} />
+            {images && (
+              <IconButton
+                sx={{
+                  position: 'absolute',
+                  border: '1px solid red',
+                  backgroundColor: 'white',
+                  borderRadius: '3px',
+                  left: '65px',
+                  height: '33px',
+                  width: '33px',
+                  ':hover': {
+                    backgroundColor: 'white'
+                  },
+                  bottom: '5px'
+                }}
+                onClick={resetPicture}
+              >
+                <FiTrash2 style={{ zIndex: '999', color: 'red' }} />
+              </IconButton>
+            )}
+          </div>
+
           {
             formik.errors.picture && (
               <Typography component='span' fontSize='12px' color='red.500'>This field is required</Typography>
