@@ -74,6 +74,11 @@ export const Menus: CoreLayout.SidebarItem[] = [
     roles: ['HR Admin'],
     child: [
       {
+        path: '/attendance-leave/attendance-entries',
+        title: 'Attendance Entries',
+        roles: ['HR Admin']
+      },
+      {
         path: '/attendance-leave/leave-summary',
         title: 'Leave Summary',
         roles: ['HR Admin']
