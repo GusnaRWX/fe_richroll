@@ -911,7 +911,7 @@ function* fetchPostTerminateEmployee(action: AnyAction) {
   } catch (err) {
     if (err instanceof AxiosError) {
       const errorMessage = err?.response?.data as Services.ErrorResponse;
-      yield put({ type: postCalculateEventFailed.toString() });
+      yield put({ type: postTerminateEmployeeFailed.toString() });
       yield delay(2000, true);
       yield put({
         type: setResponserMessage.toString(),
