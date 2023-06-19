@@ -12,7 +12,6 @@ import { getCompanyData, ifThenElse, getUserData } from '@/utils/helper';
 import { useAppSelectors, useAppDispatch } from '@/hooks/index';
 import { patchEmergencyContactRequested, patchEmployeeInformationRequested, patchPersonalRequested, postWorkScheduleRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
 
-
 const EmployeeInformationEdit = dynamic(() => import('./EmployeeInformationEdit'), {
   ssr: false
 });
@@ -119,6 +118,7 @@ function EmployeeEditComponent() {
   const phoneNumber = ifThenElse(typeof dataEmployeeInformation.phoneNumber !== 'undefined', dataEmployeeInformation?.phoneNumber?.slice(3), '');
   const dispatch = useAppDispatch();
   const [informationValue, setInformationValue] = useState<Employees.InformationValues>({
+    pictureBackend: [],
     companyID: getCompanyData()?.id as string,
     department: dataEmployeeInformation?.department,
     email: dataEmployeeInformation?.email,
@@ -203,8 +203,8 @@ function EmployeeEditComponent() {
   const handleClick = () => {
     const inputData = new FormData();
     inputData.append('companyID', getCompanyData()?.id as string);
-    if ((informationValue.picture as []).length > 0) {
-      inputData.append('picture', (informationValue.picture as File)[0]);
+    if (informationValue?.pictureBackend?.length !== 0) {
+      inputData.append('picture', informationValue?.pictureBackend as unknown as File);
     }
     inputData.append('fullName', informationValue.fullName);
     inputData.append('nickname', informationValue.nickname);
@@ -345,7 +345,7 @@ function EmployeeEditComponent() {
             on Development
           </TabPanel>
           <TabPanel value={value} index={4}>
-            <EmployeeWorkScheduleEdit setData={setValueWorkSchedule}/>
+            <EmployeeWorkScheduleEdit setData={setValueWorkSchedule} />
           </TabPanel>
         </Box>
       </ContentWrapper>
