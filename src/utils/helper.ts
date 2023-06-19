@@ -62,7 +62,7 @@ export interface UserDataParse {
   email?: string | null;
   name?: string | null;
   employee: {
-    companies: Array<{logo: string | null , name: string | null, sector: string | null}>
+    companies: Array<{ logo: string | null, name: string | null, sector: string | null }>
   };
   roles?: string[];
 }
