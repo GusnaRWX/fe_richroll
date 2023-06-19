@@ -304,6 +304,11 @@ export declare namespace Employees {
     isCustom?: boolean,
     items: Array<ItemsWorkScheduleType>;
   }
+  
+  interface PostTerminateEmployee {
+    terminateDate: string;
+    terminateNote: string;
+  }
 
 }
 
