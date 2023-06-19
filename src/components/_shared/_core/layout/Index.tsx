@@ -53,6 +53,7 @@ const Layout = ({
   }, []);
 
   const container = typeof window !== 'undefined' ? () => window.document.body : undefined;
+  const { me: { profile } } = useAppSelectors(state => state);
 
   // Drawer
   const drawer = (
@@ -72,40 +73,44 @@ const Layout = ({
           />
         </Box>
       </Toolbar>
-      <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', px: '16px', gap: '12px' }}>
-        <Box component='div' sx={{ position: 'relative', width: '60px', height: '60px' }}>
-          <Image
-            src={companyData?.imageUrl && companyData?.imageUrl.includes('http') ? companyData?.imageUrl : ImageType.PLACEHOLDER_COMPANY}
-            fill={true}
-            style={{ objectFit: 'contain' }}
-            sizes='(max-width: 60px) 100%, 60px'
-            alt='company-logo'
-          />
-        </Box>
-        <Box component='div'>
+      {!profile?.roles?.includes('Super Admin') &&
+        <>
+          <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', px: '16px', gap: '12px' }}>
+            <Box component='div' sx={{ position: 'relative', width: '60px', height: '60px' }}>
+              <Image
+                src={companyData?.imageUrl && companyData?.imageUrl.includes('http') ? companyData?.imageUrl : ImageType.PLACEHOLDER_COMPANY}
+                fill={true}
+                style={{ objectFit: 'contain' }}
+                sizes='(max-width: 60px) 100%, 60px'
+                alt='company-logo'
+              />
+            </Box>
+            <Box component='div'>
+              <Typography
+                variant='text-lg'
+                component='div'
+                sx={{ fontWeight: 700, width: '100%', color: '#223567' }}
+              >
+                {companyData?.name}
+              </Typography>
+              <Typography
+                variant='text-xs'
+                component='div'
+                sx={{ fontWeight: 500, width: '100%', color: '#6B7280' }}
+              >
+                {companyData?.sector}
+              </Typography>
+            </Box>
+          </Box>
           <Typography
-            variant='text-lg'
+            variant='text-base'
             component='div'
-            sx={{ fontWeight: 700, width: '100%', color: '#223567' }}
+            sx={{ fontWeight: 400, px: '16px', mt: '8px', color: '#6B7280', width: '100%' }}
           >
-            {companyData?.name}
+            Menus
           </Typography>
-          <Typography
-            variant='text-xs'
-            component='div'
-            sx={{ fontWeight: 500, width: '100%', color: '#6B7280' }}
-          >
-            {companyData?.sector}
-          </Typography>
-        </Box>
-      </Box>
-      <Typography
-        variant='text-base'
-        component='div'
-        sx={{ fontWeight: 400, px: '16px', mt: '8px', color: '#6B7280', width: '100%' }}
-      >
-        Menus
-      </Typography>
+        </>
+      }
       <List>
         {
           Menus?.map(menu => (

@@ -145,6 +145,21 @@ const Profile = () => {
             </div>
           )
         }
+        {
+          checkRoles?.includes('Super Admin') && (
+            <div>
+              <MenuItem>
+                <Text title='Account Settings' />
+              </MenuItem>
+              <MenuItem>
+                <Text title='Support' />
+              </MenuItem>
+              <MenuItem onClick={() => { handleRemoveToken('logout'); }}>
+                <Text title='Sign Out' />
+              </MenuItem>
+            </div>
+          )
+        }
       </Menu>
     </Grid>
   );

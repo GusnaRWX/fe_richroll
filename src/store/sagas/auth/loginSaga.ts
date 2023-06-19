@@ -54,6 +54,8 @@ function* fetchAuthenticationLogin(action: AnyAction) {
       const roles = profile?.data?.data?.roles;
       if (roles?.includes('Employee')) {
         yield Router.push('/employe/company');
+      } else if (roles?.includes('Super Admin')) {
+        yield Router.push('/dashboard');
       } else {
         yield Router.push('/company');
       }
