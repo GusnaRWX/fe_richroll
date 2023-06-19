@@ -213,7 +213,22 @@ function* fetchPostEmergency(action: AnyAction) {
         phoneNumber: action?.payload.data.phoneNumberSecondary
       }
     };
-    const res: AxiosResponse = yield call(postEmergency, payload);
+    let emergencyPayload = {};
+    if (checkObject(payload.secondary)) {
+      emergencyPayload = {
+        ...emergencyPayload,
+        employeeID: payload.employeeID,
+        primary: payload.primary
+      };
+    } else {
+      emergencyPayload = {
+        ...emergencyPayload,
+        employeeID: payload.employeeID,
+        primary: payload.primary,
+        secondary: payload.secondary
+      };
+    }
+    const res: AxiosResponse = yield call(postEmergency, emergencyPayload);
     if (res.data.code === 200 || res.data.code === 201) {
       yield put({ type: postEmergencySuccess.toString() });
       yield put({
@@ -589,7 +604,23 @@ function* fetchPatchEmergencyContact(action: AnyAction) {
       }
       // }
     };
-    const res: AxiosResponse = yield call(patchEmergencyContact, payload);
+    let emergencyPayload = {};
+    if (checkObject(payload.secondary)) {
+      emergencyPayload = {
+        ...emergencyPayload,
+        employeeID: payload.employeeID,
+        primary: payload.primary
+      };
+    } else {
+      emergencyPayload = {
+        ...emergencyPayload,
+        employeeID: payload.employeeID,
+        primary: payload.primary,
+        secondary: payload.secondary
+      };
+    }
+
+    const res: AxiosResponse = yield call(patchEmergencyContact, emergencyPayload);
     if (res.data.code) {
       yield put({ type: patchEmergencyContactSuccess.toString(), payload: res?.data?.data });
       yield delay(1000);
