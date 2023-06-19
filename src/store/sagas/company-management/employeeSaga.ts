@@ -973,7 +973,6 @@ function* employeeSaga() {
   yield takeEvery(postCalculateEventRequested.toString(), fetchPostCalculateEvent);
   yield takeEvery(postWorkScheduleRequested.toString(), fetchPostWorkSchedule);
   yield takeEvery(getViewWorkScheduleRequested.toString(), fetchGetViewWorkSchedule);
-  yield takeEvery(getViewWorkScheduleRequested.toString(), fetchGetViewWorkSchedule);
   yield takeEvery(postTerminateEmployeeRequested.toString(), fetchPostTerminateEmployee);
 }
 
