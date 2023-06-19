@@ -13,7 +13,7 @@ import BasicDatePicker from '@/components/_shared/form/DatePicker';
 import styled from '@emotion/styled';
 import ItpDeductableComponentTable from './ItpDeductableComponentTable';
 
-const ItpDeductableComponent = () => {
+const ItpDeductableComponentComponent = () => {
   const router = useRouter();
   const TitleWrapper = styled.div`
     display: flex;
@@ -88,4 +88,4 @@ const ItpDeductableComponent = () => {
   );
 };
 
-export default ItpDeductableComponent;
+export default ItpDeductableComponentComponent;

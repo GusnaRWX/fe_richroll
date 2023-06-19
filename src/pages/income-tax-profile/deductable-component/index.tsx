@@ -2,7 +2,7 @@ import React from 'react';
 import ItpDeductableComponentContainer from '@/containers/income-tax-profile/ItpDeductableComponentContainer';
 import MetaHead from '@/components/_shared/_core/layout/MetaHead';
 
-const CompanyCreate = () => {
+const ItpDeductableComponent = () => {
   return (
     <>
       <MetaHead title='Income Tax Profile - Deductable Component Dashboard' />
@@ -11,4 +11,4 @@ const CompanyCreate = () => {
   );
 };
 
-export default CompanyCreate;
+export default ItpDeductableComponent;
