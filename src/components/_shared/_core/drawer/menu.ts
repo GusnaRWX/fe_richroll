@@ -179,7 +179,7 @@ export const Menus: CoreLayout.SidebarItem[] = [
     roles: ['HR Admin'],
     child: [
       {
-        path: '/income-tax-profile/detuchable-component',
+        path: '/income-tax-profile/deductable-component',
         title: 'Deductable Component',
         roles: ['HR Admin']
       },
