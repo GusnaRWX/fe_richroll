@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Input, Select, RadioGroup, CheckBox } from '@/components/_shared/form';
-import { Button as MuiButton, Grid, InputAdornment, Typography, Button, FormHelperText } from '@mui/material';
+import { Button as MuiButton, Grid, InputAdornment, Typography, Button, FormHelperText, Stack } from '@mui/material';
 import { Add } from '@mui/icons-material';
 import { Scheduler } from '@aldabil/react-scheduler';
 import CustomModal from '@/components/_shared/common/CustomModal';
@@ -16,8 +16,9 @@ import dayjs from 'dayjs';
 import WorkScheduleEditForm from '../WorkScheduleEditForm';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { postSimulationEventRequested } from '@/store/reducers/slice/company-management/work-schedule/workScheduleSlice';
-import { OverlayLoading } from '@/components/_shared/common';
+import { OverlayLoading, Alert} from '@/components/_shared/common';
 import { compareCheck, getCompanyData, ifThenElse } from '@/utils/helper';
+import { Cancel } from '@mui/icons-material';
 
 
 const AsteriskComponent = styled('span')(({ theme }) => ({
@@ -34,9 +35,10 @@ const FlexBoxRow = styled('div')(() => ({
 
 interface WorkScheduleFormProps {
   setData: React.Dispatch<React.SetStateAction<workSchedule.PostWorkSchedulePayloadType>>;
+  setIsValid: (_val) => void,
 }
 
-function WorkScheduleCreateForm({ setData }: WorkScheduleFormProps) {
+function WorkScheduleCreateForm({ setData, setIsValid }: WorkScheduleFormProps) {
   const calendarRef = useRef<SchedulerRef>(null);
   const dispatch = useAppDispatch();
   const { workSchedule } = useAppSelectors((state) => state);
@@ -117,7 +119,7 @@ function WorkScheduleCreateForm({ setData }: WorkScheduleFormProps) {
         type: postSimulationEventRequested.toString(),
         payload: data.type === '0' ? payload : payloadFlexi
       });
-
+      setIsValid(true);
       setOPenForm(false);
       setIsCreate(true);
     }
@@ -208,6 +210,17 @@ function WorkScheduleCreateForm({ setData }: WorkScheduleFormProps) {
   return (
     <>
       <OverlayLoading open={workSchedule?.isLoading} />
+      {
+        Object.keys(formik.errors).length > 0 && (
+          <Stack mb='1rem'>
+            <Alert
+              severity='error'
+              content='Please fill in all the mandatory fields'
+              icon={<Cancel />}
+            />
+          </Stack>
+        )
+      }
       <Grid container spacing={4} mb='1rem' alignItems='center'>
         <Grid item xs={10} sm={10} md={10} lg={10} xl={10}>
           <Input
