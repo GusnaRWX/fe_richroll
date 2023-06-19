@@ -168,4 +168,26 @@ export const Menus: CoreLayout.SidebarItem[] = [
     icons: HiTicket,
     roles: ['HR Admin']
   },
+  {
+    key: 'income-tax-profile',
+    path: '/income-tax-profile',
+    title: [
+      { key: 'HR Admin', title: 'Income Tax Profile' }
+    ],
+    icons: TbMoodDollar,
+    hasChild: true,
+    roles: ['HR Admin'],
+    child: [
+      {
+        path: '/income-tax-profile/detuchable-component',
+        title: 'Deductable Component',
+        roles: ['HR Admin']
+      },
+      {
+        path: '/income-tax-profile/profile',
+        title: 'Profile',
+        roles: ['HR Admin']
+      },
+    ],
+  },
 ];
