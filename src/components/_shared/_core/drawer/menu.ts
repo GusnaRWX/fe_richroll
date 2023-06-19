@@ -16,9 +16,12 @@ export const Menus: CoreLayout.SidebarItem[] = [
       },
       {
         key: 'Employee', title: 'Dashboard'
+      },
+      {
+        key: 'Super Admin', title: 'Dashboard'
       }],
     icons: AiFillHome,
-    roles: ['HR Admin', 'Employee']
+    roles: ['HR Admin', 'Employee', 'Super Admin']
   },
   {
     key: 'company-management',
