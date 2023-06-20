@@ -10,6 +10,7 @@ import {
 import { useRouter } from 'next/router';
 import { HiOutlineChevronDown, HiOutlineChevronUp } from 'react-icons/hi2';
 import { useAppSelectors } from '@/hooks/index';
+import { ifThenElse } from '@/utils/helper';
 
 
 const SidebarItem = ({
@@ -19,13 +20,19 @@ const SidebarItem = ({
   hasChild,
   child,
   roles,
+  menuOpen,
+  setMenuOpen
 }: CoreLayout.SidebarItem) => {
   const [open, setOpen] = useState(false);
   const { pathname, push } = useRouter();
-  const handleOpen = () => setOpen(!open);
   const { me: { profile } } = useAppSelectors(state => state);
   const checkRoles = roles?.map(role => profile?.roles?.includes(role));
   const renderTitle = title?.find(text => profile?.roles?.includes(text.key));
+  
+  const handleOpen = () => {
+    if(setMenuOpen) setMenuOpen(renderTitle?.title?.replace('& ', '').toLowerCase());
+    setOpen(!open);
+  };
 
   return (
     <>
@@ -41,7 +48,10 @@ const SidebarItem = ({
           <ListItemText primary={renderTitle?.title} sx={{ fontSize: '14px', color: 'grey.400' }} />
           {
             hasChild && (
-              open || pathname.split('/')[1].replace('-', ' ').replace('& ', '') === renderTitle?.title.replace('& ', '').toLowerCase() ? <HiOutlineChevronUp color='#9CA3AF' /> : <HiOutlineChevronDown color='#9CA3AF' />
+              (open || pathname.split('/')[1].replace('-', ' ').replace('& ', '') === renderTitle?.title.replace('& ', '').toLowerCase())
+              && (ifThenElse(menuOpen !== '', menuOpen === renderTitle?.title.replace('& ', '').toLowerCase(), true))
+                ? <HiOutlineChevronUp color='#9CA3AF' />
+                : <HiOutlineChevronDown color='#9CA3AF' />
             )
           }
         </ListItemButton>
@@ -51,7 +61,8 @@ const SidebarItem = ({
         hasChild && (
           <Collapse
             in={
-              open || pathname.split('/')[1].replace('-', ' ').replace('& ', '') === renderTitle?.title.replace('& ', '').toLowerCase()
+              (open || pathname.split('/')[1].replace('-', ' ').replace('& ', '') === renderTitle?.title.replace('& ', '').toLowerCase())
+              && (ifThenElse(menuOpen !== '', menuOpen === renderTitle?.title.replace('& ', '').toLowerCase(), true))
             }
           >
             <List
