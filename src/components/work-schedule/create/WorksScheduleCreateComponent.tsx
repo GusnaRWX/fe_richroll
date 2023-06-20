@@ -126,7 +126,7 @@ function WorksScheduleCreateComponent() {
               <ArrowBack sx={{ color: '#FFFFFF' }} />
             }
             onClick={() => {
-              router.push('/company-management/employees');
+              router.push('/company-management/work-schedule');
               resetState();
             }}
           />
