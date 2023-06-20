@@ -6,23 +6,9 @@ import {
   Textarea,
   IconButton,
   CheckBox,
-  Form,
 } from "@/components/_shared/form";
 import { styled } from "@mui/material/styles";
-import {
-  Typography,
-  MenuItem,
-  RadioGroup,
-  Radio,
-  FormControlLabel,
-  Box,
-  FormHelperText,
-  FormControl,
-  Paper,
-  Grid,
-} from "@mui/material";
-import { Close, Download } from "@mui/icons-material";
-import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
+import { Typography, Box, FormHelperText, Paper, Grid } from "@mui/material";
 import BasicDatePicker from "@/components/_shared/form/DatePicker";
 import { ArrowBack } from "@mui/icons-material";
 import AddIcon from "@mui/icons-material/Add";
@@ -80,27 +66,81 @@ export default function CreateNewProfile() {
     { value: "3", label: "Dummy 3" },
   ];
 
-  interface PayloadCreateComponentType {
-    profileComponentId: string;
-    title: string;
-    effectivePeriode: string;
-    rateType: string;
-  }
-
   interface BaseTypeInitialValues {
-    profile: PayloadCreateComponentType[];
+    componentName: string;
+    country: string;
+    province: string;
+    city: string;
+    subDistrict: string;
+    effectiveDate: string;
+    experationDate: string;
+    citation: string;
+    internalNotes: string;
+    externalNotes: string;
+    benefitComponent: [];
   }
 
   const initialValues: BaseTypeInitialValues = {
-    profile: [],
+    componentName: "",
+    country: "",
+    province: "",
+    city: "",
+    subDistrict: "",
+    effectiveDate: "",
+    experationDate: "",
+    citation: "",
+    internalNotes: "",
+    externalNotes: "",
+    benefitComponent: [],
   };
+
+  const validationSchema = Yup.object().shape({
+    componentName: Yup.string().required("Component Name is required"),
+    country: Yup.string().required("Country is required"),
+    effectiveDate: Yup.date().required("Effective Date is required"),
+    expirationDate: Yup.date(),
+    citation: Yup.string().max(120, "Citation must be at most 120 characters"),
+    internalNotes: Yup.string().max(
+      120,
+      "Internal Notes must be at most 120 characters"
+    ),
+    externalNotes: Yup.string().max(
+      120,
+      "External Notes must be at most 120 characters"
+    ),
+  });
+
+  const selectedBenefitsOption = [
+    {
+      label: "Health Insurance",
+      value: "healthInsurance",
+    },
+    {
+      label: "Pension",
+      value: "pension",
+    },
+    {
+      label: "Death",
+      value: "death",
+    },
+    {
+      label: "Old Age",
+      value: "oldAge",
+    },
+    {
+      label: "Work Accident",
+      value: "workAccident",
+    },
+  ];
 
   return (
     <>
       <Formik
+        validationSchema={validationSchema}
         initialValues={initialValues}
         onSubmit={(values: any) => {
           // setIsModalFormSubmitted(true);
+
           setIsAddNewComponent(false);
         }}
       >
@@ -143,10 +183,11 @@ export default function CreateNewProfile() {
                   size="small"
                   label="Save and Approve"
                   color="primary"
-                  // onClick={() => formik.handleSubmit()}
+                  onClick={() => formik.handleSubmit()}
                 />
               </NextBtnWrapper>
             </Header>
+
             <Paper style={{ padding: "21px 32px" }}>
               <Paper style={{ padding: "21px 32px" }}>
                 <Grid container spacing={2} rowSpacing={4}>
@@ -154,20 +195,39 @@ export default function CreateNewProfile() {
                     <Input
                       placeholder="Input Statutory Benefits Name"
                       customLabel="Component Name"
+                      required
                       withAsterisk
                       size="small"
+                      onChange={(e) => {
+                        formik.setFieldValue("componentName", e.target.value);
+                      }}
                     />
+                    {formik.errors.componentName &&
+                    formik.touched.componentName ? (
+                      <FormHelperText sx={{ color: "#DC2626" }}>
+                        {formik.errors.componentName}
+                      </FormHelperText>
+                    ) : null}
                   </Grid>
                   <Grid item xs={6} md={6} lg={6} xl={6}></Grid>
                   <Grid item xs={6} md={6} lg={6} xl={6}>
                     <Select
                       placeholder="Select Country"
                       customLabel="Country"
+                      required
                       withAsterisk
                       size="small"
                       fullWidth
+                      onChange={(e) => {
+                        formik.setFieldValue("country", e.target.value);
+                      }}
                       options={Dummyoption}
                     />
+                    {formik.errors.country && formik.touched.country ? (
+                      <FormHelperText sx={{ color: "#DC2626" }}>
+                        {formik.errors.country}
+                      </FormHelperText>
+                    ) : null}
                   </Grid>
                   <Grid item xs={6} md={6} lg={6} xl={6}>
                     <Select
@@ -175,6 +235,9 @@ export default function CreateNewProfile() {
                       customLabel="Province"
                       size="small"
                       fullWidth
+                      onChange={(e) => {
+                        formik.setFieldValue("province", e.target.value);
+                      }}
                       options={Dummyoption}
                     />
                   </Grid>
@@ -184,6 +247,9 @@ export default function CreateNewProfile() {
                       customLabel="City"
                       size="small"
                       fullWidth
+                      onChange={(e) => {
+                        formik.setFieldValue("city", e.target.value);
+                      }}
                       options={Dummyoption}
                     />
                   </Grid>
@@ -193,6 +259,9 @@ export default function CreateNewProfile() {
                       customLabel="Sub-District"
                       size="small"
                       fullWidth
+                      onChange={(e) => {
+                        formik.setFieldValue("subDistrict", e.target.value);
+                      }}
                       options={Dummyoption}
                     />
                   </Grid>
@@ -200,7 +269,16 @@ export default function CreateNewProfile() {
                     <BasicDatePicker
                       customLabel="Effective Date"
                       withAsterisk
+                      onChange={(date) => {
+                        formik.setFieldValue("effectiveDate", date);
+                      }}
                     />
+                    {formik.errors.effectiveDate &&
+                    formik.touched.effectiveDate ? (
+                      <FormHelperText sx={{ color: "#DC2626" }}>
+                        {formik.errors.effectiveDate}
+                      </FormHelperText>
+                    ) : null}
                   </Grid>
                   <Grid item xs={3} md={3} lg={3} xl={3}>
                     <BasicDatePicker customLabel="Expiration Date" />
@@ -259,22 +337,42 @@ export default function CreateNewProfile() {
               </Paper>
 
               <FieldArray
-                name="profile"
+                name="benefitComponent"
                 render={(arrayHelper) => {
                   const handleCheckBoxChange = (e: any) => {
+                    const value = e.target.name;
+                    const { benefitComponent } = formik.values;
+
                     if (e.target.checked) {
-                      arrayHelper.insert(formik.values.profile.length + 1, {
-                        title: e.target.name,
-                      });
+                      if (value === "Employee Name") {
+                        const allValues = selectedBenefitsOption.map(
+                          (option) => option.label
+                        );
+                        formik.setFieldValue("benefitComponent", allValues);
+                      } else {
+                        formik.setFieldValue("benefitComponent", [
+                          ...benefitComponent,
+                          value,
+                        ]);
+                      }
                     } else {
-                      arrayHelper.pop();
+                      if (value === "Employee Name") {
+                        formik.setFieldValue("benefitComponent", []);
+                      } else {
+                        formik.setFieldValue(
+                          "benefitComponent",
+                          benefitComponent.filter(
+                            (option: string) => option !== value
+                          )
+                        );
+                      }
                     }
                   };
                   return (
                     <div>
-                      {formik.values.profile.length > 0 && (
+                      {formik.values.benefitComponent.length > 0 && (
                         <FormikForm>
-                          {formik.values.profile.map((profileData, i) => {
+                          {formik.values.benefitComponent.map((benefit, i) => {
                             return (
                               <Paper
                                 style={{
@@ -296,7 +394,7 @@ export default function CreateNewProfile() {
                                       fontSize: "18px",
                                     }}
                                   >
-                                    {profileData.title}
+                                    {benefit}
                                   </Typography>
 
                                   <Box sx={{ display: "flex", gap: "4px" }}>
@@ -462,7 +560,15 @@ export default function CreateNewProfile() {
                             sx={{ display: "flex", alignItems: "center" }}
                           >
                             <Grid item xs={1} md={1} lg={1} xl={1}>
-                              <CheckBox name="Employee Name" customLabel="" />
+                              <CheckBox
+                                name="Employee Name"
+                                checked={
+                                  formik.values.benefitComponent.length ===
+                                  selectedBenefitsOption.length
+                                }
+                                customLabel=""
+                                onChange={handleCheckBoxChange}
+                              />
                             </Grid>
                             <Grid item xs={3} md={3} lg={3} xl={3}>
                               <Typography
@@ -496,195 +602,48 @@ export default function CreateNewProfile() {
                           </Grid>
                         </Box>
 
-                        <Box sx={{ flexGrow: 1 }}>
-                          <Grid
-                            container
-                            sx={{ display: "flex", alignItems: "center" }}
-                          >
-                            <Grid item xs={1} md={1} lg={1} xl={1}>
-                              <CheckBox
-                                name="Health Insurance"
-                                customLabel=""
-                                onChange={(e) => {
-                                  handleCheckBoxChange(e);
-                                }}
-                              />
-                            </Grid>
-                            <Grid item xs={3} md={3} lg={3} xl={3}>
-                              <Typography
-                                sx={{ fontWeight: 400, color: "#4B5563" }}
+                        {selectedBenefitsOption.map((option, i) => {
+                          return (
+                            <Box sx={{ flexGrow: 1 }}>
+                              <Grid
+                                container
+                                sx={{ display: "flex", alignItems: "center" }}
                               >
-                                Health Insurance
-                              </Typography>
-                            </Grid>
-                            <Grid item xs={3} md={3} lg={3} xl={3}>
-                              <Typography
-                                sx={{ fontWeight: 400, color: "#4B5563" }}
-                              >
-                                09/05/2023
-                              </Typography>
-                            </Grid>
-                            <Grid item xs={3} md={3} lg={3} xl={3}>
-                              <Typography
-                                sx={{ fontWeight: 400, color: "#4B5563" }}
-                              >
-                                Fixed Rate
-                              </Typography>
-                            </Grid>
-                          </Grid>
-                        </Box>
-
-                        <Box sx={{ flexGrow: 1 }}>
-                          <Grid
-                            container
-                            sx={{ display: "flex", alignItems: "center" }}
-                          >
-                            <Grid item xs={1} md={1} lg={1} xl={1}>
-                              <CheckBox
-                                name="Pension"
-                                customLabel=""
-                                onChange={(e) => {
-                                  handleCheckBoxChange(e);
-                                }}
-                              />
-                            </Grid>
-                            <Grid item xs={3} md={3} lg={3} xl={3}>
-                              <Typography
-                                sx={{ fontWeight: 400, color: "#4B5563" }}
-                              >
-                                Pension
-                              </Typography>
-                            </Grid>
-                            <Grid item xs={3} md={3} lg={3} xl={3}>
-                              <Typography
-                                sx={{ fontWeight: 400, color: "#4B5563" }}
-                              >
-                                09/05/2023
-                              </Typography>
-                            </Grid>
-                            <Grid item xs={3} md={3} lg={3} xl={3}>
-                              <Typography
-                                sx={{ fontWeight: 400, color: "#4B5563" }}
-                              >
-                                Fixed Rate
-                              </Typography>
-                            </Grid>
-                          </Grid>
-                        </Box>
-
-                        <Box sx={{ flexGrow: 1 }}>
-                          <Grid
-                            container
-                            sx={{ display: "flex", alignItems: "center" }}
-                          >
-                            <Grid item xs={1} md={1} lg={1} xl={1}>
-                              <CheckBox
-                                name="Death"
-                                customLabel=""
-                                onChange={(e) => {
-                                  handleCheckBoxChange(e);
-                                }}
-                              />
-                            </Grid>
-                            <Grid item xs={3} md={3} lg={3} xl={3}>
-                              <Typography
-                                sx={{ fontWeight: 400, color: "#4B5563" }}
-                              >
-                                Death
-                              </Typography>
-                            </Grid>
-                            <Grid item xs={3} md={3} lg={3} xl={3}>
-                              <Typography
-                                sx={{ fontWeight: 400, color: "#4B5563" }}
-                              >
-                                09/05/2023
-                              </Typography>
-                            </Grid>
-                            <Grid item xs={3} md={3} lg={3} xl={3}>
-                              <Typography
-                                sx={{ fontWeight: 400, color: "#4B5563" }}
-                              >
-                                Fixed Rate
-                              </Typography>
-                            </Grid>
-                          </Grid>
-                        </Box>
-
-                        <Box sx={{ flexGrow: 1 }}>
-                          <Grid
-                            container
-                            sx={{ display: "flex", alignItems: "center" }}
-                          >
-                            <Grid item xs={1} md={1} lg={1} xl={1}>
-                              <CheckBox
-                                name="Old Age"
-                                customLabel=""
-                                onChange={(e) => {
-                                  handleCheckBoxChange(e);
-                                }}
-                              />
-                            </Grid>
-                            <Grid item xs={3} md={3} lg={3} xl={3}>
-                              <Typography
-                                sx={{ fontWeight: 400, color: "#4B5563" }}
-                              >
-                                Old Age
-                              </Typography>
-                            </Grid>
-                            <Grid item xs={3} md={3} lg={3} xl={3}>
-                              <Typography
-                                sx={{ fontWeight: 400, color: "#4B5563" }}
-                              >
-                                -
-                              </Typography>
-                            </Grid>
-                            <Grid item xs={3} md={3} lg={3} xl={3}>
-                              <Typography
-                                sx={{ fontWeight: 400, color: "#4B5563" }}
-                              >
-                                Fixed Amount
-                              </Typography>
-                            </Grid>
-                          </Grid>
-                        </Box>
-
-                        <Box sx={{ flexGrow: 1 }}>
-                          <Grid
-                            container
-                            sx={{ display: "flex", alignItems: "center" }}
-                          >
-                            <Grid item xs={1} md={1} lg={1} xl={1}>
-                              <CheckBox
-                                name="Work Accident"
-                                customLabel=""
-                                onChange={(e) => {
-                                  handleCheckBoxChange(e);
-                                }}
-                              />
-                            </Grid>
-                            <Grid item xs={3} md={3} lg={3} xl={3}>
-                              <Typography
-                                sx={{ fontWeight: 400, color: "#4B5563" }}
-                              >
-                                Work Accident
-                              </Typography>
-                            </Grid>
-                            <Grid item xs={3} md={3} lg={3} xl={3}>
-                              <Typography
-                                sx={{ fontWeight: 400, color: "#4B5563" }}
-                              >
-                                -
-                              </Typography>
-                            </Grid>
-                            <Grid item xs={3} md={3} lg={3} xl={3}>
-                              <Typography
-                                sx={{ fontWeight: 400, color: "#4B5563" }}
-                              >
-                                Matching
-                              </Typography>
-                            </Grid>
-                          </Grid>
-                        </Box>
+                                <Grid item xs={1} md={1} lg={1} xl={1}>
+                                  <CheckBox
+                                    name={option.label}
+                                    checked={formik.values.benefitComponent.includes(
+                                      option.label
+                                    )}
+                                    customLabel=""
+                                    onChange={handleCheckBoxChange}
+                                  />
+                                </Grid>
+                                <Grid item xs={3} md={3} lg={3} xl={3}>
+                                  <Typography
+                                    sx={{ fontWeight: 400, color: "#4B5563" }}
+                                  >
+                                    {option.label}
+                                  </Typography>
+                                </Grid>
+                                <Grid item xs={3} md={3} lg={3} xl={3}>
+                                  <Typography
+                                    sx={{ fontWeight: 400, color: "#4B5563" }}
+                                  >
+                                    09/05/2023
+                                  </Typography>
+                                </Grid>
+                                <Grid item xs={3} md={3} lg={3} xl={3}>
+                                  <Typography
+                                    sx={{ fontWeight: 400, color: "#4B5563" }}
+                                  >
+                                    Fixed Rate
+                                  </Typography>
+                                </Grid>
+                              </Grid>
+                            </Box>
+                          );
+                        })}
                       </CustomModal>
                     </div>
                   );
