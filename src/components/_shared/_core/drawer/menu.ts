@@ -1,12 +1,14 @@
 import { AiFillHome } from 'react-icons/ai';
+import { RiArticleLine, RiAccountCircleFill } from 'react-icons/ri';
 import { HiBuildingOffice, HiCurrencyDollar } from 'react-icons/hi2';
 import { CoreLayout } from '@/types/component';
 import { BsFillCalendar2Fill } from 'react-icons/bs';
 import { GiReceiveMoney } from 'react-icons/gi';
 import { TbMoodDollar } from 'react-icons/tb';
-import { HiDocumentReport, HiTicket } from 'react-icons/hi';
+import { HiDocumentReport, HiTicket, HiUserGroup } from 'react-icons/hi';
 
 export const Menus: CoreLayout.SidebarItem[] = [
+  // Dashboard
   {
     key: 'dashboard',
     path: '/dashboard/',
@@ -23,6 +25,7 @@ export const Menus: CoreLayout.SidebarItem[] = [
     icons: AiFillHome,
     roles: ['HR Admin', 'Employee', 'Super Admin']
   },
+  // Company Management (HR Admin and Employee)
   {
     key: 'company-management',
     path: '/company-management',
@@ -66,6 +69,7 @@ export const Menus: CoreLayout.SidebarItem[] = [
       }
     ],
   },
+  // Attendance & Leave
   {
     key: 'attendance-leave',
     path: '/attendance-leave',
@@ -108,6 +112,7 @@ export const Menus: CoreLayout.SidebarItem[] = [
       },
     ],
   },
+  // Compensation & Benefits
   {
     key: 'compensation-benefits',
     path: '/compensation-benefits',
@@ -117,6 +122,7 @@ export const Menus: CoreLayout.SidebarItem[] = [
     icons: HiCurrencyDollar,
     roles: ['HR Admin']
   },
+  // Reimbursement
   {
     key: 'reimbursement',
     path: '/reimbursement',
@@ -126,6 +132,7 @@ export const Menus: CoreLayout.SidebarItem[] = [
     icons: GiReceiveMoney,
     roles: ['HR Admin']
   },
+  // Internal Reports
   {
     key: 'internal-reports',
     path: '/internal-reports',
@@ -135,6 +142,7 @@ export const Menus: CoreLayout.SidebarItem[] = [
     icons: HiDocumentReport,
     roles: ['HR Admin']
   },
+  // Payroll & Disbursement
   {
     key: 'payroll-disbursement',
     path: '/payroll-disbursement',
@@ -167,13 +175,75 @@ export const Menus: CoreLayout.SidebarItem[] = [
       },
     ],
   },
+  // Company Management (Super Admin)
+  {
+    key: 'company-management-admin',
+    path: '/company-management-admin',
+    title: [
+      { key: 'Super Admin', title: 'Company Management' }
+    ],
+    icons: HiBuildingOffice,
+    roles: ['Super Admin']
+  },
+  // Account Management
+  {
+    key: 'account-management',
+    path: '/account-management',
+    title: [
+      { key: 'Super Admin', title: 'Account Management' }
+    ],
+    icons: RiAccountCircleFill,
+    roles: ['Super Admin']
+  },
+  // Employee Management
+  {
+    key: 'employee-management',
+    path: '/employee-management',
+    title: [
+      { key: 'Super Admin', title: 'Employee Management' }
+    ],
+    icons: HiUserGroup,
+    roles: ['Super Admin']
+  },
+  // Payroll Setting
+  {
+    key: 'payroll-setting',
+    path: '/payroll-setting',
+    title: [
+      { key: 'Super Admin', title: 'Payroll Setting' }
+    ],
+    icons: TbMoodDollar,
+    roles: ['Super Admin']
+  },
+  // Reports
+  {
+    key: 'reports',
+    path: '/reports',
+    title: [
+      { key: 'Super Admin', title: 'Reports' }
+    ],
+    icons: HiDocumentReport,
+    roles: ['Super Admin']
+  },
+  // Article Management
+  {
+    key: 'article-management',
+    path: '/article-management',
+    title: [
+      { key: 'Super Admin', title: 'Article Management' }
+    ],
+    icons: RiArticleLine,
+    roles: ['Super Admin']
+  },
+  // Package Management
   {
     key: 'package-management',
     path: '/package-management',
     title: [
-      { key: 'HR Admin', title: 'Package Management' }
+      { key: 'HR Admin', title: 'Package Management' },
+      { key: 'Super Admin', title: 'Package Management' }
     ],
     icons: HiTicket,
-    roles: ['HR Admin']
+    roles: ['HR Admin', 'Super Admin']
   },
 ];
