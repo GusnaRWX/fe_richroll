@@ -75,7 +75,7 @@ function AttendanceComponent() {
       <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
         <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
           <Typography variant='h5' color='primary.main'>Payroll Operation</Typography>
-          <Typography variant='text-base' color='#4B5563'>Attendance</Typography>
+          <Typography variant='text-base' color='#4B5563'>Attendance Summary</Typography>
         </Grid>
         <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
           <ButtonWrapper>
