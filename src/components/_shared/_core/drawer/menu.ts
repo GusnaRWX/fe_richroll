@@ -160,12 +160,12 @@ export const Menus: CoreLayout.SidebarItem[] = [
       },
       {
         path: '/payroll-disbursement/attendance',
-        title: 'Attendance',
+        title: 'Attendance Summary',
         roles: ['HR Admin']
       },
       {
         path: '/payroll-disbursement/payroll',
-        title: 'Payroll',
+        title: 'Payroll Reports',
         roles: ['HR Admin']
       },
       {
