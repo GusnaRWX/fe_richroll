@@ -221,8 +221,8 @@ function WorkScheduleCreateForm({ setData, setIsValid }: WorkScheduleFormProps) 
           </Stack>
         )
       }
-      <Grid container spacing={4} mb='1rem' alignItems='center'>
-        <Grid item xs={10} sm={10} md={10} lg={10} xl={10}>
+      <Grid container spacing={5} mb='1rem' alignItems='center'>
+        <Grid item xs={10.5} sm={10.5} md={10.5} lg={10.5} xl={10.5}>
           <Input
             name='profileName'
             withAsterisk={true}
@@ -236,7 +236,7 @@ function WorkScheduleCreateForm({ setData, setIsValid }: WorkScheduleFormProps) 
             helperText={ifThenElse(formik.touched.profileName, formik.errors.profileName, '')}
           />
         </Grid>
-        <Grid item xs={2} sm={2} md={2} lg={2} xl={2} mt={formik.errors.profileName ? '0px' : '28px'}>
+        <Grid item xs={1.5} sm={1.5} md={1.5} lg={1.5} xl={1.5} mt={formik.errors.profileName ? '0px' : '28px'}>
           <MuiButton onClick={handleFormOpen} variant='contained' disabled={isCreate === true} size='small' sx={{ height: '2.5rem' }}><Add />&nbsp; Add schedule</MuiButton>
         </Grid>
       </Grid>
@@ -498,7 +498,7 @@ function WorkScheduleCreateForm({ setData, setIsValid }: WorkScheduleFormProps) 
         }
         {
           formik.values.type === '1' && (
-            <>
+            <div style={{ marginBottom: '1rem' }}>
               <Typography mb='12px' fontWeight='bold' color='primary'>Spesific Working Day</Typography>
               <Grid container>
                 <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
@@ -525,7 +525,7 @@ function WorkScheduleCreateForm({ setData, setIsValid }: WorkScheduleFormProps) 
                   />
                 </Grid>
               </Grid>
-            </>
+            </div>
           )
         }
         <Typography mb='12px' fontWeight='bold' color='primary'>Add Break</Typography>
