@@ -16,7 +16,8 @@ const CustomDrawer = styled(Drawer)<CustomDrawerProps>(({ drawerwidth }) => ({
     width: drawerwidth,
     boxSizing: 'border-box',
     backgroundColor: '#FFFFFF',
-    border: 'none'
+    border: 'none',
+    marginTop: '66px'
   }
 }));
 
@@ -32,7 +33,7 @@ const DrawerCore = ({
       component='nav'
       sx={{
         width: {
-          md: drawerwidth
+          md: mobileOpen ? drawerwidth : 0
         },
         flexShrink: {
           sm: 0
@@ -61,8 +62,9 @@ const DrawerCore = ({
       <CustomDrawer
         drawerwidth={drawerwidth}
         variant='permanent'
+        onClose={handleDrawerToggle}
         sx={{
-          display: { xs: 'none', md: 'block' }
+          display: { xs: 'none', md: mobileOpen ? 'block' : 'none' }
         }}
       >
         {drawer as React.ReactNode}

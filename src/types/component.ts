@@ -121,7 +121,9 @@ export declare namespace CoreLayout {
     path: string;
     icons: IconType;
     hasChild?: boolean;
-    roles: Array<string>
+    roles: Array<string>;
+    menuOpen?: string;
+    setMenuOpen?: (_name: string | undefined) => void;
     child?: Array<{
       title: string;
       path: string;
