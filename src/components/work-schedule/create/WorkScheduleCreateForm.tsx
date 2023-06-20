@@ -237,7 +237,7 @@ function WorkScheduleCreateForm({ setData, setIsValid }: WorkScheduleFormProps) 
           />
         </Grid>
         <Grid item xs={2} sm={2} md={2} lg={2} xl={2} mt={formik.errors.profileName ? '0px' : '28px'}>
-          <MuiButton onClick={handleFormOpen} variant='contained' disabled={isCreate === true} size='small' sx={{ height: '2.5rem' }}><Add />&nbsp; Create Schedule</MuiButton>
+          <MuiButton onClick={handleFormOpen} variant='contained' disabled={isCreate === true} size='small' sx={{ height: '2.5rem' }}><Add />&nbsp; Add schedule</MuiButton>
         </Grid>
       </Grid>
       <Grid container spacing={2} mb='1rem'>

@@ -553,7 +553,7 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, set
           <Grid item xs={12} sm={12} md={8} lg={8} xl={8}>
             <EmployeeSelfWrapper>
               <CheckBox
-                customLabel='Employee Self Serive'
+                customLabel='Employee Self Service'
                 name='isSelfService'
                 checked={formik.values.isSelfService}
                 onChange={formik.handleChange}
