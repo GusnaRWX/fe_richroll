@@ -706,9 +706,10 @@ function* fetchPatchEmployeePersonal(action: AnyAction) {
       thirdLevelCode: action?.payload?.employeePersonal.personalPayload.subDistrictResidentialAddress,
       address: action?.payload?.employeePersonal.personalPayload.addressResidentialAddress,
       zipCode: action?.payload?.employeePersonal.personalPayload.zipCodeResidentialAddress,
-      isCitizen: false,
+      isCitizen: true,
       // isResident: action?.payload?.employeePersonal ? personalPayload..useResidentialAddress
-      isResident: action?.payload?.employeePersonal.personalPayload?.useResidentialAddress
+      // isResident: action?.payload?.employeePersonal.personalPayload?.useResidentialAddress
+      isResident: true
     };
 
     let payload = {};

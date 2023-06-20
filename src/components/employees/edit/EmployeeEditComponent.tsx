@@ -149,12 +149,12 @@ function EmployeeEditComponent() {
     addressCitizenAddress: dataPersonalInformation?.citizen?.address,
     zipCodeCitizenAddress: dataPersonalInformation?.citizen?.zipCode,
 
-    countryResidentialAddress: dataPersonalInformation?.citizen?.country.id,
-    provinceResidentialAddress: dataPersonalInformation?.citizen?.firstLevel.code,
-    cityResidentialAddress: dataPersonalInformation?.citizen?.secondLevel.code,
-    subDistrictResidentialAddress: dataPersonalInformation?.citizen?.thirdLevel.code,
-    addressResidentialAddress: dataPersonalInformation?.citizen?.address,
-    zipCodeResidentialAddress: dataPersonalInformation?.citizen?.zipCode,
+    countryResidentialAddress: dataPersonalInformation?.residential?.country.id,
+    provinceResidentialAddress: dataPersonalInformation?.residential?.firstLevel.code,
+    cityResidentialAddress: dataPersonalInformation?.residential?.secondLevel.code,
+    subDistrictResidentialAddress: dataPersonalInformation?.residential?.thirdLevel.code,
+    addressResidentialAddress: dataPersonalInformation?.residential?.address,
+    zipCodeResidentialAddress: dataPersonalInformation?.residential?.zipCode,
 
     bankBankInformation: dataPersonalInformation?.bank?.bank.id,
     bankAccountHolderNameBankInformation: dataPersonalInformation?.bank?.holder,
