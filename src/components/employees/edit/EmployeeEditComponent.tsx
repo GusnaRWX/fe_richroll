@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 import ConfirmationModal from '@/components/_shared/common/ConfirmationModal';
 import { Employees } from '@/types/employees';
 import dayjs from 'dayjs';
-import { getCompanyData, ifThenElse, getUserData } from '@/utils/helper';
+import { getCompanyData, ifThenElse } from '@/utils/helper';
 import { useAppSelectors, useAppDispatch } from '@/hooks/index';
 import { patchEmergencyContactRequested, patchEmployeeInformationRequested, patchPersonalRequested, postWorkScheduleRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
 
@@ -287,7 +287,7 @@ function EmployeeEditComponent() {
           />
           <TitleWrapper>
             <Typography component='h3' fontWeight='bold'>Employee Profile</Typography>
-            <Typography component='span' fontSize='12px' sx={{ color: '#4B5563' }}>{getUserData()?.name}</Typography>
+            <Typography component='span' fontSize='12px' sx={{ color: '#4B5563' }}>{employee?.employeeInformationDetail?.fullName}</Typography>
           </TitleWrapper>
         </BackWrapper>
         <ButtonWrapper>
