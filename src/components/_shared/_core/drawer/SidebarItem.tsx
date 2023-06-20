@@ -28,7 +28,7 @@ const SidebarItem = ({
   const { me: { profile } } = useAppSelectors(state => state);
   const checkRoles = roles?.map(role => profile?.roles?.includes(role));
   const renderTitle = title?.find(text => profile?.roles?.includes(text.key));
-  
+
   const handleOpen = () => {
     if(setMenuOpen) setMenuOpen(renderTitle?.title?.replace('& ', '').toLowerCase());
     setOpen(!open);
@@ -41,11 +41,27 @@ const SidebarItem = ({
           key={index}
           onClick={hasChild ? () => handleOpen() : () => push(path)}
           selected={pathname === path}
+          sx={{
+            backgroundColor: pathname === path ? '#E9EFFF !important' : '',
+            '&:hover': {
+              backgroundColor: '#E9EFFF',
+              color: '#223567 !important'
+            }
+          }}
         >
           <ListItemIcon sx={{ minWidth: '30px' }}>
             {icons({ color: 'grey.400' })}
           </ListItemIcon>
-          <ListItemText primary={renderTitle?.title} sx={{ fontSize: '14px', color: 'grey.400' }} />
+          <ListItemText
+            primary={renderTitle?.title}
+            sx={{
+              fontSize: '14px',
+              color: pathname === path ? '#223567 !important' : 'grey.400',
+              '& > span': {
+                fontWeight: pathname === path ? 'bold' : ''
+              }
+            }}
+          />
           {
             hasChild && (
               (open || pathname.split('/')[1].replace('-', ' ').replace('& ', '') === renderTitle?.title.replace('& ', '').toLowerCase())
@@ -75,10 +91,23 @@ const SidebarItem = ({
                     <ListItemButton
                       key={key}
                       selected={pathname === childMenu.path}
-                      sx={{ pl: 6 }}
+                      sx={{
+                        backgroundColor: pathname === childMenu.path ? '#E9EFFF !important' : '',
+                        pl: 6,
+                        ':hover': {
+                          backgroundColor: '#E9EFFF'
+                        } }}
                       onClick={() => { push(childMenu.path); }}
                     >
-                      <ListItemText primary={childMenu.title} sx={{ fontSize: '14px', color: 'grey.400' }} />
+                      <ListItemText
+                        primary={childMenu.title}
+                        sx={{
+                          fontSize: '14px',
+                          color: pathname === childMenu.path ? '#223567 !important' : 'grey.400',
+                          '& > span': {
+                            fontWeight: pathname === childMenu.path ? 'bold' : ''
+                          }
+                        }} />
                     </ListItemButton>
                   ))
                 ))

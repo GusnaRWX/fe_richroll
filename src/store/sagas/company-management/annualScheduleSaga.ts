@@ -70,7 +70,7 @@ function* fetchPostAnnualSchedule(action: AnyAction) {
           page: 1,
           itemPerPage: 5,
           sort: '',
-          direction: 'DESC',
+          direction: 'ASC',
           search: '',
           start: '',
           end: ''
@@ -113,7 +113,7 @@ function* fetchUpdateAnnualSchedule(action: AnyAction) {
           page: 1,
           itemPerPage: 5,
           sort: '',
-          direction: 'DESC',
+          direction: 'ASC',
           search: '',
           start: '',
           end: ''
@@ -155,7 +155,7 @@ function* fetchDeleteAnnualSchedule(action: AnyAction) {
           page: 1,
           itemPerPage: 5,
           sort: '',
-          direction: 'DESC',
+          direction: 'ASC',
           search: '',
           start: '',
           end: ''
