@@ -314,8 +314,8 @@ function* fetchPostPersonalInformation(action: AnyAction) {
       thirdLevelCode: action?.payload?.data.subDistrictResidentialAddress,
       address: action?.payload?.data.addressResidentialAddress,
       zipCode: action?.payload?.data.zipCodeResidentialAddress,
-      isCitizen: false,
-      isResident: action?.payload?.data?.useResidentialAddress
+      isCitizen: true,
+      isResident: true
     };
 
     let payload = {};
