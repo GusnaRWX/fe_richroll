@@ -102,13 +102,6 @@ const Layout = ({
               </Typography>
             </Box>
           </Box>
-          <Typography
-            variant='text-base'
-            component='div'
-            sx={{ fontWeight: 400, px: '16px', mt: '8px', color: '#6B7280', width: '100%' }}
-          >
-            Menus
-          </Typography>
         </>
       }
       <List>
