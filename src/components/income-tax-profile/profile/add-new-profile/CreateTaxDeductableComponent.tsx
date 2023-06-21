@@ -23,7 +23,7 @@ type TempInitialDeductableValues = {
   additionalPayload?: string;
 };
 
-const ItpProfileAddDeductableComponent = () => {
+const CreateTaxDeductableComponent = () => {
   const [initialDeductableValues, setInitialDeductableValues] = useState<
     TempInitialDeductableValues[]
   >([]);
@@ -517,4 +517,4 @@ const ItpProfileAddDeductableComponent = () => {
   );
 };
 
-export default ItpProfileAddDeductableComponent;
+export default CreateTaxDeductableComponent;

@@ -5,7 +5,9 @@ import { styled } from "@mui/material/styles";
 import { Typography, Box, Paper, Tabs, Tab } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
 import { useRouter } from "next/router";
-import ItpProfileAddDeductableComponent from "./ItpProfileAddDeductableComponent";
+
+// Import Deductable Component
+import CreateTaxDeductableComponent from "./CreateTaxDeductableComponent";
 
 // Import Create Component
 import CreateTaxBasicDetailComponent from "./CreateTaxBasicDetail";
@@ -98,7 +100,7 @@ export default function ItpAddNewProfileComponent() {
         </TabPanel>
         <TabPanel value={value} index={1}>
           {/* <CreateDesignedTransferAccount setValue={setValue} /> */}
-          <ItpProfileAddDeductableComponent />
+          <CreateTaxDeductableComponent />
         </TabPanel>
         <TabPanel value={value} index={2}>
           {/* <CreateRates /> */}
