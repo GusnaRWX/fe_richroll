@@ -55,7 +55,7 @@ function* fetchGetAccount(action: AnyAction) {
 function* fetchPatchSuspensionAccount(action: AnyAction) {
   try {
     const res: AxiosResponse = yield call(patchSuspensionAccount, action?.payload);
-    if (res.data.code === '200' || res.data.code === '201') {
+    if (res.data.code === 200 || res.data.code === 201) {
       yield put({ type: patchAccountSuspensionSuccess.toString() });
       yield put({
         type: setResponserMessage.toString(),
