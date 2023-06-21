@@ -84,7 +84,7 @@ function* fetchPatchSuspensionAccount(action: AnyAction) {
 function* fetchPutDeleteAccount(action: AnyAction) {
   try {
     const res: AxiosResponse = yield call(putDeleteAccount, action?.payload);
-    if (res.data.code === '200' || res.data.code === '201') {
+    if (res.data.code === 200 || res.data.code === 201) {
       yield put({ type: putAccountDeleteSuccess.toString() });
       yield put({
         type: setResponserMessage.toString(),
@@ -113,7 +113,7 @@ function* fetchPutDeleteAccount(action: AnyAction) {
 function* fetchPutReactivateAccount(action: AnyAction) {
   try {
     const res: AxiosResponse = yield call(putReactivateAccount, action?.payload);
-    if (res.data.code === '200' || res.data.code === '201') {
+    if (res.data.code === 200 || res.data.code === 201) {
       yield put({ type: putAccountReactiveSuccess.toString() });
       yield put({
         type: setResponserMessage.toString(),
