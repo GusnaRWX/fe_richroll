@@ -67,6 +67,10 @@ const SatutoryBenefitProfile = () => {
     }
   };
 
+  function HandleProfileDetail () {
+    router.push('/satutory-benefit/profile/detail')
+  }
+
   return (
     <>
       <TitleWrapper>
@@ -156,10 +160,11 @@ const SatutoryBenefitProfile = () => {
           <SutatoryBenefitProfileTable
             tabValue={value}
             DeleteAction
-            EditAction
+            DetailAction
             ActivateAction
             CopyAction
             Draft
+
           />
         </TabPanel>
         <TabPanel value={value} index={1}>

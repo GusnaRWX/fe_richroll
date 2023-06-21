@@ -10,6 +10,7 @@ import Table from '@/components/_shared/form/Table';
 import { IconButton } from '@/components/_shared/form';
 import styled from '@emotion/styled';
 import { visuallyHidden } from '@mui/utils';
+import { useRouter } from 'next/router';
 
 // Import Icon React Icon
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -21,13 +22,6 @@ const ButtonWrapper = styled.div`
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-`;
-const NameWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  margin: 0;
 `;
 
 const headerItems = [
@@ -130,6 +124,12 @@ function SutatoryBenefitComponentTable({
   if (!hydrated) {
     return null;
   }
+
+  const router = useRouter();
+  function DetailActionHandler () {
+    router.push('/satutory-benefit/component/detail')
+  }
+
   return (
     <>
       <Table
@@ -187,6 +187,7 @@ function SutatoryBenefitComponentTable({
                         <IconButton
                           parentColor='primary.50'
                           icons={<HiPencilAlt fontSize={20} color='#223567' />}
+                          onClick={DetailActionHandler}
                         />
                         <IconButton
                           parentColor='red.100'

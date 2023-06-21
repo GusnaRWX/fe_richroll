@@ -10,6 +10,7 @@ import Table from '@/components/_shared/form/Table';
 import { IconButton, Button } from '@/components/_shared/form';
 import styled from '@emotion/styled';
 import { visuallyHidden } from '@mui/utils';
+import { useRouter } from 'next/router';
 
 // Import Icon React Icon
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -48,7 +49,7 @@ const DraftHeaderItems = [
 interface SutatoryBenefitProfileTableProps {
   tabValue: number;
   DeleteAction?: boolean;
-  EditAction?: boolean;
+  DetailAction?: boolean;
   CopyAction?: boolean;
   ActivateAction?: boolean;
   ArchivedAction?: boolean;
@@ -60,7 +61,7 @@ type Order = 'asc' | 'desc';
 function SutatoryBenefitProfileTable({
   // tabValue,
   DeleteAction,
-  EditAction,
+  DetailAction,
   CopyAction,
   ActivateAction,
   ArchivedAction,
@@ -147,6 +148,12 @@ function SutatoryBenefitProfileTable({
   if (!hydrated) {
     return null;
   }
+
+  const router = useRouter();
+  function DetailActionHandler () {
+    router.push('/satutory-benefit/profile/detail')
+  }
+
   return (
     <>
       <Table
@@ -254,12 +261,13 @@ function SutatoryBenefitProfileTable({
                             icons={<FiCopy fontSize={20} color='#374151' />}
                           />
                         )}
-                        {EditAction && (
+                        {DetailAction && (
                           <IconButton
                             parentColor='primary.50'
                             icons={
                               <HiPencilAlt fontSize={20} color='#223567' />
                             }
+                            onClick={DetailActionHandler}
                           />
                         )}
                         {DeleteAction && (

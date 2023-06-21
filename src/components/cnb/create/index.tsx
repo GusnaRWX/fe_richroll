@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/indent */
-import React, { useState } from "react";
-import { Button, Form, IconButton } from "@/components/_shared/form";
-import AddIcon from "@mui/icons-material/Add";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { styled } from "@mui/material/styles";
+import React, { useState } from 'react';
+import { Button, Form, IconButton } from '@/components/_shared/form';
+import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { styled } from '@mui/material/styles';
 import {
   Typography,
   Select,
@@ -18,27 +18,27 @@ import {
   Paper,
   FormControl,
   FormHelperText,
-} from "@mui/material";
-import { ArrowBack } from "@mui/icons-material";
-import { useRouter } from "next/router";
-import { postNewCnbProfileRequested } from "@/store/reducers/slice/cnb/compensationSlice";
-import { Input } from "@/components/_shared/form";
-import { useAppDispatch, useAppSelectors } from "@/hooks/index";
+} from '@mui/material';
+import { ArrowBack } from '@mui/icons-material';
+import { useRouter } from 'next/router';
+import { postNewCnbProfileRequested } from '@/store/reducers/slice/cnb/compensationSlice';
+import { Input } from '@/components/_shared/form';
+import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import {
   getCompanyData,
   getPaymentType,
   dynamicPayloadBaseCnb,
-} from "@/utils/helper";
-import { FieldArray, Form as FormikForm, Formik } from "formik";
-import * as Yup from "yup";
+} from '@/utils/helper';
+import { FieldArray, Form as FormikForm, Formik } from 'formik';
+import * as Yup from 'yup';
 import {
   getListTerminReqeusted,
   getListSuppTerminRequested,
   removeListSuppTermin,
-} from "@/store/reducers/slice/options/optionSlice";
-import { Text } from "@/components/_shared/common";
-import ConfirmationModal from "@/components/_shared/common/ConfirmationModal";
-import { resetResponserMessage } from "@/store/reducers/slice/responserSlice";
+} from '@/store/reducers/slice/options/optionSlice';
+import { Text } from '@/components/_shared/common';
+import ConfirmationModal from '@/components/_shared/common/ConfirmationModal';
+import { resetResponserMessage } from '@/store/reducers/slice/responserSlice';
 
 export default function CreateCNBComponent() {
   const router = useRouter();
@@ -47,28 +47,28 @@ export default function CreateCNBComponent() {
   const { listCompensation, listTermin, listSuppTermin } = useAppSelectors(
     (state) => state.option
   );
-  const [title, setTitle] = React.useState("Amount");
+  const [title, setTitle] = React.useState('Amount');
   const [withPercentage, setWithPercentage] = React.useState(false);
   const [leave, setLeave] = useState(false);
 
   const validationSchecma = Yup.object().shape({
-    name: Yup.string().required("This is required"),
-    compensationComponentId: Yup.string().required("This is required"),
-    period: Yup.string().required("This is required"),
+    name: Yup.string().required('This is required'),
+    compensationComponentId: Yup.string().required('This is required'),
+    period: Yup.string().required('This is required'),
     rateOrAmount: Yup.number()
-      .required("This is required")
-      .positive("Must be positive")
-      .integer("Must be number"),
-    taxStatus: Yup.string().required("This is required"),
+      .required('This is required')
+      .positive('Must be positive')
+      .integer('Must be number'),
+    taxStatus: Yup.string().required('This is required'),
     supplementary: Yup.array().of(
       Yup.object().shape({
-        compensationComponentId: Yup.string().required("This is required"),
-        period: Yup.string().required("This is required"),
+        compensationComponentId: Yup.string().required('This is required'),
+        period: Yup.string().required('This is required'),
         rateOrAmount: Yup.number()
-          .required("This is required")
-          .positive("Must be positive")
-          .integer("Must be number"),
-        taxStatus: Yup.string().required("This is required"),
+          .required('This is required')
+          .positive('Must be positive')
+          .integer('Must be number'),
+        taxStatus: Yup.string().required('This is required'),
       })
     ),
   });
@@ -82,77 +82,77 @@ export default function CreateCNBComponent() {
   };
 
   const AddButton = styled(Button)({
-    color: "white",
-    maxWidth: "245px",
-    padding: "8px 10px",
-    ".MuiTypography-root": {
-      fontSize: "12px",
+    color: 'white',
+    maxWidth: '245px',
+    padding: '8px 10px',
+    '.MuiTypography-root': {
+      fontSize: '12px',
     },
   });
 
-  const Header = styled("div")({
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: "32px",
+  const Header = styled('div')({
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: '32px',
   });
 
-  const HeaderPageTitle = styled("div")({
-    display: "flex",
-    gap: "16px",
-    alignItems: "center",
+  const HeaderPageTitle = styled('div')({
+    display: 'flex',
+    gap: '16px',
+    alignItems: 'center',
   });
 
   const NextBtnWrapper = styled(Box)({
-    width: "100%",
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "flex-end",
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
   });
 
-  const BpIcon = styled("span")(({ theme }) => ({
-    borderRadius: "50%",
+  const BpIcon = styled('span')(({ theme }) => ({
+    borderRadius: '50%',
     width: 16,
     height: 16,
     boxShadow:
-      theme.palette.mode === "dark"
-        ? "0 0 0 1px rgb(16 22 26 / 40%)"
-        : "inset 0 0 0 1px rgba(16,22,26,.2), inset 0 -1px 0 rgba(16,22,26,.1)",
-    backgroundColor: theme.palette.mode === "dark" ? "#394b59" : "#f5f8fa",
+      theme.palette.mode === 'dark'
+        ? '0 0 0 1px rgb(16 22 26 / 40%)'
+        : 'inset 0 0 0 1px rgba(16,22,26,.2), inset 0 -1px 0 rgba(16,22,26,.1)',
+    backgroundColor: theme.palette.mode === 'dark' ? '#394b59' : '#f5f8fa',
     backgroundImage:
-      theme.palette.mode === "dark"
-        ? "linear-gradient(180deg,hsla(0,0%,100%,.05),hsla(0,0%,100%,0))"
-        : "linear-gradient(180deg,hsla(0,0%,100%,.8),hsla(0,0%,100%,0))",
-    ".Mui-focusVisible &": {
-      outline: "2px auto rgba(19,124,189,.6)",
+      theme.palette.mode === 'dark'
+        ? 'linear-gradient(180deg,hsla(0,0%,100%,.05),hsla(0,0%,100%,0))'
+        : 'linear-gradient(180deg,hsla(0,0%,100%,.8),hsla(0,0%,100%,0))',
+    '.Mui-focusVisible &': {
+      outline: '2px auto rgba(19,124,189,.6)',
       outlineOffset: 2,
     },
-    "input:hover ~ &": {
-      backgroundColor: theme.palette.mode === "dark" ? "#30404d" : "#ebf1f5",
+    'input:hover ~ &': {
+      backgroundColor: theme.palette.mode === 'dark' ? '#30404d' : '#ebf1f5',
     },
-    "input:disabled ~ &": {
-      boxShadow: "none",
+    'input:disabled ~ &': {
+      boxShadow: 'none',
       background:
-        theme.palette.mode === "dark"
-          ? "rgba(57,75,89,.5)"
-          : "rgba(206,217,224,.5)",
+        theme.palette.mode === 'dark'
+          ? 'rgba(57,75,89,.5)'
+          : 'rgba(206,217,224,.5)',
     },
   }));
 
   const BpCheckedIcon = styled(BpIcon)({
-    backgroundColor: "#137cbd",
+    backgroundColor: '#137cbd',
     backgroundImage:
-      "linear-gradient(180deg,hsla(0,0%,100%,.1),hsla(0,0%,100%,0))",
-    "&:before": {
-      display: "block",
+      'linear-gradient(180deg,hsla(0,0%,100%,.1),hsla(0,0%,100%,0))',
+    '&:before': {
+      display: 'block',
       width: 16,
       height: 16,
-      backgroundImage: "radial-gradient(#fff,#fff 28%,transparent 32%)",
+      backgroundImage: 'radial-gradient(#fff,#fff 28%,transparent 32%)',
       content: '""',
     },
-    "input:hover ~ &": {
-      backgroundColor: "#106ba3",
+    'input:hover ~ &': {
+      backgroundColor: '#106ba3',
     },
   });
 
@@ -197,11 +197,11 @@ export default function CreateCNBComponent() {
     });
 
     if (
-      value.name !== "" &&
-      value.compensationComponentId !== "" &&
-      value.period !== "" &&
-      value.rateOrAmount !== "" &&
-      value.taxStatus !== "" &&
+      value.name !== '' &&
+      value.compensationComponentId !== '' &&
+      value.period !== '' &&
+      value.rateOrAmount !== '' &&
+      value.taxStatus !== '' &&
       supplement
     ) {
       const tempBase = dynamicPayloadBaseCnb(
@@ -212,7 +212,7 @@ export default function CreateCNBComponent() {
       const tempSupplementary: any = [];
       if (value.supplementary.length > 0) {
         for (let i = 0; i <= value.supplementary.length; i++) {
-          if (typeof value.supplementary[i] !== "undefined") {
+          if (typeof value.supplementary[i] !== 'undefined') {
             const tempData = dynamicPayloadBaseCnb(
               listCompensation,
               value.supplementary[i].compensationComponentId,
@@ -244,12 +244,12 @@ export default function CreateCNBComponent() {
     taxStatus: string;
     supplementary: SuplementType[];
   } = {
-    name: "",
-    compensationComponentId: "",
-    period: "",
-    rateOrAmount: "",
-    percentage: "",
-    taxStatus: "",
+    name: '',
+    compensationComponentId: '',
+    period: '',
+    rateOrAmount: '',
+    percentage: '',
+    taxStatus: '',
     supplementary: [],
   };
 
@@ -259,7 +259,7 @@ export default function CreateCNBComponent() {
         initialValues={initialValues}
         onSubmit={(values: BaseType) => {
           CreateNewCnbProfile(values);
-          console.log("here");
+          console.log('here');
         }}
         validationSchema={validationSchecma}
       >
@@ -270,18 +270,18 @@ export default function CreateCNBComponent() {
               <Header>
                 <HeaderPageTitle>
                   <IconButton
-                    parentColor="primary.500"
-                    icons={<ArrowBack sx={{ color: "#FFFFFF" }} />}
+                    parentColor='primary.500'
+                    icons={<ArrowBack sx={{ color: '#FFFFFF' }} />}
                     onClick={() => {
-                      router.push("/compensation-benefits");
+                      router.push('/compensation-benefits');
                     }}
                   />
                   <Typography
                     style={{
-                      color: "#223567",
-                      fontSize: "20px",
-                      fontWeight: "700",
-                      width: "250px",
+                      color: '#223567',
+                      fontSize: '20px',
+                      fontWeight: '700',
+                      width: '250px',
                     }}
                   >
                     Create New CnB Profile
@@ -290,37 +290,37 @@ export default function CreateCNBComponent() {
                 <NextBtnWrapper>
                   <Button
                     fullWidth={false}
-                    size="small"
-                    label="Cancel"
-                    variant="outlined"
-                    sx={{ mr: "12px" }}
-                    color="primary"
+                    size='small'
+                    label='Cancel'
+                    variant='outlined'
+                    sx={{ mr: '12px' }}
+                    color='primary'
                     onClick={handleOpen}
                   />
                   <Button
                     fullWidth={false}
-                    size="small"
-                    label="Save"
-                    color="primary"
-                    type="submit"
+                    size='small'
+                    label='Save'
+                    color='primary'
+                    type='submit'
                   />
                 </NextBtnWrapper>
               </Header>
-              <Paper sx={{ width: "100%", p: "21px 32px" }}>
-                <Form style={{ marginBottom: "32px" }}>
+              <Paper sx={{ width: '100%', p: '21px 32px' }}>
+                <Form style={{ marginBottom: '32px' }}>
                   <Typography>
                     Profile Name
-                    <span style={{ color: "red" }}>*</span>
+                    <span style={{ color: 'red' }}>*</span>
                   </Typography>
                   <Grid container>
                     <Grid item xs={6} md={6} lg={6} xl={6}>
                       <TextField
-                        sx={{ marginTop: ".4rem" }}
+                        sx={{ marginTop: '.4rem' }}
                         fullWidth
                         required
-                        type="text"
-                        size="small"
-                        placeholder="Input Profile Name"
+                        type='text'
+                        size='small'
+                        placeholder='Input Profile Name'
                         error={
                           formik.touched.name && Boolean(formik.errors.name)
                         }
@@ -328,8 +328,8 @@ export default function CreateCNBComponent() {
                         value={formik.values.name}
                         onChange={(e) =>
                           formik.setFieldValue(
-                            "name",
-                            e.target.value.replace(/[^a-zA-Z\s]+/, "") as string
+                            'name',
+                            e.target.value.replace(/[^a-zA-Z\s]+/, '') as string
                           )
                         }
                       />
@@ -337,21 +337,21 @@ export default function CreateCNBComponent() {
                   </Grid>
                   <Typography
                     style={{
-                      marginBottom: "17px",
-                      marginTop: "31px",
-                      fontSize: "18px",
-                      fontWeight: "700",
-                      color: "#223567",
+                      marginBottom: '17px',
+                      marginTop: '31px',
+                      fontSize: '18px',
+                      fontWeight: '700',
+                      color: '#223567',
                     }}
                   >
                     Compensation
                   </Typography>
                   <Typography
                     style={{
-                      marginBottom: "17px",
-                      fontSize: "16px",
-                      fontWeight: "700",
-                      color: "#223567",
+                      marginBottom: '17px',
+                      fontSize: '16px',
+                      fontWeight: '700',
+                      color: '#223567',
                     }}
                   >
                     Base
@@ -359,10 +359,10 @@ export default function CreateCNBComponent() {
                   <Grid>
                     <Grid container spacing={2}>
                       <Grid item xs={6} md={6} lg={6} xl={6}>
-                        <div style={{ marginBottom: "16px" }}>
+                        <div style={{ marginBottom: '16px' }}>
                           <Typography>
                             Compensation Component
-                            <span style={{ color: "red" }}>*</span>
+                            <span style={{ color: 'red' }}>*</span>
                           </Typography>
                           <FormControl
                             fullWidth
@@ -372,13 +372,13 @@ export default function CreateCNBComponent() {
                             }
                           >
                             <Select
-                              sx={{ marginTop: ".4rem" }}
+                              sx={{ marginTop: '.4rem' }}
                               fullWidth
-                              size="small"
+                              size='small'
                               value={formik.values.compensationComponentId}
                               onChange={(e) => {
                                 formik.setFieldValue(
-                                  "compensationComponentId",
+                                  'compensationComponentId',
                                   e.target.value
                                 );
                                 dispatch({
@@ -403,8 +403,8 @@ export default function CreateCNBComponent() {
                                 if ((value as string)?.length === 0) {
                                   return (
                                     <Text
-                                      title="Select base compensation component"
-                                      color="grey.400"
+                                      title='Select base compensation component'
+                                      color='grey.400'
                                     />
                                   );
                                 }
@@ -432,7 +432,7 @@ export default function CreateCNBComponent() {
                       </Grid>
                       <Grid item xs={6} md={6} lg={6} xl={6}>
                         <Typography>
-                          Tax Status<span style={{ color: "red" }}>*</span>
+                          Tax Status<span style={{ color: 'red' }}>*</span>
                         </Typography>
                         <FormControl
                           error={
@@ -442,31 +442,31 @@ export default function CreateCNBComponent() {
                         >
                           <RadioGroup
                             row
-                            style={{ height: "54px" }}
+                            style={{ height: '54px' }}
                             value={formik.values.taxStatus}
                             onChange={(e) =>
-                              formik.setFieldValue("taxStatus", e.target.value)
+                              formik.setFieldValue('taxStatus', e.target.value)
                             }
                           >
                             <FormControlLabel
-                              value="true"
+                              value='true'
                               control={
                                 <Radio
-                                  size="small"
+                                  size='small'
                                   checkedIcon={<BpCheckedIcon />}
                                 />
                               }
-                              label="Taxable"
+                              label='Taxable'
                             />
                             <FormControlLabel
-                              value="false"
+                              value='false'
                               control={
                                 <Radio
-                                  size="small"
+                                  size='small'
                                   checkedIcon={<BpCheckedIcon />}
                                 />
                               }
-                              label="Non-Taxable"
+                              label='Non-Taxable'
                             />
                           </RadioGroup>
                           <FormHelperText>
@@ -476,19 +476,19 @@ export default function CreateCNBComponent() {
                         </FormControl>
                       </Grid>
                     </Grid>
-                    {formik.values.compensationComponentId !== "" && (
+                    {formik.values.compensationComponentId !== '' && (
                       <Grid container>
                         <Grid container spacing={2}>
                           <Grid item xs={3} md={3} lg={3} xl={3}>
                             <Typography>
                               {title}
-                              <span style={{ color: "red" }}>*</span>
+                              <span style={{ color: 'red' }}>*</span>
                             </Typography>
                             <TextField
-                              sx={{ marginTop: ".4rem" }}
+                              sx={{ marginTop: '.4rem' }}
                               fullWidth
-                              type="number"
-                              size="small"
+                              type='number'
+                              size='small'
                               error={
                                 formik.touched.rateOrAmount &&
                                 Boolean(formik.errors.rateOrAmount)
@@ -500,18 +500,18 @@ export default function CreateCNBComponent() {
                               value={formik.values.rateOrAmount}
                               onChange={(e) =>
                                 formik.setFieldValue(
-                                  "rateOrAmount",
+                                  'rateOrAmount',
                                   e.target.value
                                 )
                               }
                               InputProps={{
                                 startAdornment: (
-                                  <InputAdornment position="start">
+                                  <InputAdornment position='start'>
                                     Rp
                                   </InputAdornment>
                                 ),
                                 endAdornment: (
-                                  <InputAdornment position="end">
+                                  <InputAdornment position='end'>
                                     IDR
                                   </InputAdornment>
                                 ),
@@ -523,13 +523,13 @@ export default function CreateCNBComponent() {
                               <FormControl fullWidth>
                                 <Input
                                   fullWidth
-                                  customLabel="Rate"
-                                  variant="outlined"
-                                  type="number"
-                                  size="small"
+                                  customLabel='Rate'
+                                  variant='outlined'
+                                  type='number'
+                                  size='small'
                                   InputProps={{
                                     endAdornment: (
-                                      <InputAdornment position="end">
+                                      <InputAdornment position='end'>
                                         %
                                       </InputAdornment>
                                     ),
@@ -547,12 +547,12 @@ export default function CreateCNBComponent() {
                               }
                             >
                               <Select
-                                sx={{ marginTop: "1.8rem" }}
+                                sx={{ marginTop: '1.8rem' }}
                                 fullWidth
-                                size="small"
+                                size='small'
                                 value={formik.values.period}
                                 onChange={(e) =>
-                                  formik.setFieldValue("period", e.target.value)
+                                  formik.setFieldValue('period', e.target.value)
                                 }
                               >
                                 {listTermin?.map((item) => (
@@ -572,7 +572,7 @@ export default function CreateCNBComponent() {
                   </Grid>
                 </Form>
                 <FieldArray
-                  name="supplementary"
+                  name='supplementary'
                   render={(arrayHelper) => {
                     return (
                       <div>
@@ -580,10 +580,10 @@ export default function CreateCNBComponent() {
                           <>
                             <Typography
                               style={{
-                                marginBottom: "17px",
-                                fontSize: "16px",
-                                fontWeight: "700",
-                                color: "#223567",
+                                marginBottom: '17px',
+                                fontSize: '16px',
+                                fontWeight: '700',
+                                color: '#223567',
                               }}
                             >
                               Suplementary
@@ -591,13 +591,13 @@ export default function CreateCNBComponent() {
                             <Form>
                               {formik.values.supplementary.map(
                                 (suplement, i) => (
-                                  <div key={i} style={{ marginBottom: "33px" }}>
+                                  <div key={i} style={{ marginBottom: '33px' }}>
                                     <Grid container spacing={2}>
                                       <Grid item xs={6} md={6} lg={6} xl={6}>
-                                        <div style={{ marginBottom: "16px" }}>
+                                        <div style={{ marginBottom: '16px' }}>
                                           <Typography>
                                             Compensation Component {i + 1}
-                                            <span style={{ color: "red" }}>
+                                            <span style={{ color: 'red' }}>
                                               *
                                             </span>
                                           </Typography>
@@ -621,9 +621,9 @@ export default function CreateCNBComponent() {
                                               })}
                                           >
                                             <Select
-                                              sx={{ marginTop: ".4rem" }}
+                                              sx={{ marginTop: '.4rem' }}
                                               fullWidth
-                                              size="small"
+                                              size='small'
                                               value={
                                                 formik.values.supplementary[i]
                                                   ?.compensationComponentId
@@ -684,16 +684,16 @@ export default function CreateCNBComponent() {
                                       <Grid item xs={6} md={6} lg={6} xl={6}>
                                         <Typography>
                                           Tax Status
-                                          <span style={{ color: "red" }}>
+                                          <span style={{ color: 'red' }}>
                                             *
                                           </span>
                                         </Typography>
                                         <Box
                                           style={{
-                                            display: "flex",
-                                            justifyContent: "space-between",
-                                            alignItems: "center",
-                                            height: "54px",
+                                            display: 'flex',
+                                            justifyContent: 'space-between',
+                                            alignItems: 'center',
+                                            height: '54px',
                                           }}
                                         >
                                           <FormControl
@@ -729,28 +729,28 @@ export default function CreateCNBComponent() {
                                               }
                                             >
                                               <FormControlLabel
-                                                value="true"
+                                                value='true'
                                                 control={
                                                   <Radio
-                                                    size="small"
+                                                    size='small'
                                                     checkedIcon={
                                                       <BpCheckedIcon />
                                                     }
                                                   />
                                                 }
-                                                label="Taxable"
+                                                label='Taxable'
                                               />
                                               <FormControlLabel
-                                                value="false"
+                                                value='false'
                                                 control={
                                                   <Radio
-                                                    size="small"
+                                                    size='small'
                                                     checkedIcon={
                                                       <BpCheckedIcon />
                                                     }
                                                   />
                                                 }
-                                                label="Non-Taxable"
+                                                label='Non-Taxable'
                                               />
                                             </RadioGroup>
                                             {formik.touched?.supplementary &&
@@ -770,9 +770,9 @@ export default function CreateCNBComponent() {
                                           </FormControl>
                                           <Box>
                                             <Button
-                                              color="red"
+                                              color='red'
                                               startIcon={<DeleteIcon />}
-                                              label="Delete"
+                                              label='Delete'
                                               onClick={() => {
                                                 arrayHelper.remove(i);
                                                 dispatch({
@@ -792,15 +792,15 @@ export default function CreateCNBComponent() {
                                             formik.values.supplementary[i]
                                               .titleRate
                                           }
-                                          <span style={{ color: "red" }}>
+                                          <span style={{ color: 'red' }}>
                                             *
                                           </span>
                                         </Typography>
                                         <TextField
-                                          sx={{ marginTop: ".4rem" }}
+                                          sx={{ marginTop: '.4rem' }}
                                           fullWidth
-                                          size="small"
-                                          type="number"
+                                          size='small'
+                                          type='number'
                                           {...(formik.touched?.supplementary &&
                                             formik.errors?.supplementary && {
                                               error:
@@ -838,12 +838,12 @@ export default function CreateCNBComponent() {
                                           }
                                           InputProps={{
                                             startAdornment: (
-                                              <InputAdornment position="start">
+                                              <InputAdornment position='start'>
                                                 Rp
                                               </InputAdornment>
                                             ),
                                             endAdornment: (
-                                              <InputAdornment position="end">
+                                              <InputAdornment position='end'>
                                                 IDR
                                               </InputAdornment>
                                             ),
@@ -856,11 +856,11 @@ export default function CreateCNBComponent() {
                                           <FormControl fullWidth>
                                             <Input
                                               fullWidth
-                                              customLabel="Rate"
-                                              variant="outlined"
-                                              type="number"
-                                              size="small"
-                                              name="percentage"
+                                              customLabel='Rate'
+                                              variant='outlined'
+                                              type='number'
+                                              size='small'
+                                              name='percentage'
                                               value={
                                                 formik.values.supplementary[i]
                                                   ?.percentage
@@ -869,7 +869,7 @@ export default function CreateCNBComponent() {
                                               onBlur={formik.handleBlur}
                                               InputProps={{
                                                 endAdornment: (
-                                                  <InputAdornment position="end">
+                                                  <InputAdornment position='end'>
                                                     %
                                                   </InputAdornment>
                                                 ),
@@ -897,9 +897,9 @@ export default function CreateCNBComponent() {
                                             })}
                                         >
                                           <Select
-                                            sx={{ marginTop: "1.8rem" }}
+                                            sx={{ marginTop: '1.8rem' }}
                                             fullWidth
-                                            size="small"
+                                            size='small'
                                             value={
                                               formik.values.supplementary[i]
                                                 ?.period
@@ -944,18 +944,18 @@ export default function CreateCNBComponent() {
                           </>
                         )}
                         <AddButton
-                          color="secondary"
+                          color='secondary'
                           startIcon={<AddIcon />}
-                          label="Add Supplementary Compensation"
+                          label='Add Supplementary Compensation'
                           onClick={() =>
                             arrayHelper.insert(
                               formik.values.supplementary.length + 1,
                               {
-                                compensationComponentId: "",
-                                period: "",
-                                rateOrAmount: "",
-                                taxStatus: "",
-                                titleRate: "Amount",
+                                compensationComponentId: '',
+                                period: '',
+                                rateOrAmount: '',
+                                taxStatus: '',
+                                titleRate: 'Amount',
                               }
                             )
                           }
@@ -972,11 +972,11 @@ export default function CreateCNBComponent() {
       <ConfirmationModal
         open={leave}
         handleClose={handleClose}
-        title="Are you sure you want to leave?"
-        content="Any unsaved changes will be discarded"
+        title='Are you sure you want to leave?'
+        content='Any unsaved changes will be discarded'
         withCallback
         callback={() => {
-          router.push("/compensation-benefits");
+          router.push('/compensation-benefits');
           dispatch({
             type: resetResponserMessage.toString(),
           });
