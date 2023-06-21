@@ -62,7 +62,7 @@ const Appbar: FC<AppbarProps> = (props) => {
         justifyContent: 'flex-start',
         ml: '30px'
       }}>
-        <Box onClick={handleDrawerToggle}>
+        <Box onClick={handleDrawerToggle} sx={{ '&:hover': { cursor: 'pointer' } }}>
           <Image
             src={ImageType.KAYAROLL_LOGO}
             width={151}
