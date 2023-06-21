@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import {
   Button,
   Input,
@@ -15,7 +15,6 @@ import AddIcon from "@mui/icons-material/Add";
 import { useRouter } from "next/router";
 import { Form as FormikForm, Formik, FieldArray } from "formik";
 import * as Yup from "yup";
-import dayjs from "dayjs";
 import { CustomModal } from "@/components/_shared/common";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { HiPencilAlt } from "react-icons/hi";
@@ -139,8 +138,7 @@ export default function CreateNewProfile() {
         validationSchema={validationSchema}
         initialValues={initialValues}
         onSubmit={(values: any) => {
-          // setIsModalFormSubmitted(true);
-
+          setIsModalFormSubmitted(true);
           setIsAddNewComponent(false);
         }}
       >
@@ -370,173 +368,178 @@ export default function CreateNewProfile() {
                   };
                   return (
                     <div>
-                      {formik.values.benefitComponent.length > 0 && (
-                        <FormikForm>
-                          {formik.values.benefitComponent.map((benefit, i) => {
-                            return (
-                              <Paper
-                                style={{
-                                  padding: "21px 32px",
-                                  marginTop: "16px",
-                                }}
-                              >
-                                <Box
-                                  sx={{
-                                    display: "flex",
-                                    justifyContent: "space-between",
-                                    width: "100%",
-                                  }}
-                                >
-                                  <Typography
-                                    sx={{
-                                      color: "#223567",
-                                      fontWeight: 700,
-                                      fontSize: "18px",
+                      {formik.values.benefitComponent.length > 0 &&
+                        isModalFormSubmitted && (
+                          <FormikForm>
+                            {formik.values.benefitComponent.map(
+                              (benefit, i) => {
+                                return (
+                                  <Paper
+                                    style={{
+                                      padding: "21px 32px",
+                                      marginTop: "16px",
                                     }}
                                   >
-                                    {benefit}
-                                  </Typography>
+                                    <Box
+                                      sx={{
+                                        display: "flex",
+                                        justifyContent: "space-between",
+                                        width: "100%",
+                                      }}
+                                    >
+                                      <Typography
+                                        sx={{
+                                          color: "#223567",
+                                          fontWeight: 700,
+                                          fontSize: "18px",
+                                        }}
+                                      >
+                                        {benefit}
+                                      </Typography>
 
-                                  <Box sx={{ display: "flex", gap: "4px" }}>
-                                    <Button
-                                      size="medium"
-                                      color="green"
-                                      startIcon={<HiPencilAlt color="white" />}
-                                      label="Edit"
-                                      sx={{
-                                        backgroundColor: "#8DD0B8",
-                                        color: " white",
-                                      }}
-                                    />
-                                    <Button
-                                      color="red"
-                                      size="medium"
-                                      startIcon={<DeleteIcon />}
-                                      label="Delete"
-                                      sx={{
-                                        backgroundColor: "#FEE2E2",
-                                        color: "#B91C1C",
-                                      }}
-                                      onClick={() => arrayHelper.remove(i)}
-                                    />
-                                  </Box>
-                                </Box>
+                                      <Box sx={{ display: "flex", gap: "4px" }}>
+                                        <Button
+                                          size="medium"
+                                          color="green"
+                                          startIcon={
+                                            <HiPencilAlt color="white" />
+                                          }
+                                          label="Edit"
+                                          sx={{
+                                            backgroundColor: "#8DD0B8",
+                                            color: " white",
+                                          }}
+                                        />
+                                        <Button
+                                          color="red"
+                                          size="medium"
+                                          startIcon={<DeleteIcon />}
+                                          label="Delete"
+                                          sx={{
+                                            backgroundColor: "#FEE2E2",
+                                            color: "#B91C1C",
+                                          }}
+                                          onClick={() => arrayHelper.remove(i)}
+                                        />
+                                      </Box>
+                                    </Box>
 
-                                <Grid container sx={{ marginTop: "12px" }}>
-                                  <Grid item xs={2} md={2} lg={2} xl={2}>
-                                    <Typography
-                                      sx={{
-                                        color: "#374151",
-                                        fontWeight: 400,
-                                        fontSize: "14px",
-                                      }}
-                                    >
-                                      Contributor
-                                    </Typography>
-                                  </Grid>
-                                  <Grid item xs={2} md={2} lg={2} xl={2}>
-                                    <Typography
-                                      sx={{
-                                        color: "#374151",
-                                        fontWeight: 400,
-                                        fontSize: "14px",
-                                      }}
-                                    >
-                                      Rate Types
-                                    </Typography>
-                                  </Grid>
-                                  <Grid item xs={2} md={2} lg={2} xl={2}>
-                                    <Typography
-                                      sx={{
-                                        color: "#374151",
-                                        fontWeight: 400,
-                                        fontSize: "14px",
-                                      }}
-                                    >
-                                      Flat Rate
-                                    </Typography>
-                                  </Grid>
-                                  <Grid item xs={3} md={3} lg={3} xl={3}>
-                                    <Typography
-                                      sx={{
-                                        color: "#374151",
-                                        fontWeight: 400,
-                                        fontSize: "14px",
-                                      }}
-                                    >
-                                      Amount Cap
-                                    </Typography>
-                                  </Grid>
-                                  <Grid item xs={3} md={3} lg={3} xl={3}>
-                                    <Typography
-                                      sx={{
-                                        color: "#374151",
-                                        fontWeight: 400,
-                                        fontSize: "14px",
-                                      }}
-                                    >
-                                      Effective Periode
-                                    </Typography>
-                                  </Grid>
-                                </Grid>
+                                    <Grid container sx={{ marginTop: "12px" }}>
+                                      <Grid item xs={2} md={2} lg={2} xl={2}>
+                                        <Typography
+                                          sx={{
+                                            color: "#374151",
+                                            fontWeight: 400,
+                                            fontSize: "14px",
+                                          }}
+                                        >
+                                          Contributor
+                                        </Typography>
+                                      </Grid>
+                                      <Grid item xs={2} md={2} lg={2} xl={2}>
+                                        <Typography
+                                          sx={{
+                                            color: "#374151",
+                                            fontWeight: 400,
+                                            fontSize: "14px",
+                                          }}
+                                        >
+                                          Rate Types
+                                        </Typography>
+                                      </Grid>
+                                      <Grid item xs={2} md={2} lg={2} xl={2}>
+                                        <Typography
+                                          sx={{
+                                            color: "#374151",
+                                            fontWeight: 400,
+                                            fontSize: "14px",
+                                          }}
+                                        >
+                                          Flat Rate
+                                        </Typography>
+                                      </Grid>
+                                      <Grid item xs={3} md={3} lg={3} xl={3}>
+                                        <Typography
+                                          sx={{
+                                            color: "#374151",
+                                            fontWeight: 400,
+                                            fontSize: "14px",
+                                          }}
+                                        >
+                                          Amount Cap
+                                        </Typography>
+                                      </Grid>
+                                      <Grid item xs={3} md={3} lg={3} xl={3}>
+                                        <Typography
+                                          sx={{
+                                            color: "#374151",
+                                            fontWeight: 400,
+                                            fontSize: "14px",
+                                          }}
+                                        >
+                                          Effective Periode
+                                        </Typography>
+                                      </Grid>
+                                    </Grid>
 
-                                <Grid container sx={{ marginTop: "12px" }}>
-                                  <Grid item xs={2} md={2} lg={2} xl={2}>
-                                    <Typography
-                                      sx={{
-                                        color: "#4B5563",
-                                        fontWeight: 700,
-                                      }}
-                                    >
-                                      Employee
-                                    </Typography>
-                                  </Grid>
-                                  <Grid item xs={2} md={2} lg={2} xl={2}>
-                                    <Typography
-                                      sx={{
-                                        color: "#4B5563",
-                                        fontWeight: 700,
-                                      }}
-                                    >
-                                      Flat Rate
-                                    </Typography>
-                                  </Grid>
-                                  <Grid item xs={2} md={2} lg={2} xl={2}>
-                                    <Typography
-                                      sx={{
-                                        color: "#4B5563",
-                                        fontWeight: 700,
-                                      }}
-                                    >
-                                      10,0%
-                                    </Typography>
-                                  </Grid>
-                                  <Grid item xs={3} md={3} lg={3} xl={3}>
-                                    <Typography
-                                      sx={{
-                                        color: "#4B5563",
-                                        fontWeight: 700,
-                                      }}
-                                    >
-                                      Rp. 3.000.000,00
-                                    </Typography>
-                                  </Grid>
-                                  <Grid item xs={3} md={3} lg={3} xl={3}>
-                                    <Typography
-                                      sx={{
-                                        color: "#4B5563",
-                                        fontWeight: 700,
-                                      }}
-                                    >
-                                      -
-                                    </Typography>
-                                  </Grid>
-                                </Grid>
-                              </Paper>
-                            );
-                          })}
-                        </FormikForm>
-                      )}
+                                    <Grid container sx={{ marginTop: "12px" }}>
+                                      <Grid item xs={2} md={2} lg={2} xl={2}>
+                                        <Typography
+                                          sx={{
+                                            color: "#4B5563",
+                                            fontWeight: 700,
+                                          }}
+                                        >
+                                          Employee
+                                        </Typography>
+                                      </Grid>
+                                      <Grid item xs={2} md={2} lg={2} xl={2}>
+                                        <Typography
+                                          sx={{
+                                            color: "#4B5563",
+                                            fontWeight: 700,
+                                          }}
+                                        >
+                                          Flat Rate
+                                        </Typography>
+                                      </Grid>
+                                      <Grid item xs={2} md={2} lg={2} xl={2}>
+                                        <Typography
+                                          sx={{
+                                            color: "#4B5563",
+                                            fontWeight: 700,
+                                          }}
+                                        >
+                                          10,0%
+                                        </Typography>
+                                      </Grid>
+                                      <Grid item xs={3} md={3} lg={3} xl={3}>
+                                        <Typography
+                                          sx={{
+                                            color: "#4B5563",
+                                            fontWeight: 700,
+                                          }}
+                                        >
+                                          Rp. 3.000.000,00
+                                        </Typography>
+                                      </Grid>
+                                      <Grid item xs={3} md={3} lg={3} xl={3}>
+                                        <Typography
+                                          sx={{
+                                            color: "#4B5563",
+                                            fontWeight: 700,
+                                          }}
+                                        >
+                                          -
+                                        </Typography>
+                                      </Grid>
+                                    </Grid>
+                                  </Paper>
+                                );
+                              }
+                            )}
+                          </FormikForm>
+                        )}
                       <Box style={{ padding: "21px 32px" }}>
                         <AddButton
                           onClick={() => setIsAddNewComponent(true)}
