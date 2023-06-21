@@ -19,6 +19,7 @@ import { BsTrashFill } from 'react-icons/bs';
 import { HiPencilAlt } from 'react-icons/hi';
 import styled from '@emotion/styled';
 import { ConfirmationModal } from '@/components/_shared/common';
+import AttendanceEntriesEdit from './AttendanceEntriesEdit';
 
 const ButtonWrapper = styled.div`
  display: flex;
@@ -100,6 +101,7 @@ function AttendanceEntriesTable() {
   const [sort, setSort] = useState('');
   const [hydrated, setHaydrated] = useState(false);
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
+  const [editConfirmation, setEditConfirmation] = useState(false);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -209,6 +211,9 @@ function AttendanceEntriesTable() {
                         <ButtonWrapper>
                           <IconButton
                             parentColor='#E9EFFF'
+                            onClick={() => {
+                              setEditConfirmation(true);
+                            }}
                             icons={
                               <HiPencilAlt fontSize={20} color='#223567' />
                             }
@@ -241,7 +246,12 @@ function AttendanceEntriesTable() {
         content='You are about to delete this attendance data entry. This action cannot be undone.'
         withCallback
         noChange={true}
+        type='delete'
         callback={() => setDeleteConfirmation(false)}
+      />
+      <AttendanceEntriesEdit
+        open={editConfirmation}
+        handleClose={() => { setEditConfirmation(false); }}
       />
     </>
   );
