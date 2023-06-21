@@ -86,7 +86,7 @@ function ConfirmationModal({ open, handleClose, title, content, withCallback, ca
             <MuiButton variant='contained' onClick={handleClick} size='small' color='primary'>Confirm</MuiButton>
           }
           {type === 'delete' &&
-            <MuiButton variant='contained' onClick={handleClick} size='small' sx={{ background: '#FECACA', color: '#DC2626' }}>Delete</MuiButton>
+            <MuiButton variant='contained' onClick={handleClick} size='small' sx={{ background: '#FECACA', color: '#DC2626', ':hover': { background: '#FECACA', color: '#DC2626' } }}>Delete</MuiButton>
           }
           {type === 'suspend' &&
             <MuiButton variant='contained' onClick={handleClick} size='small' sx={{ background: '#FFEDD5', color: '#EA580C' }}>Suspend</MuiButton>
