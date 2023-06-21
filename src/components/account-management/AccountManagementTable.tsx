@@ -127,15 +127,7 @@ function AttendanceTable({
   const handleReactivateConfirm = () => {
     dispatch({
       type: putAccountReactiveRequested.toString(),
-      payload: {
-        page: page + 1,
-        itemPerPage: rowsPerPage,
-        sort: sort,
-        direction: direction.toUpperCase(),
-        search: search,
-        status: ifThenElse(tabValue === 0, 'active', ifThenElse(tabValue === 1, 'suspended', 'deleted')),
-        searchType: searchType
-      }
+      payload: selectedItem?.id
     });
   };
 
@@ -379,7 +371,10 @@ function AttendanceTable({
                           {tabValue === 1 && (
                             <IconButton
                               parentColor='#DCFCE7'
-                              onClick={() => setReactivateConfirmation(true)}
+                              onClick={() => {
+                                setSelectedItem(item);
+                                setReactivateConfirmation(true);
+                              }}
                               icons={
                                 <RiUserReceived2Fill fontSize={20} color='#22C55E' />
                               }
