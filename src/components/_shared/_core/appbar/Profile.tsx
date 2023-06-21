@@ -133,10 +133,10 @@ const Profile = () => {
         {
           checkRoles?.includes('Employee') && (
             <div>
-              <MenuItem>
+              <MenuItem onClick={() => { handleRemoveToken('profile'); }}>
                 <Text title='Account Settings' />
               </MenuItem>
-              <MenuItem>
+              <MenuItem onClick={() => { handleRemoveToken('company'); }}>
                 <Text title='Support' />
               </MenuItem>
               <MenuItem onClick={() => { handleRemoveToken('logout'); }}>
@@ -148,10 +148,10 @@ const Profile = () => {
         {
           checkRoles?.includes('Super Admin') && (
             <div>
-              <MenuItem>
+              <MenuItem onClick={() => { handleRemoveToken('profile'); }}>
                 <Text title='Account Settings' />
               </MenuItem>
-              <MenuItem>
+              <MenuItem onClick={() => { handleRemoveToken('company'); }}>
                 <Text title='Support' />
               </MenuItem>
               <MenuItem onClick={() => { handleRemoveToken('logout'); }}>
