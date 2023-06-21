@@ -13,7 +13,6 @@ import {
 import { Input } from '../_shared/form';
 import { Search } from '@mui/icons-material';
 import Table from '../_shared/form/Table';
-import { Image as ImageType } from '@/utils/assetsConstant';
 import { compareCheck, ifThenElse } from '@/utils/helper';
 import { visuallyHidden } from '@mui/utils';
 import { IconButton } from '@/components/_shared/form';
@@ -21,7 +20,10 @@ import { BsTrashFill } from 'react-icons/bs';
 import { RiUserReceived2Fill } from 'react-icons/ri';
 import { AiOutlineStop } from 'react-icons/ai';
 import styled from '@emotion/styled';
-import { ConfirmationModal } from '@/components/_shared/common';
+import { useAppDispatch, useAppSelectors } from '@/hooks/index';
+import { getAccountRequested } from '@/store/reducers/slice/account-management/accountManagementSlice';
+import dayjs from 'dayjs';
+import { CustomModal, ConfirmationModal } from '@/components/_shared/common';
 
 const ButtonWrapper = styled.div`
  display: flex;
@@ -58,65 +60,30 @@ type Order = 'asc' | 'desc'
 function AttendanceTable({
   tabValue
 }: EmployeeTableProps) {
-  const data = {
-    items: [
-      {
-        id: 1,
-        accountID: '018379127',
-        name: 'Budi Irawan',
-        email: 'budirawan@gmail.com',
-        type: 'HR Admin',
-        createdAt: '01/02/22',
-        lastLogin: '01/02/23, 12:00',
-      },
-      {
-        id: 2,
-        accountID: '018379127',
-        name: 'Budi Irawan',
-        email: 'budirawan@gmail.com',
-        type: 'HR Admin',
-        createdAt: '01/02/22',
-        lastLogin: '01/02/23, 12:00',
-      },
-      {
-        id: 3,
-        accountID: '018379127',
-        name: 'Budi Irawan',
-        email: 'budirawan@gmail.com',
-        type: 'HR Admin',
-        createdAt: '01/02/22',
-        lastLogin: '01/02/23, 12:00',
-      },
-      {
-        id: 4,
-        accountID: '018379127',
-        name: 'Budi Irawan',
-        email: 'budirawan@gmail.com',
-        type: 'HR Admin',
-        createdAt: '01/02/22',
-        lastLogin: '01/02/23, 12:00',
-      },
-      {
-        id: 5,
-        accountID: '018379127',
-        name: 'Budi Irawan',
-        email: 'budirawan@gmail.com',
-        type: 'HR Admin',
-        createdAt: '01/02/22',
-        lastLogin: '01/02/23, 12:00',
-      },
-    ],
-    itemTotals: 5
-  };
+  const dispatch = useAppDispatch();
+  const data = useAppSelectors(state => state.account.data);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
-  // const [search, setSearch] = useState('');
+  const [search, setSearch] = useState('');
+  const [searchType, setSearchType] = useState('all');
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
   const [hydrated, setHaydrated] = useState(false);
+  const [deleteInfo, setDeleteInfo] = useState(false);
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
+  const [suspendInfo, setSuspendInfo] = useState(false);
   const [suspendConfirmation, setSuspendConfirmation] = useState(false);
   const [reactivateConfirmation, setReactivateConfirmation] = useState(false);
+
+  const handleDelete = () => {
+    setDeleteInfo(false);
+    setDeleteConfirmation(true);
+  };
+
+  const handleSuspend = () => {
+    setSuspendInfo(false);
+    setSuspendConfirmation(true);
+  };
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -129,10 +96,7 @@ function AttendanceTable({
 
   const handleSearch = (e) => {
     if (e.key === 'Enter') {
-      // setSearch(e.target.value);
-      console.log(e.target.value);
-      console.log(tabValue);
-      
+      setSearch(e.target.value);
     }
   };
 
@@ -141,6 +105,21 @@ function AttendanceTable({
     setDirection(ifThenElse(isAsc, 'desc', 'asc'));
     setSort(headId);
   };
+
+  useEffect(() => {
+    dispatch({
+      type: getAccountRequested.toString(),
+      payload: {
+        page: page + 1,
+        itemPerPage: rowsPerPage,
+        sort: sort,
+        direction: direction.toUpperCase(),
+        search: search,
+        status: ifThenElse(tabValue === 0, 'active', ifThenElse(tabValue === 1, 'suspended', 'deleted')),
+        searchType: searchType
+      }
+    });
+  }, [rowsPerPage, page, tabValue, search, searchType, sort, direction]);
 
   useEffect(() => {
     setHaydrated(true);
@@ -166,16 +145,17 @@ function AttendanceTable({
             }}
           />
         </Grid>
-        <Grid item xs={2}>
+        <Grid item xs={2.5}>
           <Select
             fullWidth
             variant='outlined'
             size='small'
             placeholder='Sort by Status'
-            value={''}
+            onChange={(e) => setSearchType(e?.target?.value)}
+            value={searchType}
           >
-            <MenuItem value='company'>Company Listed</MenuItem>
-            <MenuItem value='name'>Employee Name</MenuItem>
+            <MenuItem value='company_listed'>Company Listed</MenuItem>
+            <MenuItem value='employee_name'>Employee Name</MenuItem>
             <MenuItem value='all'>All</MenuItem>
           </Select>
         </Grid>
@@ -220,44 +200,46 @@ function AttendanceTable({
                 ), (
                   data?.items?.map((item, index) => (
                     <TableRow key={index}>
-                      <TableCell>{item.accountID}</TableCell>
+                      <TableCell>{item.code || '-'}</TableCell>
                       <TableCell>
                         <NameWrapper>
                           <Avatar
-                            src={ImageType.AVATAR_PLACEHOLDER}
-                            alt={item.name}
+                            src={item.user.userInformation?.picture}
+                            alt={item.user.name}
                             sx={{
                               width: 24, height: 24
                             }}
                           />
-                          &nbsp;{item.name}
+                          &nbsp;{item.user.name}
                         </NameWrapper>
                       </TableCell>
-                      <TableCell>{item.email}</TableCell>
-                      <TableCell>{item.type}</TableCell>
-                      <TableCell>{item.lastLogin}</TableCell>
-                      <TableCell>{item.createdAt}</TableCell>
+                      <TableCell>{item.user.email}</TableCell>
+                      <TableCell>
+                        {!!item.user.roles.length && item.user.roles.map((i) => i.name)}
+                      </TableCell>
+                      <TableCell>-</TableCell>
+                      <TableCell>{dayjs(item.user.createdAt).format('YYYY-MM-DD H:m:s')}</TableCell>
                       <TableCell>
                         <ButtonWrapper>
                           {tabValue === 0 && (
                             <>
                               <IconButton
                                 parentColor='#FFEDD5'
-                                onClick={() => setSuspendConfirmation(true)}
+                                onClick={() => setSuspendInfo(true)}
                                 icons={
                                   <AiOutlineStop fontSize={20} color='#F97316'/>
                                 }
                               />
                               <IconButton
                                 parentColor='#FEE2E2'
-                                onClick={() => setDeleteConfirmation(true)}
+                                onClick={() => setDeleteInfo(true)}
                                 icons={
                                   <BsTrashFill fontSize={20} color='#EF4444'/>
                                 }
                               />
                             </>
                           )}
-                          {tabValue !== 0 && (
+                          {tabValue === 1 && (
                             <IconButton
                               parentColor='#DCFCE7'
                               onClick={() => setReactivateConfirmation(true)}
@@ -280,6 +262,25 @@ function AttendanceTable({
           </>
         }
       />
+
+      {/* delete popup */}
+      <CustomModal
+        open={deleteInfo}
+        handleClose={() => setDeleteInfo(false)}
+        title='Account Deletion'
+        width='720px'
+        handleConfirm={handleDelete}
+        submitText='Delete'
+      >
+        <Grid container mt='1rem' mb='1rem'>
+          <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+          </Grid>
+        </Grid>
+        <Grid container spacing={2} mb='1rem'>
+          <Grid item xs={12}>
+          </Grid>
+        </Grid>
+      </CustomModal>
       <ConfirmationModal
         open={deleteConfirmation}
         handleClose={() => setDeleteConfirmation(false)}
@@ -290,6 +291,25 @@ function AttendanceTable({
         callback={() => setDeleteConfirmation(false)}
         type='delete'
       />
+
+      {/* suspend popup */}
+      <CustomModal
+        open={suspendInfo}
+        handleClose={() => setSuspendInfo(false)}
+        title='Account Suspension'
+        width='544px'
+        handleConfirm={handleSuspend}
+        submitText='Suspend'
+      >
+        <Grid container mt='1rem' mb='1rem'>
+          <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+          </Grid>
+        </Grid>
+        <Grid container spacing={2} mb='1rem'>
+          <Grid item xs={12}>
+          </Grid>
+        </Grid>
+      </CustomModal>
       <ConfirmationModal
         open={suspendConfirmation}
         handleClose={() => setSuspendConfirmation(false)}
@@ -300,6 +320,8 @@ function AttendanceTable({
         callback={() => setSuspendConfirmation(false)}
         type='suspend'
       />
+
+      {/* reactivate popup */}
       <ConfirmationModal
         open={reactivateConfirmation}
         handleClose={() => setReactivateConfirmation(false)}
