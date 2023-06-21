@@ -8,7 +8,7 @@ import {
   Typography
 } from '@mui/material';
 import { Input, DateRangePicker } from '../_shared/form';
-import { Search  } from '@mui/icons-material';
+import { Search } from '@mui/icons-material';
 import Table from '../_shared/form/Table';
 import { compareCheck, ifThenElse } from '@/utils/helper';
 import { visuallyHidden } from '@mui/utils';
@@ -72,7 +72,7 @@ function PayrollAssistantTable({
     itemTotals: 5
   };
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   // const [search, setSearch] = useState('');
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
@@ -83,8 +83,8 @@ function PayrollAssistantTable({
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 0));
-    setPage(0);
+    setRowsPerPage(event);
+    // setPage(0);
   };
 
   const handleSearch = (e) => {
@@ -92,7 +92,7 @@ function PayrollAssistantTable({
       // setSearch(e.target.value);
       console.log(e.target.value);
       console.log(tabValue);
-      
+
     }
   };
 
@@ -121,7 +121,7 @@ function PayrollAssistantTable({
             type='text'
             InputProps={{
               startAdornment: (
-                <Search sx={{ color: '#9CA3AF' }}/>
+                <Search sx={{ color: '#9CA3AF' }} />
               )
             }}
           />
@@ -131,7 +131,7 @@ function PayrollAssistantTable({
             withAsterisk
             // value={formik.values.startDate as unknown as Date}
             onChange={(date: unknown) => console.log(date)}
-            // error={formik.touched.startDate && formik.errors.startDate ? String(formik.errors.startDate) : ''}
+          // error={formik.touched.startDate && formik.errors.startDate ? String(formik.errors.startDate) : ''}
           />
         </Grid>
       </Grid>
@@ -141,7 +141,7 @@ function PayrollAssistantTable({
         rowsPerPage={rowsPerPage}
         page={page}
         onChangePage={handleChangePage}
-        onRowsPerPagesChange={(e) =>handleChangeRowsPerPage(e)}
+        onRowsPerPagesChange={(e) => handleChangeRowsPerPage(e)}
         headChildren={
           <TableRow>
             {
@@ -157,7 +157,7 @@ function PayrollAssistantTable({
                       <Box component='span' sx={visuallyHidden}>
                         {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
                       </Box>
-                    ): null}
+                    ) : null}
                   </TableSortLabel>
                 </TableCell>
               ))

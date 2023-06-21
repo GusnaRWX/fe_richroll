@@ -80,7 +80,7 @@ const data = {
 function GrossContent(att) {
   const { isPreview } = att;
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
   const [hydrated, setHaydrated] = useState(false);
@@ -90,8 +90,8 @@ function GrossContent(att) {
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 0));
-    setPage(0);
+    setRowsPerPage(event);
+    // setPage(0);
   };
 
   const handleRequestSort = (event: React.MouseEvent<unknown>, headId: string) => {
@@ -139,7 +139,7 @@ function GrossContent(att) {
               rowsPerPage={rowsPerPage}
               page={page}
               onChangePage={handleChangePage}
-              onRowsPerPagesChange={(e) =>handleChangeRowsPerPage(e)}
+              onRowsPerPagesChange={(e) => handleChangeRowsPerPage(e)}
               headChildren={
                 <TableRow>
                   {
@@ -155,7 +155,7 @@ function GrossContent(att) {
                             <Box component='span' sx={visuallyHidden}>
                               {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
                             </Box>
-                          ): null}
+                          ) : null}
                         </TableSortLabel>
                       </TableCell>
                     ))
@@ -218,7 +218,7 @@ function GrossContent(att) {
               rowsPerPage={rowsPerPage}
               page={page}
               onChangePage={handleChangePage}
-              onRowsPerPagesChange={(e) =>handleChangeRowsPerPage(e)}
+              onRowsPerPagesChange={(e) => handleChangeRowsPerPage(e)}
               headChildren={
                 <TableRow>
                   {
@@ -234,7 +234,7 @@ function GrossContent(att) {
                             <Box component='span' sx={visuallyHidden}>
                               {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
                             </Box>
-                          ): null}
+                          ) : null}
                         </TableSortLabel>
                       </TableCell>
                     ))

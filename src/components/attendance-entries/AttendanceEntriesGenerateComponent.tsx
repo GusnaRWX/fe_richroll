@@ -133,7 +133,7 @@ function AttendanceEntriesGenerateComponent() {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const [selected, setSelected] = useState(Array<object>);
   // const [search, setSearch] = useState('');
   const [direction, setDirection] = useState<Order>('desc');
@@ -146,15 +146,15 @@ function AttendanceEntriesGenerateComponent() {
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 0));
-    setPage(0);
+    setRowsPerPage(event);
+    // setPage(0);
   };
 
   const handleSearch = (e) => {
     if (e.key === 'Enter') {
       // setSearch(e.target.value);
       console.log(e.target.value);
-      
+
     }
   };
 
@@ -185,7 +185,7 @@ function AttendanceEntriesGenerateComponent() {
               icons={
                 <ArrowBack sx={{ color: '#FFFFFF' }} />
               }
-              onClick={() => {router.push('/payroll-disbursement/attendance');}}
+              onClick={() => { router.push('/payroll-disbursement/attendance'); }}
             />
             <Box>
               <Typography variant='h6' color='#4B5563'><b>Generate Attendant Report</b></Typography>
@@ -199,13 +199,13 @@ function AttendanceEntriesGenerateComponent() {
               variant='outlined'
               size='small'
               color='primary'
-              onClick={() => {router.push('/payroll-disbursement/attendance');}}
+              onClick={() => { router.push('/payroll-disbursement/attendance'); }}
             >Cancel</MuiButton>
             <MuiButton
               variant='contained'
               size='small'
               color='primary'
-              onClick={() => {router.push('/payroll-disbursement/attendance');}}
+              onClick={() => { router.push('/payroll-disbursement/attendance'); }}
               sx={{ color: 'white' }}
             >Save</MuiButton>
           </ButtonWrapper>
@@ -224,7 +224,7 @@ function AttendanceEntriesGenerateComponent() {
                 type='text'
                 InputProps={{
                   startAdornment: (
-                    <Search sx={{ color: '#9CA3AF' }}/>
+                    <Search sx={{ color: '#9CA3AF' }} />
                   )
                 }}
               />
@@ -248,7 +248,7 @@ function AttendanceEntriesGenerateComponent() {
                 withAsterisk
                 // value={formik.values.startDate as unknown as Date}
                 onChange={(date: unknown) => console.log(date)}
-                // error={formik.touched.startDate && formik.errors.startDate ? String(formik.errors.startDate) : ''}
+              // error={formik.touched.startDate && formik.errors.startDate ? String(formik.errors.startDate) : ''}
               />
             </Grid>
           </Grid>
@@ -258,7 +258,7 @@ function AttendanceEntriesGenerateComponent() {
             rowsPerPage={rowsPerPage}
             page={page}
             onChangePage={handleChangePage}
-            onRowsPerPagesChange={(e) =>handleChangeRowsPerPage(e)}
+            onRowsPerPagesChange={(e) => handleChangeRowsPerPage(e)}
             headChildren={
               <TableRow>
                 {
@@ -274,7 +274,7 @@ function AttendanceEntriesGenerateComponent() {
                           <Box component='span' sx={visuallyHidden}>
                             {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
                           </Box>
-                        ): null}
+                        ) : null}
                       </TableSortLabel>
                     </TableCell>
                   ))
@@ -317,7 +317,7 @@ function AttendanceEntriesGenerateComponent() {
                                 parentColor='#E9EFFF'
                                 onClick={() => { setOpenCal(true); }}
                                 icons={
-                                  <FiCalendar fontSize={20} color='#223567'/>
+                                  <FiCalendar fontSize={20} color='#223567' />
                                 }
                               />
                             </ButtonWrapper>

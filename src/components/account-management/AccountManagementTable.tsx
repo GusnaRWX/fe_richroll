@@ -63,7 +63,9 @@ function AttendanceTable({
   const dispatch = useAppDispatch();
   const data = useAppSelectors(state => state.account.data);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
+  // const [search, setSearch] = useState('');
+  // const [page, setPage] = useState(0);
   const [search, setSearch] = useState('');
   const [searchType, setSearchType] = useState('all');
   const [direction, setDirection] = useState<Order>('desc');
@@ -90,12 +92,16 @@ function AttendanceTable({
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 0));
-    setPage(0);
+    setRowsPerPage(event);
+    // setPage(0);
   };
 
   const handleSearch = (e) => {
     if (e.key === 'Enter') {
+      // setSearch(e.target.value);
+      console.log(e.target.value);
+      console.log(tabValue);
+
       setSearch(e.target.value);
     }
   };
@@ -140,7 +146,7 @@ function AttendanceTable({
             type='text'
             InputProps={{
               startAdornment: (
-                <Search sx={{ color: '#9CA3AF' }}/>
+                <Search sx={{ color: '#9CA3AF' }} />
               )
             }}
           />
@@ -166,7 +172,7 @@ function AttendanceTable({
         rowsPerPage={rowsPerPage}
         page={page}
         onChangePage={handleChangePage}
-        onRowsPerPagesChange={(e) =>handleChangeRowsPerPage(e)}
+        onRowsPerPagesChange={(e) => handleChangeRowsPerPage(e)}
         headChildren={
           <TableRow>
             {
@@ -182,7 +188,7 @@ function AttendanceTable({
                       <Box component='span' sx={visuallyHidden}>
                         {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
                       </Box>
-                    ): null}
+                    ) : null}
                   </TableSortLabel>
                 </TableCell>
               ))
@@ -227,14 +233,14 @@ function AttendanceTable({
                                 parentColor='#FFEDD5'
                                 onClick={() => setSuspendInfo(true)}
                                 icons={
-                                  <AiOutlineStop fontSize={20} color='#F97316'/>
+                                  <AiOutlineStop fontSize={20} color='#F97316' />
                                 }
                               />
                               <IconButton
                                 parentColor='#FEE2E2'
                                 onClick={() => setDeleteInfo(true)}
                                 icons={
-                                  <BsTrashFill fontSize={20} color='#EF4444'/>
+                                  <BsTrashFill fontSize={20} color='#EF4444' />
                                 }
                               />
                             </>
@@ -244,7 +250,7 @@ function AttendanceTable({
                               parentColor='#DCFCE7'
                               onClick={() => setReactivateConfirmation(true)}
                               icons={
-                                <RiUserReceived2Fill fontSize={20} color='#22C55E'/>
+                                <RiUserReceived2Fill fontSize={20} color='#22C55E' />
                               }
                             />
                           )}
