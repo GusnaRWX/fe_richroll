@@ -16,6 +16,7 @@ import {
   Switch,
 } from '@mui/material';
 import { useFormik } from 'formik';
+import * as Yup from 'yup'
 
 const rates = [
   {
@@ -61,6 +62,23 @@ export default function CreateRates() {
     },
   };
 
+  const validationSchema = Yup.object({
+    employeeData: Yup.object({
+      start: Yup.string().required('This Field is Required'),
+      end: Yup.string().required('This Field is Required'),
+      rate: Yup.string().required('This Field is Required'),
+      fixed: Yup.string().required('This Field is Required'),
+      amountCap: Yup.string().required('This Field is Required'),
+    }),
+    employerData: Yup.object({
+      start: Yup.string().required('This Field is Required'),
+      end: Yup.string().required('This Field is Required'),
+      rate: Yup.string().required('This Field is Required'),
+      fixed: Yup.string().required('This Field is Required'),
+      amountCap: Yup.string().required('This Field is Required'),
+    })
+  })
+
   const handleSubmit = (values) => {
     const payload = {
       employee: values.employeeData,
@@ -74,6 +92,7 @@ export default function CreateRates() {
   const formik = useFormik({
     initialValues: initialValues,
     onSubmit: (values) => handleSubmit(values),
+    validationSchema : validationSchema
   });
 
   const AsteriskComponent = styled('span')(({ theme }) => ({
