@@ -7,7 +7,7 @@ export const getAccount = (payload: Account.AccountParams) => {
 };
 
 export const patchSuspensionAccount = (payload) => {
-  return patch(`admin/users/${payload.id}/suspension`, payload as Account.PatcSuspension);
+  return patch(`admin/users/${payload.id}/suspension`, payload.data as Account.PatcSuspension);
 };
 
 export const putDeleteAccount = (id:string) => {

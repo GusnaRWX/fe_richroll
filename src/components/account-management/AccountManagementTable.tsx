@@ -10,10 +10,11 @@ import {
   MenuItem,
   Typography
 } from '@mui/material';
-import { Input } from '../_shared/form';
+import { Input, DatePicker, CheckBox } from '../_shared/form';
 import { Search } from '@mui/icons-material';
 import Table from '../_shared/form/Table';
 import { compareCheck, ifThenElse } from '@/utils/helper';
+import { Image as ImageType } from '@/utils/assetsConstant';
 import { visuallyHidden } from '@mui/utils';
 import { IconButton } from '@/components/_shared/form';
 import { BsTrashFill } from 'react-icons/bs';
@@ -21,9 +22,10 @@ import { RiUserReceived2Fill } from 'react-icons/ri';
 import { AiOutlineStop } from 'react-icons/ai';
 import styled from '@emotion/styled';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
-import { getAccountRequested } from '@/store/reducers/slice/account-management/accountManagementSlice';
+import { getAccountRequested, patchAccountSuspensionRequested, putAccountDeleteRequested, putAccountReactiveRequested } from '@/store/reducers/slice/account-management/accountManagementSlice';
 import dayjs from 'dayjs';
 import { CustomModal, ConfirmationModal } from '@/components/_shared/common';
+import { Account } from '@/types/account';
 
 const ButtonWrapper = styled.div`
  display: flex;
@@ -76,15 +78,65 @@ function AttendanceTable({
   const [suspendInfo, setSuspendInfo] = useState(false);
   const [suspendConfirmation, setSuspendConfirmation] = useState(false);
   const [reactivateConfirmation, setReactivateConfirmation] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<Account.AccountType>();
+  const [isPermanent, setIsPermanent] = useState(false);
+  const startSuspend = dayjs();
+  const [endSuspend, setEndSuspend] = useState(dayjs());
 
   const handleDelete = () => {
     setDeleteInfo(false);
     setDeleteConfirmation(true);
   };
 
+  const handleDeleteConfirm = () => {
+    dispatch({
+      type: putAccountDeleteRequested.toString(),
+      payload: {
+        page: page + 1,
+        itemPerPage: rowsPerPage,
+        sort: sort,
+        direction: direction.toUpperCase(),
+        search: search,
+        status: ifThenElse(tabValue === 0, 'active', ifThenElse(tabValue === 1, 'suspended', 'deleted')),
+        searchType: searchType
+      }
+    });
+  };
+
   const handleSuspend = () => {
     setSuspendInfo(false);
+    setEndSuspend(dayjs());
+    setIsPermanent(false);
     setSuspendConfirmation(true);
+  };
+
+  const handleSuspendConfirm = () => {
+    dispatch({
+      type: patchAccountSuspensionRequested.toString(),
+      payload: {
+        id: selectedItem?.id,
+        data: {
+          start: dayjs(startSuspend).format('YYYY-MM-DD'),
+          end: dayjs(endSuspend).format('YYYY-MM-DD'),
+          isPermanent: isPermanent
+        }
+      }
+    });
+  };
+
+  const handleReactivateConfirm = () => {
+    dispatch({
+      type: putAccountReactiveRequested.toString(),
+      payload: {
+        page: page + 1,
+        itemPerPage: rowsPerPage,
+        sort: sort,
+        direction: direction.toUpperCase(),
+        search: search,
+        status: ifThenElse(tabValue === 0, 'active', ifThenElse(tabValue === 1, 'suspended', 'deleted')),
+        searchType: searchType
+      }
+    });
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -130,6 +182,79 @@ function AttendanceTable({
   useEffect(() => {
     setHaydrated(true);
   }, []);
+
+  const SuspendInfo = () => {
+    return <>
+      <Grid spacing={2} container mt='.5rem' mb='.5rem'>
+        <Grid item xs={6}>
+          <Typography component='div' variant='text-base' fontWeight={500}>Full Name</Typography>
+          <NameWrapper>
+            <Avatar
+              src={selectedItem?.user?.userInformation && selectedItem?.user?.userInformation['picture'] || ImageType.AVATAR_PLACEHOLDER}
+              alt={selectedItem?.user?.name}
+              sx={{
+                width: 24, height: 24
+              }}
+            />
+              &nbsp;<Typography component='div' variant='text-sm' fontWeight={400}>{selectedItem?.user?.name}</Typography>
+          </NameWrapper>
+        </Grid>
+        <Grid item xs={6}>
+          <Typography component='div' variant='text-base' fontWeight={500}>Account ID</Typography>
+          <Typography component='div' variant='text-sm' fontWeight={400}>{selectedItem?.code || '-'}</Typography>
+        </Grid>
+      </Grid>
+      <Grid spacing={2} container mt='.5rem' mb='.5rem'>
+        <Grid item xs={6}>
+          <Typography component='div' variant='text-base' fontWeight={500}>Email</Typography>
+          <Typography component='div' variant='text-sm' fontWeight={400}>{selectedItem?.user.email}</Typography>
+        </Grid>
+        <Grid item xs={6}>
+          <Typography component='div' variant='text-base' fontWeight={500}>Last Login</Typography>
+          <Typography component='div' variant='text-sm' fontWeight={400}>{'-'}</Typography>
+        </Grid>
+      </Grid>
+      <Grid spacing={2} container mt='.5rem' mb='.5rem'>
+        <Grid item xs={6}>
+          <Typography component='div' variant='text-base' fontWeight={500}>User Type</Typography>
+          <Typography component='div' variant='text-sm' fontWeight={400}>{selectedItem && !!selectedItem.user.roles.length && selectedItem.user.roles.map((i) => i.name)}</Typography>
+        </Grid>
+        <Grid item xs={6}>
+          <Typography component='div' variant='text-base' fontWeight={500}>Created On</Typography>
+          <Typography component='div' variant='text-sm' fontWeight={400}>{selectedItem && dayjs(selectedItem.user.createdAt).format('DD/MM/YY')}</Typography>
+        </Grid>
+      </Grid>
+      <Grid spacing={2} container mt='.5rem'>
+        <Grid item xs={6}>
+          <DatePicker
+            customLabel='Start of Suspend Period'
+            value={startSuspend as unknown as Date}
+            disabled
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <DatePicker
+            customLabel='End of Suspend Period'
+            withAsterisk
+            value={endSuspend as unknown as Date}
+            onChange={(date) => setEndSuspend(date)}
+            disabled={isPermanent}
+            disablePast
+          />
+        </Grid>
+      </Grid>
+      <Grid container mb='.5rem'>
+        <Grid item xs={6}>
+          <CheckBox
+            customLabel='Permanent'
+            name='isPermanent'
+            checked={isPermanent}
+            onChange={(e) => setIsPermanent(e.target.checked)}
+          />
+        </Grid>
+      </Grid>
+    </>;
+  };
 
   if (!hydrated) {
     return null;
@@ -210,7 +335,7 @@ function AttendanceTable({
                       <TableCell>
                         <NameWrapper>
                           <Avatar
-                            src={item.user.userInformation?.picture}
+                            src={item.user.userInformation?.picture || ImageType.AVATAR_PLACEHOLDER}
                             alt={item.user.name}
                             sx={{
                               width: 24, height: 24
@@ -224,21 +349,27 @@ function AttendanceTable({
                         {!!item.user.roles.length && item.user.roles.map((i) => i.name)}
                       </TableCell>
                       <TableCell>-</TableCell>
-                      <TableCell>{dayjs(item.user.createdAt).format('YYYY-MM-DD H:m:s')}</TableCell>
+                      <TableCell>{dayjs(item.user.createdAt).format('DD/MM/YY')}</TableCell>
                       <TableCell>
                         <ButtonWrapper>
                           {tabValue === 0 && (
                             <>
                               <IconButton
                                 parentColor='#FFEDD5'
-                                onClick={() => setSuspendInfo(true)}
+                                onClick={() => {
+                                  setSelectedItem(item);
+                                  setSuspendInfo(true);
+                                }}
                                 icons={
                                   <AiOutlineStop fontSize={20} color='#F97316' />
                                 }
                               />
                               <IconButton
                                 parentColor='#FEE2E2'
-                                onClick={() => setDeleteInfo(true)}
+                                onClick={() => {
+                                  setSelectedItem(item);
+                                  setDeleteInfo(true);
+                                }}
                                 icons={
                                   <BsTrashFill fontSize={20} color='#EF4444' />
                                 }
@@ -279,11 +410,11 @@ function AttendanceTable({
         submitText='Delete'
       >
         <Grid container mt='1rem' mb='1rem'>
-          <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+          <Grid item xs={6}>
           </Grid>
         </Grid>
         <Grid container spacing={2} mb='1rem'>
-          <Grid item xs={12}>
+          <Grid item xs={6}>
           </Grid>
         </Grid>
       </CustomModal>
@@ -294,7 +425,7 @@ function AttendanceTable({
         content='Are you sure you want to delete the selected account?'
         withCallback
         noChange={true}
-        callback={() => setDeleteConfirmation(false)}
+        callback={() => handleDeleteConfirm()}
         type='delete'
       />
 
@@ -307,14 +438,7 @@ function AttendanceTable({
         handleConfirm={handleSuspend}
         submitText='Suspend'
       >
-        <Grid container mt='1rem' mb='1rem'>
-          <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-          </Grid>
-        </Grid>
-        <Grid container spacing={2} mb='1rem'>
-          <Grid item xs={12}>
-          </Grid>
-        </Grid>
+        <SuspendInfo />
       </CustomModal>
       <ConfirmationModal
         open={suspendConfirmation}
@@ -323,7 +447,7 @@ function AttendanceTable({
         content='Are you sure you want to suspend the selected account? You can reactivate account later.'
         withCallback
         noChange={true}
-        callback={() => setSuspendConfirmation(false)}
+        callback={() => handleSuspendConfirm()}
         type='suspend'
       />
 
@@ -335,7 +459,7 @@ function AttendanceTable({
         content='Are you sure you want to reactivate the selected account?'
         withCallback
         noChange={true}
-        callback={() => setReactivateConfirmation(false)}
+        callback={() => handleReactivateConfirm()}
         type='reactivate'
       />
     </>
