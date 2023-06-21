@@ -5,11 +5,13 @@ import { Account } from '@/types/account';
 interface AccountState {
   isLoading: boolean;
   data: Array<Account.AccountType>;
+  isErrorInput: boolean;
 }
 
 const initialState: AccountState = {
   isLoading: false,
-  data: []
+  data: [],
+  isErrorInput: false
 };
 
 export const accountSlice = createSlice({
@@ -54,6 +56,19 @@ export const accountSlice = createSlice({
     putAccountReactiveFailed: (state) => {
       state.isLoading = false;
     },
+    putEmployeeAccountDeletionRequested: (state) => {
+      state.isLoading = true;
+    },
+    putEmployeeAccountDeletionSuccess: (state) => {
+      state.isLoading = false;
+      state.isErrorInput = false;
+    },
+    putEmployeeAccountDeletionFailed: (state, action) => {
+      state.isLoading = false;
+      if (action?.payload?.code === 409) {
+        state.isErrorInput = true;
+      }
+    }
     // end
   },
   extraReducers: {
@@ -78,7 +93,10 @@ export const {
   putAccountDeleteFailed,
   putAccountReactiveRequested,
   putAccountReactiveSuccess,
-  putAccountReactiveFailed
+  putAccountReactiveFailed,
+  putEmployeeAccountDeletionFailed,
+  putEmployeeAccountDeletionRequested,
+  putEmployeeAccountDeletionSuccess
 } = accountSlice.actions;
 
 export default accountSlice.reducer;
