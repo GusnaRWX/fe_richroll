@@ -57,7 +57,7 @@ function AttendanceModal({
   const dispatch = useAppDispatch();
   const data = useAppSelectors(state => state.employee.data);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
   const [hydrated, setHaydrated] = useState(false);
@@ -69,8 +69,8 @@ function AttendanceModal({
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 0));
-    setPage(0);
+    setRowsPerPage(event);
+    // setPage(0);
   };
 
   const handleRequestSort = (event: React.MouseEvent<unknown>, headId: string) => {
@@ -104,7 +104,7 @@ function AttendanceModal({
     dispatch({
       type: getEmployeeRequested.toString(),
       payload: {
-        page: page + 1,
+        page: page,
         itemPerPage: rowsPerPage,
         sort: sort,
         direction: direction.toUpperCase(),
@@ -140,7 +140,7 @@ function AttendanceModal({
             rowsPerPage={rowsPerPage}
             page={page}
             onChangePage={handleChangePage}
-            onRowsPerPagesChange={(e) =>handleChangeRowsPerPage(e)}
+            onRowsPerPagesChange={(e) => handleChangeRowsPerPage(e)}
             headChildren={
               <TableRow>
                 {
@@ -156,7 +156,7 @@ function AttendanceModal({
                           <Box component='span' sx={visuallyHidden}>
                             {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
                           </Box>
-                        ): null}
+                        ) : null}
                       </TableSortLabel>
                     </TableCell>
                   ))

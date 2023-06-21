@@ -457,6 +457,18 @@ const theme = createTheme({
           fontSize: '.8rem'
         }
       }
+    },
+    MuiPaginationItem: {
+      styleOverrides: {
+        root: {
+          margin: 0,
+
+          '&.Mui-selected': {
+            backgroundColor: '#EEF2FF',
+            border: '2px solid #4F46E5'
+          }
+        }
+      }
     }
   }
 });

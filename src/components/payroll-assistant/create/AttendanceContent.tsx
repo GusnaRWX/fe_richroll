@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import { Input, IconButton, DateRangePicker } from '@/components/_shared/form';
 import { Add } from '@mui/icons-material';
-import { Search  } from '@mui/icons-material';
+import { Search } from '@mui/icons-material';
 import Table from '@/components/_shared/form/Table';
 import { FiCalendar } from 'react-icons/fi';
 import styled from '@emotion/styled';
@@ -118,7 +118,7 @@ function AttendanceContent() {
   //   itemTotals: 5
   // };
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const [selected, setSelected] = useState(Array<object>);
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
@@ -131,15 +131,15 @@ function AttendanceContent() {
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 0));
-    setPage(0);
+    setRowsPerPage(event);
+    // setPage(0);
   };
 
   const handleSearch = (e) => {
     if (e.key === 'Enter') {
       // setSearch(e.target.value);
       console.log(e.target.value);
-      
+
     }
   };
 
@@ -173,7 +173,7 @@ function AttendanceContent() {
               type='text'
               InputProps={{
                 startAdornment: (
-                  <Search sx={{ color: '#9CA3AF' }}/>
+                  <Search sx={{ color: '#9CA3AF' }} />
                 )
               }}
             />
@@ -183,7 +183,7 @@ function AttendanceContent() {
               withAsterisk
               // value={formik.values.startDate as unknown as Date}
               onChange={(date: unknown) => console.log(date)}
-              // error={formik.touched.startDate && formik.errors.startDate ? String(formik.errors.startDate) : ''}
+            // error={formik.touched.startDate && formik.errors.startDate ? String(formik.errors.startDate) : ''}
             />
           </Grid>
         </Grid>
@@ -193,7 +193,7 @@ function AttendanceContent() {
           rowsPerPage={rowsPerPage}
           page={page}
           onChangePage={handleChangePage}
-          onRowsPerPagesChange={(e) =>handleChangeRowsPerPage(e)}
+          onRowsPerPagesChange={(e) => handleChangeRowsPerPage(e)}
           headChildren={
             <TableRow>
               {
@@ -209,7 +209,7 @@ function AttendanceContent() {
                         <Box component='span' sx={visuallyHidden}>
                           {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
                         </Box>
-                      ): null}
+                      ) : null}
                     </TableSortLabel>
                   </TableCell>
                 ))
@@ -252,7 +252,7 @@ function AttendanceContent() {
                               parentColor='#E9EFFF'
                               onClick={() => { setOpenCal(true); }}
                               icons={
-                                <FiCalendar fontSize={20} color='#223567'/>
+                                <FiCalendar fontSize={20} color='#223567' />
                               }
                             />
                           </ButtonWrapper>

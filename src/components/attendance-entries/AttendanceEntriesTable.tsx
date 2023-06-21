@@ -9,7 +9,7 @@ import {
   Typography
 } from '@mui/material';
 import { Input } from '../_shared/form';
-import { Search  } from '@mui/icons-material';
+import { Search } from '@mui/icons-material';
 import Table from '../_shared/form/Table';
 import { Image as ImageType } from '@/utils/assetsConstant';
 import { compareCheck, ifThenElse } from '@/utils/helper';
@@ -94,7 +94,7 @@ function AttendanceEntriesTable() {
     itemTotals: 5
   };
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   // const [search, setSearch] = useState('');
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
@@ -106,15 +106,15 @@ function AttendanceEntriesTable() {
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 0));
-    setPage(0);
+    setRowsPerPage(event);
+    // setPage(0);
   };
 
   const handleSearch = (e) => {
     if (e.key === 'Enter') {
       // setSearch(e.target.value);
       console.log(e.target.value);
-      
+
     }
   };
 
@@ -143,7 +143,7 @@ function AttendanceEntriesTable() {
             type='text'
             InputProps={{
               startAdornment: (
-                <Search sx={{ color: '#9CA3AF' }}/>
+                <Search sx={{ color: '#9CA3AF' }} />
               )
             }}
           />
@@ -155,7 +155,7 @@ function AttendanceEntriesTable() {
         rowsPerPage={rowsPerPage}
         page={page}
         onChangePage={handleChangePage}
-        onRowsPerPagesChange={(e) =>handleChangeRowsPerPage(e)}
+        onRowsPerPagesChange={(e) => handleChangeRowsPerPage(e)}
         headChildren={
           <TableRow>
             {
@@ -171,7 +171,7 @@ function AttendanceEntriesTable() {
                       <Box component='span' sx={visuallyHidden}>
                         {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
                       </Box>
-                    ): null}
+                    ) : null}
                   </TableSortLabel>
                 </TableCell>
               ))
@@ -210,14 +210,14 @@ function AttendanceEntriesTable() {
                           <IconButton
                             parentColor='#E9EFFF'
                             icons={
-                              <HiPencilAlt fontSize={20} color='#223567'/>
+                              <HiPencilAlt fontSize={20} color='#223567' />
                             }
                           />
                           <IconButton
                             parentColor='#FEE2E2'
                             onClick={() => setDeleteConfirmation(true)}
                             icons={
-                              <BsTrashFill fontSize={20} color='#EF4444'/>
+                              <BsTrashFill fontSize={20} color='#EF4444' />
                             }
                           />
                         </ButtonWrapper>
