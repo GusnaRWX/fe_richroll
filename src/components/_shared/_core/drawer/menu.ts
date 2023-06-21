@@ -1,4 +1,4 @@
-import { AiFillHome } from 'react-icons/ai';
+import { AiFillHome, AiFillBank } from 'react-icons/ai';
 import { HiBuildingOffice, HiCurrencyDollar } from 'react-icons/hi2';
 import { CoreLayout } from '@/types/component';
 import { BsFillCalendar2Fill } from 'react-icons/bs';
@@ -174,7 +174,7 @@ export const Menus: CoreLayout.SidebarItem[] = [
     title: [
       { key: 'HR Admin', title: 'Income Tax Profile' }
     ],
-    icons: TbMoodDollar,
+    icons: AiFillBank,
     hasChild: true,
     roles: ['HR Admin'],
     child: [
