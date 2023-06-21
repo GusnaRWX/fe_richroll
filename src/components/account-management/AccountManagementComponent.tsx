@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
 import { Typography, Card, Grid, Box, Button as MuiButton, Tab, Tabs } from '@mui/material';
-import { DateRangePicker, Input } from '@/components/_shared/form';
 import { styled } from '@mui/material/styles';
-import { useRouter } from 'next/router';
 import { FiDownload } from 'react-icons/fi';
 import AccountManagementTable from './AccountManagementTable';
-import CustomModal from '@/components/_shared/common/CustomModal';
 
 const ButtonWrapper = styled(Box)(({
   display: 'flex',
@@ -55,20 +52,10 @@ function a11yProps(index: number) {
 }
 
 function AccountManagementComponent() {
-  const router = useRouter();
   const [value, setValue] = useState(0);
-  const [open, setOpen] = useState(false);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const handleConfirm = () => {
-    router.push('/payroll-disbursement/attendance/generate');
   };
 
   return (
@@ -85,7 +72,6 @@ function AccountManagementComponent() {
               color='secondary'
               startIcon={<FiDownload/>}
               sx={{ color: 'white' }}
-              onClick={() => { setOpen(true); }}
             >Download Data</MuiButton>
           </ButtonWrapper>
         </Grid>
@@ -111,39 +97,6 @@ function AccountManagementComponent() {
           </TabPanel>
         </Box>
       </ContentWrapper>
-
-      <CustomModal
-        open={open}
-        handleClose={handleClose}
-        title='Create New Payroll'
-        width='543px'
-        handleConfirm={handleConfirm}
-        submitText='Submit'
-      >
-        <Grid container mt='1rem' mb='1rem'>
-          <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-            <Input
-              name='nameEvent'
-              withAsterisk
-              customLabel='Name'
-              placeholder='Input Name'
-              size='small'
-            />
-          </Grid>
-        </Grid>
-        <Grid container spacing={2} mb='1rem'>
-          <Grid item xs={12}>
-            <DateRangePicker
-              withAsterisk
-              customLabelStart='Start Date'
-              customLabelEnd='End Date'
-              // value={formik.values.startDate as unknown as Date}
-              onChange={(date: unknown) => console.log(date)}
-              // error={formik.touched.startDate && formik.errors.startDate ? String(formik.errors.startDate) : ''}
-            />
-          </Grid>
-        </Grid>
-      </CustomModal>
     </>
   );
 }
