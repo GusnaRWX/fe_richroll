@@ -101,7 +101,7 @@ const SatutoryBenefitComponent = () => {
             </Grid>
           </Grid>
         </Grid>
-        <SutatoryBenefitTable tabValue={0} />
+        <SutatoryBenefitTable />
       </Paper>
     </>
   );

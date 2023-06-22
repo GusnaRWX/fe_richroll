@@ -16,26 +16,37 @@ export declare namespace Account {
   }
 
   interface RolesType {
-    name: string
+    id: string,
+    name: string,
   }
 
-  interface UserType {
+  interface CompaniesType {
     createdAt: DayJS,
+    employeesTotal: number,
+    id: string,
     name: string,
-    email: string,
-    isActive: boolean,
-    suspensionStart: DayJS,
-    suspensionEnd: DayJS,
-    roles: Array<RolesType>,
-    userInformation: object | null
+  }
+
+  interface EmployeeType {
+    code: string,
+    companies: CompaniesType[],
+    terminateEnd: DayJS,
+    terminateStart: string | null,
   }
 
   interface AccountType {
+    createdAt: DayJS,
+    deletedAt: DayJS,
+    email: string,
+    employee: EmployeeType | null,
     id: string,
-    code: number | null,
-    terminateDate: DayJS,
-    terminateNote: string | null,
-    user: UserType
+    isActive: boolean,
+    lastLoginAt: string | null,
+    name: string,
+    roles: Array<RolesType>,
+    suspensionEnd: DayJS,
+    suspensionStart: DayJS,
+    userInformation: object | null
   }
 
   interface PatcSuspension {

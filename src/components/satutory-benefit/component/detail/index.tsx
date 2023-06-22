@@ -312,7 +312,7 @@ export default function SatutoryBenefitComponentDetail() {
               color='#9CA3AF'
               mb='8px'
             >
-              Bank Account Holder's Name
+              Bank Account Holder’s Name
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -

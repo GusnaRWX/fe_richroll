@@ -35,14 +35,9 @@ const headerItems = [
   { id: 'action', label: '' },
 ];
 
-interface SutatoryBenefitComponentTableProps {
-  tabValue: number;
-}
-
 type Order = 'asc' | 'desc';
 
-function SutatoryBenefitComponentTable({}: // tabValue,
-SutatoryBenefitComponentTableProps) {
+function SutatoryBenefitComponentTable() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
   const [direction, setDirection] = useState<Order>('desc');
