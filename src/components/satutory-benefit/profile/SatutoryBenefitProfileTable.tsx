@@ -303,7 +303,7 @@ function SutatoryBenefitProfileTable({
         }
       />
       <ConfirmationModal
-        forDeleteAction
+        type='delete'
         open={DeleteConfirmation}
         handleClose={() => setDeleteConfirmation(false)}
         title='Delete Data Entry'

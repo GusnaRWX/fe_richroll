@@ -235,6 +235,16 @@ export const Menus: CoreLayout.SidebarItem[] = [
       { key: 'Super Admin', title: 'Package Management' }
     ],
     icons: HiTicket,
+    roles: ['HR Admin'],
+  },
+  {
+    key: 'satutory-benefit',
+    path: '/satutory-benefit',
+    title: [
+      { key: 'HR Admin', title: 'Satutory Benefits' },
+      { key: 'Super Admin', title: 'Satutory Benefits' }
+    ],
+    icons: HiTicket,
     hasChild: true,
     roles: ['HR Admin'],
     child: [

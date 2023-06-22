@@ -329,7 +329,7 @@ export default function SatutoryBenefitProfileDetail() {
       </Paper>
       {/* Pop Up Setting ============================== */}
       <ConfirmationModal
-        forDeleteAction
+        type='delete'
         open={deleteConfirmation}
         handleClose={() => setDeleteConfirmation(false)}
         title='Delete Data Entry'

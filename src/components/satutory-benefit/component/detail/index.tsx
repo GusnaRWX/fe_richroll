@@ -384,7 +384,7 @@ export default function SatutoryBenefitComponentDetail() {
         </Grid>
       </Paper>
       <ConfirmationModal
-        forDeleteAction
+        type='delete'
         open={DeleteConfirmation}
         handleClose={() => setDeleteConfirmation(false)}
         title='Delete Data Entry'

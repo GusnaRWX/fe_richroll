@@ -208,7 +208,6 @@ SutatoryBenefitComponentTableProps) {
               </TableRow>
             )}
             <ConfirmationModal
-              forDeleteAction
               open={DeleteConfirmation}
               handleClose={() => setDeleteConfirmation(false)}
               title='Delete Data Entry'
@@ -216,6 +215,7 @@ SutatoryBenefitComponentTableProps) {
               withCallback
               noChange={true}
               callback={() => setDeleteConfirmation(false)}
+              type='delete'
             />
           </>
         }
