@@ -13,7 +13,7 @@ import { Input, Button, Select as CustomSelect, CheckBox, DatePicker, FileUpload
 import { styled as MuiStyled } from '@mui/material/styles';
 import { Image as ImageType } from '@/utils/assetsConstant';
 import styled from '@emotion/styled';
-import { useAppSelectors } from '@/hooks/index';
+import { useAppSelectors, useAppDispatch } from '@/hooks/index';
 import {
   base64ToFile,
   convertImageParams, randomCode,
@@ -29,8 +29,10 @@ import { AiOutlinePlus } from 'react-icons/ai';
 import { BsTrash3 } from 'react-icons/bs';
 import Webcam from 'react-webcam';
 import { CameraAlt } from '@mui/icons-material';
-import {Chip} from '@mui/material';
+import { Chip } from '@mui/material';
 import TerminateAccount from '../options/TerminateAccount';
+import { getListPositionRequested } from '@/store/reducers/slice/options/optionSlice';
+import { FiTrash2 } from 'react-icons/fi';
 
 const AsteriskComponent = MuiStyled('span')(({ theme }) => ({
   color: theme.palette.error.main
@@ -126,6 +128,7 @@ interface EmployeeInformationDetailProps {
 
 function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, setIsInformationValid, handleFirstInformation }: EmployeeProps, { data }: EmployeeInformationDetailProps) {
   const [isCaptureEnable, setCaptureEnable] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
   const webcamRef = useRef<Webcam>(null);
   const [openCamera, setOpenCamera] = useState(false);
 
@@ -146,6 +149,7 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
       const nameFile = randomCode(5);
       const fileImage = base64ToFile(imageSrc, nameFile);
       formik.setFieldValue('picture', fileImage);
+      formik.setFieldValue('pictureBackend', fileImage);
       handleClose();
       handleCloseCamera();
     }
@@ -156,6 +160,7 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
 
   const formik = useFormik({
     initialValues: {
+      pictureBackend: [],
       picture: [],
       fullName: infoValues?.fullName,
       nickname: infoValues?.nickname,
@@ -211,13 +216,18 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
       ...formik.values,
       images: String(images)
     };
-    setValues(allInfoValues);
+    setValues(allInfoValues as any);
   }, [formik.values]);
 
   const filter = createFilterOptions<Option.FreesoloType>();
 
   const [mappedDepartment, setMappedDeparment] = useState(listDepartment);
   const [mappedListPosition, setMappedListPosition] = useState(listPosition);
+
+  useEffect(() => {
+    setMappedDeparment(listDepartment);
+    setMappedListPosition(listPosition);
+  }, [listDepartment, listPosition]);
 
   const handleDelete = (id: number) => {
     const temp = [...mappedDepartment];
@@ -229,6 +239,10 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
     const temp = [...mappedListPosition];
     temp.splice(id, 1);
     setMappedListPosition(temp);
+  };
+
+  const resetImages = () => {
+    setImages(null);
   };
 
   return (
@@ -257,7 +271,29 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
             title='Employee Photo'
             color='primary.500'
           />
-          <ImageReview image={!images ? ImageType.PLACEHOLDER : images} onClick={handleOpen} />
+          <div style={{ position: 'relative' }}>
+            <ImageReview image={!images ? ImageType.PLACEHOLDER : images} onClick={handleOpen} />
+            {images && (
+              <IconButton
+                sx={{
+                  position: 'absolute',
+                  border: '1px solid red',
+                  backgroundColor: 'white',
+                  borderRadius: '3px',
+                  left: '65px',
+                  height: '33px',
+                  width: '33px',
+                  ':hover': {
+                    backgroundColor: 'white'
+                  },
+                  bottom: '5px'
+                }}
+                onClick={resetImages}
+              >
+                <FiTrash2 style={{ zIndex: '999', color: 'red' }} />
+              </IconButton>
+            )}
+          </div>
           {
             formik.errors.picture && (
               <Typography component='span' fontSize='12px' color='red.500'>This field is required</Typography>
@@ -391,6 +427,12 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
                   }]);
                 } else {
                   formik.setFieldValue('department', newValue?.label);
+                  dispatch({
+                    type: getListPositionRequested.toString(),
+                    payload: {
+                      departmentID: newValue?.value
+                    }
+                  });
                 }
               }}
               size='small'
@@ -537,7 +579,7 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
           <Grid item xs={12} sm={12} md={8} lg={8} xl={8}>
             <EmployeeSelfWrapper>
               <CheckBox
-                customLabel='Employee Self Serive'
+                customLabel='Employee Self Service'
                 name='isSelfService'
                 checked={formik.values.isSelfService}
                 onChange={formik.handleChange}
@@ -572,7 +614,10 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
       <FileUploadModal
         open={open}
         handleClose={handleClose}
-        onChange={(e) => formik.setFieldValue('picture', convertImageParams('picture', !e.target.files ? null : e.target.files[0], setImages, handleClose), false)}
+        onChange={(e) => {
+          formik.setFieldValue('picture', convertImageParams('picture', !e.target.files ? null : e.target.files[0], setImages, handleClose), false);
+          formik.setFieldValue('pictureBackend', !e.target.files ? null : e.target.files[0]);
+        }}
         onCapture={handleOpenCamera}
       />
       <Modal

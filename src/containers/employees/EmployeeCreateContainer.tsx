@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import Layout from '@/components/_shared/_core/layout/Index';
 import EmployeeCreateComponent from '@/components/employees/create/EmployeeCreateComponent';
 import { useAppDispatch } from '@/hooks/index';
-import { getListDepartmentRequested, getListCnbRequested, getListPositionRequested, getListOptionWorkScheduleRequested } from '@/store/reducers/slice/options/optionSlice';
+import { getListDepartmentRequested, getListCnbRequested, getListOptionWorkScheduleRequested } from '@/store/reducers/slice/options/optionSlice';
 import { getCompensationComponentOptionRequested } from '@/store/reducers/slice/cnb/compensationSlice';
 import { getCompanyData } from '@/utils/helper';
 
@@ -18,12 +18,6 @@ function EmployeeCreateContainer() {
     });
     dispatch({
       type: getCompensationComponentOptionRequested.toString()
-    });
-    dispatch({
-      type: getListPositionRequested.toString(),
-      payload: {
-        departmentID: getCompanyData()?.id
-      }
     });
     dispatch({
       type: getListOptionWorkScheduleRequested.toString(),

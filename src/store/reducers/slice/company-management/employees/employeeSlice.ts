@@ -290,6 +290,15 @@ export const employeeSlice = createSlice({
     getViewWorkScheduleFailed: (state) => {
       state.isLoading = false;
     },
+    postTerminateEmployeeRequested: (state) => {
+      state.isLoading = true;
+    },
+    postTerminateEmployeeSuccess: (state) => {
+      state.isLoading = false;
+    },
+    postTerminateEmployeeFailed: (state) => {
+      state.isLoading = false;
+    },
     clearWorkScheduleState: (state) => {
       state.events = [];
       state.grossHour = 0;
@@ -358,6 +367,9 @@ export const {
   getViewWorkScheduleFailed,
   getViewWorkScheduleRequested,
   getViewWorkScheduleSuccess,
+  postTerminateEmployeeFailed,
+  postTerminateEmployeeRequested,
+  postTerminateEmployeeSuccess,
   clearWorkScheduleState
 } = employeeSlice.actions;
 

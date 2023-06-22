@@ -51,43 +51,43 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
 
   const formik = useFormik({
     initialValues: {
-      dateofBirthPersonalInformation: dayjs(personalValues?.dateofBirthPersonalInformation),
-      genderPersonalInformation: personalValues?.genderPersonalInformation,
-      maritialStatusPersonalInformation: personalValues?.maritialStatusPersonalInformation,
-      numberOfDependantsPersonalInformation: personalValues?.numberOfDependantsPersonalInformation,
-      nationalityPersonalInformation: personalValues?.nationalityPersonalInformation,
-      religionPersonalInformation: personalValues?.religionPersonalInformation,
+      dateofBirthPersonalInformation: personalValues?.dateofBirthPersonalInformation === null ? null : dayjs(personalValues?.dateofBirthPersonalInformation),
+      genderPersonalInformation: personalValues?.genderPersonalInformation === null ? '' : personalValues?.genderPersonalInformation,
+      maritialStatusPersonalInformation: personalValues?.maritialStatusPersonalInformation === null ? '' : personalValues?.maritialStatusPersonalInformation,
+      numberOfDependantsPersonalInformation: personalValues?.numberOfDependantsPersonalInformation === null ? '' :personalValues?.numberOfDependantsPersonalInformation,
+      nationalityPersonalInformation: personalValues?.nationalityPersonalInformation === null ? '' :personalValues?.nationalityPersonalInformation,
+      religionPersonalInformation: personalValues?.religionPersonalInformation === null ? '' : personalValues?.religionPersonalInformation,
 
       // Group Citizen Address
-      countryCitizenAddress: personalValues?.countryCitizenAddress,
-      provinceCitizenAddress: personalValues?.provinceCitizenAddress,
-      cityCitizenAddress: personalValues?.cityCitizenAddress,
-      subDistrictCitizenAddress: personalValues?.subDistrictCitizenAddress,
-      addressCitizenAddress: personalValues?.addressCitizenAddress,
-      zipCodeCitizenAddress: personalValues?.zipCodeCitizenAddress,
+      countryCitizenAddress: personalValues?.countryCitizenAddress === null ? '' :  personalValues?.countryCitizenAddress,
+      provinceCitizenAddress: personalValues?.provinceCitizenAddress === null ? '' : personalValues?.provinceCitizenAddress,
+      cityCitizenAddress: personalValues?.cityCitizenAddress === null ? '' : personalValues?.cityCitizenAddress,
+      subDistrictCitizenAddress: personalValues?.subDistrictCitizenAddress === null ? '' : personalValues?.subDistrictCitizenAddress,
+      addressCitizenAddress: personalValues?.addressCitizenAddress === null ? '' : personalValues?.addressCitizenAddress,
+      zipCodeCitizenAddress: personalValues?.zipCodeCitizenAddress === null ? '' :   personalValues?.zipCodeCitizenAddress,
 
       // Group Residential Address
-      countryResidentialAddress: personalValues?.countryResidentialAddress,
-      provinceResidentialAddress: personalValues?.provinceResidentialAddress,
-      cityResidentialAddress: personalValues?.cityResidentialAddress,
-      subDistrictResidentialAddress: personalValues?.subDistrictResidentialAddress,
-      addressResidentialAddress: personalValues?.addressResidentialAddress,
-      zipCodeResidentialAddress: personalValues?.zipCodeResidentialAddress,
+      countryResidentialAddress: personalValues?.countryResidentialAddress === null ? '' : personalValues?.countryResidentialAddress,
+      provinceResidentialAddress: personalValues?.provinceResidentialAddress === null ? '' : personalValues?.provinceResidentialAddress,
+      cityResidentialAddress: personalValues?.cityResidentialAddress === null ? '' : personalValues?.cityResidentialAddress,
+      subDistrictResidentialAddress: personalValues?.subDistrictResidentialAddress === null ? '' : personalValues?.subDistrictResidentialAddress,
+      addressResidentialAddress: personalValues?.addressResidentialAddress === null ? '' : personalValues?.addressResidentialAddress,
+      zipCodeResidentialAddress: personalValues?.zipCodeResidentialAddress === null ? '' : personalValues?.zipCodeResidentialAddress,
 
 
       // Group Bank Information
-      bankBankInformation: personalValues?.bankBankInformation,
-      bankAccountHolderNameBankInformation: personalValues?.bankAccountHolderNameBankInformation,
-      bankAccoutNoBankInformation: personalValues?.bankAccoutNoBankInformation,
-      bankCodeBankInformation: personalValues?.bankCodeBankInformation,
-      branchCodeBankInformation: personalValues?.branchCodeBankInformation,
-      branchNameBankInformation: personalValues?.branchNameBankInformation,
-      swiftCodeBankInformation: personalValues?.swiftCodeBankInformation,
+      bankBankInformation: personalValues?.bankBankInformation === null ? '' : personalValues?.bankBankInformation,
+      bankAccountHolderNameBankInformation: personalValues?.bankAccountHolderNameBankInformation === null ? '' : personalValues?.bankAccountHolderNameBankInformation,
+      bankAccoutNoBankInformation: personalValues?.bankAccoutNoBankInformation === null ? '' :  personalValues?.bankAccoutNoBankInformation,
+      bankCodeBankInformation: personalValues?.bankCodeBankInformation === null ? '' : personalValues?.bankCodeBankInformation,
+      branchCodeBankInformation: personalValues?.branchCodeBankInformation === null ? '' : personalValues?.branchCodeBankInformation,
+      branchNameBankInformation: personalValues?.branchNameBankInformation === null ? '' : personalValues?.branchNameBankInformation,
+      swiftCodeBankInformation: personalValues?.swiftCodeBankInformation === null ? '' : personalValues?.swiftCodeBankInformation,
 
       // Group Personal ID
-      idTypePersonalID: personalValues?.idTypePersonalID,
-      idNumberPersonalID: personalValues?.idNumberPersonalID,
-      idExpirationDatePersonalID: dayjs(personalValues?.idExpirationDatePersonalID)
+      idTypePersonalID: personalValues?.idTypePersonalID === null ? '' : personalValues?.idTypePersonalID,
+      idNumberPersonalID: personalValues?.idNumberPersonalID === null ? '' : personalValues?.idNumberPersonalID,
+      idExpirationDatePersonalID: personalValues?.idExpirationDatePersonalID === null ? null : dayjs(personalValues?.idExpirationDatePersonalID)
     },
     validationSchema: validationSchemePersonalInformation,
     onSubmit: (values) => {
@@ -122,7 +122,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
       ...formik.values,
       useResidentialAddress: useResidentialAddress
     };
-    setValues(allPersonalValues);
+    setValues(allPersonalValues as any);
   }, [formik.values, useResidentialAddress]);
 
   useEffect(() => {
@@ -199,14 +199,51 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
     formik.setFieldValue('zipCodeCitizenAddress', formik.values.zipCodeCitizenAddress);
   }, []);
 
+  useEffect(() => {
+    formik.setFieldValue('countryResidentialAddress', formik.values.countryResidentialAddress);
+    dispatch({
+      type: getSecondAdministrativeFirstLevelRequested.toString(),
+      payload: {
+        countryID: formik.values.countryResidentialAddress
+      }
+    });
+    formik.setFieldValue('provinceResidentialAddress', formik.values.provinceResidentialAddress);
+    setTimeout(() => {
+      dispatch({
+        type: getSecondAdministrativeSecondLevelRequested.toString(),
+        payload: {
+          countryID: formik.values.countryResidentialAddress,
+          firstLevelCode: formik.values.provinceResidentialAddress
+        }
+      });
+    }, 3000);
+    formik.setFieldValue('cityResidentialAddress', formik.values.cityResidentialAddress);
+    setTimeout(() => {
+      dispatch({
+        type: getSecondAdministrativeThirdLevelRequested.toString(),
+        payload: {
+          countryId: formik.values.countryResidentialAddress,
+          firstLevelCode: formik.values.provinceResidentialAddress,
+          secondLevelCode: formik.values.cityResidentialAddress
+        }
+      });
+    }, 3500);
+
+    formik.setFieldValue('subDistrictResidentialAddress', formik.values.subDistrictResidentialAddress);
+    formik.setFieldValue('addressResidentialAddress', formik.values.addressResidentialAddress);
+    formik.setFieldValue('zipCodeResidentialAddress', formik.values.zipCodeResidentialAddress);
+  }, []);
+
+
+  console.log(formik.values);
 
   const checkCountry = (value: unknown) => {
-    if ((value as string).length === 0) {
+    if ((value as string)?.length === 0) {
       return <Text title='Select Country' color='grey.400' />;
     }
-    const selectedCountries = (countries as Array<{ label: string, value: string }>).find(country => country.value === value);
+    const selectedCountries = (countries as Array<{ label: string, value: string }>).find(country => country?.value === value);
     if (selectedCountries) {
-      return `${selectedCountries.label}`;
+      return `${selectedCountries?.label}`;
     }
     return null;
   };
@@ -374,7 +411,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
                 if ((value as string)?.length === 0) {
                   return <Text title='Select Nationality' color='grey.400' />;
                 }
-                const selectedCountries = (countries as Array<{ label: string, value: string }>).find(country => country.value === value);
+                const selectedCountries = (countries as Array<{ label: string, value: string }>).find(country => country?.value === value);
                 if (selectedCountries) {
                   return `${selectedCountries?.label}`;
                 }
@@ -491,7 +528,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               helperText={ifThenElse(compareCheck(formik.touched.provinceCitizenAddress, Boolean(formik.errors.provinceCitizenAddress)), formik.errors.provinceCitizenAddress, '')}
               displayEmpty
               renderValue={(value: unknown) => {
-                if ((value as string).length === 0) {
+                if ((value as string)?.length === 0) {
                   return <Text title='Select Province' color='grey.400' />;
                 }
                 const selectedCountries = (administrativeFirst as Array<{ label: string, value: string }>).find(country => country.value === value);
@@ -539,7 +576,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               helperText={ifThenElse(compareCheck(formik.touched.cityCitizenAddress, Boolean(formik.errors.cityCitizenAddress)), formik.errors.cityCitizenAddress, '')}
               displayEmpty
               renderValue={(value: unknown) => {
-                if ((value as string).length === 0) {
+                if ((value as string)?.length === 0) {
                   return <Text title='Select City' color='grey.400' />;
                 }
                 const selectedCountries = (administrativeSecond as Array<{ label: string, value: string }>).find(country => country.value === value);
@@ -569,7 +606,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               helperText={ifThenElse(compareCheck(formik.touched.subDistrictCitizenAddress, Boolean(formik.errors.subDistrictCitizenAddress)), formik.errors.subDistrictCitizenAddress, '')}
               displayEmpty
               renderValue={(value: unknown) => {
-                if ((value as string).length === 0) {
+                if ((value as string)?.length === 0) {
                   return <Text title='Select Sub-District' color='grey.400' />;
                 }
                 const selectedCountries = (administrativeThird as Array<{ label: string, value: string }>).find(country => country.value === value);
@@ -721,7 +758,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               helperText={ifThenElse(compareCheck(formik.touched.provinceResidentialAddress, Boolean(formik.errors.provinceResidentialAddress)), formik.errors.provinceResidentialAddress, '')}
               displayEmpty
               renderValue={(value: unknown) => {
-                if ((value as string).length === 0) {
+                if ((value as string)?.length === 0) {
                   return <Text title='Select Province' color='grey.400' />;
                 }
                 const selectedCountries = (secondAdministrativeFirst as Array<{ label: string, value: string }>).find(country => country.value === value);
@@ -769,7 +806,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               helperText={ifThenElse(compareCheck(formik.touched.cityResidentialAddress, Boolean(formik.errors.cityResidentialAddress)), formik.errors.cityResidentialAddress, '')}
               displayEmpty
               renderValue={(value: unknown) => {
-                if ((value as string).length === 0) {
+                if ((value as string)?.length === 0) {
                   return <Text title='Select City' color='grey.400' />;
                 }
                 const selectedCountries = (secondAdministrativeSecond as Array<{ label: string, value: string }>).find(country => country.value === value);
@@ -799,7 +836,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               helperText={ifThenElse(compareCheck(formik.touched.subDistrictResidentialAddress, Boolean(formik.errors.subDistrictResidentialAddress)), formik.errors.subDistrictResidentialAddress, '')}
               displayEmpty
               renderValue={(value: unknown) => {
-                if ((value as string).length === 0) {
+                if ((value as string)?.length === 0) {
                   return <Text title='Select Sub-District' color='grey.400' />;
                 }
                 const selectedCountries = (secondAdministrativeThird as Array<{ label: string, value: string }>).find(country => country.value === value);
@@ -892,7 +929,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               helperText={ifThenElse(compareCheck(formik.touched.idTypePersonalID, Boolean(formik.errors.idTypePersonalID)), formik.errors.idTypePersonalID, '')}
               displayEmpty
               renderValue={(value: unknown) => {
-                if ((value as string).length === 0) {
+                if ((value as string)?.length === 0) {
                   return <Text title='Select ID type' color='grey.400' />;
                 }
                 const selectedType = IDTypes.find(IDType => IDType.value === value);
@@ -1115,7 +1152,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
         <Grid item>
           <Button onClick={() => {
             nextPage(0);
-            setValues({ ...formik.values, useResidentialAddress });
+            setValues({ ...formik.values as any, useResidentialAddress });
           }} label='Back' variant='outlined' />
         </Grid>
         <Grid item>

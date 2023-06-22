@@ -11,6 +11,7 @@ import departmentSlice from './slice/company-management/department/departmentSli
 import workScheduleSlice from './slice/company-management/work-schedule/workScheduleSlice';
 import annualScheduleSlice  from './slice/company-management/annual-work-schedule/annualSchedule';
 import employmentSlice from './slice/employment/employmentSlice';
+import accountSlice from './slice/account-management/accountManagementSlice';
 
 
 const reducers: Reducer = combineReducers({
@@ -25,7 +26,8 @@ const reducers: Reducer = combineReducers({
   department: departmentSlice,
   workSchedule: workScheduleSlice,
   annualSchedule: annualScheduleSlice,
-  employment: employmentSlice
+  employment: employmentSlice,
+  account: accountSlice
 });
 
 export default reducers;

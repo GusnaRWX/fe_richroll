@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { HTMLAttributes, useState, useCallback, useRef } from 'react';
+import React, { HTMLAttributes, useState, useCallback, useRef, useEffect } from 'react';
 import {
   Grid,
   Typography,
@@ -15,7 +15,7 @@ import { Input, Button, Select as CustomSelect, CheckBox, DatePicker, FileUpload
 import { styled as MuiStyled } from '@mui/material/styles';
 import { Image as ImageType } from '@/utils/assetsConstant';
 import styled from '@emotion/styled';
-import { useAppSelectors } from '@/hooks/index';
+import { useAppSelectors, useAppDispatch } from '@/hooks/index';
 import dayjs from 'dayjs';
 import { Alert, Text } from '@/components/_shared/common';
 import { CameraAlt, Cancel } from '@mui/icons-material';
@@ -23,9 +23,11 @@ import { Employees } from '@/types/employees';
 import { validationSchemeEmployeeInformation } from './validate';
 import { useFormik } from 'formik';
 import { convertImageParams, getCompanyData, base64ToFile, randomCode } from '@/utils/helper';
+import { getListPositionRequested } from '@/store/reducers/slice/options/optionSlice';
 import { Option } from '@/types/option';
 import { BsTrash3 } from 'react-icons/bs';
 import { AiOutlinePlus } from 'react-icons/ai';
+import { FiTrash2 } from 'react-icons/fi';
 
 const videoConstraints = {
   width: 500,
@@ -103,6 +105,7 @@ interface EmployeeProps {
 
 function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, setIsInformationValid }: EmployeeProps) {
   const [isCaptureEnable, setCaptureEnable] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
   const webcamRef = useRef<Webcam>(null);
   const [openCamera, setOpenCamera] = useState(false);
   const capture = useCallback(() => {
@@ -190,6 +193,11 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, set
   const [mappedDepartment, setMappedDepartment] = useState(listDepartment);
   const [mappedListPosition, setMappedListPosition] = useState(listPosition);
 
+  useEffect(() => {
+    setMappedDepartment(listDepartment);
+    setMappedListPosition(listPosition);
+  }, [listDepartment, listPosition]);
+
   const handleDelete = (id: number) => {
     const temp = mappedDepartment.filter(item => +item.id !== +id);
     setMappedDepartment(temp);
@@ -198,6 +206,10 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, set
   const handleDeletePosition = (id: number) => {
     const temp = mappedListPosition.filter(item => +item.id !== +id);
     setMappedListPosition(temp);
+  };
+
+  const resetPicture = () => {
+    setImages(null);
   };
 
   return (
@@ -235,7 +247,30 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, set
             title='Employee Photo'
             color='primary.500'
           />
-          <ImageReview image={!images ? ImageType.PLACEHOLDER : images} onClick={handleOpen} />
+          <div style={{ position: 'relative' }}>
+            <ImageReview image={!images ? ImageType.PLACEHOLDER : images} onClick={handleOpen} />
+            {images && (
+              <IconButton
+                sx={{
+                  position: 'absolute',
+                  border: '1px solid red',
+                  backgroundColor: 'white',
+                  borderRadius: '3px',
+                  left: '65px',
+                  height: '33px',
+                  width: '33px',
+                  ':hover': {
+                    backgroundColor: 'white'
+                  },
+                  bottom: '5px'
+                }}
+                onClick={resetPicture}
+              >
+                <FiTrash2 style={{ zIndex: '999', color: 'red' }} />
+              </IconButton>
+            )}
+          </div>
+
           {
             formik.errors.picture && (
               <Typography component='span' fontSize='12px' color='red.500'>This field is required</Typography>
@@ -371,6 +406,12 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, set
                   }]);
                 } else {
                   formik.setFieldValue('department', newValue?.label);
+                  dispatch({
+                    type: getListPositionRequested.toString(),
+                    payload: {
+                      departmentID: newValue?.value
+                    }
+                  });
                 }
               }}
               size='small'
@@ -512,7 +553,7 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, set
           <Grid item xs={12} sm={12} md={8} lg={8} xl={8}>
             <EmployeeSelfWrapper>
               <CheckBox
-                customLabel='Employee Self Serive'
+                customLabel='Employee Self Service'
                 name='isSelfService'
                 checked={formik.values.isSelfService}
                 onChange={formik.handleChange}

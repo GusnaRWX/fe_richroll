@@ -73,28 +73,20 @@ export const validationSchemeEmployeeEmergencyContact = Yup.object({
 });
 
 export const validationSchemeCompensationBenefits = Yup.object({
-  templateID: Yup.string(),
-  name: Yup.string(),
-  base: Yup.object().shape({
-    componentID: Yup.string(),
-    termID: Yup.string(),
-    isTaxable: Yup.boolean(),
-    amount: Yup.string(),
-    amountType: Yup.string(),
-    rate: Yup.string(),
-    rateType: Yup.string(),
-  }),
-  supplementaries: Yup.array().of(
+  templateID: Yup.string().notRequired(),
+  name: Yup.string().required('this field is required'),
+  compensationComponentId: Yup.string().required('This field is rquired'),
+  period: Yup.string().required('This field is rquired'),
+  rateOrAmount: Yup.number().required('THis field is rquird').positive('Must be positive').integer('must be number'),
+  taxStatus: Yup.string().required('This field is rquired'),
+  supplementary: Yup.array().of(
     Yup.object().shape({
-      componentID: Yup.string().nullable(),
-      termID: Yup.string().nullable(),
-      isTaxable: Yup.boolean().nullable(),
-      amount: Yup.string().nullable(),
-      amountType: Yup.string().nullable(),
-      rate: Yup.string().nullable(),
-      rateType: Yup.string().nullable(),
+      compensationComponentID: Yup.string().required('this field is required'),
+      period: Yup.string().required('This is required'),
+      rateOrAmount: Yup.number().required('This is required').positive('Must be positive').integer('Must be number'),
+      taxStatus: Yup.string().required('This is required')
     })
-  ),
+  )
 });
 export const validationSchemaWorkScheduler = Yup.object({
   workScheduleID: Yup.string().required('This field is required'),

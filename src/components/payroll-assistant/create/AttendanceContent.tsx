@@ -12,8 +12,7 @@ import {
 } from '@mui/material';
 import { Input, IconButton, DateRangePicker } from '@/components/_shared/form';
 import { Add } from '@mui/icons-material';
-import { Image as ImageType } from '@/utils/assetsConstant';
-import { Search  } from '@mui/icons-material';
+import { Search } from '@mui/icons-material';
 import Table from '@/components/_shared/form/Table';
 import { FiCalendar } from 'react-icons/fi';
 import styled from '@emotion/styled';
@@ -58,69 +57,69 @@ const headerItems = [
 type Order = 'asc' | 'desc'
 
 function AttendanceContent() {
-  const data = {
-    items: [
-      {
-        id: 1,
-        name: 'Budi Irawan',
-        attendance: '30 Days',
-        absent: '2 Days',
-        paidLeave: '3 Days',
-        unpaidLeave: '4 Days',
-        overtime: '8 Days',
-        totalHours: '175 Days',
-        averageHours: '30 Days',
-      },
-      {
-        id: 2,
-        name: 'Budi Irawan',
-        attendance: '30 Days',
-        absent: '2 Days',
-        paidLeave: '3 Days',
-        unpaidLeave: '4 Days',
-        overtime: '8 Days',
-        totalHours: '175 Days',
-        averageHours: '30 Days',
-      },
-      {
-        id: 3,
-        name: 'Budi Irawan',
-        attendance: '30 Days',
-        absent: '2 Days',
-        paidLeave: '3 Days',
-        unpaidLeave: '4 Days',
-        overtime: '8 Days',
-        totalHours: '175 Days',
-        averageHours: '30 Days',
-      },
-      {
-        id: 4,
-        name: 'Budi Irawan',
-        attendance: '30 Days',
-        absent: '2 Days',
-        paidLeave: '3 Days',
-        unpaidLeave: '4 Days',
-        overtime: '8 Days',
-        totalHours: '175 Days',
-        averageHours: '30 Days',
-      },
-      {
-        id: 5,
-        name: 'Budi Irawan',
-        attendance: '30 Days',
-        absent: '2 Days',
-        paidLeave: '3 Days',
-        unpaidLeave: '4 Days',
-        overtime: '8 Days',
-        totalHours: '175 Days',
-        averageHours: '30 Days',
-      },
-    ],
-    itemTotals: 5
-  };
+  // const data = {
+  //   items: [
+  //     {
+  //       id: 1,
+  //       name: 'Budi Irawan',
+  //       attendance: '30 Days',
+  //       absent: '2 Days',
+  //       paidLeave: '3 Days',
+  //       unpaidLeave: '4 Days',
+  //       overtime: '8 Days',
+  //       totalHours: '175 Days',
+  //       averageHours: '30 Days',
+  //     },
+  //     {
+  //       id: 2,
+  //       name: 'Budi Irawan',
+  //       attendance: '30 Days',
+  //       absent: '2 Days',
+  //       paidLeave: '3 Days',
+  //       unpaidLeave: '4 Days',
+  //       overtime: '8 Days',
+  //       totalHours: '175 Days',
+  //       averageHours: '30 Days',
+  //     },
+  //     {
+  //       id: 3,
+  //       name: 'Budi Irawan',
+  //       attendance: '30 Days',
+  //       absent: '2 Days',
+  //       paidLeave: '3 Days',
+  //       unpaidLeave: '4 Days',
+  //       overtime: '8 Days',
+  //       totalHours: '175 Days',
+  //       averageHours: '30 Days',
+  //     },
+  //     {
+  //       id: 4,
+  //       name: 'Budi Irawan',
+  //       attendance: '30 Days',
+  //       absent: '2 Days',
+  //       paidLeave: '3 Days',
+  //       unpaidLeave: '4 Days',
+  //       overtime: '8 Days',
+  //       totalHours: '175 Days',
+  //       averageHours: '30 Days',
+  //     },
+  //     {
+  //       id: 5,
+  //       name: 'Budi Irawan',
+  //       attendance: '30 Days',
+  //       absent: '2 Days',
+  //       paidLeave: '3 Days',
+  //       unpaidLeave: '4 Days',
+  //       overtime: '8 Days',
+  //       totalHours: '175 Days',
+  //       averageHours: '30 Days',
+  //     },
+  //   ],
+  //   itemTotals: 5
+  // };
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [page, setPage] = useState(0);
-  // const [search, setSearch] = useState('');
+  const [page, setPage] = useState(1);
+  const [selected, setSelected] = useState(Array<object>);
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
   const [hydrated, setHaydrated] = useState(false);
@@ -132,15 +131,15 @@ function AttendanceContent() {
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 0));
-    setPage(0);
+    setRowsPerPage(event);
+    // setPage(0);
   };
 
   const handleSearch = (e) => {
     if (e.key === 'Enter') {
       // setSearch(e.target.value);
       console.log(e.target.value);
-      
+
     }
   };
 
@@ -174,7 +173,7 @@ function AttendanceContent() {
               type='text'
               InputProps={{
                 startAdornment: (
-                  <Search sx={{ color: '#9CA3AF' }}/>
+                  <Search sx={{ color: '#9CA3AF' }} />
                 )
               }}
             />
@@ -184,17 +183,17 @@ function AttendanceContent() {
               withAsterisk
               // value={formik.values.startDate as unknown as Date}
               onChange={(date: unknown) => console.log(date)}
-              // error={formik.touched.startDate && formik.errors.startDate ? String(formik.errors.startDate) : ''}
+            // error={formik.touched.startDate && formik.errors.startDate ? String(formik.errors.startDate) : ''}
             />
           </Grid>
         </Grid>
         <Table
-          count={data?.itemTotals}
+          count={selected?.length}
           rowsPerPageOptions={[5, 10, 15]}
           rowsPerPage={rowsPerPage}
           page={page}
           onChangePage={handleChangePage}
-          onRowsPerPagesChange={(e) =>handleChangeRowsPerPage(e)}
+          onRowsPerPagesChange={(e) => handleChangeRowsPerPage(e)}
           headChildren={
             <TableRow>
               {
@@ -210,7 +209,7 @@ function AttendanceContent() {
                         <Box component='span' sx={visuallyHidden}>
                           {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
                         </Box>
-                      ): null}
+                      ) : null}
                     </TableSortLabel>
                   </TableCell>
                 ))
@@ -220,40 +219,40 @@ function AttendanceContent() {
           bodyChildren={
             <>
               {
-                ifThenElse(typeof data?.items !== 'undefined', (
-                  ifThenElse(data?.items?.length === 0, (
+                ifThenElse(typeof selected !== 'undefined', (
+                  ifThenElse(selected?.length === 0, (
                     <TableRow>
                       <TableCell colSpan={12} align='center'><Typography>Data not found</Typography></TableCell>
                     </TableRow>
                   ), (
-                    data?.items?.map((item, index) => (
+                    selected?.map((item, index) => (
                       <TableRow key={index}>
                         <TableCell>
                           <NameWrapper>
                             <Avatar
-                              src={ImageType.AVATAR_PLACEHOLDER}
-                              alt={item.name}
+                              src={item['picture']}
+                              alt={item['name']}
                               sx={{
                                 width: 24, height: 24
                               }}
                             />
-                            &nbsp;{item.name}
+                            &nbsp;{item['name']}
                           </NameWrapper>
                         </TableCell>
-                        <TableCell>{item.attendance}</TableCell>
-                        <TableCell>{item.absent}</TableCell>
-                        <TableCell>{item.paidLeave}</TableCell>
-                        <TableCell>{item.unpaidLeave}</TableCell>
-                        <TableCell>{item.overtime}</TableCell>
-                        <TableCell>{item.totalHours}</TableCell>
-                        <TableCell>{item.averageHours}</TableCell>
+                        <TableCell>{item['attendance']}</TableCell>
+                        <TableCell>{item['absent']}</TableCell>
+                        <TableCell>{item['paidLeave']}</TableCell>
+                        <TableCell>{item['unpaidLeave']}</TableCell>
+                        <TableCell>{item['overtime']}</TableCell>
+                        <TableCell>{item['totalHours']}</TableCell>
+                        <TableCell>{item['averageHours']}</TableCell>
                         <TableCell>
                           <ButtonWrapper>
                             <IconButton
                               parentColor='#E9EFFF'
                               onClick={() => { setOpenCal(true); }}
                               icons={
-                                <FiCalendar fontSize={20} color='#223567'/>
+                                <FiCalendar fontSize={20} color='#223567' />
                               }
                             />
                           </ButtonWrapper>
@@ -291,6 +290,8 @@ function AttendanceContent() {
         <AddEmployeesModal
           open={open}
           handleClose={handleClose}
+          selected={selected}
+          setSelected={setSelected}
         />
       </Box>
     </ContentWrapper>

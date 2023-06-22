@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Typography, Card, Grid, Box, Button as MuiButton, Tab, Tabs } from '@mui/material';
-import { DatePicker, Input } from '@/components/_shared/form';
+import { DateRangePicker, Input } from '@/components/_shared/form';
 import { styled } from '@mui/material/styles';
 import { useRouter } from 'next/router';
 import AttendanceTable from './AttendanceTable';
@@ -75,7 +75,7 @@ function AttendanceComponent() {
       <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
         <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
           <Typography variant='h5' color='primary.main'>Payroll Operation</Typography>
-          <Typography variant='text-base' color='#4B5563'>Attendance</Typography>
+          <Typography variant='text-base' color='#4B5563'>Attendance Summary</Typography>
         </Grid>
         <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
           <ButtonWrapper>
@@ -149,16 +149,14 @@ function AttendanceComponent() {
           </Grid>
         </Grid>
         <Grid container spacing={2} mb='1rem'>
-          <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
-            <DatePicker
-              customLabel='Start Date'
+          <Grid item xs={12}>
+            <DateRangePicker
               withAsterisk
-            />
-          </Grid>
-          <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
-            <DatePicker
-              customLabel='End Date'
-              withAsterisk
+              customLabelStart='Start Date'
+              customLabelEnd='End Date'
+              // value={formik.values.startDate as unknown as Date}
+              onChange={(date: unknown) => console.log(date)}
+              // error={formik.touched.startDate && formik.errors.startDate ? String(formik.errors.startDate) : ''}
             />
           </Grid>
         </Grid>

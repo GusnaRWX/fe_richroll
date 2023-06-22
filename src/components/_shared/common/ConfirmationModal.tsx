@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  Modal,
-  Box,
-  IconButton,
-  Typography,
-  Button as MuiButton,
-} from '@mui/material';
+import { Modal, Box, IconButton, Typography, Button as MuiButton } from '@mui/material';
 import { Close } from '@mui/icons-material';
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
@@ -44,6 +38,8 @@ const ModalFooter = styled.div`
   padding-top: 1rem;
 `;
 
+type Type = 'delete' | 'suspend' | 'reactivate'
+
 interface ConfirmationModalProp {
   open: boolean;
   handleClose: () => void;
@@ -52,19 +48,11 @@ interface ConfirmationModalProp {
   withCallback?: boolean;
   callback?: () => void;
   noChange?: boolean;
-  forDeleteAction?: boolean;
+  type?: Type;
 }
 
-function ConfirmationModal({
-  open,
-  handleClose,
-  title,
-  content,
-  withCallback,
-  callback,
-  noChange,
-  forDeleteAction,
-}: ConfirmationModalProp) {
+
+function ConfirmationModal({ open, handleClose, title, content, withCallback, callback, noChange, type }: ConfirmationModalProp) {
   const router = useRouter();
   const handleClick = () => {
     handleClose();
@@ -92,29 +80,8 @@ function ConfirmationModal({
           </Typography>
         </div>
         <ModalFooter>
-          <MuiButton variant='outlined' size='small' onClick={handleClose}>
-            Cancel
-          </MuiButton>
-          {forDeleteAction ? (
-            <MuiButton
-              variant='contained'
-              onClick={handleClick}
-              size='small'
-              color='red'
-              sx={{ bgcolor: '#FECACA', color: '#DC2626' }}
-            >
-              Delete
-            </MuiButton>
-          ) : (
-            <MuiButton
-              variant='contained'
-              onClick={handleClick}
-              size='small'
-              color='primary'
-            >
-              Confirm
-            </MuiButton>
-          )}
+          <MuiButton variant='outlined' size='small' onClick={handleClose}>Cancel</MuiButton>
+          <MuiButton variant='contained' onClick={handleClick} size='small' color='primary'>Confirm</MuiButton>
         </ModalFooter>
       </Box>
     </Modal>

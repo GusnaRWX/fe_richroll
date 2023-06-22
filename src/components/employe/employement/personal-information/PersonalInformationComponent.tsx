@@ -1,15 +1,15 @@
 import { Box, Card, Tab, Tabs } from '@mui/material';
 import React, { ReactNode, useState } from 'react';
 import styled from '@emotion/styled';
-import { Button } from '@/components/_shared/form';
+//import { Button } from '@/components/_shared/form';
 import { Text } from '@/components/_shared/common';
-import { FiEdit } from 'react-icons/fi';
+// import { FiEdit } from 'react-icons/fi';
 import PersonalInformationTabComponent from './PersonalInformationTabComponent';
 import PersonalInformationPersonalTabComponent from './PersonalInformationPersonalTabComponent';
 import PersonalInformationEmergencyTabComponent from './PersonalInformationEmergencyTabComponent';
 import PersonalWorkSchedule from './PersonalWorkSchedule';
 import { useAppSelectors } from '@/hooks/index';
-import { useRouter } from 'next/router';
+//import { useRouter } from 'next/router';
 
 const TopWrapper = styled.div`
  display: flex;
@@ -28,15 +28,15 @@ const BackWrapper = styled.div`
  gap: 1rem;
 `;
 
-const ButtonWrapper = styled.div`
- display: flex;
- flex-direction: row;
- align-items: center;
- justify-content: flex-end;
- gap: 1rem;
- margin-top: 10px;
- margin-bottom: 1rem;
-`;
+// const ButtonWrapper = styled.div`
+//  display: flex;
+//  flex-direction: row;
+//  align-items: center;
+//  justify-content: flex-end;
+//  gap: 1rem;
+//  margin-top: 10px;
+//  margin-bottom: 1rem;
+// `;
 
 const TitleWrapper = styled.div`
  display: flex;
@@ -83,13 +83,13 @@ function TabPanel(props: TabPanelProps) {
 
 const PersonalInformationComponent = () => {
   const [value, setValue] = useState(0);
-  const router = useRouter();
+  // const router = useRouter();
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
-  const handleChangePage = (path) => {
-    router.push(path);
-  };
+  // const handleChangePage = (path) => {
+  //   router.push(path);
+  // };
   const { me: { profile } } = useAppSelectors(state => state);
   return (
     <>
@@ -105,7 +105,7 @@ const PersonalInformationComponent = () => {
             <Text title={profile?.name} fontSize='14px' color='grey.600' fontWeight={400} />
           </TitleWrapper>
         </BackWrapper>
-        <ButtonWrapper>
+        {/* <ButtonWrapper>
           <Button
             color='secondary'
             label='Edit'
@@ -119,7 +119,7 @@ const PersonalInformationComponent = () => {
             size='small'
             onClick={() => {handleChangePage('/employe/employement/profile-information/edit');}}
           />
-        </ButtonWrapper>
+        </ButtonWrapper> */}
       </TopWrapper>
       <ContentWrapper>
         <Box sx={{ width: '100%' }}>

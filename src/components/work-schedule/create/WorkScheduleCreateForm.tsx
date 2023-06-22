@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Input, Select, RadioGroup, CheckBox } from '@/components/_shared/form';
-import { Button as MuiButton, Grid, InputAdornment, Typography, Button } from '@mui/material';
+import { Button as MuiButton, Grid, InputAdornment, Typography, Button, FormHelperText, Stack } from '@mui/material';
 import { Add } from '@mui/icons-material';
 import { Scheduler } from '@aldabil/react-scheduler';
 import CustomModal from '@/components/_shared/common/CustomModal';
@@ -16,8 +16,9 @@ import dayjs from 'dayjs';
 import WorkScheduleEditForm from '../WorkScheduleEditForm';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { postSimulationEventRequested } from '@/store/reducers/slice/company-management/work-schedule/workScheduleSlice';
-import { OverlayLoading } from '@/components/_shared/common';
+import { OverlayLoading, Alert} from '@/components/_shared/common';
 import { compareCheck, getCompanyData, ifThenElse } from '@/utils/helper';
+import { Cancel } from '@mui/icons-material';
 
 
 const AsteriskComponent = styled('span')(({ theme }) => ({
@@ -34,9 +35,10 @@ const FlexBoxRow = styled('div')(() => ({
 
 interface WorkScheduleFormProps {
   setData: React.Dispatch<React.SetStateAction<workSchedule.PostWorkSchedulePayloadType>>;
+  setIsValid: (_val) => void,
 }
 
-function WorkScheduleCreateForm({ setData }: WorkScheduleFormProps) {
+function WorkScheduleCreateForm({ setData, setIsValid }: WorkScheduleFormProps) {
   const calendarRef = useRef<SchedulerRef>(null);
   const dispatch = useAppDispatch();
   const { workSchedule } = useAppSelectors((state) => state);
@@ -117,7 +119,7 @@ function WorkScheduleCreateForm({ setData }: WorkScheduleFormProps) {
         type: postSimulationEventRequested.toString(),
         payload: data.type === '0' ? payload : payloadFlexi
       });
-
+      setIsValid(true);
       setOPenForm(false);
       setIsCreate(true);
     }
@@ -208,8 +210,19 @@ function WorkScheduleCreateForm({ setData }: WorkScheduleFormProps) {
   return (
     <>
       <OverlayLoading open={workSchedule?.isLoading} />
-      <Grid container spacing={4} mb='1rem' alignItems='center'>
-        <Grid item xs={10} sm={10} md={10} lg={10} xl={10}>
+      {
+        Object.keys(formik.errors).length > 0 && (
+          <Stack mb='1rem'>
+            <Alert
+              severity='error'
+              content='Please fill in all the mandatory fields'
+              icon={<Cancel />}
+            />
+          </Stack>
+        )
+      }
+      <Grid container spacing={5} mb='1rem' alignItems='center'>
+        <Grid item xs={10.5} sm={10.5} md={10.5} lg={10.5} xl={10.5}>
           <Input
             name='profileName'
             withAsterisk={true}
@@ -223,8 +236,8 @@ function WorkScheduleCreateForm({ setData }: WorkScheduleFormProps) {
             helperText={ifThenElse(formik.touched.profileName, formik.errors.profileName, '')}
           />
         </Grid>
-        <Grid item xs={2} sm={2} md={2} lg={2} xl={2} mt={formik.errors.profileName ? '0px' : '28px'}>
-          <MuiButton onClick={handleFormOpen} variant='contained' disabled={isCreate === true} size='small' sx={{ height: '2.5rem' }}><Add />&nbsp; Create Schedule</MuiButton>
+        <Grid item xs={1.5} sm={1.5} md={1.5} lg={1.5} xl={1.5} mt={formik.errors.profileName ? '0px' : '28px'}>
+          <MuiButton onClick={handleFormOpen} variant='contained' disabled={isCreate === true} size='small' sx={{ height: '2.5rem' }}><Add />&nbsp; Add schedule</MuiButton>
         </Grid>
       </Grid>
       <Grid container spacing={2} mb='1rem'>
@@ -422,7 +435,7 @@ function WorkScheduleCreateForm({ setData }: WorkScheduleFormProps) {
                   />
                 </Grid>
               </Grid>
-              <Grid container spacing={2} alignItems='end' mb='1rem'>
+              <Grid container spacing={2} mb='2rem' sx={{ height: '100px' }}>
                 <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
                   <Typography width='150px' fontSize='16px'>Work Hours</Typography>
                   <FlexBoxRow>
@@ -453,8 +466,14 @@ function WorkScheduleCreateForm({ setData }: WorkScheduleFormProps) {
                       />
                     </LocalizationProvider>
                   </FlexBoxRow>
+                  {
+                    formik.errors.fixedStartTime && formik.errors.fixedEndTime && (
+                      <FormHelperText sx={{ color: '#EF4444 !important' }}>This field is required</FormHelperText>
+                    )
+                  }
+
                 </Grid>
-                <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+                <Grid mt='1.5rem' item xs={6} sm={6} md={6} lg={6} xl={6}>
                   <Select
                     variant='outlined'
                     size='small'
@@ -462,6 +481,8 @@ function WorkScheduleCreateForm({ setData }: WorkScheduleFormProps) {
                     name='fixedWorkDayType'
                     value={formik.values.fixedWorkDayType}
                     onChange={formik.handleChange}
+                    error={compareCheck(formik.touched.fixedWorkDayType, Boolean(formik.errors.fixedWorkDayType))}
+                    helperText={ifThenElse(formik.touched.fixedWorkDayType, formik.errors.fixedWorkDayType, '')}
                     options={[
                       { label: 'This Day Only', value: '0' },
                       { label: 'Full Week', value: '1' },
@@ -477,7 +498,7 @@ function WorkScheduleCreateForm({ setData }: WorkScheduleFormProps) {
         }
         {
           formik.values.type === '1' && (
-            <>
+            <div style={{ marginBottom: '1rem' }}>
               <Typography mb='12px' fontWeight='bold' color='primary'>Spesific Working Day</Typography>
               <Grid container>
                 <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
@@ -504,10 +525,10 @@ function WorkScheduleCreateForm({ setData }: WorkScheduleFormProps) {
                   />
                 </Grid>
               </Grid>
-            </>
+            </div>
           )
         }
-        <Typography mt='12px' mb='12px' fontWeight='bold' color='primary'>Add Break</Typography>
+        <Typography mb='12px' fontWeight='bold' color='primary'>Add Break</Typography>
         <Grid container spacing={2}>
           <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
             <Input

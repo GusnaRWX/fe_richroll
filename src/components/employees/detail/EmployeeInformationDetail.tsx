@@ -1,9 +1,10 @@
 import React, { HTMLAttributes } from 'react';
-import { Grid, Typography, Chip } from '@mui/material';
+import { Grid, Typography, Chip, IconButton } from '@mui/material';
 import { Image as ImageType } from '@/utils/assetsConstant';
 import styled from '@emotion/styled';
 import { Text } from '@/components/_shared/common';
 import dayjs from 'dayjs';
+import { FiTrash2 } from 'react-icons/fi';
 
 
 
@@ -48,6 +49,12 @@ interface EmployeeInformationDetailProps {
 }
 
 function EmployeeInformationDetail({ data }: EmployeeInformationDetailProps) {
+  const [picture, setPicture] = React.useState<string | null>(data?.picture);
+
+  const resetPicture = () => {
+    setPicture(null);
+  };
+
   return (
     <>
       <Typography component='h3' fontWeight='bold' fontSize={18} color='primary' mb='1rem'>Employee Information</Typography>
@@ -57,7 +64,31 @@ function EmployeeInformationDetail({ data }: EmployeeInformationDetailProps) {
           fontWeight={500}
           color='grey.400'
         />
-        <ImageReview image={data?.picture !== null ? data?.picture : ImageType.AVATAR_PLACEHOLDER} />
+        <div style={{ position: 'relative' }}>
+          <ImageReview image={picture !== null ? picture : ImageType.AVATAR_PLACEHOLDER} />
+          {picture && (
+            <IconButton
+              sx={{
+                position: 'absolute',
+                border: '1px solid red',
+                backgroundColor: 'white',
+                borderRadius: '3px',
+                left: '65px',
+                height: '33px',
+                width: '33px',
+                ':hover': {
+                  backgroundColor: 'white'
+                },
+                bottom: '5px'
+              }}
+              onClick={resetPicture}
+            >
+              <FiTrash2 style={{ zIndex: '999', color: 'red' }} />
+            </IconButton>
+          )}
+
+        </div>
+
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Text

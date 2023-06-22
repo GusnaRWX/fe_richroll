@@ -14,6 +14,20 @@ export declare namespace AnnualWorkSchedule {
     notes: string;
   }
 
+  interface InitialValuesUpdate {
+    id: string | number;
+    name: string;
+    type: string | number;
+    startDate: string | Date | null;
+    endDate: string | Date | null;
+    startHours: string | Date | null;
+    endHours: string | Date | null;
+    notes: string;
+    createdAt?: string;
+    updatedAt?: string;
+    deletedAt?: string;
+  }
+
   interface AnnualWorkSchedulePayload {
     name: string;
     type: string | number;

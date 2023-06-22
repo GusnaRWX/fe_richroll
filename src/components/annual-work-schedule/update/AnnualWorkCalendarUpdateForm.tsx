@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import CustomModal from '@/components/_shared/common/CustomModal';
 import {Grid, Typography } from '@mui/material';
 import { DatePicker, Input, RadioGroup, Textarea } from '@/components/_shared/form';
@@ -8,6 +8,8 @@ import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { useFormik } from 'formik';
 import { AnnualWorkSchedule } from '@/types/annualWorkSchedule';
 import { validationUpdateAnnualWorkCalendar } from './validate';
+import { useAppSelectors, useAppDispatch } from '@/hooks/index';
+import { updateAnnualScheduleRequested } from '@/store/reducers/slice/company-management/annual-work-schedule/annualSchedule';
 import dayjs from 'dayjs';
 
 interface AnnualWorkCalendarCreateProps {
@@ -17,27 +19,61 @@ interface AnnualWorkCalendarCreateProps {
 }
 
 function AnnualWorkCalendarUpdateForm({open, handleClose, handleConfirm}: AnnualWorkCalendarCreateProps) {
+  const {detailAnnual} = useAppSelectors((state) => state.annualSchedule);
+  const dispatch = useAppDispatch();
   const formik = useFormik({
     initialValues: {
+      id: '',
       name: '',
       type: '',
-      startDate: dayjs(new Date()),
-      endDate: dayjs(new Date()),
-      startHours: dayjs(new Date()),
-      endHours: dayjs(new Date()),
+      startDate: '',
+      endDate: '',
+      startHours: '',
+      endHours: '',
       notes: ''
-    } as AnnualWorkSchedule.InitialValues,
+    } as AnnualWorkSchedule.InitialValuesUpdate,
     validationSchema: validationUpdateAnnualWorkCalendar,
     onSubmit: (values) => {
       console.log(values);
-      handleConfirm();
+      handleChangeSubmit();
     }
   });
+
+  useEffect(() => {
+    console.log(detailAnnual);
+    formik.setFieldValue('id', detailAnnual?.id);
+    formik.setFieldValue('name', detailAnnual?.name);
+    formik.setFieldValue('type', detailAnnual?.eventType?.toString());
+    formik.setFieldValue('startDate', dayjs(new Date(detailAnnual?.start)));
+    formik.setFieldValue('endDate', dayjs(new Date(detailAnnual?.end)));
+    formik.setFieldValue('startHours', dayjs(new Date(detailAnnual?.start)));
+    formik.setFieldValue('endHours', dayjs(new Date(detailAnnual?.end)));
+    formik.setFieldValue('notes', detailAnnual?.note);
+  }, [detailAnnual]);
+
+  const handleChangeSubmit = () => {
+    dispatch({
+      type: updateAnnualScheduleRequested.toString(),
+      payload: {
+        id: formik.values.id,
+        data: {
+          name: formik.values.name,
+          eventType: Number(formik.values.type),
+          startDate: dayjs(formik.values.startDate).format('YYYY-MM-DD'),
+          startHour: dayjs(formik.values.startHours).format('HH:mm:ss'),
+          endHour: dayjs(formik.values.endHours).format('HH:mm:ss'),
+          isWithTime: true,
+          note: formik.values.notes
+        }
+      }
+    });
+    handleConfirm();
+  };
   return (
     <CustomModal
       open={open}
       handleClose={handleClose}
-      title='Create New Event'
+      title='Update Event'
       width='758px'
       handleConfirm={formik.handleSubmit}
     >

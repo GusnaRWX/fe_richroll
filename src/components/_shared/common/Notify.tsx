@@ -18,17 +18,17 @@ const CardWrapper = styled.div`
  position: fixed;
  padding: .5rem;
  z-index: 99999999;
- top: 40px;
+ top: 70px;
  left: 70%;
 
  @keyframes snackbarin {
   from {
-    top: 0;
+    top: 50px;
     opacity: 0;
   }
 
   to {
-    top: 30px;
+    top: 70px;
     opacity: 1;
   }
 }

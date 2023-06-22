@@ -247,7 +247,7 @@ function WorkScheduleForm({ setData }: WorkScheduleFormProps) {
     <>
       <OverlayLoading open={employee?.isLoading}/>
       <Grid container spacing={4} mb='1rem' alignItems='center'>
-        <Grid item xs={10} sm={10} md={10} lg={10} xl={10}>
+        <Grid item xs={10.5} sm={10.5} md={10.5} lg={10.5} xl={10.5}>
           <Select
             name='workScheduleID'
             withAsterisk={true}
@@ -273,8 +273,8 @@ function WorkScheduleForm({ setData }: WorkScheduleFormProps) {
             options={listWorkSchedule}
           />
         </Grid>
-        <Grid item xs={2} sm={2} md={2} lg={2} xl={2} mt={formik.errors.profileName ? '0px' : '28px'}>
-          <MuiButton onClick={handleConfirmOpen} variant='contained' size='small' sx={{ height: '2.5rem' }}><Add />&nbsp; Create Schedule</MuiButton>
+        <Grid item xs={1.5} sm={1.5} md={1.5} lg={1.5} xl={1.5} mt={formik.errors.profileName ? '0px' : '28px'}>
+          <MuiButton onClick={handleConfirmOpen} variant='contained' size='small' sx={{ height: '2.5rem', marginLeft: '3px' }}><Add />&nbsp; Add Schedule</MuiButton>
         </Grid>
       </Grid>
       <Grid container spacing={2} mb='1rem'>

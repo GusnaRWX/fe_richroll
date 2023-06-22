@@ -1,4 +1,4 @@
-import { post, get, del, put } from '@/utils/services';
+import { post, get, del, patch } from '@/utils/services';
 import { AnnualWorkSchedule } from '@/types/annualWorkSchedule';
 
 export const getListAnnualSchedule = (payload: AnnualWorkSchedule.AnnualScheduleParams) => {
@@ -11,7 +11,11 @@ export const postAnnualSchedule = (payload: AnnualWorkSchedule.PayloadSagaAnnual
 };
 
 export const updateAnnualSchedule = (payload) => {
-  return put(`annual-work-calendars/${payload.id}`, payload.data as AnnualWorkSchedule.PayloadSagaAnnualSchedule);
+  return patch(`annual-work-calendars/${payload.id}`, payload.data as AnnualWorkSchedule.PayloadSagaAnnualSchedule);
+};
+
+export const getViewAnnualSchedule = (id: number) => {
+  return get(`annual-work-calendars/${id}`);
 };
 
 export const deleteAnnualSchedule = (id: number) => {

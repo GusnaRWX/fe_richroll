@@ -152,8 +152,9 @@ function CompanyInformationForm({
   };
 
   const handleNext = () => {
-    formik.handleSubmit();
-    if (Object.keys(formik.errors).length === 3 && !duplicateCompany) {
+    // formik.handleSubmit();
+    // if (Object.keys(formik.errors).length === 3 && !duplicateCompany) {
+    if (!duplicateCompany) {
       nextPage(1);
       setIsError(false);
     } else {
@@ -309,7 +310,7 @@ function CompanyInformationForm({
           <Grid item xs={6} md={6} lg={6} xl={6} sx={{ marginBottom: '1.5rem', marginTop: '.3rem' }}>
             <Typography>Contact Number<AsteriskComponent>*</AsteriskComponent></Typography>
             <Grid container spacing={2}>
-              <Grid item xs={1} sm={3} md={3} lg={3} xl={3}>
+              <Grid item width='95px'>
                 <Select
                   fullWidth
                   displayEmpty
@@ -341,7 +342,7 @@ function CompanyInformationForm({
                   <MenuItem value='+44'>+44</MenuItem>
                 </Select>
               </Grid>
-              <Grid item xs={9} sm={9} md={9} lg={9} xl={9} alignSelf='flex-end'>
+              <Grid item width='calc(100% - 95px)' alignSelf='flex-end'>
                 <Input
                   name='phoneNumber'
                   type='number'
@@ -567,7 +568,7 @@ function CompanyInformationForm({
               value={formik.values.addressCompanyAddress}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={ifThenElse(formik.touched.addressCompanyAddress, formik.errors.addressCompanyAddress, false)}
+              error={compareCheck(formik.touched.addressCompanyAddress, Boolean(formik.errors.addressCompanyAddress))}
               withAsterisk={true}
               customLabel='Street Name, Building Name'
               placeholder='Input Address Details'

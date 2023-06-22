@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Drawer, DrawerProps } from '@mui/material';
+import { Drawer, DrawerProps, Collapse } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 export interface CustomDrawerProps extends DrawerProps {
@@ -11,12 +11,12 @@ export interface CustomDrawerProps extends DrawerProps {
 
 const CustomDrawer = styled(Drawer)<CustomDrawerProps>(({ drawerwidth }) => ({
   width: drawerwidth,
-  flexShrink: 0,
   '& .MuiDrawer-paper': {
-    width: drawerwidth,
+    maxWidth: drawerwidth,
     boxSizing: 'border-box',
     backgroundColor: '#FFFFFF',
-    border: 'none'
+    border: 'none',
+    marginTop: '66px'
   }
 }));
 
@@ -28,16 +28,10 @@ const DrawerCore = ({
   handleDrawerToggle
 }: CustomDrawerProps) => {
   return (
-    <Box
+    <Collapse
       component='nav'
-      sx={{
-        width: {
-          md: drawerwidth
-        },
-        flexShrink: {
-          sm: 0
-        }
-      }}
+      in={mobileOpen}
+      orientation='horizontal'
       aria-label='mailbox folders'
     >
       <CustomDrawer
@@ -60,14 +54,13 @@ const DrawerCore = ({
       </CustomDrawer>
       <CustomDrawer
         drawerwidth={drawerwidth}
-        variant='permanent'
-        sx={{
-          display: { xs: 'none', md: 'block' }
-        }}
+        variant='persistent'
+        anchor='left'
+        open={mobileOpen}
       >
         {drawer as React.ReactNode}
       </CustomDrawer>
-    </Box>
+    </Collapse>
   );
 };
 

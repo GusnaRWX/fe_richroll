@@ -10,6 +10,7 @@ import {
 import { useRouter } from 'next/router';
 import { HiOutlineChevronDown, HiOutlineChevronUp } from 'react-icons/hi2';
 import { useAppSelectors } from '@/hooks/index';
+import { ifThenElse } from '@/utils/helper';
 
 
 const SidebarItem = ({
@@ -19,13 +20,19 @@ const SidebarItem = ({
   hasChild,
   child,
   roles,
+  menuOpen,
+  setMenuOpen
 }: CoreLayout.SidebarItem) => {
   const [open, setOpen] = useState(false);
   const { pathname, push } = useRouter();
-  const handleOpen = () => setOpen(!open);
   const { me: { profile } } = useAppSelectors(state => state);
   const checkRoles = roles?.map(role => profile?.roles?.includes(role));
   const renderTitle = title?.find(text => profile?.roles?.includes(text.key));
+
+  const handleOpen = () => {
+    if(setMenuOpen) setMenuOpen(renderTitle?.title?.replace('& ', '').toLowerCase());
+    setOpen(!open);
+  };
 
   return (
     <>
@@ -34,14 +41,33 @@ const SidebarItem = ({
           key={index}
           onClick={hasChild ? () => handleOpen() : () => push(path)}
           selected={pathname === path}
+          sx={{
+            backgroundColor: pathname === path ? '#E9EFFF !important' : '',
+            '&:hover': {
+              backgroundColor: '#E9EFFF',
+              color: '#223567 !important'
+            }
+          }}
         >
           <ListItemIcon sx={{ minWidth: '30px' }}>
             {icons({ color: 'grey.400' })}
           </ListItemIcon>
-          <ListItemText primary={renderTitle?.title} sx={{ fontSize: '14px', color: 'grey.400' }} />
+          <ListItemText
+            primary={renderTitle?.title}
+            sx={{
+              fontSize: '14px',
+              color: pathname === path ? '#223567 !important' : 'grey.400',
+              '& > span': {
+                fontWeight: pathname === path ? 'bold' : ''
+              }
+            }}
+          />
           {
             hasChild && (
-              open || pathname.split('/')[1].replace('-', ' ').replace('& ', '') === renderTitle?.title.replace('& ', '').toLowerCase() ? <HiOutlineChevronUp color='#9CA3AF' /> : <HiOutlineChevronDown color='#9CA3AF' />
+              (open || pathname.split('/')[1].replace('-', ' ').replace('& ', '') === renderTitle?.title.replace('& ', '').toLowerCase())
+              && (ifThenElse(menuOpen !== '', menuOpen === renderTitle?.title.replace('& ', '').toLowerCase(), true))
+                ? <HiOutlineChevronUp color='#9CA3AF' />
+                : <HiOutlineChevronDown color='#9CA3AF' />
             )
           }
         </ListItemButton>
@@ -51,7 +77,8 @@ const SidebarItem = ({
         hasChild && (
           <Collapse
             in={
-              open || pathname.split('/')[1].replace('-', ' ').replace('& ', '') === renderTitle?.title.replace('& ', '').toLowerCase()
+              (open || pathname.split('/')[1].replace('-', ' ').replace('& ', '') === renderTitle?.title.replace('& ', '').toLowerCase())
+              && (ifThenElse(menuOpen !== '', menuOpen === renderTitle?.title.replace('& ', '').toLowerCase(), true))
             }
           >
             <List
@@ -64,10 +91,23 @@ const SidebarItem = ({
                     <ListItemButton
                       key={key}
                       selected={pathname === childMenu.path}
-                      sx={{ pl: 6 }}
+                      sx={{
+                        backgroundColor: pathname === childMenu.path ? '#E9EFFF !important' : '',
+                        pl: 6,
+                        ':hover': {
+                          backgroundColor: '#E9EFFF'
+                        } }}
                       onClick={() => { push(childMenu.path); }}
                     >
-                      <ListItemText primary={childMenu.title} sx={{ fontSize: '14px', color: 'grey.400' }} />
+                      <ListItemText
+                        primary={childMenu.title}
+                        sx={{
+                          fontSize: '14px',
+                          color: pathname === childMenu.path ? '#223567 !important' : 'grey.400',
+                          '& > span': {
+                            fontWeight: pathname === childMenu.path ? 'bold' : ''
+                          }
+                        }} />
                     </ListItemButton>
                   ))
                 ))

@@ -16,7 +16,8 @@ import {
   postCalculateEvent,
   postSimulationEvent,
   postWorkSchedule,
-  getViewWorkSchedule
+  getViewWorkSchedule,
+  postTerminateEmployee
 } from '../saga-actions/company-management/employeeActions';
 import { call, put, takeEvery, delay } from 'redux-saga/effects';
 import {
@@ -70,7 +71,10 @@ import {
   getDetailWorkSchedulerSuccess,
   getViewWorkScheduleFailed,
   getViewWorkScheduleRequested,
-  getViewWorkScheduleSuccess
+  getViewWorkScheduleSuccess,
+  postTerminateEmployeeRequested,
+  postTerminateEmployeeSuccess,
+  postTerminateEmployeeFailed,
 } from '@/store/reducers/slice/company-management/employees/employeeSlice';
 import { setResponserMessage } from '@/store/reducers/slice/responserSlice';
 import { Services } from '@/types/axios';
@@ -159,14 +163,13 @@ function* fetchPostEmployeeInfo(action: AnyAction) {
         };
         yield call(fetchPostCnbEmployee, body);
       }
-      // const body = {
-      //   type: postCnbEmplyeeRequested.toString(),
-      //   payload: {
-      //     employeeID: res?.data?.data,
-      //     data: action?.payload?.cnbValue
-      //   }
-      // };
-      // yield call(fetchPostCnbEmployee, body);
+      yield put({
+        type: postCnbEmployeeRequested.toString(),
+        payload: {
+          id: res?.data?.data,
+          cnb: action?.payload?.cnbValue
+        }
+      });
 
       yield put({
         type: postWorkScheduleRequested.toString(),
@@ -210,7 +213,22 @@ function* fetchPostEmergency(action: AnyAction) {
         phoneNumber: action?.payload.data.phoneNumberSecondary
       }
     };
-    const res: AxiosResponse = yield call(postEmergency, payload);
+    let emergencyPayload = {};
+    if (checkObject(payload.secondary)) {
+      emergencyPayload = {
+        ...emergencyPayload,
+        employeeID: payload.employeeID,
+        primary: payload.primary
+      };
+    } else {
+      emergencyPayload = {
+        ...emergencyPayload,
+        employeeID: payload.employeeID,
+        primary: payload.primary,
+        secondary: payload.secondary
+      };
+    }
+    const res: AxiosResponse = yield call(postEmergency, emergencyPayload);
     if (res.data.code === 200 || res.data.code === 201) {
       yield put({ type: postEmergencySuccess.toString() });
       yield put({
@@ -296,8 +314,8 @@ function* fetchPostPersonalInformation(action: AnyAction) {
       thirdLevelCode: action?.payload?.data.subDistrictResidentialAddress,
       address: action?.payload?.data.addressResidentialAddress,
       zipCode: action?.payload?.data.zipCodeResidentialAddress,
-      isCitizen: false,
-      isResident: action?.payload?.data?.useResidentialAddress
+      isCitizen: true,
+      isResident: true
     };
 
     let payload = {};
@@ -368,46 +386,10 @@ function* fetchPostPersonalInformation(action: AnyAction) {
  */
 function* fetchPostCnbEmployee(action: AnyAction) {
   try {
-    console.log(action, 'acitons');
-    let payload = {};
-    const employeeID = action?.payload?.employeeID;
-    const base = {
-      componentID: action?.payload?.data?.base?.componentID,
-      termID: action?.payload?.data?.base?.termID,
-      isTaxable: action?.payload?.data?.base?.isTaxable === 'taxable' ? true : false,
-      amount: +action?.payload?.data?.base?.amount || 0,
-      amountType: 0,
-      rate: +action?.payload?.data?.base?.rate || 0,
-      rateType: 0
+    const payload = {
+      employeeID: action?.payload?.id,
+      data: action?.payload?.cnb
     };
-
-    const supplementaries = action?.payload?.data?.supplementaries?.map(v => {
-      return {
-        amount: +v?.amount,
-        amountType: 0,
-        componentID: +v?.component?.id,
-        isTaxable: v?.isTaxable === 'taxable' ? true : false,
-        rate: +v?.rate,
-        rateType: 0,
-        termID: v?.term?.id
-      };
-    });
-    if (action?.payload?.data?.supplementaries.length > 0) {
-      payload = {
-        ...payload,
-        employeeID,
-        data: {
-          base: base,
-          supplementaries: supplementaries
-        }
-      };
-    } else {
-      payload = {
-        ...payload,
-        employeeID,
-        data: { base: base }
-      };
-    }
 
     const res: AxiosResponse = yield call(postEmployeeCNB, payload);
 
@@ -571,7 +553,8 @@ function* fetchPatchEmployeeInformation(action: AnyAction) {
         type: setResponserMessage.toString(),
         payload: {
           code: res?.data?.code,
-          message: res?.data?.message
+          message: 'Successfully Saved!',
+          footerMessage: 'Employee Profile has been updated'
         }
       });
       yield delay(1000);
@@ -621,7 +604,23 @@ function* fetchPatchEmergencyContact(action: AnyAction) {
       }
       // }
     };
-    const res: AxiosResponse = yield call(patchEmergencyContact, payload);
+    let emergencyPayload = {};
+    if (checkObject(payload.secondary)) {
+      emergencyPayload = {
+        ...emergencyPayload,
+        employeeID: payload.employeeID,
+        primary: payload.primary
+      };
+    } else {
+      emergencyPayload = {
+        ...emergencyPayload,
+        employeeID: payload.employeeID,
+        primary: payload.primary,
+        secondary: payload.secondary
+      };
+    }
+
+    const res: AxiosResponse = yield call(patchEmergencyContact, emergencyPayload);
     if (res.data.code) {
       yield put({ type: patchEmergencyContactSuccess.toString(), payload: res?.data?.data });
       yield delay(1000);
@@ -629,7 +628,8 @@ function* fetchPatchEmergencyContact(action: AnyAction) {
         type: setResponserMessage.toString(),
         payload: {
           code: res?.data?.code,
-          message: res?.data?.message
+          message: 'Successfully Saved!',
+          footerMessage: 'Employee Profile has been updated'
         }
       });
       yield delay(1000);
@@ -706,9 +706,10 @@ function* fetchPatchEmployeePersonal(action: AnyAction) {
       thirdLevelCode: action?.payload?.employeePersonal.personalPayload.subDistrictResidentialAddress,
       address: action?.payload?.employeePersonal.personalPayload.addressResidentialAddress,
       zipCode: action?.payload?.employeePersonal.personalPayload.zipCodeResidentialAddress,
-      isCitizen: false,
+      isCitizen: true,
       // isResident: action?.payload?.employeePersonal ? personalPayload..useResidentialAddress
-      isResident: action?.payload?.employeePersonal.personalPayload?.useResidentialAddress
+      // isResident: action?.payload?.employeePersonal.personalPayload?.useResidentialAddress
+      isResident: true
     };
 
     let payload = {};
@@ -743,7 +744,8 @@ function* fetchPatchEmployeePersonal(action: AnyAction) {
         type: setResponserMessage.toString(),
         payload: {
           code: res?.data?.code,
-          message: res?.data?.message
+          message: 'Successfully Saved!',
+          footerMessage: 'Employee Profile has been updated'
         }
       });
       yield delay(2000);
@@ -925,6 +927,35 @@ function* fetchGetViewWorkSchedule(action: AnyAction) {
   }
 }
 
+function* fetchPostTerminateEmployee(action: AnyAction) {
+  try {
+    const res: AxiosResponse = yield call(postTerminateEmployee, action?.payload, action?.id);
+    if (res.data.code === 200) {
+      yield put({
+        type: postTerminateEmployeeSuccess.toString(),
+        payload: {
+          id: res?.data?.data?.company_work_schedule_id,
+          status: res?.data?.data?.status,
+          message: res?.data?.data?.messages,
+        }
+      });
+    }
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      yield put({ type: postTerminateEmployeeFailed.toString() });
+      yield delay(2000, true);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message,
+        }
+      });
+    }
+  }
+}
+
 function* employeeSaga() {
   yield takeEvery(getEmployeeRequested.toString(), fetchGetEmployee);
   yield takeEvery(postEmployeeInfoRequested.toString(), fetchPostEmployeeInfo);
@@ -943,6 +974,7 @@ function* employeeSaga() {
   yield takeEvery(postCalculateEventRequested.toString(), fetchPostCalculateEvent);
   yield takeEvery(postWorkScheduleRequested.toString(), fetchPostWorkSchedule);
   yield takeEvery(getViewWorkScheduleRequested.toString(), fetchGetViewWorkSchedule);
+  yield takeEvery(postTerminateEmployeeRequested.toString(), fetchPostTerminateEmployee);
 }
 
 export default employeeSaga;

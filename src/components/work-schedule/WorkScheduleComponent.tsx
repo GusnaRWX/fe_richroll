@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import  styled  from '@emotion/styled';
+import styled from '@emotion/styled';
 import { Typography, Button as MuiButton, Card, Box, TableRow, TableCell, TableSortLabel } from '@mui/material';
 import { Add } from '@mui/icons-material';
 import Table from '../_shared/form/Table';
@@ -42,7 +42,7 @@ type Order = 'asc' | 'desc'
 function WorkScheduleComponent() {
   const router = useRouter();
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
   const [hydrated, setHaydrated] = useState(false);
@@ -53,8 +53,8 @@ function WorkScheduleComponent() {
     setPage(newPage);
   };
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 0));
-    setPage(0);
+    setRowsPerPage(event);
+    // setPage(0);
   };
 
   const handleRequestSort = (event: React.MouseEvent<unknown>, headId: string) => {
@@ -67,7 +67,7 @@ function WorkScheduleComponent() {
     dispatch({
       type: getListWorkScheduleRequested.toString(),
       payload: {
-        page: page + 1,
+        page: page,
         itemPerPage: rowsPerPage,
         sort: sort,
         direction: direction.toUpperCase(),
@@ -114,7 +114,7 @@ function WorkScheduleComponent() {
                         <Box component='span' sx={visuallyHidden}>
                           {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
                         </Box>
-                      ): null}
+                      ) : null}
                     </TableSortLabel>
                   </TableCell>
                 ))
@@ -142,7 +142,7 @@ function WorkScheduleComponent() {
                             <IconButton
                               parentColor='primary.50'
                               icons={
-                                <HiPencilAlt fontSize={20} color='#223567'/>
+                                <HiPencilAlt fontSize={20} color='#223567' />
                               }
                             />
                           </ButtonWrapper>
