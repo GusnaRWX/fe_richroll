@@ -1,16 +1,18 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Button, IconButton, DatePicker, CheckBox } from '@/components/_shared/form';
 import { styled } from '@mui/material/styles';
 import { Typography, Box, Paper, Grid } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import { CustomModal } from '@/components/_shared/common';
+import { ConfirmationModal } from '@/components/_shared/common';
 
 // Icon Import
 import { HiPencilAlt } from 'react-icons/hi';
 import { FiCopy } from 'react-icons/fi';
 import { HiUpload } from 'react-icons/hi';
 import { HiOutlineArchive } from 'react-icons/hi';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 export default function SatutoryBenefitProfileDetail() {
   const router = useRouter();
@@ -80,6 +82,13 @@ export default function SatutoryBenefitProfileDetail() {
         </HeaderPageTitle>
         <NextBtnWrapper>
           <Button
+            color='red'
+            sx={{ bgcolor: '#FECACA', color: '#DC2626', width: 'fit-content' }}
+            startIcon={<DeleteIcon />}
+            label='Delete'
+            onClick={() => setDeleteConfirmation(true)}
+          />
+          <Button
             color='inherit'
             sx={{
               bgcolor: '#fff',
@@ -90,6 +99,7 @@ export default function SatutoryBenefitProfileDetail() {
             }}
             startIcon={<FiCopy />}
             label='Duplicate'
+            onClick={() => setDuplicateConfirmation(true)}
           />
           <Button
             color='orange'
@@ -315,6 +325,26 @@ export default function SatutoryBenefitProfileDetail() {
           </Grid>
         </Grid>
       </Paper>
+      {/* Pop Up Setting ============================== */}
+      <ConfirmationModal
+        forDeleteAction
+        open={DeleteConfirmation}
+        handleClose={() => setDeleteConfirmation(false)}
+        title='Delete Data Entry'
+        content='You are about to delete this attendance data entry. This action cannot be undone.'
+        withCallback
+        noChange={true}
+        callback={() => setDeleteConfirmation(false)}
+      />
+      <ConfirmationModal
+        open={DuplicateConfirmation}
+        handleClose={() => setDuplicateConfirmation(false)}
+        title='Confirmation'
+        content='Are you sure you want to duplicate this profile ?'
+        withCallback
+        noChange={true}
+        callback={() => setDuplicateConfirmation(false)}
+      />
       <CustomModal
         open={open}
         handleClose={() => setOpen(false)}
