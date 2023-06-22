@@ -36,7 +36,7 @@ export default function SatutoryBenefitComponentDetail() {
   });
 
   function EditActionHandler() {
-    router.push('/satutory-benefit/profile/add-new-profile');
+    router.push('/satutory-benefit/component/add-new-component');
   }
 
   return (
@@ -209,7 +209,7 @@ export default function SatutoryBenefitComponentDetail() {
           </Grid>
         </Grid>
         {/* Employee Section ==================== */}
-        <Grid container spacing={2} style={{marginTop: '32px'}}>
+        <Grid container spacing={2} style={{ marginTop: '32px' }}>
           <Grid item xs={12} md={12} lg={12} xl={12}>
             <Typography
               style={{
@@ -262,7 +262,7 @@ export default function SatutoryBenefitComponentDetail() {
           </Grid>
         </Grid>
         {/* Transfer Information Section ==================== */}
-        <Grid container spacing={2} style={{marginTop: '32px'}}>
+        <Grid container spacing={2} style={{ marginTop: '32px' }}>
           <Grid item xs={12} md={12} lg={12} xl={12}>
             <Typography
               style={{
