@@ -137,7 +137,7 @@ export default function CreateNewProfile() {
       <Formik
         validationSchema={validationSchema}
         initialValues={initialValues}
-        onSubmit={(values: any) => {
+        onSubmit={() => {
           setIsModalFormSubmitted(true);
           setIsAddNewComponent(false);
         }}
@@ -202,10 +202,10 @@ export default function CreateNewProfile() {
                     />
                     {formik.errors.componentName &&
                     formik.touched.componentName ? (
-                      <FormHelperText sx={{ color: '#DC2626' }}>
-                        {formik.errors.componentName as ReactNode}
-                      </FormHelperText>
-                    ) : null}
+                        <FormHelperText sx={{ color: '#DC2626' }}>
+                          {formik.errors.componentName as ReactNode}
+                        </FormHelperText>
+                      ) : null}
                   </Grid>
                   <Grid item xs={6} md={6} lg={6} xl={6}></Grid>
                   <Grid item xs={6} md={6} lg={6} xl={6}>
@@ -273,10 +273,10 @@ export default function CreateNewProfile() {
                     />
                     {formik.errors.effectiveDate &&
                     formik.touched.effectiveDate ? (
-                      <FormHelperText sx={{ color: '#DC2626' }}>
-                        {formik.errors.effectiveDate as ReactNode}
-                      </FormHelperText>
-                    ) : null}
+                        <FormHelperText sx={{ color: '#DC2626' }}>
+                          {formik.errors.effectiveDate as ReactNode}
+                        </FormHelperText>
+                      ) : null}
                   </Grid>
                   <Grid item xs={3} md={3} lg={3} xl={3}>
                     <BasicDatePicker customLabel='Expiration Date' />
@@ -337,7 +337,7 @@ export default function CreateNewProfile() {
               <FieldArray
                 name='benefitComponent'
                 render={(arrayHelper) => {
-                  const handleCheckBoxChange = (e: any) => {
+                  const handleCheckBoxChange = (e) => {
                     const value = e.target.name;
                     const { benefitComponent } = formik.values;
 
@@ -370,176 +370,176 @@ export default function CreateNewProfile() {
                     <div>
                       {formik.values.benefitComponent.length > 0 &&
                         isModalFormSubmitted && (
-                          <FormikForm>
-                            {formik.values.benefitComponent.map(
-                              (benefit, i) => {
-                                return (
-                                  <Paper
-                                    style={{
-                                      padding: '21px 32px',
-                                      marginTop: '16px',
+                        <FormikForm>
+                          {formik.values.benefitComponent.map(
+                            (benefit, i) => {
+                              return (
+                                <Paper key={i}
+                                  style={{
+                                    padding: '21px 32px',
+                                    marginTop: '16px',
+                                  }}
+                                >
+                                  <Box
+                                    sx={{
+                                      display: 'flex',
+                                      justifyContent: 'space-between',
+                                      width: '100%',
                                     }}
                                   >
-                                    <Box
+                                    <Typography
                                       sx={{
-                                        display: 'flex',
-                                        justifyContent: 'space-between',
-                                        width: '100%',
+                                        color: '#223567',
+                                        fontWeight: 700,
+                                        fontSize: '18px',
                                       }}
                                     >
+                                      {benefit}
+                                    </Typography>
+
+                                    <Box sx={{ display: 'flex', gap: '4px' }}>
+                                      <Button
+                                        size='medium'
+                                        color='green'
+                                        startIcon={
+                                          <HiPencilAlt color='white' />
+                                        }
+                                        label='Edit'
+                                        sx={{
+                                          backgroundColor: '#8DD0B8',
+                                          color: ' white',
+                                        }}
+                                      />
+                                      <Button
+                                        color='red'
+                                        size='medium'
+                                        startIcon={<DeleteIcon />}
+                                        label='Delete'
+                                        sx={{
+                                          backgroundColor: '#FEE2E2',
+                                          color: '#B91C1C',
+                                        }}
+                                        onClick={() => arrayHelper.remove(i)}
+                                      />
+                                    </Box>
+                                  </Box>
+
+                                  <Grid container sx={{ marginTop: '12px' }}>
+                                    <Grid item xs={2} md={2} lg={2} xl={2}>
                                       <Typography
                                         sx={{
-                                          color: '#223567',
-                                          fontWeight: 700,
-                                          fontSize: '18px',
+                                          color: '#374151',
+                                          fontWeight: 400,
+                                          fontSize: '14px',
                                         }}
                                       >
-                                        {benefit}
-                                      </Typography>
-
-                                      <Box sx={{ display: 'flex', gap: '4px' }}>
-                                        <Button
-                                          size='medium'
-                                          color='green'
-                                          startIcon={
-                                            <HiPencilAlt color='white' />
-                                          }
-                                          label='Edit'
-                                          sx={{
-                                            backgroundColor: '#8DD0B8',
-                                            color: ' white',
-                                          }}
-                                        />
-                                        <Button
-                                          color='red'
-                                          size='medium'
-                                          startIcon={<DeleteIcon />}
-                                          label='Delete'
-                                          sx={{
-                                            backgroundColor: '#FEE2E2',
-                                            color: '#B91C1C',
-                                          }}
-                                          onClick={() => arrayHelper.remove(i)}
-                                        />
-                                      </Box>
-                                    </Box>
-
-                                    <Grid container sx={{ marginTop: '12px' }}>
-                                      <Grid item xs={2} md={2} lg={2} xl={2}>
-                                        <Typography
-                                          sx={{
-                                            color: '#374151',
-                                            fontWeight: 400,
-                                            fontSize: '14px',
-                                          }}
-                                        >
                                           Contributor
-                                        </Typography>
-                                      </Grid>
-                                      <Grid item xs={2} md={2} lg={2} xl={2}>
-                                        <Typography
-                                          sx={{
-                                            color: '#374151',
-                                            fontWeight: 400,
-                                            fontSize: '14px',
-                                          }}
-                                        >
+                                      </Typography>
+                                    </Grid>
+                                    <Grid item xs={2} md={2} lg={2} xl={2}>
+                                      <Typography
+                                        sx={{
+                                          color: '#374151',
+                                          fontWeight: 400,
+                                          fontSize: '14px',
+                                        }}
+                                      >
                                           Rate Types
-                                        </Typography>
-                                      </Grid>
-                                      <Grid item xs={2} md={2} lg={2} xl={2}>
-                                        <Typography
-                                          sx={{
-                                            color: '#374151',
-                                            fontWeight: 400,
-                                            fontSize: '14px',
-                                          }}
-                                        >
+                                      </Typography>
+                                    </Grid>
+                                    <Grid item xs={2} md={2} lg={2} xl={2}>
+                                      <Typography
+                                        sx={{
+                                          color: '#374151',
+                                          fontWeight: 400,
+                                          fontSize: '14px',
+                                        }}
+                                      >
                                           Flat Rate
-                                        </Typography>
-                                      </Grid>
-                                      <Grid item xs={3} md={3} lg={3} xl={3}>
-                                        <Typography
-                                          sx={{
-                                            color: '#374151',
-                                            fontWeight: 400,
-                                            fontSize: '14px',
-                                          }}
-                                        >
+                                      </Typography>
+                                    </Grid>
+                                    <Grid item xs={3} md={3} lg={3} xl={3}>
+                                      <Typography
+                                        sx={{
+                                          color: '#374151',
+                                          fontWeight: 400,
+                                          fontSize: '14px',
+                                        }}
+                                      >
                                           Amount Cap
-                                        </Typography>
-                                      </Grid>
-                                      <Grid item xs={3} md={3} lg={3} xl={3}>
-                                        <Typography
-                                          sx={{
-                                            color: '#374151',
-                                            fontWeight: 400,
-                                            fontSize: '14px',
-                                          }}
-                                        >
+                                      </Typography>
+                                    </Grid>
+                                    <Grid item xs={3} md={3} lg={3} xl={3}>
+                                      <Typography
+                                        sx={{
+                                          color: '#374151',
+                                          fontWeight: 400,
+                                          fontSize: '14px',
+                                        }}
+                                      >
                                           Effective Periode
-                                        </Typography>
-                                      </Grid>
+                                      </Typography>
                                     </Grid>
+                                  </Grid>
 
-                                    <Grid container sx={{ marginTop: '12px' }}>
-                                      <Grid item xs={2} md={2} lg={2} xl={2}>
-                                        <Typography
-                                          sx={{
-                                            color: '#4B5563',
-                                            fontWeight: 700,
-                                          }}
-                                        >
+                                  <Grid container sx={{ marginTop: '12px' }}>
+                                    <Grid item xs={2} md={2} lg={2} xl={2}>
+                                      <Typography
+                                        sx={{
+                                          color: '#4B5563',
+                                          fontWeight: 700,
+                                        }}
+                                      >
                                           Employee
-                                        </Typography>
-                                      </Grid>
-                                      <Grid item xs={2} md={2} lg={2} xl={2}>
-                                        <Typography
-                                          sx={{
-                                            color: '#4B5563',
-                                            fontWeight: 700,
-                                          }}
-                                        >
-                                          Flat Rate
-                                        </Typography>
-                                      </Grid>
-                                      <Grid item xs={2} md={2} lg={2} xl={2}>
-                                        <Typography
-                                          sx={{
-                                            color: '#4B5563',
-                                            fontWeight: 700,
-                                          }}
-                                        >
-                                          10,0%
-                                        </Typography>
-                                      </Grid>
-                                      <Grid item xs={3} md={3} lg={3} xl={3}>
-                                        <Typography
-                                          sx={{
-                                            color: '#4B5563',
-                                            fontWeight: 700,
-                                          }}
-                                        >
-                                          Rp. 3.000.000,00
-                                        </Typography>
-                                      </Grid>
-                                      <Grid item xs={3} md={3} lg={3} xl={3}>
-                                        <Typography
-                                          sx={{
-                                            color: '#4B5563',
-                                            fontWeight: 700,
-                                          }}
-                                        >
-                                          -
-                                        </Typography>
-                                      </Grid>
+                                      </Typography>
                                     </Grid>
-                                  </Paper>
-                                );
-                              }
-                            )}
-                          </FormikForm>
-                        )}
+                                    <Grid item xs={2} md={2} lg={2} xl={2}>
+                                      <Typography
+                                        sx={{
+                                          color: '#4B5563',
+                                          fontWeight: 700,
+                                        }}
+                                      >
+                                          Flat Rate
+                                      </Typography>
+                                    </Grid>
+                                    <Grid item xs={2} md={2} lg={2} xl={2}>
+                                      <Typography
+                                        sx={{
+                                          color: '#4B5563',
+                                          fontWeight: 700,
+                                        }}
+                                      >
+                                          10,0%
+                                      </Typography>
+                                    </Grid>
+                                    <Grid item xs={3} md={3} lg={3} xl={3}>
+                                      <Typography
+                                        sx={{
+                                          color: '#4B5563',
+                                          fontWeight: 700,
+                                        }}
+                                      >
+                                          Rp. 3.000.000,00
+                                      </Typography>
+                                    </Grid>
+                                    <Grid item xs={3} md={3} lg={3} xl={3}>
+                                      <Typography
+                                        sx={{
+                                          color: '#4B5563',
+                                          fontWeight: 700,
+                                        }}
+                                      >
+                                          -
+                                      </Typography>
+                                    </Grid>
+                                  </Grid>
+                                </Paper>
+                              );
+                            }
+                          )}
+                        </FormikForm>
+                      )}
                       <Box style={{ padding: '21px 32px' }}>
                         <AddButton
                           onClick={() => setIsAddNewComponent(true)}
@@ -605,9 +605,9 @@ export default function CreateNewProfile() {
                           </Grid>
                         </Box>
 
-                        {selectedBenefitsOption.map((option, i) => {
+                        {selectedBenefitsOption.map((option, j) => {
                           return (
-                            <Box sx={{ flexGrow: 1 }}>
+                            <Box key={j} sx={{ flexGrow: 1 }}>
                               <Grid
                                 container
                                 sx={{ display: 'flex', alignItems: 'center' }}
@@ -615,9 +615,7 @@ export default function CreateNewProfile() {
                                 <Grid item xs={1} md={1} lg={1} xl={1}>
                                   <CheckBox
                                     name={option.label}
-                                    checked={formik.values.benefitComponent.includes(
-                                      option.label
-                                    )}
+                                    checked={formik.values.benefitComponent.includes(option.label as unknown as never)}
                                     customLabel=''
                                     onChange={handleCheckBoxChange}
                                   />

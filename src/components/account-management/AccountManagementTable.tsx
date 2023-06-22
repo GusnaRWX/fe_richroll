@@ -4,6 +4,8 @@ import {
   TableCell,
   TableRow,
   Avatar,
+  Tab,
+  Tabs,
   Box,
   TableSortLabel,
   Select,
@@ -22,7 +24,12 @@ import { RiUserReceived2Fill } from 'react-icons/ri';
 import { AiOutlineStop } from 'react-icons/ai';
 import styled from '@emotion/styled';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
-import { getAccountRequested, patchAccountSuspensionRequested, putAccountDeleteRequested, putAccountReactiveRequested } from '@/store/reducers/slice/account-management/accountManagementSlice';
+import {
+  getAccountRequested,
+  patchAccountSuspensionRequested,
+  putAccountDeleteRequested,
+  putAccountReactiveRequested
+} from '@/store/reducers/slice/account-management/accountManagementSlice';
 import dayjs from 'dayjs';
 import { CustomModal, ConfirmationModal } from '@/components/_shared/common';
 import { Account } from '@/types/account';
@@ -44,14 +51,48 @@ const NameWrapper = styled.div`
 `;
 
 const headerItems = [
-  { id: 'accountID', label: 'Account ID' },
+  { id: 'employee.code', label: 'Account ID' },
   { id: 'user.name', label: 'Full Name' },
-  { id: 'email', label: 'Email' },
-  { id: 'type', label: 'User Type' },
-  { id: 'user.lastLogin', label: 'Last Login' },
+  { id: 'user.email', label: 'Email' },
+  { id: 'roles.name', label: 'User Type' },
+  { id: 'user.lastLoginAt', label: 'Last Login' },
   { id: 'user.createdAt', label: 'Created on' },
   { id: 'action', label: '' },
 ];
+
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number
+}
+
+function TabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role='tabpanel'
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      {...other}
+    >
+      {
+        value === index && (
+          <Box sx={{ px: 2, py: 1 }}>
+            {children}
+          </Box>
+        )
+      }
+    </div>
+  );
+}
+
+function a11yProps(index: number) {
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`
+  };
+}
 
 interface EmployeeTableProps {
   tabValue: number
@@ -66,8 +107,6 @@ function AttendanceTable({
   const data = useAppSelectors(state => state.account.data);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(1);
-  // const [search, setSearch] = useState('');
-  // const [page, setPage] = useState(0);
   const [search, setSearch] = useState('');
   const [searchType, setSearchType] = useState('all');
   const [direction, setDirection] = useState<Order>('desc');
@@ -82,6 +121,11 @@ function AttendanceTable({
   const [isPermanent, setIsPermanent] = useState(false);
   const startSuspend = dayjs();
   const [endSuspend, setEndSuspend] = useState(dayjs());
+  const [value, setValue] = useState(0);
+
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue);
+  };
 
   const handleDelete = () => {
     setDeleteInfo(false);
@@ -91,15 +135,7 @@ function AttendanceTable({
   const handleDeleteConfirm = () => {
     dispatch({
       type: putAccountDeleteRequested.toString(),
-      payload: {
-        page: page + 1,
-        itemPerPage: rowsPerPage,
-        sort: sort,
-        direction: direction.toUpperCase(),
-        search: search,
-        status: ifThenElse(tabValue === 0, 'active', ifThenElse(tabValue === 1, 'suspended', 'deleted')),
-        searchType: searchType
-      }
+      payload: selectedItem?.id
     });
   };
 
@@ -142,10 +178,6 @@ function AttendanceTable({
 
   const handleSearch = (e) => {
     if (e.key === 'Enter') {
-      // setSearch(e.target.value);
-      console.log(e.target.value);
-      console.log(tabValue);
-
       setSearch(e.target.value);
     }
   };
@@ -160,7 +192,7 @@ function AttendanceTable({
     dispatch({
       type: getAccountRequested.toString(),
       payload: {
-        page: page + 1,
+        page: page,
         itemPerPage: rowsPerPage,
         sort: sort,
         direction: direction.toUpperCase(),
@@ -169,7 +201,7 @@ function AttendanceTable({
         searchType: searchType
       }
     });
-  }, [rowsPerPage, page, tabValue, search, searchType, sort, direction]);
+  }, [rowsPerPage, page, tabValue, search, searchType, sort, direction, deleteConfirmation, suspendConfirmation]);
 
   useEffect(() => {
     setHaydrated(true);
@@ -182,38 +214,38 @@ function AttendanceTable({
           <Typography component='div' variant='text-base' fontWeight={500}>Full Name</Typography>
           <NameWrapper>
             <Avatar
-              src={selectedItem?.user?.userInformation && selectedItem?.user?.userInformation['picture'] || ImageType.AVATAR_PLACEHOLDER}
-              alt={selectedItem?.user?.name}
+              src={selectedItem?.userInformation && selectedItem?.userInformation['picture'] || ImageType.AVATAR_PLACEHOLDER}
+              alt={selectedItem?.name}
               sx={{
                 width: 24, height: 24
               }}
             />
-              &nbsp;<Typography component='div' variant='text-sm' fontWeight={400}>{selectedItem?.user?.name}</Typography>
+              &nbsp;<Typography component='div' variant='text-sm' fontWeight={400}>{selectedItem?.name}</Typography>
           </NameWrapper>
         </Grid>
         <Grid item xs={6}>
           <Typography component='div' variant='text-base' fontWeight={500}>Account ID</Typography>
-          <Typography component='div' variant='text-sm' fontWeight={400}>{selectedItem?.code || '-'}</Typography>
+          <Typography component='div' variant='text-sm' fontWeight={400}>{selectedItem?.employee && selectedItem?.employee['code'] || '-'}</Typography>
         </Grid>
       </Grid>
       <Grid spacing={2} container mt='.5rem' mb='.5rem'>
         <Grid item xs={6}>
           <Typography component='div' variant='text-base' fontWeight={500}>Email</Typography>
-          <Typography component='div' variant='text-sm' fontWeight={400}>{selectedItem?.user.email}</Typography>
+          <Typography component='div' variant='text-sm' fontWeight={400}>{selectedItem?.email}</Typography>
         </Grid>
         <Grid item xs={6}>
           <Typography component='div' variant='text-base' fontWeight={500}>Last Login</Typography>
-          <Typography component='div' variant='text-sm' fontWeight={400}>{'-'}</Typography>
+          <Typography component='div' variant='text-sm' fontWeight={400}>{selectedItem?.lastLoginAt && dayjs(selectedItem?.lastLoginAt).format('DD/MM/YY, HH:mm') || '-'}</Typography>
         </Grid>
       </Grid>
       <Grid spacing={2} container mt='.5rem' mb='.5rem'>
         <Grid item xs={6}>
           <Typography component='div' variant='text-base' fontWeight={500}>User Type</Typography>
-          <Typography component='div' variant='text-sm' fontWeight={400}>{selectedItem && !!selectedItem.user.roles.length && selectedItem.user.roles.map((i) => i.name)}</Typography>
+          <Typography component='div' variant='text-sm' fontWeight={400}>{selectedItem && !!selectedItem.roles.length && selectedItem.roles.map((i) => i.name)}</Typography>
         </Grid>
         <Grid item xs={6}>
           <Typography component='div' variant='text-base' fontWeight={500}>Created On</Typography>
-          <Typography component='div' variant='text-sm' fontWeight={400}>{selectedItem && dayjs(selectedItem.user.createdAt).format('DD/MM/YY')}</Typography>
+          <Typography component='div' variant='text-sm' fontWeight={400}>{selectedItem && dayjs(selectedItem.createdAt).format('DD/MM/YY')}</Typography>
         </Grid>
       </Grid>
       <Grid spacing={2} container mt='.5rem'>
@@ -246,6 +278,90 @@ function AttendanceTable({
         </Grid>
       </Grid>
     </>;
+  };
+
+  const DeleteInfo: React.FC = () => {
+    return (
+      <Box sx={{ width: '100%' }}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <Tabs value={value} onChange={handleChange} aria-label='basic tabs'>
+            <Tab sx={{ textTransform: 'none' }} label='Account Profile' {...a11yProps(0)} />
+            <Tab sx={{ textTransform: 'none' }} label='List Of Company' {...a11yProps(1)} />
+          </Tabs>
+        </Box>
+        <TabPanel value={value} index={0}>
+          <Grid spacing={2} container mt='0px' mb='.5rem'>
+            <Grid item xs={4}>
+              <Typography component='div' variant='text-base' fontWeight={500}>Full Name</Typography>
+              <NameWrapper>
+                <Avatar
+                  src={selectedItem?.userInformation && selectedItem?.userInformation['picture'] || ImageType.AVATAR_PLACEHOLDER}
+                  alt={selectedItem?.name}
+                  sx={{
+                    width: 24, height: 24
+                  }}
+                />
+                  &nbsp;<Typography component='div' variant='text-sm' fontWeight={400}>{selectedItem?.name}</Typography>
+              </NameWrapper>
+            </Grid>
+            <Grid item xs={4}>
+              <Typography component='div' variant='text-base' fontWeight={500}>Account ID</Typography>
+              <Typography component='div' variant='text-sm' fontWeight={400}>{selectedItem?.employee && selectedItem?.employee['code'] || '-'}</Typography>
+            </Grid>
+            <Grid item xs={4}>
+              <Typography component='div' variant='text-base' fontWeight={500}>User Type</Typography>
+              <Typography component='div' variant='text-sm' fontWeight={400}>{selectedItem && !!selectedItem.roles.length && selectedItem.roles.map((i) => i.name)}</Typography>
+            </Grid>
+          </Grid>
+          <Grid spacing={2} container mt='.5rem' mb='1.5rem'>
+            <Grid item xs={4}>
+              <Typography component='div' variant='text-base' fontWeight={500}>Email</Typography>
+              <Typography component='div' variant='text-sm' fontWeight={400}>{selectedItem?.email}</Typography>
+            </Grid>
+            <Grid item xs={4}>
+              <Typography component='div' variant='text-base' fontWeight={500}>Last Login</Typography>
+              <Typography component='div' variant='text-sm' fontWeight={400}>{selectedItem?.lastLoginAt && dayjs(selectedItem?.lastLoginAt).format('DD/MM/YY, HH:mm') || '-'}</Typography>
+            </Grid>
+            <Grid item xs={4}>
+              <Typography component='div' variant='text-base' fontWeight={500}>Created On</Typography>
+              <Typography component='div' variant='text-sm' fontWeight={400}>{selectedItem && dayjs(selectedItem.createdAt).format('DD/MM/YY')}</Typography>
+            </Grid>
+          </Grid>
+          <Grid container mb='.5rem'>
+            <Grid item xs={4}>
+              <Typography component='div' variant='text-base' fontWeight={500}>Total Company</Typography>
+              <Typography component='div' variant='text-sm' fontWeight={400}>{ifThenElse(selectedItem?.employee, selectedItem?.employee?.companies?.length + ' Company', '0 Company')}</Typography>
+            </Grid>
+          </Grid>
+        </TabPanel>
+        <TabPanel value={value} index={1}>
+          <Grid spacing={2} container mt='0px' sx={{ borderBottom: 'solid 1px #E5E7EB', paddingBottom: '10px' }}>
+            <Grid item xs={4}>
+              <Typography component='div' variant='text-base' fontWeight={500}>Company Name</Typography>
+            </Grid>
+            <Grid item xs={4}>
+              <Typography component='div' variant='text-base' fontWeight={500}>Total Employee</Typography>
+            </Grid>
+            <Grid item xs={4}>
+              <Typography component='div' variant='text-base' fontWeight={500}>Created On</Typography>
+            </Grid>
+          </Grid>
+          {!!selectedItem?.employee && !!selectedItem?.employee?.companies.length && selectedItem?.employee?.companies?.map((itm, index) => (
+            <Grid key={index} spacing={2} container mt='0px' sx={{ borderBottom: 'solid 1px #E5E7EB', paddingBottom: '10px' }}>
+              <Grid item xs={4}>
+                <Typography component='div' variant='text-sm' fontWeight={400}>{itm.name}</Typography>
+              </Grid>
+              <Grid item xs={4}>
+                <Typography component='div' variant='text-sm' fontWeight={400}>{itm.employeesTotal}</Typography>
+              </Grid>
+              <Grid item xs={4}>
+                <Typography component='div' variant='text-sm' fontWeight={400}>{dayjs(itm.createdAt).format('DD/MM/YY')}</Typography>
+              </Grid>
+            </Grid>
+          ))}
+        </TabPanel>
+      </Box>
+    );
   };
 
   if (!hydrated) {
@@ -323,25 +439,25 @@ function AttendanceTable({
                 ), (
                   data?.items?.map((item, index) => (
                     <TableRow key={index}>
-                      <TableCell>{item.code || '-'}</TableCell>
+                      <TableCell>{item.employee && item.employee.code || '-'}</TableCell>
                       <TableCell>
                         <NameWrapper>
                           <Avatar
-                            src={item.user.userInformation?.picture || ImageType.AVATAR_PLACEHOLDER}
-                            alt={item.user.name}
+                            src={item.userInformation?.picture || ImageType.AVATAR_PLACEHOLDER}
+                            alt={item.name}
                             sx={{
                               width: 24, height: 24
                             }}
                           />
-                          &nbsp;{item.user.name}
+                          &nbsp;{item.name}
                         </NameWrapper>
                       </TableCell>
-                      <TableCell>{item.user.email}</TableCell>
+                      <TableCell>{item.email}</TableCell>
                       <TableCell>
-                        {!!item.user.roles.length && item.user.roles.map((i) => i.name)}
+                        {!!item.roles.length && item.roles.map((i) => i.name)}
                       </TableCell>
-                      <TableCell>-</TableCell>
-                      <TableCell>{dayjs(item.user.createdAt).format('DD/MM/YY')}</TableCell>
+                      <TableCell>{item.lastLoginAt && dayjs(item.lastLoginAt).format('DD/MM/YY, HH:mm') || '-'}</TableCell>
+                      <TableCell>{dayjs(item.createdAt).format('DD/MM/YY')}</TableCell>
                       <TableCell>
                         <ButtonWrapper>
                           {tabValue === 0 && (
@@ -404,14 +520,7 @@ function AttendanceTable({
         handleConfirm={handleDelete}
         submitText='Delete'
       >
-        <Grid container mt='1rem' mb='1rem'>
-          <Grid item xs={6}>
-          </Grid>
-        </Grid>
-        <Grid container spacing={2} mb='1rem'>
-          <Grid item xs={6}>
-          </Grid>
-        </Grid>
+        <DeleteInfo />
       </CustomModal>
       <ConfirmationModal
         open={deleteConfirmation}

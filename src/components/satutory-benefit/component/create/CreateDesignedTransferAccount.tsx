@@ -12,12 +12,16 @@ import {
   Grid,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import React, { useState } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-export default function CreateDesignedTransferAccount({ setValue }) {
+interface CreateDesignedTransferAccountProps {
+  setValue: Dispatch<SetStateAction<number>>
+}
+
+export default function CreateDesignedTransferAccount({ setValue }: CreateDesignedTransferAccountProps) {
   const [account, setAccount] = useState('central');
 
   const AsteriskComponent = styled('span')(({ theme }) => ({
@@ -125,7 +129,7 @@ export default function CreateDesignedTransferAccount({ setValue }) {
             color: '#223567',
           }}
         >
-          The Designated Transfer Account is added manually to each employee's
+          The Designated Transfer Account is added manually to each employee’s
           profile
         </Typography>
       </Box>
@@ -147,9 +151,9 @@ export default function CreateDesignedTransferAccount({ setValue }) {
             sx={
               account !== 'central'
                 ? {
-                    backgroundColor: '#F3F4F6',
-                    color: '#6B7280',
-                  }
+                  backgroundColor: '#F3F4F6',
+                  color: '#6B7280',
+                }
                 : null
             }
             value={formik.values.bank}
@@ -175,9 +179,9 @@ export default function CreateDesignedTransferAccount({ setValue }) {
             sx={
               account !== 'central'
                 ? {
-                    backgroundColor: '#F3F4F6',
-                    color: '#6B7280',
-                  }
+                  backgroundColor: '#F3F4F6',
+                  color: '#6B7280',
+                }
                 : null
             }
             value={formik.values.holder}
@@ -201,9 +205,9 @@ export default function CreateDesignedTransferAccount({ setValue }) {
             sx={
               account !== 'central'
                 ? {
-                    backgroundColor: '#F3F4F6',
-                    color: '#6B7280',
-                  }
+                  backgroundColor: '#F3F4F6',
+                  color: '#6B7280',
+                }
                 : null
             }
             value={formik.values.no}
@@ -233,9 +237,9 @@ export default function CreateDesignedTransferAccount({ setValue }) {
               sx={
                 account !== 'central'
                   ? {
-                      backgroundColor: '#F3F4F6',
-                      color: '#6B7280',
-                    }
+                    backgroundColor: '#F3F4F6',
+                    color: '#6B7280',
+                  }
                   : null
               }
             />
@@ -255,9 +259,9 @@ export default function CreateDesignedTransferAccount({ setValue }) {
               sx={
                 account !== 'central'
                   ? {
-                      backgroundColor: '#F3F4F6',
-                      color: '#6B7280',
-                    }
+                    backgroundColor: '#F3F4F6',
+                    color: '#6B7280',
+                  }
                   : null
               }
               value={formik.values.branchCode}
@@ -285,9 +289,9 @@ export default function CreateDesignedTransferAccount({ setValue }) {
             sx={
               account !== 'central'
                 ? {
-                    backgroundColor: '#F3F4F6',
-                    color: '#6B7280',
-                  }
+                  backgroundColor: '#F3F4F6',
+                  color: '#6B7280',
+                }
                 : null
             }
             value={formik.values.branchName}
@@ -309,9 +313,9 @@ export default function CreateDesignedTransferAccount({ setValue }) {
             sx={
               account !== 'central'
                 ? {
-                    backgroundColor: '#F3F4F6',
-                    color: '#6B7280',
-                  }
+                  backgroundColor: '#F3F4F6',
+                  color: '#6B7280',
+                }
                 : null
             }
             value={formik.values.swiftCode}

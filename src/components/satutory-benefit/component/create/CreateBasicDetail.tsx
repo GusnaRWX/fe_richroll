@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { Grid, Box, Typography } from '@mui/material';
 import { Button, Input, Select, Textarea } from '@/components/_shared/form';
 import { useFormik } from 'formik';
-import * as Yup from 'yup'
+import * as Yup from 'yup';
 
-export default function CreateBasicDetailComponent({setValue}) {
+interface CreateBasicDetailComponentProps {
+  setValue: Dispatch<SetStateAction<number>>
+}
+
+export default function CreateBasicDetailComponent({setValue}: CreateBasicDetailComponentProps) {
   const Dummyoption = [
     { value: '1', label: 'Dummy 1' },
     { value: '2', label: 'Dummy 2' },
@@ -20,7 +24,7 @@ export default function CreateBasicDetailComponent({setValue}) {
     citation: Yup.string(),
     internalNotes: Yup.string(),
     externalNotes: Yup.string(),
-  })
+  });
 
   const formik = useFormik({
     initialValues: {
@@ -35,10 +39,10 @@ export default function CreateBasicDetailComponent({setValue}) {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      console.log(values)
-      setValue(1)
+      console.log(values);
+      setValue(1);
     }
-  })
+  });
 
   return (
     <>

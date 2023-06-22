@@ -67,10 +67,6 @@ const SatutoryBenefitProfile = () => {
     }
   };
 
-  function HandleProfileDetail () {
-    router.push('/satutory-benefit/profile/detail')
-  }
-
   return (
     <>
       <TitleWrapper>

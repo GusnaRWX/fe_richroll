@@ -16,7 +16,7 @@ import {
   Switch,
 } from '@mui/material';
 import { useFormik } from 'formik';
-import * as Yup from 'yup'
+import * as Yup from 'yup';
 
 const rates = [
   {
@@ -77,7 +77,7 @@ export default function CreateRates() {
       fixed: Yup.string().required('This Field is Required'),
       amountCap: Yup.string().required('This Field is Required'),
     })
-  })
+  });
 
   const handleSubmit = (values) => {
     const payload = {
