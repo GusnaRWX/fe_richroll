@@ -8,7 +8,7 @@ import {
   Grid,
 } from '@mui/material';
 import Table from '@/components/_shared/form/Table';
-import { IconButton, Button, DatePicker } from '@/components/_shared/form';
+import { IconButton, Button, DatePicker, CheckBox } from '@/components/_shared/form';
 import styled from '@emotion/styled';
 import { visuallyHidden } from '@mui/utils';
 import { useRouter } from 'next/router';
@@ -76,6 +76,7 @@ function SutatoryBenefitProfileTable({
   const [DeleteConfirmation, setDeleteConfirmation] = useState(false);
   const [DuplicateConfirmation, setDuplicateConfirmation] = useState(false);
   const [activateConfirmation, setActivateConfirmation] = useState(false);
+  const [archiveConfirmation, setArchiveConfirmation] = useState(false);
   const [hydrated, setHaydrated] = useState(false);
 
   const data = {
@@ -290,6 +291,7 @@ function SutatoryBenefitProfileTable({
                             sx={{ bgcolor: '#FFEDD5', color: '#F97316' }}
                             startIcon={<HiOutlineArchive />}
                             label='Archive'
+                            onClick={() => setArchiveConfirmation(true)}
                           />
                         )}
                       </ButtonWrapper>
@@ -345,6 +347,18 @@ function SutatoryBenefitProfileTable({
               <DatePicker customLabel='Expiration Date' />
             </Grid>
           </Grid>
+        </Grid>
+      </CustomModal>
+      <CustomModal
+        open={archiveConfirmation}
+        handleClose={() => setArchiveConfirmation(false)}
+        handleConfirm={() => setArchiveConfirmation(false)}
+        title='Archivation Date'
+        width='40%'
+      >
+        <Grid>
+          <DatePicker customLabel='Input Effective Archivation Date' withAsterisk />
+          <CheckBox customLabel='Replace with New Profile' />
         </Grid>
       </CustomModal>
     </>
