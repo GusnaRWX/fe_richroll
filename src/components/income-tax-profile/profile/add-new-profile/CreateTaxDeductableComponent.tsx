@@ -20,7 +20,9 @@ const AddButton = styled(Button)({
 const CreateTaxDeductableComponent = () => {
   const [isAddNewDeductableComponent, setIsAddNewDeductableComponent] =
     useState(false);
-  const [initialDeductableValues, setInitialDeductableValues] = useState([]);
+  const [initialDeductableValues, setInitialDeductableValues] = useState<
+    string[]
+  >([]);
 
   const selectedDeductableComponents = [
     {
@@ -60,20 +62,22 @@ const CreateTaxDeductableComponent = () => {
     if (checked) {
       // Select All
       if (name === "Component Name") {
-        const allValues = selectedDeductableComponents.map(
+        const allValues: string[] = selectedDeductableComponents.map(
           (option) => option.componentName
         );
         setInitialDeductableValues([...allValues]);
 
         // Select One
       } else {
-        setInitialDeductableValues((prevValues) => [...prevValues, name]);
+        setInitialDeductableValues((prevValues: string[]): any[] => [
+          ...prevValues,
+          name,
+        ]);
       }
     } else {
       // Unchecked Select All
       if (name === "Component Name") {
         setInitialDeductableValues([]);
-        console.log("here 2");
 
         // Unchecked Select One
       } else {
