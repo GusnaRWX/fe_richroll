@@ -17,7 +17,9 @@ import DeleteIcon from '@mui/icons-material/Delete';
 export default function SatutoryBenefitProfileDetail() {
   const router = useRouter();
 
-  const [open, setOpen] = React.useState(false);
+  const [duplicateConfirmation, setDuplicateConfirmation] = useState(false);
+  const [deleteConfirmation, setDeleteConfirmation] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const Header = styled('div')({
     display: 'flex',
@@ -328,7 +330,7 @@ export default function SatutoryBenefitProfileDetail() {
       {/* Pop Up Setting ============================== */}
       <ConfirmationModal
         forDeleteAction
-        open={DeleteConfirmation}
+        open={deleteConfirmation}
         handleClose={() => setDeleteConfirmation(false)}
         title='Delete Data Entry'
         content='You are about to delete this attendance data entry. This action cannot be undone.'
@@ -337,7 +339,7 @@ export default function SatutoryBenefitProfileDetail() {
         callback={() => setDeleteConfirmation(false)}
       />
       <ConfirmationModal
-        open={DuplicateConfirmation}
+        open={duplicateConfirmation}
         handleClose={() => setDuplicateConfirmation(false)}
         title='Confirmation'
         content='Are you sure you want to duplicate this profile ?'
