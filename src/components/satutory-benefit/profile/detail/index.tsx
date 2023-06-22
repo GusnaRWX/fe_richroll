@@ -19,7 +19,9 @@ export default function SatutoryBenefitProfileDetail() {
 
   const [duplicateConfirmation, setDuplicateConfirmation] = useState(false);
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [archiveConfirmation, setArchiveConfirmation] = useState(false);
+  const [activateConfirmation, setActivateConfirmation] = useState(false);
+
 
   const Header = styled('div')({
     display: 'flex',
@@ -108,7 +110,7 @@ export default function SatutoryBenefitProfileDetail() {
             sx={{ bgcolor: '#FFEDD5', color: '#F97316', width: 'fit-content' }}
             startIcon={<HiOutlineArchive />}
             label='Archive'
-            onClick={() => setOpen(true)}
+            onClick={() => setArchiveConfirmation(true)}
           />
           <Button
             color='green'
@@ -122,6 +124,7 @@ export default function SatutoryBenefitProfileDetail() {
             sx={{ bgcolor: '#223567', color: '#fff', width: 'fit-content' }}
             startIcon={<HiUpload />}
             label='Activate'
+            onClick={() => setActivateConfirmation(true)}
           />
         </NextBtnWrapper>
       </Header>
@@ -348,9 +351,9 @@ export default function SatutoryBenefitProfileDetail() {
         callback={() => setDuplicateConfirmation(false)}
       />
       <CustomModal
-        open={open}
-        handleClose={() => setOpen(false)}
-        handleConfirm={() => setOpen(false)}
+        open={archiveConfirmation}
+        handleClose={() => setArchiveConfirmation(false)}
+        handleConfirm={() => setArchiveConfirmation(false)}
         title='Archivation Date'
         width='40%'
       >
@@ -359,6 +362,28 @@ export default function SatutoryBenefitProfileDetail() {
           <CheckBox customLabel='Replace with New Profile' />
         </Grid>
       </CustomModal>
+      <CustomModal
+        open={activateConfirmation}
+        handleClose={() => setActivateConfirmation(false)}
+        handleConfirm={() => setActivateConfirmation(false)}
+        title='Publication Date'
+        width='40%'
+      >
+        <Grid container p={2} spacing={2}>
+          <Grid item xs={12} md={12} lg={12} xl={12}>
+            <Typography>Do you want to Activate the tax profile?</Typography>
+          </Grid>
+          <Grid item container spacing={2}>
+            <Grid item xs={12} md={6} lg={6} xl={6}>
+              <DatePicker customLabel='Effective Date' />
+            </Grid>
+            <Grid item xs={12} md={6} lg={6} xl={6}>
+              <DatePicker customLabel='Expiration Date' />
+            </Grid>
+          </Grid>
+        </Grid>
+      </CustomModal>
+
     </>
   );
 }
