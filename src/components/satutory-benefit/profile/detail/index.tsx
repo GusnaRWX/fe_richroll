@@ -16,6 +16,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 export default function SatutoryBenefitProfileDetail() {
   const router = useRouter();
   const [DeleteConfirmation, setDeleteConfirmation] = useState(false)
+  const [DuplicateConfirmation, setDuplicateConfirmation] = useState(false)
 
   const Header = styled('div')({
     display: 'flex',
@@ -97,6 +98,7 @@ export default function SatutoryBenefitProfileDetail() {
             }}
             startIcon={<FiCopy />}
             label='Duplicate'
+            onClick={() => setDuplicateConfirmation(true)}
           />
           <Button
             color='orange'
@@ -331,6 +333,15 @@ export default function SatutoryBenefitProfileDetail() {
         withCallback
         noChange={true}
         callback={() => setDeleteConfirmation(false)}
+      />
+      <ConfirmationModal
+        open={DuplicateConfirmation}
+        handleClose={() => setDuplicateConfirmation(false)}
+        title='Confirmation'
+        content='Are you sure you want to duplicate this profile ?'
+        withCallback
+        noChange={true}
+        callback={() => setDuplicateConfirmation(false)}
       />
     </>
   );
