@@ -1,9 +1,10 @@
 import React from 'react';
-import { Button, IconButton } from '@/components/_shared/form';
+import { Button, IconButton, DatePicker, CheckBox } from '@/components/_shared/form';
 import { styled } from '@mui/material/styles';
 import { Typography, Box, Paper, Grid } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import { useRouter } from 'next/router';
+import { CustomModal } from '@/components/_shared/common';
 
 // Icon Import
 import { HiPencilAlt } from 'react-icons/hi';
@@ -13,6 +14,8 @@ import { HiOutlineArchive } from 'react-icons/hi';
 
 export default function SatutoryBenefitProfileDetail() {
   const router = useRouter();
+
+  const [open, setOpen] = React.useState(false);
 
   const Header = styled('div')({
     display: 'flex',
@@ -93,6 +96,7 @@ export default function SatutoryBenefitProfileDetail() {
             sx={{ bgcolor: '#FFEDD5', color: '#F97316', width: 'fit-content' }}
             startIcon={<HiOutlineArchive />}
             label='Archive'
+            onClick={() => setOpen(true)}
           />
           <Button
             color='green'
@@ -311,6 +315,18 @@ export default function SatutoryBenefitProfileDetail() {
           </Grid>
         </Grid>
       </Paper>
+      <CustomModal
+        open={open}
+        handleClose={() => setOpen(false)}
+        handleConfirm={() => setOpen(false)}
+        title='Archivation Date'
+        width='40%'
+      >
+        <Grid>
+          <DatePicker customLabel='Input Effective Archivation Date' withAsterisk />
+          <CheckBox customLabel='Replace with New Profile' />
+        </Grid>
+      </CustomModal>
     </>
   );
 }
