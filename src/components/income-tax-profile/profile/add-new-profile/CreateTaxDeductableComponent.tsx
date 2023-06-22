@@ -17,27 +17,72 @@ const AddButton = styled(Button)({
   },
 });
 
-type TempInitialDeductableValues = {
-  title: string;
-  subTitle: string;
-  additionalPayload?: string;
-};
-
 const CreateTaxDeductableComponent = () => {
-  const [initialDeductableValues, setInitialDeductableValues] = useState<
-    TempInitialDeductableValues[]
-  >([]);
-
   const [isAddNewDeductableComponent, setIsAddNewDeductableComponent] =
     useState(false);
+  const [initialDeductableValues, setInitialDeductableValues] = useState([]);
 
-  function handleClose() {
+  const selectedDeductableComponents = [
+    {
+      componentName: "Marital Deductable",
+      componentCondition: "Marital Status",
+    },
+    {
+      componentName: "Employee Dependants 2023",
+      componentCondition: "Number Of Dependants",
+    },
+    {
+      componentName: "Occupational Allowances",
+      componentCondition: "Manual",
+    },
+    {
+      componentName: "Other Component 01",
+      componentCondition: "Manual",
+    },
+    {
+      componentName: "Other Component 02",
+      componentCondition: "Manual",
+    },
+  ];
+
+  const handleClose = () => {
     setIsAddNewDeductableComponent(false);
-  }
+  };
 
-  function handleSubmit() {
+  const handleSubmit = () => {
     console.log("submit");
-  }
+  };
+
+  const onChangeCheckboxHandler = (e) => {
+    const name: string = e.target.name;
+    const checked: boolean = e.target.checked;
+
+    if (checked) {
+      // Select All
+      if (name === "Component Name") {
+        const allValues = selectedDeductableComponents.map(
+          (option) => option.componentName
+        );
+        setInitialDeductableValues([...allValues]);
+
+        // Select One
+      } else {
+        setInitialDeductableValues((prevValues) => [...prevValues, name]);
+      }
+    } else {
+      // Unchecked Select All
+      if (name === "Component Name") {
+        setInitialDeductableValues([]);
+        console.log("here 2");
+
+        // Unchecked Select One
+      } else {
+        setInitialDeductableValues((prevValues) =>
+          prevValues.filter((selectedCheckbox) => selectedCheckbox !== name)
+        );
+      }
+    }
+  };
 
   return (
     <Box component="div">
@@ -372,7 +417,15 @@ const CreateTaxDeductableComponent = () => {
         <Box sx={{ flexGrow: 1 }}>
           <Grid container sx={{ display: "flex", alignItems: "center" }}>
             <Grid item xs={1} md={1} lg={1} xl={1}>
-              <CheckBox name="Employee Name" customLabel="" />
+              <CheckBox
+                name="Component Name"
+                customLabel=""
+                checked={
+                  initialDeductableValues.length ===
+                  selectedDeductableComponents.length
+                }
+                onChange={onChangeCheckboxHandler}
+              />
             </Grid>
             <Grid
               item
@@ -413,105 +466,36 @@ const CreateTaxDeductableComponent = () => {
           </Grid>
         </Box>
 
-        <Box sx={{ flexGrow: 1 }}>
-          <Grid container sx={{ display: "flex", alignItems: "center" }}>
-            <Grid item xs={1} md={1} lg={1} xl={1}>
-              <CheckBox name="Marital Deductable" customLabel="" />
-            </Grid>
-            <Grid item xs={4} md={4} lg={4} xl={4}>
-              <Typography
-                sx={{ fontWeight: 500, color: "#4B5563", fontSize: "14px" }}
-              >
-                Marital Deductable
-              </Typography>
-            </Grid>
-            <Grid item xs={4} md={4} lg={4} xl={4}>
-              <Typography sx={{ fontWeight: 400, color: "#4B5563" }}>
-                Marital Status
-              </Typography>
-            </Grid>
-          </Grid>
-        </Box>
-
-        <Box sx={{ flexGrow: 1 }}>
-          <Grid container sx={{ display: "flex", alignItems: "center" }}>
-            <Grid item xs={1} md={1} lg={1} xl={1}>
-              <CheckBox name="Employee Dependants 2023" customLabel="" />
-            </Grid>
-            <Grid item xs={4} md={4} lg={4} xl={4}>
-              <Typography
-                sx={{ fontWeight: 500, color: "#4B5563", fontSize: "14px" }}
-              >
-                Employee Dependants 2023
-              </Typography>
-            </Grid>
-            <Grid item xs={4} md={4} lg={4} xl={4}>
-              <Typography sx={{ fontWeight: 400, color: "#4B5563" }}>
-                Number Of Dependants
-              </Typography>
-            </Grid>
-          </Grid>
-        </Box>
-
-        <Box sx={{ flexGrow: 1 }}>
-          <Grid container sx={{ display: "flex", alignItems: "center" }}>
-            <Grid item xs={1} md={1} lg={1} xl={1}>
-              <CheckBox name="Occupational Allowances" customLabel="" />
-            </Grid>
-            <Grid item xs={4} md={4} lg={4} xl={4}>
-              <Typography
-                sx={{ fontWeight: 500, color: "#4B5563", fontSize: "14px" }}
-              >
-                Occupational Allowances
-              </Typography>
-            </Grid>
-            <Grid item xs={4} md={4} lg={4} xl={4}>
-              <Typography sx={{ fontWeight: 400, color: "#4B5563" }}>
-                Manual
-              </Typography>
-            </Grid>
-          </Grid>
-        </Box>
-
-        <Box sx={{ flexGrow: 1 }}>
-          <Grid container sx={{ display: "flex", alignItems: "center" }}>
-            <Grid item xs={1} md={1} lg={1} xl={1}>
-              <CheckBox name="Other Component 01" customLabel="" />
-            </Grid>
-            <Grid item xs={4} md={4} lg={4} xl={4}>
-              <Typography
-                sx={{ fontWeight: 500, color: "#4B5563", fontSize: "14px" }}
-              >
-                Other Component 01
-              </Typography>
-            </Grid>
-            <Grid item xs={4} md={4} lg={4} xl={4}>
-              <Typography sx={{ fontWeight: 400, color: "#4B5563" }}>
-                Manual
-              </Typography>
-            </Grid>
-          </Grid>
-        </Box>
-
-        <Box sx={{ flexGrow: 1 }}>
-          <Grid container sx={{ display: "flex", alignItems: "center" }}>
-            <Grid item xs={1} md={1} lg={1} xl={1}>
-              <CheckBox name="Other Component 02" customLabel="" />
-            </Grid>
-            <Grid item xs={4} md={4} lg={4} xl={4}>
-              <Typography
-                sx={{ fontWeight: 500, color: "#4B5563", fontSize: "14px" }}
-              >
-                Other Component 02
-              </Typography>
-            </Grid>
-            <Grid item xs={4} md={4} lg={4} xl={4}>
-              <Typography sx={{ fontWeight: 400, color: "#4B5563" }}>
-                Manual
-              </Typography>
-            </Grid>
-          </Grid>
-        </Box>
+        {selectedDeductableComponents.map((value, i) => {
+          return (
+            <Box sx={{ flexGrow: 1 }}>
+              <Grid container sx={{ display: "flex", alignItems: "center" }}>
+                <Grid item xs={1} md={1} lg={1} xl={1}>
+                  <CheckBox
+                    name={value.componentName}
+                    customLabel=""
+                    checked={initialDeductableValues.includes(
+                      value.componentName
+                    )}
+                    onChange={onChangeCheckboxHandler}
+                  />
+                </Grid>
+                <Grid item xs={4} md={4} lg={4} xl={4}>
+                  <Typography
+                    sx={{ fontWeight: 500, color: "#4B5563", fontSize: "14px" }}
+                  >
+                    {value.componentName}
+                  </Typography>
+                </Grid>
+                <Grid item xs={4} md={4} lg={4} xl={4}>
+                  <Typography sx={{ fontWeight: 400, color: "#4B5563" }}>
+                    {value.componentCondition}
+                  </Typography>
+                </Grid>
+              </Grid>
+            </Box>
+          );
+        })}
       </CustomModal>
     </Box>
   );
