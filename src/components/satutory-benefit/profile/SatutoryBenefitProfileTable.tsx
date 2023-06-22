@@ -73,6 +73,7 @@ function SutatoryBenefitProfileTable({
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
   const [DeleteConfirmation, setDeleteConfirmation] = useState(false)
+  const [DuplicateConfirmation, setDuplicateConfirmation] = useState(false)
   const [hydrated, setHaydrated] = useState(false);
 
   const data = {
@@ -261,6 +262,7 @@ function SutatoryBenefitProfileTable({
                               boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.05)',
                             }}
                             icons={<FiCopy fontSize={20} color='#374151' />}
+                            onClick={() => setDuplicateConfirmation(true)}
                           />
                         )}
                         {DetailAction && (
@@ -311,6 +313,15 @@ function SutatoryBenefitProfileTable({
         withCallback
         noChange={true}
         callback={() => setDeleteConfirmation(false)}
+      />
+      <ConfirmationModal
+        open={DuplicateConfirmation}
+        handleClose={() => setDuplicateConfirmation(false)}
+        title='Confirmation'
+        content='Are you sure you want to duplicate this profile ?'
+        withCallback
+        noChange={true}
+        callback={() => setDuplicateConfirmation(false)}
       />
     </>
   );
