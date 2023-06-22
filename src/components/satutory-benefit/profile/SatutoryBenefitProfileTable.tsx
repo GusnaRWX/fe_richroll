@@ -5,13 +5,14 @@ import {
   Box,
   TableSortLabel,
   Typography,
+  Grid,
 } from '@mui/material';
 import Table from '@/components/_shared/form/Table';
-import { IconButton, Button } from '@/components/_shared/form';
+import { IconButton, Button, DatePicker } from '@/components/_shared/form';
 import styled from '@emotion/styled';
 import { visuallyHidden } from '@mui/utils';
 import { useRouter } from 'next/router';
-import { ConfirmationModal } from '@/components/_shared/common';
+import { ConfirmationModal, CustomModal } from '@/components/_shared/common';
 
 // Import Icon React Icon
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -72,8 +73,9 @@ function SutatoryBenefitProfileTable({
   const [page, setPage] = useState(0);
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
-  const [DeleteConfirmation, setDeleteConfirmation] = useState(false)
-  const [DuplicateConfirmation, setDuplicateConfirmation] = useState(false)
+  const [DeleteConfirmation, setDeleteConfirmation] = useState(false);
+  const [DuplicateConfirmation, setDuplicateConfirmation] = useState(false);
+  const [activateConfirmation, setActivateConfirmation] = useState(false);
   const [hydrated, setHaydrated] = useState(false);
 
   const data = {
@@ -253,6 +255,7 @@ function SutatoryBenefitProfileTable({
                             sx={{ bgcolor: '#DCFCE7', color: '#16A34A' }}
                             startIcon={<HiUpload />}
                             label='Activate'
+                            onClick={() => setActivateConfirmation(true)}
                           />
                         )}
                         {CopyAction && (
@@ -323,6 +326,27 @@ function SutatoryBenefitProfileTable({
         noChange={true}
         callback={() => setDuplicateConfirmation(false)}
       />
+      <CustomModal
+        open={activateConfirmation}
+        handleClose={() => setActivateConfirmation(false)}
+        handleConfirm={() => setActivateConfirmation(false)}
+        title='Publication Date'
+        width='40%'
+      >
+        <Grid container p={2} spacing={2}>
+          <Grid item xs={12} md={12} lg={12} xl={12}>
+            <Typography>Do you want to Activate the tax profile?</Typography>
+          </Grid>
+          <Grid item container spacing={2}>
+            <Grid item xs={12} md={6} lg={6} xl={6}>
+              <DatePicker customLabel='Effective Date' />
+            </Grid>
+            <Grid item xs={12} md={6} lg={6} xl={6}>
+              <DatePicker customLabel='Expiration Date' />
+            </Grid>
+          </Grid>
+        </Grid>
+      </CustomModal>
     </>
   );
 }
