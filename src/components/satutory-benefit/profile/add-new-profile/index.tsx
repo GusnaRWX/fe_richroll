@@ -161,7 +161,7 @@ export default function CreateNewProfile() {
                     width: '250px',
                   }}
                 >
-                  Create Statutory Benefit Profile Geprek Bensu
+                  Create Statutory Benefit
                 </Typography>
               </HeaderPageTitle>
               <NextBtnWrapper>
