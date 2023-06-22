@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, IconButton } from '@/components/_shared/form';
 import { styled } from '@mui/material/styles';
 import { Typography, Box, Paper, Grid } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import { useRouter } from 'next/router';
+import { ConfirmationModal } from '@/components/_shared/common';
 
 // Icon Import
 import { HiPencilAlt } from 'react-icons/hi';
@@ -12,6 +13,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 export default function SatutoryBenefitComponentDetail() {
   const router = useRouter();
+  const [DeleteConfirmation, setDeleteConfirmation] = useState(false);
 
   const Header = styled('div')({
     display: 'flex',
@@ -50,16 +52,29 @@ export default function SatutoryBenefitComponentDetail() {
               router.push('/satutory-benefit/component');
             }}
           />
-          <Typography
-            style={{
-              color: '#223567',
-              fontSize: '20px',
-              fontWeight: '700',
-              width: '350px',
-            }}
-          >
-            Statutory Benefit Component
-          </Typography>
+          <div>
+            <Typography
+              style={{
+                color: '#223567',
+                fontSize: '20px',
+                fontWeight: '700',
+                width: '350px',
+              }}
+            >
+              Statutory Benefit Component
+            </Typography>
+            <Typography
+              style={{
+                color: '#223567',
+                fontSize: '14px',
+                fontWeight: '400',
+                width: '250px',
+                marginTop: '-3px',
+              }}
+            >
+              Profile dudul kanabawi
+            </Typography>
+          </div>
         </HeaderPageTitle>
         <NextBtnWrapper>
           <Button
@@ -79,6 +94,7 @@ export default function SatutoryBenefitComponentDetail() {
             sx={{ bgcolor: '#FECACA', color: '#DC2626', width: 'fit-content' }}
             startIcon={<DeleteIcon />}
             label='Delete'
+            onClick={() => setDeleteConfirmation(true)}
           />
           <Button
             color='green'
@@ -367,6 +383,16 @@ export default function SatutoryBenefitComponentDetail() {
           </Grid>
         </Grid>
       </Paper>
+      <ConfirmationModal
+        forDeleteAction
+        open={DeleteConfirmation}
+        handleClose={() => setDeleteConfirmation(false)}
+        title='Delete Data Entry'
+        content='You are about to delete this statutory benefit component. This action cannot be undone.'
+        withCallback
+        noChange={true}
+        callback={() => setDeleteConfirmation(false)}
+      />
     </>
   );
 }

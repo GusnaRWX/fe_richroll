@@ -11,6 +11,7 @@ import { IconButton } from '@/components/_shared/form';
 import styled from '@emotion/styled';
 import { visuallyHidden } from '@mui/utils';
 import { useRouter } from 'next/router';
+import { ConfirmationModal } from '@/components/_shared/common';
 
 // Import Icon React Icon
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -40,13 +41,13 @@ interface SutatoryBenefitComponentTableProps {
 
 type Order = 'asc' | 'desc';
 
-function SutatoryBenefitComponentTable({
-  // tabValue,
-}: SutatoryBenefitComponentTableProps) {
+function SutatoryBenefitComponentTable({}: // tabValue,
+SutatoryBenefitComponentTableProps) {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
+  const [DeleteConfirmation, setDeleteConfirmation] = useState(false);
   const [hydrated, setHaydrated] = useState(false);
 
   const data = {
@@ -126,8 +127,8 @@ function SutatoryBenefitComponentTable({
   }
 
   const router = useRouter();
-  function DetailActionHandler () {
-    router.push('/satutory-benefit/component/detail')
+  function DetailActionHandler() {
+    router.push('/satutory-benefit/component/detail');
   }
 
   return (
@@ -192,6 +193,7 @@ function SutatoryBenefitComponentTable({
                         <IconButton
                           parentColor='red.100'
                           icons={<DeleteIcon sx={{ color: '#EF4444' }} />}
+                          onClick={() => setDeleteConfirmation(true)}
                         />
                       </ButtonWrapper>
                     </TableCell>
@@ -205,6 +207,16 @@ function SutatoryBenefitComponentTable({
                 </TableCell>
               </TableRow>
             )}
+            <ConfirmationModal
+              forDeleteAction
+              open={DeleteConfirmation}
+              handleClose={() => setDeleteConfirmation(false)}
+              title='Delete Data Entry'
+              content='You are about to delete this statutory benefit component. This action cannot be undone.'
+              withCallback
+              noChange={true}
+              callback={() => setDeleteConfirmation(false)}
+            />
           </>
         }
       />

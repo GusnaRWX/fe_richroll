@@ -1,15 +1,7 @@
 import React from 'react';
-import {
-  Button,
-  IconButton,
-} from '@/components/_shared/form';
+import { Button, IconButton } from '@/components/_shared/form';
 import { styled } from '@mui/material/styles';
-import {
-  Typography,
-  Box,
-  Paper,
-  Grid,
-} from '@mui/material';
+import { Typography, Box, Paper, Grid } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 
@@ -45,7 +37,7 @@ export default function SatutoryBenefitProfileDetail() {
   });
 
   function EditActionHandler() {
-    router.push('/satutory-benefit/profile/add-new-profile')
+    router.push('/satutory-benefit/profile/add-new-profile');
   }
 
   return (
@@ -59,16 +51,29 @@ export default function SatutoryBenefitProfileDetail() {
               router.push('/satutory-benefit/profile');
             }}
           />
-          <Typography
-            style={{
-              color: '#223567',
-              fontSize: '20px',
-              fontWeight: '700',
-              width: '250px',
-            }}
-          >
-            Statutory Benefit Profile
-          </Typography>
+          <div>
+            <Typography
+              style={{
+                color: '#223567',
+                fontSize: '20px',
+                fontWeight: '700',
+                width: '250px',
+              }}
+            >
+              Statutory Benefit Profile
+            </Typography>
+            <Typography
+              style={{
+                color: '#223567',
+                fontSize: '14px',
+                fontWeight: '400',
+                width: '250px',
+                marginTop: '-3px',
+              }}
+            >
+              Profile dudul kanabawi
+            </Typography>
+          </div>
         </HeaderPageTitle>
         <NextBtnWrapper>
           <Button
@@ -105,78 +110,204 @@ export default function SatutoryBenefitProfileDetail() {
         </NextBtnWrapper>
       </Header>
       <Paper style={{ padding: '21px 32px' }}>
-      <Grid container spacing={2}>
+        <Grid container spacing={2}>
           <Grid item xs={2} md={2} lg={2} xl={2}>
-            <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px' >Profile Name</Typography>
-            <Typography component='div' variant='text-sm' color='#4B5563'>-</Typography>
+            <Typography
+              component='div'
+              variant='text-sm'
+              color='#9CA3AF'
+              mb='8px'
+            >
+              Profile Name
+            </Typography>
+            <Typography component='div' variant='text-sm' color='#4B5563'>
+              -
+            </Typography>
           </Grid>
           <Grid item xs={2} md={2} lg={2} xl={2}>
-            <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px' >Country</Typography>
-            <Typography component='div' variant='text-sm' color='#4B5563'>-</Typography>
+            <Typography
+              component='div'
+              variant='text-sm'
+              color='#9CA3AF'
+              mb='8px'
+            >
+              Country
+            </Typography>
+            <Typography component='div' variant='text-sm' color='#4B5563'>
+              -
+            </Typography>
           </Grid>
           <Grid item xs={2} md={2} lg={2} xl={2}>
-            <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px' >Province</Typography>
-            <Typography component='div' variant='text-sm' color='#4B5563'>-</Typography>
+            <Typography
+              component='div'
+              variant='text-sm'
+              color='#9CA3AF'
+              mb='8px'
+            >
+              Province
+            </Typography>
+            <Typography component='div' variant='text-sm' color='#4B5563'>
+              -
+            </Typography>
           </Grid>
           <Grid item xs={2} md={2} lg={2} xl={2}>
-            <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px' >City</Typography>
-            <Typography component='div' variant='text-sm' color='#4B5563'>-</Typography>
+            <Typography
+              component='div'
+              variant='text-sm'
+              color='#9CA3AF'
+              mb='8px'
+            >
+              City
+            </Typography>
+            <Typography component='div' variant='text-sm' color='#4B5563'>
+              -
+            </Typography>
           </Grid>
           <Grid item xs={2} md={2} lg={2} xl={2}>
-            <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px' >Sub-Distric</Typography>
-            <Typography component='div' variant='text-sm' color='#4B5563'>-</Typography>
+            <Typography
+              component='div'
+              variant='text-sm'
+              color='#9CA3AF'
+              mb='8px'
+            >
+              Sub-Distric
+            </Typography>
+            <Typography component='div' variant='text-sm' color='#4B5563'>
+              -
+            </Typography>
           </Grid>
           <Grid item xs={2} md={2} lg={2} xl={2}>
-            <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px' >Effective Periode</Typography>
-            <Typography component='div' variant='text-sm' color='#4B5563'>-</Typography>
+            <Typography
+              component='div'
+              variant='text-sm'
+              color='#9CA3AF'
+              mb='8px'
+            >
+              Effective Periode
+            </Typography>
+            <Typography component='div' variant='text-sm' color='#4B5563'>
+              -
+            </Typography>
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
-            <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px' >Citatation</Typography>
-            <Typography component='div' variant='text-sm' color='#4B5563'>-</Typography>
+            <Typography
+              component='div'
+              variant='text-sm'
+              color='#9CA3AF'
+              mb='8px'
+            >
+              Citatation
+            </Typography>
+            <Typography component='div' variant='text-sm' color='#4B5563'>
+              -
+            </Typography>
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}></Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
-            <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px' >External Notes</Typography>
-            <Typography component='div' variant='text-sm' color='#4B5563'>-</Typography>
+            <Typography
+              component='div'
+              variant='text-sm'
+              color='#9CA3AF'
+              mb='8px'
+            >
+              External Notes
+            </Typography>
+            <Typography component='div' variant='text-sm' color='#4B5563'>
+              -
+            </Typography>
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
-            <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px' >Internal Notes</Typography>
-            <Typography component='div' variant='text-sm' color='#4B5563'>-</Typography>
+            <Typography
+              component='div'
+              variant='text-sm'
+              color='#9CA3AF'
+              mb='8px'
+            >
+              Internal Notes
+            </Typography>
+            <Typography component='div' variant='text-sm' color='#4B5563'>
+              -
+            </Typography>
           </Grid>
         </Grid>
       </Paper>
-      <Paper style={{ padding: '21px 32px', marginTop:'32px' }}>
+      <Paper style={{ padding: '21px 32px', marginTop: '32px' }}>
         <Grid container spacing={2}>
           <Grid item xs={12} md={12} lg={12} xl={12}>
-          <Typography
-            style={{
-              color: '#223567',
-              fontSize: '18px',
-              fontWeight: '700',
-            }}
-          >
-            Old Age
-          </Typography>
+            <Typography
+              style={{
+                color: '#223567',
+                fontSize: '18px',
+                fontWeight: '700',
+              }}
+            >
+              Old Age
+            </Typography>
           </Grid>
           <Grid item xs={2} md={2} lg={2} xl={2}>
-            <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px' >Contributor</Typography>
-            <Typography component='div' variant='text-sm' color='#4B5563'>-</Typography>
+            <Typography
+              component='div'
+              variant='text-sm'
+              color='#9CA3AF'
+              mb='8px'
+            >
+              Contributor
+            </Typography>
+            <Typography component='div' variant='text-sm' color='#4B5563'>
+              -
+            </Typography>
           </Grid>
           <Grid item xs={2} md={2} lg={2} xl={2}>
-            <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px' >Rate Types</Typography>
-            <Typography component='div' variant='text-sm' color='#4B5563'>-</Typography>
+            <Typography
+              component='div'
+              variant='text-sm'
+              color='#9CA3AF'
+              mb='8px'
+            >
+              Rate Types
+            </Typography>
+            <Typography component='div' variant='text-sm' color='#4B5563'>
+              -
+            </Typography>
           </Grid>
           <Grid item xs={2} md={2} lg={2} xl={2}>
-            <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px' >Flat Rate </Typography>
-            <Typography component='div' variant='text-sm' color='#4B5563'>-</Typography>
+            <Typography
+              component='div'
+              variant='text-sm'
+              color='#9CA3AF'
+              mb='8px'
+            >
+              Flat Rate{' '}
+            </Typography>
+            <Typography component='div' variant='text-sm' color='#4B5563'>
+              -
+            </Typography>
           </Grid>
           <Grid item xs={3} md={3} lg={3} xl={3}>
-            <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px' >Amount Cap</Typography>
-            <Typography component='div' variant='text-sm' color='#4B5563'>-</Typography>
+            <Typography
+              component='div'
+              variant='text-sm'
+              color='#9CA3AF'
+              mb='8px'
+            >
+              Amount Cap
+            </Typography>
+            <Typography component='div' variant='text-sm' color='#4B5563'>
+              -
+            </Typography>
           </Grid>
           <Grid item xs={3} md={3} lg={3} xl={3}>
-            <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px' >Effective Periode</Typography>
-            <Typography component='div' variant='text-sm' color='#4B5563'>-</Typography>
+            <Typography
+              component='div'
+              variant='text-sm'
+              color='#9CA3AF'
+              mb='8px'
+            >
+              Effective Periode
+            </Typography>
+            <Typography component='div' variant='text-sm' color='#4B5563'>
+              -
+            </Typography>
           </Grid>
         </Grid>
       </Paper>
