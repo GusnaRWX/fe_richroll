@@ -10,6 +10,8 @@ import Table from '@/components/_shared/form/Table';
 import { IconButton } from '@/components/_shared/form';
 import styled from '@emotion/styled';
 import { visuallyHidden } from '@mui/utils';
+import { useRouter } from 'next/router';
+import { ConfirmationModal } from '@/components/_shared/common';
 
 // Import Icon React Icon
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -45,6 +47,7 @@ function ItpDeductableComponentTable({
   const [page, setPage] = useState(0);
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
+  const [DeleteConfirmation, setDeleteConfirmation] = useState(false);
   const [hydrated, setHaydrated] = useState(false);
 
   const data = {
@@ -112,6 +115,12 @@ function ItpDeductableComponentTable({
   if (!hydrated) {
     return null;
   }
+
+  const router = useRouter();
+  function DetailActionHandler() {
+    router.push('/income-tax-profile/deductable-component/detail');
+  }
+
   return (
     <>
       <Table
@@ -167,10 +176,12 @@ function ItpDeductableComponentTable({
                         <IconButton
                           parentColor='primary.50'
                           icons={<HiPencilAlt fontSize={20} color='#223567' />}
+                          onClick={DetailActionHandler}
                         />
                         <IconButton
                           parentColor='red.100'
                           icons={<DeleteIcon sx={{ color: '#EF4444' }} />}
+                          onClick={()=>setDeleteConfirmation(true)}
                         />
                       </ButtonWrapper>
                     </TableCell>
@@ -184,6 +195,16 @@ function ItpDeductableComponentTable({
                 </TableCell>
               </TableRow>
             )}
+            <ConfirmationModal
+              open={DeleteConfirmation}
+              handleClose={() => setDeleteConfirmation(false)}
+              title='Delete Data Entry'
+              content='You are about to delete this statutory benefit component. This action cannot be undone.'
+              withCallback
+              noChange={true}
+              callback={() => setDeleteConfirmation(false)}
+              type='delete'
+            />
           </>
         }
       />
