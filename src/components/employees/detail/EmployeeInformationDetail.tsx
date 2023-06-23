@@ -59,11 +59,11 @@ function EmployeeInformationDetail({ data }: EmployeeInformationDetailProps) {
     <>
       <Typography component='h3' fontWeight='bold' fontSize={18} color='primary' mb='1rem'>Employee Information</Typography>
       <form>
-        <Text
+        {/* <Text
           title='Employee Photo'
           fontWeight={500}
           color='grey.400'
-        />
+        /> */}
         <div style={{ position: 'relative' }}>
           <ImageReview image={picture !== null ? picture : ImageType.AVATAR_PLACEHOLDER} />
           {picture && (
