@@ -96,11 +96,11 @@ export default function CreateRates() {
         employee: values.employeeData,
       };
     } else if (values.employer) {
+      // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
       payload = {
         employer: values.employerData,
       };
     }
-    console.log(payload);
   };
 
   const formik = useFormik({
@@ -129,7 +129,7 @@ export default function CreateRates() {
               checked={formik.values.employee}
               onChange={(e) => {
                 formik.setFieldValue('employee', e.target.checked);
-                formik.setFieldValue('employerMatch', e.target.checked ? false : true);
+                formik.setFieldValue('employerMatch', !e.target.checked);
               }}
             />
           }
@@ -141,7 +141,7 @@ export default function CreateRates() {
               checked={formik.values.employer}
               onChange={(e) => {
                 formik.setFieldValue('employer', e.target.checked);
-                formik.setFieldValue('employerMatch', e.target.checked ? false : true);
+                formik.setFieldValue('employerMatch', !e.target.checked);
               }}
             />
           }
@@ -266,7 +266,7 @@ export default function CreateRates() {
                           'employeeData.start',
                           e.target.value
                         );
-                        formik.values.employerMatch ? formik.setFieldValue('employerData.start', e.target.value) : null;
+                        formik.setFieldValue('employerData.start', formik.values.employerMatch ? e.target.value : null);
                       }}
                     />
                   </Box>
@@ -291,7 +291,7 @@ export default function CreateRates() {
                       value={formik.values.employeeData.end}
                       onChange={(e) => {
                         formik.setFieldValue('employeeData.end', e.target.value);
-                        formik.values.employerMatch ? formik.setFieldValue('employerData.end', e.target.value) : null;
+                        formik.setFieldValue('employerData.end', formik.values.employerMatch ? e.target.value : null);
                       }}
                     />
                   </Box>
@@ -335,7 +335,7 @@ export default function CreateRates() {
                     value={formik.values.employeeData.rate}
                     onChange={(e) => {
                       formik.setFieldValue('employeeData.rate', e.target.value);
-                      formik.values.employerMatch ? formik.setFieldValue('employerData.rate', e.target.value) : null;
+                      formik.setFieldValue('employerData.rate', formik.values.employerMatch ? e.target.value : null);
                     }}
                     size='small'
                     customLabel='Rate'
@@ -357,7 +357,7 @@ export default function CreateRates() {
                     value={formik.values.employeeData.fixed}
                     onChange={(e) => {
                       formik.setFieldValue('employeeData.fixed', e.target.value);
-                      formik.values.employerMatch ? formik.setFieldValue('employerData.fixed', e.target.value) : null;
+                      formik.setFieldValue('employerData.fixed', formik.values.employerMatch ? e.target.value : null);
                     }}
                     InputProps={{
                       endAdornment: (
@@ -385,7 +385,7 @@ export default function CreateRates() {
                       'employeeData.amountCap',
                       e.target.value
                     );
-                    formik.values.employerMatch ? formik.setFieldValue('employerData.amountCap', e.target.value) : null;
+                    formik.setFieldValue('employerData.amountCap', formik.values.employerMatch ? e.target.value : null);
                   }}
                   InputProps={{
                     endAdornment: (
