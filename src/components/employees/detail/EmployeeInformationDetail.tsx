@@ -203,7 +203,7 @@ function EmployeeInformationDetail({ data }: EmployeeInformationDetailProps) {
           />
           {
             data?.isPermanent === false ? (
-              <Chip label='Non Active' sx={{ backgroundColor: '#FEE2E2', color: '#166534', fontWeight: 'bold' }} />
+              <Chip label='Inactive' sx={{ backgroundColor: '#FEE2E2', color: '#DC2626', fontWeight: 'bold' }} />
             ) : (
               <Chip label='Active' sx={{ backgroundColor: '#DCFCE7', color: '#166534', fontWeight: 'bold' }} />
             )
