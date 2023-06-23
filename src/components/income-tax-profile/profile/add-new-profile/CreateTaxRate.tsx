@@ -7,12 +7,12 @@ import AddIcon from '@mui/icons-material/Add';
 import * as Yup from 'yup';
 
 export default function CreateTaxRate() {
-  interface InitialValues {
-    minIncome: string;
-    maxIncome: string;
-    rate: string;
-    additionalAmount?: string;
-  }
+  // interface InitialValues {
+  //   minIncome: string;
+  //   maxIncome: string;
+  //   rate: string;
+  //   additionalAmount?: string;
+  // }
 
   const initialValues = {
     component: [{
@@ -97,10 +97,10 @@ export default function CreateTaxRate() {
                             size='small'
                             value={formik.values.component[index].minIncome}
                             onChange={(e) => formik.setFieldValue(`component.${index}.minIncome`, e.target.value)}
-                            {...(formik.touched.component && formik.errors.component && {
-                              error: formik.touched.component[index].minIncome && Boolean((formik.errors.component[index] as unknown as InitialValues).minIncome),
-                              helperText: formik.touched.component[index].minIncome && (formik.errors.component[index] as unknown as InitialValues).minIncome
-                            })}
+                            // {...(formik.touched.component && formik.errors.component && {
+                            //   error: formik.touched.component[index].minIncome && Boolean((formik.errors.component[index] as unknown as InitialValues).minIncome),
+                            //   helperText: formik.touched.component[index].minIncome && (formik.errors.component[index] as unknown as InitialValues).minIncome
+                            // })}
                           />
                         </Grid>
                         <Grid item mb={0.5} xs={0.3}>
@@ -164,7 +164,14 @@ export default function CreateTaxRate() {
                 ))}
               </>
             )} />
-            <Button label='save' onClick={() => formik.submitForm()} />
+            <Grid container direction='row-reverse' spacing={2} p={2} alignItems='center'>
+              <Grid item>
+                <Button label='Next' onClick={() => formik.submitForm()} />
+              </Grid>
+              <Grid item>
+                <Button label='Back' variant='outlined' onClick={() => formik.submitForm()} />
+              </Grid>
+            </Grid>
           </form>
         )}
       </Formik>
