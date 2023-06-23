@@ -45,7 +45,7 @@ export default function CreateRates() {
   const initialValues = {
     employee: true,
     employer: false,
-    employerMatch: false,
+    employerMatch: true,
     employeeData: {
       start: 0,
       end: 0,
@@ -80,13 +80,27 @@ export default function CreateRates() {
   });
 
   const handleSubmit = (values) => {
-    const payload = {
-      employee: values.employeeData,
-      employer: values.employerMatch
-        ? values.employeeData
-        : values.employerData,
-    };
-    console.log(payload);
+    let payload = {};
+    if (values.employerMatch && values.employer && values.employee) {
+      payload= {
+        employee: values.employeeData,
+        employer: values.employeeData,
+      };
+    } else if (values.employee && values.employer) {
+      payload = {
+        employee: values.employeeData,
+        employer: values.employerData,
+      };
+    } else if (values.employee) {
+      payload = {
+        employee: values.employeeData,
+      };
+    } else if (values.employer) {
+      // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+      payload = {
+        employer: values.employerData,
+      };
+    }
   };
 
   const formik = useFormik({
@@ -113,9 +127,10 @@ export default function CreateRates() {
           control={
             <Checkbox
               checked={formik.values.employee}
-              onChange={(e) =>
-                formik.setFieldValue('employee', e.target.checked)
-              }
+              onChange={(e) => {
+                formik.setFieldValue('employee', e.target.checked);
+                formik.setFieldValue('employerMatch', !e.target.checked);
+              }}
             />
           }
           label='Employee'
@@ -124,9 +139,10 @@ export default function CreateRates() {
           control={
             <Checkbox
               checked={formik.values.employer}
-              onChange={(e) =>
-                formik.setFieldValue('employer', e.target.checked)
-              }
+              onChange={(e) => {
+                formik.setFieldValue('employer', e.target.checked);
+                formik.setFieldValue('employerMatch', !e.target.checked);
+              }}
             />
           }
           label='Employer'
@@ -245,12 +261,13 @@ export default function CreateRates() {
                       size='small'
                       fullWidth
                       value={formik.values.employeeData.start}
-                      onChange={(e) =>
+                      onChange={(e) => {
                         formik.setFieldValue(
                           'employeeData.start',
                           e.target.value
-                        )
-                      }
+                        );
+                        formik.setFieldValue('employerData.start', formik.values.employerMatch ? e.target.value : null);
+                      }}
                     />
                   </Box>
                 </Box>
@@ -272,9 +289,10 @@ export default function CreateRates() {
                       customLabel='End'
                       size='small'
                       value={formik.values.employeeData.end}
-                      onChange={(e) =>
-                        formik.setFieldValue('employeeData.end', e.target.value)
-                      }
+                      onChange={(e) => {
+                        formik.setFieldValue('employeeData.end', e.target.value);
+                        formik.setFieldValue('employerData.end', formik.values.employerMatch ? e.target.value : null);
+                      }}
                     />
                   </Box>
                   <IconButton
@@ -315,9 +333,10 @@ export default function CreateRates() {
                   <Select
                     displayEmpty
                     value={formik.values.employeeData.rate}
-                    onChange={(e) =>
-                      formik.setFieldValue('employeeData.rate', e.target.value)
-                    }
+                    onChange={(e) => {
+                      formik.setFieldValue('employeeData.rate', e.target.value);
+                      formik.setFieldValue('employerData.rate', formik.values.employerMatch ? e.target.value : null);
+                    }}
                     size='small'
                     customLabel='Rate'
                     withAsterisk
@@ -336,9 +355,10 @@ export default function CreateRates() {
                     customLabel='Additional Fixed Amount'
                     size='small'
                     value={formik.values.employeeData.fixed}
-                    onChange={(e) =>
-                      formik.setFieldValue('employeeData.fixed', e.target.value)
-                    }
+                    onChange={(e) => {
+                      formik.setFieldValue('employeeData.fixed', e.target.value);
+                      formik.setFieldValue('employerData.fixed', formik.values.employerMatch ? e.target.value : null);
+                    }}
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position='end'>IDR</InputAdornment>
@@ -360,12 +380,13 @@ export default function CreateRates() {
                   placeholder='Rp 0'
                   size='small'
                   value={formik.values.employeeData.amountCap}
-                  onChange={(e) =>
+                  onChange={(e) => {
                     formik.setFieldValue(
                       'employeeData.amountCap',
                       e.target.value
-                    )
-                  }
+                    );
+                    formik.setFieldValue('employerData.amountCap', formik.values.employerMatch ? e.target.value : null);
+                  }}
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position='end'>IDR</InputAdornment>
@@ -447,10 +468,10 @@ export default function CreateRates() {
                       withAsterisk
                       customLabel='Start'
                       size='small'
-                      disabled={formik.values.employerMatch}
+                      disabled={formik.values.employerMatch && formik.values.employee}
                       fullWidth
                       value={
-                        formik.values.employerMatch
+                        formik.values.employerMatch && formik.values.employee
                           ? formik.values.employeeData.start
                           : formik.values.employerData.start
                       }
@@ -485,7 +506,7 @@ export default function CreateRates() {
                           ? formik.values.employeeData.end
                           : formik.values.employerData.end
                       }
-                      disabled={formik.values.employerMatch}
+                      disabled={formik.values.employerMatch && formik.values.employee}
                       onChange={(e) =>
                         formik.setFieldValue('employerData.end', e.target.value)
                       }
@@ -518,7 +539,7 @@ export default function CreateRates() {
                 <Box width='33%'>
                   <Select
                     displayEmpty
-                    disabled={formik.values.employerMatch}
+                    disabled={formik.values.employerMatch && formik.values.employee}
                     value={
                       formik.values.employerMatch
                         ? formik.values.employeeData.rate
@@ -549,7 +570,7 @@ export default function CreateRates() {
                         ? formik.values.employeeData.fixed
                         : formik.values.employerData.fixed
                     }
-                    disabled={formik.values.employerMatch}
+                    disabled={formik.values.employerMatch && formik.values.employee}
                     onChange={(e) =>
                       formik.setFieldValue('employerData.fixed', e.target.value)
                     }
@@ -578,7 +599,7 @@ export default function CreateRates() {
                       ? formik.values.employeeData.amountCap
                       : formik.values.employerData.amountCap
                   }
-                  disabled={formik.values.employerMatch}
+                  disabled={formik.values.employerMatch && formik.values.employee}
                   onChange={(e) =>
                     formik.setFieldValue(
                       'employerData.amountCap',

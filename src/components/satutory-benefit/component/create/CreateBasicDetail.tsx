@@ -14,7 +14,7 @@ export default function CreateBasicDetailComponent({setValue}: CreateBasicDetail
     { value: '2', label: 'Dummy 2' },
     { value: '3', label: 'Dummy 3' },
   ];
-  
+
   const validationSchema = Yup.object({
     componentName: Yup.string().required(),
     country: Yup.string().required(),
