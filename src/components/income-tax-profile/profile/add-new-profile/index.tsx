@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/indent */
-import React, { useState } from 'react';
-import { IconButton } from '@/components/_shared/form';
-import { styled } from '@mui/material/styles';
-import { Typography, Box, Paper, Tabs, Tab } from '@mui/material';
-import { ArrowBack } from '@mui/icons-material';
-import { useRouter } from 'next/router';
+import React, { useState } from "react";
+import { IconButton } from "@/components/_shared/form";
+import { styled } from "@mui/material/styles";
+import { Typography, Box, Paper, Tabs, Tab } from "@mui/material";
+import { ArrowBack } from "@mui/icons-material";
+import { useRouter } from "next/router";
+import CreateDesignedTransferAccount from "./CreateDesignedTransferAccount";
 
 // Import Create Component
 // import CreateBasicDetailComponent from './CreateBasicDetail';
@@ -14,17 +15,17 @@ import { useRouter } from 'next/router';
 export default function ItpAddNewProfileComponent() {
   const router = useRouter();
 
-  const Header = styled('div')({
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: '32px',
+  const Header = styled("div")({
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: "32px",
   });
 
-  const HeaderPageTitle = styled('div')({
-    display: 'flex',
-    gap: '16px',
-    alignItems: 'center',
+  const HeaderPageTitle = styled("div")({
+    display: "flex",
+    gap: "16px",
+    alignItems: "center",
   });
 
   // const BpIcon = styled('span')(({ theme }) => ({
@@ -85,7 +86,7 @@ export default function ItpAddNewProfileComponent() {
 
     return (
       <div
-        role='tabpanel'
+        role="tabpanel"
         hidden={value !== index}
         id={`simple-tabpanel-${index}`}
         {...other}
@@ -98,7 +99,7 @@ export default function ItpAddNewProfileComponent() {
   function a11yProps(index: number) {
     return {
       id: `simple-tab-${index}`,
-      'aria-controls': `simple-tabpanel-${index}`,
+      "aria-controls": `simple-tabpanel-${index}`,
     };
   }
 
@@ -111,32 +112,32 @@ export default function ItpAddNewProfileComponent() {
       <Header>
         <HeaderPageTitle>
           <IconButton
-            parentColor='primary.500'
-            icons={<ArrowBack sx={{ color: '#FFFFFF' }} />}
+            parentColor="primary.500"
+            icons={<ArrowBack sx={{ color: "#FFFFFF" }} />}
             onClick={() => {
-              router.push('/income-tax-profile/profile/');
+              router.push("/income-tax-profile/profile/");
             }}
           />
           <Typography
             style={{
-              color: '#223567',
-              fontSize: '20px',
-              fontWeight: '700',
-              width: '250px',
+              color: "#223567",
+              fontSize: "20px",
+              fontWeight: "700",
+              width: "250px",
             }}
           >
             Add New Tax Profile
           </Typography>
         </HeaderPageTitle>
       </Header>
-      <Paper sx={{ width: '100%', p: '21px 32px' }}>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <Tabs value={value} onChange={handleChange} aria-label='basic tabs'>
-            <Tab label='Basic Detail' {...a11yProps(0)} />
-            <Tab label='Deductible Components' {...a11yProps(1)} />
-            <Tab label='Income Tax Rate' {...a11yProps(2)} />
-            <Tab label='Income Tax Multiplier' {...a11yProps(3)} />
-            <Tab label='Designated Transfer Account' {...a11yProps(4)} />
+      <Paper sx={{ width: "100%", p: "21px 32px" }}>
+        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+          <Tabs value={value} onChange={handleChange} aria-label="basic tabs">
+            <Tab label="Basic Detail" {...a11yProps(0)} />
+            <Tab label="Deductible Components" {...a11yProps(1)} />
+            <Tab label="Income Tax Rate" {...a11yProps(2)} />
+            <Tab label="Income Tax Multiplier" {...a11yProps(3)} />
+            <Tab label="Designated Transfer Account" {...a11yProps(4)} />
           </Tabs>
         </Box>
         <TabPanel value={value} index={0}>
@@ -153,6 +154,7 @@ export default function ItpAddNewProfileComponent() {
         </TabPanel>
         <TabPanel value={value} index={4}>
           {/* <CreateRates /> */}
+          <CreateDesignedTransferAccount />
         </TabPanel>
       </Paper>
     </>
