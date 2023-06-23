@@ -876,7 +876,7 @@ function* fetchPostWorkSchedule(action: AnyAction) {
         payload: {
           code: res.data.code,
           message: 'Successfully saved!',
-          footerMessage: `New Work Schedule Profile "${action?.payload?.name}" has been created`
+          footerMessage: `Work schedule profile has been created`
         }
       });
     }
