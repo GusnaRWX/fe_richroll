@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { Grid, Box, Typography, Paper } from '@mui/material';
 import { Button, Input, Select, Textarea } from '@/components/_shared/form';
 import BasicDatePicker from '@/components/_shared/form/DatePicker';
@@ -6,7 +6,11 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import dayjs from 'dayjs';
 
-export default function CreateTaxBasicDetailComponent({ setValue }) {
+interface CreateBasicDetailComponentProps {
+  setValue: Dispatch<SetStateAction<number>>
+}
+
+export default function CreateTaxBasicDetailComponent({ setValue }: CreateBasicDetailComponentProps) {
   const Dummyoption = [
     { value: '1', label: 'Dummy 1' },
     { value: '2', label: 'Dummy 2' },
