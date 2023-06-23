@@ -4,8 +4,16 @@ import { FieldArray, Formik } from 'formik';
 import { Input, Button, IconButton, Select } from '@/components/_shared/form';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
+import * as Yup from 'yup';
 
 export default function CreateTaxRate() {
+  interface InitialValues {
+    minIncome: string;
+    maxIncome: string;
+    rate: string;
+    additionalAmount?: string;
+  }
+
   const initialValues = {
     component: [{
       minIncome: '',
@@ -14,6 +22,17 @@ export default function CreateTaxRate() {
       additionalAmount: ''
     }]
   };
+
+  const validationSchema = Yup.object({
+    component: Yup.array().of(
+      Yup.object({
+        minIncome: Yup.string().required('This Field is Required'),
+        maxIncome: Yup.string().required('This Field is Required'),
+        rate: Yup.string().required('This Field is Required'),
+        additionalAmount: Yup.string(),
+      })
+    )
+  });
 
   const onSubmit = (values) => {
     console.log(values);
@@ -27,12 +46,12 @@ export default function CreateTaxRate() {
 
   return (
     <>
-      <Formik initialValues={initialValues} onSubmit={onSubmit}>
+      <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
         {(formik) => (
           <form>
             <FieldArray name='component' render={(arrayHelpers) => (
               <>
-                {formik.values.component.map((item, index) => (
+                {formik.values.component.map((_, index) => (
                   <>
                     <Grid
                       key={index}
@@ -46,13 +65,13 @@ export default function CreateTaxRate() {
                         item
                         container
                         alignItems='flex-end'
-                        spacing={2}
+                        spacing={1}
                         marginTop={0}
                         marginLeft={0}
                         xs={12}
-                        md={8}
+                        md={7}
                       >
-                        <Grid item>
+                        <Grid item xs={1}>
                           <IconButton
                             icons={
                               <RemoveIcon
@@ -71,19 +90,23 @@ export default function CreateTaxRate() {
                             disabled={index === 0}
                           />
                         </Grid>
-                        <Grid item>
+                        <Grid item md={4}>
                           <Input
                             customLabel='Min.Income'
                             withAsterisk
                             size='small'
                             value={formik.values.component[index].minIncome}
                             onChange={(e) => formik.setFieldValue(`component.${index}.minIncome`, e.target.value)}
+                            {...(formik.touched.component && formik.errors.component && {
+                              error: formik.touched.component[index].minIncome && Boolean((formik.errors.component[index] as unknown as InitialValues).minIncome),
+                              helperText: formik.touched.component[index].minIncome && (formik.errors.component[index] as unknown as InitialValues).minIncome
+                            })}
                           />
                         </Grid>
-                        <Grid item mb={0.5}>
+                        <Grid item mb={0.5} xs={0.3}>
                         -
                         </Grid>
-                        <Grid item>
+                        <Grid item md={4}>
                           <Input
                             customLabel='Max.Income'
                             withAsterisk
@@ -92,7 +115,7 @@ export default function CreateTaxRate() {
                             onChange={(e) => formik.setFieldValue(`component.${index}.maxIncome`, e.target.value)}
                           />
                         </Grid>
-                        <Grid item>
+                        <Grid item xs={1}>
                           <IconButton
                             icons={
                               <AddIcon
@@ -116,19 +139,20 @@ export default function CreateTaxRate() {
                           />
                         </Grid>
                       </Grid>
-                      <Grid item container xs={12} md={3} alignItems='flex-end' spacing={1}>
-                        <Grid item xs={6}>
+                      <Grid item container xs={12} md={4.5} alignItems='flex-end' spacing={1}>
+                        <Grid item xs={12} md={5}>
                           <Select
+                            customLabel='Rate'
+                            withAsterisk
                             fullWidth
                             size='small'
                             options={option}
                             value={formik.values.component[index].rate}
                             onChange={(e) => formik.setFieldValue(`component.${index}.rate`, e.target.value)} />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={12} md={7}>
                           <Input
-                            customLabel='Max.Income'
-                            withAsterisk
+                            customLabel='Additional Fixed Amount'
                             size='small'
                             value={formik.values.component[index].additionalAmount}
                             onChange={(e) => formik.setFieldValue(`component.${index}.additionalAmount`, e.target.value)}
