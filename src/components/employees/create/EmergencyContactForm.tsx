@@ -263,6 +263,7 @@ function EmergencyContactForm({ refProp, nextPage, setValues, emergencyValues, s
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.phoneNumberSecondary}
+                    type='number'
                   />
                 </Grid>
               </Grid>
