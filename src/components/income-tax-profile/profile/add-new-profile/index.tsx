@@ -12,6 +12,12 @@ import CreateTaxDeductableComponent from './CreateTaxDeductableComponent';
 // Import Create Component
 import CreateTaxBasicDetailComponent from './CreateTaxBasicDetail';
 
+// Import Create Component
+import CreateTaxRate from './CreateTaxRate';
+
+// Import Create Component
+import CreateTaxMultiplier from './CreateTaxMultiplier';
+
 export default function ItpAddNewProfileComponent() {
   const router = useRouter();
 
@@ -103,10 +109,10 @@ export default function ItpAddNewProfileComponent() {
           <CreateTaxDeductableComponent />
         </TabPanel>
         <TabPanel value={value} index={2}>
-          {/* <CreateRates /> */}
+          <CreateTaxRate />
         </TabPanel>
         <TabPanel value={value} index={3}>
-          {/* <CreateRates /> */}
+          <CreateTaxMultiplier />
         </TabPanel>
         <TabPanel value={value} index={4}>
           {/* <CreateRates /> */}
