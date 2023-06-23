@@ -266,11 +266,11 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
       />
       <form ref={refProp} onSubmit={formik.handleSubmit}>
         <Box component='div'>
-          <Text
+          {/* <Text
             component='span'
             title='Employee Photo'
             color='primary.500'
-          />
+          /> */}
           <div style={{ position: 'relative' }}>
             <ImageReview image={!images ? ImageType.PLACEHOLDER : images} onClick={handleOpen} />
             {images && (
