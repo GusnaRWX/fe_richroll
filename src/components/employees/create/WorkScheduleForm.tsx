@@ -14,7 +14,7 @@ import { Employees } from '@/types/employees';
 import { validationSchemaWorkScheduler } from './validate';
 import dayjs from 'dayjs';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
-import { OverlayLoading } from '@/components/_shared/common';
+import { OverlayLoading, Text } from '@/components/_shared/common';
 import { compareCheck, ifThenElse } from '@/utils/helper';
 import { getDetailWorkScheduleRequested, postSimulationEventRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
 
@@ -394,7 +394,7 @@ function WorkScheduleForm({ setData }: WorkScheduleFormProps) {
             />
           </Grid>
         </Grid>
-        {
+        {/* {
           formik.values.type === '1' && (
             <>
               <Typography mb='12px' fontWeight='bold' color='primary'>Working Hour Duration<AsteriskComponent>*</AsteriskComponent></Typography>
@@ -442,7 +442,7 @@ function WorkScheduleForm({ setData }: WorkScheduleFormProps) {
               </Grid>
             </>
           )
-        }
+        } */}
         {
           formik.values.type === '0' && (
             <>
@@ -554,10 +554,13 @@ function WorkScheduleForm({ setData }: WorkScheduleFormProps) {
           formik.values.type === '1' && (
             <>
               <Typography mb='12px' fontWeight='bold' color='primary'>Spesific Working Day</Typography>
-              <Grid container>
-                <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+              <Grid container mb='12px' alignItems='center'>
+                <Grid item xs={12} sm={12} md={2}>
+                  <Text title='Work Days' />
+                </Grid>
+                <Grid item xs={12} sm={12} md={10} lg={10} xl={10}>
                   <Select
-                    customLabel='Works Days'
+                    customLabel=''
                     variant='outlined'
                     size='small'
                     fullWidth
@@ -576,6 +579,78 @@ function WorkScheduleForm({ setData }: WorkScheduleFormProps) {
                       { label: 'Weekend (Monday - Friday)', value: '8' },
                       { label: 'Full Week', value: '9' }
                     ]}
+                    displayEmpty
+                    renderValue={(value: unknown) => {
+                      if((value as string).length === 0) {
+                        return <Text title='Select Day' color='grey.400' />;
+                      }
+                      const data = [
+                        { label: 'Monday', value: '0' },
+                        { label: 'Tuesday', value: '1' },
+                        { label: 'Wendesday', value: '2' },
+                        { label: 'Thursday', value: '3' },
+                        { label: 'Friday', value: '4' },
+                        { label: 'Saturday', value: '5' },
+                        { label: 'Sunday', value: '6' },
+                        { label: 'Weekday (Saturday - Sunday)', value: '7' },
+                        { label: 'Weekend (Monday - Friday)', value: '8' },
+                        { label: 'Full Week', value: '9' }
+                      ];
+                      const selected = data.find(item => item.value === value);
+                      if(selected) {
+                        return `${selected.label}`;
+                      }
+                      return null;
+                    }}
+                  />
+                </Grid>
+              </Grid>
+            </>
+          )
+        }
+        {
+          formik.values.type === '1' && (
+            <>
+              <Typography mb='12px' fontWeight='bold' color='primary'>Working Hour Duration<AsteriskComponent>*</AsteriskComponent></Typography>
+              <Grid  container spacing={2}>
+                <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+                  <Input
+                    name='flexiWorkHour'
+                    withAsterisk={false}
+                    customLabel='Working Hour'
+                    type='number'
+                    fullWidth
+                    placeholder='Input Working Hour'
+                    size='small'
+                    value={formik.values.flexiWorkHour}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={formik.touched.flexiWorkHour && Boolean(formik.errors.flexiWorkHour)}
+                    helperText={formik.touched.flexiWorkHour && formik.errors.flexiWorkHour}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position='end'>
+                          <Typography color='grey.500'>Hours/day</Typography>
+                        </InputAdornment>
+                      )
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+                  <Input
+                    name='flexiMinWorkHour'
+                    withAsterisk={false}
+                    customLabel='Minimum Working Hour'
+                    size='small'
+                    disabled
+                    value={formik.values.flexiMinWorkHour}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position='end'>
+                          <Typography color='grey.500'>Hours/day</Typography>
+                        </InputAdornment>
+                      )
+                    }}
                   />
                 </Grid>
               </Grid>
