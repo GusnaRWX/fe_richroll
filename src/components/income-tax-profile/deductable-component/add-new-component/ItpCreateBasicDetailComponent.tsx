@@ -4,11 +4,11 @@ import { Button, Input, Select, Textarea } from '@/components/_shared/form';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-interface CreateBasicDetailComponentProps {
+interface ItpCreateBasicDetailComponentProps {
   setValue: Dispatch<SetStateAction<number>>
 }
 
-export default function CreateBasicDetailComponent({setValue}: CreateBasicDetailComponentProps) {
+export default function ItpCreateBasicDetailComponent({setValue}: ItpCreateBasicDetailComponentProps) {
   const Dummyoption = [
     { value: '1', label: 'Dummy 1' },
     { value: '2', label: 'Dummy 2' },
