@@ -116,7 +116,7 @@ function Table({
           <p>Showing <b>{page}</b> to <b>{rowsPerPage}</b> of <b>{count}</b> results</p>
         </Box>
         <Box>
-          <Pagination count={Math.round(count / rowsPerPage) || 1} variant='outlined' shape='rounded' onChange={onChangePage} />
+          <Pagination count={Math.ceil(count / rowsPerPage) || 1} variant='outlined' shape='rounded' onChange={onChangePage} />
         </Box>
       </Box>
     </>
