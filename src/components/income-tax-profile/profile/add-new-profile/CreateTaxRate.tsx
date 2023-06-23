@@ -57,8 +57,8 @@ export default function CreateTaxRate() {
                             icons={
                               <RemoveIcon
                                 sx={{
-                                  color: '#B91C1C',
-                                  bgcolor: '#FEE2E2',
+                                  color: index !== 0 ? '#B91C1C' : '#9CA3AF',
+                                  bgcolor: index !== 0 ? '#FEE2E2' : '#F3F4F6',
                                   borderRadius: '5px',
                                   width: '32px',
                                   height: '32px',
@@ -68,6 +68,7 @@ export default function CreateTaxRate() {
                             }
                             size='small'
                             onClick={() => arrayHelpers.remove(index)}
+                            disabled={index === 0}
                           />
                         </Grid>
                         <Grid item>
