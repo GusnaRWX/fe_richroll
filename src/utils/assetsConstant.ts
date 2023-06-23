@@ -1,9 +1,9 @@
 interface ImageType {
-  [name: string]: string
+  [name: string]: string;
 }
 
 interface IconsType {
-  [name: string]: string
+  [name: string]: string;
 }
 
 export const Image: ImageType = {
@@ -33,7 +33,7 @@ export const Image: ImageType = {
   ADD_COMPANY: '/assets/images/add-company.png',
   PLACEHOLDER_COMPANY: '/assets/images/placeholder-company.svg',
   AVATAR_PLACEHOLDER: '/assets/images/avatar-placeholder.png',
-  EXAMPLE_EMPLOYE: '/assets/images/example-employe.jpg'
+  EXAMPLE_EMPLOYE: '/assets/images/example-employe.jpg',
 };
 
 export const Icons: IconsType = {
@@ -50,5 +50,6 @@ export const Icons: IconsType = {
   FOOTER_LINKEDIN: '/assets/icons/footer-linkedin.png',
   FOOTER_FACEBOOK: '/assets/icons/footer-facebook.png',
   CHECK_CIRCLE: '/assets/icons/check-circle.png',
-  ENGLISH_ICON: '/assets/icons/english-icon.svg'
+  ENGLISH_ICON: '/assets/icons/english-icon.svg',
+  INFO: '/assets/icons/info.svg',
 };

@@ -1,4 +1,4 @@
-import { Box, Container, List, Toolbar, Typography } from '@mui/material';
+import { Box, Container, List, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import Appbar from '@/components/_shared/_core/appbar/Appbar';
 import DrawerCore from '@/components/_shared/_core/drawer/Index';
@@ -30,7 +30,8 @@ const MainComponent = styled(Box)<BoxProps>(({ theme }) => ({
 const Layout = ({
   children,
 }: LayoutProps) => {
-  const [mobileOpen, setMobileOpen] = useState<boolean>(false);
+  const [mobileOpen, setMobileOpen] = useState<boolean>(true);
+  const [menuOpen, setMenuOpen] = useState<string>('');
   const [companyData, setCompanyData] = useState<CompanyDataParse | null>({});
   const dispatch = useAppDispatch();
 
@@ -52,60 +53,47 @@ const Layout = ({
     }
   }, []);
 
+  const handleMenuOpen = (name: string | undefined) => {
+    if(name) setMenuOpen(name);
+  };
+
   const container = typeof window !== 'undefined' ? () => window.document.body : undefined;
+  const { me: { profile } } = useAppSelectors(state => state);
 
   // Drawer
   const drawer = (
     <Box>
-      <Toolbar sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        margin: '20px 0'
-      }}>
-        <Box>
-          <Image
-            src={ImageType.KAYAROLL_LOGO}
-            width={151}
-            height={40}
-            alt='kayaroll'
-            priority
-          />
-        </Box>
-      </Toolbar>
-      <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', px: '16px', gap: '12px' }}>
-        <Box component='div' sx={{ position: 'relative', width: '60px', height: '60px' }}>
-          <Image
-            src={companyData?.imageUrl && companyData?.imageUrl.includes('http') ? companyData?.imageUrl : ImageType.PLACEHOLDER_COMPANY}
-            fill={true}
-            style={{ objectFit: 'contain' }}
-            sizes='(max-width: 60px) 100%, 60px'
-            alt='company-logo'
-          />
-        </Box>
-        <Box component='div'>
-          <Typography
-            variant='text-lg'
-            component='div'
-            sx={{ fontWeight: 700, width: '100%', color: '#223567' }}
-          >
-            {companyData?.name}
-          </Typography>
-          <Typography
-            variant='text-xs'
-            component='div'
-            sx={{ fontWeight: 500, width: '100%', color: '#6B7280' }}
-          >
-            {companyData?.sector}
-          </Typography>
-        </Box>
-      </Box>
-      <Typography
-        variant='text-base'
-        component='div'
-        sx={{ fontWeight: 400, px: '16px', mt: '8px', color: '#6B7280', width: '100%' }}
-      >
-        Menus
-      </Typography>
+      {!profile?.roles?.includes('Super Admin') &&
+        <>
+          <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', px: '16px', pt: '8px', gap: '12px' }}>
+            <Box component='div' sx={{ position: 'relative', width: '60px', height: '60px' }}>
+              <Image
+                src={companyData?.imageUrl && companyData?.imageUrl.includes('http') ? companyData?.imageUrl : ImageType.PLACEHOLDER_COMPANY}
+                fill={true}
+                style={{ objectFit: 'contain' }}
+                sizes='(max-width: 60px) 100%, 60px'
+                alt='company-logo'
+              />
+            </Box>
+            <Box component='div'>
+              <Typography
+                variant='text-lg'
+                component='div'
+                sx={{ fontWeight: 700, width: '100%', color: '#223567' }}
+              >
+                {companyData?.name}
+              </Typography>
+              <Typography
+                variant='text-xs'
+                component='div'
+                sx={{ fontWeight: 500, width: '100%', color: '#6B7280' }}
+              >
+                {companyData?.sector}
+              </Typography>
+            </Box>
+          </Box>
+        </>
+      }
       <List>
         {
           Menus?.map(menu => (
@@ -117,6 +105,8 @@ const Layout = ({
               hasChild={menu.hasChild}
               child={menu.child}
               roles={menu.roles}
+              menuOpen={menuOpen}
+              setMenuOpen={handleMenuOpen}
             />
           ))
         }

@@ -1,6 +1,6 @@
 import React from 'react';
 import Layout from '@/components/_shared/_core/layout/Index';
-import DisbursementGenerateComponent from '@/components/disbursement/DisbursementGenerateComponent';
+import DisbursementGenerateComponent from '@/components/payroll-disbursement/DisbursementGenerateComponent';
 
 const DisbursementGenerateContainer = () => {
   return (

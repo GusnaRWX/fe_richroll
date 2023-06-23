@@ -44,6 +44,32 @@ interface PersonalInformationDetailProps {
       isCitizen: boolean;
       isResident: boolean;
     },
+    residential: {
+      country: {
+        code: string | number;
+        name: string;
+      };
+      firstLevel: {
+        code: string | number;
+        name: string;
+      };
+      secondLevel: {
+        code: string | number;
+        name: string;
+      };
+      thirdLevel: {
+        code: string | number;
+        name: string;
+      };
+      fourthLevel: {
+        code: string | number | null;
+        name: string | null;
+      };
+      address: string | null;
+      zipCode: string | null;
+      isCitizen: boolean;
+      isResident: boolean;
+    },
     identity: {
       type: number | null;
       number: number | null;
@@ -327,7 +353,7 @@ const EmployeePersonalInformationDetail = ({ data }: PersonalInformationDetailPr
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            {data?.citizen?.firstLevel?.name}
+            {data?.residential?.country?.name}
           </Typography>
         </Grid>
         <Grid
@@ -343,7 +369,7 @@ const EmployeePersonalInformationDetail = ({ data }: PersonalInformationDetailPr
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            {data?.citizen?.firstLevel?.name}
+            {data?.residential?.firstLevel?.name}
           </Typography>
         </Grid>
         <Grid
@@ -359,7 +385,7 @@ const EmployeePersonalInformationDetail = ({ data }: PersonalInformationDetailPr
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            {data?.citizen?.secondLevel?.name}
+            {data?.residential?.secondLevel?.name}
           </Typography>
         </Grid>
         <Grid
@@ -375,7 +401,7 @@ const EmployeePersonalInformationDetail = ({ data }: PersonalInformationDetailPr
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            {data?.citizen?.thirdLevel?.name}
+            {data?.residential?.thirdLevel?.name}
           </Typography>
         </Grid>
         <Grid
@@ -391,7 +417,7 @@ const EmployeePersonalInformationDetail = ({ data }: PersonalInformationDetailPr
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            {data?.citizen?.address}
+            {data?.residential?.address}
           </Typography>
         </Grid>
         <Grid
@@ -407,7 +433,7 @@ const EmployeePersonalInformationDetail = ({ data }: PersonalInformationDetailPr
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            {data?.citizen?.zipCode}
+            {data?.residential?.zipCode}
           </Typography>
         </Grid>
       </Grid>

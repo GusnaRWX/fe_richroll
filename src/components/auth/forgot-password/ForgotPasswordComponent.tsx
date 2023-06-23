@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from '@emotion/styled';
 import Image from 'next/image';
 import kayaroll from '../../../../public/images/kayaroll-logo.png';
@@ -14,6 +14,7 @@ import Notify from '@/components/_shared/common/Notify';
 import { Alert, OverlayLoading } from '@/components/_shared/common';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { forgotPasswordRequested } from '@/store/reducers/slice/auth/loginSlice';
+import { useRouter } from 'next/router';
 
 const LinkComponent = MuiStyled(Link)(({ theme }) => ({
   color: theme.palette.primary.main,
@@ -56,8 +57,10 @@ height: 100vh;
 
 function ForgotPasswordComponent() {
   const { responser, login } = useAppSelectors((state) => state);
+  const router = useRouter();
   const dispatch = useAppDispatch();
-  const [initialValues, setInitialValues] = useState({
+  const [isFinish, setIsFinish] = useState(false);
+  const [initialValues] = useState({
     email: ''
   });
 
@@ -89,9 +92,13 @@ function ForgotPasswordComponent() {
     e.preventDefault();
     if (validate()) {
       dispatch({ type: forgotPasswordRequested.toString(), payload: { email: values.email } });
-      setInitialValues({ email: '' });
     }
   };
+
+  useEffect(() => {
+    if ([200, 201].includes(responser.code)) setIsFinish(true);
+  }, [responser]);
+
   return (
     <Base>
       <OverlayLoading open={login.isLoading} />
@@ -113,51 +120,85 @@ function ForgotPasswordComponent() {
           <Notify error={true} body='Please check your input or check your authorization' />
         )
       }
-      <Card sx={{ width: '585px', height: login.isError ? '80%' : '70%' }}>
-        <CardContent sx={{ padding: '2rem' }}>
-          <div style={{ marginBottom: '1rem' }}>
-            <Image src={kayaroll} alt='logo' height={56} width={211} />
-          </div>
-          <div style={{ marginBottom: '1rem' }}>
-            <Typography component='h2' fontWeight='bold' fontSize='24px' color='primary'>Forgot your password?</Typography>
-          </div>
-          <div style={{ marginBottom: '1rem' }}>
-            <Typography color='grey.400' fontSize='16px'>Enter your email address and we will send you a link to reset your password.</Typography>
-          </div>
-          {
-            login.isError && (
-              <Alert
-                severity={'error'}
-                content='Email address not found'
-                icon={<CancelIcon />}
-              />
-            )
-          }
-          <Box
-            component='form'
-            autoComplete='off'
-            onSubmit={handleSubmit}
-          >
-            <Input
-              customLabel='Email Address'
-              withAsterisk
-              size='small'
-              placeholder='Input email address'
-              name='email'
-              onChange={handleInputChange}
-              error={errors.email}
-            />
-            <Stack sx={{ marginTop: '1rem' }}>
-              <Button
-                color='primary'
-                size='large'
-                type='submit'
-                label='Reset Password'
-              />
-            </Stack>
-          </Box>
-          <LinkComponent href='/login'><ArrowBack />&nbsp;Log in now</LinkComponent>
-        </CardContent>
+      <Card sx={{ width: '585px', height: 'fit-content' }}>
+        {
+          !isFinish && (
+            <CardContent sx={{ padding: '2rem' }}>
+              <div style={{ marginBottom: '1rem' }}>
+                <Image src={kayaroll} alt='logo' height={56} width={211} />
+              </div>
+              <div style={{ marginBottom: '1rem' }}>
+                <Typography component='h2' fontWeight='bold' fontSize='24px' color='primary'>Recover Password</Typography>
+              </div>
+              <div style={{ marginBottom: '1rem' }}>
+                <Typography color='grey.400' fontSize='16px'>Enter your email address and we will send you a link to reset your password.</Typography>
+              </div>
+              {
+                login.isError && (
+                  <Alert
+                    severity={'error'}
+                    content='Email address not found'
+                    icon={<CancelIcon />}
+                  />
+                )
+              }
+              <Box
+                component='form'
+                autoComplete='off'
+                onSubmit={handleSubmit}
+              >
+                <Input
+                  customLabel='Email Address'
+                  withAsterisk
+                  size='small'
+                  placeholder='Input email address'
+                  name='email'
+                  onChange={handleInputChange}
+                  error={errors.email}
+                />
+                <Stack sx={{ marginTop: '1rem' }}>
+                  <Button
+                    color='primary'
+                    size='large'
+                    type='submit'
+                    label='Reset Password'
+                  />
+                </Stack>
+              </Box>
+              <LinkComponent href='/login'><ArrowBack />&nbsp;Log in now</LinkComponent>
+            </CardContent>
+          )
+        }
+        {
+          isFinish && (
+            <CardContent sx={{ padding: '2rem' }}>
+              <div style={{ marginBottom: '1rem' }}>
+                <Image src={kayaroll} alt='logo' height={56} width={211} />
+              </div>
+              <div style={{ marginBottom: '1rem' }}>
+                <Typography component='h2' fontWeight='bold' fontSize='24px' color='primary'>Email sent successfully!</Typography>
+              </div>
+              <div style={{ marginBottom: '1rem' }}>
+                <Typography color='grey.400' fontSize='16px'>We have sent password reset instructions to {values.email}. Please check your email. Thank You!.</Typography>
+              </div>
+              <Box
+                component='form'
+                autoComplete='off'
+                onSubmit={handleSubmit}
+              >
+                <Stack sx={{ marginTop: '1rem' }}>
+                  <Button
+                    color='primary'
+                    size='large'
+                    onClick={() => router.push('/login')}
+                    label='Check Email'
+                  />
+                </Stack>
+              </Box>
+              <LinkComponent href='/login'><ArrowBack />&nbsp;Log in now</LinkComponent>
+            </CardContent>
+          )
+        }
       </Card>
     </Base>
   );

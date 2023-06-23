@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Input, Select } from '@/components/_shared/form';
 import { Grid, InputAdornment, Typography, Button } from '@mui/material';
 import { Scheduler } from '@aldabil/react-scheduler';
@@ -14,7 +14,6 @@ function EmployeeWorkScheduleDetail() {
   const router = useRouter();
   const { employee } = useAppSelectors((state) => state);
   const { listWorkSchedule } = useAppSelectors((state) => state.option);
-  const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
     dispatch({
@@ -26,14 +25,7 @@ function EmployeeWorkScheduleDetail() {
     calendarRef?.current?.scheduler?.confirmEvent(employee?.workScheduleDetail?.events, 'create');
   }, [employee?.workScheduleDetail?.events]);
 
-
-  useEffect(() => {
-    setHydrated(true);
-  }, []);
-
-  if (!hydrated) {
-    return null;
-  }
+  console.log(employee?.isLoading);
 
 
   return (

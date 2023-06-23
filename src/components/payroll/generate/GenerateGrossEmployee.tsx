@@ -126,7 +126,7 @@ const data = {
 function GenerateGrossEmployee() {
   const router = useRouter();
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   // const [search, setSearch] = useState('');
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
@@ -137,8 +137,8 @@ function GenerateGrossEmployee() {
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 0));
-    setPage(0);
+    setRowsPerPage(event);
+    // setPage(0);
   };
 
   const handleRequestSort = (event: React.MouseEvent<unknown>, headId: string) => {
@@ -164,7 +164,7 @@ function GenerateGrossEmployee() {
               icons={
                 <ArrowBack sx={{ color: '#FFFFFF' }} />
               }
-              onClick={() => {router.push('/payroll-disbursement/attendance');}}
+              onClick={() => { router.push('/payroll-disbursement/attendance'); }}
             />
             <Box>
               <Typography variant='h6' color='#4B5563'><b>Generate Gross Payroll Report</b></Typography>
@@ -182,7 +182,7 @@ function GenerateGrossEmployee() {
             rowsPerPage={rowsPerPage}
             page={page}
             onChangePage={handleChangePage}
-            onRowsPerPagesChange={(e) =>handleChangeRowsPerPage(e)}
+            onRowsPerPagesChange={(e) => handleChangeRowsPerPage(e)}
             headChildren={
               <TableRow>
                 {
@@ -198,7 +198,7 @@ function GenerateGrossEmployee() {
                           <Box component='span' sx={visuallyHidden}>
                             {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
                           </Box>
-                        ): null}
+                        ) : null}
                       </TableSortLabel>
                     </TableCell>
                   ))
@@ -255,13 +255,13 @@ function GenerateGrossEmployee() {
                   variant='outlined'
                   size='small'
                   color='primary'
-                  onClick={() => {router.push('/payroll-disbursement/attendance');}}
+                  onClick={() => { router.push('/payroll-disbursement/attendance'); }}
                 >Cancel</MuiButton>
                 <MuiButton
                   variant='contained'
                   size='small'
                   color='primary'
-                  onClick={() => {router.push('/payroll-disbursement/payroll/generate-gross/detail');}}
+                  onClick={() => { router.push('/payroll-disbursement/payroll/generate-gross/detail'); }}
                   sx={{ color: 'white' }}
                 >Confirm</MuiButton>
               </ButtonWrapper>

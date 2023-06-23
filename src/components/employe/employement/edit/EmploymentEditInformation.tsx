@@ -1,5 +1,5 @@
 
-import { Box, Grid, Typography, Modal, IconButton} from '@mui/material';
+import { Box, Grid, Typography, Modal, IconButton } from '@mui/material';
 import React, { HTMLAttributes, useCallback, useEffect, useRef, useState } from 'react';
 
 import { Image as ImageType } from '@/utils/assetsConstant';
@@ -88,6 +88,7 @@ const EmploymentEditInformation = ({ refProp, setValues, infoValues, handleFirst
     setCaptureEnable(false);
     setOpenCamera(false);
   };
+  console.log(images, 'images');
 
   const handleOpenCamera = () => {
     setCaptureEnable(true);
@@ -360,7 +361,8 @@ const EmploymentEditInformation = ({ refProp, setValues, infoValues, handleFirst
                   display: 'flex',
                   flexDirection: 'row',
                   alignItems: 'center',
-                  justifyContent: 'center' }}
+                  justifyContent: 'center'
+                }}
               >
                 <h3>Data Not Found</h3>
               </Box>
@@ -401,7 +403,7 @@ const EmploymentEditInformation = ({ refProp, setValues, infoValues, handleFirst
                     </Grid>
                     <Grid item md={4}>
                       <Text
-                        title={'Per' + ' ' + detailCnb?.base?.term?.name }
+                        title={'Per' + ' ' + detailCnb?.base?.term?.name}
                         fontSize='14px'
                         fontWeight={400}
                         color='grey.700'
@@ -444,7 +446,7 @@ const EmploymentEditInformation = ({ refProp, setValues, infoValues, handleFirst
                         </Grid>
                         <Grid item md={4}>
                           <Text
-                            title={'Per' + ' ' + item?.term?.name }
+                            title={'Per' + ' ' + item?.term?.name}
                             fontSize='14px'
                             fontWeight={400}
                             color='grey.700'

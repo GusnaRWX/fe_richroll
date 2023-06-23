@@ -25,6 +25,12 @@ const ContentWrapper = styled(Card)(({
   padding: '2rem'
 }));
 
+const SchedulerWrapper = styled.div`
+ & > div > div:last-child > div:last-child {
+  overflow-x: hidden !important;
+ }
+`;
+
 const TopWrapper = styled.div`
  display: flex;
  flex-direction: row;
@@ -96,7 +102,7 @@ function AnnualWorkCalendarComponent() {
         page: page,
         itemPerPage: 5,
         sort: '',
-        direction: 'DESC',
+        direction: 'ASC',
         search: '',
         start: '',
         end: ''
@@ -149,8 +155,6 @@ function AnnualWorkCalendarComponent() {
 
   };
 
-
-
   return (
     <>
       <OverlayLoading open={isLoading}/>
@@ -166,36 +170,38 @@ function AnnualWorkCalendarComponent() {
       <ContentWrapper>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={12} md={8} lg={8} xl={8}>
-            <Scheduler
-              events={[]}
-              ref={calendarRef}
-              disableViewNavigator={true}
-              view='month'
-              day={null}
-              deletable={false}
-              editable={false}
-              viewerExtraComponent={(fields, events) => {
-                return (
-                  <div>
-                    <p>Notes: {events?.note}</p>
-                  </div>
-                );
-              }}
-              week={null}
-              month={{
-                weekDays: [0, 1,2,3,4,5,6],
-                weekStartOn: 1,
-                startHour: 1,
-                endHour: 23,
-                cellRenderer: () => {
+            <SchedulerWrapper>
+              <Scheduler
+                events={[]}
+                ref={calendarRef}
+                disableViewNavigator={true}
+                view='month'
+                day={null}
+                deletable={false}
+                editable={false}
+                viewerExtraComponent={(fields, events) => {
                   return (
-                    <MuiButton onClick={() => {
-                      return null;
-                    }}/>
+                    <div>
+                      <p>Notes: {events?.note}</p>
+                    </div>
                   );
-                }
-              }}
-            />
+                }}
+                week={null}
+                month={{
+                  weekDays: [0, 1,2,3,4,5,6],
+                  weekStartOn: 1,
+                  startHour: 1,
+                  endHour: 23,
+                  cellRenderer: () => {
+                    return (
+                      <MuiButton onClick={() => {
+                        return null;
+                      }}/>
+                    );
+                  }
+                }}
+              />
+            </SchedulerWrapper>
           </Grid>
           <Grid item xs={12} sm={12} md={4} lg={4} xl={4}>
             <Box width='100%' height='100%' sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between'  }}>

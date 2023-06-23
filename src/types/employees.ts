@@ -152,6 +152,7 @@ export declare namespace Employees {
   }
 
   interface InformationValues {
+    pictureBackend?: [],
     companyID?: string;
     images: string
     picture: unknown
@@ -277,7 +278,8 @@ export declare namespace Employees {
       isWithBreak: boolean,
       specificBreakHour: boolean,
       specificBreakStartHour: string,
-      specificBreakEndHour: string}>
+      specificBreakEndHour: string
+    }>
   }
 
   interface ItemsWorkScheduleType {
@@ -286,7 +288,7 @@ export declare namespace Employees {
     label: string,
     name: string,
     start: Date | string,
-    end:Date | string,
+    end: Date | string,
     isBreak?: boolean,
     isDuration?: boolean,
     color?: string,
@@ -304,7 +306,7 @@ export declare namespace Employees {
     isCustom?: boolean,
     items: Array<ItemsWorkScheduleType>;
   }
-  
+
   interface PostTerminateEmployee {
     terminateDate: string;
     terminateNote: string;

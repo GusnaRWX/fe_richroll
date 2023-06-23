@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { 
+import {
   Typography,
   Card,
   Grid,
@@ -8,7 +8,8 @@ import {
   Avatar,
   Box,
   TableSortLabel,
-  Button as MuiButton } from '@mui/material';
+  Button as MuiButton
+} from '@mui/material';
 // import { styled as muiStyled } from '@mui/material/styles';
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
@@ -109,7 +110,7 @@ const data = {
 
 function PayrollAssistantCreate() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
   const [hydrated, setHaydrated] = useState(false);
@@ -120,8 +121,8 @@ function PayrollAssistantCreate() {
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 0));
-    setPage(0);
+    setRowsPerPage(event);
+    // setPage(0);
   };
 
   const handleRequestSort = (event: React.MouseEvent<unknown>, headId: string) => {
@@ -156,7 +157,7 @@ function PayrollAssistantCreate() {
               variant='contained'
               size='small'
               color='primary'
-              onClick={() => {router.push('/payroll-disbursement/payroll-assistant');}}
+              onClick={() => { router.push('/payroll-disbursement/payroll-assistant'); }}
             >Close</MuiButton>
           </ButtonWrapper>
         </Grid>
@@ -229,7 +230,7 @@ function PayrollAssistantCreate() {
               rowsPerPage={rowsPerPage}
               page={page}
               onChangePage={handleChangePage}
-              onRowsPerPagesChange={(e) =>handleChangeRowsPerPage(e)}
+              onRowsPerPagesChange={(e) => handleChangeRowsPerPage(e)}
               headChildren={
                 <TableRow>
                   {
@@ -245,7 +246,7 @@ function PayrollAssistantCreate() {
                             <Box component='span' sx={visuallyHidden}>
                               {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
                             </Box>
-                          ): null}
+                          ) : null}
                         </TableSortLabel>
                       </TableCell>
                     ))
@@ -285,7 +286,7 @@ function PayrollAssistantCreate() {
                                 <IconButton
                                   parentColor='#E9EFFF'
                                   icons={
-                                    <BsFillEyeFill fontSize={20} color='#223567'/>
+                                    <BsFillEyeFill fontSize={20} color='#223567' />
                                   }
                                 />
                               </ButtonWrapper>
@@ -346,7 +347,7 @@ function PayrollAssistantCreate() {
               rowsPerPage={rowsPerPage}
               page={page}
               onChangePage={handleChangePage}
-              onRowsPerPagesChange={(e) =>handleChangeRowsPerPage(e)}
+              onRowsPerPagesChange={(e) => handleChangeRowsPerPage(e)}
               headChildren={
                 <TableRow>
                   {
@@ -362,7 +363,7 @@ function PayrollAssistantCreate() {
                             <Box component='span' sx={visuallyHidden}>
                               {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
                             </Box>
-                          ): null}
+                          ) : null}
                         </TableSortLabel>
                       </TableCell>
                     ))
@@ -402,7 +403,7 @@ function PayrollAssistantCreate() {
                                 <IconButton
                                   parentColor='#E9EFFF'
                                   icons={
-                                    <BsFillEyeFill fontSize={20} color='#223567'/>
+                                    <BsFillEyeFill fontSize={20} color='#223567' />
                                   }
                                 />
                               </ButtonWrapper>
@@ -463,7 +464,7 @@ function PayrollAssistantCreate() {
               rowsPerPage={rowsPerPage}
               page={page}
               onChangePage={handleChangePage}
-              onRowsPerPagesChange={(e) =>handleChangeRowsPerPage(e)}
+              onRowsPerPagesChange={(e) => handleChangeRowsPerPage(e)}
               headChildren={
                 <TableRow>
                   {
@@ -479,7 +480,7 @@ function PayrollAssistantCreate() {
                             <Box component='span' sx={visuallyHidden}>
                               {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
                             </Box>
-                          ): null}
+                          ) : null}
                         </TableSortLabel>
                       </TableCell>
                     ))
@@ -519,7 +520,7 @@ function PayrollAssistantCreate() {
                                 <IconButton
                                   parentColor='#E9EFFF'
                                   icons={
-                                    <BsFillEyeFill fontSize={20} color='#223567'/>
+                                    <BsFillEyeFill fontSize={20} color='#223567' />
                                   }
                                 />
                               </ButtonWrapper>

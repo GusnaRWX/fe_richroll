@@ -9,7 +9,7 @@ import {
   Button as MuiButton
 } from '@mui/material';
 import { Input, DateRangePicker } from '../_shared/form';
-import { Search  } from '@mui/icons-material';
+import { Search } from '@mui/icons-material';
 import Table from '../_shared/form/Table';
 import { compareCheck, ifThenElse } from '@/utils/helper';
 import { visuallyHidden } from '@mui/utils';
@@ -116,7 +116,7 @@ function PayrollTable({
     itemTotals: 5
   };
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   // const [search, setSearch] = useState('');
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
@@ -129,8 +129,7 @@ function PayrollTable({
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 0));
-    setPage(0);
+    setRowsPerPage(event);
   };
 
   const handleSearch = (e) => {
@@ -138,7 +137,7 @@ function PayrollTable({
       // setSearch(e.target.value);
       console.log(e.target.value);
       console.log(tabValue);
-      
+
     }
   };
 
@@ -167,7 +166,7 @@ function PayrollTable({
             type='text'
             InputProps={{
               startAdornment: (
-                <Search sx={{ color: '#9CA3AF' }}/>
+                <Search sx={{ color: '#9CA3AF' }} />
               )
             }}
           />
@@ -177,7 +176,7 @@ function PayrollTable({
             withAsterisk
             // value={formik.values.startDate as unknown as Date}
             onChange={(date: unknown) => console.log(date)}
-            // error={formik.touched.startDate && formik.errors.startDate ? String(formik.errors.startDate) : ''}
+          // error={formik.touched.startDate && formik.errors.startDate ? String(formik.errors.startDate) : ''}
           />
         </Grid>
       </Grid>
@@ -187,7 +186,7 @@ function PayrollTable({
         rowsPerPage={rowsPerPage}
         page={page}
         onChangePage={handleChangePage}
-        onRowsPerPagesChange={(e) =>handleChangeRowsPerPage(e)}
+        onRowsPerPagesChange={(e) => handleChangeRowsPerPage(e)}
         headChildren={
           <TableRow>
             {
@@ -203,7 +202,7 @@ function PayrollTable({
                       <Box component='span' sx={visuallyHidden}>
                         {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
                       </Box>
-                    ): null}
+                    ) : null}
                   </TableSortLabel>
                 </TableCell>
               ))
@@ -223,7 +222,7 @@ function PayrollTable({
                     <TableRow key={index}>
                       <TableCell>{item.name}</TableCell>
                       <TableCell>{item.daterange}</TableCell>
-                      <TableCell>{ifThenElse(item.reportType === 'gross',<GrossComponent>{item.reportName}</GrossComponent>,<NetComponent>{item.reportName}</NetComponent>)}</TableCell>
+                      <TableCell>{ifThenElse(item.reportType === 'gross', <GrossComponent>{item.reportName}</GrossComponent>, <NetComponent>{item.reportName}</NetComponent>)}</TableCell>
                       <TableCell>{item.createdAt}</TableCell>
                       <TableCell>{item.lastUpdated}</TableCell>
                       <TableCell>
@@ -234,7 +233,7 @@ function PayrollTable({
                           sx={{ color: '#111827' }}
                           onClick={() => { console.log(true); }}
                         >
-                          {ifThenElse(item.reportType === 'gross','Gross Payroll Report.pdf','Net Payroll Report.pdf')} &nbsp;<FiDownload fontSize='small' />
+                          {ifThenElse(item.reportType === 'gross', 'Gross Payroll Report.pdf', 'Net Payroll Report.pdf')} &nbsp;<FiDownload fontSize='small' />
                         </MuiButton>
                       </TableCell>
                       <TableCell>
@@ -243,16 +242,16 @@ function PayrollTable({
                             <>
                               <IconButton
                                 parentColor='#E9EFFF'
-                                onClick={() => {item.reportType === 'gross' ? router.push('/payroll-disbursement/payroll/gross-detail') : router.push('/payroll-disbursement/payroll/net-detail');}}
+                                onClick={() => { item.reportType === 'gross' ? router.push('/payroll-disbursement/payroll/gross-detail') : router.push('/payroll-disbursement/payroll/net-detail'); }}
                                 icons={
-                                  <TbFileImport fontSize={20} color='#223567'/>
+                                  <TbFileImport fontSize={20} color='#223567' />
                                 }
                               />
                               <IconButton
                                 parentColor='#FEE2E2'
                                 onClick={() => setDeleteConfirmation(true)}
                                 icons={
-                                  <BsTrashFill fontSize={20} color='#EF4444'/>
+                                  <BsTrashFill fontSize={20} color='#EF4444' />
                                 }
                               />
                             </>
@@ -261,16 +260,16 @@ function PayrollTable({
                             <>
                               <IconButton
                                 parentColor='#E9EFFF'
-                                onClick={() => {item.reportType === 'gross' ? router.push('/payroll-disbursement/payroll/gross-detail') : router.push('/payroll-disbursement/payroll/net-detail');}}
+                                onClick={() => { item.reportType === 'gross' ? router.push('/payroll-disbursement/payroll/gross-detail') : router.push('/payroll-disbursement/payroll/net-detail'); }}
                                 icons={
-                                  <BsFillEyeFill fontSize={20} color='#223567'/>
+                                  <BsFillEyeFill fontSize={20} color='#223567' />
                                 }
                               />
                               <IconButton
                                 parentColor='#FEE2E2'
                                 onClick={() => setDeleteConfirmation(true)}
                                 icons={
-                                  <BsTrashFill fontSize={20} color='#EF4444'/>
+                                  <BsTrashFill fontSize={20} color='#EF4444' />
                                 }
                               />
                             </>
@@ -280,14 +279,14 @@ function PayrollTable({
                               <IconButton
                                 parentColor='#E9EFFF'
                                 icons={
-                                  <HiOutlineInboxIn fontSize={20} color='#223567'/>
+                                  <HiOutlineInboxIn fontSize={20} color='#223567' />
                                 }
                               />
                               <IconButton
                                 parentColor='#FEE2E2'
                                 onClick={() => setDeleteConfirmation(true)}
                                 icons={
-                                  <BsTrashFill fontSize={20} color='#EF4444'/>
+                                  <BsTrashFill fontSize={20} color='#EF4444' />
                                 }
                               />
                             </>
@@ -296,9 +295,9 @@ function PayrollTable({
                             <>
                               <IconButton
                                 parentColor='#E9EFFF'
-                                onClick={() => {item.reportType === 'gross' ? router.push('/payroll-disbursement/payroll/gross-detail') : router.push('/payroll-disbursement/payroll/net-detail');}}
+                                onClick={() => { item.reportType === 'gross' ? router.push('/payroll-disbursement/payroll/gross-detail') : router.push('/payroll-disbursement/payroll/net-detail'); }}
                                 icons={
-                                  <BsFillEyeFill fontSize={20} color='#223567'/>
+                                  <BsFillEyeFill fontSize={20} color='#223567' />
                                 }
                               />
                             </>

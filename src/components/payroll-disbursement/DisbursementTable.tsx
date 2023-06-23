@@ -9,14 +9,13 @@ import {
   Button as MuiButton
 } from '@mui/material';
 import { Input, DateRangePicker } from '../_shared/form';
-import { Search  } from '@mui/icons-material';
+import { Search } from '@mui/icons-material';
 import Table from '../_shared/form/Table';
 import { compareCheck, ifThenElse } from '@/utils/helper';
 import { visuallyHidden } from '@mui/utils';
 import { IconButton } from '@/components/_shared/form';
 import { BsTrashFill, BsFillEyeFill } from 'react-icons/bs';
 import { FiDownload } from 'react-icons/fi';
-import { TbFileImport } from 'react-icons/tb';
 import { HiOutlineInboxIn } from 'react-icons/hi';
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
@@ -31,9 +30,9 @@ const ButtonWrapper = styled.div`
 `;
 
 const TypeComponent = styled.div`
- background: #E0F2FE;
+ background: #FFEDD5;
  border-radius: 4px;
- color: #075985;
+ color: #9A3412;
  padding: 3px 12px;
  text-align: center;
 `;
@@ -54,7 +53,7 @@ interface EmployeeTableProps {
 
 type Order = 'asc' | 'desc'
 
-function AttendanceTable({
+function DisbursementTable({
   tabValue
 }: EmployeeTableProps) {
   const data = {
@@ -63,7 +62,7 @@ function AttendanceTable({
         id: 1,
         name: 'Payroll February 2023',
         daterange: '1/03/2023 - 31/03/2023',
-        type: 'Attendance Report',
+        type: 'Disbursement Receipt',
         createdAt: '20/03/2023',
         lastUpdated: '20/03/2023',
       },
@@ -71,7 +70,7 @@ function AttendanceTable({
         id: 2,
         name: 'Payroll February 2023',
         daterange: '1/03/2023 - 31/03/2023',
-        type: 'Attendance Report',
+        type: 'Disbursement Receipt',
         createdAt: '20/03/2023',
         lastUpdated: '20/03/2023',
       },
@@ -79,7 +78,7 @@ function AttendanceTable({
         id: 3,
         name: 'Payroll February 2023',
         daterange: '1/03/2023 - 31/03/2023',
-        type: 'Attendance Report',
+        type: 'Disbursement Receipt',
         createdAt: '20/03/2023',
         lastUpdated: '20/03/2023',
       },
@@ -87,7 +86,7 @@ function AttendanceTable({
         id: 4,
         name: 'Payroll February 2023',
         daterange: '1/03/2023 - 31/03/2023',
-        type: 'Attendance Report',
+        type: 'Disbursement Receipt',
         createdAt: '20/03/2023',
         lastUpdated: '20/03/2023',
       },
@@ -95,7 +94,7 @@ function AttendanceTable({
         id: 5,
         name: 'Payroll February 2023',
         daterange: '1/03/2023 - 31/03/2023',
-        type: 'Attendance Report',
+        type: 'Disbursement Receipt',
         createdAt: '20/03/2023',
         lastUpdated: '20/03/2023',
       },
@@ -103,7 +102,7 @@ function AttendanceTable({
     itemTotals: 5
   };
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   // const [search, setSearch] = useState('');
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
@@ -116,8 +115,8 @@ function AttendanceTable({
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 0));
-    setPage(0);
+    setRowsPerPage(event);
+    // setPage(0);
   };
 
   const handleSearch = (e) => {
@@ -125,7 +124,7 @@ function AttendanceTable({
       // setSearch(e.target.value);
       console.log(e.target.value);
       console.log(tabValue);
-      
+
     }
   };
 
@@ -154,7 +153,7 @@ function AttendanceTable({
             type='text'
             InputProps={{
               startAdornment: (
-                <Search sx={{ color: '#9CA3AF' }}/>
+                <Search sx={{ color: '#9CA3AF' }} />
               )
             }}
           />
@@ -164,7 +163,7 @@ function AttendanceTable({
             withAsterisk
             // value={formik.values.startDate as unknown as Date}
             onChange={(date: unknown) => console.log(date)}
-            // error={formik.touched.startDate && formik.errors.startDate ? String(formik.errors.startDate) : ''}
+          // error={formik.touched.startDate && formik.errors.startDate ? String(formik.errors.startDate) : ''}
           />
         </Grid>
       </Grid>
@@ -174,7 +173,7 @@ function AttendanceTable({
         rowsPerPage={rowsPerPage}
         page={page}
         onChangePage={handleChangePage}
-        onRowsPerPagesChange={(e) =>handleChangeRowsPerPage(e)}
+        onRowsPerPagesChange={(e) => handleChangeRowsPerPage(e)}
         headChildren={
           <TableRow>
             {
@@ -190,7 +189,7 @@ function AttendanceTable({
                       <Box component='span' sx={visuallyHidden}>
                         {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
                       </Box>
-                    ): null}
+                    ) : null}
                   </TableSortLabel>
                 </TableCell>
               ))
@@ -221,7 +220,7 @@ function AttendanceTable({
                           sx={{ color: '#111827' }}
                           onClick={() => { console.log(true); }}
                         >
-                          Attendance report.pdf &nbsp;<FiDownload fontSize='small' />
+                          Disbursement Receipt.pdf &nbsp;<FiDownload fontSize='small' />
                         </MuiButton>
                       </TableCell>
                       <TableCell>
@@ -230,16 +229,16 @@ function AttendanceTable({
                             <>
                               <IconButton
                                 parentColor='#E9EFFF'
-                                onClick={() => { router.push('/payroll-disbursement/payroll/generate-gross/employee'); }}
+                                onClick={() => { router.push('/payroll-disbursement/disbursement/generate'); }}
                                 icons={
-                                  <TbFileImport fontSize={20} color='#223567'/>
+                                  <BsFillEyeFill fontSize={20} color='#223567' />
                                 }
                               />
                               <IconButton
                                 parentColor='#FEE2E2'
                                 onClick={() => setDeleteConfirmation(true)}
                                 icons={
-                                  <BsTrashFill fontSize={20} color='#EF4444'/>
+                                  <BsTrashFill fontSize={20} color='#EF4444' />
                                 }
                               />
                             </>
@@ -248,16 +247,15 @@ function AttendanceTable({
                             <>
                               <IconButton
                                 parentColor='#E9EFFF'
-                                onClick={() => {router.push('/payroll-disbursement/attendance/generate');}}
                                 icons={
-                                  <BsFillEyeFill fontSize={20} color='#223567'/>
+                                  <HiOutlineInboxIn fontSize={20} color='#223567' />
                                 }
                               />
                               <IconButton
                                 parentColor='#FEE2E2'
                                 onClick={() => setDeleteConfirmation(true)}
                                 icons={
-                                  <BsTrashFill fontSize={20} color='#EF4444'/>
+                                  <BsTrashFill fontSize={20} color='#EF4444' />
                                 }
                               />
                             </>
@@ -266,26 +264,9 @@ function AttendanceTable({
                             <>
                               <IconButton
                                 parentColor='#E9EFFF'
+                                onClick={() => { router.push('/payroll-disbursement/disbursement/generate'); }}
                                 icons={
-                                  <HiOutlineInboxIn fontSize={20} color='#223567'/>
-                                }
-                              />
-                              <IconButton
-                                parentColor='#FEE2E2'
-                                onClick={() => setDeleteConfirmation(true)}
-                                icons={
-                                  <BsTrashFill fontSize={20} color='#EF4444'/>
-                                }
-                              />
-                            </>
-                          )}
-                          {tabValue === 3 && (
-                            <>
-                              <IconButton
-                                parentColor='#E9EFFF'
-                                onClick={() => {router.push('/payroll-disbursement/attendance/generate');}}
-                                icons={
-                                  <BsFillEyeFill fontSize={20} color='#223567'/>
+                                  <BsFillEyeFill fontSize={20} color='#223567' />
                                 }
                               />
                             </>
@@ -307,8 +288,8 @@ function AttendanceTable({
       <ConfirmationModal
         open={deleteConfirmation}
         handleClose={() => setDeleteConfirmation(false)}
-        title='Delete Attendance from Payroll Operation?'
-        content='You are about to delete this attendance report. This action cannot be undone.'
+        title='Delete Disbursement Receipt from Payroll Operation?'
+        content='You are about to delete this disbursement receipt. This action cannot be undone.'
         withCallback
         noChange={true}
         callback={() => setDeleteConfirmation(false)}
@@ -317,4 +298,4 @@ function AttendanceTable({
   );
 }
 
-export default AttendanceTable;
+export default DisbursementTable;
