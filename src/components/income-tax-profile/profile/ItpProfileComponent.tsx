@@ -28,21 +28,21 @@ const ButtonWrapper = styled.div`
 `;
 
 const headerItems = [
-    { id: 'name', label: 'Profile Name' },
-    { id: 'country', label: 'Country' },
-    { id: 'province', label: 'Province' },
-    { id: 'eperiod', label: 'Effective Period' },
-    { id: 'created', label: 'Created On' },
-    { id: 'last_update', label: 'last Updated' },
-    { id: 'action', label: '' },
-  ];
+  { id: 'name', label: 'Profile Name' },
+  { id: 'country', label: 'Country' },
+  { id: 'province', label: 'Province' },
+  { id: 'eperiod', label: 'Effective Period' },
+  { id: 'created', label: 'Created On' },
+  { id: 'last_update', label: 'last Updated' },
+  { id: 'action', label: '' },
+];
 
 const DraftHeaderItems = [
   { id: 'name', label: 'Name' },
   { id: 'country', label: 'Country' },
-    { id: 'eperiod', label: 'Effective Period' },
-    { id: 'created', label: 'Created On' },
-    { id: 'last_update', label: 'last Updated' },
+  { id: 'eperiod', label: 'Effective Period' },
+  { id: 'created', label: 'Created On' },
+  { id: 'last_update', label: 'last Updated' },
   { id: 'action', label: '' },
 ];
 
@@ -151,7 +151,7 @@ function ItpProfileTable({
 
   const router = useRouter();
   function DetailActionHandler () {
-    router.push('/satutory-benefit/profile/detail')
+    router.push('/satutory-benefit/profile/detail');
   }
 
   return (
@@ -165,52 +165,52 @@ function ItpProfileTable({
         onRowsPerPagesChange={(e) => handleChangeRowsPerPage(e)}
         headChildren={
           Draft ?
-          <TableRow>
-            {DraftHeaderItems.map((item) => (
-              <TableCell
-                key={item.id}
-                sortDirection={sort === item.id ? direction : false}
-              >
-                <TableSortLabel
-                  active={sort === item.id}
-                  direction={sort === item.id ? direction : 'asc'}
-                  onClick={(e) => handleRequestSort(e, item.id)}
+            <TableRow>
+              {DraftHeaderItems.map((item) => (
+                <TableCell
+                  key={item.id}
+                  sortDirection={sort === item.id ? direction : false}
                 >
-                  {item.label}
-                  {sort === item.id ? (
-                    <Box component='span' sx={visuallyHidden}>
-                      {direction === 'asc'
-                        ? 'sorted descending'
-                        : 'sorted ascending'}
-                    </Box>
-                  ) : null}
-                </TableSortLabel>
-              </TableCell>
-            ))}
-          </TableRow>
-          : <TableRow>
-          {headerItems.map((item) => (
-            <TableCell
-              key={item.id}
-              sortDirection={sort === item.id ? direction : false}
-            >
-              <TableSortLabel
-                active={sort === item.id}
-                direction={sort === item.id ? direction : 'asc'}
-                onClick={(e) => handleRequestSort(e, item.id)}
-              >
-                {item.label}
-                {sort === item.id ? (
-                  <Box component='span' sx={visuallyHidden}>
-                    {direction === 'asc'
-                      ? 'sorted descending'
-                      : 'sorted ascending'}
-                  </Box>
-                ) : null}
-              </TableSortLabel>
-            </TableCell>
-          ))}
-        </TableRow>
+                  <TableSortLabel
+                    active={sort === item.id}
+                    direction={sort === item.id ? direction : 'asc'}
+                    onClick={(e) => handleRequestSort(e, item.id)}
+                  >
+                    {item.label}
+                    {sort === item.id ? (
+                      <Box component='span' sx={visuallyHidden}>
+                        {direction === 'asc'
+                          ? 'sorted descending'
+                          : 'sorted ascending'}
+                      </Box>
+                    ) : null}
+                  </TableSortLabel>
+                </TableCell>
+              ))}
+            </TableRow>
+            : <TableRow>
+              {headerItems.map((item) => (
+                <TableCell
+                  key={item.id}
+                  sortDirection={sort === item.id ? direction : false}
+                >
+                  <TableSortLabel
+                    active={sort === item.id}
+                    direction={sort === item.id ? direction : 'asc'}
+                    onClick={(e) => handleRequestSort(e, item.id)}
+                  >
+                    {item.label}
+                    {sort === item.id ? (
+                      <Box component='span' sx={visuallyHidden}>
+                        {direction === 'asc'
+                          ? 'sorted descending'
+                          : 'sorted ascending'}
+                      </Box>
+                    ) : null}
+                  </TableSortLabel>
+                </TableCell>
+              ))}
+            </TableRow>
         }
         bodyChildren={
           <>
@@ -225,22 +225,22 @@ function ItpProfileTable({
                 data?.items.map((item, index) => (
                   <TableRow key={index}>
                     {Draft ?
-                    <>
+                      <>
                         <TableCell>{item.name}</TableCell>
                         <TableCell>{item.country}</TableCell>
                         <TableCell>{item.effective_period}</TableCell>
                         <TableCell>{item.created}</TableCell>
                         <TableCell>{item.last_update}</TableCell>
-                    </>
-                    :
-                    <>
+                      </>
+                      :
+                      <>
                         <TableCell>{item.name}</TableCell>
                         <TableCell>{item.country}</TableCell>
                         <TableCell>{item.province}</TableCell>
                         <TableCell>{item.effective_period}</TableCell>
                         <TableCell>{item.created}</TableCell>
                         <TableCell>{item.last_update}</TableCell>
-                    </>
+                      </>
                     }
                     <TableCell>
                       <ButtonWrapper>

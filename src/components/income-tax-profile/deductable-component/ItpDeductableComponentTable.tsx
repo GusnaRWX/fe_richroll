@@ -22,13 +22,6 @@ const ButtonWrapper = styled.div`
   justify-content: center;
   gap: 0.5rem;
 `;
-const NameWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  margin: 0;
-`;
 
 const headerItems = [
   { id: 'name', label: 'Company Name' },
@@ -45,7 +38,8 @@ interface ItpDeductableComponentTableProps {
 type Order = 'asc' | 'desc';
 
 function ItpDeductableComponentTable({
-  // tabValue,
+  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+  tabValue,
 }: ItpDeductableComponentTableProps) {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
