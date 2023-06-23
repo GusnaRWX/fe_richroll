@@ -1,3 +1,4 @@
+import React from 'react';
 import { Button, CheckBox } from '@/components/_shared/form';
 import { styled } from '@mui/material/styles';
 import { Box, Grid, Paper, Typography } from '@mui/material';
@@ -473,34 +474,32 @@ const CreateTaxDeductableComponent = () => {
 
           {selectedDeductableComponents.map((value, i) => {
             return (
-              <>
-                <Box sx={{ flexGrow: 1 }} key={i}>
-                  <Grid container sx={{ display: 'flex', alignItems: 'center' }}>
-                    <Grid item xs={1} md={1} lg={1} xl={1}>
-                      <CheckBox
-                        name={value.componentName}
-                        customLabel=''
-                        checked={initialDeductableValues.includes(
-                          value.componentName
-                        )}
-                        onChange={onChangeCheckboxHandler}
-                      />
-                    </Grid>
-                    <Grid item xs={4} md={4} lg={4} xl={4}>
-                      <Typography
-                        sx={{ fontWeight: 500, color: '#4B5563', fontSize: '14px' }}
-                      >
-                        {value.componentName}
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={4} md={4} lg={4} xl={4}>
-                      <Typography sx={{ fontWeight: 400, color: '#4B5563' }}>
-                        {value.componentCondition}
-                      </Typography>
-                    </Grid>
+              <Box sx={{ flexGrow: 1 }} key={i}>
+                <Grid container sx={{ display: 'flex', alignItems: 'center' }}>
+                  <Grid item xs={1} md={1} lg={1} xl={1}>
+                    <CheckBox
+                      name={value.componentName}
+                      customLabel=''
+                      checked={initialDeductableValues.includes(
+                        value.componentName
+                      )}
+                      onChange={onChangeCheckboxHandler}
+                    />
                   </Grid>
-                </Box>
-              </>
+                  <Grid item xs={4} md={4} lg={4} xl={4}>
+                    <Typography
+                      sx={{ fontWeight: 500, color: '#4B5563', fontSize: '14px' }}
+                    >
+                      {value.componentName}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={4} md={4} lg={4} xl={4}>
+                    <Typography sx={{ fontWeight: 400, color: '#4B5563' }}>
+                      {value.componentCondition}
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </Box>
             );
           })}
         </CustomModal>
