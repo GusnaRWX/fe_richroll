@@ -137,7 +137,7 @@ function ForgotPasswordComponent() {
                 login.isError && (
                   <Alert
                     severity={'error'}
-                    content='Email address not found'
+                    content='Email address not registered.'
                     icon={<CancelIcon />}
                   />
                 )
