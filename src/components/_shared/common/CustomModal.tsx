@@ -46,15 +46,16 @@ interface CustomModalProps {
   width: string;
   submitText?: string;
   ConfirmationDisable?:boolean;
+  keepMounted?:boolean;
 }
 
 
-function CustomModal({open, handleClose, handleConfirm, title, children, width, submitText,ConfirmationDisable}: CustomModalProps) {
+function CustomModal({open, handleClose, handleConfirm, title, children, width, submitText, ConfirmationDisable, keepMounted}: CustomModalProps) {
   return (
     <Modal
       open={open}
       onClose={handleClose}
-      keepMounted
+      keepMounted={keepMounted}
       disableAutoFocus
     >
       <Box sx={modalStyle} width={width}>
