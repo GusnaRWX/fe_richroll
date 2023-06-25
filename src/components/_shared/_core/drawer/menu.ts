@@ -90,6 +90,11 @@ export const Menus: CoreLayout.SidebarItem[] = [
         roles: ['HR Admin'],
       },
       {
+        path: '/attendance-leave/leave-entries',
+        title: 'Leave Entries',
+        roles: ['HR Admin']
+      },
+      {
         path: '/attendance-leave/overtime-summary',
         title: 'Overtime Summary',
         roles: ['HR Admin']
