@@ -11,6 +11,7 @@ import { useRouter } from 'next/router';
 import { HiOutlineChevronDown, HiOutlineChevronUp } from 'react-icons/hi2';
 import { useAppSelectors } from '@/hooks/index';
 import { ifThenElse } from '@/utils/helper';
+import { useTranslation } from 'react-i18next';
 
 
 const SidebarItem = ({
@@ -23,6 +24,7 @@ const SidebarItem = ({
   menuOpen,
   setMenuOpen
 }: CoreLayout.SidebarItem) => {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const { pathname, push } = useRouter();
   const { me: { profile } } = useAppSelectors(state => state);
@@ -53,7 +55,7 @@ const SidebarItem = ({
             {icons({ color: 'grey.400' })}
           </ListItemIcon>
           <ListItemText
-            primary={renderTitle?.title}
+            primary={t('sidebar.' + renderTitle?.prefix)}
             sx={{
               fontSize: '14px',
               color: pathname === path ? '#223567 !important' : 'grey.400',
@@ -100,7 +102,7 @@ const SidebarItem = ({
                       onClick={() => { push(childMenu.path); }}
                     >
                       <ListItemText
-                        primary={childMenu.title}
+                        primary={t('sidebar.' + childMenu.prefix)}
                         sx={{
                           fontSize: '14px',
                           color: pathname === childMenu.path ? '#223567 !important' : 'grey.400',

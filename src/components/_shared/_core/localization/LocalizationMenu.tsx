@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { IconButton } from '@/components/_shared/form';
 import { LocalizationsMenu } from './localization';
-import Image from 'next/image';
+// import Image from 'next/image';
 import { Box, Menu, Typography } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { useTranslation } from 'react-i18next';
 
 const LocalizationMenu = () => {
-  const [selectedCountry, setSelectedCountry] = useState('EN');
+  const { i18n } = useTranslation();
+  const [selectedCountry, setSelectedCountry] = useState('English');
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const isLanguageOpen = Boolean(anchorEl);
   const [hydrated, setHaydrated] = useState(false);
@@ -19,6 +21,10 @@ const LocalizationMenu = () => {
     setSelectedCountry(country);
     setAnchorEl(null);
   };
+
+  useEffect(() => {
+    i18n.changeLanguage('en');
+  }, []);
 
   useEffect(() => {
     setHaydrated(true);
@@ -67,23 +73,18 @@ const LocalizationMenu = () => {
             sx={{
               display: 'flex',
               alignItems: 'center',
-              cursor: 'pointer'
-            }}
-            onClick={() => { handleChangeLocalization(locale.name); }}
-          >
-            <IconButton
-              icons={
-                <Image
-                  src={locale.icons}
-                  width={19}
-                  height={14}
-                  alt={locale.name}
-                />
+              cursor: 'pointer',
+              ':hover': {
+                backgroundColor: '#223567 !important',
+                color: '#FFFFFF'
               }
-              disableFocusRipple
-              disableRipple
-            />
-            <Typography>{locale.name}</Typography>
+            }}
+            onClick={() => {
+              handleChangeLocalization(locale.nativeName);
+              i18n.changeLanguage(locale?.codeName);
+            }}
+          >
+            <Typography sx={{ paddingLeft: '.5rem' }}>{locale.nativeName}</Typography>
           </Box>
         ))
       }
@@ -94,7 +95,7 @@ const LocalizationMenu = () => {
     <>
       {
         LocalizationsMenu.map((locale) => (
-          locale.name === selectedCountry && (
+          locale.nativeName === selectedCountry && (
             <Box
               key={locale.name}
               sx={{
@@ -102,22 +103,7 @@ const LocalizationMenu = () => {
                 alignItems: 'center'
               }}
             >
-              <IconButton
-                icons={
-                  <Image
-                    src={locale.icons}
-                    width={19}
-                    height={14}
-                    alt={locale.name}
-                  />
-                }
-
-                disableFocusRipple
-                disableRipple
-                sx={{ cursor: 'text' }}
-
-              />
-              <Typography>{locale.name}</Typography>
+              <Typography>{locale.nativeName}</Typography>
               <IconButton icons={<ExpandMoreIcon />}
                 aria-controls={languageId}
                 aria-label='current language'
