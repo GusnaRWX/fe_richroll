@@ -117,7 +117,7 @@ export declare namespace CoreLayout {
 
   export interface SidebarItem {
     key: string;
-    title: Array<{ key: string, title: string }>;
+    title: Array<{ key: string, title: string, prefix?: string }>;
     path: string;
     icons: IconType;
     hasChild?: boolean;
@@ -127,6 +127,7 @@ export declare namespace CoreLayout {
     child?: Array<{
       title: string;
       path: string;
+      prefix?: string;
       roles?: Array<string>
     }>
   }
