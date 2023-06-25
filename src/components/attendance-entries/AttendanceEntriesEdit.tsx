@@ -1,21 +1,14 @@
-import React from 'react';
-import { Box, Modal, IconButton, Grid } from '@mui/material';
+import React, { useEffect } from 'react';
+import { Box, Modal, IconButton, Grid, Avatar } from '@mui/material';
 import styled from '@emotion/styled';
 import { Text } from '../_shared/common';
 import { Close } from '@mui/icons-material';
-import { Image as Assets } from '@/utils/assetsConstant';
-import Image from 'next/image';
 import { LocalizationProvider, TimePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { Textarea, Button } from '../_shared/form';
+import { Button } from '../_shared/form';
 import { useFormik } from 'formik';
-import { Dayjs } from 'dayjs';
-
-interface AttendanceEntriesEditForm {
-  from: Dayjs | null;
-  to: Dayjs | null;
-  notes: string
-}
+import { AttendanceLeave } from '@/types/attendanceLeave';
+import dayjs from 'dayjs';
 
 const modalStyle = {
   position: 'absolute',
@@ -42,29 +35,46 @@ const ModalHeader = styled.div`
 
 interface AttendanceEntriesEditProps {
   open: boolean;
-  handleClose: () => void
+  handleClose: () => void;
+  callback: (_data: AttendanceLeave.PutAttendance) => void;
+  item: AttendanceLeave.AttendanceType | undefined;
 }
 
 const AttendanceEntriesEdit: React.FC<AttendanceEntriesEditProps> = ({
   open,
-  handleClose
+  handleClose,
+  callback,
+  item
 }) => {
+
+  const convertTime = (time) => {
+    if (typeof time === 'string') {
+      const split = time.split(':');
+      console.log(Number(split[0]), Number(split[1]));
+      return dayjs().set('hour', Number(split[0])).set('minute', Number(split[1]));
+    }
+  };
 
   const formik = useFormik({
     initialValues: {
-      from: null,
-      to: null,
-      notes: ''
-    } as AttendanceEntriesEditForm,
+      clockIn: '',
+      clockOut: ''
+    } as AttendanceLeave.PutAttendance,
     onSubmit: (values) => {
-      console.log(values);
+      callback(values);
     }
   });
+
+  useEffect(() => {
+    if (!open) formik.resetForm();
+    formik.setFieldValue('clockIn', convertTime(item?.clockIn));
+    formik.setFieldValue('clockOut', convertTime(item?.clockOut));
+  }, [open, item]);
 
   return (
     <Modal
       open={open}
-      keepMounted
+      keepMounted={false}
       disableAutoFocus
     >
       <Box sx={modalStyle}>
@@ -76,19 +86,19 @@ const AttendanceEntriesEdit: React.FC<AttendanceEntriesEditProps> = ({
         </ModalHeader>
         <form onSubmit={formik.handleSubmit}>
           <Box sx={{ padding: '16px 0px' }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: '10px', borderBottom: '1px solid #E5E7EB', paddingBottom: '15px' }}>
               <div>
-                <Image
-                  src={Assets.EXAMPLE_EMPLOYE}
-                  alt='user'
-                  height={72}
-                  width={72}
-                  style={{ borderRadius: '50%' }}
+                <Avatar
+                  src={item?.employee?.picture || item?.employee?.name}
+                  alt={item?.employee?.name}
+                  sx={{
+                    width: 72, height: 72
+                  }}
                 />
               </div>
               <div>
-                <Text title='Ratna Sinta' fontWeight={700} fontSize='18px' />
-                <Text title='Assistent MANAGENTR' fontWeight={400} fontSize='14px' />
+                <Text title={item?.employee?.name} fontWeight={700} fontSize='18px' />
+                <Text title={item?.employee?.department || '-'} fontWeight={400} fontSize='14px' />
               </div>
             </Box>
             <Box sx={{ marginTop: '10px' }}>
@@ -97,6 +107,7 @@ const AttendanceEntriesEdit: React.FC<AttendanceEntriesEditProps> = ({
                   <Text title='From' fontWeight={400} sx={{ marginBottom: '6px' }} />
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <TimePicker
+                      format='HH:mm'
                       sx={{
                         '& .MuiOutlinedInput-input': {
                           padding: '8.5px 14px',
@@ -104,8 +115,8 @@ const AttendanceEntriesEdit: React.FC<AttendanceEntriesEditProps> = ({
                         },
                         width: '100%'
                       }}
-                      value={formik.values.from}
-                      onChange={(e) => { formik.setFieldValue('from', e, false); }}
+                      value={formik.values.clockIn}
+                      onChange={(e) => formik.setFieldValue('clockIn', e)}
                     />
                   </LocalizationProvider>
                 </Grid>
@@ -113,6 +124,7 @@ const AttendanceEntriesEdit: React.FC<AttendanceEntriesEditProps> = ({
                   <Text title='To' fontWeight={400} sx={{ marginBottom: '6px' }} />
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <TimePicker
+                      format='HH:mm'
                       sx={{
                         '& .MuiOutlinedInput-input': {
                           padding: '8.5px 14px',
@@ -120,23 +132,10 @@ const AttendanceEntriesEdit: React.FC<AttendanceEntriesEditProps> = ({
                         },
                         width: '100%'
                       }}
-                      value={formik.values.to}
-                      onChange={(e) => { formik.setFieldValue('to', e, false); }}
+                      value={formik.values.clockOut}
+                      onChange={(e) => { formik.setFieldValue('clockOut', e); }}
                     />
                   </LocalizationProvider>
-                </Grid>
-              </Grid>
-              <Grid container mt='10px'>
-                <Grid item md={12}>
-                  <Textarea
-                    customLabel='Note'
-                    placeholder='Add notes'
-                    name='notes'
-                    value={formik.values.notes}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    minRows={4}
-                  />
                 </Grid>
               </Grid>
             </Box>

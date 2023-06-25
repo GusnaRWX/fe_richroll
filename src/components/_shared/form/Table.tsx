@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import Button from './Button';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import { ifThenElse } from '@/utils/helper';
 
 
 interface TableProps {
@@ -34,7 +35,6 @@ function Table({
   rowsPerPage,
   onRowsPerPagesChange
 }: TableProps) {
-  console.log(count);
   const [currentPage, setCurrentPage] = useState(rowsPerPageOptions[0]);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -113,7 +113,7 @@ function Table({
               <MenuItem key={index} onClick={() => { handleChangeRow(value); }}>{value + ' Records'}</MenuItem>
             ))}
           </Menu>
-          <p>Showing <b>{page}</b> to <b>{rowsPerPage}</b> of <b>{count}</b> results</p>
+          <p>Showing <b>{(rowsPerPage * page) - (rowsPerPage - 1)}</b> to <b>{ifThenElse((count < (rowsPerPage * page)), count, rowsPerPage * page)}</b> of <b>{count}</b> results</p>
         </Box>
         <Box>
           <Pagination count={Math.ceil(count / rowsPerPage) || 1} variant='outlined' shape='rounded' onChange={onChangePage} />

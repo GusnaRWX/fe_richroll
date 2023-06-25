@@ -12,6 +12,7 @@ import workScheduleSlice from './slice/company-management/work-schedule/workSche
 import annualScheduleSlice  from './slice/company-management/annual-work-schedule/annualSchedule';
 import employmentSlice from './slice/employment/employmentSlice';
 import accountSlice from './slice/account-management/accountManagementSlice';
+import attendanceEntriesSlice from './slice/attendance-leave/attendanceEntriesSlice';
 
 
 const reducers: Reducer = combineReducers({
@@ -27,7 +28,8 @@ const reducers: Reducer = combineReducers({
   workSchedule: workScheduleSlice,
   annualSchedule: annualScheduleSlice,
   employment: employmentSlice,
-  account: accountSlice
+  account: accountSlice,
+  attendanceEntries: attendanceEntriesSlice
 });
 
 export default reducers;

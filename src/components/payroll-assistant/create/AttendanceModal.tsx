@@ -70,7 +70,6 @@ function AttendanceModal({
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(event);
-    // setPage(0);
   };
 
   const handleRequestSort = (event: React.MouseEvent<unknown>, headId: string) => {
@@ -98,9 +97,7 @@ function AttendanceModal({
     handleClose();
   };
 
-  useEffect(() => {
-    console.log(companyData);
-
+  const loadDataEmployee = () => {
     dispatch({
       type: getEmployeeRequested.toString(),
       payload: {
@@ -113,11 +110,23 @@ function AttendanceModal({
         companyID: companyData?.id
       }
     });
+  };
+
+  useEffect(() => {
+    loadDataEmployee();
   }, [rowsPerPage, page, sort, direction]);
 
   useEffect(() => {
     setHaydrated(true);
   }, []);
+  
+  useEffect(() => {
+    setSelectedTemp(selected);
+    setRowsPerPage(5);
+    setPage(1);
+    setDirection('desc');
+    setSort('');
+  }, [selected]);
 
   if (!hydrated) {
     return null;
@@ -128,12 +137,13 @@ function AttendanceModal({
       open={open}
       handleClose={handleClose}
       title='Select Employees'
-      width='640px'
+      width='800px'
       handleConfirm={onConfirm}
       submitText='Add Employee'
+      keepMounted={false}
     >
       <Grid container>
-        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+        <Grid item xs={12}>
           <Table
             count={data?.itemTotals}
             rowsPerPageOptions={[5]}
@@ -178,20 +188,20 @@ function AttendanceModal({
                           <TableCell>
                             <NameWrapper>
                               <Avatar
-                                src={ifThenElse(item?.user?.userInformation !== null, item?.user?.userInformation?.picture, item.user.name)}
-                                alt={ifThenElse(item?.user?.userInformation !== null, item?.user?.userInformation?.picture, item.user.name)}
+                                src={ifThenElse(item?.user?.userInformation !== null, item?.user?.userInformation?.picture, item?.user?.name)}
+                                alt={ifThenElse(item?.user?.userInformation !== null, item?.user?.userInformation?.picture, item?.user?.name)}
                                 sx={{
                                   width: 24, height: 24
                                 }}
                               />
-                              &nbsp;{item.user.name}
+                              &nbsp;{item?.user?.name}
                             </NameWrapper>
                           </TableCell>
-                          <TableCell>{item.position.name}</TableCell>
-                          <TableCell>{item.department.name}</TableCell>
+                          <TableCell>{item?.position?.name}</TableCell>
+                          <TableCell>{item?.department?.name}</TableCell>
                           <TableCell>
                             <ButtonWrapper>
-                              <Checkbox onChange={(e) => onSelected(item, e)} checked={checkVal(item.id)} />
+                              <Checkbox onChange={(e) => onSelected(item, e)} checked={checkVal(item?.id)} />
                             </ButtonWrapper>
                           </TableCell>
                         </TableRow>
