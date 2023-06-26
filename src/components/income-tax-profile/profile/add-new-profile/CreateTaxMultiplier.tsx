@@ -104,6 +104,10 @@ export default function CreateTaxMultiplier() {
                                     ?.status
                                 }
                                 onChange={(e) => {
+                                  formik.setFieldValue(
+                                    `component.${i}.status`,
+                                    e.target.value
+                                  );
                                   if (e.target.value === '1') {
                                     formik.setFieldValue(`component.${i}.condition.${0}.conditionStatus`, 'owner');
                                     formik.setFieldValue(`component.${i}.condition.${1}.conditionStatus`, 'non-owner');
@@ -111,10 +115,6 @@ export default function CreateTaxMultiplier() {
                                     formik.setFieldValue(`component.${i}.condition.${0}.conditionStatus`, 'Fulltime');
                                     formik.setFieldValue(`component.${i}.condition.${1}.conditionStatus`, 'Freelance/ Contract/ Irregular');
                                   }
-                                  formik.setFieldValue(
-                                    `component.${i}.status`,
-                                    e.target.value
-                                  );
                                 }}
                               />
                             </Grid>
