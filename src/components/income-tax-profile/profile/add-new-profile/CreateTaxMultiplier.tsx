@@ -160,18 +160,7 @@ export default function CreateTaxMultiplier() {
                             arrayHelper.insert(
                               formik.values.component.length + 1,
                               {
-                                condition :[
-                                  {
-                                    conditionAction : '',
-                                    conditionStatus : '',
-                                    multiplier : '',
-                                  },
-                                  {
-                                    conditionAction : '',
-                                    conditionStatus : '',
-                                    multiplier : '',
-                                  },
-                                ]
+                                condition :[]
                               }
                             )
                           }
