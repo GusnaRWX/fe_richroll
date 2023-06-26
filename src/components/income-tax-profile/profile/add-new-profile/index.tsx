@@ -110,7 +110,7 @@ export default function ItpAddNewProfileComponent() {
           <CreateTaxMultiplier />
         </TabPanel>
         <TabPanel value={value} index={4}>
-          <CreateDesignedTransferAccount />
+          <CreateDesignedTransferAccount setValue={setValue} />
         </TabPanel>
       </Paper>
     </>
