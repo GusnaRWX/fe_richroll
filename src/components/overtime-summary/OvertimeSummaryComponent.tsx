@@ -25,6 +25,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { AiOutlineSwapRight } from 'react-icons/ai';
 import AddEmployeeModal from '@/components/payroll-assistant/create/AttendanceModal';
+import EmptyState from '../_shared/common/EmptyState';
 
 const ButtonWrapper = styled(Box)(({
   display: 'flex',
@@ -171,9 +172,7 @@ function OvertimeSummaryComponent() {
                   ifThenElse(selected?.length === 0, (
                     <TableRow>
                       <TableCell colSpan={12} align='center'>
-                        <Typography>
-                        Data not found
-                        </Typography>
+                        <EmptyState />
                       </TableCell>
                     </TableRow>
                   ), (
@@ -189,7 +188,7 @@ function OvertimeSummaryComponent() {
                                 width: 24, height: 24
                               }}
                             />
-                          &nbsp;{item['name']}
+                            &nbsp;{item['name']}
                           </NameWrapper>
                         </TableCell>
                         <TableCell sx={{ width: '200px' }}>
@@ -255,7 +254,9 @@ function OvertimeSummaryComponent() {
                   ))
                 ), (
                   <TableRow>
-                    <TableCell colSpan={12} align='center'><Typography>Data not found</Typography></TableCell>
+                    <TableCell colSpan={12} align='center'>
+                      <EmptyState />
+                    </TableCell>
                   </TableRow>
                 ))
               }

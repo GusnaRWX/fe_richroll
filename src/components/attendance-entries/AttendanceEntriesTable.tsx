@@ -6,7 +6,6 @@ import {
   TableRow,
   Box,
   TableSortLabel,
-  Typography
 } from '@mui/material';
 import { Input } from '../_shared/form';
 import { Search } from '@mui/icons-material';
@@ -23,6 +22,7 @@ import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { getAttendanceRequested, putAttendanceRequested, deleteAttendanceRequested } from '@/store/reducers/slice/attendance-leave/attendanceEntriesSlice';
 import { AttendanceLeave } from '@/types/attendanceLeave';
 import dayjs from 'dayjs';
+import EmptyState from '../_shared/common/EmptyState';
 
 const ButtonWrapper = styled.div`
  display: flex;
@@ -187,7 +187,9 @@ const AttendanceEntriesTable: React.FC<AttendanceEntriesTable> = ({ reload }) =>
               ifThenElse(typeof data?.items !== 'undefined', (
                 ifThenElse(data?.items?.length === 0, (
                   <TableRow>
-                    <TableCell colSpan={12} align='center'><Typography>Data not found</Typography></TableCell>
+                    <TableCell colSpan={12} align='center'>
+                      <EmptyState />
+                    </TableCell>
                   </TableRow>
                 ), (
                   data?.items?.map((item, index) => (
@@ -239,7 +241,9 @@ const AttendanceEntriesTable: React.FC<AttendanceEntriesTable> = ({ reload }) =>
                 ))
               ), (
                 <TableRow>
-                  <TableCell colSpan={12} align='center'><Typography>Data not found</Typography></TableCell>
+                  <TableCell colSpan={12} align='center'>
+                    <EmptyState />
+                  </TableCell>
                 </TableRow>
               ))
             }

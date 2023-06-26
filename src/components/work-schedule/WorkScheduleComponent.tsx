@@ -11,6 +11,7 @@ import { getCompanyData, compareCheck, ifThenElse } from '@/utils/helper';
 import { getListWorkScheduleRequested } from '@/store/reducers/slice/company-management/work-schedule/workScheduleSlice';
 import { visuallyHidden } from '@mui/utils';
 import dayjs from 'dayjs';
+import EmptyState from '../_shared/common/EmptyState';
 
 const TopWrapper = styled.div`
  display: flex;
@@ -127,7 +128,9 @@ function WorkScheduleComponent() {
                 ifThenElse(typeof data?.items !== 'undefined', (
                   ifThenElse(data?.items?.length === 0, (
                     <TableRow>
-                      <TableCell colSpan={12} align='center'><Typography>Data not found</Typography></TableCell>
+                      <TableCell colSpan={12} align='center'>
+                        <EmptyState />
+                      </TableCell>
                     </TableRow>
                   ), (
                     data?.items?.map((item, index) => (
@@ -152,7 +155,9 @@ function WorkScheduleComponent() {
                   ))
                 ), (
                   <TableRow>
-                    <TableCell colSpan={12} align='center'><Typography>Data not found</Typography></TableCell>
+                    <TableCell colSpan={12} align='center'>
+                      <EmptyState />
+                    </TableCell>
                   </TableRow>
                 ))
               }
