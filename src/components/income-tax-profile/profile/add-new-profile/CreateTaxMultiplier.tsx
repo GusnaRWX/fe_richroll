@@ -17,13 +17,18 @@ export default function CreateTaxMultiplier() {
   ];
 
   const DummyConditionOption = [
-    {value:'1',label:'NPWP'},
-    {value:'2',label:'Employment Status'},
+    {value:'1',label:'='},
+    {value:'2',label:'≥'},
+    {value:'3',label:'≤'},
+    {value:'4',label:'≠'},
   ];
 
   const DummyMultlipierOption = [
-    {value:'1',label:'NPWP'},
-    {value:'2',label:'Employment Status'},
+    {value:'1',label:'50%'},
+    {value:'2',label:'75%'},
+    {value:'3',label:'100%'},
+    {value:'4',label:'125%'},
+    {value:'5',label:'150%'},
   ];
 
   const validationSchecma = Yup.object().shape({
@@ -64,7 +69,7 @@ export default function CreateTaxMultiplier() {
                 render={(arrayHelper) => {
                   return(
                     <div>
-                      {formik?.values?.component?.map((component, i) => (
+                      {formik?.values?.component?.map((componentItem, i) => (
                         <Box style={{padding:'16px', border:'1px solid #E5E7EB', borderRadius:'4px'}} key={i}>
                           <Box sx={{display:'flex', justifyContent:'space-between'}}>
                             <Typography
