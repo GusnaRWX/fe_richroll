@@ -111,41 +111,43 @@ export default function CreateTaxMultiplier() {
                               />
                             </Grid>
                             <Grid item xs={12} md={12} lg={12} xl={12}>
-                              <Box sx={{padding:'16px', boxSizing:'border-box', bgcolor:'#F9FAFB', borderRadius:'4px'}}>
-                                {formik.values.component[i]?.condition.map((_, index) => (
-                                  <div key={index}>
-                                    <Grid container spacing={2} sx={{marginBottom:'32px'}}>
-                                      <Grid item xs={2} md={2} lg={2} xl={2}>
-                                        <Select
-                                          customLabel={`Condition ${index + 1}`}
-                                          withAsterisk
-                                          size='small'
-                                          fullWidth
-                                          options={DummyConditionOption}
-                                        />
+                              {formik.values.component[i]?.condition.length !== 0 && (
+                                <Box sx={{padding:'16px', boxSizing:'border-box', bgcolor:'#F9FAFB', borderRadius:'4px'}}>
+                                  {formik.values.component[i]?.condition.map((_, index) => (
+                                    <div key={index}>
+                                      <Grid container spacing={2} sx={{marginBottom:'32px'}}>
+                                        <Grid item xs={2} md={2} lg={2} xl={2}>
+                                          <Select
+                                            customLabel={`Condition ${index + 1}`}
+                                            withAsterisk
+                                            size='small'
+                                            fullWidth
+                                            options={DummyConditionOption}
+                                          />
+                                        </Grid>
+                                        <Grid item xs={4} md={4} lg={4} xl={4}>
+                                          <Input
+                                            size='small'
+                                            sx={{marginTop:'30px'}}
+                                            value={formik.values.component[i].condition[index]?.conditionStatus}
+                                            aria-readonly
+                                          />
+                                        </Grid>
+                                        <Grid item xs={2} md={2} lg={2} xl={2}>
+                                          <Select
+                                            customLabel='Multlipier'
+                                            withAsterisk
+                                            size='small'
+                                            fullWidth
+                                            options={DummyMultlipierOption}
+                                          />
+                                        </Grid>
+                                        <Grid item xs={4} md={4} lg={4} xl={4}/>
                                       </Grid>
-                                      <Grid item xs={4} md={4} lg={4} xl={4}>
-                                        <Input
-                                          size='small'
-                                          sx={{marginTop:'30px'}}
-                                          value={formik.values.component[i].condition[index]?.conditionStatus}
-                                          aria-readonly
-                                        />
-                                      </Grid>
-                                      <Grid item xs={2} md={2} lg={2} xl={2}>
-                                        <Select
-                                          customLabel='Multlipier'
-                                          withAsterisk
-                                          size='small'
-                                          fullWidth
-                                          options={DummyMultlipierOption}
-                                        />
-                                      </Grid>
-                                      <Grid item xs={4} md={4} lg={4} xl={4}/>
-                                    </Grid>
-                                  </div>
-                                ))}
-                              </Box>
+                                    </div>
+                                  ))}
+                                </Box>
+                              )}
                             </Grid>
                           </Grid>
                         </Box>
