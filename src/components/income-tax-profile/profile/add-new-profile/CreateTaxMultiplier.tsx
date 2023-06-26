@@ -130,7 +130,7 @@ export default function CreateTaxMultiplier() {
                               />
                             </Grid>
                             <Grid item xs={12} md={12} lg={12} xl={12}>
-                              {formik.values.component[i]?.condition.length !== 0 && (
+                              {formik.values.component[i]?.status !== '' && (
                                 <Box sx={{padding:'16px', boxSizing:'border-box', bgcolor:'#F9FAFB', borderRadius:'4px'}}>
                                   {formik.values.component[i]?.condition.map((_, index) => (
                                     <div key={index}>
@@ -201,13 +201,25 @@ export default function CreateTaxMultiplier() {
                             arrayHelper.insert(
                               formik.values.component.length + 1,
                               {
-                                condition :[],
                                 status: '',
+                                condition :[
+                                  {
+                                    conditionAction: '',
+                                    conditionStatus: '',
+                                    multiplier: '',
+                                  },
+                                  {
+                                    conditionAction: '',
+                                    conditionStatus: '',
+                                    multiplier: '',
+                                  },
+                                ],
                               }
                             )
                           }
                         />
                       </Box>
+                      <button type='submit' onClick={() => formik.submitForm()}>save</button>
                     </div>
                   );
                 }}/>
