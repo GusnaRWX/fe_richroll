@@ -46,8 +46,8 @@ export default function ItpCreateBasicDetailComponent({setValue}: ItpCreateBasic
 
   return (
     <>
-      <Grid container rowSpacing={4} style={{paddingLeft:'-16px'}}>
-        <Grid item xs={6} md={6} lg={6} xl={6} sx={{paddingRight:'8px'}}>
+      <Grid container spacing={2} rowSpacing={4} style={{paddingLeft:'-16px'}}>
+        <Grid item xs={6} md={6} lg={6} xl={6} >
           <Input
             placeholder='Input Statutory Benefits Name'
             customLabel='Component Name'
@@ -58,7 +58,7 @@ export default function ItpCreateBasicDetailComponent({setValue}: ItpCreateBasic
           />
         </Grid>
         <Grid item xs={6} md={6} lg={6} xl={6}></Grid>
-        <Grid item xs={6} md={6} lg={6} xl={6} sx={{width:'0px', paddingRight:'8px'}}>
+        <Grid item xs={6} md={6} lg={6} xl={6}>
           <Select
             placeholder='Select Country'
             customLabel='Country'
@@ -70,7 +70,7 @@ export default function ItpCreateBasicDetailComponent({setValue}: ItpCreateBasic
             onChange={(e) => formik.setFieldValue('country', e.target.value)}
           />
         </Grid>
-        <Grid item xs={6} md={6} lg={6} xl={6} sx={{width:'0px', paddingLeft:'8px'}}>
+        <Grid item xs={6} md={6} lg={6} xl={6}>
           <Select
             placeholder='Select Province'
             customLabel='Province'
@@ -81,7 +81,7 @@ export default function ItpCreateBasicDetailComponent({setValue}: ItpCreateBasic
             onChange={(e) => formik.setFieldValue('province', e.target.value)}
           />
         </Grid>
-        <Grid item xs={6} md={6} lg={6} xl={6} sx={{width:'0px', paddingRight:'8px'}}>
+        <Grid item xs={6} md={6} lg={6} xl={6}>
           <Select
             placeholder='Select City'
             customLabel='City'
@@ -92,7 +92,7 @@ export default function ItpCreateBasicDetailComponent({setValue}: ItpCreateBasic
             onChange={(e) => formik.setFieldValue('city', e.target.value)}
           />
         </Grid>
-        <Grid item xs={6} md={6} lg={6} xl={6} sx={{width:'0px', paddingLeft:'8px'}}>
+        <Grid item xs={6} md={6} lg={6} xl={6}>
           <Select
             placeholder='Select Country'
             customLabel='Sub-District'
@@ -103,7 +103,7 @@ export default function ItpCreateBasicDetailComponent({setValue}: ItpCreateBasic
             onChange={(e) => formik.setFieldValue('subDistrict', e.target.value)}
           />
         </Grid>
-        <Grid item xs={6} md={6} lg={6} xl={6} sx={{paddingRight:'8px'}}>
+        <Grid item xs={6} md={6} lg={6} xl={6} >
           <Textarea
             customLabel='Citation'
             minRows={4}
@@ -122,7 +122,7 @@ export default function ItpCreateBasicDetailComponent({setValue}: ItpCreateBasic
           </Typography>
         </Grid>
         <Grid item xs={6} md={6} lg={6} xl={6}></Grid>
-        <Grid item xs={6} md={6} lg={6} xl={6} sx={{paddingRight:'8px'}}>
+        <Grid item xs={6} md={6} lg={6} xl={6} >
           <Textarea
             customLabel='Internal Notes'
             minRows={4}
@@ -140,7 +140,7 @@ export default function ItpCreateBasicDetailComponent({setValue}: ItpCreateBasic
             Max. 120 Character
           </Typography>
         </Grid>
-        <Grid item xs={6} md={6} lg={6} xl={6} sx={{paddingLeft:'8px'}}>
+        <Grid item xs={6} md={6} lg={6} xl={6} >
           <Textarea
             customLabel='External Notes'
             minRows={4}
