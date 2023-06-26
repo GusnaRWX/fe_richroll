@@ -10,6 +10,7 @@ import { BsTrashFill } from 'react-icons/bs';
 import { visuallyHidden } from '@mui/utils';
 import { ConfirmationModal } from '@/components/_shared/common';
 import LeaveEntriesEditComponent from './LeaveEntriesEditComponent';
+import EmptyState from '../_shared/common/EmptyState';
 
 import styled from '@emotion/styled';
 import { compareCheck, ifThenElse } from '@/utils/helper';
@@ -140,51 +141,72 @@ const LeaveEntriesTableComponent = () => {
           </TableRow>
         }
         bodyChildren={
-          data?.map(value => (
-            <TableRow key={value.date}>
-              <TableCell>{value.date}</TableCell>
-              <TableCell>{value.employeeID}</TableCell>
-              <TableCell>
-                <NameWrapper>
-                  <Avatar
-                    src={Image.EXAMPLE_EMPLOYE}
-                    sx={{
-                      width: 24, height: 24
-                    }}
-                  />
-                  &nbsp;{value.employeeName}
-                </NameWrapper>
-              </TableCell>
-              <TableCell>{value.leaveFrom}</TableCell>
-              <TableCell>{value.leaveTo}</TableCell>
-              <TableCell>{value.leaveType}</TableCell>
-              <TableCell>{value.status}</TableCell>
-              <TableCell>
-                <ButtonWrapper>
-                  <IconButton
-                    parentColor='primary.50'
-                    onClick={() => {
-                      setSelectedItem(value.date);
-                      setEditConfirmation(true);
-                    }}
-                    icons={
-                      <HiPencilAlt fontSize={20} color='#223567' />
-                    }
-                  />
-                  <IconButton
-                    parentColor='red.50'
-                    onClick={() => {
-                      setSelectedItem(value.date);
-                      setDeleteConfirmation(true);
-                    }}
-                    icons={
-                      <BsTrashFill fontSize={20} color='#EF4444' />
-                    }
-                  />
-                </ButtonWrapper>
-              </TableCell>
-            </TableRow>
-          ))
+          <>
+            {
+              ifThenElse(typeof data !== 'undefined', (
+                ifThenElse(data.length === 0, (
+                  <TableRow>
+                    <TableCell colSpan={12} align='center'>
+                      <EmptyState />
+                    </TableCell>
+                  </TableRow>
+                ), (
+                  data?.map(value => (
+                    <TableRow key={value.date}>
+                      <TableCell>{value.date}</TableCell>
+                      <TableCell>{value.employeeID}</TableCell>
+                      <TableCell>
+                        <NameWrapper>
+                          <Avatar
+                            src={Image.EXAMPLE_EMPLOYE}
+                            sx={{
+                              width: 24, height: 24
+                            }}
+                          />
+                          &nbsp;{value.employeeName}
+                        </NameWrapper>
+                      </TableCell>
+                      <TableCell>{value.leaveFrom}</TableCell>
+                      <TableCell>{value.leaveTo}</TableCell>
+                      <TableCell>{value.leaveType}</TableCell>
+                      <TableCell>{value.status}</TableCell>
+                      <TableCell>
+                        <ButtonWrapper>
+                          <IconButton
+                            parentColor='primary.50'
+                            onClick={() => {
+                              setSelectedItem(value.date);
+                              setEditConfirmation(true);
+                            }}
+                            icons={
+                              <HiPencilAlt fontSize={20} color='#223567' />
+                            }
+                          />
+                          <IconButton
+                            parentColor='red.50'
+                            onClick={() => {
+                              setSelectedItem(value.date);
+                              setDeleteConfirmation(true);
+                            }}
+                            icons={
+                              <BsTrashFill fontSize={20} color='#EF4444' />
+                            }
+                          />
+                        </ButtonWrapper>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ))
+              ), (
+                <TableRow>
+                  <TableCell colSpan={12} align='center'>
+                    <EmptyState />
+                  </TableCell>
+                </TableRow>
+              ))
+            }
+          </>
+
         }
       />
       <ConfirmationModal

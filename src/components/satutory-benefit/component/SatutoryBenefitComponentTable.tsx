@@ -4,7 +4,6 @@ import {
   TableRow,
   Box,
   TableSortLabel,
-  Typography,
 } from '@mui/material';
 import Table from '@/components/_shared/form/Table';
 import { IconButton } from '@/components/_shared/form';
@@ -12,6 +11,7 @@ import styled from '@emotion/styled';
 import { visuallyHidden } from '@mui/utils';
 import { useRouter } from 'next/router';
 import { ConfirmationModal } from '@/components/_shared/common';
+import EmptyState from '@/components/_shared/common/EmptyState';
 
 // Import Icon React Icon
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -166,7 +166,7 @@ function SutatoryBenefitComponentTable() {
               data?.items.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={12} align='center'>
-                    <Typography>Data not found</Typography>
+                    <EmptyState />
                   </TableCell>
                 </TableRow>
               ) : (
@@ -198,7 +198,7 @@ function SutatoryBenefitComponentTable() {
             ) : (
               <TableRow>
                 <TableCell colSpan={12} align='center'>
-                  <Typography>Data not found</Typography>
+                  <EmptyState />
                 </TableCell>
               </TableRow>
             )}

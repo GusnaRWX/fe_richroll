@@ -5,7 +5,6 @@ import {
   TableRow,
   Box,
   TableSortLabel,
-  Typography,
   Button as MuiButton
 } from '@mui/material';
 import { Input, DateRangePicker } from '../_shared/form';
@@ -21,6 +20,7 @@ import { HiOutlineInboxIn } from 'react-icons/hi';
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
 import { ConfirmationModal } from '@/components/_shared/common';
+import EmptyState from '../_shared/common/EmptyState';
 
 const ButtonWrapper = styled.div`
  display: flex;
@@ -215,7 +215,9 @@ function PayrollTable({
               ifThenElse(typeof data?.items !== 'undefined', (
                 ifThenElse(data?.items?.length === 0, (
                   <TableRow>
-                    <TableCell colSpan={12} align='center'><Typography>Data not found</Typography></TableCell>
+                    <TableCell colSpan={12} align='center'>
+                      <EmptyState />
+                    </TableCell>
                   </TableRow>
                 ), (
                   data?.items?.map((item, index) => (
@@ -309,7 +311,9 @@ function PayrollTable({
                 ))
               ), (
                 <TableRow>
-                  <TableCell colSpan={12} align='center'><Typography>Data not found</Typography></TableCell>
+                  <TableCell colSpan={12} align='center'>
+                    <EmptyState />
+                  </TableCell>
                 </TableRow>
               ))
             }

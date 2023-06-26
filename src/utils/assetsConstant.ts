@@ -34,6 +34,8 @@ export const Image: ImageType = {
   PLACEHOLDER_COMPANY: '/assets/images/placeholder-company.svg',
   AVATAR_PLACEHOLDER: '/assets/images/avatar-placeholder.png',
   EXAMPLE_EMPLOYE: '/assets/images/example-employe.jpg',
+  EMPTY_STATE: '/assets/images/empty-state.svg',
+  NOT_FOUND: '/assets/images/not-found.svg'
 };
 
 export const Icons: IconsType = {

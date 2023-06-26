@@ -4,8 +4,7 @@ import {
   TableCell,
   TableRow,
   Box,
-  TableSortLabel,
-  Typography
+  TableSortLabel
 } from '@mui/material';
 import { Input, IconButton } from '../_shared/form';
 import { Search, Visibility } from '@mui/icons-material';
@@ -22,6 +21,7 @@ import { visuallyHidden } from '@mui/utils';
 import DetailModal from './modal';
 import DetailCnb from './detail';
 import ConfirmationModal from '../_shared/common/ConfirmationModal';
+import EmptyState from '../_shared/common/EmptyState';
 
 const ButtonWrapper = styled.div`
  display: flex;
@@ -165,7 +165,9 @@ function EnhancedTable() {
               ifThenElse(typeof data?.items !== 'undefined', (
                 ifThenElse(data?.items?.length === 0, (
                   <TableRow>
-                    <TableCell colSpan={12} align='center'><Typography>Data not found</Typography></TableCell>
+                    <TableCell colSpan={12} align='center'>
+                      <EmptyState />
+                    </TableCell>
                   </TableRow>
                 ), (
                   data?.items?.map((item, index) => (
@@ -210,7 +212,9 @@ function EnhancedTable() {
                 ))
               ), (
                 <TableRow>
-                  <TableCell colSpan={12} align='center'><Typography>Data not found</Typography></TableCell>
+                  <TableCell colSpan={12} align='center'>
+                    <EmptyState />
+                  </TableCell>
                 </TableRow>
               ))
             }
