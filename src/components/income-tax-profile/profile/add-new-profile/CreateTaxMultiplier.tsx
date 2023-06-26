@@ -60,7 +60,7 @@ export default function CreateTaxMultiplier() {
           <>
             <FormikForm>
               <FieldArray
-                name='condition'
+                name='component'
                 render={(arrayHelper) => {
                   return(
                     <div>
@@ -76,7 +76,7 @@ export default function CreateTaxMultiplier() {
                                 marginTop: '-3px',
                               }}
                             >
-                              Component {i}
+                              Component {i + 1}
                             </Typography>
                             <Button
                               color='rose'
@@ -160,7 +160,6 @@ export default function CreateTaxMultiplier() {
                             arrayHelper.insert(
                               formik.values.component.length + 1,
                               {
-                                status:'',
                                 condition :[{
 
                                 }]
