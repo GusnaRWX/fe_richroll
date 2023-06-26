@@ -92,110 +92,122 @@ const CreateTaxDeductableComponent = () => {
   return (
     <>
       <Box component='div'>
-        <Box component='div'>
-          <Paper elevation={1} sx={{ padding: '16px' }}>
-            <Box
-              component='div'
-              sx={{ display: 'flex', justifyContent: 'space-between' }}
+        <Paper component='div' elevation={1} sx={{padding: '12px' }}>
+          <Box
+            component='div'
+            sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+          >
+            <Typography
+              sx={{ fontWeight: 700, color: '#223567', fontSize: '18px' }}
             >
-              <Typography
-                sx={{ fontWeight: 700, color: '#223567', fontSize: '18px' }}
-              >
               Material Status
-              </Typography>
-              <Box sx={{ display: 'flex', gap: '4px' }}>
-                <Button
-                  size='medium'
-                  color='green'
-                  startIcon={<HiPencilAlt color='white' />}
-                  label='Edit'
-                  sx={{
-                    backgroundColor: '#8DD0B8',
-                    color: ' white',
-                  }}
-                />
-                <Button
-                  color='red'
-                  size='medium'
-                  startIcon={<DeleteIcon />}
-                  label='Delete'
-                  sx={{
-                    backgroundColor: '#FEE2E2',
-                    color: '#B91C1C',
-                  }}
-                />
-              </Box>
+            </Typography>
+            <Box sx={{ display: 'flex', gap: '4px' }}>
+              <Button
+                color='green'
+                startIcon={<HiPencilAlt color='white' />}
+                label='Edit'
+                sx={{
+                  backgroundColor: '#8DD0B8',
+                  width: {xs: '68px', md: '73px'},
+                  height: {xs: '29px', md: '30px'},
+                  padding:{xs: '2px', md:'8px'},
+                  color: ' white',
+                }}
+              />
+              <Button
+                color='red'
+                startIcon={<DeleteIcon />}
+                label='Delete'
+                sx={{
+                  width: {xs: '68px', md: '73px'},
+                  height: {xs: '29px', md: '30px'},
+                  padding:{xs: '2px', md:'8px'},
+                  backgroundColor: '#FEE2E2',
+                  color: '#B91C1C',
+                }}
+              />
             </Box>
+          </Box>
 
-            <Grid container sx={{ marginTop: '20px' }} rowSpacing={1}>
-              <Grid item xs={6} md={6} lg={6} xl={6}>
+          <Box sx={{ marginTop: '20px'}}>
+            <Grid container xs={12} style={{marginTop: '6px'}}>
+              <Grid item xs={6}>
                 <Typography
                   sx={{ color: '#374151', fontWeight: 400, fontSize: '14px' }}
                 >
                 Factor Unit Condition
                 </Typography>
               </Grid>
-              <Grid item xs={6} md={6} lg={6} xl={6}>
+              <Grid item xs={6}>
                 <Typography
                   sx={{ color: '#374151', fontWeight: 400, fontSize: '14px' }}
                 >
                 Amount
                 </Typography>
               </Grid>
+            </Grid>
 
-              <Grid item xs={6} md={6} lg={6} xl={6}>
+            <Grid container xs={12} style={{marginTop: '6px'}}>
+              <Grid item xs={6}>
                 <Typography
                   sx={{ color: '#4B5563', fontWeight: 700, fontSize: '14px' }}
                 >
                 Single
                 </Typography>
               </Grid>
-              <Grid item xs={6} md={6} lg={6} xl={6}>
+              <Grid item xs={6}>
                 <Typography
                   sx={{ color: '#4B5563', fontWeight: 700, fontSize: '14px' }}
                 >
                 Rp. 54.000.000
                 </Typography>
               </Grid>
+            </Grid>
 
-              <Grid item xs={6} md={6} lg={6} xl={6}>
+            <Grid container xs={12} style={{marginTop: '6px'}}>
+              <Grid item xs={6}>
                 <Typography
                   sx={{ color: '#4B5563', fontWeight: 700, fontSize: '14px' }}
                 >
                 Married
                 </Typography>
               </Grid>
-              <Grid item xs={6} md={6} lg={6} xl={6}>
+              <Grid item xs={6}>
                 <Typography
                   sx={{ color: '#4B5563', fontWeight: 700, fontSize: '14px' }}
                 >
                 Rp. 58.500.000
                 </Typography>
               </Grid>
+            </Grid>
 
-              <Grid item xs={6} md={6} lg={6} xl={6}>
+            <Grid container xs={12} style={{marginTop: '6px'}}>
+              <Grid item xs={6}>
                 <Typography
                   sx={{ color: '#4B5563', fontWeight: 700, fontSize: '14px' }}
                 >
                 Married with Spouse Earening (Claim)
                 </Typography>
               </Grid>
-              <Grid item xs={6} md={6} lg={6} xl={6}>
+              <Grid item xs={6}>
                 <Typography
                   sx={{ color: '#4B5563', fontWeight: 700, fontSize: '14px' }}
                 >
                 Rp. 112.500.000
                 </Typography>
               </Grid>
+            </Grid>
 
-              <Grid item xs={6} md={6} lg={6} xl={6}>
+            <Grid container xs={12} style={{marginTop: '6px'}}>
+              <Grid item xs={6}>
                 <Typography
-                  sx={{ color: '#4B5563', fontWeight: 700, fontSize: '14px' }}
+                  sx={{ color: '#4B5563', fontWeight: 700, fontSize: '14px'}}
                 >
                 Married with Spouse Earening (Claimed)
                 </Typography>
               </Grid>
-              <Grid item xs={6} md={6} lg={6} xl={6}>
+              <Grid item xs={6}>
                 <Typography
                   sx={{ color: '#4B5563', fontWeight: 700, fontSize: '14px' }}
                 >
@@ -203,176 +215,180 @@ const CreateTaxDeductableComponent = () => {
                 </Typography>
               </Grid>
             </Grid>
-          </Paper>
-        </Box>
+          </Box>
+        </Paper>
 
-        <Box component='div' sx={{ marginTop: '16px' }}>
-          <Paper elevation={1} sx={{ padding: '16px' }}>
-            <Box
-              component='div'
-              sx={{ display: 'flex', justifyContent: 'space-between' }}
+        <Paper component='div' elevation={1} sx={{ padding: '12px', marginTop: '16px'} }>
+          <Box
+            component='div'
+            sx={{ display: 'flex', justifyContent: 'space-between' }}
+          >
+            <Typography
+              sx={{ fontWeight: 700, color: '#223567', fontSize: '18px' }}
             >
-              <Typography
-                sx={{ fontWeight: 700, color: '#223567', fontSize: '18px' }}
-              >
               Number of Dependance
-              </Typography>
-              <Box sx={{ display: 'flex', gap: '4px' }}>
-                <Button
-                  size='medium'
-                  color='green'
-                  startIcon={<HiPencilAlt color='white' />}
-                  label='Edit'
-                  sx={{
-                    backgroundColor: '#8DD0B8',
-                    color: ' white',
-                  }}
-                />
-                <Button
-                  color='red'
-                  size='medium'
-                  startIcon={<DeleteIcon />}
-                  label='Delete'
-                  sx={{
-                    backgroundColor: '#FEE2E2',
-                    color: '#B91C1C',
-                  }}
-                />
-              </Box>
+            </Typography>
+            <Box sx={{ display: 'flex', gap: '4px' }}>
+              <Button
+                color='green'
+                startIcon={<HiPencilAlt color='white' />}
+                label='Edit'
+                sx={{
+                  backgroundColor: '#8DD0B8',
+                  width: {xs: '68px', md: '73px'},
+                  height: {xs: '29px', md: '30px'},
+                  padding:{xs: '2px', md:'8px'},
+                  color: ' white',
+                }}
+              />
+              <Button
+                color='red'
+                startIcon={<DeleteIcon />}
+                label='Delete'
+                sx={{
+                  width: {xs: '68px', md: '73px'},
+                  height: {xs: '29px', md: '30px'},
+                  padding:{xs: '2px', md:'8px'},
+                  backgroundColor: '#FEE2E2',
+                  color: '#B91C1C',
+                }}
+              />
             </Box>
+          </Box>
 
-            <Grid container sx={{ marginTop: '20px' }} rowSpacing={1}>
-              <Grid item xs={6} md={6} lg={6} xl={6}>
-                <Typography
-                  sx={{ color: '#374151', fontWeight: 400, fontSize: '14px' }}
-                >
+          <Grid container sx={{ marginTop: '20px' }} rowSpacing={1}>
+            <Grid item xs={6}>
+              <Typography
+                sx={{ color: '#374151', fontWeight: 400, fontSize: '14px' }}
+              >
                 Factor Unit Condition
-                </Typography>
-              </Grid>
-              <Grid item xs={6} md={6} lg={6} xl={6}>
-                <Typography
-                  sx={{ color: '#374151', fontWeight: 400, fontSize: '14px' }}
-                >
+              </Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <Typography
+                sx={{ color: '#374151', fontWeight: 400, fontSize: '14px' }}
+              >
                 Amount
-                </Typography>
-              </Grid>
+              </Typography>
+            </Grid>
 
-              <Grid item xs={6} md={6} lg={6} xl={6}>
-                <Typography
-                  sx={{ color: '#4B5563', fontWeight: 700, fontSize: '14px' }}
-                >
+            <Grid item xs={6}>
+              <Typography
+                sx={{ color: '#4B5563', fontWeight: 700, fontSize: '14px' }}
+              >
                 1
-                </Typography>
-              </Grid>
-              <Grid item xs={6} md={6} lg={6} xl={6}>
-                <Typography
-                  sx={{ color: '#4B5563', fontWeight: 700, fontSize: '14px' }}
-                >
+              </Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <Typography
+                sx={{ color: '#4B5563', fontWeight: 700, fontSize: '14px' }}
+              >
                 Rp. 4.500.000
-                </Typography>
-              </Grid>
+              </Typography>
+            </Grid>
 
-              <Grid item xs={6} md={6} lg={6} xl={6}>
-                <Typography
-                  sx={{ color: '#4B5563', fontWeight: 700, fontSize: '14px' }}
-                >
+            <Grid item xs={6}>
+              <Typography
+                sx={{ color: '#4B5563', fontWeight: 700, fontSize: '14px' }}
+              >
                 2
-                </Typography>
-              </Grid>
-              <Grid item xs={6} md={6} lg={6} xl={6}>
-                <Typography
-                  sx={{ color: '#4B5563', fontWeight: 700, fontSize: '14px' }}
-                >
-                Rp. 9.000.000
-                </Typography>
-              </Grid>
-
-              <Grid item xs={6} md={6} lg={6} xl={6}>
-                <Typography
-                  sx={{ color: '#4B5563', fontWeight: 700, fontSize: '14px' }}
-                >
-                3
-                </Typography>
-              </Grid>
-              <Grid item xs={6} md={6} lg={6} xl={6}>
-                <Typography
-                  sx={{ color: '#4B5563', fontWeight: 700, fontSize: '14px' }}
-                >
-                Rp. 13.500.000
-                </Typography>
-              </Grid>
-            </Grid>
-          </Paper>
-        </Box>
-
-        <Box component='div' sx={{ marginTop: '16px' }}>
-          <Paper elevation={1} sx={{ padding: '16px' }}>
-            <Box
-              component='div'
-              sx={{ display: 'flex', justifyContent: 'space-between' }}
-            >
-              <Typography
-                sx={{ fontWeight: 700, color: '#223567', fontSize: '18px' }}
-              >
-              Number of Dependance
               </Typography>
-              <Box sx={{ display: 'flex', gap: '4px' }}>
-                <Button
-                  size='medium'
-                  color='green'
-                  startIcon={<HiPencilAlt color='white' />}
-                  label='Edit'
-                  sx={{
-                    backgroundColor: '#8DD0B8',
-                    color: ' white',
-                  }}
-                />
-                <Button
-                  color='red'
-                  size='medium'
-                  startIcon={<DeleteIcon />}
-                  label='Delete'
-                  sx={{
-                    backgroundColor: '#FEE2E2',
-                    color: '#B91C1C',
-                  }}
-                />
-              </Box>
-            </Box>
-
-            <Grid container sx={{ marginTop: '20px' }} rowSpacing={1}>
-              <Grid item xs={6} md={6} lg={6} xl={6}>
-                <Typography
-                  sx={{ color: '#374151', fontWeight: 400, fontSize: '14px' }}
-                >
-                Factor Unit Condition
-                </Typography>
-              </Grid>
-              <Grid item xs={6} md={6} lg={6} xl={6}>
-                <Typography
-                  sx={{ color: '#374151', fontWeight: 400, fontSize: '14px' }}
-                >
-                Amount
-                </Typography>
-              </Grid>
-
-              <Grid item xs={6} md={6} lg={6} xl={6}>
-                <Typography
-                  sx={{ color: '#4B5563', fontWeight: 700, fontSize: '14px' }}
-                >
-                1
-                </Typography>
-              </Grid>
-              <Grid item xs={6} md={6} lg={6} xl={6}>
-                <Typography
-                  sx={{ color: '#4B5563', fontWeight: 700, fontSize: '14px' }}
-                >
-                Rp. 4.500.000
-                </Typography>
-              </Grid>
             </Grid>
-          </Paper>
-        </Box>
+            <Grid item xs={6}>
+              <Typography
+                sx={{ color: '#4B5563', fontWeight: 700, fontSize: '14px' }}
+              >
+                Rp. 9.000.000
+              </Typography>
+            </Grid>
+
+            <Grid item xs={6}>
+              <Typography
+                sx={{ color: '#4B5563', fontWeight: 700, fontSize: '14px' }}
+              >
+                3
+              </Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <Typography
+                sx={{ color: '#4B5563', fontWeight: 700, fontSize: '14px' }}
+              >
+                Rp. 13.500.000
+              </Typography>
+            </Grid>
+          </Grid>
+        </Paper>
+
+        <Paper component='div' elevation={1} sx={{ padding: '12px', marginTop: '16px' }}>
+          <Box
+            component='div'
+            sx={{ display: 'flex', justifyContent: 'space-between' }}
+          >
+            <Typography
+              sx={{ fontWeight: 700, color: '#223567', fontSize: '18px' }}
+            >
+              Number of Dependance
+            </Typography>
+            <Box sx={{ display: 'flex', gap: '4px' }}>
+              <Button
+                color='green'
+                startIcon={<HiPencilAlt color='white' />}
+                label='Edit'
+                sx={{
+                  backgroundColor: '#8DD0B8',
+                  width: {xs: '68px', md: '73px'},
+                  height: {xs: '29px', md: '30px'},
+                  padding:{xs: '2px', md:'8px'},
+                  color: ' white',
+                }}
+              />
+              <Button
+                color='red'
+                startIcon={<DeleteIcon />}
+                label='Delete'
+                sx={{
+                  width: {xs: '68px', md: '73px'},
+                  height: {xs: '29px', md: '30px'},
+                  padding:{xs: '2px', md:'8px'},
+                  backgroundColor: '#FEE2E2',
+                  color: '#B91C1C',
+                }}
+              />
+            </Box>
+          </Box>
+
+          <Grid container sx={{ marginTop: '20px' }} rowSpacing={1}>
+            <Grid item xs={6}>
+              <Typography
+                sx={{ color: '#374151', fontWeight: 400, fontSize: '14px' }}
+              >
+                Factor Unit Condition
+              </Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <Typography
+                sx={{ color: '#374151', fontWeight: 400, fontSize: '14px' }}
+              >
+                Amount
+              </Typography>
+            </Grid>
+
+            <Grid item xs={6}>
+              <Typography
+                sx={{ color: '#4B5563', fontWeight: 700, fontSize: '14px' }}
+              >
+                1
+              </Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <Typography
+                sx={{ color: '#4B5563', fontWeight: 700, fontSize: '14px' }}
+              >
+                Rp. 4.500.000
+              </Typography>
+            </Grid>
+          </Grid>
+        </Paper>
 
         <Box component='div' sx={{ marginTop: '16px' }}>
           <Paper elevation={1} sx={{ padding: '16px' }}>
