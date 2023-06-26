@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, CustomModal, Text,  } from '@/components/_shared/common';
+import { Card, CustomModal, Text, } from '@/components/_shared/common';
 import { Box, Grid, IconButton, InputAdornment, Alert } from '@mui/material';
 import { Button, Input } from '@/components/_shared/form';
 import { BsTrashFill, BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
@@ -12,7 +12,7 @@ const ValidationSchemaDelete = Yup.object({
   password: Yup.string().required('This field is required')
 });
 
-interface ProfileDeleteAccountType  {
+interface ProfileDeleteAccountType {
   password: string
 }
 
@@ -95,6 +95,7 @@ const ProfileDeleteAccount = () => {
         width='720px'
         handleConfirm={formik.handleSubmit}
         submitText='Delete'
+        deleteText='Confirm Delete'
       >
         <Grid container mt='1rem' mb='1rem'>
           <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>

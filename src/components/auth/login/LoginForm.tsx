@@ -93,7 +93,7 @@ const LoginForm = ({
           Login
         </Typography>
         {![200, 201, 0].includes(responser?.code) && (
-          <Box mb='17px'>
+          <Box mb='16px'>
             <Alert severity='error'>
               <Text
                 title={responser?.message}
@@ -102,7 +102,7 @@ const LoginForm = ({
             </Alert>
           </Box>
         )}
-        <Box component='div' mb='17px'>
+        <Box component='div' mb='16px'>
           <Input
             customLabel='Email'
             withAsterisk
@@ -116,7 +116,7 @@ const LoginForm = ({
             helperText={formik.touched.email && formik.errors.email}
           />
         </Box>
-        <Box mb='17px'>
+        <Box mb='16px'>
           <Input
             customLabel='Password'
             withAsterisk
@@ -154,7 +154,7 @@ const LoginForm = ({
           isLoading={login.isLoading}
         />
       </Box>
-      <Box component='div' mt={`${![200, 201, 0].includes(responser?.code) ? 17 : 30}px`}>
+      <Box component='div' mt={`${![200, 201, 0].includes(responser?.code) ? 15 : 30}px`}>
         <Typography
           color='grey.400'
           textAlign='center'
