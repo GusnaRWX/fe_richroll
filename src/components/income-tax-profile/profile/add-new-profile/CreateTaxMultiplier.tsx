@@ -99,6 +99,10 @@ export default function CreateTaxMultiplier() {
                                 size='small'
                                 fullWidth
                                 options={DummyStatusOption}
+                                value={
+                                  formik.values.component[i]
+                                    ?.status
+                                }
                                 onChange={(e) => {
                                   if (e.target.value === '1') {
                                     formik.setFieldValue(`component.${i}.condition.${0}.conditionStatus`, 'owner');
@@ -107,6 +111,10 @@ export default function CreateTaxMultiplier() {
                                     formik.setFieldValue(`component.${i}.condition.${0}.conditionStatus`, 'Fulltime');
                                     formik.setFieldValue(`component.${i}.condition.${1}.conditionStatus`, 'Freelance/ Contract/ Irregular');
                                   }
+                                  formik.setFieldValue(
+                                    `component.${i}.status`,
+                                    e.target.value
+                                  );
                                 }}
                               />
                             </Grid>
@@ -123,6 +131,16 @@ export default function CreateTaxMultiplier() {
                                             size='small'
                                             fullWidth
                                             options={DummyConditionOption}
+                                            value={
+                                              formik.values.component[i]
+                                                ?.condition[index]?.conditionAction
+                                            }
+                                            onChange={(e) =>
+                                              formik.setFieldValue(
+                                                `component.${i}.condition.${index}.conditionAction`,
+                                                e.target.value
+                                              )
+                                            }
                                           />
                                         </Grid>
                                         <Grid item xs={4} md={4} lg={4} xl={4}>
@@ -140,6 +158,16 @@ export default function CreateTaxMultiplier() {
                                             size='small'
                                             fullWidth
                                             options={DummyMultlipierOption}
+                                            value={
+                                              formik.values.component[i]
+                                                ?.condition[index]?.multiplier
+                                            }
+                                            onChange={(e) =>
+                                              formik.setFieldValue(
+                                                `component.${i}.condition.${index}.multiplier`,
+                                                e.target.value
+                                              )
+                                            }
                                           />
                                         </Grid>
                                         <Grid item xs={4} md={4} lg={4} xl={4}/>
