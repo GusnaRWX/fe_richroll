@@ -94,58 +94,52 @@ export default function CreateTaxMultiplier() {
                                 size='small'
                                 fullWidth
                                 options={DummyStatusOption}
+                                onChange={(e) => {
+                                  if (e.target.value === '1') {
+                                    formik.setFieldValue(`component.${i}.condition.${0}.conditionStatus`, 'owner');
+                                    formik.setFieldValue(`component.${i}.condition.${1}.conditionStatus`, 'non-owner');
+                                  } else if (e.target.value === '2') {
+                                    formik.setFieldValue(`component.${i}.condition.${0}.conditionStatus`, 'Fulltime');
+                                    formik.setFieldValue(`component.${i}.condition.${1}.conditionStatus`, 'Freelance/ Contract/ Irregular');
+                                  }
+                                }}
                               />
                             </Grid>
                             <Grid item xs={12} md={12} lg={12} xl={12}>
                               <Box sx={{padding:'16px', boxSizing:'border-box', bgcolor:'#F9FAFB', borderRadius:'4px'}}>
-                                <Grid container spacing={2} sx={{marginBottom:'32px'}}>
-                                  <Grid item xs={2} md={2} lg={2} xl={2}>
-                                    <Select
-                                      customLabel='Condition 1'
-                                      withAsterisk
-                                      size='small'
-                                      fullWidth
-                                      options={DummyConditionOption}
-                                    />
-                                  </Grid>
-                                  <Grid item xs={4} md={4} lg={4} xl={4}>
-                                    <Input size='small' sx={{marginTop:'30px'}}></Input>
-                                  </Grid>
-                                  <Grid item xs={2} md={2} lg={2} xl={2}>
-                                    <Select
-                                      customLabel='Multlipier'
-                                      withAsterisk
-                                      size='small'
-                                      fullWidth
-                                      options={DummyMultlipierOption}
-                                    />
-                                  </Grid>
-                                  <Grid item xs={4} md={4} lg={4} xl={4}/>
-                                </Grid>
-                                <Grid container spacing={2}>
-                                  <Grid item xs={2} md={2} lg={2} xl={2}>
-                                    <Select
-                                      customLabel='Condition 2'
-                                      withAsterisk
-                                      size='small'
-                                      fullWidth
-                                      options={DummyConditionOption}
-                                    />
-                                  </Grid>
-                                  <Grid item xs={4} md={4} lg={4} xl={4}>
-                                    <Input size='small' sx={{marginTop:'30px'}}></Input>
-                                  </Grid>
-                                  <Grid item xs={2} md={2} lg={2} xl={2}>
-                                    <Select
-                                      customLabel='Multlipier'
-                                      withAsterisk
-                                      size='small'
-                                      fullWidth
-                                      options={DummyMultlipierOption}
-                                    />
-                                  </Grid>
-                                  <Grid item xs={4} md={4} lg={4} xl={4}/>
-                                </Grid>
+                                {formik.values.component[i]?.condition.map((_, index) => (
+                                  <div key={index}>
+                                    <Grid container spacing={2} sx={{marginBottom:'32px'}}>
+                                      <Grid item xs={2} md={2} lg={2} xl={2}>
+                                        <Select
+                                          customLabel={`Condition ${index + 1}`}
+                                          withAsterisk
+                                          size='small'
+                                          fullWidth
+                                          options={DummyConditionOption}
+                                        />
+                                      </Grid>
+                                      <Grid item xs={4} md={4} lg={4} xl={4}>
+                                        <Input
+                                          size='small'
+                                          sx={{marginTop:'30px'}}
+                                          value={formik.values.component[i].condition[index]?.conditionStatus}
+                                          aria-readonly
+                                        />
+                                      </Grid>
+                                      <Grid item xs={2} md={2} lg={2} xl={2}>
+                                        <Select
+                                          customLabel='Multlipier'
+                                          withAsterisk
+                                          size='small'
+                                          fullWidth
+                                          options={DummyMultlipierOption}
+                                        />
+                                      </Grid>
+                                      <Grid item xs={4} md={4} lg={4} xl={4}/>
+                                    </Grid>
+                                  </div>
+                                ))}
                               </Box>
                             </Grid>
                           </Grid>
@@ -161,9 +155,18 @@ export default function CreateTaxMultiplier() {
                             arrayHelper.insert(
                               formik.values.component.length + 1,
                               {
-                                condition :[{
-
-                                }]
+                                condition :[
+                                  {
+                                    conditionAction : '',
+                                    conditionStatus : '',
+                                    multiplier : '',
+                                  },
+                                  {
+                                    conditionAction : '',
+                                    conditionStatus : '',
+                                    multiplier : '',
+                                  },
+                                ]
                               }
                             )
                           }
