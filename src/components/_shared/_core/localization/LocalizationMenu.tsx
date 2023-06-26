@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 
 const LocalizationMenu = () => {
   const { i18n } = useTranslation();
-  const [selectedCountry, setSelectedCountry] = useState('English');
+  const [selectedCountry, setSelectedCountry] = useState('EN');
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const isLanguageOpen = Boolean(anchorEl);
   const [hydrated, setHaydrated] = useState(false);
@@ -76,8 +76,10 @@ const LocalizationMenu = () => {
               cursor: 'pointer',
               ':hover': {
                 backgroundColor: '#223567 !important',
-                color: '#FFFFFF'
-              }
+                color: '#fff'
+              },
+              backgroundColor: selectedCountry === locale.nativeName ? '#223567 !important' : '',
+              color: selectedCountry === locale.nativeName ? '#fff' : '#223567',
             }}
             onClick={() => {
               handleChangeLocalization(locale.nativeName);

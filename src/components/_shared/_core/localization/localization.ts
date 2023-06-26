@@ -4,7 +4,7 @@ export const LocalizationsMenu = [
   {
     name: 'EN',
     codeName: 'en',
-    nativeName: 'English',
+    nativeName: 'EN',
     lang: {
       en: { nativeName: 'English' }
     },
@@ -18,13 +18,13 @@ export const LocalizationsMenu = [
       in: { nativeName: 'Indonesian' }
     },
     locale: 'id_ID',
-    nativeName: 'Indonesian',
+    nativeName: 'ID',
     icons: Icons.ENGLISH_ICON
   },
   {
     name: 'MY',
     codeName: 'ms',
-    nativeName: 'Malay',
+    nativeName: 'MS',
     lang: {
       ms: { nativeName: 'Malay' }
     },
@@ -34,7 +34,7 @@ export const LocalizationsMenu = [
   {
     name: 'CN',
     codeName: 'zh',
-    nativeName: 'Chinese',
+    nativeName: 'ZH',
     lang: {
       zh: { nativeName: 'Chinese' }
     },
