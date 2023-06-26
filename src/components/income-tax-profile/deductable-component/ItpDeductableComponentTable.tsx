@@ -10,6 +10,8 @@ import Table from '@/components/_shared/form/Table';
 import { IconButton } from '@/components/_shared/form';
 import styled from '@emotion/styled';
 import { visuallyHidden } from '@mui/utils';
+import { useRouter } from 'next/router';
+import { ConfirmationModal } from '@/components/_shared/common';
 
 // Import Icon React Icon
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -21,13 +23,6 @@ const ButtonWrapper = styled.div`
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-`;
-const NameWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  margin: 0;
 `;
 
 const headerItems = [
@@ -45,12 +40,14 @@ interface ItpDeductableComponentTableProps {
 type Order = 'asc' | 'desc';
 
 function ItpDeductableComponentTable({
-  // tabValue,
+  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+  tabValue,
 }: ItpDeductableComponentTableProps) {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
+  const [DeleteConfirmation, setDeleteConfirmation] = useState(false);
   const [hydrated, setHaydrated] = useState(false);
 
   const data = {
@@ -118,6 +115,12 @@ function ItpDeductableComponentTable({
   if (!hydrated) {
     return null;
   }
+
+  const router = useRouter();
+  function DetailActionHandler() {
+    router.push('/income-tax-profile/deductable-component/detail');
+  }
+
   return (
     <>
       <Table
@@ -173,10 +176,12 @@ function ItpDeductableComponentTable({
                         <IconButton
                           parentColor='primary.50'
                           icons={<HiPencilAlt fontSize={20} color='#223567' />}
+                          onClick={DetailActionHandler}
                         />
                         <IconButton
                           parentColor='red.100'
                           icons={<DeleteIcon sx={{ color: '#EF4444' }} />}
+                          onClick={()=>setDeleteConfirmation(true)}
                         />
                       </ButtonWrapper>
                     </TableCell>
@@ -190,6 +195,16 @@ function ItpDeductableComponentTable({
                 </TableCell>
               </TableRow>
             )}
+            <ConfirmationModal
+              open={DeleteConfirmation}
+              handleClose={() => setDeleteConfirmation(false)}
+              title='Delete Data Entry'
+              content='You are about to delete this statutory benefit component. This action cannot be undone.'
+              withCallback
+              noChange={true}
+              callback={() => setDeleteConfirmation(false)}
+              type='delete'
+            />
           </>
         }
       />

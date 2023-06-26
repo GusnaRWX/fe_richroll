@@ -47,7 +47,7 @@ function EnhancedTable() {
   const data = useAppSelectors(state => state.compensation.dataTable);
   const router = useRouter();
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
@@ -58,8 +58,8 @@ function EnhancedTable() {
     setPage(newPage);
   };
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 0));
-    setPage(0);
+    setRowsPerPage(event);
+    // setPage(0);
   };
   const handleSearch = (e) => {
     if (e.key === 'Enter') {
@@ -94,7 +94,7 @@ function EnhancedTable() {
     dispatch({
       type: getTableRequested.toString(),
       payload: {
-        page: page + 1,
+        page: page,
         itemPerPage: rowsPerPage,
         sort: sort,
         direction: direction.toUpperCase(),

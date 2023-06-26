@@ -38,6 +38,7 @@ border-top: 1px solid #E5E7EB;
  padding-top: 1rem;
 `;
 
+type Type = 'delete' | 'suspend' | 'reactivate'
 
 interface ConfirmationModalProp {
   open: boolean;
@@ -47,10 +48,11 @@ interface ConfirmationModalProp {
   withCallback?: boolean;
   callback?: () => void;
   noChange?: boolean;
+  type?: Type;
 }
 
 
-function ConfirmationModal({ open, handleClose, title, content, withCallback, callback, noChange }: ConfirmationModalProp) {
+function ConfirmationModal({ open, handleClose, title, content, withCallback, callback, noChange, type }: ConfirmationModalProp) {
   const router = useRouter();
   const handleClick = () => {
     handleClose();
@@ -80,7 +82,18 @@ function ConfirmationModal({ open, handleClose, title, content, withCallback, ca
         </div>
         <ModalFooter>
           <MuiButton variant='outlined' size='small' onClick={handleClose}>Cancel</MuiButton>
-          <MuiButton variant='contained' onClick={handleClick} size='small' color='primary'>Confirm</MuiButton>
+          {!type &&
+            <MuiButton variant='contained' onClick={handleClick} size='small' color='primary'>Confirm</MuiButton>
+          }
+          {type === 'delete' &&
+            <MuiButton variant='contained' onClick={handleClick} size='small' sx={{ background: '#FECACA', color: '#DC2626', ':hover': { background: '#FECACA', color: '#DC2626' } }}>Delete</MuiButton>
+          }
+          {type === 'suspend' &&
+            <MuiButton variant='contained' onClick={handleClick} size='small' sx={{ background: '#FFEDD5', color: '#EA580C' }}>Suspend</MuiButton>
+          }
+          {type === 'reactivate' &&
+            <MuiButton variant='contained' onClick={handleClick} size='small' sx={{ background: '#DCFCE7', color: '#16A34A' }}>Reactivate</MuiButton>
+          }
         </ModalFooter>
       </Box>
     </Modal>

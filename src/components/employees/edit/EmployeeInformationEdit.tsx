@@ -149,6 +149,7 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
       const nameFile = randomCode(5);
       const fileImage = base64ToFile(imageSrc, nameFile);
       formik.setFieldValue('picture', fileImage);
+      formik.setFieldValue('pictureBackend', fileImage);
       handleClose();
       handleCloseCamera();
     }
@@ -159,6 +160,7 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
 
   const formik = useFormik({
     initialValues: {
+      pictureBackend: [],
       picture: [],
       fullName: infoValues?.fullName,
       nickname: infoValues?.nickname,
@@ -214,7 +216,7 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
       ...formik.values,
       images: String(images)
     };
-    setValues(allInfoValues);
+    setValues(allInfoValues as any);
   }, [formik.values]);
 
   const filter = createFilterOptions<Option.FreesoloType>();
@@ -577,7 +579,7 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
           <Grid item xs={12} sm={12} md={8} lg={8} xl={8}>
             <EmployeeSelfWrapper>
               <CheckBox
-                customLabel='Employee Self Serive'
+                customLabel='Employee Self Service'
                 name='isSelfService'
                 checked={formik.values.isSelfService}
                 onChange={formik.handleChange}
@@ -612,7 +614,10 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
       <FileUploadModal
         open={open}
         handleClose={handleClose}
-        onChange={(e) => formik.setFieldValue('picture', convertImageParams('picture', !e.target.files ? null : e.target.files[0], setImages, handleClose), false)}
+        onChange={(e) => {
+          formik.setFieldValue('picture', convertImageParams('picture', !e.target.files ? null : e.target.files[0], setImages, handleClose), false);
+          formik.setFieldValue('pictureBackend', !e.target.files ? null : e.target.files[0]);
+        }}
         onCapture={handleOpenCamera}
       />
       <Modal

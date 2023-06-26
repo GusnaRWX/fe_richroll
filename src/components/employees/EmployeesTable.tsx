@@ -12,7 +12,7 @@ import {
   Typography
 } from '@mui/material';
 import { Input, IconButton } from '../_shared/form';
-import { Search  } from '@mui/icons-material';
+import { Search } from '@mui/icons-material';
 import Table from '../_shared/form/Table';
 import { HiPencilAlt } from 'react-icons/hi';
 import { BsTrashFill } from 'react-icons/bs';
@@ -63,7 +63,7 @@ function EmployeesTable({
   const data = useAppSelectors(state => state.employee.data);
   const router = useRouter();
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
@@ -73,8 +73,8 @@ function EmployeesTable({
     setPage(newPage);
   };
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 0));
-    setPage(0);
+    setRowsPerPage(event);
+    // setPage(0);
   };
   const handleSearch = (e) => {
     if (e.key === 'Enter') {
@@ -94,7 +94,7 @@ function EmployeesTable({
     dispatch({
       type: getEmployeeRequested.toString(),
       payload: {
-        page: page + 1,
+        page: page,
         itemPerPage: rowsPerPage,
         sort: sort,
         direction: direction.toUpperCase(),
@@ -124,7 +124,7 @@ function EmployeesTable({
             type='text'
             InputProps={{
               startAdornment: (
-                <Search sx={{ color: '#9CA3AF' }}/>
+                <Search sx={{ color: '#9CA3AF' }} />
               )
             }}
           />
@@ -148,7 +148,7 @@ function EmployeesTable({
         rowsPerPage={rowsPerPage}
         page={page}
         onChangePage={handleChangePage}
-        onRowsPerPagesChange={(e) =>handleChangeRowsPerPage(e)}
+        onRowsPerPagesChange={handleChangeRowsPerPage}
         headChildren={
           <TableRow>
             {
@@ -164,7 +164,7 @@ function EmployeesTable({
                       <Box component='span' sx={visuallyHidden}>
                         {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
                       </Box>
-                    ): null}
+                    ) : null}
                   </TableSortLabel>
                 </TableCell>
               ))
@@ -192,7 +192,7 @@ function EmployeesTable({
                               width: 24, height: 24
                             }}
                           />
-                    &nbsp;{item.user.name}
+                          &nbsp;{item.user.name}
                         </NameWrapper>
                       </TableCell>
                       <TableCell>{item.position.name}</TableCell>
@@ -200,7 +200,7 @@ function EmployeesTable({
                       <TableCell>{ifThenElse(item?.isActive, (
                         <Chip color='secondary' label='active' />
                       ), (
-                        <Chip label='Non Active' sx={{ backgroundColor: '#FEE2E2' }}/>
+                        <Chip label='Non Active' sx={{ backgroundColor: '#FEE2E2' }} />
                       ))}</TableCell>
                       <TableCell>{dayjs(item.user.createdAt).format('YYYY-MM-DD H:m:s')}</TableCell>
                       <TableCell>-</TableCell>
@@ -210,14 +210,14 @@ function EmployeesTable({
                             parentColor='primary.50'
                             onClick={() => { router.push('/company-management/employees/detail/' + item.id); }}
                             icons={
-                              <HiPencilAlt fontSize={20} color='#223567'/>
+                              <HiPencilAlt fontSize={20} color='#223567' />
                             }
                           />
                           <IconButton
                             parentColor='grey.100'
                             disabled
                             icons={
-                              <BsTrashFill fontSize={20} color='#D1D5DB'/>
+                              <BsTrashFill fontSize={20} color='#D1D5DB' />
                             }
                           />
                         </ButtonWrapper>

@@ -199,6 +199,43 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
     formik.setFieldValue('zipCodeCitizenAddress', formik.values.zipCodeCitizenAddress);
   }, []);
 
+  useEffect(() => {
+    formik.setFieldValue('countryResidentialAddress', formik.values.countryResidentialAddress);
+    dispatch({
+      type: getSecondAdministrativeFirstLevelRequested.toString(),
+      payload: {
+        countryID: formik.values.countryResidentialAddress
+      }
+    });
+    formik.setFieldValue('provinceResidentialAddress', formik.values.provinceResidentialAddress);
+    setTimeout(() => {
+      dispatch({
+        type: getSecondAdministrativeSecondLevelRequested.toString(),
+        payload: {
+          countryID: formik.values.countryResidentialAddress,
+          firstLevelCode: formik.values.provinceResidentialAddress
+        }
+      });
+    }, 3000);
+    formik.setFieldValue('cityResidentialAddress', formik.values.cityResidentialAddress);
+    setTimeout(() => {
+      dispatch({
+        type: getSecondAdministrativeThirdLevelRequested.toString(),
+        payload: {
+          countryId: formik.values.countryResidentialAddress,
+          firstLevelCode: formik.values.provinceResidentialAddress,
+          secondLevelCode: formik.values.cityResidentialAddress
+        }
+      });
+    }, 3500);
+
+    formik.setFieldValue('subDistrictResidentialAddress', formik.values.subDistrictResidentialAddress);
+    formik.setFieldValue('addressResidentialAddress', formik.values.addressResidentialAddress);
+    formik.setFieldValue('zipCodeResidentialAddress', formik.values.zipCodeResidentialAddress);
+  }, []);
+
+
+  console.log(formik.values);
 
   const checkCountry = (value: unknown) => {
     if ((value as string)?.length === 0) {

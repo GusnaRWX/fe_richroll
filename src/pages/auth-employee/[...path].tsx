@@ -24,7 +24,7 @@ const EmployeeLogin = () => {
       return (
         <>
           <MetaHead title='Kayaroll - Login' />
-          <LoginContainer />
+          <LoginContainer isAdmin={false} />
         </>
       );
     case 'set-new-password':

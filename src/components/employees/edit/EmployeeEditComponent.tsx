@@ -8,10 +8,9 @@ import { useRouter } from 'next/router';
 import ConfirmationModal from '@/components/_shared/common/ConfirmationModal';
 import { Employees } from '@/types/employees';
 import dayjs from 'dayjs';
-import { getCompanyData, ifThenElse, getUserData } from '@/utils/helper';
+import { getCompanyData, ifThenElse } from '@/utils/helper';
 import { useAppSelectors, useAppDispatch } from '@/hooks/index';
 import { patchEmergencyContactRequested, patchEmployeeInformationRequested, patchPersonalRequested, postWorkScheduleRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
-
 
 const EmployeeInformationEdit = dynamic(() => import('./EmployeeInformationEdit'), {
   ssr: false
@@ -119,6 +118,7 @@ function EmployeeEditComponent() {
   const phoneNumber = ifThenElse(typeof dataEmployeeInformation.phoneNumber !== 'undefined', dataEmployeeInformation?.phoneNumber?.slice(3), '');
   const dispatch = useAppDispatch();
   const [informationValue, setInformationValue] = useState<Employees.InformationValues>({
+    pictureBackend: [],
     companyID: getCompanyData()?.id as string,
     department: dataEmployeeInformation?.department,
     email: dataEmployeeInformation?.email,
@@ -149,12 +149,12 @@ function EmployeeEditComponent() {
     addressCitizenAddress: dataPersonalInformation?.citizen?.address,
     zipCodeCitizenAddress: dataPersonalInformation?.citizen?.zipCode,
 
-    countryResidentialAddress: dataPersonalInformation?.citizen?.country.id,
-    provinceResidentialAddress: dataPersonalInformation?.citizen?.firstLevel.code,
-    cityResidentialAddress: dataPersonalInformation?.citizen?.secondLevel.code,
-    subDistrictResidentialAddress: dataPersonalInformation?.citizen?.thirdLevel.code,
-    addressResidentialAddress: dataPersonalInformation?.citizen?.address,
-    zipCodeResidentialAddress: dataPersonalInformation?.citizen?.zipCode,
+    countryResidentialAddress: dataPersonalInformation?.residential?.country.id,
+    provinceResidentialAddress: dataPersonalInformation?.residential?.firstLevel.code,
+    cityResidentialAddress: dataPersonalInformation?.residential?.secondLevel.code,
+    subDistrictResidentialAddress: dataPersonalInformation?.residential?.thirdLevel.code,
+    addressResidentialAddress: dataPersonalInformation?.residential?.address,
+    zipCodeResidentialAddress: dataPersonalInformation?.residential?.zipCode,
 
     bankBankInformation: dataPersonalInformation?.bank?.bank.id,
     bankAccountHolderNameBankInformation: dataPersonalInformation?.bank?.holder,
@@ -203,8 +203,8 @@ function EmployeeEditComponent() {
   const handleClick = () => {
     const inputData = new FormData();
     inputData.append('companyID', getCompanyData()?.id as string);
-    if ((informationValue.picture as []).length > 0) {
-      inputData.append('picture', (informationValue.picture as File)[0]);
+    if (informationValue?.pictureBackend?.length !== 0) {
+      inputData.append('picture', informationValue?.pictureBackend as unknown as File);
     }
     inputData.append('fullName', informationValue.fullName);
     inputData.append('nickname', informationValue.nickname);
@@ -287,7 +287,7 @@ function EmployeeEditComponent() {
           />
           <TitleWrapper>
             <Typography component='h3' fontWeight='bold'>Employee Profile</Typography>
-            <Typography component='span' fontSize='12px' sx={{ color: '#4B5563' }}>{getUserData()?.name}</Typography>
+            <Typography component='span' fontSize='12px' sx={{ color: '#4B5563' }}>{employee?.employeeInformationDetail?.fullName}</Typography>
           </TitleWrapper>
         </BackWrapper>
         <ButtonWrapper>
@@ -345,7 +345,7 @@ function EmployeeEditComponent() {
             on Development
           </TabPanel>
           <TabPanel value={value} index={4}>
-            <EmployeeWorkScheduleEdit setData={setValueWorkSchedule}/>
+            <EmployeeWorkScheduleEdit setData={setValueWorkSchedule} />
           </TabPanel>
         </Box>
       </ContentWrapper>

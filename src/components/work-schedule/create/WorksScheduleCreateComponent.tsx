@@ -82,6 +82,7 @@ function WorksScheduleCreateComponent() {
   const [value, setValue] = useState(0);
   const [leave, setLeave] = useState(false);
   const [data, setData] = useState({});
+  const [isValid, setIsValid] = useState(false);
   const dispatch = useAppDispatch();
   const { workSchedule } = useAppSelectors(state => state);
   const router = useRouter();
@@ -96,18 +97,24 @@ function WorksScheduleCreateComponent() {
     setLeave(false);
   };
 
+  const handleSetValid = (val: boolean) => {
+    setIsValid(val);
+  };
+
   const resetState = () => dispatch({ type: clearState.toString() });
 
   const handleSave = () => {
-    const payload = {
-      ...data,
-      grossHours: workSchedule?.grossHour,
-      netHours: workSchedule?.netHour
-    };
-    dispatch({
-      type: postWorkScheduleRequested.toString(),
-      payload: payload
-    });
+    if (isValid) {
+      const payload = {
+        ...data,
+        grossHours: workSchedule?.grossHour,
+        netHours: workSchedule?.netHour
+      };
+      dispatch({
+        type: postWorkScheduleRequested.toString(),
+        payload: payload
+      });
+    }
   };
   return (
     <>
@@ -119,7 +126,7 @@ function WorksScheduleCreateComponent() {
               <ArrowBack sx={{ color: '#FFFFFF' }} />
             }
             onClick={() => {
-              router.push('/company-management/employees');
+              router.push('/company-management/work-schedule');
               resetState();
             }}
           />
@@ -127,7 +134,7 @@ function WorksScheduleCreateComponent() {
         </BackWrapper>
         <ButtonWrapper>
           <MuiButton variant='outlined' size='small' onClick={() => handleOpen()}>Cancel</MuiButton>
-          <MuiButton variant='contained' onClick={handleSave} size='small' color='primary'>Save</MuiButton>
+          <MuiButton variant='contained' onClick={handleSave} disabled={!isValid} size='small' color='primary'>Save</MuiButton>
         </ButtonWrapper>
       </TopWrapper>
       <ContentWrapper>
@@ -138,7 +145,7 @@ function WorksScheduleCreateComponent() {
             </Tabs>
           </Box>
           <TabPanel value={value} index={0}>
-            <WorkScheduleCreateForm setData={setData} />
+            <WorkScheduleCreateForm setData={setData} setIsValid={handleSetValid} />
           </TabPanel>
         </Box>
       </ContentWrapper>

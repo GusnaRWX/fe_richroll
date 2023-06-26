@@ -73,7 +73,7 @@ function FileUploadModal({
             onChange={onChange}
             type='file'
             style={{ display: 'none' }}
-            accept='image/file'
+            accept='image/*'
           />
           <label htmlFor='input-file'>
             <MuiButton sx={{ paddingLeft: '.9rem', paddingRight: '.9rem' }} component='span' fullWidth size='small' variant='outlined'>

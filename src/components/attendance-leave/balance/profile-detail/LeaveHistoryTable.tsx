@@ -38,7 +38,7 @@ type Order = 'asc' | 'desc';
 function LeaveBalanceHistoryTable({ tabValue }: LeaveBalanceHistoryTableProps) {
   const router = useRouter();
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
   const EmployeeName = router.query.name;
@@ -78,8 +78,8 @@ function LeaveBalanceHistoryTable({ tabValue }: LeaveBalanceHistoryTableProps) {
     setPage(newPage);
   };
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 0));
-    setPage(0);
+    setRowsPerPage(event);
+    // setPage(0);
   };
 
   const handleRequestSort = (

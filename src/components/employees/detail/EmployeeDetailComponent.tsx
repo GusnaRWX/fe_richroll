@@ -10,7 +10,6 @@ import EmployeeInformationDetail from './EmployeeInformationDetail';
 import EmergencyContactDetail from './EmergencyContactDetail';
 import EmployeeWorkScheduleDetail from './EmployeeWorkScheduleDetail';
 import { useAppSelectors } from '@/hooks/index';
-import { getUserData } from '@/utils/helper';
 
 const TopWrapper = styled.div`
  display: flex;
@@ -90,6 +89,7 @@ function EmployeeDetailComponent() {
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
+  
   return (
     <>
       <TopWrapper>
@@ -103,7 +103,7 @@ function EmployeeDetailComponent() {
           />
           <TitleWrapper>
             <Typography component='h3' fontWeight='bold'>Employee Profile</Typography>
-            <Typography component='span' fontSize='12px' sx={{ color: '#4B5563' }}>{getUserData()?.name}</Typography>
+            <Typography component='span' fontSize='12px' sx={{ color: '#4B5563' }}>{employee?.employeeInformationDetail?.fullName}</Typography>
           </TitleWrapper>
         </BackWrapper>
         <ButtonWrapper>

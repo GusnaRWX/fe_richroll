@@ -8,8 +8,8 @@ import { postTerminateEmployeeRequested } from '@/store/reducers/slice/company-m
 import { useRouter } from 'next/router';
 
 const TerminateAccount = () => {
-  const dispatch = useAppDispatch()
-  const router = useRouter()
+  const dispatch = useAppDispatch();
+  const router = useRouter();
   const [Open, setOpen] = useState(false);
   const [Note, setNote] = useState('');
 
@@ -25,13 +25,13 @@ const TerminateAccount = () => {
     const payload = {
       terminateDate: Date(),
       terminateNote: Note,
-    }
+    };
     dispatch({
       type: postTerminateEmployeeRequested.toString(),
       id: router.query.id,
       payload: payload,
-    })
-    setNote('')
+    });
+    setNote('');
     setOpen(false);
   };
 

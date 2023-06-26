@@ -213,7 +213,7 @@ function CompanyProfileInformationForm({
           <Grid item xs={6} md={6} lg={6} xl={6} sx={{ marginBottom: '1.5rem', marginTop: '.3rem' }}>
             <Typography>Contact Number<AsteriskComponent>*</AsteriskComponent></Typography>
             <Grid container spacing={2}>
-              <Grid item xs={1} sm={3} md={3} lg={3} xl={3}>
+              <Grid item width='95px'>
                 <Select
                   fullWidth
                   displayEmpty
@@ -245,7 +245,7 @@ function CompanyProfileInformationForm({
                   <MenuItem value='+44'>+44</MenuItem>
                 </Select>
               </Grid>
-              <Grid item xs={9} sm={9} md={9} lg={9} xl={9} alignSelf='flex-end'>
+              <Grid item width='calc(100% - 95px)' alignSelf='flex-end'>
                 <Input
                   name='phoneNumber'
                   type='number'

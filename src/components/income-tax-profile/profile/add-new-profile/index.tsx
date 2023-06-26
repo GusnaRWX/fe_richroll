@@ -5,11 +5,13 @@ import { styled } from "@mui/material/styles";
 import { Typography, Box, Paper, Tabs, Tab } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
 import { useRouter } from "next/router";
-import CreateDesignedTransferAccount from "./CreateDesignedTransferAccount";
 
 // Import Create Component
+import CreateDesignedTransferAccount from "./CreateDesignedTransferAccount";
 import CreateTaxBasicDetailComponent from "./CreateTaxBasicDetail";
 import CreateTaxDeductableComponent from "./CreateTaxDeductableComponent";
+import CreateTaxRate from "./CreateTaxRate";
+import CreateTaxMultiplier from "./CreateTaxMultiplier";
 
 export default function ItpAddNewProfileComponent() {
   const router = useRouter();
@@ -102,13 +104,12 @@ export default function ItpAddNewProfileComponent() {
           <CreateTaxDeductableComponent />
         </TabPanel>
         <TabPanel value={value} index={2}>
-          {/* <CreateRates /> */}
+          <CreateTaxRate />
         </TabPanel>
         <TabPanel value={value} index={3}>
-          {/* <CreateRates /> */}
+          <CreateTaxMultiplier />
         </TabPanel>
         <TabPanel value={value} index={4}>
-          {/* <CreateRates /> */}
           <CreateDesignedTransferAccount />
         </TabPanel>
       </Paper>

@@ -213,7 +213,22 @@ function* fetchPostEmergency(action: AnyAction) {
         phoneNumber: action?.payload.data.phoneNumberSecondary
       }
     };
-    const res: AxiosResponse = yield call(postEmergency, payload);
+    let emergencyPayload = {};
+    if (checkObject(payload.secondary)) {
+      emergencyPayload = {
+        ...emergencyPayload,
+        employeeID: payload.employeeID,
+        primary: payload.primary
+      };
+    } else {
+      emergencyPayload = {
+        ...emergencyPayload,
+        employeeID: payload.employeeID,
+        primary: payload.primary,
+        secondary: payload.secondary
+      };
+    }
+    const res: AxiosResponse = yield call(postEmergency, emergencyPayload);
     if (res.data.code === 200 || res.data.code === 201) {
       yield put({ type: postEmergencySuccess.toString() });
       yield put({
@@ -299,8 +314,8 @@ function* fetchPostPersonalInformation(action: AnyAction) {
       thirdLevelCode: action?.payload?.data.subDistrictResidentialAddress,
       address: action?.payload?.data.addressResidentialAddress,
       zipCode: action?.payload?.data.zipCodeResidentialAddress,
-      isCitizen: false,
-      isResident: action?.payload?.data?.useResidentialAddress
+      isCitizen: true,
+      isResident: true
     };
 
     let payload = {};
@@ -589,7 +604,23 @@ function* fetchPatchEmergencyContact(action: AnyAction) {
       }
       // }
     };
-    const res: AxiosResponse = yield call(patchEmergencyContact, payload);
+    let emergencyPayload = {};
+    if (checkObject(payload.secondary)) {
+      emergencyPayload = {
+        ...emergencyPayload,
+        employeeID: payload.employeeID,
+        primary: payload.primary
+      };
+    } else {
+      emergencyPayload = {
+        ...emergencyPayload,
+        employeeID: payload.employeeID,
+        primary: payload.primary,
+        secondary: payload.secondary
+      };
+    }
+
+    const res: AxiosResponse = yield call(patchEmergencyContact, emergencyPayload);
     if (res.data.code) {
       yield put({ type: patchEmergencyContactSuccess.toString(), payload: res?.data?.data });
       yield delay(1000);
@@ -675,9 +706,10 @@ function* fetchPatchEmployeePersonal(action: AnyAction) {
       thirdLevelCode: action?.payload?.employeePersonal.personalPayload.subDistrictResidentialAddress,
       address: action?.payload?.employeePersonal.personalPayload.addressResidentialAddress,
       zipCode: action?.payload?.employeePersonal.personalPayload.zipCodeResidentialAddress,
-      isCitizen: false,
+      isCitizen: true,
       // isResident: action?.payload?.employeePersonal ? personalPayload..useResidentialAddress
-      isResident: action?.payload?.employeePersonal.personalPayload?.useResidentialAddress
+      // isResident: action?.payload?.employeePersonal.personalPayload?.useResidentialAddress
+      isResident: true
     };
 
     let payload = {};
@@ -911,7 +943,7 @@ function* fetchPostTerminateEmployee(action: AnyAction) {
   } catch (err) {
     if (err instanceof AxiosError) {
       const errorMessage = err?.response?.data as Services.ErrorResponse;
-      yield put({ type: postCalculateEventFailed.toString() });
+      yield put({ type: postTerminateEmployeeFailed.toString() });
       yield delay(2000, true);
       yield put({
         type: setResponserMessage.toString(),
@@ -941,7 +973,6 @@ function* employeeSaga() {
   yield takeEvery(postSimulationEventRequested.toString(), fetchPostSimulationEvent);
   yield takeEvery(postCalculateEventRequested.toString(), fetchPostCalculateEvent);
   yield takeEvery(postWorkScheduleRequested.toString(), fetchPostWorkSchedule);
-  yield takeEvery(getViewWorkScheduleRequested.toString(), fetchGetViewWorkSchedule);
   yield takeEvery(getViewWorkScheduleRequested.toString(), fetchGetViewWorkSchedule);
   yield takeEvery(postTerminateEmployeeRequested.toString(), fetchPostTerminateEmployee);
 }
