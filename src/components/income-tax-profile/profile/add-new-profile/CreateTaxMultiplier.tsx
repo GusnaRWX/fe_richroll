@@ -83,6 +83,7 @@ export default function CreateTaxMultiplier() {
                               sx={{ bgcolor: '#FECACA', color: '#DC2626', width: 'fit-content' }}
                               startIcon={<DeleteIcon />}
                               label='Delete'
+                              onClick={() => arrayHelper.remove(i)}
                             />
                           </Box>
                           <Grid container spacing={2} rowSpacing={4}>
