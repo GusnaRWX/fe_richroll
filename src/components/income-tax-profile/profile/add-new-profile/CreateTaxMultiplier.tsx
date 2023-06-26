@@ -31,8 +31,19 @@ export default function CreateTaxMultiplier() {
     {value:'5',label:'150%'},
   ];
 
-  const validationSchecma = Yup.object().shape({
-    status: Yup.string().required('This is required'),
+  const validationSchecma = Yup.object({
+    component: Yup.array().of(
+      Yup.object({
+        status: Yup.string().required(),
+        condition: Yup.array().of(
+          Yup.object({
+            conditionAction: Yup.string().required(),
+            conditionStatus: Yup.string().required(),
+            multiplier: Yup.string().required(),
+          })
+        )
+      })
+    )
   });
 
   interface ConditionType {
@@ -56,12 +67,12 @@ export default function CreateTaxMultiplier() {
     <>
       <Formik
         initialValues={initialValues}
-        onSubmit={() => {
-          console.log('here');
+        onSubmit={(values) => {
+          console.log(values);
         }}
         validationSchema={validationSchecma}
       >
-        {(formik) => (console.log(formik.values), (
+        {(formik) => (
           <>
             <FormikForm>
               <FieldArray
@@ -190,7 +201,8 @@ export default function CreateTaxMultiplier() {
                             arrayHelper.insert(
                               formik.values.component.length + 1,
                               {
-                                condition :[]
+                                condition :[],
+                                status: '',
                               }
                             )
                           }
@@ -201,7 +213,7 @@ export default function CreateTaxMultiplier() {
                 }}/>
             </FormikForm>
           </>
-        ))}
+        )}
       </Formik>
     </>
   );
