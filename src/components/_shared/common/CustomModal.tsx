@@ -12,7 +12,7 @@ const modalStyle = {
   border: '1px solid #E5E7EB',
   borderRadius: '8px',
   paddingTop: '10px',
-  p:2
+  p: 2
 };
 
 const ModalHeader = styled.div`
@@ -45,12 +45,13 @@ interface CustomModalProps {
   children;
   width: string;
   submitText?: string;
-  ConfirmationDisable?:boolean;
-  keepMounted?:boolean;
+  ConfirmationDisable?: boolean;
+  keepMounted?: boolean;
+  deleteText?: string;
 }
 
 
-function CustomModal({open, handleClose, handleConfirm, title, children, width, submitText, ConfirmationDisable, keepMounted}: CustomModalProps) {
+function CustomModal({ open, handleClose, handleConfirm, title, children, width, submitText, ConfirmationDisable, keepMounted, deleteText }: CustomModalProps) {
   return (
     <Modal
       open={open}
@@ -75,7 +76,7 @@ function CustomModal({open, handleClose, handleConfirm, title, children, width, 
             <MuiButton variant='contained' disabled={ConfirmationDisable} onClick={handleConfirm} size='small' sx={{ background: '#FFEDD5', color: '#EA580C' }}>Suspend</MuiButton>
           }
           {submitText === 'Delete' &&
-            <MuiButton variant='contained' disabled={ConfirmationDisable} onClick={handleConfirm} size='small' sx={{ background: '#FECACA', color: '#DC2626' }}>Delete</MuiButton>
+            <MuiButton variant='contained' disabled={ConfirmationDisable} onClick={handleConfirm} size='small' sx={{ background: '#FECACA', color: '#DC2626' }}>{deleteText || 'Delete'}</MuiButton>
           }
         </ModalFooter>
       </Box>
