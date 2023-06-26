@@ -101,6 +101,7 @@ export const Menus: CoreLayout.SidebarItem[] = [
       {
         path: '/attendance-leave/leave-entries',
         title: 'Leave Entries',
+        prefix: 'attendance_&_leave_leave_entries',
         roles: ['HR Admin']
       },
       {
