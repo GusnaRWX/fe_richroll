@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction } from 'react';
-import { Grid, Box, Typography, FormHelperText } from '@mui/material';
+import { Grid, Box, Typography, FormHelperText, Paper } from '@mui/material';
 import { Button, Input, Select, Textarea } from '@/components/_shared/form';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -50,7 +50,7 @@ export default function CreateTaxBasicDetailComponent({setValue}: CreateTaxBasic
 
   return (
     <>
-      <Box component='div' sx={{marginTop: '16px'}}>
+      <Paper sx={{p: '16px'}}>
         <Grid container xs={12} spacing={2}>
           <Grid item xs={6} md={6} lg={6} xl={6} >
             <Input
@@ -213,7 +213,7 @@ export default function CreateTaxBasicDetailComponent({setValue}: CreateTaxBasic
             </Box>
           </Grid>
         </Grid>
-      </Box>
+      </Paper>
     </>
   );
 }
