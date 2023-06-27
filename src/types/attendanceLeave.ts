@@ -27,10 +27,31 @@ export declare namespace AttendanceLeave {
     clockOut: DayJS
   }
 
+  interface OvertimeType {
+    id: string,
+    employee: EmployeeType | null,
+    date: DayJS,
+    start: DayJS,
+    duration: string,
+    multiplier: string
+  }
+
   interface PostType {
     employeeID: string;
     clockIn: string;
     clockOut: string;
+  }
+
+  interface postTypeOvertime {
+    employeeID: string;
+    start: string;
+    duration: string;
+    multiplier: string
+  }
+
+  interface PostOvertime {
+    date: DayJS;
+    overtimes: postTypeOvertime[]
   }
 
   interface PostAttendance {
@@ -41,6 +62,12 @@ export declare namespace AttendanceLeave {
   interface PutAttendance {
     clockIn: DayJS;
     clockOut: DayJS;
+  }
+
+  interface putOvertime {
+    start: string;
+    duration: string;
+    multiplier: string
   }
 
 }

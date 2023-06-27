@@ -3,14 +3,17 @@ import { CustomModal } from '../_shared/common';
 import {
   Avatar,
   Typography,
-  Grid
+  Grid,
+  InputAdornment
 } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import styled from '@emotion/styled';
-import { Textarea, Select } from '../_shared/form';
-import { Image as ImageType } from '@/utils/assetsConstant';
+import { Input } from '../_shared/form';
+import { AttendanceLeave } from '@/types/attendanceLeave';
+import { useFormik } from 'formik';
+import dayjs from 'dayjs';
 
 const AvatarWrapper = styled.div`
  display: flex;
@@ -32,11 +35,31 @@ const NameWrapper = styled.div`
 interface EditProps {
   editOpen: boolean;
   handleEditClose: () => void;
-  handleConfirm: () => void;
+  callback: (_data: AttendanceLeave.putOvertime) => void;
+  item: AttendanceLeave.OvertimeType | undefined;
 }
 
-function OvertimeSummaryEditForm({editOpen, handleEditClose, handleConfirm}: EditProps) {
+function OvertimeSummaryEditForm({editOpen, handleEditClose, callback, item}: EditProps) {
   const [hydrated, setHaydrated] = useState(false);
+
+  const formik = useFormik({
+    initialValues: {
+      start: '',
+      duration: '',
+      multiplier: ''
+    } as AttendanceLeave.putOvertime,
+    onSubmit: (values) => {
+      callback(values);
+    }
+  });
+
+  useEffect(() => {
+    if (!open) formik.resetForm();
+    formik.setFieldValue('start', dayjs(item?.start));
+    formik.setFieldValue('duration', item?.duration);
+    formik.setFieldValue('multiplier', item?.multiplier);
+  }, [open, item]);
+
 
   useEffect(() => {
     setHaydrated(true);
@@ -52,26 +75,26 @@ function OvertimeSummaryEditForm({editOpen, handleEditClose, handleConfirm}: Edi
       handleClose={handleEditClose}
       title='Edit Overtime Entry'
       width='650px'
-      handleConfirm={handleConfirm}
+      handleConfirm={formik.handleSubmit}
       submitText='Save'
     >
       <AvatarWrapper>
         <Avatar
-          src={ImageType.AVATAR_PLACEHOLDER}
-          alt='image'
+          src={item?.employee?.picture || item?.employee?.name}
+          alt={item?.employee?.name}
           sx={{
             width: '74px',
             height: '74px'
           }}
         />
         <NameWrapper>
-          <Typography fontSize='18px'>Ratna</Typography>
-          <Typography fontSize='14px'>Assistant Manager</Typography>
+          <Typography fontSize='18px'>{item?.employee?.name}</Typography>
+          <Typography fontSize='14px'>{item?.employee?.department || '-'}</Typography>
         </NameWrapper>
       </AvatarWrapper>
       <Grid container mb='1rem' spacing={2}>
         <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
-          <Typography mb='7px' fontSize='16px'>Overtime From</Typography>
+          <Typography mb='7px' fontSize='16px'>Start Time</Typography>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <TimePicker
               sx={{
@@ -80,48 +103,50 @@ function OvertimeSummaryEditForm({editOpen, handleEditClose, handleConfirm}: Edi
                 },
                 width: '100%'
               }}
+              value={formik.values.start}
+              onChange={(e) => formik.setFieldValue('start', e)}
             />
           </LocalizationProvider>
         </Grid>
         <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
-          <Typography mb='7px' fontSize='16px'>Overtime From</Typography>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <TimePicker
-              sx={{
-                '& .MuiOutlinedInput-input': {
-                  padding: '8.5px 14px',
-                },
-                width: '100%'
-              }}
-            />
-          </LocalizationProvider>
-        </Grid>
-        <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
-          <Select
-            fullWidth
-            name='multiplier'
-            value={''}
+          <Input
+            withAsterisk={false}
             size='small'
-            customLabel='Multiplier'
-            options={[
-              {label: '0.0x', value: '0.0x'},
-              {label: '0.5x', value: '0.5x'},
-              {label: '1.0x', value: '1.0x'},
-              {label: '1.5x', value: '1.5x'},
-              {label: '2.0x', value: '2.0x'},
-              {label: '2.5x', value: '2.5x'},
-              {label: '3.0x', value: '3.0x'}
-            ]}
+            type='number'
+            name='duration'
+            customLabel='Duration'
+            value={formik.values.duration}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position='end'>
+                  <Typography color='grey.500'>Hours</Typography>
+                </InputAdornment>
+              )
+            }}
           />
         </Grid>
-      </Grid>
-      <Grid container mb='1rem'>
-        <Grid xs={12}>
-          <Textarea
-            name='notes'
-            maxRows={7}
-            minRows={7}
-            customLabel='Note'
+        <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
+          <Input
+            withAsterisk={false}
+            size='small'
+            name='multiplier'
+            customLabel='Multiplier'
+            type='number'
+            value={formik.values.multiplier}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            inputProps={{
+              step: 0.5
+            }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position='end'>
+                  <Typography color='grey.500'>x</Typography>
+                </InputAdornment>
+              )
+            }}
           />
         </Grid>
       </Grid>

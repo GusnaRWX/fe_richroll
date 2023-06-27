@@ -45,6 +45,7 @@ const SidebarItem = ({
           selected={pathname === path}
           sx={{
             backgroundColor: pathname === path ? '#E9EFFF !important' : '',
+            borderRight: pathname === path ? '4px solid #223567 !important': '',
             '&:hover': {
               backgroundColor: '#E9EFFF',
               color: '#223567 !important'
@@ -95,6 +96,7 @@ const SidebarItem = ({
                       selected={pathname === childMenu.path}
                       sx={{
                         backgroundColor: pathname === childMenu.path ? '#E9EFFF !important' : '',
+                        borderRight: pathname === childMenu.path ? '4px solid #223567 !important': '',
                         pl: 6,
                         ':hover': {
                           backgroundColor: '#E9EFFF'

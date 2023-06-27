@@ -12,7 +12,8 @@ import { Input } from '../_shared/form';
 import { Search } from '@mui/icons-material';
 import Table from '../_shared/form/Table';
 import { Image as ImageType } from '@/utils/assetsConstant';
-import { compareCheck, ifThenElse } from '@/utils/helper';
+import Image from 'next/image';
+import { compareCheck, ifThenElse, getCompanyData } from '@/utils/helper';
 import { visuallyHidden } from '@mui/utils';
 import { IconButton } from '@/components/_shared/form';
 import { BsTrashFill } from 'react-icons/bs';
@@ -20,6 +21,13 @@ import { HiPencilAlt } from 'react-icons/hi';
 import styled from '@emotion/styled';
 import OvertimeSummaryEditForm from './OvertimeSummaryEditForm';
 import { ConfirmationModal } from '../_shared/common';
+import { useAppDispatch, useAppSelectors } from '@/hooks/index';
+import { getOvertimeRequested, putOvertimeRequested, deleteOvertimeRequested } from '@/store/reducers/slice/attendance-leave/overtimeSlice';
+//import Datepicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import dayjs from 'dayjs';
+import { AttendanceLeave } from '@/types/attendanceLeave';
+//import { AiOutlineSwapRight } from 'react-icons/ai';
 
 const ButtonWrapper = styled.div`
  display: flex;
@@ -37,76 +45,77 @@ const NameWrapper = styled.div`
  margin: 0;
 `;
 
+const EmptyTableWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  margin-top: 2rem;
+ `;
+
+// const DatePickerWrapper = styled.div`
+//  display: flex;
+//  flex-direction: row;
+//  align-items: center;
+//  justify-content: flex-start;
+//  border: 1px solid #c5c5c5;
+//  padding: .5rem;
+//  border-radius: 5px;
+//  gap: .5rem;
+//  margin: 0;
+
+//  &:hover {
+//   cursor: text;
+//   border: 1px solid #000000;
+//  }
+
+//  & > .react-datepicker-wrapper {
+//   width: 130px;
+//  }
+
+//  & > .react-datepicker-wrapper > .react-datepicker__input-container > input {
+//   border: none;
+//   font-size: 14px !important;
+//   width: 60%;
+//   color: #4B5563;
+
+//   &:focus {
+//     outline: none;
+//   }
+//  }
+// `;
+
 const headerItems = [
   { id: 'date', label: 'Date' },
-  { id: 'employeeID', label: 'Employee ID' },
+  { id: 'id', label: 'Employee ID' },
   { id: 'name', label: 'Employee Name' },
-  { id: 'overtimeFrom', label: 'Overtime From' },
-  { id: 'overtimeTo', label: 'Overtime To' },
-  { id: 'overtimeRate', label: 'Overtime Rate' },
+  { id: 'start', label: 'Start Time' },
+  { id: 'duration', label: 'Duration' },
+  { id: 'multiplier', label: 'Multiplier' },
   { id: 'action', label: '' }
 ];
 
 type Order = 'asc' | 'desc'
 
-function OvertimeSummaryTable() {
-  const data = {
-    items: [
-      {
-        id: 1,
-        employeeID: 'MIG21090101',
-        name: 'Budi Irawan',
-        date: '31/03/2023',
-        overtimeFrom: '18:00',
-        overtimeTo: '21:00',
-        overtimeRate: '1x'
-      },
-      {
-        id: 2,
-        employeeID: 'MIG21090101',
-        name: 'Budi Irawan',
-        date: '31/03/2023',
-        overtimeFrom: '18:00',
-        overtimeTo: '21:00',
-        overtimeRate: '1x'
-      },
-      {
-        id: 3,
-        employeeID: 'MIG21090101',
-        name: 'Budi Irawan',
-        date: '31/03/2023',
-        overtimeFrom: '18:00',
-        overtimeTo: '21:00',
-        overtimeRate: '1x'
-      },
-      {
-        id: 4,
-        employeeID: 'MIG21090101',
-        name: 'Budi Irawan',
-        date: '31/03/2023',
-        overtimeFrom: '18:00',
-        overtimeTo: '21:00',
-        overtimeRate: '1x'
-      },
-      {
-        id: 5,
-        employeeID: 'MIG21090101',
-        name: 'Budi Irawan',
-        date: '31/03/2023',
-        overtimeFrom: '18:00',
-        overtimeTo: '21:00',
-        overtimeRate: '1x'
-      },
-    ],
-    itemTotals: 5
-  };
+interface OvertimeTable {
+  reload?: boolean;
+}
+
+function OvertimeSummaryTable({ reload }: OvertimeTable) {
+  const dispatch = useAppDispatch();
+  const { data } = useAppSelectors(state => state.overtime);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(1);
+  const [search, setSearch] = useState('');
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
+  const companyData = getCompanyData();
   const [hydrated, setHaydrated] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<AttendanceLeave.OvertimeType>();
+  // const [startDate, setStartDate] = useState(new Date('2023/06/01'));
+  // const [endDate, setEndDate] = useState(new Date());
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
@@ -119,7 +128,7 @@ function OvertimeSummaryTable() {
   const handleSearch = (e) => {
     if (e.key === 'Enter') {
       // setSearch(e.target.value);
-      console.log(e.target.value);
+      setSearch(e.target.value);
 
     }
   };
@@ -130,6 +139,42 @@ function OvertimeSummaryTable() {
     setSort(headId);
   };
 
+  const handleUpdate = (data: AttendanceLeave.putOvertime) => {
+    setEditOpen(false);
+    dispatch({
+      type: putOvertimeRequested.toString(),
+      payload: {
+        id: selectedItem?.id,
+        data: {
+          start: dayjs(data.start).toISOString(),
+          duration: data.duration,
+          multiplier: data.multiplier.toString()
+        }
+      }
+    });
+  };
+
+  const handleDelete = () => {
+    setDeleteConfirmation(false);
+    dispatch({
+      type: deleteOvertimeRequested.toString(),
+      payload: selectedItem?.id
+    });
+  };
+
+  useEffect(() => {
+    dispatch({
+      type: getOvertimeRequested.toString(),
+      payload: {
+        page: page,
+        itemPerPage: rowsPerPage,
+        sort: sort,
+        direction: direction.toUpperCase(),
+        search: search,
+        companyID: companyData?.id
+      }
+    });
+  }, [rowsPerPage, page, search, sort, direction, reload,]);
   useEffect(() => {
     setHaydrated(true);
   }, []);
@@ -154,7 +199,28 @@ function OvertimeSummaryTable() {
             }}
           />
         </Grid>
+        <Grid item xs={4}>
+          {/* <DatePickerWrapper>
+            <Datepicker
+              selected={startDate}
+              onChange={(date) => setStartDate(date)}
+              selectsStart
+              startDate={startDate}
+              endDate={endDate}
+            />
+            <AiOutlineSwapRight style={{ marginRight: '20px' }}/>
+            <Datepicker
+              selected={endDate}
+              onChange={(date) => setEndDate(date)}
+              selectsEnd
+              startDate={startDate}
+              endDate={endDate}
+              minDate={startDate}
+            />
+          </DatePickerWrapper> */}
+        </Grid>
       </Grid>
+
       <Table
         count={data?.itemTotals}
         rowsPerPageOptions={[5, 10, 15]}
@@ -190,28 +256,39 @@ function OvertimeSummaryTable() {
               ifThenElse(typeof data?.items !== 'undefined', (
                 ifThenElse(data?.items?.length === 0, (
                   <TableRow>
-                    <TableCell colSpan={12} align='center'><Typography>Data not found</Typography></TableCell>
+                    <TableCell colSpan={12} align='center'>
+                      <EmptyTableWrapper>
+                        <Typography>There is no Entry</Typography>
+                        <Image
+                          src={ImageType.NO_ENTRY}
+                          alt='data-not-found'
+                          width={400}
+                          height={266}
+                        />
+                      </EmptyTableWrapper>
+
+                    </TableCell>
                   </TableRow>
                 ), (
                   data?.items?.map((item, index) => (
                     <TableRow key={index}>
-                      <TableCell>{item.date}</TableCell>
-                      <TableCell>{item.employeeID}</TableCell>
+                      <TableCell>{dayjs(item.date).format('DD/MM/YY')}</TableCell>
+                      <TableCell>{item.employee.employeeID}</TableCell>
                       <TableCell>
                         <NameWrapper>
                           <Avatar
-                            src={ImageType.AVATAR_PLACEHOLDER}
-                            alt={item.name}
+                            src={item.employee.picture}
+                            alt={item.employee.name}
                             sx={{
                               width: 24, height: 24
                             }}
                           />
-                          &nbsp;{item.name}
+                          &nbsp;{item.employee.name}
                         </NameWrapper>
                       </TableCell>
-                      <TableCell>{item.overtimeFrom}</TableCell>
-                      <TableCell>{item.overtimeTo}</TableCell>
-                      <TableCell>{item.overtimeRate}</TableCell>
+                      <TableCell>{dayjs(item.start).format('HH:mm')}</TableCell>
+                      <TableCell>{item.duration}</TableCell>
+                      <TableCell>{item.multiplier}x</TableCell>
                       <TableCell>
                         <ButtonWrapper>
                           <IconButton
@@ -219,11 +296,17 @@ function OvertimeSummaryTable() {
                             icons={
                               <HiPencilAlt fontSize={20} color='#223567' />
                             }
-                            onClick={() => setEditOpen(true)}
+                            onClick={() => {
+                              setSelectedItem(item);
+                              setEditOpen(true);
+                            }}
                           />
                           <IconButton
                             parentColor='#FEE2E2'
-                            onClick={() => setDeleteConfirmation(true)}
+                            onClick={() => {
+                              setSelectedItem(item);
+                              setDeleteConfirmation(true);
+                            }}
                             icons={
                               <BsTrashFill fontSize={20} color='#EF4444' />
                             }
@@ -244,8 +327,9 @@ function OvertimeSummaryTable() {
       />
       <OvertimeSummaryEditForm
         editOpen={editOpen}
-        handleConfirm={() => setEditOpen(false)}
+        callback={(data) => handleUpdate(data)}
         handleEditClose={() => setEditOpen(false)}
+        item={selectedItem}
       />
       <ConfirmationModal
         open={deleteConfirmation}
@@ -255,7 +339,7 @@ function OvertimeSummaryTable() {
         withCallback
         noChange={true}
         type='delete'
-        callback={() => setDeleteConfirmation(false)}
+        callback={() => handleDelete()}
       />
     </>
   );
