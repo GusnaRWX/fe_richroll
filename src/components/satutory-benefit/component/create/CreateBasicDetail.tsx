@@ -1,10 +1,14 @@
-import React from 'react';
+import React, {Dispatch, SetStateAction} from 'react';
 import { Grid, Box, Typography } from '@mui/material';
 import { Button, Input, Select, Textarea } from '@/components/_shared/form';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-export default function CreateBasicDetailComponent({setValue}) {
+interface CreateDesignedTransferAccountProps {
+  setValue: Dispatch<SetStateAction<number>>
+}
+
+export default function CreateBasicDetailComponent({setValue}: CreateDesignedTransferAccountProps) {
   const Dummyoption = [
     { value: '1', label: 'Dummy 1' },
     { value: '2', label: 'Dummy 2' },
