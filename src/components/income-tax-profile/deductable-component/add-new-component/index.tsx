@@ -84,13 +84,15 @@ export default function ItpCreateNewComponentComponent() {
           </Typography>
         </HeaderPageTitle>
       </Header>
-      <Paper sx={{ width: '100%', p: '21px 32px' }}>
+      <Paper sx={{ width: '100%', p: '21px 8px' }}>
+        <Box sx={{px:'48px'}}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs value={value} onChange={handleChange} aria-label='basic tabs'>
             <Tab label='Basic Detail' {...a11yProps(0)} />
             <Tab label='Designated Transfer Account' {...a11yProps(1)} />
             <Tab label='Rates' {...a11yProps(2)} />
           </Tabs>
+        </Box>
         </Box>
         <TabPanel value={value} index={0}>
           <ItpCreateBasicDetailComponent setValue={setValue} />
