@@ -10,6 +10,7 @@ import {
   RadioGroup,
   FormControlLabel,
   Grid,
+  Paper
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import React, { Dispatch, SetStateAction, useState } from 'react';
@@ -80,7 +81,7 @@ export default function CreateDesignedTransferAccount({
   }, [account]);
 
   return (
-    <Box component='div' sx={{ marginTop: '17px' }}>
+    <Paper sx={{ p: '16px' }}>
       <Typography
         style={{ color: '#223567', fontWeight: 700, fontSize: '16px' }}
       >
@@ -373,6 +374,6 @@ export default function CreateDesignedTransferAccount({
           </Box>
         </Grid>
       </Box>
-    </Box>
+    </Paper>
   );
 }
