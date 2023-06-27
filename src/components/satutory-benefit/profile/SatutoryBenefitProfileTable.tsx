@@ -79,6 +79,11 @@ function SutatoryBenefitProfileTable({
   const [archiveConfirmation, setArchiveConfirmation] = useState(false);
   const [hydrated, setHaydrated] = useState(false);
 
+  const router = useRouter();
+  function DetailActionHandler () {
+    router.push('/satutory-benefit/profile/detail');
+  }
+
   const data = {
     items: [
       {
@@ -153,11 +158,6 @@ function SutatoryBenefitProfileTable({
 
   if (!hydrated) {
     return null;
-  }
-
-  const router = useRouter();
-  function DetailActionHandler () {
-    router.push('/satutory-benefit/profile/detail');
   }
 
   return (
