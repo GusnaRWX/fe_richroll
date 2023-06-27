@@ -78,7 +78,7 @@ export default function CreateDesignedTransferAccount({ setValue }: CreateDesign
   }, [account]);
 
   return (
-    <Box component='div' sx={{ marginTop: '17px' }}>
+    <Box component='div' sx={{ p: '16px' }}>
       <Typography
         style={{ color: '#223567', fontWeight: 700, fontSize: '16px' }}
       >

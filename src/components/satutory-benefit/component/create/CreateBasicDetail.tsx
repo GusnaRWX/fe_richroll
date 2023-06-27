@@ -42,7 +42,7 @@ export default function CreateBasicDetailComponent({setValue}) {
 
   return (
     <>
-      <Box component='div'>
+      <Box component='div' sx={{p:'16px'}}>
         <Grid container spacing={2}>
           <Grid item xs={12} md={12} lg={6} xl={6}>
             <Input
