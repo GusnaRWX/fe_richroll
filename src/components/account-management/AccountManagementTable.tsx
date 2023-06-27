@@ -150,12 +150,15 @@ function AttendanceTable({
     dispatch({
       type: patchAccountSuspensionRequested.toString(),
       payload: {
-        id: selectedItem?.id,
         data: {
-          start: dayjs(startSuspend).format('YYYY-MM-DD'),
-          end: dayjs(endSuspend).format('YYYY-MM-DD'),
-          isPermanent: isPermanent
-        }
+          id: selectedItem?.id,
+          data: {
+            start: dayjs(startSuspend).format('YYYY-MM-DD'),
+            end: dayjs(endSuspend).format('YYYY-MM-DD'),
+            isPermanent: isPermanent
+          }
+        },
+        accountName: selectedItem?.name
       }
     });
   };
@@ -220,7 +223,7 @@ function AttendanceTable({
                 width: 24, height: 24
               }}
             />
-              &nbsp;<Typography component='div' variant='text-sm' fontWeight={400}>{selectedItem?.name}</Typography>
+            &nbsp;<Typography component='div' variant='text-sm' fontWeight={400}>{selectedItem?.name}</Typography>
           </NameWrapper>
         </Grid>
         <Grid item xs={6}>
@@ -301,7 +304,7 @@ function AttendanceTable({
                     width: 24, height: 24
                   }}
                 />
-                  &nbsp;<Typography component='div' variant='text-sm' fontWeight={400}>{selectedItem?.name}</Typography>
+                &nbsp;<Typography component='div' variant='text-sm' fontWeight={400}>{selectedItem?.name}</Typography>
               </NameWrapper>
             </Grid>
             <Grid item xs={4}>
