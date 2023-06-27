@@ -6,13 +6,14 @@ import registerSlice from './slice/auth/registerSlice';
 import meSlice from './slice/auth/meSlice';
 import employeeSlice from './slice/company-management/employees/employeeSlice';
 import companySlice from './slice/company/companySlice';
-import cnbSlice  from './slice/cnb/compensationSlice';
+import cnbSlice from './slice/cnb/compensationSlice';
 import departmentSlice from './slice/company-management/department/departmentSlice';
 import workScheduleSlice from './slice/company-management/work-schedule/workScheduleSlice';
-import annualScheduleSlice  from './slice/company-management/annual-work-schedule/annualSchedule';
+import annualScheduleSlice from './slice/company-management/annual-work-schedule/annualSchedule';
 import employmentSlice from './slice/employment/employmentSlice';
 import accountSlice from './slice/account-management/accountManagementSlice';
 import attendanceEntriesSlice from './slice/attendance-leave/attendanceEntriesSlice';
+import globalSlice from './slice/global/globalSlice';
 
 
 const reducers: Reducer = combineReducers({
@@ -29,7 +30,8 @@ const reducers: Reducer = combineReducers({
   annualSchedule: annualScheduleSlice,
   employment: employmentSlice,
   account: accountSlice,
-  attendanceEntries: attendanceEntriesSlice
+  attendanceEntries: attendanceEntriesSlice,
+  global: globalSlice // global state
 });
 
 export default reducers;
