@@ -47,14 +47,6 @@ const AttendanceEntriesEdit: React.FC<AttendanceEntriesEditProps> = ({
   item
 }) => {
 
-  const convertTime = (time) => {
-    if (typeof time === 'string') {
-      const split = time.split(':');
-      console.log(Number(split[0]), Number(split[1]));
-      return dayjs().set('hour', Number(split[0])).set('minute', Number(split[1]));
-    }
-  };
-
   const formik = useFormik({
     initialValues: {
       clockIn: '',
@@ -62,13 +54,15 @@ const AttendanceEntriesEdit: React.FC<AttendanceEntriesEditProps> = ({
     } as AttendanceLeave.PutAttendance,
     onSubmit: (values) => {
       callback(values);
+      // console.log(dayjs(values.clockIn).toISOString());
+      // console.log(dayjs(values.clockOut).toISOString());
     }
   });
 
   useEffect(() => {
     if (!open) formik.resetForm();
-    formik.setFieldValue('clockIn', convertTime(item?.clockIn));
-    formik.setFieldValue('clockOut', convertTime(item?.clockOut));
+    formik.setFieldValue('clockIn', dayjs(item?.clockIn));
+    formik.setFieldValue('clockOut', dayjs(item?.clockOut));
   }, [open, item]);
 
   return (
