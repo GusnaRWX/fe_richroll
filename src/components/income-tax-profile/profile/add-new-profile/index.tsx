@@ -86,15 +86,17 @@ export default function ItpAddNewProfileComponent() {
           </Typography>
         </HeaderPageTitle>
       </Header>
-      <Paper sx={{ width: '100%', p: '21px 32px' }}>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <Tabs value={value} onChange={handleChange} aria-label='basic tabs'>
-            <Tab label='Basic Detail' {...a11yProps(0)} />
-            <Tab label='Deductible Components' {...a11yProps(1)} />
-            <Tab label='Income Tax Rate' {...a11yProps(2)} />
-            <Tab label='Income Tax Multiplier' {...a11yProps(3)} />
-            <Tab label='Designated Transfer Account' {...a11yProps(4)} />
-          </Tabs>
+      <Paper sx={{ width: '100%', p: '21px 8px' }}>
+        <Box sx={{px:'48px'}}>
+          <Box sx={{ borderBottom: 1, borderColor: 'divider',  }}>
+            <Tabs value={value} onChange={handleChange} aria-label='basic tabs'>
+              <Tab label='Basic Detail' {...a11yProps(0)} />
+              <Tab label='Deductible Components' {...a11yProps(1)} />
+              <Tab label='Income Tax Rate' {...a11yProps(2)} />
+              <Tab label='Income Tax Multiplier' {...a11yProps(3)} />
+              <Tab label='Designated Transfer Account' {...a11yProps(4)} />
+            </Tabs>
+          </Box>
         </Box>
         <TabPanel value={value} index={0}>
           <CreateTaxBasicDetailComponent setValue={setValue} />

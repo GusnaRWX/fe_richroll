@@ -1,9 +1,10 @@
 import React, { Dispatch, SetStateAction } from 'react';
-import { Grid, Box, Typography, FormHelperText } from '@mui/material';
+import { Grid, Box, Typography, FormHelperText, Paper } from '@mui/material';
 import { Button, Input, Select, Textarea } from '@/components/_shared/form';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import BasicDatePicker from '@/components/_shared/form/DatePicker';
+import dayjs from 'dayjs';
 
 interface CreateTaxBasicDetailComponentProps {
   setValue: Dispatch<SetStateAction<number>>
@@ -49,7 +50,7 @@ export default function CreateTaxBasicDetailComponent({setValue}: CreateTaxBasic
 
   return (
     <>
-      <Box component='div' sx={{marginTop: '16px'}}>
+      <Paper sx={{p: '16px'}}>
         <Grid container xs={12} spacing={2}>
           <Grid item xs={6} md={6} lg={6} xl={6} >
             <Input
@@ -126,7 +127,7 @@ export default function CreateTaxBasicDetailComponent({setValue}: CreateTaxBasic
             <BasicDatePicker
               customLabel='Effective Date'
               withAsterisk
-              onChange={(e)=> formik.setFieldValue('effectiveDate', e.target.value)}
+              onChange={(e)=> formik.setFieldValue('effectiveDate', dayjs(e).format('DD/MM/YYYY'))}
             />
             {formik.touched.effectiveDate && formik.errors.effectiveDate ? (
               <FormHelperText sx={{color: '#EF4444'}}>{formik.errors.effectiveDate}</FormHelperText>
@@ -212,7 +213,7 @@ export default function CreateTaxBasicDetailComponent({setValue}: CreateTaxBasic
             </Box>
           </Grid>
         </Grid>
-      </Box>
+      </Paper>
     </>
   );
 }
