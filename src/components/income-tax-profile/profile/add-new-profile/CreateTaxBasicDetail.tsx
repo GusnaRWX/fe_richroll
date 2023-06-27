@@ -4,6 +4,7 @@ import { Button, Input, Select, Textarea } from '@/components/_shared/form';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import BasicDatePicker from '@/components/_shared/form/DatePicker';
+import dayjs from 'dayjs';
 
 interface CreateTaxBasicDetailComponentProps {
   setValue: Dispatch<SetStateAction<number>>
@@ -126,7 +127,7 @@ export default function CreateTaxBasicDetailComponent({setValue}: CreateTaxBasic
             <BasicDatePicker
               customLabel='Effective Date'
               withAsterisk
-              onChange={(e)=> formik.setFieldValue('effectiveDate', e.target.value)}
+              onChange={(e)=> formik.setFieldValue('effectiveDate', dayjs(e).format('DD/MM/YYYY'))}
             />
             {formik.touched.effectiveDate && formik.errors.effectiveDate ? (
               <FormHelperText sx={{color: '#EF4444'}}>{formik.errors.effectiveDate}</FormHelperText>

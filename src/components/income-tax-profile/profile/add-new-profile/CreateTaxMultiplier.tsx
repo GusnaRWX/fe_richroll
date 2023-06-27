@@ -219,7 +219,18 @@ export default function CreateTaxMultiplier() {
                           }
                         />
                       </Box>
-                      <button type='submit' onClick={() => formik.submitForm()}>save</button>
+                      <Grid container xs={12} spacing={2} style={{marginTop: '16px'}}>
+                        <Grid item xs={12} md={12} lg={12} xl={12}>
+                          <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                            <Button
+                              color='primary'
+                              label='Next'
+                              sx={{ width: '63px' }}
+                              onClick={() => formik.submitForm()}
+                            />
+                          </Box>
+                        </Grid>
+                      </Grid>
                     </div>
                   );
                 }}/>
