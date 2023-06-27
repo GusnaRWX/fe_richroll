@@ -1,14 +1,14 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React, {Dispatch, SetStateAction} from 'react';
 import { Grid, Box, Typography } from '@mui/material';
 import { Button, Input, Select, Textarea } from '@/components/_shared/form';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-interface ItpCreateBasicDetailComponentProps {
+interface CreateDesignedTransferAccountProps {
   setValue: Dispatch<SetStateAction<number>>
 }
 
-export default function ItpCreateBasicDetailComponent({setValue}: ItpCreateBasicDetailComponentProps) {
+export default function CreateBasicDetailComponent({setValue}: CreateDesignedTransferAccountProps) {
   const Dummyoption = [
     { value: '1', label: 'Dummy 1' },
     { value: '2', label: 'Dummy 2' },
@@ -16,8 +16,8 @@ export default function ItpCreateBasicDetailComponent({setValue}: ItpCreateBasic
   ];
 
   const validationSchema = Yup.object({
-    componentName: Yup.string().required(),
-    country: Yup.string().required(),
+    componentName: Yup.string().required('This field is Required!'),
+    country: Yup.string().required('This field is Required!'),
     province: Yup.string(),
     city: Yup.string(),
     subDistrict: Yup.string(),
@@ -46,9 +46,9 @@ export default function ItpCreateBasicDetailComponent({setValue}: ItpCreateBasic
 
   return (
     <>
-      <Box component='div' sx={{ p: '16px' }}>
-        <Grid container spacing={2} rowSpacing={4} style={{paddingLeft:'-16px'}}>
-          <Grid item xs={6} md={6} lg={6} xl={6} >
+      <Box component='div' sx={{p:'16px'}}>
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={12} lg={6} xl={6}>
             <Input
               placeholder='Input Statutory Benefits Name'
               customLabel='Component Name'
@@ -57,8 +57,13 @@ export default function ItpCreateBasicDetailComponent({setValue}: ItpCreateBasic
               value={formik.values.componentName}
               onChange={(e) => formik.setFieldValue('componentName', e.target.value)}
             />
+            {formik.touched.componentName && formik.errors.componentName ? (
+              <Typography sx={{color: '#DC2626',}}>{formik.errors.componentName}</Typography>
+            ): null}
           </Grid>
-          <Grid item xs={6} md={6} lg={6} xl={6}></Grid>
+        </Grid>
+
+        <Grid container spacing={2} style={{marginTop: '12px'}}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Select
               placeholder='Select Country'
@@ -70,6 +75,9 @@ export default function ItpCreateBasicDetailComponent({setValue}: ItpCreateBasic
               value={formik.values.country}
               onChange={(e) => formik.setFieldValue('country', e.target.value)}
             />
+            {formik.touched.country && formik.errors.country ? (
+              <Typography sx={{color: '#DC2626'}}>{formik.errors.country}</Typography>
+            ): null}
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Select
@@ -82,6 +90,9 @@ export default function ItpCreateBasicDetailComponent({setValue}: ItpCreateBasic
               onChange={(e) => formik.setFieldValue('province', e.target.value)}
             />
           </Grid>
+        </Grid>
+
+        <Grid container spacing={2} style={{marginTop: '12px'}}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Select
               placeholder='Select City'
@@ -104,7 +115,10 @@ export default function ItpCreateBasicDetailComponent({setValue}: ItpCreateBasic
               onChange={(e) => formik.setFieldValue('subDistrict', e.target.value)}
             />
           </Grid>
-          <Grid item xs={6} md={6} lg={6} xl={6} >
+        </Grid>
+
+        <Grid container spacing={2} style={{marginTop: '12px'}}>
+          <Grid item xs={12} md={12} lg={12} xl={12}>
             <Textarea
               customLabel='Citation'
               minRows={4}
@@ -122,8 +136,10 @@ export default function ItpCreateBasicDetailComponent({setValue}: ItpCreateBasic
             Max. 120 Character
             </Typography>
           </Grid>
-          <Grid item xs={6} md={6} lg={6} xl={6}></Grid>
-          <Grid item xs={6} md={6} lg={6} xl={6} >
+        </Grid>
+
+        <Grid container spacing={2} style={{marginTop: '12px'}}>
+          <Grid item xs={12} md={12} lg={12} xl={12}>
             <Textarea
               customLabel='Internal Notes'
               minRows={4}
@@ -141,7 +157,10 @@ export default function ItpCreateBasicDetailComponent({setValue}: ItpCreateBasic
             Max. 120 Character
             </Typography>
           </Grid>
-          <Grid item xs={6} md={6} lg={6} xl={6} >
+        </Grid>
+
+        <Grid container spacing={2} style={{marginTop: '12px'}}>
+          <Grid item xs={12} md={12} lg={12} xl={12}>
             <Textarea
               customLabel='External Notes'
               minRows={4}
@@ -159,6 +178,9 @@ export default function ItpCreateBasicDetailComponent({setValue}: ItpCreateBasic
             Max. 120 Character
             </Typography>
           </Grid>
+        </Grid>
+
+        <Grid container spacing={2} style={{marginTop: '12px'}}>
           <Grid item xs={12} md={12} lg={12} xl={12}>
             <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
               <Button
