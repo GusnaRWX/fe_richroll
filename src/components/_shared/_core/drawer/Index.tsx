@@ -16,7 +16,19 @@ const CustomDrawer = styled(Drawer)<CustomDrawerProps>(({ drawerwidth }) => ({
     boxSizing: 'border-box',
     backgroundColor: '#FFFFFF',
     border: 'none',
-    marginTop: '66px'
+    boxShadow: '0px 6px 20px 0px rgba(0, 0, 0, 0.05)',
+    marginTop: '66px',
+    '::-webkit-scrollbar': {
+      //width: '8px'
+      display: 'none'
+    },
+    // '::-webkit-scrollbar-track': {
+    //   boxShadow: 'inset 0 0 6px rgba(0, 0, 0, 0.3)'
+    // },
+    // '::-webkit-scrollbar-thumb': {
+    //   backgroundColor: '#223567',
+    //   borderRadius: '8px'
+    // }
   }
 }));
 

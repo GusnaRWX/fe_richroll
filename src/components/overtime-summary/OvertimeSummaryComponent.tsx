@@ -5,27 +5,35 @@ import {
   Grid,
   Box,
   Button as MuiButton,
-  TableRow,
-  TableCell,
   Avatar,
-  Select,
-  MenuItem
+  Switch,
+  InputAdornment,
+  FormControlLabel
 } from '@mui/material';
+import { SwitchProps } from '@mui/material/Switch';
+import { DataGrid } from '@mui/x-data-grid';
 import AddIcon from '@mui/icons-material/Add';
 import CustomModal from '@/components/_shared/common/CustomModal';
 import OvertimeSummaryTable from './OvertimeSummaryTable';
-import { DatePicker, IconButton } from '../_shared/form';
+import { DatePicker, IconButton, Input } from '../_shared/form';
 import { BsTrashFill } from 'react-icons/bs';
-import Table from '@/components/_shared/form/Table';
 import { Add } from '@mui/icons-material';
 import styled from '@emotion/styled';
-import { ifThenElse } from '@/utils/helper';
+import { styled as MuiStyled } from '@mui/material/styles';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
-import { AiOutlineSwapRight } from 'react-icons/ai';
 import AddEmployeeModal from '@/components/payroll-assistant/create/AttendanceModal';
-import EmptyState from '../_shared/common/EmptyState';
+import dayjs from 'dayjs';
+import { useAppDispatch } from '@/hooks/index';
+import { postOvertimeRequested } from '@/store/reducers/slice/attendance-leave/overtimeSlice';
+
+interface DataGridCellProps {
+  rowNode: object;
+  field: string;
+  value: string;
+  tabIndex: number;
+}
 
 const ButtonWrapper = styled(Box)(({
   display: 'flex',
@@ -44,46 +52,277 @@ const NameWrapper = styled.div`
  margin: 0;
 `;
 
-const headerItems = [
-  { id: 'employeeID', label: 'Employee ID' },
-  { id: 'user.name', label: 'Employee Name' },
-  { id: 'overtimeFrom', label: 'Overtime From' },
-  { id: 'swap', label: '' },
-  { id: 'overtimeTo', label: 'Overtime To' },
-  { id: 'multiplier', label: 'Multiplier' },
-  { id: 'actions', label: '' }
-];
+const IOSSwitch = MuiStyled((props: SwitchProps) => (
+  <Switch focusVisibleClassName='.Mui-focusVisible' disableRipple {...props} />
+))(({ theme }) => ({
+  width: 42,
+  height: 26,
+  padding: 0,
+  '& .MuiSwitch-switchBase': {
+    padding: 0,
+    margin: 2,
+    transitionDuration: '300ms',
+    '&.Mui-checked': {
+      transform: 'translateX(16px)',
+      color: '#fff',
+      '& + .MuiSwitch-track': {
+        backgroundColor: theme.palette.mode === 'dark' ? '#223567' : '#223567',
+        opacity: 1,
+        border: 0,
+      },
+      '&.Mui-disabled + .MuiSwitch-track': {
+        opacity: 0.5,
+      },
+    },
+    '&.Mui-focusVisible .MuiSwitch-thumb': {
+      color: '#223567',
+      border: '6px solid #fff',
+    },
+    '&.Mui-disabled .MuiSwitch-thumb': {
+      color:
+        theme.palette.mode === 'light'
+          ? theme.palette.grey[100]
+          : theme.palette.grey[600],
+    },
+    '&.Mui-disabled + .MuiSwitch-track': {
+      opacity: theme.palette.mode === 'light' ? 0.7 : 0.3,
+    },
+  },
+  '& .MuiSwitch-thumb': {
+    boxSizing: 'border-box',
+    width: 22,
+    height: 22,
+  },
+  '& .MuiSwitch-track': {
+    borderRadius: 26 / 2,
+    backgroundColor: theme.palette.mode === 'light' ? '#E9E9EA' : '#39393D',
+    opacity: 1,
+    transition: theme.transitions.create(['background-color'], {
+      duration: 500,
+    }),
+  },
+}));
 
 const ContentWrapper = styled(Card)(({
   padding: '1rem'
 }));
 
 function OvertimeSummaryComponent() {
+  const dispatch = useAppDispatch();
   const [open, setOpen] = useState(false);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [page, setPage] = useState(1);
+  const [isAuto, setIsAuto] = useState(false);
+  const [isReload, setIsReload] = useState(false);
   const [selected, setSelected] = useState(Array<object>);
   const [hydrated, setHaydrated] = useState(false);
   const [employeeOpen, setEmployeeOpen] = useState(false);
+  const [selectDate, setSelectDate] = useState(dayjs());
 
-  const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage);
-  };
+  function GridActionCell({ rowNode }: DataGridCellProps) {
+    const tempId = rowNode['id'];
+    return (
+      <IconButton
+        parentColor='#FEE2E2'
+        onClick={() => {
+          const tempSelected = selected.filter((v) => v['id'] !== tempId);
+          setSelected(tempSelected);
+        }}
+        icons={
+          <BsTrashFill fontSize={20} color='#EF4444' />
+        }
+      />
+    );
+  }
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(event);
-    // setPage(0);
-  };
+  function GridNameCell({ rowNode, value }: DataGridCellProps) {
+    const tempId = rowNode['id'];
+    const tempRow = selected.find((v) => v['id'] === tempId);
+    return (
+      <NameWrapper>
+        <Avatar
+          src={tempRow && tempRow['picture']}
+          alt={value}
+          sx={{
+            width: 24, height: 24
+          }}
+        />
+        &nbsp;{value}
+      </NameWrapper>
+    );
+  }
+
+  function GridClockCell({rowNode, value, field }: DataGridCellProps) {
+    const id = rowNode['id'];
+    const setVal = (val) => {
+      const setValue = selected.map((item) => {
+        if (item['id'] === id) {
+          return {...item, ...{[field]: val}};
+        }else{
+          return item;
+        }
+      });
+      setSelected(setValue);
+    };
+    return (
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <TimePicker
+          format='HH:mm'
+          onAccept={(e) => setVal(e)}
+          value={value}
+          sx={{
+            '& .MuiOutlinedInput-input': {
+              padding: '8.5px 14px',
+              border: 'none !important'
+            },
+            width: '90%'
+          }}
+        />
+      </LocalizationProvider>
+    );
+  }
+
+  function GridDurationCell({ rowNode, value, field }: DataGridCellProps) {
+    const id = rowNode['id'];
+    const setVal = (value) => {
+      const setValue = selected.map((item) => {
+        if (item['id'] === id) {
+          return {...item, ...{[field]: value}};
+        }else{
+          return item;
+        }
+      });
+      setSelected(setValue);
+    };
+    return (
+      <Input
+        withAsterisk={false}
+        size='small'
+        type='number'
+        value={value}
+        onChange={(e) => setVal(e.target.value)}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position='end'>
+              <Typography color='grey.500'>Hours</Typography>
+            </InputAdornment>
+          )
+        }}
+      />
+    );
+  }
+
+  function GridMultiplierCell({ rowNode, value, field }: DataGridCellProps) {
+    const id = rowNode['id'];
+    const setVal = (value) => {
+      const setValue = selected.map((item) => {
+        if (item['id'] === id) {
+          return {...item, ...{[field]: value}};
+        }else{
+          return item;
+        }
+      });
+      setSelected(setValue);
+    };
+    return (
+      <Input
+        withAsterisk={false}
+        size='small'
+        type='number'
+        value={value}
+        onChange={(e) => setVal(e.target.value)}
+        inputProps={{
+          step: 0.5
+        }}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position='end'>
+              <Typography color='grey.500'>x</Typography>
+            </InputAdornment>
+          )
+        }}
+      />
+    );
+  }
+
+  const headerItems = [
+    {
+      field: 'id',
+      width: 110,
+      sortable: false,
+      headerName: 'Employee ID'
+    },
+    { field: 'name',
+      width: 260,
+      sortable: false,
+      headerName: 'Employee Name',
+      renderCell: (params) => <GridNameCell {...params} />
+    },
+    { field: 'startTime',
+      width: 165,
+      sortable: false,
+      headerName: 'Start Time',
+      renderCell: (params) => <GridClockCell {...params} />
+    },
+    { field: 'duration',
+      width: 165,
+      sortable: false,
+      headerName: 'Duration',
+      renderCell: (params) => <GridDurationCell {...params} />
+    },
+    { field: 'multiplier',
+      width: 165,
+      sortable: false,
+      headerName: 'Multiplier',
+      renderCell: (params) => <GridMultiplierCell {...params} />
+    },
+    { field: 'action',
+      headerName: '',
+      width: 30,
+      sortable: false,
+      renderCell: (params) => <GridActionCell {...params} />
+    },
+  ];
 
 
   const handleClose = () => {
     setOpen(false);
+    setSelected([]);
+    setSelectDate(dayjs());
   };
 
-  const handleDeleteItem = (index) => {
-    const tempData = [...selected];
-    tempData.splice(index, 1);
-    setSelected(tempData);
+  const handleConfirm = () => {
+    console.log(selected);
+    const tempData = selected.map((val) => {
+      return ({
+        employeeID: val['id'],
+        start: dayjs(val['startTime']).toISOString(),
+        duration: val['duration'],
+        multiplier: val['multiplier']
+      });
+    });
+    dispatch({
+      type: postOvertimeRequested.toString(),
+      payload: {
+        date: dayjs(selectDate).format('YYYY-MM-DD'),
+        overtimes: tempData
+      }
+    });
+    handleClose();
+    setIsReload(!isReload);
+  };
+
+  const handleAuto = (v: boolean) => {
+    setIsAuto(v);
+    if (v) {
+      const arrTemp = selected.map((val) => {
+        return({...val, ...{startTime: dayjs().set('hour', 17).set('minute', 0)}});
+      });
+      setSelected(arrTemp);
+    } else {
+      const arrTemp = selected.map((val) => {
+        return({...val, ...{startTime: null}});
+      });
+      setSelected(arrTemp);
+    }
   };
 
   useEffect(() => {
@@ -117,7 +356,7 @@ function OvertimeSummaryComponent() {
 
       <ContentWrapper>
         <Box sx={{ width: '100%' }}>
-          <OvertimeSummaryTable />
+          <OvertimeSummaryTable reload={isReload}/>
         </Box>
       </ContentWrapper>
 
@@ -125,8 +364,8 @@ function OvertimeSummaryComponent() {
         open={open}
         handleClose={handleClose}
         title='New Overtime Entry'
-        width='1100px'
-        handleConfirm={handleClose}
+        width='970px'
+        handleConfirm={handleConfirm}
         submitText='Create Entry'
       >
         <Grid container spacing={2} mt='.5rem' mb='.5rem'>
@@ -134,10 +373,23 @@ function OvertimeSummaryComponent() {
             <DatePicker
               customLabel='Select Date'
               withAsterisk
-              onChange={(date: unknown) => console.log(date)}
+              value={selectDate as unknown as Date}
+              onChange={(date) => {setSelectDate(date);}}
             />
           </Grid>
-          <Grid item xs={4} sm={4} md={4} lg={4} xl={4}></Grid>
+          <Grid sx={{ display: 'flex', alignItems: 'end' }} item xs={4} sm={4} md={4} lg={4} xl={4}>
+            <FormControlLabel
+              sx={{ ml: '1rem', mb: '.5rem' }}
+              label='Auto'
+              control={
+                <IOSSwitch
+                  sx={{ mr: '.5rem' }}
+                  value={isAuto}
+                  onChange={(e) => handleAuto(e.target.checked)}
+                />
+              }
+            />
+          </Grid>
           <Grid item xs={4} sm={4} md={4} lg={4} xl={4} textAlign='end' alignSelf='end'>
             <MuiButton
               variant='contained'
@@ -147,122 +399,26 @@ function OvertimeSummaryComponent() {
             ><Add fontSize='small' />&nbsp; Add Employee</MuiButton>
           </Grid>
         </Grid>
-        <Table
-          count={selected?.length}
-          rowsPerPageOptions={[5, 10, 15]}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onChangePage={handleChangePage}
-          onRowsPerPagesChange={(e) => handleChangeRowsPerPage(e)}
-          headChildren={
-            <TableRow>
-              {
-                headerItems.map((item) => (
-                  <TableCell key={item.id}>
-                    {item.label}
-                  </TableCell>
-                ))
-              }
-            </TableRow>
-          }
-          bodyChildren={
-            <>
-              {
-                ifThenElse(typeof selected !== 'undefined', (
-                  ifThenElse(selected?.length === 0, (
-                    <TableRow>
-                      <TableCell colSpan={12} align='center'>
-                        <EmptyState />
-                      </TableCell>
-                    </TableRow>
-                  ), (
-                    selected?.map((item, index) => (
-                      <TableRow key={index}>
-                        <TableCell>{item['id']}</TableCell>
-                        <TableCell>
-                          <NameWrapper>
-                            <Avatar
-                              src={item['picture']}
-                              alt={item['name']}
-                              sx={{
-                                width: 24, height: 24
-                              }}
-                            />
-                            &nbsp;{item['name']}
-                          </NameWrapper>
-                        </TableCell>
-                        <TableCell sx={{ width: '200px' }}>
-                          <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <TimePicker
-                              sx={{
-                                '& .MuiOutlinedInput-input': {
-                                  padding: '8.5px 14px',
-                                  border: 'none !important'
-                                },
-                                width: '90%'
-                              }}
-                            />
-                          </LocalizationProvider>
-                        </TableCell>
-                        <TableCell>
-                          <AiOutlineSwapRight />
-                        </TableCell>
-                        <TableCell sx={{ width: '200px' }}>
-                          <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <TimePicker
-                              sx={{
-                                '& .MuiOutlinedInput-input': {
-                                  padding: '8.5px 14px',
-                                  border: 'none !important'
-                                },
-                                width: '90%'
-                              }}
-                            />
-                          </LocalizationProvider>
-                        </TableCell>
-                        <TableCell>
-                          <Select
-                            fullWidth
-                            variant='outlined'
-                            size='small'
-                            placeholder=''
-                            value={''}
-                            sx={{
-                              width: '100%'
-                            }}
-                          >
-                            <MenuItem value='0.0'>0.0x</MenuItem>
-                            <MenuItem value='0.5'>0.5x</MenuItem>
-                            <MenuItem value='1.0'>1.0x</MenuItem>
-                            <MenuItem value='1.5'>1.5x</MenuItem>
-                            <MenuItem value='2.0'>2.0x</MenuItem>
-                            <MenuItem value='2.5'>2.5x</MenuItem>
-                            <MenuItem value='3.0'>3.0x</MenuItem>
-                          </Select>
-                        </TableCell>
-                        <TableCell>
-                          <IconButton
-                            parentColor='#FEE2E2'
-                            icons={
-                              <BsTrashFill fontSize={20} color='#EF4444' />
-                            }
-                            onClick={() => handleDeleteItem(index)}
-                          />
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  ))
-                ), (
-                  <TableRow>
-                    <TableCell colSpan={12} align='center'>
-                      <EmptyState />
-                    </TableCell>
-                  </TableRow>
-                ))
-              }
-            </>
-          }
-        />
+        <Box sx={{ width: '100%' }}>
+          <DataGrid
+            autoHeight
+            disableColumnFilter
+            disableColumnMenu
+            disableColumnSelector
+            disableDensitySelector
+            disableRowSelectionOnClick
+            rows={selected}
+            columns={headerItems}
+            initialState={{
+              pagination: {
+                paginationModel: {
+                  pageSize: 5,
+                },
+              },
+            }}
+            pageSizeOptions={[5]}
+          />
+        </Box>
       </CustomModal>
 
       <AddEmployeeModal
