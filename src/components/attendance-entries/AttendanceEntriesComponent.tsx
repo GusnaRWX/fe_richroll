@@ -209,14 +209,14 @@ function AttendanceEntriesComponent() {
     const tempData = selected.map((val) => {
       return ({
         employeeID: val['id'],
-        clockIn: dayjs(val['clockIn']).format('HH:mm'),
-        clockOut: dayjs(val['clockOut']).format('HH:mm'),
+        clockIn: dayjs(val['clockIn']).toISOString(),
+        clockOut: dayjs(val['clockOut']).toISOString(),
       });
     });
     dispatch({
       type: postAttendanceRequested.toString(),
       payload: {
-        date: dayjs(selectDate).format('YYYY-MM-DD'),
+        date: dayjs(selectDate).toISOString(),
         attendances: tempData
       }
     });
@@ -228,7 +228,7 @@ function AttendanceEntriesComponent() {
     setIsAuto(v);
     if (v) {
       const arrTemp = selected.map((val) => {
-        return({...val, ...{clockIn: dayjs().set('hour', 9).set('minute', 0), clockOut: dayjs().set('hour', 17).set('minute', 0)}});
+        return({...val, ...{clockIn: dayjs(selectDate).set('hour', 9).set('minute', 0), clockOut: dayjs(selectDate).set('hour', 17).set('minute', 0)}});
       });
       setSelected(arrTemp);
     } else {

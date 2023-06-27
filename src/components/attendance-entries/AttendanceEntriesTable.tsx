@@ -94,8 +94,8 @@ const AttendanceEntriesTable: React.FC<AttendanceEntriesTable> = ({ reload }) =>
       payload: {
         id: selectedItem?.id,
         data: {
-          clockIn: dayjs(data.clockIn).format('HH:mm'),
-          clockOut: dayjs(data.clockOut).format('HH:mm')
+          clockIn: dayjs(data.clockIn).toISOString(),
+          clockOut: dayjs(data.clockOut).toISOString()
         }
       }
     });
@@ -194,7 +194,7 @@ const AttendanceEntriesTable: React.FC<AttendanceEntriesTable> = ({ reload }) =>
                 ), (
                   data?.items?.map((item, index) => (
                     <TableRow key={index}>
-                      <TableCell>{item.date}</TableCell>
+                      <TableCell>{dayjs(item.date).format('DD/MM/YY')}</TableCell>
                       <TableCell>{item.employee.employeeID}</TableCell>
                       <TableCell>
                         <NameWrapper>
@@ -208,8 +208,8 @@ const AttendanceEntriesTable: React.FC<AttendanceEntriesTable> = ({ reload }) =>
                           &nbsp;{item.employee.name}
                         </NameWrapper>
                       </TableCell>
-                      <TableCell>{item.clockIn}</TableCell>
-                      <TableCell>{item.clockOut}</TableCell>
+                      <TableCell>{dayjs(item.clockIn).format('HH:mm')}</TableCell>
+                      <TableCell>{dayjs(item.clockOut).format('HH:mm')}</TableCell>
                       <TableCell>-</TableCell>
                       <TableCell>-</TableCell>
                       <TableCell>
