@@ -1,33 +1,37 @@
 import React, { useState, useEffect } from 'react';
 import { IconButton } from '@/components/_shared/form';
 import { LocalizationsMenu } from './localization';
-// import Image from 'next/image';
+import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { Box, Menu, Typography } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useTranslation } from 'react-i18next';
+import { getLanguage, setLanguage } from '@/store/reducers/slice/global/globalSlice';
 
 const LocalizationMenu = () => {
   const { i18n } = useTranslation();
-  const [selectedCountry, setSelectedCountry] = useState('EN');
+  const dispatch = useAppDispatch();
+  const { global } = useAppSelectors(state => state);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const isLanguageOpen = Boolean(anchorEl);
   const [hydrated, setHaydrated] = useState(false);
-
+  const findCodeName = LocalizationsMenu.find(locale => locale.nativeName === global.language);
   const handleLanguageMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleChangeLocalization = (country: string) => {
-    setSelectedCountry(country);
-    setAnchorEl(null);
-  };
 
   useEffect(() => {
-    i18n.changeLanguage('en');
+    i18n.changeLanguage(findCodeName?.codeName);
   }, []);
 
   useEffect(() => {
     setHaydrated(true);
+  }, []);
+
+  useEffect(() => {
+    dispatch({
+      type: getLanguage.toString()
+    });
   }, []);
 
   if (!hydrated) {
@@ -78,12 +82,16 @@ const LocalizationMenu = () => {
                 backgroundColor: '#223567 !important',
                 color: '#fff'
               },
-              backgroundColor: selectedCountry === locale.nativeName ? '#223567 !important' : '',
-              color: selectedCountry === locale.nativeName ? '#fff' : '#223567',
+              backgroundColor: global.language === locale.nativeName ? '#223567 !important' : '',
+              color: global.language === locale.nativeName ? '#fff' : '#223567',
             }}
             onClick={() => {
-              handleChangeLocalization(locale.nativeName);
               i18n.changeLanguage(locale?.codeName);
+              dispatch({
+                type: setLanguage.toString(),
+                payload: locale.nativeName
+              });
+              setAnchorEl(null);
             }}
           >
             <Typography sx={{ paddingLeft: '.5rem' }}>{locale.nativeName}</Typography>
@@ -97,7 +105,7 @@ const LocalizationMenu = () => {
     <>
       {
         LocalizationsMenu.map((locale) => (
-          locale.nativeName === selectedCountry && (
+          locale.nativeName === global.language && (
             <Box
               key={locale.name}
               sx={{
