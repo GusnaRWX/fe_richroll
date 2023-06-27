@@ -50,7 +50,7 @@ export default function CreateBasicDetailComponent({setValue}: CreateDesignedTra
         <Grid container spacing={2}>
           <Grid item xs={12} md={12} lg={6} xl={6}>
             <Input
-              placeholder='Input Statutory Benefits Name'
+              placeholder='Input Component Name'
               customLabel='Component Name'
               withAsterisk
               size='small'
