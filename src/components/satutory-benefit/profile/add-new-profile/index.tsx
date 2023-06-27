@@ -94,9 +94,9 @@ export default function CreateNewProfile() {
   };
 
   const validationSchema = Yup.object().shape({
-    componentName: Yup.string().required('Component Name is required'),
-    country: Yup.string().required('Country is required'),
-    effectiveDate: Yup.date().required('Effective Date is required'),
+    componentName: Yup.string().required('This field is required'),
+    country: Yup.string().required('This field is required'),
+    effectiveDate: Yup.date().required('This field is required'),
     expirationDate: Yup.date(),
     citation: Yup.string().max(120, 'Citation must be at most 120 characters'),
     internalNotes: Yup.string().max(
@@ -137,7 +137,8 @@ export default function CreateNewProfile() {
       <Formik
         validationSchema={validationSchema}
         initialValues={initialValues}
-        onSubmit={() => {
+        // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+        onSubmit={(values: any) => {
           setIsModalFormSubmitted(true);
           setIsAddNewComponent(false);
         }}
@@ -188,11 +189,11 @@ export default function CreateNewProfile() {
 
             <Paper style={{ padding: '21px 32px' }}>
               <Paper style={{ padding: '21px 32px' }}>
-                <Grid container spacing={2} rowSpacing={4}>
+                <Grid container spacing={2}>
                   <Grid item xs={6} md={6} lg={6} xl={6}>
                     <Input
                       placeholder='Input Statutory Benefits Name'
-                      customLabel='Component Name'
+                      customLabel='Satutory Name'
                       required
                       withAsterisk
                       size='small'
@@ -208,6 +209,9 @@ export default function CreateNewProfile() {
                       ) : null}
                   </Grid>
                   <Grid item xs={6} md={6} lg={6} xl={6}></Grid>
+                </Grid>
+
+                <Grid container spacing={2} style={{marginTop: '12px'}}>
                   <Grid item xs={6} md={6} lg={6} xl={6}>
                     <Select
                       placeholder='Select Country'
@@ -239,6 +243,9 @@ export default function CreateNewProfile() {
                       options={Dummyoption}
                     />
                   </Grid>
+                </Grid>
+
+                <Grid container spacing={2} style={{marginTop: '12px'}}>
                   <Grid item xs={6} md={6} lg={6} xl={6}>
                     <Select
                       placeholder='Select Country'
@@ -263,6 +270,9 @@ export default function CreateNewProfile() {
                       options={Dummyoption}
                     />
                   </Grid>
+                </Grid>
+
+                <Grid container spacing={2} style={{marginTop: '12px'}}>
                   <Grid item xs={6} md={6} lg={6} xl={6}>
                     <BasicDatePicker
                       customLabel='Effective Date'
@@ -278,11 +288,13 @@ export default function CreateNewProfile() {
                         </FormHelperText>
                       ) : null}
                   </Grid>
-                  <Grid item xs={3} md={3} lg={3} xl={3}>
+                  <Grid item xs={6} md={6} lg={6} xl={6}>
                     <BasicDatePicker customLabel='Expiration Date' />
                   </Grid>
-                  <Grid item xs={3} md={3} lg={3} xl={3}></Grid>
-                  <Grid item xs={6} md={6} lg={6} xl={6}>
+                </Grid>
+
+                <Grid container spacing={2} style={{marginTop: '12px'}}>
+                  <Grid item xs={12} md={12} lg={12} xl={12}>
                     <Textarea
                       customLabel='Citation'
                       minRows={4}
@@ -298,8 +310,10 @@ export default function CreateNewProfile() {
                       Max. 120 Character
                     </Typography>
                   </Grid>
-                  <Grid item xs={6} md={6} lg={6} xl={6}></Grid>
-                  <Grid item xs={6} md={6} lg={6} xl={6}>
+                </Grid>
+
+                <Grid container spacing={2} style={{marginTop: '12px'}}>
+                  <Grid item xs={12} md={12} lg={12} xl={12}>
                     <Textarea
                       customLabel='Internal Notes'
                       minRows={4}
@@ -315,7 +329,10 @@ export default function CreateNewProfile() {
                       Max. 120 Character
                     </Typography>
                   </Grid>
-                  <Grid item xs={6} md={6} lg={6} xl={6}>
+                </Grid>
+
+                <Grid container spacing={2} style={{marginTop: '12px'}}>
+                  <Grid item xs={12} md={12} lg={12} xl={12}>
                     <Textarea
                       customLabel='External Notes'
                       minRows={4}
@@ -337,7 +354,7 @@ export default function CreateNewProfile() {
               <FieldArray
                 name='benefitComponent'
                 render={(arrayHelper) => {
-                  const handleCheckBoxChange = (e) => {
+                  const handleCheckBoxChange = (e: any) => {
                     const value = e.target.name;
                     const { benefitComponent } = formik.values;
 
@@ -372,9 +389,10 @@ export default function CreateNewProfile() {
                         isModalFormSubmitted && (
                         <FormikForm>
                           {formik.values.benefitComponent.map(
-                            (benefit, i) => {
+                            (benefit, i_benefit) => {
                               return (
-                                <Paper key={i}
+                                <Paper
+                                  key={i_benefit}
                                   style={{
                                     padding: '21px 32px',
                                     marginTop: '16px',
@@ -419,7 +437,7 @@ export default function CreateNewProfile() {
                                           backgroundColor: '#FEE2E2',
                                           color: '#B91C1C',
                                         }}
-                                        onClick={() => arrayHelper.remove(i)}
+                                        onClick={() => arrayHelper.remove(i_benefit)}
                                       />
                                     </Box>
                                   </Box>
@@ -604,10 +622,9 @@ export default function CreateNewProfile() {
                             </Grid>
                           </Grid>
                         </Box>
-
-                        {selectedBenefitsOption.map((option, j) => {
+                        {selectedBenefitsOption.map((option, i_option) => {
                           return (
-                            <Box key={j} sx={{ flexGrow: 1 }}>
+                            <Box sx={{ flexGrow: 1 }} key={i_option}>
                               <Grid
                                 container
                                 sx={{ display: 'flex', alignItems: 'center' }}
@@ -615,7 +632,9 @@ export default function CreateNewProfile() {
                                 <Grid item xs={1} md={1} lg={1} xl={1}>
                                   <CheckBox
                                     name={option.label}
-                                    checked={formik.values.benefitComponent.includes(option.label as unknown as never)}
+                                    checked={formik.values.benefitComponent.includes(
+                                      option.label
+                                    )}
                                     customLabel=''
                                     onChange={handleCheckBoxChange}
                                   />
