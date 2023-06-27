@@ -8,12 +8,14 @@ import { postTerminateEmployeeRequested } from '@/store/reducers/slice/company-m
 import InfoRoundedIcon from '@mui/icons-material/InfoRounded';
 import BasicDatePicker from '@/components/_shared/form/DatePicker';
 import { useRouter } from 'next/router';
+import dayjs from 'dayjs';
 
 const TerminateAccount = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const [Open, setOpen] = useState(false);
-  const [Note, setNote] = useState('');
+  const [note, setNote] = useState('');
+  const [date, setDate] = useState('');
 
   const handleOpen = () => {
     setOpen(true);
@@ -25,8 +27,8 @@ const TerminateAccount = () => {
 
   const handleConfirmation = () => {
     const payload = {
-      terminateDate: Date(),
-      terminateNote: Note,
+      terminateDate: date,
+      terminateNote: note,
     };
     dispatch({
       type: postTerminateEmployeeRequested.toString(),
@@ -34,6 +36,7 @@ const TerminateAccount = () => {
       payload: payload,
     });
     setNote('');
+    setDate('');
     setOpen(false);
   };
 
@@ -90,7 +93,7 @@ const TerminateAccount = () => {
         handleConfirm={handleConfirmation}
         title='Termination Form'
         width='563px'
-        ConfirmationDisable={Note === ''}
+        ConfirmationDisable={note === '' || date === ''}
       >
         <Box sx={{ my: 2, display:'flex', flexDirection:'column', gap:'24px' }}>
           <Alert
@@ -105,6 +108,7 @@ const TerminateAccount = () => {
             <BasicDatePicker
               customLabel='Input Effective Termination Date'
               withAsterisk
+              onChange={(e) => setDate(dayjs(e).format('DD/MM/YYYY'))}
             />
           </Box>
           <Textarea
@@ -114,7 +118,7 @@ const TerminateAccount = () => {
             minRows={3}
             style={{ resize: 'vertical'}}
             onChange={(e) => setNote(e.target.value)}
-            value={Note}
+            value={note}
           />
         </Box>
       </CustomModal>
