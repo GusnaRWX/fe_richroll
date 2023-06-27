@@ -79,6 +79,11 @@ function ItpProfileTable({
   const [archiveConfirmation, setArchiveConfirmation] = useState(false);
   const [hydrated, setHaydrated] = useState(false);
 
+  const router = useRouter();
+  function DetailActionHandler () {
+    router.push('/income-tax-profile/profile/detail');
+  }
+
   const data = {
     items: [
       {
@@ -153,11 +158,6 @@ function ItpProfileTable({
 
   if (!hydrated) {
     return null;
-  }
-
-  const router = useRouter();
-  function DetailActionHandler () {
-    router.push('/income-tax-profile/profile/detail');
   }
 
   return (
