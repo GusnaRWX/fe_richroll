@@ -15,6 +15,7 @@ import accountSlice from './slice/account-management/accountManagementSlice';
 import attendanceEntriesSlice from './slice/attendance-leave/attendanceEntriesSlice';
 import globalSlice from './slice/global/globalSlice';
 import overtimeSlice from './slice/attendance-leave/overtimeSlice';
+import leaveEntriesSlice from './slice/attendance-leave/leaveEntriesSlice';
 
 
 const reducers: Reducer = combineReducers({
@@ -33,7 +34,8 @@ const reducers: Reducer = combineReducers({
   account: accountSlice,
   attendanceEntries: attendanceEntriesSlice,
   global: globalSlice, // global state
-  overtime: overtimeSlice
+  overtime: overtimeSlice,
+  leaveEntries: leaveEntriesSlice
 });
 
 export default reducers;

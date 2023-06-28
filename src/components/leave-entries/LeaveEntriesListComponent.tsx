@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { CustomModal } from '../_shared/common';
-import { Avatar, Box, Grid, TableCell, TableRow, TableSortLabel, Typography, Checkbox } from '@mui/material';
+import { Avatar, Box, Grid, TableCell, TableRow, TableSortLabel } from '@mui/material';
 import Table from '../_shared/form/Table';
 import { compareCheck, getCompanyData, ifThenElse } from '@/utils/helper';
 import { visuallyHidden } from '@mui/utils';
@@ -8,6 +8,7 @@ import store from '@/store/index';
 import { getEmployeeRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
 import { useAppSelectors } from '@/hooks/index';
 import styled from '@emotion/styled';
+import EmptyState from '../_shared/common/EmptyState';
 
 interface LeaveEntriesListComponentProps {
   open: boolean;
@@ -21,14 +22,6 @@ const NameWrapper = styled.div`
  align-items: center;
  justify-content: flex-start;
  margin: 0;
-`;
-
-const ButtonWrapper = styled.div`
- display: flex;
- flex-direction: row;
- align-items: center;
- justify-content: flex-end;
- gap: .5rem;
 `;
 
 type Order = 'asc' | 'desc'
@@ -146,16 +139,13 @@ const LeaveEntriesListComponent: React.FC<LeaveEntriesListComponentProps> = ({
                   ifThenElse(typeof data?.items !== 'undefined', (
                     ifThenElse(data?.items?.length === 0, (
                       <TableRow>
-                        <TableCell colSpan={12} align='center'><Typography>Data not found</Typography></TableCell>
+                        <TableCell colSpan={12} align='center'>
+                          <EmptyState />
+                        </TableCell>
                       </TableRow>
                     ), (
                       data?.items?.map((item, index) => (
                         <TableRow key={index}>
-                          <TableCell>
-                            <ButtonWrapper>
-                              <Checkbox />
-                            </ButtonWrapper>
-                          </TableCell>
                           <TableCell>
                             <NameWrapper>
                               <Avatar
@@ -170,17 +160,14 @@ const LeaveEntriesListComponent: React.FC<LeaveEntriesListComponentProps> = ({
                           </TableCell>
                           <TableCell>{item?.position?.name}</TableCell>
                           <TableCell>{item?.department?.name}</TableCell>
-                          {/* <TableCell>
-                            <ButtonWrapper>
-                              <Checkbox onChange={(e) => onSelected(item, e)} checked={checkVal(item?.id)} />
-                            </ButtonWrapper>
-                          </TableCell> */}
                         </TableRow>
                       ))
                     ))
                   ), (
                     <TableRow>
-                      <TableCell colSpan={12} align='center'><Typography>Data not found</Typography></TableCell>
+                      <TableCell colSpan={12} align='center'>
+                        <EmptyState />
+                      </TableCell>
                     </TableRow>
                   ))
                 }

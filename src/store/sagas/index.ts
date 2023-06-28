@@ -12,6 +12,7 @@ import employmentSaga from './employment/employmentSaga';
 import accountSaga from './account-management/accountManagementSaga';
 import attendanceEntriesSaga from './attendance-leave/attendanceEntriesSaga';
 import overtimeSaga from './attendance-leave/overtimeSaga';
+import leaveEntriesSaga from './attendance-leave/leaveEntriesSaga';
 
 export default function* rootSaga() {
   yield all([
@@ -27,6 +28,7 @@ export default function* rootSaga() {
     employmentSaga(),
     accountSaga(),
     attendanceEntriesSaga(),
-    overtimeSaga()
+    overtimeSaga(),
+    leaveEntriesSaga()
   ]);
 }
