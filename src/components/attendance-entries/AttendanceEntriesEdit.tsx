@@ -54,8 +54,6 @@ const AttendanceEntriesEdit: React.FC<AttendanceEntriesEditProps> = ({
     } as AttendanceLeave.PutAttendance,
     onSubmit: (values) => {
       callback(values);
-      // console.log(dayjs(values.clockIn).toISOString());
-      // console.log(dayjs(values.clockOut).toISOString());
     }
   });
 

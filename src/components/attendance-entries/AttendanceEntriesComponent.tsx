@@ -125,6 +125,7 @@ function AttendanceEntriesComponent() {
 
   function GridNameCell({ rowNode, value }: DataGridCellProps) {
     const tempId = rowNode['id'];
+    
     const tempRow = selected.find((v) => v['id'] === tempId);
     return (
       <NameWrapper>
@@ -140,14 +141,41 @@ function AttendanceEntriesComponent() {
     );
   }
 
-  function GridClockCell({ value }: DataGridCellProps) {
-    // const tempId = rowNode['id'];
-    // const tempRow = selected.find((v) => v['id'] === tempId);
+  function GridClockCell({ rowNode, value, field }: DataGridCellProps) {
+    const tempId = rowNode['id'];
+
+    const handleChange = (val) => {
+      const setClock = selected.map((itm) => {
+        if (itm['id'] === tempId) {
+          return {...itm, ...{[field]: dayjs(val).set('date', Number(dayjs(selectDate).format('D')))}};
+        } else {
+          return itm;
+        }
+      });
+      setSelected(setClock);
+    };
+
+    const handleBlur = (val) => {
+      const setClock = selected.map((itm) => {
+        const tempVal = val.split(':');
+        if (itm['id'] === tempId) {
+          return {...itm, ...{[field]: dayjs().set('date', Number(dayjs(selectDate).format('D'))).set('month', Number(dayjs(selectDate).format('M'))).set('year', Number(dayjs(selectDate).format('YYYY'))).set('hour', Number(tempVal[0])).set('minute', Number(tempVal[1]))}};
+        } else {
+          return itm;
+        }
+      });
+      setSelected(setClock);
+    };
+
     return (
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <TimePicker
           format='HH:mm'
-          onChange={(e) => console.log(e) }
+          onAccept={(e) => handleChange(e)}
+          slotProps={{
+            textField: { onBlur: (a) => handleBlur(a.target.value) }
+          }}
+          
           value={value}
           sx={{
             '& .MuiOutlinedInput-input': {
@@ -239,6 +267,21 @@ function AttendanceEntriesComponent() {
     }
   };
 
+  const handleChangeDate = (e) => {
+    setSelectDate(e);
+    const setDate = selected.map((val) => {
+      const tempClockIn = val['clockIn'];
+      const tempClockOut = val['clockOut'];
+
+      if (typeof tempClockIn == 'object' && typeof tempClockOut == 'object') {
+        return {...val, ...{['clockIn']: dayjs(tempClockIn).set('date', Number(dayjs(e).format('D'))), ['clockOut']: dayjs(tempClockOut).set('date', Number(dayjs(e).format('D')))}};
+      } else {
+        return val;
+      }
+    });
+    setSelected(setDate);
+  };
+
   useEffect(() => {
     console.log(selected);
   }, [selected]);
@@ -292,7 +335,7 @@ function AttendanceEntriesComponent() {
               customLabel='Select Date'
               withAsterisk
               value={selectDate as unknown as Date}
-              onChange={(date) => { setSelectDate(date); }}
+              onChange={(date) => { handleChangeDate(date); }}
             />
           </Grid>
           <Grid item xs={2} sx={{ display: 'flex', alignItems: 'end' }}>

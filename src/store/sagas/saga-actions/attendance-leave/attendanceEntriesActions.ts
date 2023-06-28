@@ -11,7 +11,7 @@ export const postAttendanceEntries = (payload: AttendanceLeave.PostAttendance) =
 };
 
 export const putAttendanceEntries = (payload) => {
-  return put(`attendances?id=${payload.id}`, payload.data as AttendanceLeave.PutAttendance);
+  return put(`attendances/${payload.id}`, payload.data as AttendanceLeave.PutAttendance);
 };
 
 export const delAttendanceEntries = (id:string) => {
