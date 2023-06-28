@@ -1,5 +1,5 @@
 import { AnyAction } from '@reduxjs/toolkit';
-import { getLeaveEntries, postLeaveEntries, deleteLeaveEntries } from '../saga-actions/attendance-leave/leaveEntriesAction';
+import { getLeaveEntries, postLeaveEntries, deleteLeaveEntries, putLeaveEntries } from '../saga-actions/attendance-leave/leaveEntriesAction';
 import { call, put, takeEvery, delay } from 'redux-saga/effects';
 import {
   getLeaveEntriesRequested,
@@ -10,7 +10,10 @@ import {
   postLeaveEntriesFailed,
   deleteLeaveEntriesRequested,
   deleteLeaveEntriesSuccess,
-  deleteLeaveEntriesFailed
+  deleteLeaveEntriesFailed,
+  putLeaveEntriesRequested,
+  putLeaveEntriesSuccess,
+  putLeaveEntriesFailed
 } from '@/store/reducers/slice/attendance-leave/leaveEntriesSlice';
 import { setResponserMessage } from '@/store/reducers/slice/responserSlice';
 import { Services } from '@/types/axios';
@@ -59,6 +62,7 @@ function* fetchPostLeaveEntries(action: AnyAction) {
           message: null
         }
       });
+      yield call(fetchGetLeaveEntries, action);
     }
   } catch (err) {
     if (err instanceof AxiosError) {
@@ -104,6 +108,7 @@ function* fetchDeleteLeaveEntries(action: AnyAction) {
           message: null
         }
       });
+      yield call(fetchGetLeaveEntries, action);
     }
   } catch (err) {
     if (err instanceof AxiosError) {
@@ -128,10 +133,57 @@ function* fetchDeleteLeaveEntries(action: AnyAction) {
   }
 }
 
+function* fetchPutLeaveEntries(action: AnyAction) {
+  try {
+    const res: AxiosResponse = yield call(putLeaveEntries, action?.payload);
+    if (res.status === 200) {
+      yield put({ type: putLeaveEntriesSuccess.toString() });
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: res?.data?.code,
+          message: 'Leave Entry Updated',
+          footerMessage: 'Data Entry has been Updated Successfully'
+        }
+      });
+      yield delay(2000);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: 0,
+          message: null
+        }
+      });
+      yield call(fetchGetLeaveEntries, action);
+    }
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      yield put({ type: putLeaveEntriesFailed.toString() });
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message
+        }
+      });
+      yield delay(2000);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: 0,
+          message: null
+        }
+      });
+    }
+  }
+}
+
 function* leaveEntriesSaga() {
   yield takeEvery(getLeaveEntriesRequested.toString(), fetchGetLeaveEntries);
   yield takeEvery(postLeaveEntriesRequested.toString(), fetchPostLeaveEntries);
   yield takeEvery(deleteLeaveEntriesRequested.toString(), fetchDeleteLeaveEntries);
+  yield takeEvery(putLeaveEntriesRequested.toString(), fetchPutLeaveEntries);
 }
 
 export default leaveEntriesSaga;

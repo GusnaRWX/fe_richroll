@@ -65,7 +65,7 @@ function* fetchPostAttendanceEntries(action: AnyAction) {
         }
       });
     }
-  } catch(err) {
+  } catch (err) {
     if (err instanceof AxiosError) {
       const errorMessage = err?.response?.data as Services.ErrorResponse;
       yield put({ type: postAttendanceFailed.toString() });
@@ -94,7 +94,7 @@ function* fetchPutAttendanceEntries(action: AnyAction) {
         }
       });
     }
-  } catch(err) {
+  } catch (err) {
     if (err instanceof AxiosError) {
       const errorMessage = err?.response?.data as Services.ErrorResponse;
       yield put({ type: putAttendanceFailed.toString() });
@@ -123,7 +123,7 @@ function* fetchDelAttendanceEntries(action: AnyAction) {
         }
       });
     }
-  } catch(err) {
+  } catch (err) {
     if (err instanceof AxiosError) {
       const errorMessage = err?.response?.data as Services.ErrorResponse;
       yield put({ type: deleteAttendanceFailed.toString() });

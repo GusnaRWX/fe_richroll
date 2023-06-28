@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { CustomModal, Text } from '../_shared/common';
 import { Grid, Avatar } from '@mui/material';
 import { Image as ImageType } from '@/utils/assetsConstant';
@@ -10,34 +10,41 @@ import { validationSchemeCreateLeaveEntries } from './validate';
 import store from '@/store/index';
 import dayjs from 'dayjs';
 import { postLeaveEntriesRequested } from '@/store/reducers/slice/attendance-leave/leaveEntriesSlice';
-
+import { LocalizationProvider, TimePicker } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 interface LeaveEntriesEmployeeCreateProps {
   selectedEmployee: any,
   openCreateModal: boolean;
   setOpenCreateModal: React.Dispatch<React.SetStateAction<boolean>>,
-  dispatch: typeof store.dispatch
+  dispatch: typeof store.dispatch,
+  setOpenModal: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const LeaveEntriesEmployeeCreateComponent = ({
   selectedEmployee,
   openCreateModal,
   setOpenCreateModal,
-  dispatch
+  dispatch,
+  setOpenModal
 }: LeaveEntriesEmployeeCreateProps) => {
+  const [isHalfDay, setIsHalfDay] = useState(false);
+
   const formik = useFormik({
     initialValues: {
       leaveFrom: null,
       leaveTo: null,
       leaveType: '',
       leaveStatus: '',
-      note: ''
+      note: '',
+      halfFrom: null,
+      halfTo: null
     },
     validationSchema: validationSchemeCreateLeaveEntries,
     onSubmit: (values) => {
       const postValues = {
         employeeID: selectedEmployee?.id,
-        start: dayjs(values.leaveFrom).toISOString(),
-        end: dayjs(values.leaveTo).toISOString(),
+        start: values.halfFrom === null ? dayjs(values.leaveFrom).toISOString() : dayjs(values.leaveFrom).set('hour', dayjs(values.halfFrom).hour()).toISOString(),
+        end: values.halfTo === null ? dayjs(values.leaveTo).toISOString() : dayjs(values.leaveTo).set('hour', dayjs(values.halfTo).hour()).toISOString(),
         leaveType: values.leaveType,
         leaveStatus: values.leaveStatus,
         note: values.note
@@ -46,9 +53,10 @@ const LeaveEntriesEmployeeCreateComponent = ({
         type: postLeaveEntriesRequested.toString(),
         payload: postValues
       });
+      setOpenCreateModal(false);
+      setOpenModal(false);
     }
   });
-
 
   return (
     <CustomModal
@@ -96,9 +104,50 @@ const LeaveEntriesEmployeeCreateComponent = ({
       </Grid>
       <Grid container sx={{ padding: '0 16px' }}>
         <Grid item>
-          <CheckBox customLabel='Half-day Leave' disabled />
+          <CheckBox customLabel='Half-day Leave' value={isHalfDay} onChange={() => { setIsHalfDay(prev => !prev); }} />
         </Grid>
       </Grid>
+      {isHalfDay && (
+        <Grid container justifyContent='space-between' alignItems='center' sx={{ padding: '0px 16px' }} mb='16px'>
+          <Grid item md={5.5}>
+            <Text title='From' color='grey.700' mb='6px' />
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <TimePicker
+                format='HH:mm'
+                value={formik.values.halfFrom}
+                onChange={(val) => formik.setFieldValue('halfFrom', val, false)}
+                sx={{
+                  '& .MuiOutlinedInput-input': {
+                    padding: '8.5px 14px',
+                    border: 'none !important'
+                  },
+                  width: '100%'
+                }}
+              />
+            </LocalizationProvider>
+          </Grid>
+          <Grid item>
+            <AiOutlineSwapRight style={{ marginTop: '30px' }} />
+          </Grid>
+          <Grid item md={5.5}>
+            <Text title='To' color='grey.700' mb='6px' />
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <TimePicker
+                format='HH:mm'
+                value={formik.values.halfTo}
+                onChange={(val) => formik.setFieldValue('halfTo', val, false)}
+                sx={{
+                  '& .MuiOutlinedInput-input': {
+                    padding: '8.5px 14px',
+                    border: 'none !important'
+                  },
+                  width: '100%'
+                }}
+              />
+            </LocalizationProvider>
+          </Grid>
+        </Grid>
+      )}
       <Grid container justifyContent='space-between' alignItems='center' sx={{ padding: '0px 16px' }}>
         <Grid item md={5.5}>
           <Select
@@ -114,7 +163,7 @@ const LeaveEntriesEmployeeCreateComponent = ({
             displayEmpty
             renderValue={(value: unknown) => {
               if ((value as string).length === 0) {
-                return <Text title='Select Leave Type' color='greyy.400' />;
+                return <Text title='Select Leave Type' color='grey.400' />;
               }
               const selected = LeaveTypeItems.find(item => item.value === value);
               if (selected) {

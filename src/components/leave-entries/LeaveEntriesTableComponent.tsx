@@ -54,6 +54,7 @@ const LeaveEntriesTableComponent = ({
   const [editConfirmation, setEditConfirmation] = useState(false);
   const companyData = getCompanyData();
   const leaveEntries = useAppSelectors(state => state.leaveEntries);
+  const [searchData, setSearchData] = useState('');
 
   const handleRequestSort = (event: React.MouseEvent<unknown>, headId: string) => {
     const isAsc = compareCheck(sort === headId, direction === 'asc');
@@ -88,7 +89,7 @@ const LeaveEntriesTableComponent = ({
         itemPerPage: rowsPerPage,
         sort: sort,
         direction: direction.toUpperCase(),
-        search: '',
+        search: searchData,
         companyID: companyData?.id
       }
     });
@@ -103,9 +104,15 @@ const LeaveEntriesTableComponent = ({
     loadDataLeaveEntries();
   };
 
+  const handleSearch = (e) => {
+    if (e.key === 'Enter') {
+      setSearchData(e.target.value);
+    }
+  };
+
   useEffect(() => {
     loadDataLeaveEntries();
-  }, [rowsPerPage, page, sort, direction]);
+  }, [rowsPerPage, page, sort, direction, searchData]);
 
   const renderLeaveType = (type: number) => {
     return LeaveTypeItems.find(item => +item.value === type)?.label;
@@ -139,6 +146,7 @@ const LeaveEntriesTableComponent = ({
                 <Search sx={{ color: '#9CA3AF' }} />
               )
             }}
+            onKeyDown={(e) => handleSearch(e)}
           />
         </Grid>
       </Grid>
@@ -207,7 +215,7 @@ const LeaveEntriesTableComponent = ({
                           <IconButton
                             parentColor='primary.50'
                             onClick={() => {
-                              setSelectedItem(value.date);
+                              setSelectedItem(value);
                               setEditConfirmation(true);
                             }}
                             icons={
@@ -253,8 +261,9 @@ const LeaveEntriesTableComponent = ({
       />
       <LeaveEntriesEditComponent
         open={editConfirmation}
-        // item={selectedItem}
+        selectedItem={selectedItem}
         handleClose={() => setEditConfirmation(false)}
+        setSelectedItem={setSelectedItem}
       />
     </Card>
   );

@@ -1,12 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Box, Modal, IconButton, Avatar, Grid } from '@mui/material';
 import styled from '@emotion/styled';
 import { Text } from '../_shared/common';
 import { Close } from '@mui/icons-material';
-import { Image } from '@/utils/assetsConstant';
 import { Button, Select, Textarea } from '../_shared/form';
 import { LocalizationProvider, TimePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { AttendanceLeave } from '@/types/attendanceLeave';
+import { LeaveTypeItems, LeaveTypeStatus } from '@/utils/options';
+import { validationSchemeUpdateLeaveEntries } from './validate';
+import { putLeaveEntriesRequested } from '@/store/reducers/slice/attendance-leave/leaveEntriesSlice';
+import { useFormik } from 'formik';
+import { useAppDispatch } from '@/hooks/index';
+import dayjs from 'dayjs';
 
 const modalStyle = {
   position: 'absolute',
@@ -33,13 +39,60 @@ const ModalHeader = styled.div`
 
 interface LeaveEntriesEditProps {
   open: boolean;
-  handleClose: () => void
+  handleClose: () => void;
+  selectedItem: AttendanceLeave.LeaveEntriesList | null,
+  setSelectedItem: any
 }
 
 const LeaveEntriesEditComponent: React.FC<LeaveEntriesEditProps> = ({
   open,
-  handleClose
+  handleClose,
+  selectedItem,
+  setSelectedItem
 }) => {
+  const dispatch = useAppDispatch();
+
+  const handleClear = () => {
+    setSelectedItem(null);
+    handleClose();
+  };
+
+  const formik = useFormik({
+    initialValues: {
+      leaveType: '',
+      leaveStatus: '',
+      leaveFrom: null,
+      leaveTo: null,
+      note: ''
+    },
+    validationSchema: validationSchemeUpdateLeaveEntries,
+    onSubmit: (values) => {
+      const result = {
+        start: dayjs(values.leaveFrom).toISOString(),
+        end: dayjs(values.leaveTo).toISOString(),
+        note: values.note,
+        leaveType: values.leaveType,
+        leaveStatus: values.leaveStatus
+      };
+      dispatch({
+        type: putLeaveEntriesRequested.toString(),
+        payload: {
+          id: selectedItem?.id,
+          data: result
+        }
+      });
+      handleClear();
+    }
+  });
+
+  useEffect(() => {
+    if (!open) formik.resetForm();
+    formik.setFieldValue('leaveType', String(selectedItem?.leaveType));
+    formik.setFieldValue('leaveStatus', String(selectedItem?.leaveStatus));
+    formik.setFieldValue('leaveFrom', dayjs(selectedItem?.start));
+    formik.setFieldValue('leaveTo', selectedItem?.end);
+  }, [open, selectedItem]);
+
   return (
     <Modal
       open={open}
@@ -49,16 +102,16 @@ const LeaveEntriesEditComponent: React.FC<LeaveEntriesEditProps> = ({
       <Box sx={modalStyle}>
         <ModalHeader>
           <Text title='Edit Leave Entry' fontWeight={600} fontSize='18px' />
-          <IconButton onClick={handleClose}>
+          <IconButton onClick={handleClear}>
             <Close />
           </IconButton>
         </ModalHeader>
-        <form>
+        <form onSubmit={formik.handleSubmit}>
           <Box sx={{ padding: '16px 0px' }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: '10px', borderBottom: '1px solid #E5E7EB', paddingBottom: '15px' }}>
               <div>
                 <Avatar
-                  src={Image.EXAMPLE_EMPLOYE}
+                  src={selectedItem?.employee?.picture}
                   alt='employee'
                   sx={{
                     width: 72, height: 72
@@ -66,8 +119,8 @@ const LeaveEntriesEditComponent: React.FC<LeaveEntriesEditProps> = ({
                 />
               </div>
               <div>
-                <Text title='Asep Kusnandar' fontWeight={700} fontSize='18px' />
-                <Text title='Manajer' fontWeight={400} fontSize='14px' />
+                <Text title={selectedItem?.employee?.name} fontWeight={700} fontSize='18px' />
+                <Text title={selectedItem?.employee?.department} fontWeight={400} fontSize='14px' />
               </div>
             </Box>
             <Box sx={{ marginTop: '24px' }}>
@@ -75,23 +128,49 @@ const LeaveEntriesEditComponent: React.FC<LeaveEntriesEditProps> = ({
                 <Grid item sm={5.8}>
                   <Select
                     customLabel='Leave Type'
-                    options={[
-                      { value: '0', label: 'Sick Leave' }
-                    ]}
+                    options={LeaveTypeItems}
                     variant='outlined'
                     size='small'
                     fullWidth
+                    name='leaveType'
+                    displayEmpty
+                    value={formik.values.leaveType}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    renderValue={(value: unknown) => {
+                      if ((value as string)?.length === 0) {
+                        return <Text title='Select Leave Type' color='grey.400' />;
+                      }
+                      const selected = LeaveTypeItems.find(item => item.value === value);
+                      if (selected) {
+                        return `${selected.label}`;
+                      }
+                      return null;
+                    }}
                   />
                 </Grid>
                 <Grid item sm={5.8}>
                   <Select
                     customLabel='Status'
-                    options={[
-                      { value: '0', label: 'Paid' }
-                    ]}
+                    options={LeaveTypeStatus}
                     variant='outlined'
                     size='small'
                     fullWidth
+                    name='leaveStatus'
+                    displayEmpty
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.leaveStatus}
+                    renderValue={(value: unknown) => {
+                      if ((value as string)?.length === 0) {
+                        return <Text title='Select Leave Status' color='grey.400' />;
+                      }
+                      const selected = LeaveTypeStatus.find(item => item.value === value);
+                      if (selected) {
+                        return `${selected.label}`;
+                      }
+                      return null;
+                    }}
                   />
                 </Grid>
               </Grid>
@@ -108,6 +187,8 @@ const LeaveEntriesEditComponent: React.FC<LeaveEntriesEditProps> = ({
                         },
                         width: '100%'
                       }}
+                      value={formik.values.leaveFrom}
+                      onChange={(val) => formik.setFieldValue('leaveFrom', val, false)}
                     />
                   </LocalizationProvider>
                 </Grid>
@@ -123,6 +204,8 @@ const LeaveEntriesEditComponent: React.FC<LeaveEntriesEditProps> = ({
                         },
                         width: '100%'
                       }}
+                      value={formik.values.leaveTo}
+                      onChange={(val) => formik.setFieldValue('leaveTo', val, false)}
                     />
                   </LocalizationProvider>
                 </Grid>
@@ -133,6 +216,10 @@ const LeaveEntriesEditComponent: React.FC<LeaveEntriesEditProps> = ({
                     placeholder='Add Notes'
                     customLabel='Note'
                     minRows={4}
+                    name='note'
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.note}
                   />
                 </Grid>
               </Grid>
@@ -141,7 +228,7 @@ const LeaveEntriesEditComponent: React.FC<LeaveEntriesEditProps> = ({
           <Box sx={{ padding: '16px 0px' }}>
             <Grid container direction='row' justifyContent='flex-end' alignItems='center' gap={2}>
               <Grid item>
-                <Button label='Cancel' variant='outlined' onClick={handleClose} />
+                <Button label='Cancel' variant='outlined' onClick={handleClear} />
               </Grid>
               <Grid item>
                 <Button label='Save' type='submit' />
