@@ -46,8 +46,7 @@ const headerItems = [
   { id: 'name', label: 'Employee Name' },
   { id: 'clockIn', label: 'Clock In' },
   { id: 'clockOut', label: 'Clock Out' },
-  { id: 'occurance', label: 'Occurance' },
-  { id: 'utc', label: 'UTC' },
+  { id: 'count', label: 'Count' },
   { id: 'action', label: '' },
 ];
 
@@ -210,7 +209,6 @@ const AttendanceEntriesTable: React.FC<AttendanceEntriesTable> = ({ reload }) =>
                       </TableCell>
                       <TableCell>{dayjs(item.clockIn).format('HH:mm')}</TableCell>
                       <TableCell>{dayjs(item.clockOut).format('HH:mm')}</TableCell>
-                      <TableCell>-</TableCell>
                       <TableCell>-</TableCell>
                       <TableCell>
                         <ButtonWrapper>
