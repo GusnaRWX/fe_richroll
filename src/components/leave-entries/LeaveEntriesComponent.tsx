@@ -5,12 +5,12 @@ import { Button } from '../_shared/form';
 import { useAppDispatch } from '@/hooks/index';
 import AddIcon from '@mui/icons-material/Add';
 import LeaveEntriesTableComponent from './LeaveEntriesTableComponent';
-import LeaveEntriesCreateComponent from './LeaveEntriesCreateComponent';
+// import LeaveEntriesCreateComponent from './LeaveEntriesCreateComponent';
 import LeaveEntriesListComponent from './LeaveEntriesListComponent';
 
 const LeaveEntriesComponent = () => {
   const dispatch = useAppDispatch();
-  const [openCreate, setOpenCreate] = useState(false);
+  // const [openCreate, setOpenCreate] = useState(false);
   const [openAddEmployee, setOpenAddEmployee] = useState(false);
 
   return (
@@ -25,13 +25,13 @@ const LeaveEntriesComponent = () => {
             label='Create Leave Entry'
             startIcon={<AddIcon />}
             onClick={() => {
-              setOpenCreate(true);
+              setOpenAddEmployee(true);
             }}
           />
         </Grid>
       </Grid>
-      <LeaveEntriesTableComponent />
-      <LeaveEntriesCreateComponent
+      <LeaveEntriesTableComponent dispatch={dispatch} />
+      {/* <LeaveEntriesCreateComponent
         open={openCreate}
         onClose={() => {
           setOpenCreate(false);
@@ -39,7 +39,7 @@ const LeaveEntriesComponent = () => {
         onOpenAddEmployee={() => {
           setOpenAddEmployee(true);
         }}
-      />
+      /> */}
       <LeaveEntriesListComponent
         open={openAddEmployee}
         onClose={() => {

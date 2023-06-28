@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card } from '../_shared/common';
 import { Grid, TableCell, TableRow, Avatar, TableSortLabel, Box } from '@mui/material';
 import { IconButton, Input } from '../_shared/form';
@@ -13,7 +13,10 @@ import LeaveEntriesEditComponent from './LeaveEntriesEditComponent';
 import EmptyState from '../_shared/common/EmptyState';
 
 import styled from '@emotion/styled';
-import { compareCheck, ifThenElse } from '@/utils/helper';
+import { compareCheck, getCompanyData, ifThenElse } from '@/utils/helper';
+import store from '@/store/index';
+import { getLeaveEntriesRequested } from '@/store/reducers/slice/attendance-leave/leaveEntriesSlice';
+import { useAppSelectors } from '@/hooks/index';
 
 const NameWrapper = styled.div`
    display: flex;
@@ -33,7 +36,13 @@ const ButtonWrapper = styled.div`
 
 type Order = 'asc' | 'desc'
 
-const LeaveEntriesTableComponent = () => {
+interface LeaveEntriesTableProps {
+  dispatch: typeof store.dispatch
+}
+
+const LeaveEntriesTableComponent = ({
+  dispatch
+}: LeaveEntriesTableProps) => {
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(1);
@@ -43,6 +52,8 @@ const LeaveEntriesTableComponent = () => {
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   const [selectedItem, setSelectedItem] = useState('');
   const [editConfirmation, setEditConfirmation] = useState(false);
+  const companyData = getCompanyData();
+  const leaveEntries = useAppSelectors(state => state.leaveEntries);
 
   const handleRequestSort = (event: React.MouseEvent<unknown>, headId: string) => {
     const isAsc = compareCheck(sort === headId, direction === 'asc');
@@ -93,6 +104,24 @@ const LeaveEntriesTableComponent = () => {
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(event);
   };
+
+  const loadDataLeaveEntries = () => {
+    dispatch({
+      type: getLeaveEntriesRequested.toString(),
+      payload: {
+        page: page,
+        itemPerPage: rowsPerPage,
+        sort: sort,
+        direction: direction.toUpperCase(),
+        search: '',
+        companyID: companyData?.id
+      }
+    });
+  };
+
+  useEffect(() => {
+    loadDataLeaveEntries();
+  }, [rowsPerPage, page, sort, direction]);
 
   return (
     <Card sx={{ marginTop: '16px' }}>
@@ -151,7 +180,7 @@ const LeaveEntriesTableComponent = () => {
                     </TableCell>
                   </TableRow>
                 ), (
-                  data?.map(value => (
+                  leaveEntries?.leaveEntriesData?.items?.map(value => (
                     <TableRow key={value.date}>
                       <TableCell>{value.date}</TableCell>
                       <TableCell>{value.employeeID}</TableCell>
