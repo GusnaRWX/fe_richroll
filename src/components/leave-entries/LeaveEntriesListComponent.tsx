@@ -13,7 +13,10 @@ import EmptyState from '../_shared/common/EmptyState';
 interface LeaveEntriesListComponentProps {
   open: boolean;
   onClose: () => void;
-  dispatch: typeof store.dispatch
+  dispatch: typeof store.dispatch,
+  setSelectedEmployee: any,
+  selectedEmployee: any,
+  setOpenCreateModal: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const NameWrapper = styled.div`
@@ -29,7 +32,10 @@ type Order = 'asc' | 'desc'
 const LeaveEntriesListComponent: React.FC<LeaveEntriesListComponentProps> = ({
   open,
   onClose,
-  dispatch
+  dispatch,
+  setSelectedEmployee,
+  selectedEmployee,
+  setOpenCreateModal
 }) => {
   const data = useAppSelectors(state => state.employee.data);
   const [page, setPage] = useState(1);
@@ -40,7 +46,6 @@ const LeaveEntriesListComponent: React.FC<LeaveEntriesListComponentProps> = ({
   const [hydrated, setHydrated] = useState(false);
 
   const headerItemsEmployees = [
-    { id: '', label: '' },
     { id: 'user.name', label: 'Employee Name' },
     { id: 'position', label: 'Position' },
     { id: 'department', label: 'Department' }
@@ -58,6 +63,10 @@ const LeaveEntriesListComponent: React.FC<LeaveEntriesListComponentProps> = ({
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(event);
+  };
+
+  const handleSelectedRow = (item) => {
+    setSelectedEmployee(item);
   };
 
   const loadDataEmployee = () => {
@@ -95,7 +104,10 @@ const LeaveEntriesListComponent: React.FC<LeaveEntriesListComponentProps> = ({
       width='800px'
       keepMounted={false}
       submitText='Select Employee'
-      handleConfirm={() => { console.log('goodby'); }}
+      handleConfirm={() => {
+        setOpenCreateModal(true);
+        onClose();
+      }}
     >
       <Grid container>
         <Grid item xs={12}>
@@ -145,7 +157,13 @@ const LeaveEntriesListComponent: React.FC<LeaveEntriesListComponentProps> = ({
                       </TableRow>
                     ), (
                       data?.items?.map((item, index) => (
-                        <TableRow key={index}>
+                        <TableRow
+                          key={index}
+                          onClick={() => { handleSelectedRow(item); }}
+                          sx={{
+                            border: selectedEmployee.id === item.id ? '2px solid #4F46E5' : ''
+                          }}
+                        >
                           <TableCell>
                             <NameWrapper>
                               <Avatar

@@ -38,3 +38,18 @@ export const relationshipItems: Array<Option.Mapper> = [
   { label: 'Spouse', value: '3' },
   { label: 'Others', value: '0' }
 ];
+
+export const LeaveTypeItems: Array<Option.Mapper> = [
+  // {value: '0', label: 'Leave'}
+  { value: '1', label: 'Annual Leave' },
+  { value: '2', label: 'Child Care Leavee' },
+  { value: '3', label: 'Maternity Leave' },
+  { value: '4', label: 'Paternity Leave' },
+  { value: '5', label: 'Shared Parental Leave' },
+  { value: '6', label: 'Sick leave' },
+];
+
+export const LeaveTypeStatus: Array<Option.Mapper> = [
+  { value: '1', label: 'Paid' },
+  { value: '2', label: 'Unpaid' }
+];

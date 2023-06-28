@@ -5,13 +5,14 @@ import { Button } from '../_shared/form';
 import { useAppDispatch } from '@/hooks/index';
 import AddIcon from '@mui/icons-material/Add';
 import LeaveEntriesTableComponent from './LeaveEntriesTableComponent';
-// import LeaveEntriesCreateComponent from './LeaveEntriesCreateComponent';
 import LeaveEntriesListComponent from './LeaveEntriesListComponent';
+import LeaveEntriesEmployeeCreateComponent from './LeaveEntriesEmployeeCreateComponent';
 
 const LeaveEntriesComponent = () => {
   const dispatch = useAppDispatch();
-  // const [openCreate, setOpenCreate] = useState(false);
-  const [openAddEmployee, setOpenAddEmployee] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [openCreateModal, setOpenCreateModal] = useState(false);
+  const [selectedEmployee, setSelectedEmployee] = useState({});
 
   return (
     <>
@@ -25,27 +26,27 @@ const LeaveEntriesComponent = () => {
             label='Create Leave Entry'
             startIcon={<AddIcon />}
             onClick={() => {
-              setOpenAddEmployee(true);
+              setOpen(true);
             }}
           />
         </Grid>
       </Grid>
       <LeaveEntriesTableComponent dispatch={dispatch} />
-      {/* <LeaveEntriesCreateComponent
-        open={openCreate}
-        onClose={() => {
-          setOpenCreate(false);
-        }}
-        onOpenAddEmployee={() => {
-          setOpenAddEmployee(true);
-        }}
-      /> */}
       <LeaveEntriesListComponent
-        open={openAddEmployee}
+        open={open}
         onClose={() => {
-          setOpenAddEmployee(false);
+          setOpen(false);
         }}
         dispatch={dispatch}
+        setSelectedEmployee={setSelectedEmployee}
+        selectedEmployee={selectedEmployee}
+        setOpenCreateModal={setOpenCreateModal}
+      />
+      <LeaveEntriesEmployeeCreateComponent
+        dispatch={dispatch}
+        selectedEmployee={selectedEmployee}
+        openCreateModal={openCreateModal}
+        setOpenCreateModal={setOpenCreateModal}
       />
     </>
   );

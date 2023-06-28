@@ -24,6 +24,24 @@ export const leaveEntriesSlice = createSlice({
     },
     getLeaveEntriesFailed: state => {
       state.loading = false;
+    },
+    postLeaveEntriesRequested: state => {
+      state.loading = true;
+    },
+    postLeaveEntriesSuccess: state => {
+      state.loading = false;
+    },
+    postLeaveEntriesFailed: state => {
+      state.loading = false;
+    },
+    deleteLeaveEntriesRequested: state => {
+      state.loading = true;
+    },
+    deleteLeaveEntriesSuccess: state => {
+      state.loading = false;
+    },
+    deleteLeaveEntriesFailed: state => {
+      state.loading = false;
     }
   },
   extraReducers: {
@@ -36,6 +54,16 @@ export const leaveEntriesSlice = createSlice({
   }
 });
 
-export const { getLeaveEntriesRequested, getLeaveEntriesSuccess, getLeaveEntriesFailed } = leaveEntriesSlice.actions;
+export const {
+  getLeaveEntriesRequested,
+  getLeaveEntriesSuccess,
+  getLeaveEntriesFailed,
+  postLeaveEntriesRequested,
+  postLeaveEntriesSuccess,
+  postLeaveEntriesFailed,
+  deleteLeaveEntriesRequested,
+  deleteLeaveEntriesSuccess,
+  deleteLeaveEntriesFailed
+} = leaveEntriesSlice.actions;
 
 export default leaveEntriesSlice.reducer;

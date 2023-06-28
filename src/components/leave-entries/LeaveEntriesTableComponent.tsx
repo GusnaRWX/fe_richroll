@@ -1,22 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { Card } from '../_shared/common';
-import { Grid, TableCell, TableRow, Avatar, TableSortLabel, Box } from '@mui/material';
+import { Grid, TableCell, TableRow, Avatar, TableSortLabel, Box, Chip } from '@mui/material';
 import { IconButton, Input } from '../_shared/form';
 import { Search } from '@mui/icons-material';
 import Table from '../_shared/form/Table';
-import { Image } from '@/utils/assetsConstant';
 import { HiPencilAlt } from 'react-icons/hi';
 import { BsTrashFill } from 'react-icons/bs';
 import { visuallyHidden } from '@mui/utils';
 import { ConfirmationModal } from '@/components/_shared/common';
 import LeaveEntriesEditComponent from './LeaveEntriesEditComponent';
 import EmptyState from '../_shared/common/EmptyState';
-
+import dayjs from 'dayjs';
+import { LeaveTypeItems, LeaveTypeStatus } from '@/utils/options';
 import styled from '@emotion/styled';
 import { compareCheck, getCompanyData, ifThenElse } from '@/utils/helper';
 import store from '@/store/index';
-import { getLeaveEntriesRequested } from '@/store/reducers/slice/attendance-leave/leaveEntriesSlice';
+import { getLeaveEntriesRequested, deleteLeaveEntriesRequested } from '@/store/reducers/slice/attendance-leave/leaveEntriesSlice';
 import { useAppSelectors } from '@/hooks/index';
+import { AttendanceLeave } from '@/types/attendanceLeave';
 
 const NameWrapper = styled.div`
    display: flex;
@@ -49,8 +50,7 @@ const LeaveEntriesTableComponent = ({
   const [sort, setSort] = useState('');
   const [direction, setDirection] = useState<Order>('desc');
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
-  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-  const [selectedItem, setSelectedItem] = useState('');
+  const [selectedItem, setSelectedItem] = useState<AttendanceLeave.LeaveEntriesList | null>(null);
   const [editConfirmation, setEditConfirmation] = useState(false);
   const companyData = getCompanyData();
   const leaveEntries = useAppSelectors(state => state.leaveEntries);
@@ -61,32 +61,6 @@ const LeaveEntriesTableComponent = ({
     setSort(headId);
   };
 
-  const handleDelete = () => {
-    setDeleteConfirmation(false);
-  };
-
-
-  const data = [
-    {
-      date: '27/11/2022',
-      employeeID: 'MIG1231123123',
-      employeeName: 'Asep Subaru',
-      leaveFrom: '09:00',
-      leaveTo: '11:00',
-      leaveType: 'Sick Leave',
-      status: 'Paid'
-    },
-    {
-      date: '27/11/2022',
-      employeeID: 'MIG1231123123',
-      employeeName: 'Asep Subaru',
-      leaveFrom: '09:00',
-      leaveTo: '11:00',
-      leaveType: 'Sick Leave',
-      status: 'Paid'
-    }
-  ];
-
   const headers = [
     { id: 'date', label: 'Date' },
     { id: 'emp.id', label: 'Employee ID' },
@@ -95,6 +69,7 @@ const LeaveEntriesTableComponent = ({
     { id: 'leave.to', label: 'Leave To' },
     { id: 'leave.type', label: 'Leave Type' },
     { id: 'status', label: 'Status' },
+    { id: 'action', label: '' }
   ];
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -119,9 +94,36 @@ const LeaveEntriesTableComponent = ({
     });
   };
 
+  const handleDelete = () => {
+    setDeleteConfirmation(false);
+    dispatch({
+      type: deleteLeaveEntriesRequested.toString(),
+      payload: selectedItem?.id
+    });
+    loadDataLeaveEntries();
+  };
+
   useEffect(() => {
     loadDataLeaveEntries();
   }, [rowsPerPage, page, sort, direction]);
+
+  const renderLeaveType = (type: number) => {
+    return LeaveTypeItems.find(item => +item.value === type)?.label;
+  };
+
+  const renderLeaveStatus = (type: number) => {
+    const statusType = LeaveTypeStatus.find(item => +item.value === type);
+    if (statusType) {
+      switch (+statusType?.value) {
+        case 1:
+          return <Chip label={statusType?.label} sx={{ color: '#166534', backgroundColor: '#DCFCE7' }} />;
+        case 2:
+          return <Chip label={statusType?.label} sx={{ color: '#991B1B', backgroundColor: '#FEE2E2' }} />;
+        default:
+          return null;
+      }
+    }
+  };
 
   return (
     <Card sx={{ marginTop: '16px' }}>
@@ -141,7 +143,7 @@ const LeaveEntriesTableComponent = ({
         </Grid>
       </Grid>
       <Table
-        count={data?.length}
+        count={leaveEntries?.leaveEntriesData?.items?.length}
         rowsPerPageOptions={[5, 10, 15]}
         rowsPerPage={rowsPerPage}
         page={page}
@@ -165,6 +167,7 @@ const LeaveEntriesTableComponent = ({
                     ) : null}
                   </TableSortLabel>
                 </TableCell>
+
               ))
             }
           </TableRow>
@@ -172,8 +175,8 @@ const LeaveEntriesTableComponent = ({
         bodyChildren={
           <>
             {
-              ifThenElse(typeof data !== 'undefined', (
-                ifThenElse(data.length === 0, (
+              ifThenElse(typeof leaveEntries?.leaveEntriesData?.items !== 'undefined', (
+                ifThenElse(leaveEntries?.leaveEntriesData?.items?.length === 0, (
                   <TableRow>
                     <TableCell colSpan={12} align='center'>
                       <EmptyState />
@@ -182,23 +185,23 @@ const LeaveEntriesTableComponent = ({
                 ), (
                   leaveEntries?.leaveEntriesData?.items?.map(value => (
                     <TableRow key={value.date}>
-                      <TableCell>{value.date}</TableCell>
-                      <TableCell>{value.employeeID}</TableCell>
+                      <TableCell>{dayjs(value.date).format('DD/MM/YY')}</TableCell>
+                      <TableCell>{value.employee?.employeeID}</TableCell>
                       <TableCell>
                         <NameWrapper>
                           <Avatar
-                            src={Image.EXAMPLE_EMPLOYE}
+                            src={value?.employee?.picture}
                             sx={{
                               width: 24, height: 24
                             }}
                           />
-                          &nbsp;{value.employeeName}
+                          &nbsp;{value.employee?.name}
                         </NameWrapper>
                       </TableCell>
-                      <TableCell>{value.leaveFrom}</TableCell>
-                      <TableCell>{value.leaveTo}</TableCell>
-                      <TableCell>{value.leaveType}</TableCell>
-                      <TableCell>{value.status}</TableCell>
+                      <TableCell>{dayjs(value.start).format('DD/MM/YY')}</TableCell>
+                      <TableCell>{dayjs(value.to).format('DD/MM/YY')}</TableCell>
+                      <TableCell>{renderLeaveType(value?.leaveType)}</TableCell>
+                      <TableCell>{renderLeaveStatus(value?.leaveStatus)}</TableCell>
                       <TableCell>
                         <ButtonWrapper>
                           <IconButton
@@ -214,7 +217,7 @@ const LeaveEntriesTableComponent = ({
                           <IconButton
                             parentColor='red.50'
                             onClick={() => {
-                              setSelectedItem(value.date);
+                              setSelectedItem(value);
                               setDeleteConfirmation(true);
                             }}
                             icons={
