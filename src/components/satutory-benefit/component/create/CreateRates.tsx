@@ -174,196 +174,145 @@ export default function CreateRates() {
                 </>
               )}
 
-              <Grid container spacing={2}>
-                <Grid item xs={12} md={12} lg={7} xl={7}>
-                  <Box
-                    display='flex'
-                    flexDirection='row'
-                    alignItems='flex-end'
-                    gap='10px'
-                    width='100%'
-                  >
-                    <Box
-                      display='flex'
-                      flexDirection='row'
-                      alignItems='flex-end'
-                      gap='10px'
-                      sx={{
-                        width: {
-                          xs: '50%',
-                        },
-                      }}
-                    >
-                      <IconButton
-                        icons={
-                          <RemoveIcon
-                            sx={{
-                              color: '#B91C1C',
-                              bgcolor: '#FEE2E2',
-                              borderRadius: '5px',
-                              width: '32px',
-                              height: '32px',
-                              padding: '8px',
-                            }}
-                          />
-                        }
-                        onClick={() =>
-                          formik.setFieldValue(
-                            'employeeData.start',
-                            formik.values.employeeData.start - 1
-                          )
-                        }
+              <Box component='div' sx={{width: '100%', display: 'flex', gap: '15px'}}>
+                <Box component='div' sx={{width: '75%', display: 'flex', alignItems: 'flex-end', gap: '5px'}}>
+                  <IconButton
+                    icons={
+                      <RemoveIcon
+                        sx={{
+                          color: '#B91C1C',
+                          bgcolor: '#FEE2E2',
+                          borderRadius: '5px',
+                          width: '32px',
+                          height: '32px',
+                          padding: '8px',
+                        }}
                       />
-
-                      <Box width='100%'>
-                        <Input
-                          withAsterisk
-                          customLabel='Start'
-                          size='small'
-                          fullWidth
-                          value={formik.values.employeeData.start}
-                          onChange={(e) =>
-                            formik.setFieldValue(
-                              'employeeData.start',
-                              e.target.value
-                            )
-                          }
-                        />
-                      </Box>
-                    </Box>
-
-                    <Text title='-' color='#223567' fontWeight='700' mb='8px' />
-
-                    <Box
-                      display='flex'
-                      flexDirection='row'
-                      alignItems='flex-end'
-                      gap='10px'
-                      sx={{
-                        width: {
-                          xs: '50%',
-                        },
-                      }}
-                    >
-                      <Box width='100%'>
-                        <Input
-                          withAsterisk
-                          customLabel='End'
-                          size='small'
-                          value={formik.values.employeeData.end}
-                          onChange={(e) =>
-                            formik.setFieldValue('employeeData.end', e.target.value)
-                          }
-                        />
-                      </Box>
-                      <IconButton
-                        icons={
-                          <AddIcon
-                            sx={{
-                              color: 'white',
-                              bgcolor: '#8DD0B8',
-                              borderRadius: '5px',
-                              width: '32px',
-                              height: '32px',
-                              padding: '8px',
-                            }}
-                          />
-                        }
-                        onClick={() =>
-                          formik.setFieldValue(
-                            'employeeData.end',
-                            formik.values.employeeData.end + 1
-                          )
-                        }
-                      />
-                    </Box>
+                    }
+                    onClick={() =>
+                      formik.setFieldValue(
+                        'employeeData.start',
+                        formik.values.employeeData.start - 1
+                      )
+                    }
+                  />
+                  <Box component='div'  sx={{width: '100%'}}>
+                    <Input
+                      withAsterisk
+                      customLabel='Start'
+                      size='small'
+                      value={formik.values.employeeData.start}
+                      onChange={(e) =>
+                        formik.setFieldValue(
+                          'employeeData.start',
+                          e.target.value
+                        )
+                      }
+                    />
                   </Box>
-                </Grid>
 
-                <Grid item xs={12} md={12} lg={5} xl={5}>
-                  <Box
-                    display='flex'
-                    flexDirection='row'
-                    alignItems='flex-end'
-                    gap='10px'
-                    sx={{
-                      width: {
-                        xs: '100%',
-                      },
-                    }}
-                  >
-                    <Box width='33%'>
-                      <Select
-                        displayEmpty
-                        value={formik.values.employeeData.rate}
-                        onChange={(e) =>
-                          formik.setFieldValue('employeeData.rate', e.target.value)
-                        }
-                        size='small'
-                        customLabel='Rate'
-                        withAsterisk
-                        endAdornment={
-                          <InputAdornment position='end' sx={{ mr: '20px' }}>
+                  <Text title='-' color='#223567' fontWeight='700' mb='8px' />
+
+                  <Box component='div' sx={{width: '100%'}}>
+                    <Input
+                      withAsterisk
+                      customLabel='End'
+                      size='small'
+                      value={formik.values.employeeData.end}
+                      onChange={(e) =>
+                        formik.setFieldValue('employeeData.end', e.target.value)
+                      }
+                    />
+                  </Box>
+                  <IconButton
+                    icons={
+                      <AddIcon
+                        sx={{
+                          color: 'white',
+                          bgcolor: '#8DD0B8',
+                          borderRadius: '5px',
+                          width: '32px',
+                          height: '32px',
+                          padding: '8px',
+                        }}
+                      />
+                    }
+                    onClick={() =>
+                      formik.setFieldValue(
+                        'employeeData.end',
+                        formik.values.employeeData.end + 1
+                      )
+                    }
+                  />
+                </Box>
+
+                <Box component='div' sx={{width: '25%', display: 'flex', alignItems: 'flex-end'}}>
+                  <Box component='div' sx={{width: '100px'}}>
+                    <Select
+                      displayEmpty
+                      value={formik.values.employeeData.rate}
+                      onChange={(e) =>
+                        formik.setFieldValue('employeeData.rate', e.target.value)
+                      }
+                      size='small'
+                      customLabel='Rate'
+                      withAsterisk
+                      endAdornment={
+                        <InputAdornment position='end' sx={{ mr: '20px' }}>
                         %
-                          </InputAdornment>
-                        }
-                        options={rates}
-                      />
-                    </Box>
+                        </InputAdornment>
+                      }
+                      options={rates}
+                    />
+                  </Box>
+                </Box>
+              </Box>
 
-                    <Box width='66%'>
-                      <Input
-                        withAsterisk
-                        placeholder='Rp 0'
-                        customLabel='Additional Fixed Amount'
-                        size='small'
-                        value={formik.values.employeeData.fixed}
-                        onChange={(e) =>
-                          formik.setFieldValue('employeeData.fixed', e.target.value)
-                        }
-                        InputProps={{
-                          endAdornment: (
-                            <InputAdornment position='end'>IDR</InputAdornment>
-                          ),
-                        }}
-                      />
-                    </Box>
+              <Grid container spacing={2}>
+                <Grid item xs={6}>
+                  <Box component='div' sx={{width: '100%'}}>
+                    <Input
+                      withAsterisk
+                      customLabel='Additional Fixed Amount'
+                      placeholder='Rp 0'
+                      size='small'
+                      value={formik.values.employeeData.fixed}
+                      onChange={(e) =>
+                        formik.setFieldValue('employeeData.fixed', e.target.value)
+                      }
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position='end'>IDR</InputAdornment>
+                        ),
+                      }}
+                    />
                   </Box>
                 </Grid>
-              </Grid>
 
-              <Grid container>
-                <Grid item xs={12}>
-                  <Box
-                    width='100%'
-                    display='flex'
-                    flexDirection='row-reverse'
-                    alignItems='flex-end'
-                  >
-                    <Box component='div' sx={{width: {xs: '100%', lg: '40.5%'}}}>
-                      <Input
-                        customLabel='Amount Cap'
-                        placeholder='Rp 0'
-                        size='small'
-                        value={
-                          formik.values.employerMatch
-                            ? formik.values.employeeData.amountCap
-                            : formik.values.employerData.amountCap
-                        }
-                        disabled={formik.values.employerMatch}
-                        onChange={(e) =>
-                          formik.setFieldValue(
-                            'employerData.amountCap',
-                            e.target.value
-                          )
-                        }
-                        InputProps={{
-                          endAdornment: (
-                            <InputAdornment position='end'>IDR</InputAdornment>
-                          ),
-                        }}
-                      />
-                    </Box>
+                <Grid item xs={6}>
+                  <Box component='div'>
+                    <Input
+                      customLabel='Amount Cap'
+                      placeholder='Rp 0'
+                      size='small'
+                      value={
+                        formik.values.employerMatch
+                          ? formik.values.employeeData.amountCap
+                          : formik.values.employerData.amountCap
+                      }
+                      disabled={formik.values.employerMatch}
+                      onChange={(e) =>
+                        formik.setFieldValue(
+                          'employerData.amountCap',
+                          e.target.value
+                        )
+                      }
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position='end'>IDR</InputAdornment>
+                        ),
+                      }}
+                    />
                   </Box>
                 </Grid>
               </Grid>
@@ -392,196 +341,145 @@ export default function CreateRates() {
                 </>
               )}
 
-              <Grid container spacing={2}>
-                <Grid item xs={12} md={12} lg={7} xl={7}>
-                  <Box
-                    display='flex'
-                    flexDirection='row'
-                    alignItems='flex-end'
-                    gap='10px'
-                    width='100%'
-                  >
-                    <Box
-                      display='flex'
-                      flexDirection='row'
-                      alignItems='flex-end'
-                      gap='10px'
-                      sx={{
-                        width: {
-                          xs: '50%',
-                        },
-                      }}
-                    >
-                      <IconButton
-                        icons={
-                          <RemoveIcon
-                            sx={{
-                              color: '#B91C1C',
-                              bgcolor: '#FEE2E2',
-                              borderRadius: '5px',
-                              width: '32px',
-                              height: '32px',
-                              padding: '8px',
-                            }}
-                          />
-                        }
-                        onClick={() =>
-                          formik.setFieldValue(
-                            'employeeData.start',
-                            formik.values.employeeData.start - 1
-                          )
-                        }
+              <Box component='div' sx={{width: '100%', display: 'flex', gap: '15px'}}>
+                <Box component='div' sx={{width: '75%', display: 'flex', alignItems: 'flex-end', gap: '5px'}}>
+                  <IconButton
+                    icons={
+                      <RemoveIcon
+                        sx={{
+                          color: '#B91C1C',
+                          bgcolor: '#FEE2E2',
+                          borderRadius: '5px',
+                          width: '32px',
+                          height: '32px',
+                          padding: '8px',
+                        }}
                       />
-
-                      <Box width='100%'>
-                        <Input
-                          withAsterisk
-                          customLabel='Start'
-                          size='small'
-                          fullWidth
-                          value={formik.values.employeeData.start}
-                          onChange={(e) =>
-                            formik.setFieldValue(
-                              'employeeData.start',
-                              e.target.value
-                            )
-                          }
-                        />
-                      </Box>
-                    </Box>
-
-                    <Text title='-' color='#223567' fontWeight='700' mb='8px' />
-
-                    <Box
-                      display='flex'
-                      flexDirection='row'
-                      alignItems='flex-end'
-                      gap='10px'
-                      sx={{
-                        width: {
-                          xs: '50%',
-                        },
-                      }}
-                    >
-                      <Box width='100%'>
-                        <Input
-                          withAsterisk
-                          customLabel='End'
-                          size='small'
-                          value={formik.values.employeeData.end}
-                          onChange={(e) =>
-                            formik.setFieldValue('employeeData.end', e.target.value)
-                          }
-                        />
-                      </Box>
-                      <IconButton
-                        icons={
-                          <AddIcon
-                            sx={{
-                              color: 'white',
-                              bgcolor: '#8DD0B8',
-                              borderRadius: '5px',
-                              width: '32px',
-                              height: '32px',
-                              padding: '8px',
-                            }}
-                          />
-                        }
-                        onClick={() =>
-                          formik.setFieldValue(
-                            'employeeData.end',
-                            formik.values.employeeData.end + 1
-                          )
-                        }
-                      />
-                    </Box>
+                    }
+                    onClick={() =>
+                      formik.setFieldValue(
+                        'employerData.start',
+                        formik.values.employerData.start - 1
+                      )
+                    }
+                  />
+                  <Box component='div'  sx={{width: '100%'}}>
+                    <Input
+                      withAsterisk
+                      customLabel='Start'
+                      size='small'
+                      value={formik.values.employerData.start}
+                      onChange={(e) =>
+                        formik.setFieldValue(
+                          'employerData.start',
+                          e.target.value
+                        )
+                      }
+                    />
                   </Box>
-                </Grid>
 
-                <Grid item xs={12} md={12} lg={5} xl={5}>
-                  <Box
-                    display='flex'
-                    flexDirection='row'
-                    alignItems='flex-end'
-                    gap='10px'
-                    sx={{
-                      width: {
-                        xs: '100%',
-                      },
-                    }}
-                  >
-                    <Box width='33%'>
-                      <Select
-                        displayEmpty
-                        value={formik.values.employerData.rate}
-                        onChange={(e) =>
-                          formik.setFieldValue('employerData.rate', e.target.value)
-                        }
-                        size='small'
-                        customLabel='Rate'
-                        withAsterisk
-                        endAdornment={
-                          <InputAdornment position='end' sx={{ mr: '20px' }}>
+                  <Text title='-' color='#223567' fontWeight='700' mb='8px' />
+
+                  <Box component='div' sx={{width: '100%'}}>
+                    <Input
+                      withAsterisk
+                      customLabel='End'
+                      size='small'
+                      value={formik.values.employerData.end}
+                      onChange={(e) =>
+                        formik.setFieldValue('employerData.end', e.target.value)
+                      }
+                    />
+                  </Box>
+                  <IconButton
+                    icons={
+                      <AddIcon
+                        sx={{
+                          color: 'white',
+                          bgcolor: '#8DD0B8',
+                          borderRadius: '5px',
+                          width: '32px',
+                          height: '32px',
+                          padding: '8px',
+                        }}
+                      />
+                    }
+                    onClick={() =>
+                      formik.setFieldValue(
+                        'employerData.end',
+                        formik.values.employerData.end + 1
+                      )
+                    }
+                  />
+                </Box>
+
+                <Box component='div' sx={{width: '25%', display: 'flex', alignItems: 'flex-end'}}>
+                  <Box component='div' sx={{width: '100px'}}>
+                    <Select
+                      displayEmpty
+                      value={formik.values.employerData.rate}
+                      onChange={(e) =>
+                        formik.setFieldValue('employerData.rate', e.target.value)
+                      }
+                      size='small'
+                      customLabel='Rate'
+                      withAsterisk
+                      endAdornment={
+                        <InputAdornment position='end' sx={{ mr: '20px' }}>
                         %
-                          </InputAdornment>
-                        }
-                        options={rates}
-                      />
-                    </Box>
+                        </InputAdornment>
+                      }
+                      options={rates}
+                    />
+                  </Box>
+                </Box>
+              </Box>
 
-                    <Box width='66%'>
-                      <Input
-                        withAsterisk
-                        placeholder='Rp 0'
-                        customLabel='Additional Fixed Amount'
-                        size='small'
-                        value={formik.values.employerData.fixed}
-                        onChange={(e) =>
-                          formik.setFieldValue('employerData.fixed', e.target.value)
-                        }
-                        InputProps={{
-                          endAdornment: (
-                            <InputAdornment position='end'>IDR</InputAdornment>
-                          ),
-                        }}
-                      />
-                    </Box>
+              <Grid container spacing={2}>
+                <Grid item xs={6}>
+                  <Box component='div' sx={{width: '100%'}}>
+                    <Input
+                      withAsterisk
+                      customLabel='Additional Fixed Amount'
+                      placeholder='Rp 0'
+                      size='small'
+                      value={formik.values.employerData.fixed}
+                      onChange={(e) =>
+                        formik.setFieldValue('employerData.fixed', e.target.value)
+                      }
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position='end'>IDR</InputAdornment>
+                        ),
+                      }}
+                    />
                   </Box>
                 </Grid>
-              </Grid>
 
-              <Grid container>
-                <Grid item xs={12}>
-                  <Box
-                    width='100%'
-                    display='flex'
-                    flexDirection='row-reverse'
-                    alignItems='flex-end'
-                  >
-                    <Box component='div' sx={{width: {xs: '100%', lg: '40.5%'}}}>
-                      <Input
-                        customLabel='Amount Cap'
-                        placeholder='Rp 0'
-                        size='small'
-                        value={
-                          formik.values.employerMatch
-                            ? formik.values.employeeData.amountCap
-                            : formik.values.employerData.amountCap
-                        }
-                        disabled={formik.values.employerMatch}
-                        onChange={(e) =>
-                          formik.setFieldValue(
-                            'employerData.amountCap',
-                            e.target.value
-                          )
-                        }
-                        InputProps={{
-                          endAdornment: (
-                            <InputAdornment position='end'>IDR</InputAdornment>
-                          ),
-                        }}
-                      />
-                    </Box>
+                <Grid item xs={6}>
+                  <Box component='div'>
+                    <Input
+                      customLabel='Amount Cap'
+                      placeholder='Rp 0'
+                      size='small'
+                      value={
+                        formik.values.employerMatch
+                          ? formik.values.employeeData.amountCap
+                          : formik.values.employerData.amountCap
+                      }
+                      disabled={formik.values.employerMatch}
+                      onChange={(e) =>
+                        formik.setFieldValue(
+                          'employerData.amountCap',
+                          e.target.value
+                        )
+                      }
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position='end'>IDR</InputAdornment>
+                        ),
+                      }}
+                    />
                   </Box>
                 </Grid>
               </Grid>
