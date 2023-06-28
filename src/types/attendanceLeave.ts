@@ -94,5 +94,10 @@ export declare namespace AttendanceLeave {
     start: string
   }
 
+  interface PutLeave {
+    id: string;
+    data: Omit<PostLeave, 'employeeID'>
+  }
+
 }
 

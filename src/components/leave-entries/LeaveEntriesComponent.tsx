@@ -47,6 +47,7 @@ const LeaveEntriesComponent = () => {
         selectedEmployee={selectedEmployee}
         openCreateModal={openCreateModal}
         setOpenCreateModal={setOpenCreateModal}
+        setOpenModal={setOpen}
       />
     </>
   );
