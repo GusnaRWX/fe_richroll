@@ -6,8 +6,10 @@ interface GlobalState {
   language: string
 }
 
+const storedLanguage = typeof window !== 'undefined' ? getStorage('lang') : null;
+
 const initialState: GlobalState = {
-  language: '' // default
+  language: storedLanguage ? storedLanguage as string : 'EN' // default
 };
 
 export const globalSlice = createSlice({
@@ -19,10 +21,6 @@ export const globalSlice = createSlice({
       setStorages([
         { name: 'lang', value: action.payload }
       ]);
-    },
-    getLanguage: (state) => {
-      const getLanguage = getStorage('lang');
-      state.language = getLanguage as string;
     }
   },
   extraReducers: {
@@ -35,6 +33,6 @@ export const globalSlice = createSlice({
   }
 });
 
-export const { setLanguage, getLanguage } = globalSlice.actions;
+export const { setLanguage } = globalSlice.actions;
 
 export default globalSlice.reducer;

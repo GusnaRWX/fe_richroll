@@ -5,12 +5,13 @@ import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { Box, Menu, Typography } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useTranslation } from 'react-i18next';
-import { getLanguage, setLanguage } from '@/store/reducers/slice/global/globalSlice';
+import { setLanguage } from '@/store/reducers/slice/global/globalSlice';
 
 const LocalizationMenu = () => {
   const { i18n } = useTranslation();
   const dispatch = useAppDispatch();
   const { global } = useAppSelectors(state => state);
+  console.log(global);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const isLanguageOpen = Boolean(anchorEl);
   const [hydrated, setHaydrated] = useState(false);
@@ -28,11 +29,7 @@ const LocalizationMenu = () => {
     setHaydrated(true);
   }, []);
 
-  useEffect(() => {
-    dispatch({
-      type: getLanguage.toString()
-    });
-  }, []);
+
 
   if (!hydrated) {
     return null;
