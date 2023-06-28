@@ -70,5 +70,29 @@ export declare namespace AttendanceLeave {
     multiplier: string
   }
 
+  interface PostLeave {
+    employeeID: string;
+    start: string;
+    end: string;
+    note: string;
+    leaveType: number;
+    leaveStatus: number;
+  }
+
+  interface LeaveEntriesList {
+    date: string;
+    employee: {
+      department: string;
+      employeeID: string;
+      name: string;
+      picture: string
+    },
+    end: string;
+    id: string;
+    leaveStatus: string;
+    leaveType: string;
+    start: string
+  }
+
 }
 
