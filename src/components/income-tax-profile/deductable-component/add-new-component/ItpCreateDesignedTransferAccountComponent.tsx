@@ -163,6 +163,9 @@ export default function ItpCreateDesignedTransferAccountComponent({ setValue }: 
             <MenuItem value='2'>2</MenuItem>
             <MenuItem value='3'>3</MenuItem>
           </Select>
+          {formik.touched.bank && formik.errors.bank ?(
+            <Typography sx={{color: '#DC2626'}}>{formik.errors.bank}</Typography>
+          ):null}
         </Box>
         <Box sx={{ width: { xs: '100%', md: '50%' } }}>
           <Typography
@@ -187,6 +190,9 @@ export default function ItpCreateDesignedTransferAccountComponent({ setValue }: 
             value={formik.values.holder}
             onChange={(e) => formik.setFieldValue('holder', e.target.value)}
           />
+          {formik.touched.holder && formik.errors.holder ?(
+            <Typography sx={{color: '#DC2626'}}>{formik.errors.holder}</Typography>
+          ):null}
         </Box>
       </Box>
 
@@ -213,6 +219,9 @@ export default function ItpCreateDesignedTransferAccountComponent({ setValue }: 
             value={formik.values.no}
             onChange={(e) => formik.setFieldValue('no', e.target.value)}
           />
+          {formik.touched.no && formik.errors.no ?(
+            <Typography sx={{color: '#DC2626'}}>{formik.errors.no}</Typography>
+          ):null}
         </Box>
 
         <Box
