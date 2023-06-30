@@ -94,11 +94,12 @@ const LeaveEntriesEmployeeCreateComponent = ({
         <Grid item>
           <AiOutlineSwapRight style={{ marginTop: '30px' }} />
         </Grid>
-        <Grid item md={5.5}>
+        <Grid item md={5.5} sx={{ marginBottom: formik.errors.leaveTo ? '-30px' : '' }}>
           <DatePicker
             customLabel='Leave To'
-            onChange={(date: unknown) => formik.setFieldValue('leaveTo', date, false)}
+            onChange={(date: unknown) => formik.setFieldValue('leaveTo', date, true)}
             value={formik.values.leaveTo as unknown as Date}
+            error={formik.errors.leaveTo}
           />
         </Grid>
       </Grid>
