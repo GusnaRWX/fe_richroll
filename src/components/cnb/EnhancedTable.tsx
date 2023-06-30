@@ -32,7 +32,7 @@ const ButtonWrapper = styled.div`
 `;
 
 const headerItems = [
-  { id: 'name', label: 'CnB Profile Name' },
+  { id: 'name', label: 'C&B Profile Name' },
   { id: 'base', label: 'Base Compensation' },
   { id: 'supplementaries', label: 'Supplementary Compensation' },
   { id: 'createdAt', label: 'Date Created' },
@@ -230,7 +230,7 @@ function EnhancedTable() {
             <DetailModal
               open={detailOpen.open}
               handleClose={() => setDetailOpen({ id: 0, open: false })}
-              title='CnB Profile Detail'
+              title='C&B Profile Detail'
               content={
                 <DetailCnb id={detailOpen.id} open={detailOpen.open} />
               }

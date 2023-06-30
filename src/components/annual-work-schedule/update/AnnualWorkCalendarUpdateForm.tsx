@@ -59,9 +59,9 @@ function AnnualWorkCalendarUpdateForm({open, handleClose, handleConfirm}: Annual
         data: {
           name: formik.values.name,
           eventType: Number(formik.values.type),
-          startDate: dayjs(formik.values.startDate).format('YYYY-MM-DD'),
-          startHour: dayjs(formik.values.startHours).format('HH:mm:ss'),
-          endHour: dayjs(formik.values.endHours).format('HH:mm:ss'),
+          startDate: dayjs(formik.values.startDate).toISOString(),
+          startHour: dayjs(dayjs(formik.values.startDate).format('YYYY-MM-DD') + ' ' + dayjs(formik.values.startHours).format('HH:mm')).toISOString(),
+          endHour: dayjs(dayjs(formik.values.startDate).format('YYYY-MM-DD') + ' ' + dayjs(formik.values.endHours).format('HH:mm')).toISOString(),
           isWithTime: true,
           note: formik.values.notes
         }
@@ -138,6 +138,7 @@ function AnnualWorkCalendarUpdateForm({open, handleClose, handleConfirm}: Annual
                 },
                 width: '100%'
               }}
+              ampm={false}
               value={formik.values.startHours}
               onChange={(val) => formik.setFieldValue('startHours', val)}
             />
@@ -154,6 +155,7 @@ function AnnualWorkCalendarUpdateForm({open, handleClose, handleConfirm}: Annual
                 },
                 width: '100%'
               }}
+              ampm={false}
               value={formik.values.endHours}
               onChange={(val) => formik.setFieldValue('endHours', val)}
             />

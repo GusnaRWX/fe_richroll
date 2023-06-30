@@ -41,10 +41,10 @@ function AnnualWorkCalendarCreateForm({open, handleClose, handleConfirm}: Annual
           companyID: getCompanyData()?.id?.toString(),
           name: values?.name,
           eventType: values?.type as number,
-          startDate: dayjs(values?.startDate).format('YYYY-MM-DD'),
-          endDate: dayjs(values?.endDate).format('YYYY-MM-DD'),
-          startHour: dayjs(values?.startHours).format('HH:mm:ss'),
-          endHour: dayjs(values?.endHours).format('HH:mm:ss'),
+          startDate: dayjs(values?.startDate).toISOString(),
+          endDate: dayjs(values?.endDate).toISOString(),
+          startHour: dayjs(dayjs(values?.startDate).format('YYYY-MM-DD') + ' ' + dayjs(values?.startHours).format('HH:mm')).toISOString(),
+          endHour: dayjs(dayjs(values?.endDate).format('YYYY-MM-DD') + ' ' + dayjs(values?.endHours).format('HH:mm')).toISOString(),
           isWithTime: true,
           note: values.notes
         }
@@ -122,6 +122,7 @@ function AnnualWorkCalendarCreateForm({open, handleClose, handleConfirm}: Annual
                 },
                 width: '100%'
               }}
+              ampm={false}
               value={formik.values.startHours}
               onChange={(val) => formik.setFieldValue('startHours', val)}
             />
@@ -138,6 +139,7 @@ function AnnualWorkCalendarCreateForm({open, handleClose, handleConfirm}: Annual
                 },
                 width: '100%'
               }}
+              ampm={false}
               value={formik.values.endHours}
               onChange={(val) => formik.setFieldValue('endHours', val)}
             />

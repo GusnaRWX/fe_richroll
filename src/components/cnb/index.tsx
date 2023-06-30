@@ -20,7 +20,7 @@ const CNBComponent = () => {
   return (
     <>
       <TitleWrapper>
-        <Typography variant='h5'>Compensation and Benefits</Typography>
+        <Typography variant='h5'>Compensation & Benefits</Typography>
         <div>
           <Button
             onClick={() => router.push('/compensation-benefits/create')}

@@ -78,7 +78,7 @@ const DetailCnb = ({ id, open }: DetailCNBProps) => {
             alignItems='center'
           >
             <Box display='flex' flexDirection='column' gap='6px'>
-              <TitleData>CnB Profile Name</TitleData>
+              <TitleData>C&B Profile Name</TitleData>
               <ItemData>{detail?.name}</ItemData>
             </Box>
             <Button

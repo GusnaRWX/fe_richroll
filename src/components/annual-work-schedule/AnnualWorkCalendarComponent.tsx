@@ -19,6 +19,7 @@ import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import dayjs from 'dayjs';
 import type { SchedulerRef } from '@aldabil/react-scheduler/types';
 import { OverlayLoading } from '../_shared/common';
+import { getCompanyData } from '@/utils/helper';
 
 
 const ContentWrapper = styled(Card)(({
@@ -103,6 +104,7 @@ function AnnualWorkCalendarComponent() {
         itemPerPage: 5,
         sort: '',
         direction: 'ASC',
+        companyID: getCompanyData()?.id,
         search: '',
         start: '',
         end: ''
@@ -217,7 +219,7 @@ function AnnualWorkCalendarComponent() {
                           <ListWrapper>
                             <Typography fontSize='14px' fontWeight='bold' color='primary'>{item?.name}</Typography>
                             <Typography fontSize='12px' fontWeight='bold' color='gray'>
-                              {dayjs(item?.start).format('MMM D, YYYY ')} - {dayjs(item?.start).format('HH:mm A')} - {dayjs(item?.end).format('HH:mm A')}</Typography>
+                              {dayjs(item?.start).format('MMM D, YYYY ')} - {dayjs(item?.start).format('HH:mm')} - {dayjs(item?.end).format('HH:mm')}</Typography>
                           </ListWrapper>
                         </LeftWrapper>
                         <ButtonWrapper>

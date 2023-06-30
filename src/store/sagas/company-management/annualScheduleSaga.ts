@@ -31,6 +31,7 @@ import { call, put, takeEvery, delay } from 'redux-saga/effects';
 import { setResponserMessage } from '@/store/reducers/slice/responserSlice';
 import { Services } from '@/types/axios';
 import { AxiosError, AxiosResponse } from 'axios';
+import { getCompanyData } from '@/utils/helper';
 
 function* fetchGetListAnnualSchedule(action: AnyAction) {
   try {
@@ -71,6 +72,7 @@ function* fetchPostAnnualSchedule(action: AnyAction) {
           itemPerPage: 5,
           sort: '',
           direction: 'ASC',
+          companyID: getCompanyData()?.id,
           search: '',
           start: '',
           end: ''
@@ -114,6 +116,7 @@ function* fetchUpdateAnnualSchedule(action: AnyAction) {
           itemPerPage: 5,
           sort: '',
           direction: 'ASC',
+          companyID: getCompanyData()?.id,
           search: '',
           start: '',
           end: ''
@@ -156,6 +159,7 @@ function* fetchDeleteAnnualSchedule(action: AnyAction) {
           itemPerPage: 5,
           sort: '',
           direction: 'ASC',
+          companyID: getCompanyData()?.id,
           search: '',
           start: '',
           end: ''

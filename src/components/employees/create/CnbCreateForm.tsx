@@ -198,7 +198,7 @@ const CnbCreateForm = ({
             <Grid container >
               <Grid item md={4}>
                 <Text
-                  title='Compensation and Benefits Profile'
+                  title='Compensation & Benefits Profile'
                   mb='6px'
                   children={<span style={{ color: '#DC2626' }} >*</span>} />
                 <Autocomplete
