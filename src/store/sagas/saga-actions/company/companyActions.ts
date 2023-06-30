@@ -31,7 +31,6 @@ export const postCompanyProfile = (payload: object) => {
 };
 
 export const patchCompanyProfile = (payload: { id: string, companyProfile: object }) => {
-  // const { id, data } = payload;
   return patch(`companies/${payload.id}`, payload.companyProfile);
 };
 

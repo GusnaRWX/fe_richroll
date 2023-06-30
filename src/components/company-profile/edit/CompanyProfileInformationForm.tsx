@@ -569,7 +569,7 @@ function CompanyProfileInformationForm({
               value={formik.values.addressCompanyAddress}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={ifThenElse(formik.touched.addressCompanyAddress, formik.errors.addressCompanyAddress, false)}
+              error={ifThenElse(formik.touched.addressCompanyAddress, formik.errors.addressCompanyAddress, undefined)}
               withAsterisk={true}
               customLabel='Street Name, Building Name'
               placeholder='Input Address Details'

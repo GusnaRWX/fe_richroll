@@ -64,8 +64,9 @@ export declare namespace Company {
     cityCompanyAddress: string,
     subDistrictCompanyAddress: string,
     addressCompanyAddress: string,
-    zipCodeCompanyAddress: string,
-
+    zipCodeCompanyAddress: string
+  }
+  export interface Payment {
     // Group Bank Information
     bankBankInformation: string,
     bankAccountHolderNameBankInformation: string,
@@ -109,7 +110,6 @@ export declare namespace CompanyEdit {
     bank: [];
     paymentMethod: [];
     countries: [];
-    detail;
   }
 }
 

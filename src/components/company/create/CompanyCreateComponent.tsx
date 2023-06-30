@@ -21,11 +21,11 @@ import LocalizationMenu from '@/components/_shared/_core/localization/Localizati
 import Profile from '@/components/_shared/_core/appbar/Profile';
 import CompanyInformationForm from './CompanyInformationForm';
 import CompanyBankForm from './CompanyBankForm';
-import { useAppDispatch } from '@/hooks/index';
-import { postCompanyProfileRequested } from '@/store/reducers/slice/company/companySlice';
+import { useAppDispatch, useAppSelectors } from '@/hooks/index';
+import { postCompanyProfileRequested, postCompanyPaymentsRequested } from '@/store/reducers/slice/company/companySlice';
 import { base64ToFile } from '@/utils/helper';
 import { useFormik } from 'formik';
-import { validationSchemeCompanyProfile } from './validate';
+import { validationSchemeCompanyProfile, validationSchemeCompanyProfilePayment } from './validate';
 
 const WrapperAuth = styled(Box)<BoxProps>(({ theme }) => ({
   background: theme.palette.secondary[100],
@@ -121,9 +121,10 @@ const CompanyCreateComponent = ({ companyType, companySector, bank, paymentMetho
   const [tabSelected, setTabSelected] = useState(0);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [images, setImages] = useState<string | null>(null);
+  const companyID = useAppSelectors(state => state.company.companyID);
   const dispatch = useAppDispatch();
 
-  const formik = useFormik({
+  const formikDetail = useFormik({
     initialValues: {
       picture: [],
 
@@ -142,8 +143,16 @@ const CompanyCreateComponent = ({ companyType, companySector, bank, paymentMetho
       cityCompanyAddress: '',
       subDistrictCompanyAddress: '',
       addressCompanyAddress: '',
-      zipCodeCompanyAddress: '',
+      zipCodeCompanyAddress: ''
+    } as Company.Detail,
+    validationSchema: validationSchemeCompanyProfile,
+    onSubmit: (values) => {
+      handleSubmitDetail(values);
+    }
+  });
 
+  const formikPayment = useFormik({
+    initialValues: {
       // Group Bank Information
       bankBankInformation: '',
       bankAccountHolderNameBankInformation: '',
@@ -166,14 +175,14 @@ const CompanyCreateComponent = ({ companyType, companySector, bank, paymentMetho
       biWeeklyPeriod: '',
       biWeeklyPeriodWeek: '',
       biWeeklyMethod: ''
-    } as Company.Detail,
-    validationSchema: validationSchemeCompanyProfile,
+    } as Company.Payment,
+    validationSchema: validationSchemeCompanyProfilePayment,
     onSubmit: (values) => {
-      handleSubmit(values);
+      handleSubmitPayment(values);
     }
   });
 
-  const handleSubmit = (val) => {
+  const handleSubmitDetail = (val) => {
     const convertToBase64 = base64ToFile(images as string, 'example.png');
 
     const informationData = {
@@ -196,9 +205,26 @@ const CompanyCreateComponent = ({ companyType, companySector, bank, paymentMetho
       zipCode: val.zipCodeCompanyAddress,
     };
 
+    const inputData = new FormData();
+    const logoTemp = val?.picture?.length ? val.picture[0] : convertToBase64;
+    if (logoTemp) inputData.append('logo', logoTemp);
+    for (const key in informationData) {
+      if (informationData[key]) inputData.append(`${key}`, informationData[key]);
+    }
+    inputData.append('address', JSON.stringify(addressData));
+
+    dispatch({
+      type: postCompanyProfileRequested.toString(),
+      payload: {
+        companyProfile: inputData
+      }
+    });
+  };
+
+  const handleSubmitPayment = (val) => {
     const bankData = {
-      bankId: val.bankBankInformation,
-      accountName: val.bankAccountHolderNameBankInformation,
+      bankID: val.bankBankInformation,
+      holder: val.bankAccountHolderNameBankInformation,
       accountNumber: val.bankAccoutNoBankInformation,
       bankCode: val.bankCodeBankInformation,
       branchCode: val.branchCodeBankInformation,
@@ -243,19 +269,12 @@ const CompanyCreateComponent = ({ companyType, companySector, bank, paymentMetho
         }
       };
     }
-
-    const inputData = new FormData();
-    const logoTemp = val?.picture?.length ? val.picture[0] : convertToBase64;
-    if (logoTemp) inputData.append('logo', logoTemp);
-    for (const key in informationData) {
-      if (informationData[key]) inputData.append(`${key}`, informationData[key]);
-    }
-    inputData.append('address', JSON.stringify(addressData));
-
+    console.log(companyID);
+    
     dispatch({
-      type: postCompanyProfileRequested.toString(),
+      type: postCompanyPaymentsRequested.toString(),
       payload: {
-        companyProfile: inputData,
+        companyID: companyID,
         payments: {
           bank: bankData,
           payrolls: payrollData
@@ -288,7 +307,7 @@ const CompanyCreateComponent = ({ companyType, companySector, bank, paymentMetho
               <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <Tabs value={tabSelected} onChange={handleChange} aria-label='basic tabs'>
                   <Tab sx={{ textTransform: 'none' }} label='Company Information' {...a11yProps(0)} />
-                  <Tab sx={{ textTransform: 'none' }} label='Bank and Payroll Information' {...a11yProps(1)} />
+                  <Tab sx={{ textTransform: 'none' }} disabled={tabSelected === 0} label='Bank and Payroll Information' {...a11yProps(1)} />
                 </Tabs>
               </Box>
               <TabPanel value={tabSelected} index={0}>
@@ -297,7 +316,7 @@ const CompanyCreateComponent = ({ companyType, companySector, bank, paymentMetho
                   companyType={companyType}
                   companySector={companySector}
                   countries={countries}
-                  formik={formik}
+                  formik={formikDetail}
                   images={images}
                   setImages={setImages}
                   listAllCompany={listAllCompany}
@@ -305,7 +324,7 @@ const CompanyCreateComponent = ({ companyType, companySector, bank, paymentMetho
               </TabPanel>
               <TabPanel value={tabSelected} index={1}>
                 <CompanyBankForm
-                  formik={formik}
+                  formik={formikPayment}
                   bank={bank}
                   paymentMethod={paymentMethod}
                 />
