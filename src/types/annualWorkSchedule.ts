@@ -56,6 +56,7 @@ export declare namespace AnnualWorkSchedule {
     sort: string;
     direction: boolean;
     search: string;
+    companyID: string | number;
     start: string;
     end: string;
   }

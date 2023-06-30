@@ -1,10 +1,10 @@
-import React, { HTMLAttributes } from 'react';
-import { Grid, Typography, Chip, IconButton } from '@mui/material';
+import React, { HTMLAttributes, useState } from 'react';
+import { Grid, Typography, Chip, Box } from '@mui/material';
 import { Image as ImageType } from '@/utils/assetsConstant';
 import styled from '@emotion/styled';
-import { Text } from '@/components/_shared/common';
+import { Text, CustomModal } from '@/components/_shared/common';
 import dayjs from 'dayjs';
-import { FiTrash2 } from 'react-icons/fi';
+import Image from 'next/image';
 
 
 
@@ -32,6 +32,14 @@ const AdditionalWrapper = styled.div`
  margin-bottom: 2rem;
 `;
 
+const detailImage = {
+  display: 'flex',
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'center',
+  margin: '1rem'
+};
+
 interface EmployeeInformationDetailProps {
   data: {
     fullName: string | undefined;
@@ -49,12 +57,8 @@ interface EmployeeInformationDetailProps {
 }
 
 function EmployeeInformationDetail({ data }: EmployeeInformationDetailProps) {
-  const [picture, setPicture] = React.useState<string | null>(data?.picture);
-
-  const resetPicture = () => {
-    setPicture(null);
-  };
-
+  const [open, setOpen] = useState(false);
+  const [picture, setPicture] = useState<string | null>('');
   return (
     <>
       <Typography component='h3' fontWeight='bold' fontSize={18} color='primary' mb='1rem'>Employee Information</Typography>
@@ -65,28 +69,13 @@ function EmployeeInformationDetail({ data }: EmployeeInformationDetailProps) {
           color='grey.400'
         /> */}
         <div style={{ position: 'relative' }}>
-          <ImageReview image={picture !== null ? picture : ImageType.AVATAR_PLACEHOLDER} />
-          {picture && (
-            <IconButton
-              sx={{
-                position: 'absolute',
-                border: '1px solid red',
-                backgroundColor: 'white',
-                borderRadius: '3px',
-                left: '65px',
-                height: '33px',
-                width: '33px',
-                ':hover': {
-                  backgroundColor: 'white'
-                },
-                bottom: '5px'
-              }}
-              onClick={resetPicture}
-            >
-              <FiTrash2 style={{ zIndex: '999', color: 'red' }} />
-            </IconButton>
-          )}
-
+          <ImageReview
+            image={data?.picture !== null ? data?.picture : ImageType.AVATAR_PLACEHOLDER}
+            onClick={() => {
+              setPicture(data?.picture);
+              setOpen(true);
+            }}
+          />
         </div>
 
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
@@ -210,6 +199,28 @@ function EmployeeInformationDetail({ data }: EmployeeInformationDetailProps) {
           }
         </AdditionalWrapper>
       </form>
+      <CustomModal
+        open={open}
+        handleClose={() => {
+          setOpen(false);
+          setPicture('');
+        }}
+        withFooter={false}
+        title='Profile Picture'
+        width='500px'
+      >
+        <Box sx={detailImage}>
+          <Image
+            src={picture || ''}
+            alt='detail-image'
+            width={400}
+            height={300}
+            style={{
+              borderRadius: '4px'
+            }}
+          />
+        </Box>
+      </CustomModal>
     </>
   );
 }

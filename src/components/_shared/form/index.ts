@@ -9,6 +9,7 @@ import Textarea from './Textarea';
 import Select from './Select';
 import CheckBox from './CheckBox';
 import FileUploadModal from './FileUploadModal';
+import CropperImage from './CropperImage';
 
 export {
   Input,
@@ -21,5 +22,6 @@ export {
   Textarea,
   Select,
   CheckBox,
-  FileUploadModal
+  FileUploadModal,
+  CropperImage
 };

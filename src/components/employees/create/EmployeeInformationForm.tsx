@@ -11,7 +11,7 @@ import {
   createFilterOptions
 } from '@mui/material';
 import Webcam from 'react-webcam';
-import { Input, Button, Select as CustomSelect, CheckBox, DatePicker, FileUploadModal } from '@/components/_shared/form';
+import { Input, Button, Select as CustomSelect, CheckBox, DatePicker, FileUploadModal, CropperImage } from '@/components/_shared/form';
 import { styled as MuiStyled } from '@mui/material/styles';
 import { Image as ImageType } from '@/utils/assetsConstant';
 import styled from '@emotion/styled';
@@ -22,7 +22,7 @@ import { CameraAlt, Cancel } from '@mui/icons-material';
 import { Employees } from '@/types/employees';
 import { validationSchemeEmployeeInformation } from './validate';
 import { useFormik } from 'formik';
-import { convertImageParams, getCompanyData, base64ToFile, randomCode } from '@/utils/helper';
+import { convertImageParams, getCompanyData } from '@/utils/helper';
 import { getListPositionRequested } from '@/store/reducers/slice/options/optionSlice';
 import { Option } from '@/types/option';
 import { BsTrash3 } from 'react-icons/bs';
@@ -80,6 +80,7 @@ const ContentCameraWrapper = {
   justifyContent: 'center'
 };
 
+
 interface ImagePriviewProps extends HTMLAttributes<HTMLDivElement> {
   image?: string;
 }
@@ -112,9 +113,10 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, set
     const imageSrc = webcamRef.current?.getScreenshot();
     if (imageSrc) {
       setImages(imageSrc);
-      const nameFile = randomCode(5);
-      const fileImage = base64ToFile(imageSrc, nameFile);
-      formik.setFieldValue('picture', fileImage);
+      // const nameFile = randomCode(5);
+      // const fileImage = base64ToFile(imageSrc, nameFile);
+      // formik.setFieldValue('picture', fileImage);
+      setModalCrop(true);
       handleClose();
       handleCloseCamera();
     }
@@ -123,6 +125,19 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, set
   const [open, setOpen] = useState(false);
   const { listDepartment, listPosition } = useAppSelectors(state => state.option);
   const [images, setImages] = useState<string | null>(infoValues?.images);
+  const [modalCrop, setModalCrop] = useState(false);
+  const [tempImageCrop, setTempImageCrop] = useState('');
+
+
+  const handleCancelCrop = () => {
+    setImages('');
+    setModalCrop(false);
+  };
+
+  const handleSaveCropImage = (file, img) => {
+    setTempImageCrop(img);
+    formik.setFieldValue('picture', file);
+  };
 
   const { responser } = useAppSelectors(state => state);
 
@@ -143,6 +158,7 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, set
     },
     validationSchema: validationSchemeEmployeeInformation,
     onSubmit: (values, { setErrors }) => {
+      console.log(values);
       handleSubmit(values, setErrors);
     }
   });
@@ -164,6 +180,7 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, set
   };
 
   const handleClose = () => {
+    setModalCrop(true);
     setOpen(false);
   };
 
@@ -178,6 +195,7 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, set
     }
   ];
 
+  // Open camera
   const handleOpenCamera = () => {
     setCaptureEnable(true);
     setOpenCamera(true);
@@ -187,6 +205,7 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, set
     setCaptureEnable(false);
     setOpenCamera(false);
   };
+  // end open camera
 
   const filter = createFilterOptions<Option.FreesoloType>();
 
@@ -210,6 +229,7 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, set
 
   const resetPicture = () => {
     setImages(null);
+    setTempImageCrop('');
   };
 
   return (
@@ -248,8 +268,8 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, set
             color='primary.500'
           /> */}
           <div style={{ position: 'relative' }}>
-            <ImageReview image={!images ? ImageType.PLACEHOLDER : images} onClick={handleOpen} />
-            {images && (
+            <ImageReview image={!tempImageCrop ? ImageType.PLACEHOLDER : tempImageCrop} onClick={handleOpen} />
+            {tempImageCrop && (
               <IconButton
                 sx={{
                   position: 'absolute',
@@ -570,8 +590,15 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, set
       <FileUploadModal
         open={open}
         handleClose={handleClose}
-        onChange={(e) => formik.setFieldValue('picture', convertImageParams('picture', !e.target.files ? null : e.target.files[0], setImages, handleClose), false)}
+        onChange={(e) => convertImageParams('picture', !e.target.files ? null : e.target.files[0], setImages, handleClose)}
         onCapture={handleOpenCamera}
+      />
+      <CropperImage
+        open={modalCrop}
+        onClose={handleCancelCrop}
+        image={images}
+        setCropValue={handleSaveCropImage}
+        ratio={1/1}
       />
       <Modal
         open={openCamera}

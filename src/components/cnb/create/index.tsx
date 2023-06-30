@@ -284,7 +284,7 @@ export default function CreateCNBComponent() {
                       width: '250px',
                     }}
                   >
-                    Create New CnB Profile
+                    Create New C&B Profile
                   </Typography>
                 </HeaderPageTitle>
                 <NextBtnWrapper>

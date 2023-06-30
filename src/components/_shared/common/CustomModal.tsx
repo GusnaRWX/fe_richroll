@@ -40,7 +40,7 @@ border-top: 1px solid #E5E7EB;
 interface CustomModalProps {
   open: boolean;
   handleClose: () => void;
-  handleConfirm: () => void;
+  handleConfirm?: () => void;
   title: string;
   children;
   width: string;
@@ -48,10 +48,22 @@ interface CustomModalProps {
   ConfirmationDisable?: boolean;
   keepMounted?: boolean;
   deleteText?: string;
+  withFooter?: boolean;
 }
 
 
-function CustomModal({ open, handleClose, handleConfirm, title, children, width, submitText, ConfirmationDisable, keepMounted, deleteText }: CustomModalProps) {
+function CustomModal({
+  open,
+  handleClose,
+  handleConfirm,
+  title,
+  children,
+  width,
+  submitText,
+  ConfirmationDisable,
+  keepMounted,
+  deleteText,
+  withFooter = true }: CustomModalProps) {
   return (
     <Modal
       open={open}
@@ -67,18 +79,22 @@ function CustomModal({ open, handleClose, handleConfirm, title, children, width,
           ><Close /></IconButton>
         </ModalHeader>
         {children}
-        <ModalFooter>
-          <MuiButton variant='outlined' size='small' onClick={handleClose}>Cancel</MuiButton>
-          {submitText !== 'Suspend' && submitText !== 'Delete' &&
+        {
+          withFooter && (
+            <ModalFooter>
+              <MuiButton variant='outlined' size='small' onClick={handleClose}>Cancel</MuiButton>
+              {submitText !== 'Suspend' && submitText !== 'Delete' &&
             <MuiButton variant='contained' disabled={ConfirmationDisable} onClick={handleConfirm} size='small' color='primary'>{submitText || 'Confirm'}</MuiButton>
-          }
-          {submitText === 'Suspend' &&
+              }
+              {submitText === 'Suspend' &&
             <MuiButton variant='contained' disabled={ConfirmationDisable} onClick={handleConfirm} size='small' sx={{ background: '#FFEDD5', color: '#EA580C' }}>Suspend</MuiButton>
-          }
-          {submitText === 'Delete' &&
+              }
+              {submitText === 'Delete' &&
             <MuiButton variant='contained' disabled={ConfirmationDisable} onClick={handleConfirm} size='small' sx={{ background: '#FECACA', color: '#DC2626' }}>{deleteText || 'Delete'}</MuiButton>
-          }
-        </ModalFooter>
+              }
+            </ModalFooter>
+          )
+        }
       </Box>
     </Modal>
   );

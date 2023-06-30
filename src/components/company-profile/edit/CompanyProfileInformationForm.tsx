@@ -1,14 +1,17 @@
 /* eslint-disable no-unused-vars */
-import React, { HTMLAttributes, useState } from 'react';
+import React, { HTMLAttributes, useState, useCallback, useRef } from 'react';
 import {
   Grid,
   Typography,
   Select,
   FormHelperText,
   MenuItem,
-  FormControl
+  FormControl,
+  Modal,
+  IconButton,
+  Box
 } from '@mui/material';
-import { Input, Textarea, FileUploadModal } from '@/components/_shared/form';
+import { Input, Textarea, FileUploadModal, CropperImage } from '@/components/_shared/form';
 import { Text } from '@/components/_shared/common';
 import { styled as MuiStyled } from '@mui/material/styles';
 import { Image as ImageType } from '@/utils/assetsConstant';
@@ -20,6 +23,37 @@ import {
   administrativeSecondLevelRequested,
   administrativeThirdLevelRequsted
 } from '@/store/reducers/slice/options/optionSlice';
+import CancelIcon from '@mui/icons-material/Cancel';
+import Webcam from 'react-webcam';
+import { CameraAlt } from '@mui/icons-material';
+import { FiTrash2 } from 'react-icons/fi';
+
+const modalStyleCamera = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: '30%',
+  bgcolor: 'background.paper',
+  border: '1px solid #E5E7EB',
+  borderRadius: '8px',
+  paddingTop: '.2rem',
+  paddingRight: '.5rem',
+  paddingLeft: '.5rem'
+};
+
+const ContentCameraWrapper = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center'
+};
+
+const videoConstraints = {
+  width: 500,
+  height: 720,
+  facingMode: 'user'
+};
 
 
 const AsteriskComponent = MuiStyled('span')(({ theme }) => ({
@@ -60,6 +94,42 @@ function CompanyProfileInformationForm({
 }: CompanyInfoProps) {
   const [open, setOpen] = useState(false);
   const dispatch = useAppDispatch();
+  const webcamRef = useRef<Webcam>(null);
+  const [isCaptureEnable, setCaptureEnable] = useState<boolean>(false);
+  const [openCamera, setOpenCamera] = useState(false);
+  const [modalCrop, setModalCrop] = useState(false);
+  const [tempImageCrop, setTempImageCrop] = useState(images);
+
+  const handleCloseCamera = () => {
+    setCaptureEnable(false);
+    setOpenCamera(false);
+  };
+
+  const handleOpenCamera = () => {
+    setCaptureEnable(true);
+    setOpenCamera(true);
+  };
+
+  const handleCancelCrop = () => {
+    setImages('');
+    setTempImageCrop('');
+    setModalCrop(false);
+  };
+
+  const handleSaveCropImage = (file, img) => {
+    setTempImageCrop(img);
+    formik.setFieldValue('picture', file);
+  };
+
+  const capture = useCallback(() => {
+    const imageSrc = webcamRef.current?.getScreenshot();
+    if (imageSrc) {
+      setImages(imageSrc);
+      setModalCrop(true);
+      handleClose();
+      handleCloseCamera();
+    }
+  }, [webcamRef]);
 
   const {
     administrativeFirst,
@@ -72,7 +142,13 @@ function CompanyProfileInformationForm({
   };
 
   const handleClose = () => {
+    setModalCrop(true);
     setOpen(false);
+  };
+
+  const resetImages = () => {
+    setImages(null);
+    setTempImageCrop('');
   };
 
   return (
@@ -80,7 +156,29 @@ function CompanyProfileInformationForm({
       <Typography component='h3' fontSize={18} color='primary'>Company Information</Typography>
       <form>
         <Typography variant='text-sm' component='div' color='primary' sx={{ mt: '16px' }}>Company Logo</Typography>
-        <ImageReview image={ifThenElse(!images, ImageType.PLACEHOLDER, images)} onClick={handleOpen} />
+        <ImageReview
+          image={ifThenElse(!tempImageCrop, ImageType.PLACEHOLDER, tempImageCrop)}
+          onClick={handleOpen} />
+        {tempImageCrop && (
+          <IconButton
+            sx={{
+              position: 'absolute',
+              border: '1px solid red',
+              backgroundColor: 'white',
+              borderRadius: '3px',
+              left: '65px',
+              height: '33px',
+              width: '33px',
+              ':hover': {
+                backgroundColor: 'white'
+              },
+              bottom: '5px'
+            }}
+            onClick={resetImages}
+          >
+            <FiTrash2 style={{ zIndex: '999', color: 'red' }} />
+          </IconButton>
+        )}
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <FormControl fullWidth error={compareCheck(formik.touched.companyType, Boolean(formik.errors.companyType))}>
@@ -497,7 +595,53 @@ function CompanyProfileInformationForm({
         open={open}
         handleClose={handleClose}
         onChange={(e) => formik.handleChange(convertImageParams('picture', !e.target.files ? null : e.target.files[0], setImages, handleClose))}
+        onCapture={handleOpenCamera}
       />
+      <CropperImage
+        open={modalCrop}
+        onClose={handleCancelCrop}
+        image={images}
+        setCropValue={handleSaveCropImage}
+        ratio={4/3}
+      />
+      <Modal
+        open={openCamera}
+        onClose={handleCloseCamera}
+        keepMounted
+      >
+        <Box sx={modalStyleCamera}>
+          {
+            isCaptureEnable && (
+              <>
+                <Box sx={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'flex-end',
+                  marginBottom: '.5rem'
+                }}>
+                  <IconButton onClick={handleCloseCamera}>
+                    <CancelIcon />
+                  </IconButton>
+                </Box>
+                <Box sx={ContentCameraWrapper}>
+                  <Webcam
+                    audio={false}
+                    width={600}
+                    height={300}
+                    ref={webcamRef}
+                    screenshotFormat='image/jpeg'
+                    videoConstraints={videoConstraints}
+                  />
+                  <IconButton onClick={capture} sx={{ marginTop: '.5rem' }}>
+                    <CameraAlt sx={{ fontSize: '30px' }} />
+                  </IconButton>
+                </Box>
+              </>
+            )
+          }
+        </Box>
+      </Modal>
     </>
   );
 }

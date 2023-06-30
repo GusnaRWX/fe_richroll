@@ -108,6 +108,7 @@ export const convertDateValue = (name, event) => {
 };
 
 export const convertImageParams = (name, value, callback?, onClose?) => {
+  console.log(value);
   const files = value;
   const reader = new FileReader();
   reader.readAsDataURL(value);
