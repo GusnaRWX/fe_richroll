@@ -68,17 +68,26 @@ const LeaveEntriesEditComponent: React.FC<LeaveEntriesEditProps> = ({
     validationSchema: validationSchemeUpdateLeaveEntries,
     onSubmit: (values) => {
       const result = {
-        start: dayjs(values.leaveFrom).toISOString(),
-        end: dayjs(values.leaveTo).toISOString(),
-        note: values.note,
-        leaveType: values.leaveType,
-        leaveStatus: values.leaveStatus
+        put: {
+          start: dayjs(values.leaveFrom).toISOString(),
+          end: dayjs(values.leaveTo).toISOString(),
+          note: values.note,
+          leaveType: values.leaveType,
+          leaveStatus: values.leaveStatus
+        },
+        getEntries: {
+          page: 1,
+          itemPerPage: 5
+        }
       };
       dispatch({
         type: putLeaveEntriesRequested.toString(),
         payload: {
-          id: selectedItem?.id,
-          data: result
+          payload: {
+            id: selectedItem?.id,
+            data: result.put
+          },
+          getEntries: result.getEntries
         }
       });
       handleClear();
