@@ -6,9 +6,9 @@ export declare namespace AttendanceLeave {
   interface GetParams {
     page: number;
     itemPerPage: number;
-    sort: string;
-    direction: boolean;
-    search: string;
+    sort?: string;
+    direction?: boolean;
+    search?: string;
     companyID: string;
   }
 
@@ -91,7 +91,8 @@ export declare namespace AttendanceLeave {
     id: string;
     leaveStatus: string;
     leaveType: string;
-    start: string
+    start: string;
+    note: string;
   }
 
   interface PutLeave {
