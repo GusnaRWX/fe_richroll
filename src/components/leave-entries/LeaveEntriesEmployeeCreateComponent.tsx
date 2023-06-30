@@ -12,12 +12,14 @@ import dayjs from 'dayjs';
 import { postLeaveEntriesRequested } from '@/store/reducers/slice/attendance-leave/leaveEntriesSlice';
 import { LocalizationProvider, TimePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+// import { AttendanceLeave } from '@/types/attendanceLeave';
 interface LeaveEntriesEmployeeCreateProps {
   selectedEmployee: any,
   openCreateModal: boolean;
   setOpenCreateModal: React.Dispatch<React.SetStateAction<boolean>>,
   dispatch: typeof store.dispatch,
-  setOpenModal: React.Dispatch<React.SetStateAction<boolean>>
+  setOpenModal: React.Dispatch<React.SetStateAction<boolean>>,
+  setSelectedEmployee: any
 }
 
 const LeaveEntriesEmployeeCreateComponent = ({
@@ -25,7 +27,8 @@ const LeaveEntriesEmployeeCreateComponent = ({
   openCreateModal,
   setOpenCreateModal,
   dispatch,
-  setOpenModal
+  setOpenModal,
+  setSelectedEmployee
 }: LeaveEntriesEmployeeCreateProps) => {
   const [isHalfDay, setIsHalfDay] = useState(false);
 
@@ -65,7 +68,10 @@ const LeaveEntriesEmployeeCreateComponent = ({
       width='800px'
       keepMounted={false}
       submitText='Save'
-      handleClose={() => { setOpenCreateModal(false); }}
+      handleClose={() => {
+        setOpenCreateModal(false);
+        setSelectedEmployee(null);
+      }}
       handleConfirm={formik.handleSubmit}
     >
       <Grid container sx={{ padding: '8px 16px' }} alignItems='center'>

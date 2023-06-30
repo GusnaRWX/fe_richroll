@@ -18,6 +18,9 @@ import store from '@/store/index';
 import { getLeaveEntriesRequested, deleteLeaveEntriesRequested } from '@/store/reducers/slice/attendance-leave/leaveEntriesSlice';
 import { useAppSelectors } from '@/hooks/index';
 import { AttendanceLeave } from '@/types/attendanceLeave';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 const NameWrapper = styled.div`
    display: flex;
@@ -101,7 +104,7 @@ const LeaveEntriesTableComponent = ({
       type: deleteLeaveEntriesRequested.toString(),
       payload: selectedItem?.id
     });
-    loadDataLeaveEntries();
+    // loadDataLeaveEntries();
   };
 
   const handleSearch = (e) => {
@@ -193,7 +196,7 @@ const LeaveEntriesTableComponent = ({
                 ), (
                   leaveEntries?.leaveEntriesData?.items?.map(value => (
                     <TableRow key={value.date}>
-                      <TableCell>{dayjs(value.date).format('DD/MM/YY')}</TableCell>
+                      <TableCell>{dayjs.utc(value.date).format('DD/MM/YY')}</TableCell>
                       <TableCell>{value.employee?.employeeID}</TableCell>
                       <TableCell>
                         <NameWrapper>
@@ -206,8 +209,8 @@ const LeaveEntriesTableComponent = ({
                           &nbsp;{value.employee?.name}
                         </NameWrapper>
                       </TableCell>
-                      <TableCell>{dayjs(value.start).format('DD/MM/YY')}</TableCell>
-                      <TableCell>{dayjs(value.to).format('DD/MM/YY')}</TableCell>
+                      <TableCell>{dayjs.utc(value.start).format('DD/MM/YY')}</TableCell>
+                      <TableCell>{dayjs.utc(value.end).format('DD/MM/YY')}</TableCell>
                       <TableCell>{renderLeaveType(value?.leaveType)}</TableCell>
                       <TableCell>{renderLeaveStatus(value?.leaveStatus)}</TableCell>
                       <TableCell>

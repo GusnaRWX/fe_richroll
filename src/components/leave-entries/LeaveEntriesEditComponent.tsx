@@ -91,6 +91,7 @@ const LeaveEntriesEditComponent: React.FC<LeaveEntriesEditProps> = ({
     formik.setFieldValue('leaveStatus', String(selectedItem?.leaveStatus));
     formik.setFieldValue('leaveFrom', dayjs(selectedItem?.start));
     formik.setFieldValue('leaveTo', selectedItem?.end);
+    formik.setFieldValue('note', selectedItem?.note);
   }, [open, selectedItem]);
 
   return (

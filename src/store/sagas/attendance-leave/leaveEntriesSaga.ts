@@ -62,7 +62,13 @@ function* fetchPostLeaveEntries(action: AnyAction) {
           message: null
         }
       });
-      yield call(fetchGetLeaveEntries, action);
+      const fakeEntries = {
+        payload: {
+          page: 1,
+          itemPerPage: 5,
+        }
+      };
+      yield call(getLeaveEntries, fakeEntries.payload);
     }
   } catch (err) {
     if (err instanceof AxiosError) {
@@ -108,7 +114,13 @@ function* fetchDeleteLeaveEntries(action: AnyAction) {
           message: null
         }
       });
-      yield call(fetchGetLeaveEntries, action);
+      const fakeEntries = {
+        payload: {
+          page: 1,
+          itemPerPage: 5,
+        }
+      };
+      yield call(getLeaveEntries, fakeEntries.payload);
     }
   } catch (err) {
     if (err instanceof AxiosError) {
@@ -154,7 +166,13 @@ function* fetchPutLeaveEntries(action: AnyAction) {
           message: null
         }
       });
-      yield call(fetchGetLeaveEntries, action);
+      const fakeEntries = {
+        payload: {
+          page: 1,
+          itemPerPage: 5,
+        }
+      };
+      yield call(getLeaveEntries, fakeEntries.payload);
     }
   } catch (err) {
     if (err instanceof AxiosError) {

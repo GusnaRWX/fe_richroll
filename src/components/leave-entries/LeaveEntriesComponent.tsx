@@ -45,6 +45,7 @@ const LeaveEntriesComponent = () => {
       <LeaveEntriesEmployeeCreateComponent
         dispatch={dispatch}
         selectedEmployee={selectedEmployee}
+        setSelectedEmployee={setSelectedEmployee}
         openCreateModal={openCreateModal}
         setOpenCreateModal={setOpenCreateModal}
         setOpenModal={setOpen}
