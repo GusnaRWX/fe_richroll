@@ -9,20 +9,22 @@ import {
   Tabs
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { Alert } from '@/components/_shared/common';
 import { Company, CompanyEdit } from '@/types/component';
 import CompanyInformationForm from './CompanyProfileInformationForm';
 import CompanyBankForm from './CompanyProfileBankForm';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
-import { patchCompanyProfileRequested } from '@/store/reducers/slice/company/companySlice';
+import { patchCompanyProfileRequested, patchCompanyPaymentsRequested, getCompanyDetailRequested } from '@/store/reducers/slice/company/companySlice';
 import { useRouter } from 'next/router';
 import { getCompanyData, ifEmptyReplace, ifThenElse } from '@/utils/helper';
 import { useFormik } from 'formik';
-import { validationSchemeCompanyProfile } from './validate';
+import { validationSchemeCompanyProfile, validationSchemeCompanyProfilePayment } from './validate';
 import {
   administrativeFirstLevelRequested,
   administrativeSecondLevelRequested,
   administrativeThirdLevelRequsted
 } from '@/store/reducers/slice/options/optionSlice';
+import { Cancel } from '@mui/icons-material';
 
 const ButtonWrapper = styled(Box)(({
   display: 'flex',
@@ -71,69 +73,77 @@ function a11yProps(index: number) {
   };
 }
 
-const CompanyEditComponent = ({ detail, companyType, companySector, bank, paymentMethod, countries }: CompanyEdit.Component) => {
+const CompanyEditComponent = ({ companyType, companySector, bank, paymentMethod, countries }: CompanyEdit.Component) => {
   const [tabSelected, setTabSelected] = useState(0);
+  const [isError, setIsError] = useState(false);
+  const [hydrated, setHydrated] = useState(false);
+  const detail = useAppSelectors(state => state.company.detail);
   const companyPayments = useAppSelectors(state => state.company.companyPayment);
-  console.log(companyPayments);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [images, setImages] = useState<string | null>(detail?.logo);
   const companyData = getCompanyData();
   const router = useRouter();
   const dispatch = useAppDispatch();
 
-  const formik = useFormik({
+  const formikDetail = useFormik({
     initialValues: {
       picture: [],
 
       // Group Company Information
-      companyType: detail?.type?.id,
-      companyName: detail?.name,
-      companyNPWP: detail?.taxIDNumber,
-      companySector: detail?.sector?.id,
-      companyEmail: detail?.email,
-      phoneNumberPrefix: detail?.phoneNumberPrefix,
-      phoneNumber: detail?.phoneNumber,
+      companyType: '',
+      companyName: '',
+      companyNPWP: '',
+      companySector: '',
+      companyEmail: '',
+      phoneNumberPrefix: '',
+      phoneNumber: '',
 
       // Group Company Address
-      countryCompanyAddress: detail?.address?.country?.id,
-      provinceCompanyAddress: detail?.address?.firstLevel?.code,
-      cityCompanyAddress: detail?.address?.secondLevel?.code,
-      subDistrictCompanyAddress: detail?.address?.thirdLevel?.code,
-      addressCompanyAddress: detail?.address?.address,
-      zipCodeCompanyAddress: detail?.address?.zipCode,
-
-      // Group Bank Information
-      bankBankInformation: companyPayments?.bank?.bank?.id,
-      bankAccountHolderNameBankInformation: companyPayments?.bank?.holder,
-      bankAccoutNoBankInformation: companyPayments?.bank?.accountNumber,
-      bankCodeBankInformation: companyPayments?.bank?.bankCode || '',
-      branchCodeBankInformation: companyPayments?.bank?.branchCode,
-      branchNameBankInformation: companyPayments?.bank?.branchName,
-      swiftCodeBankInformation: companyPayments?.bank?.swiftCode,
-
-      // Group Payroll Information
-      isMonthly: companyPayments?.payrolls?.some(v => v.type === 0),
-      isWeekly: companyPayments?.payrolls?.some(v => v.type === 1),
-      isBiWeekly: companyPayments?.payrolls?.some(v => v.type === 2),
-      monthlyPeriodStart: ifThenElse(companyPayments?.payrolls?.some(v => v.type === 0), companyPayments?.payrolls?.find(v => v.type === 0)?.start, ''),
-      monthlyPeriodEnd: ifThenElse(companyPayments?.payrolls?.some(v => v.type === 0), companyPayments?.payrolls?.find(v => v.type === 0)?.end, ''),
-      monthlyPayrollDate: ifThenElse(companyPayments?.payrolls?.some(v => v.type === 0), companyPayments?.payrolls?.find(v => v.type === 0)?.payrollDate, ''),
-      monthlyMethod: ifThenElse(companyPayments?.payrolls?.some(v => v.type === 0), companyPayments?.payrolls?.find(v => v.type === 0)?.method?.id, ''),
-      weeklyPeriod: ifThenElse(companyPayments?.payrolls?.some(v => v.type === 1), companyPayments?.payrolls?.find(v => v.type === 1)?.start, ''),
-      weeklyMethod: ifThenElse(companyPayments?.payrolls?.some(v => v.type === 1), companyPayments?.payrolls?.find(v => v.type === 1)?.method?.id, ''),
-      biWeeklyPeriod: ifThenElse(companyPayments?.payrolls?.some(v => v.type === 2), companyPayments?.payrolls?.find(v => v.type === 2)?.start, ''),
-      biWeeklyPeriodWeek: ifThenElse(companyPayments?.payrolls?.some(v => v.type === 2), companyPayments?.payrolls?.find(v => v.type === 2)?.end, ''),
-      biWeeklyMethod: ifThenElse(companyPayments?.payrolls?.some(v => v.type === 2), companyPayments?.payrolls?.find(v => v.type === 2)?.method?.id, '')
+      countryCompanyAddress: '',
+      provinceCompanyAddress: '',
+      cityCompanyAddress: '',
+      subDistrictCompanyAddress: '',
+      addressCompanyAddress: '',
+      zipCodeCompanyAddress: ''
     } as Company.Detail,
     validationSchema: validationSchemeCompanyProfile,
+    validateOnChange: true,
     onSubmit: (values) => {
-      handleSubmit(values);
+      handleSubmitDetail(values);
     }
   });
 
-  console.log(formik.values.weeklyPeriod);
+  const formikPayment = useFormik({
+    initialValues: {
+      // Group Bank Information
+      bankBankInformation: '',
+      bankAccountHolderNameBankInformation: '',
+      bankAccoutNoBankInformation: '',
+      bankCodeBankInformation: '',
+      branchCodeBankInformation: '',
+      branchNameBankInformation: '',
+      swiftCodeBankInformation: '',
 
-  const handleSubmit = (val) => {
+      // Group Payroll Information
+      isMonthly: false,
+      isWeekly: false,
+      isBiWeekly: false,
+      monthlyPeriodStart: '',
+      monthlyPeriodEnd: '',
+      monthlyPayrollDate: '',
+      monthlyMethod: '',
+      weeklyPeriod: '',
+      weeklyMethod: '',
+      biWeeklyPeriod: '',
+      biWeeklyPeriodWeek: '',
+      biWeeklyMethod: ''
+    } as Company.Payment,
+    validationSchema: validationSchemeCompanyProfilePayment,
+    onSubmit: (values) => {
+      handleSubmitPayment(values);
+    }
+  });
+
+  const handleSubmitDetail = (val) => {
     const informationData = {
       typeID: val.companyType,
       name: val.companyName,
@@ -143,7 +153,6 @@ const CompanyEditComponent = ({ detail, companyType, companySector, bank, paymen
       phoneNumber: val.phoneNumber.toString(),
       phoneNumberPrefix: val.phoneNumberPrefix,
     };
-
 
     const addressData = {
       countryID: val.countryCompanyAddress,
@@ -155,9 +164,26 @@ const CompanyEditComponent = ({ detail, companyType, companySector, bank, paymen
       zipCode: val.zipCodeCompanyAddress,
     };
 
+    const inputData = new FormData();
+    inputData.append('logo', ifThenElse(val?.picture?.length, val?.picture[0], detail?.logo));
+    for (const key in informationData) {
+      inputData.append(`${key}`, informationData[key]);
+    }
+    inputData.append('address', JSON.stringify(addressData));
+
+    dispatch({
+      type: patchCompanyProfileRequested.toString(),
+      payload: {
+        id: companyData?.id,
+        companyProfile: inputData
+      }
+    });
+  };
+
+  const handleSubmitPayment = (val) => {
     const bankData = {
-      bankId: val.bankBankInformation,
-      accountName: val.bankAccountHolderNameBankInformation,
+      bankID: val.bankBankInformation,
+      holder: val.bankAccountHolderNameBankInformation,
       accountNumber: val.bankAccoutNoBankInformation,
       bankCode: ifEmptyReplace(val.bankCodeBankInformation, null),
       branchCode: ifEmptyReplace(val.branchCodeBankInformation, null),
@@ -205,18 +231,10 @@ const CompanyEditComponent = ({ detail, companyType, companySector, bank, paymen
       };
     }
 
-    const inputData = new FormData();
-    inputData.append('logo', ifThenElse(val?.picture?.length, val?.picture[0], detail?.logo));
-    for (const key in informationData) {
-      inputData.append(`${key}`, informationData[key]);
-    }
-    inputData.append('address', JSON.stringify(addressData));
-
     dispatch({
-      type: patchCompanyProfileRequested.toString(),
+      type: patchCompanyPaymentsRequested.toString(),
       payload: {
         id: companyData?.id,
-        companyProfile: inputData,
         payments: {
           bank: bankData,
           payrolls: payrollData
@@ -226,10 +244,75 @@ const CompanyEditComponent = ({ detail, companyType, companySector, bank, paymen
   };
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setTabSelected(newValue);
+    if (newValue === 1) {
+      formikDetail.validateForm().then((a) => {
+        if(Object.keys(a).length === 0) {
+          formikDetail.submitForm();
+          setIsError(false);
+          setTabSelected(newValue);
+        } else {
+          setIsError(true);
+        }
+      });
+    } else {
+      formikPayment.validateForm().then((a) => {
+        if(Object.keys(a).length === 0) {
+          setIsError(false);
+          setTabSelected(newValue);
+        } else {
+          setIsError(true);
+        }
+      });
+    }
   };
 
   useEffect(() => {
+    setImages(detail?.logo);
+    formikDetail.setFieldValue('companyType', detail?.type?.id);
+    formikDetail.setFieldValue('companyName', detail?.name);
+    formikDetail.setFieldValue('companyNPWP', detail?.taxIDNumber);
+    formikDetail.setFieldValue('companySector', detail?.sector?.id);
+    formikDetail.setFieldValue('companyEmail', detail?.email);
+    formikDetail.setFieldValue('phoneNumberPrefix', detail?.phoneNumberPrefix);
+    formikDetail.setFieldValue('phoneNumber', detail?.phoneNumber);
+
+    formikDetail.setFieldValue('countryCompanyAddress', detail?.address?.country?.id);
+    formikDetail.setFieldValue('provinceCompanyAddress', detail?.address?.firstLevel?.code);
+    formikDetail.setFieldValue('cityCompanyAddress', detail?.address?.secondLevel?.code);
+    formikDetail.setFieldValue('subDistrictCompanyAddress', detail?.address?.thirdLevel?.code);
+    formikDetail.setFieldValue('addressCompanyAddress', detail?.address?.address);
+    formikDetail.setFieldValue('zipCodeCompanyAddress', detail?.address?.zipCode);
+
+    formikPayment.setFieldValue('bankBankInformation', companyPayments?.bank?.bank?.id);
+    formikPayment.setFieldValue('bankAccountHolderNameBankInformation', companyPayments?.bank?.holder);
+    formikPayment.setFieldValue('bankAccoutNoBankInformation', companyPayments?.bank?.accountNumber);
+    formikPayment.setFieldValue('bankCodeBankInformation', ifEmptyReplace(companyPayments?.bank?.bankCode, ''));
+    formikPayment.setFieldValue('branchCodeBankInformation', ifEmptyReplace(companyPayments?.bank?.branchCode, ''));
+    formikPayment.setFieldValue('branchNameBankInformation', ifEmptyReplace(companyPayments?.bank?.branchName, ''));
+    formikPayment.setFieldValue('swiftCodeBankInformation', ifEmptyReplace(companyPayments?.bank?.swiftCode, ''));
+
+    formikPayment.setFieldValue('isMonthly', companyPayments?.payrolls?.some(v => v.type === 0));
+    formikPayment.setFieldValue('isWeekly', companyPayments?.payrolls?.some(v => v.type === 1));
+    formikPayment.setFieldValue('isBiWeekly', companyPayments?.payrolls?.some(v => v.type === 2));
+    formikPayment.setFieldValue('monthlyPeriodStart', ifThenElse(companyPayments?.payrolls?.some(v => v.type === 0), companyPayments?.payrolls?.find(v => v.type === 0)?.start, ''));
+    formikPayment.setFieldValue('monthlyPeriodEnd', ifThenElse(companyPayments?.payrolls?.some(v => v.type === 0), companyPayments?.payrolls?.find(v => v.type === 0)?.end, ''));
+    formikPayment.setFieldValue('monthlyPayrollDate', ifThenElse(companyPayments?.payrolls?.some(v => v.type === 0), companyPayments?.payrolls?.find(v => v.type === 0)?.payrollDate, ''));
+    formikPayment.setFieldValue('monthlyMethod', ifThenElse(companyPayments?.payrolls?.some(v => v.type === 0), companyPayments?.payrolls?.find(v => v.type === 0)?.method?.id, ''));
+    formikPayment.setFieldValue('weeklyPeriod', ifThenElse(companyPayments?.payrolls?.some(v => v.type === 1), companyPayments?.payrolls?.find(v => v.type === 1)?.start, ''));
+    formikPayment.setFieldValue('weeklyMethod', ifThenElse(companyPayments?.payrolls?.some(v => v.type === 1), companyPayments?.payrolls?.find(v => v.type === 1)?.method?.id, ''));
+    formikPayment.setFieldValue('biWeeklyPeriod', ifThenElse(companyPayments?.payrolls?.some(v => v.type === 2), companyPayments?.payrolls?.find(v => v.type === 2)?.start, ''));
+    formikPayment.setFieldValue('biWeeklyPeriodWeek', ifThenElse(companyPayments?.payrolls?.some(v => v.type === 2), companyPayments?.payrolls?.find(v => v.type === 2)?.end, ''));
+    formikPayment.setFieldValue('biWeeklyMethod', ifThenElse(companyPayments?.payrolls?.some(v => v.type === 2), companyPayments?.payrolls?.find(v => v.type === 2)?.method?.id, ''));
+  }, [detail, companyPayments]);
+
+  useEffect(() => {
+    dispatch({
+      type: getCompanyDetailRequested.toString(),
+      payload: {
+        id: companyData?.id
+      }
+    });
+
     dispatch({
       type: administrativeFirstLevelRequested.toString(),
       payload: {
@@ -253,9 +336,27 @@ const CompanyEditComponent = ({ detail, companyType, companySector, bank, paymen
         secondLevelCode: detail?.address?.secondLevel?.code
       }
     });
-
   }, []);
 
+  useEffect(() => {
+    window.onbeforeunload = function() {
+      console.log('refresh');
+      // router.push('/company-management/company-profile');
+      return false;
+    };
+
+    return () => {
+      window.onbeforeunload = null;
+    };
+  }, []);
+
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
+
+  if (!hydrated) {
+    return null;
+  }
   return (
     <>
       <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
@@ -276,7 +377,7 @@ const CompanyEditComponent = ({ detail, companyType, companySector, bank, paymen
               size='small'
               color='primary'
               sx={{ color: 'white' }}
-              onClick={() => { formik.submitForm(); }}
+              onClick={() => { ifThenElse(tabSelected === 0, formikDetail.submitForm(), formikPayment.submitForm()); }}
             >Save</MuiButton>
           </ButtonWrapper>
         </Grid>
@@ -290,18 +391,32 @@ const CompanyEditComponent = ({ detail, companyType, companySector, bank, paymen
             </Tabs>
           </Box>
           <TabPanel value={tabSelected} index={0}>
+            {(isError) && (
+              <Alert
+                severity='error'
+                content='Please fill in all the mandatory fields'
+                icon={<Cancel />}
+              />
+            )}
             <CompanyInformationForm
               companyType={companyType}
               companySector={companySector}
               countries={countries}
-              formik={formik}
+              formik={formikDetail}
               images={images}
               setImages={setImages}
             />
           </TabPanel>
           <TabPanel value={tabSelected} index={1}>
+            {(isError) && (
+              <Alert
+                severity='error'
+                content='Please fill in all the mandatory fields'
+                icon={<Cancel />}
+              />
+            )}
             <CompanyBankForm
-              formik={formik}
+              formik={formikPayment}
               bank={bank}
               paymentMethod={paymentMethod}
             />

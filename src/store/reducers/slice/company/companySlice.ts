@@ -10,6 +10,7 @@ interface CompanyState {
   paymentMethod: [],
   detail: object,
   companyPayment: object,
+  companyID: string,
 }
 
 const initialState: CompanyState = {
@@ -20,7 +21,8 @@ const initialState: CompanyState = {
   bank: [],
   paymentMethod: [],
   detail: {},
-  companyPayment: {}
+  companyPayment: {},
+  companyID: ''
 };
 
 export const companySlice = createSlice({
@@ -90,8 +92,9 @@ export const companySlice = createSlice({
     postCompanyProfileRequested: (state) => {
       state.loading = true;
     },
-    postCompanyProfileSuccess: (state) => {
+    postCompanyProfileSuccess: (state, action) => {
       state.loading = false;
+      state.companyID = action?.payload;
     },
     postCompanyProfileFailed: (state) => {
       state.loading = false;
@@ -128,7 +131,7 @@ export const companySlice = createSlice({
     },
     getCompanyProfilePaymentsSuccess: (state, action) => {
       state.loading = false;
-      state.companyPayment = action?.payload?.companyPayments;
+      state.companyPayment = action?.payload;
     },
     getCompanyProfilePaymentsFailed: (state) => {
       state.loading = false;

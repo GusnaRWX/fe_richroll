@@ -21,7 +21,7 @@ const LinkComponent = styled(Link)(({ theme }) => ({
   fontSize: 16,
   display: 'flex',
   justifyContent: 'flex-end',
-  marginBottom: 16,
+  marginBottom: 12,
 }));
 
 const WrapperSSO = styled(Box)<BoxProps>(() => ({
@@ -29,7 +29,7 @@ const WrapperSSO = styled(Box)<BoxProps>(() => ({
   justifyContent: 'center',
   gap: 16,
   alignItems: 'center',
-  margin: '14px 0'
+  margin: '12px 0'
 }));
 
 const LoginForm = ({
@@ -76,7 +76,7 @@ const LoginForm = ({
           padding: '0 40px'
         }}
       >
-        <Box component='div' mb='16px'>
+        <Box component='div' mb='12px'>
           <Image
             src={ImageType.KAYAROLL_LOGO}
             width={221}
@@ -88,12 +88,12 @@ const LoginForm = ({
           color='primary.main'
           fontWeight={700}
           fontSize={24}
-          mb='17px'
+          mb='13px'
         >
           Login
         </Typography>
         {![200, 201, 0].includes(responser?.code) && (
-          <Box mb='16px'>
+          <Box mb='12px'>
             <Alert severity='error'>
               <Text
                 title={responser?.message}
@@ -102,7 +102,7 @@ const LoginForm = ({
             </Alert>
           </Box>
         )}
-        <Box component='div' mb='16px'>
+        <Box component='div' mb='12px'>
           <Input
             customLabel='Email'
             withAsterisk
@@ -116,7 +116,7 @@ const LoginForm = ({
             helperText={formik.touched.email && formik.errors.email}
           />
         </Box>
-        <Box mb='16px'>
+        <Box mb='12px'>
           <Input
             customLabel='Password'
             withAsterisk
@@ -154,7 +154,7 @@ const LoginForm = ({
           isLoading={login.isLoading}
         />
       </Box>
-      <Box component='div' mt={`${![200, 201, 0].includes(responser?.code) ? 15 : 30}px`}>
+      <Box component='div' mt={`${![200, 201, 0].includes(responser?.code) ? 15 : 20}px`}>
         <Typography
           color='grey.400'
           textAlign='center'

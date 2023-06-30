@@ -166,14 +166,15 @@ function CompanyInformationForm({
   };
 
   const handleNext = () => {
-    // formik.handleSubmit();
-    // if (Object.keys(formik.errors).length === 3 && !duplicateCompany) {
-    if (!duplicateCompany) {
-      nextPage(1);
-      setIsError(false);
-    } else {
-      setIsError(true);
-    }
+    formik.validateForm().then((a) => {
+      if(Object.keys(a).length === 0) {
+        formik.submitForm();
+        setIsError(false);
+        nextPage(1);
+      } else {
+        setIsError(true);
+      }
+    });
   };
 
   const resetPicture = () => {
