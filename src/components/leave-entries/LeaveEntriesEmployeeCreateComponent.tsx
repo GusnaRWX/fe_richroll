@@ -45,12 +45,18 @@ const LeaveEntriesEmployeeCreateComponent = ({
     validationSchema: validationSchemeCreateLeaveEntries,
     onSubmit: (values) => {
       const postValues = {
-        employeeID: selectedEmployee?.id,
-        start: values.halfFrom === null ? dayjs(values.leaveFrom).toISOString() : dayjs(values.leaveFrom).set('hour', dayjs(values.halfFrom).hour()).toISOString(),
-        end: values.halfTo === null ? dayjs(values.leaveTo).toISOString() : dayjs(values.leaveTo).set('hour', dayjs(values.halfTo).hour()).toISOString(),
-        leaveType: values.leaveType,
-        leaveStatus: values.leaveStatus,
-        note: values.note
+        post: {
+          employeeID: selectedEmployee?.id,
+          start: values.halfFrom === null ? dayjs(values.leaveFrom).toISOString() : dayjs(values.leaveFrom).set('hour', dayjs(values.halfFrom).hour()).toISOString(),
+          end: values.halfTo === null ? dayjs(values.leaveTo).toISOString() : dayjs(values.leaveTo).set('hour', dayjs(values.halfTo).hour()).toISOString(),
+          leaveType: values.leaveType,
+          leaveStatus: values.leaveStatus,
+          note: values.note
+        },
+        getEntries: {
+          page: 1,
+          itemPerPage: 5
+        }
       };
       dispatch({
         type: postLeaveEntriesRequested.toString(),

@@ -102,7 +102,17 @@ const LeaveEntriesTableComponent = ({
     setDeleteConfirmation(false);
     dispatch({
       type: deleteLeaveEntriesRequested.toString(),
-      payload: selectedItem?.id
+      payload: {
+        id: selectedItem?.id,
+        getEntries: {
+          page: page,
+          itemPerPage: rowsPerPage,
+          sort: sort,
+          direction: direction.toUpperCase(),
+          search: searchData,
+          companyID: companyData?.id
+        }
+      }
     });
     // loadDataLeaveEntries();
   };

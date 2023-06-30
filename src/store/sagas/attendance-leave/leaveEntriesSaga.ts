@@ -43,9 +43,10 @@ function* fetchGetLeaveEntries(action: AnyAction) {
 
 function* fetchPostLeaveEntries(action: AnyAction) {
   try {
-    const res: AxiosResponse = yield call(postLeaveEntries, action?.payload);
+    const res: AxiosResponse = yield call(postLeaveEntries, action?.payload?.post);
     if (res.status === 201) {
       yield put({ type: postLeaveEntriesSuccess.toString() });
+      yield put({ type: getLeaveEntriesRequested.toString(), payload: action?.payload?.getEntries });
       yield put({
         type: setResponserMessage?.toString(),
         payload: {
@@ -62,13 +63,6 @@ function* fetchPostLeaveEntries(action: AnyAction) {
           message: null
         }
       });
-      const fakeEntries = {
-        payload: {
-          page: 1,
-          itemPerPage: 5,
-        }
-      };
-      yield call(getLeaveEntries, fakeEntries.payload);
     }
   } catch (err) {
     if (err instanceof AxiosError) {
@@ -95,9 +89,10 @@ function* fetchPostLeaveEntries(action: AnyAction) {
 
 function* fetchDeleteLeaveEntries(action: AnyAction) {
   try {
-    const res: AxiosResponse = yield call(deleteLeaveEntries, action?.payload);
+    const res: AxiosResponse = yield call(deleteLeaveEntries, action?.payload?.id);
     if (res.status === 200) {
       yield put({ type: deleteLeaveEntriesSuccess.toString() });
+      yield put({ type: getLeaveEntriesRequested.toString(), payload: action?.payload?.getEntries });
       yield put({
         type: setResponserMessage.toString(),
         payload: {
@@ -114,13 +109,6 @@ function* fetchDeleteLeaveEntries(action: AnyAction) {
           message: null
         }
       });
-      const fakeEntries = {
-        payload: {
-          page: 1,
-          itemPerPage: 5,
-        }
-      };
-      yield call(getLeaveEntries, fakeEntries.payload);
     }
   } catch (err) {
     if (err instanceof AxiosError) {
@@ -147,9 +135,10 @@ function* fetchDeleteLeaveEntries(action: AnyAction) {
 
 function* fetchPutLeaveEntries(action: AnyAction) {
   try {
-    const res: AxiosResponse = yield call(putLeaveEntries, action?.payload);
+    const res: AxiosResponse = yield call(putLeaveEntries, action?.payload?.payload);
     if (res.status === 200) {
       yield put({ type: putLeaveEntriesSuccess.toString() });
+      yield put({ type: getLeaveEntriesRequested.toString(), payload: action?.payload?.getEntries });
       yield put({
         type: setResponserMessage.toString(),
         payload: {
@@ -166,13 +155,6 @@ function* fetchPutLeaveEntries(action: AnyAction) {
           message: null
         }
       });
-      const fakeEntries = {
-        payload: {
-          page: 1,
-          itemPerPage: 5,
-        }
-      };
-      yield call(getLeaveEntries, fakeEntries.payload);
     }
   } catch (err) {
     if (err instanceof AxiosError) {
