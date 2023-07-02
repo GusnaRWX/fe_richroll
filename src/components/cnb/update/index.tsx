@@ -43,6 +43,7 @@ interface SuplementType {
   percentage?: string | number;
   amountType?: string | number;
   rateType?: string | number;
+  id?: string;
 }
 
 interface BaseType {
@@ -228,17 +229,20 @@ export default function UpdateCNBComponent() {
         for (let i = 0; i <= value.supplementary.length; i++) {
           if (typeof value.supplementary[i] !== 'undefined') {
             const tempData = dynamicPayloadBaseCnb(listCompensation, value.supplementary[i].compensationComponentId, value.supplementary[i]);
-            tempSupplementary.push(tempData);
+            const idSupplementary = { id: value?.supplementary[i]?.id || '' };
+            const mergeObject = { ...tempData, ...idSupplementary };
+            tempSupplementary.push(mergeObject);
           }
         }
       }
+      const mutateBase = { ...tempBase, id: cnbDetail?.base?.id };
       dispatch({
         type: putUpdateRequested.toString(),
         Id: router.query.id,
         Payload: {
           companyID: companyData?.id?.toString(),
           name: value.name,
-          base: tempBase,
+          base: mutateBase,
           supplementaries: tempSupplementary
         }
       });
@@ -267,7 +271,7 @@ export default function UpdateCNBComponent() {
         name: cnbDetail.name || '',
         compensationComponentId: cnbDetail.base?.component?.id || '',
         period: cnbDetail.base?.term?.id || '',
-        taxStatus: cnbDetail.base?.isTaxable || '',
+        taxStatus: cnbDetail.base?.isTaxable ? 'true' : 'false' || '',
         rateOrAmount: cnbDetail.base?.amount || '',
         supplementary: cnbDetail.supplementaries?.map(val => {
           return {
@@ -275,6 +279,7 @@ export default function UpdateCNBComponent() {
             period: val.term?.id || '',
             rateOrAmount: getPaymentType(val.component?.id, listCompensation)?.withPercentage ? val.rate : val.amount || '',
             taxStatus: val.isTaxable || '',
+            id: val?.id || ''
           };
         }) || [],
       });
@@ -625,7 +630,7 @@ export default function UpdateCNBComponent() {
                                             );
                                             dispatch({
                                               type: getListSuppTerminRequested.toString(),
-                                              pauload: e?.target?.value
+                                              payload: e?.target?.value
                                             });
                                             formik.setFieldValue(`supplementary.${i}.titleRate`,
                                               getPaymentType(e?.target?.value, listCompensation)?.title
