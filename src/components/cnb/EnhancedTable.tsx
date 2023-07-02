@@ -77,9 +77,17 @@ function EnhancedTable() {
   const deleteCnb = (Id: string | number) => {
     dispatch({
       type: deleteCompensationRequested.toString(),
-      Id: Id
+      payload: {
+        Id: Id,
+        getCnb: {
+          page: page,
+          itemPerPage: rowsPerPage,
+          sort: sort,
+          direction: direction.toUpperCase(),
+          search: search
+        }
+      }
     });
-    router.reload();
   };
 
   const handleDeleteOpen = (id) => {

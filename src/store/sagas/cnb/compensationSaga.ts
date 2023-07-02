@@ -123,7 +123,7 @@ function* fetchCompensationDetail(action: AnyAction) {
 // delete compensation benefit
 function* deleteCnb(action: AnyAction) {
   try {
-    const res: AxiosResponse = yield call(deleteCnbProfile, action?.Id);
+    const res: AxiosResponse = yield call(deleteCnbProfile, action?.payload?.Id);
     if (res.status === 200) {
       yield put({
         type: deleteCompensationSuccess.toString(),
@@ -131,6 +131,23 @@ function* deleteCnb(action: AnyAction) {
           data: res.data.data,
         },
       });
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: res?.data?.code,
+          message: 'Successfully Deleted!',
+          footerMessage: 'Compensation and Benefits Profile has been deleted',
+        }
+      });
+      yield delay(2000);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: 0,
+          message: null
+        }
+      });
+      yield put({ type: getTableRequested.toString(), payload: action?.payload?.getCnb });
     }
   } catch (err) {
     if (err instanceof AxiosError) {
