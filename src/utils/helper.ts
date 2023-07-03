@@ -66,9 +66,13 @@ interface SectorType {
 export interface UserDataParse {
   email?: string | null;
   name?: string | null;
-  employee: {
+  employee?: {
     companies: Array<{ logo: string | null, name: string | null, sector: SectorType | null }>
+    isActive?: boolean;
+    isSelfEmployeeService?: boolean;
+    position?: string | null;
   };
+  picture?: string | null;
   roles?: string[];
 }
 
@@ -80,6 +84,19 @@ export const getUserData = () => {
       parse = JSON.parse(user);
       return parse;
     } else {
+      return null;
+    }
+  }
+};
+
+export const getSelectedRoles = () => {
+  if (typeof window !== 'undefined') {
+    const roles = getStorage('selected_roles');
+    let parse: string | null;
+    if (roles) {
+      parse = JSON.parse(roles);
+      return parse;
+    }else{
       return null;
     }
   }

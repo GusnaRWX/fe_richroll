@@ -140,7 +140,8 @@ const CompanyComponent = ({ companies }: Company.Component) => {
   const router = useRouter();
   const handleClick = (val, path) => {
     setStorages([
-      { name: 'kaya_company', value: JSON.stringify({ id: val?.id, imageUrl: val?.logo || '', name: val?.name, sector: val?.sector?.name || '-' }) }
+      { name: 'kaya_company', value: JSON.stringify({ id: val?.id, imageUrl: val?.logo || '', name: val?.name, sector: val?.sector?.name || '-' }) },
+      { name:  'selected_roles', value: JSON.stringify('HR Admin')}
     ]);
     router.push(path);
   };

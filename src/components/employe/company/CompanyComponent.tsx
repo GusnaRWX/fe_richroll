@@ -19,6 +19,7 @@ import { BsBellFill } from 'react-icons/bs';
 import LocalizationMenu from '@/components/_shared/_core/localization/LocalizationMenu';
 import Profile from '@/components/_shared/_core/appbar/Profile';
 import { getUserData, ifThenElse } from '@/utils/helper';
+import { setStorages } from '@/utils/storage';
 
 const WrapperAuth = styled(Box)<BoxProps>(({ theme }) => ({
   background: theme.palette.secondary[100],
@@ -115,7 +116,13 @@ function CompanyComponent() {
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: '25px', mt: '16px', height: '221px' }}>
               {
                 getUserData()?.employee?.companies.map((item, index) => (
-                  <WrapperCardItem key={index} onClick={() => router.push('/dashboard')}>
+                  <WrapperCardItem key={index}
+                    onClick={() => {
+                      router.push('/dashboard');
+                      setStorages([{
+                        name: 'selected_roles', value: JSON.stringify('Employee')
+                      }]);
+                    }}>
                     <Box component={'div'} sx={{ position: 'relative', width: '178px', height: '142px' }}>
                       <Image
                         src={ifThenElse(item?.logo === null, ImageType.PLACEHOLDER_COMPANY, item?.logo)}
