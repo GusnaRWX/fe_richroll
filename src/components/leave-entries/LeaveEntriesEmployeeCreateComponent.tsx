@@ -12,7 +12,7 @@ import dayjs from 'dayjs';
 import { postLeaveEntriesRequested } from '@/store/reducers/slice/attendance-leave/leaveEntriesSlice';
 import { LocalizationProvider, TimePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-// import { AttendanceLeave } from '@/types/attendanceLeave';
+
 interface LeaveEntriesEmployeeCreateProps {
   selectedEmployee: any,
   openCreateModal: boolean;
@@ -43,15 +43,20 @@ const LeaveEntriesEmployeeCreateComponent = ({
       halfTo: null
     },
     validationSchema: validationSchemeCreateLeaveEntries,
-    onSubmit: (values) => {
+    onSubmit: (values, { resetForm }) => {
       const postValues = {
         post: {
           employeeID: selectedEmployee?.id,
-          start: values.halfFrom === null ? dayjs(values.leaveFrom).toISOString() : dayjs(values.leaveFrom).set('hour', dayjs(values.halfFrom).hour()).toISOString(),
-          end: values.halfTo === null ? dayjs(values.leaveTo).toISOString() : dayjs(values.leaveTo).set('hour', dayjs(values.halfTo).hour()).toISOString(),
+          start: values.halfFrom === null
+            ? dayjs(values.leaveFrom).toISOString()
+            : dayjs(dayjs(values.leaveFrom).format('YYYY-MM-DD') + ' ' + dayjs(values.halfFrom).format('HH:mm')).toISOString(),
+          end: values.halfTo === null
+            ? dayjs(values.leaveTo).toISOString()
+            : dayjs(dayjs(values.leaveTo).format('YYYY-MM-DD') + ' ' + dayjs(values.halfTo).format('HH:mm')).toISOString(),
           leaveType: values.leaveType,
           leaveStatus: values.leaveStatus,
-          note: values.note
+          note: values.note,
+          isHalfday: isHalfDay
         },
         getEntries: {
           page: 1,
@@ -64,6 +69,8 @@ const LeaveEntriesEmployeeCreateComponent = ({
       });
       setOpenCreateModal(false);
       setOpenModal(false);
+      setSelectedEmployee(null);
+      resetForm();
     }
   });
 
@@ -77,6 +84,8 @@ const LeaveEntriesEmployeeCreateComponent = ({
       handleClose={() => {
         setOpenCreateModal(false);
         setSelectedEmployee(null);
+        formik.resetForm();
+        setIsHalfDay(false);
       }}
       handleConfirm={formik.handleSubmit}
     >

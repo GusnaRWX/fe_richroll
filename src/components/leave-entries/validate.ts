@@ -16,6 +16,10 @@ export const validationSchemeUpdateLeaveEntries = Yup.object({
   leaveType: Yup.string().notRequired(),
   leaveStatus: Yup.string().notRequired(),
   leaveFrom: Yup.date().notRequired(),
-  leaveTo: Yup.date().notRequired(),
+  halfTo: Yup.date().notRequired(),
+  halfFrom: Yup.date().notRequired(),
+  leaveTo: Yup.date().min(
+    Yup.ref('leaveFrom'), 'Leave To harus lebih dari Leave From'
+  ),
   note: Yup.string()
 });

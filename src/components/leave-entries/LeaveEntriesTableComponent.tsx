@@ -18,9 +18,9 @@ import store from '@/store/index';
 import { getLeaveEntriesRequested, deleteLeaveEntriesRequested } from '@/store/reducers/slice/attendance-leave/leaveEntriesSlice';
 import { useAppSelectors } from '@/hooks/index';
 import { AttendanceLeave } from '@/types/attendanceLeave';
-import utc from 'dayjs/plugin/utc';
+// import utc from 'dayjs/plugin/utc';
 
-dayjs.extend(utc);
+// dayjs.extend(utc);
 
 const NameWrapper = styled.div`
    display: flex;
@@ -66,13 +66,12 @@ const LeaveEntriesTableComponent = ({
   };
 
   const headers = [
-    { id: 'date', label: 'Date' },
-    { id: 'emp.id', label: 'Employee ID' },
-    { id: 'emp.name', label: 'Employee Name' },
-    { id: 'leave.from', label: 'Leave From' },
-    { id: 'leave.to', label: 'Leave To' },
-    { id: 'leave.type', label: 'Leave Type' },
-    { id: 'status', label: 'Status' },
+    { id: 'employee.code', label: 'Employee ID' },
+    { id: 'employee.user.name', label: 'Employee Name' },
+    { id: 'items.start', label: 'Leave From' },
+    { id: 'items.end', label: 'Leave To' },
+    { id: 'items.leaveType', label: 'Leave Type' },
+    { id: 'items.leaveStatus', label: 'Status' },
     { id: 'action', label: '' }
   ];
 
@@ -114,7 +113,6 @@ const LeaveEntriesTableComponent = ({
         }
       }
     });
-    // loadDataLeaveEntries();
   };
 
   const handleSearch = (e) => {
@@ -205,9 +203,8 @@ const LeaveEntriesTableComponent = ({
                   </TableRow>
                 ), (
                   leaveEntries?.leaveEntriesData?.items?.map(value => (
-                    <TableRow key={value.date}>
-                      <TableCell>{dayjs.utc(value.date).format('DD/MM/YY')}</TableCell>
-                      <TableCell>{value.employee?.employeeID}</TableCell>
+                    <TableRow key={value.employee?.code}>
+                      <TableCell>{value.employee?.code}</TableCell>
                       <TableCell>
                         <NameWrapper>
                           <Avatar
@@ -219,8 +216,8 @@ const LeaveEntriesTableComponent = ({
                           &nbsp;{value.employee?.name}
                         </NameWrapper>
                       </TableCell>
-                      <TableCell>{dayjs.utc(value.start).format('DD/MM/YY')}</TableCell>
-                      <TableCell>{dayjs.utc(value.end).format('DD/MM/YY')}</TableCell>
+                      <TableCell>{dayjs(value.start).format('DD/MM/YY')}</TableCell>
+                      <TableCell>{dayjs(value.end).format('DD/MM/YY')}</TableCell>
                       <TableCell>{renderLeaveType(value?.leaveType)}</TableCell>
                       <TableCell>{renderLeaveStatus(value?.leaveStatus)}</TableCell>
                       <TableCell>
