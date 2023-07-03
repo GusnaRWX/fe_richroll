@@ -15,7 +15,13 @@ import { HiOutlineArchive } from 'react-icons/hi';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 import ItpProfileBasicDetailDetailComponent from './ItpProfileBasicDetailDetailComponent';
+<<<<<<< HEAD
 import ItpProfileIncomeTaxMultiplier from './ItpProfileIncomeTaxMultiplier';
+=======
+import ItpProfileDeductableComponentDetailComponent from './ItpProfileDeductableComponentDetailComponent';
+import ItpProfileIncomeTaxRateDetailComponent from './ItpProfileIncomeTaxRateDetailComponent';
+import ItpProfileDtaDetailComponent from './ItpProfileDtaDetailComponent';
+>>>>>>> d2e3afad0ce98c69341fe9b30067e7d26c178b93
 
 export default function ItpProfileDetailComponent() {
   const router = useRouter();
@@ -64,7 +70,7 @@ export default function ItpProfileDetailComponent() {
         id={`simple-tabpanel-${index}`}
         {...other}
       >
-        {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+        {value === index && <Box>{children}</Box>}
       </div>
     );
   }
@@ -163,8 +169,8 @@ export default function ItpProfileDetailComponent() {
           />
         </NextBtnWrapper>
       </Header>
-      <Paper sx={{ width: '100%', p: '21px 8px' }}>
-        <Box sx={{px:'48px'}}>
+      <Paper sx={{ width: '100%', p: '20px 32px' }}>
+        <Box sx={{p:'16px', pt:'0px'}}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider',  }}>
             <Tabs value={value} onChange={handleChange} aria-label='basic tabs'>
               <Tab label='Basic Detail' {...a11yProps(0)} />
@@ -178,19 +184,21 @@ export default function ItpProfileDetailComponent() {
         <TabPanel value={value} index={0}>
           <ItpProfileBasicDetailDetailComponent />
         </TabPanel>
-        <TabPanel value={value} index={1}>
-          2
-        </TabPanel>
         <TabPanel value={value} index={2}>
-          3
+          <ItpProfileIncomeTaxRateDetailComponent />
         </TabPanel>
         <TabPanel value={value} index={3}>
           <ItpProfileIncomeTaxMultiplier />
         </TabPanel>
         <TabPanel value={value} index={4}>
-          5
+          <ItpProfileDtaDetailComponent/>
         </TabPanel>
       </Paper>
+
+      <TabPanel value={value} index={1}>
+        <ItpProfileDeductableComponentDetailComponent/>
+      </TabPanel>
+
       {/* Pop Up Setting ============================== */}
       <ConfirmationModal
         type='delete'
