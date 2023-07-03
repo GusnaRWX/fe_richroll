@@ -84,7 +84,7 @@ export default function ItpProfileDetailComponent() {
   };
 
   function EditActionHandler() {
-    router.push('/income-tax-profile/profile/add-new-profile');
+    router.push(`/income-tax-profile/profile/edit?status=${value}`);
   }
 
   return (

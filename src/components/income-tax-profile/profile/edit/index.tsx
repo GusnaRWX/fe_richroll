@@ -29,7 +29,7 @@ export default function ItpEditProfileComponent() {
     alignItems: 'center',
   });
 
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(parseInt(router.query.status as string) || 0);
 
   interface TabPanelProps {
     children?: React.ReactNode;
