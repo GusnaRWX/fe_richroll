@@ -26,14 +26,14 @@ export default function ItpProfileIncomeTaxMultiplier(){
       {(dummyObeject.map((data, i_data)=>{
         return(
           <>
-            <Paper component='div' elevation={1} sx={{padding: '16px'}}>
+            <Paper key={i_data} component='div' elevation={1} sx={{padding: '16px'}}>
               <Typography sx={{color: '#223567', fontWeight: 700, fontSize: '14px'}}>Component {i_data}</Typography>
               <Typography sx={{color: '#9CA3AF', fontWeight: 400, fontSize: '14px', marginTop: '16px'}}>Deductible Factor</Typography>
               <Typography sx={{color: '#4B5563', fontWeight: 400, fontSize: '14px', marginTop: '15px'}}>{data.DeductableFactor}</Typography>
               {(data.DeductableItem.map((item, i_item)=>{
                 return(
                   <>
-                    <Grid container style={{marginTop: '19px'}}>
+                    <Grid key={i_item} container style={{marginTop: '19px'}}>
                       <Grid item xs={1} style={{display: 'flex', alignItems: 'center'}}>
                         <Typography sx={{color: '#4B5563)'}}>{item.action}</Typography>
                       </Grid>
