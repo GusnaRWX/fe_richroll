@@ -136,7 +136,7 @@ function CompanyComponent() {
                       component='div'
                       sx={{ fontWeight: 500, width: '100%' }}
                     >
-                      {ifThenElse(item?.sector === null, '-', item?.sector)}
+                      {ifThenElse(item?.sector === null, '-', item?.sector?.name)}
                     </Typography>
                   </WrapperCardItem>
                 ))

@@ -138,7 +138,7 @@ function OvertimeSummaryEditForm({editOpen, handleEditClose, callback, item}: Ed
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             inputProps={{
-              step: 0.5
+              step: 0.1
             }}
             InputProps={{
               endAdornment: (
