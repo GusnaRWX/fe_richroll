@@ -77,6 +77,7 @@ export declare namespace AttendanceLeave {
     note: string;
     leaveType: number;
     leaveStatus: number;
+    isHalfday: boolean;
   }
 
   interface LeaveEntriesList {
@@ -93,6 +94,7 @@ export declare namespace AttendanceLeave {
     leaveType: string;
     start: string;
     note: string;
+    isHalfday: boolean;
   }
 
   interface PutLeave {
