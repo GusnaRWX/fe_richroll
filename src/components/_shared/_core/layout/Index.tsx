@@ -12,7 +12,7 @@ import Notify from '../../common/Notify';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { getStorage } from '@/utils/storage';
 import { meSuccessed } from '@/store/reducers/slice/auth/meSlice';
-import { getCompanyData, CompanyDataParse } from '@/utils/helper';
+import { getCompanyData, CompanyDataParse, getUserData, getSelectedRoles } from '@/utils/helper';
 
 export interface LayoutProps {
   children?: React.ReactNode;
@@ -33,6 +33,8 @@ const Layout = ({
   const [mobileOpen, setMobileOpen] = useState<boolean>(true);
   const [menuOpen, setMenuOpen] = useState<string>('');
   const [companyData, setCompanyData] = useState<CompanyDataParse | null>({});
+  const userData = getUserData();
+  const selectedRoles = getSelectedRoles();
   const dispatch = useAppDispatch();
 
   const handleDrawerToggle = () => {
@@ -65,33 +67,68 @@ const Layout = ({
     <Box>
       {!profile?.roles?.includes('Super Admin') &&
         <>
-          <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', px: '16px', pt: '8px', gap: '12px' }}>
-            <Box component='div' sx={{ position: 'relative', width: '60px', height: '60px' }}>
-              <Image
-                src={companyData?.imageUrl && companyData?.imageUrl.includes('http') ? companyData?.imageUrl : ImageType.PLACEHOLDER_COMPANY}
-                fill={true}
-                style={{ objectFit: 'contain' }}
-                sizes='(max-width: 60px) 100%, 60px'
-                alt='company-logo'
-              />
-            </Box>
-            <Box component='div'>
-              <Typography
-                variant='text-lg'
-                component='div'
-                sx={{ fontWeight: 700, width: '100%', color: '#223567' }}
-              >
-                {companyData?.name}
-              </Typography>
-              <Typography
-                variant='text-xs'
-                component='div'
-                sx={{ fontWeight: 500, width: '100%', color: '#6B7280' }}
-              >
-                {companyData?.sector}
-              </Typography>
-            </Box>
-          </Box>
+          {
+            selectedRoles === 'HR Admin' && (
+              <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', px: '16px', pt: '8px', gap: '12px' }}>
+                <Box component='div' sx={{ position: 'relative', width: '60px', height: '60px' }}>
+                  <Image
+                    src={companyData?.imageUrl && companyData?.imageUrl.includes('http') ? companyData?.imageUrl : ImageType.PLACEHOLDER_COMPANY}
+                    fill={true}
+                    style={{ objectFit: 'contain' }}
+                    sizes='(max-width: 60px) 100%, 60px'
+                    alt='company-logo'
+                  />
+                </Box>
+                <Box component='div'>
+                  <Typography
+                    variant='text-lg'
+                    component='div'
+                    sx={{ fontWeight: 700, width: '100%', color: '#223567' }}
+                  >
+                    {companyData?.name}
+                  </Typography>
+                  <Typography
+                    variant='text-xs'
+                    component='div'
+                    sx={{ fontWeight: 500, width: '100%', color: '#6B7280' }}
+                  >
+                    {companyData?.sector}
+                  </Typography>
+                </Box>
+              </Box>
+            )
+          }
+          {
+            selectedRoles === 'Employee' && (
+              <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', px: '16px', pt: '8px', gap: '12px' }}>
+                <Box component='div' sx={{ position: 'relative', width: '60px', height: '60px' }}>
+                  <Image
+                    src={userData?.picture && userData?.picture.includes('http') ? userData?.picture : ImageType.PLACEHOLDER_COMPANY}
+                    fill={true}
+                    style={{ objectFit: 'contain' }}
+                    sizes='(max-width: 60px) 100%, 60px'
+                    alt='company-logo'
+                  />
+                </Box>
+                <Box component='div'>
+                  <Typography
+                    variant='text-lg'
+                    component='div'
+                    sx={{ fontWeight: 700, width: '100%', color: '#223567' }}
+                  >
+                    {userData?.name}
+                  </Typography>
+                  <Typography
+                    variant='text-xs'
+                    component='div'
+                    sx={{ fontWeight: 500, width: '100%', color: '#6B7280' }}
+                  >
+                    {userData?.employee?.position === null ? '-' : userData?.employee?.position}
+                  </Typography>
+                </Box>
+              </Box>
+            )
+          }
         </>
       }
       <List>
