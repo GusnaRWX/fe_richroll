@@ -15,13 +15,10 @@ import { HiOutlineArchive } from 'react-icons/hi';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 import ItpProfileBasicDetailDetailComponent from './ItpProfileBasicDetailDetailComponent';
-<<<<<<< HEAD
-import ItpProfileIncomeTaxMultiplier from './ItpProfileIncomeTaxMultiplier';
-=======
 import ItpProfileDeductableComponentDetailComponent from './ItpProfileDeductableComponentDetailComponent';
 import ItpProfileIncomeTaxRateDetailComponent from './ItpProfileIncomeTaxRateDetailComponent';
+import ItpProfileIncomeTaxMultiplier from './ItpProfileIncomeTaxMultiplier';
 import ItpProfileDtaDetailComponent from './ItpProfileDtaDetailComponent';
->>>>>>> d2e3afad0ce98c69341fe9b30067e7d26c178b93
 
 export default function ItpProfileDetailComponent() {
   const router = useRouter();
@@ -87,7 +84,7 @@ export default function ItpProfileDetailComponent() {
   };
 
   function EditActionHandler() {
-    router.push('/income-tax-profile/profile/add-new-profile');
+    router.push(`/income-tax-profile/profile/edit?status=${value}`);
   }
 
   return (
