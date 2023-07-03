@@ -236,23 +236,22 @@ export declare namespace Employees {
     phoneNumberSecondary: string;
   }
 
+  interface BreakItemType {
+    breakName: string;
+    startTime: DayJS;
+    endTime: DayJS;
+  }
+
   interface InitialValuesWorkScheduleForm {
     workScheduleID: string | number;
     profileName: string;
     type: string | number;
-    flexiWorkHour: string,
-    flexiMinWorkHour: string,
-    fixedStartDay: string,
-    fixedEndDay: string,
-    fixedStartTime: string,
-    fixedEndTime: string,
-    fixedWorkDayType: string | number,
-    flexiWorkDay: string,
-    breakName: string,
-    breakDuration: string | number,
-    specifyBreakHour: boolean,
-    breakStartTime: string,
-    breakEndTime: string
+    dayType: Array<string | number>;
+    day: Array<string | number>
+    startHour: DayJS;
+    endHour: DayJS;
+    flexiWorkHour: string | number;
+    breakItem: Array<BreakItemType>;
   }
 
   interface PostSimulationEventPayloadType {

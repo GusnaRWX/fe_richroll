@@ -230,7 +230,7 @@ function OvertimeSummaryComponent() {
         value={value}
         onChange={(e) => setVal(e.target.value)}
         inputProps={{
-          step: 0.5
+          step: 0.1
         }}
         InputProps={{
           endAdornment: (

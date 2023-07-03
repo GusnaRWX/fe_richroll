@@ -32,7 +32,7 @@ const service = axios.create({
       toString() {
         return `Bearer ${getStorage('accessToken')}`;
       }
-    } as AxiosHeaderValue
+    } as AxiosHeaderValue,
   }
 });
 
@@ -69,7 +69,7 @@ service.interceptors.response.use(
   async (error) => {
     if (config.MODE !== 'production') logResponser(error);
     console.log(error, 'error');
-    // Check if the error status is 401 
+    // Check if the error status is 401
     if (error.response && error.response.status === 401 && error.response.data.message !== 'incorrect email or password') {
       try {
         const accessToken = await refreshAccessToken();
