@@ -15,6 +15,7 @@ import { HiOutlineArchive } from 'react-icons/hi';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 import ItpProfileBasicDetailDetailComponent from './ItpProfileBasicDetailDetailComponent';
+import ItpProfileIncomeTaxMultiplier from './ItpProfileIncomeTaxMultiplier';
 
 export default function ItpProfileDetailComponent() {
   const router = useRouter();
@@ -184,7 +185,7 @@ export default function ItpProfileDetailComponent() {
           3
         </TabPanel>
         <TabPanel value={value} index={3}>
-          4
+          <ItpProfileIncomeTaxMultiplier />
         </TabPanel>
         <TabPanel value={value} index={4}>
           5
