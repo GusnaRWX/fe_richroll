@@ -9,7 +9,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 
 
-export default function CreateTaxMultiplier() {
+export default function ItpCreateTaxMultiplier() {
 
   const DummyStatusOption = [
     {value:'1',label:'NPWP'},

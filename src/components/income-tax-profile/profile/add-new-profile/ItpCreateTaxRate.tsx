@@ -6,7 +6,7 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
 import * as Yup from 'yup';
 
-export default function CreateTaxRate() {
+export default function ItpCreateTaxRate() {
   // interface InitialValues {
   //   minIncome: string;
   //   maxIncome: string;

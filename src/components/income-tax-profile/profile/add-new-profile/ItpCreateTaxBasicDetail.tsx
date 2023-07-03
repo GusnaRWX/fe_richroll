@@ -6,11 +6,11 @@ import * as Yup from 'yup';
 import BasicDatePicker from '@/components/_shared/form/DatePicker';
 import dayjs from 'dayjs';
 
-interface CreateTaxBasicDetailComponentProps {
+interface ItpCreateTaxBasicDetailProps {
   setValue: Dispatch<SetStateAction<number>>
 }
 
-export default function CreateTaxBasicDetailComponent({setValue}: CreateTaxBasicDetailComponentProps) {
+export default function ItpCreateTaxBasicDetail({setValue}: ItpCreateTaxBasicDetailProps) {
   const Dummyoption = [
     { value: '1', label: 'Dummy 1' },
     { value: '2', label: 'Dummy 2' },

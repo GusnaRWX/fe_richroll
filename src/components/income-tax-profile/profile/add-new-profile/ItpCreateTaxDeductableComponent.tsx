@@ -18,7 +18,7 @@ const AddButton = styled(Button)({
   },
 });
 
-const CreateTaxDeductableComponent = () => {
+export default function  ItpCreateTaxDeductableComponent() {
   const [isAddNewDeductableComponent, setIsAddNewDeductableComponent] =
     useState(false);
   const [initialDeductableValues, setInitialDeductableValues] = useState<
@@ -522,6 +522,6 @@ const CreateTaxDeductableComponent = () => {
       </Box>
     </>
   );
-};
+}
 
-export default CreateTaxDeductableComponent;
+
