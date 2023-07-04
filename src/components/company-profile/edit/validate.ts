@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
 
 export const validationSchemeCompanyProfile = Yup.object({
-  picture: Yup.array().notRequired(),
+  picture: Yup.mixed().notRequired(),
   companyType: Yup.string().required('Company type is required'),
   companyName: Yup.string().required('Company name is required'),
   companyNPWP: Yup.string().notRequired(),
@@ -9,7 +9,7 @@ export const validationSchemeCompanyProfile = Yup.object({
   companyEmail: Yup.string().email('Email should be valid').required('Email is required'),
   phoneNumberPrefix: Yup.string().required(),
   phoneNumber: Yup.string()
-    .matches(/^\d{11}$/, 'Phone number should have 12 or 13 digits')
+    .matches(/^\d{11}$/, 'Phone number should have 12 or 13 digits include the nation code')
     .required('Phone number is required')
     .typeError('Phone number should be a number'),
 
@@ -18,8 +18,10 @@ export const validationSchemeCompanyProfile = Yup.object({
   cityCompanyAddress: Yup.string().required('City is required'),
   subDistrictCompanyAddress: Yup.string().required('Sub District is required'),
   addressCompanyAddress: Yup.string().required('Company Address is required'),
-  zipCodeCompanyAddress: Yup.string().required('ZIP Code is required'),
+  zipCodeCompanyAddress: Yup.string().required('ZIP Code is required')
+});
 
+export const validationSchemeCompanyProfilePayment = Yup.object({
   bankBankInformation: Yup.string().required('Bank is required'),
   bankAccountHolderNameBankInformation: Yup.string().required('Bank Account Holder’s Name is required'),
   bankAccoutNoBankInformation: Yup.string().required('Bank Account No is required'),

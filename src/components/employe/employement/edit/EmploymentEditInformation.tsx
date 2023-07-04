@@ -5,11 +5,10 @@ import React, { HTMLAttributes, useCallback, useEffect, useRef, useState } from 
 import { Image as ImageType } from '@/utils/assetsConstant';
 import { styled as MuiStyled } from '@mui/material/styles';
 import {
-  base64ToFile,
-  convertImageParams, randomCode,
+  convertImageParams
 } from '@/utils/helper';
 import styled from '@emotion/styled';
-import { Input, Select as CustomSelect, FileUploadModal } from '@/components/_shared/form';
+import { Input, Select as CustomSelect, FileUploadModal, CropperImage } from '@/components/_shared/form';
 import { Employment } from '@/types/employment';
 import { useFormik } from 'formik';
 import { Alert, Text } from '@/components/_shared/common';
@@ -20,6 +19,7 @@ import { validationSchemeEmployeeInformation } from './validate';
 import { useAppSelectors } from '@/hooks/index';
 import dayjs from 'dayjs';
 import { ifThenElse } from '@/utils/helper';
+import { FiTrash2 } from 'react-icons/fi';
 
 
 const AsteriskComponent = MuiStyled('span')(({ theme }) => ({
@@ -83,6 +83,8 @@ const EmploymentEditInformation = ({ refProp, setValues, infoValues, handleFirst
   const [openCamera, setOpenCamera] = useState(false);
   const [images, setImages] = useState<string | null>(infoValues?.images);
   const [open, setOpen] = useState(false);
+  const [modalCrop, setModalCrop] = useState(false);
+  const [tempImageCrop, setTempImageCrop] = useState(infoValues?.images);
   const { detailInformation, detailCnb } = useAppSelectors((state) => state.employment);
   const handleCloseCamera = () => {
     setCaptureEnable(false);
@@ -95,13 +97,22 @@ const EmploymentEditInformation = ({ refProp, setValues, infoValues, handleFirst
     setOpenCamera(true);
   };
 
+  const handleCancelCrop = () => {
+    setImages(infoValues?.images);
+    setTempImageCrop(infoValues?.images);
+    setModalCrop(false);
+  };
+
+  const handleSaveCropImage = (file, img) => {
+    setTempImageCrop(img);
+    console.log(file);
+    formik.setFieldValue('picture', file);
+  };
+
   const capture = useCallback(() => {
     const imageSrc = webcamRef.current?.getScreenshot();
     if (imageSrc) {
       setImages(imageSrc);
-      const nameFile = randomCode(5);
-      const fileImage = base64ToFile(imageSrc, nameFile);
-      formik.setFieldValue('picture', fileImage);
       handleClose();
       handleCloseCamera();
     }
@@ -157,7 +168,13 @@ const EmploymentEditInformation = ({ refProp, setValues, infoValues, handleFirst
   };
 
   const handleClose = () => {
+    setModalCrop(true);
     setOpen(false);
+  };
+
+  const resetImages = () => {
+    setImages(null);
+    setTempImageCrop('');
   };
   return (
     <>
@@ -186,7 +203,29 @@ const EmploymentEditInformation = ({ refProp, setValues, infoValues, handleFirst
               title='Employee Photo'
               color='primary.500'
             />
-            <ImageReview image={!images ? ImageType.PLACEHOLDER : images} onClick={handleOpen} />
+            <div style={{ position: 'relative' }}>
+              <ImageReview image={!tempImageCrop ? ImageType.PLACEHOLDER : tempImageCrop} onClick={handleOpen} />
+              {tempImageCrop && (
+                <IconButton
+                  sx={{
+                    position: 'absolute',
+                    border: '1px solid red',
+                    backgroundColor: 'white',
+                    borderRadius: '3px',
+                    left: '65px',
+                    height: '33px',
+                    width: '33px',
+                    ':hover': {
+                      backgroundColor: 'white'
+                    },
+                    bottom: '5px'
+                  }}
+                  onClick={resetImages}
+                >
+                  <FiTrash2 style={{ zIndex: '999', color: 'red' }} />
+                </IconButton>
+              )}
+            </div>
             {
               formik.errors.picture && (
                 <Typography component='span' fontSize='12px' color='red.500'>This field is required</Typography>
@@ -301,6 +340,13 @@ const EmploymentEditInformation = ({ refProp, setValues, infoValues, handleFirst
           handleClose={handleClose}
           onChange={(e) => formik.setFieldValue('picture', convertImageParams('picture', !e.target.files ? null : e.target.files[0], setImages, handleClose), false)}
           onCapture={handleOpenCamera}
+        />
+        <CropperImage
+          open={modalCrop}
+          onClose={handleCancelCrop}
+          image={images}
+          setCropValue={handleSaveCropImage}
+          ratio={1/1}
         />
         <Modal
           open={openCamera}

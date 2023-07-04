@@ -11,13 +11,13 @@ import {
   Modal,
   IconButton
 } from '@mui/material';
-import { Input, Button, Textarea, FileUploadModal } from '@/components/_shared/form';
+import { Input, Button, Textarea, FileUploadModal, CropperImage } from '@/components/_shared/form';
 import { Alert, Text } from '@/components/_shared/common';
 import { styled as MuiStyled } from '@mui/material/styles';
 import { Image as ImageType } from '@/utils/assetsConstant';
 import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
-import { convertImageParams, ifThenElse, compareCheck, randomCode, base64ToFile } from '@/utils/helper';
+import { convertImageParams, ifThenElse, compareCheck } from '@/utils/helper';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import {
   administrativeFirstLevelRequested,
@@ -26,6 +26,7 @@ import {
 } from '@/store/reducers/slice/options/optionSlice';
 import Webcam from 'react-webcam';
 import { CameraAlt, Cancel } from '@mui/icons-material';
+import { FiTrash2 } from 'react-icons/fi';
 
 
 const AsteriskComponent = MuiStyled('span')(({ theme }) => ({
@@ -113,9 +114,9 @@ function CompanyInformationForm({
     const imageSrc = webcamRef.current?.getScreenshot();
     if (imageSrc) {
       setImages(imageSrc);
-      const nameFile = randomCode(5);
-      const fileImage = base64ToFile(imageSrc, nameFile);
-      formik.setFieldValue('picture', fileImage);
+      // const nameFile = randomCode(5);
+      // const fileImage = base64ToFile(imageSrc, nameFile);
+      // formik.setFieldValue('picture', fileImage);
       handleClose();
       handleCloseCamera();
     }
@@ -124,6 +125,18 @@ function CompanyInformationForm({
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const [modalCrop, setModalCrop] = useState(false);
+  const [tempImageCrop, setTempImageCrop] = useState('');
+
+  const handleCancelCrop = () => {
+    setImages('');
+    setModalCrop(false);
+  };
+
+  const handleSaveCropImage = (file, img) => {
+    setTempImageCrop(img);
+    formik.setFieldValue('picture', file);
+  };
 
   const {
     administrativeFirst,
@@ -136,6 +149,7 @@ function CompanyInformationForm({
   };
 
   const handleClose = () => {
+    setModalCrop(true);
     setOpen(false);
   };
 
@@ -152,14 +166,20 @@ function CompanyInformationForm({
   };
 
   const handleNext = () => {
-    // formik.handleSubmit();
-    // if (Object.keys(formik.errors).length === 3 && !duplicateCompany) {
-    if (!duplicateCompany) {
-      nextPage(1);
-      setIsError(false);
-    } else {
-      setIsError(true);
-    }
+    formik.validateForm().then((a) => {
+      if(Object.keys(a).length === 0) {
+        formik.submitForm();
+        setIsError(false);
+        nextPage(1);
+      } else {
+        setIsError(true);
+      }
+    });
+  };
+
+  const resetPicture = () => {
+    setImages(null);
+    setTempImageCrop('');
   };
 
   return (
@@ -174,7 +194,32 @@ function CompanyInformationForm({
       <Typography component='h3' fontSize={18} color='primary' fontWeight={700}>Company Information</Typography>
       <form>
         <Typography variant='text-sm' component='div' color='primary' sx={{ mt: '16px' }}>Company Logo</Typography>
-        <ImageReview image={ifThenElse(!images, ImageType.PLACEHOLDER, images)} onClick={handleOpen} />
+        <ImageReview
+          image={ifThenElse(!tempImageCrop, ImageType.PLACEHOLDER, tempImageCrop)}
+          onClick={handleOpen}
+        />
+        {
+          tempImageCrop && (
+            <IconButton
+              sx={{
+                position: 'absolute',
+                border: '1px solid red',
+                backgroundColor: 'white',
+                borderRadius: '3px',
+                left: '65px',
+                height: '33px',
+                width: '33px',
+                ':hover': {
+                  backgroundColor: 'white'
+                },
+                bottom: '5px'
+              }}
+              onClick={resetPicture}
+            >
+              <FiTrash2 style={{ zIndex: '999', color: 'red' }} />
+            </IconButton>
+          )
+        }
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <FormControl fullWidth error={compareCheck(formik.touched.companyType, Boolean(formik.errors.companyType))}>
@@ -599,6 +644,13 @@ function CompanyInformationForm({
         handleClose={handleClose}
         onChange={(e) => formik.handleChange(convertImageParams('picture', !e.target.files ? null : e.target.files[0], setImages, handleClose))}
         onCapture={handleOpenCamera}
+      />
+      <CropperImage
+        open={modalCrop}
+        onClose={handleCancelCrop}
+        image={images}
+        setCropValue={handleSaveCropImage}
+        ratio={1/1}
       />
       <Modal
         open={openCamera}

@@ -122,6 +122,7 @@ function AttendanceTable({
   const startSuspend = dayjs();
   const [endSuspend, setEndSuspend] = useState(dayjs());
   const [value, setValue] = useState(0);
+  const [checkAll, setCheckAll] = useState(false);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -150,12 +151,15 @@ function AttendanceTable({
     dispatch({
       type: patchAccountSuspensionRequested.toString(),
       payload: {
-        id: selectedItem?.id,
         data: {
-          start: dayjs(startSuspend).format('YYYY-MM-DD'),
-          end: dayjs(endSuspend).format('YYYY-MM-DD'),
-          isPermanent: isPermanent
-        }
+          id: selectedItem?.id,
+          data: {
+            start: dayjs(startSuspend).format('YYYY-MM-DD'),
+            end: dayjs(endSuspend).format('YYYY-MM-DD'),
+            isPermanent: isPermanent
+          }
+        },
+        accountName: selectedItem?.name
       }
     });
   };
@@ -220,7 +224,7 @@ function AttendanceTable({
                 width: 24, height: 24
               }}
             />
-              &nbsp;<Typography component='div' variant='text-sm' fontWeight={400}>{selectedItem?.name}</Typography>
+            &nbsp;<Typography component='div' variant='text-sm' fontWeight={400}>{selectedItem?.name}</Typography>
           </NameWrapper>
         </Grid>
         <Grid item xs={6}>
@@ -301,7 +305,7 @@ function AttendanceTable({
                     width: 24, height: 24
                   }}
                 />
-                  &nbsp;<Typography component='div' variant='text-sm' fontWeight={400}>{selectedItem?.name}</Typography>
+                &nbsp;<Typography component='div' variant='text-sm' fontWeight={400}>{selectedItem?.name}</Typography>
               </NameWrapper>
             </Grid>
             <Grid item xs={4}>
@@ -408,6 +412,16 @@ function AttendanceTable({
         onRowsPerPagesChange={(e) => handleChangeRowsPerPage(e)}
         headChildren={
           <TableRow>
+            {tabValue === 0 && (
+              <TableCell>
+                <CheckBox
+                  customLabel=''
+                  name='checkAll'
+                  checked={checkAll}
+                  onChange={(e) => setCheckAll(e.target.checked)}
+                />
+              </TableCell>
+            )}
             {
               headerItems.map((item) => (
                 <TableCell key={item.id} sortDirection={ifThenElse(sort === item.id, direction, false)}>
@@ -439,6 +453,16 @@ function AttendanceTable({
                 ), (
                   data?.items?.map((item, index) => (
                     <TableRow key={index}>
+                      {tabValue === 0 && (
+                        <TableCell>
+                          <CheckBox
+                            customLabel=''
+                            name='checkAll'
+                            checked={checkAll}
+                            onChange={(e) => setCheckAll(e.target.checked)}
+                          />
+                        </TableCell>
+                      )}
                       <TableCell>{item.employee && item.employee.code || '-'}</TableCell>
                       <TableCell>
                         <NameWrapper>

@@ -13,6 +13,7 @@ import styled from '@emotion/styled';
 import { visuallyHidden } from '@mui/utils';
 import { useRouter } from 'next/router';
 import { ConfirmationModal, CustomModal } from '@/components/_shared/common';
+import EmptyState from '@/components/_shared/common/EmptyState';
 
 // Import Icon React Icon
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -143,6 +144,7 @@ function SutatoryBenefitProfileTable({
     setPage(0);
   };
 
+
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
     headId: string
@@ -224,7 +226,7 @@ function SutatoryBenefitProfileTable({
               data?.items.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={12} align='center'>
-                    <Typography>Data not found</Typography>
+                    <EmptyState />
                   </TableCell>
                 </TableRow>
               ) : (
@@ -302,7 +304,7 @@ function SutatoryBenefitProfileTable({
             ) : (
               <TableRow>
                 <TableCell colSpan={12} align='center'>
-                  <Typography>Data not found</Typography>
+                  <EmptyState />
                 </TableCell>
               </TableRow>
             )}

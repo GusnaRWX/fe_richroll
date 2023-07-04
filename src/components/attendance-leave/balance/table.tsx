@@ -5,13 +5,13 @@ import {
   TableRow,
   Avatar,
   Box,
-  TableSortLabel,
-  Typography,
+  TableSortLabel
 } from '@mui/material';
 import Table from '@/components/_shared/form/Table';
 import { IconButton } from '@/components/_shared/form';
 import styled from '@emotion/styled';
 import { visuallyHidden } from '@mui/utils';
+import EmptyState from '@/components/_shared/common/EmptyState';
 
 // Import Icon React Icon
 import { HiPencilAlt } from 'react-icons/hi';
@@ -184,7 +184,7 @@ function LeaveBalanceTable({ tabValue }: LeaveBalanceTableProps) {
               data?.items.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={12} align='center'>
-                    <Typography>Data not found</Typography>
+                    <EmptyState />
                   </TableCell>
                 </TableRow>
               ) : (
@@ -237,7 +237,7 @@ function LeaveBalanceTable({ tabValue }: LeaveBalanceTableProps) {
             ) : (
               <TableRow>
                 <TableCell colSpan={12} align='center'>
-                  <Typography>Data not found</Typography>
+                  <EmptyState />
                 </TableCell>
               </TableRow>
             )}

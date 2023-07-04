@@ -1,4 +1,9 @@
+import dayjs from 'dayjs';
 export declare namespace workSchedule {
+
+  type DayJS = dayjs.Dayjs | null | string;
+
+
   interface InitialValuesWorkScheduleForm {
     profileName: string;
     type: string | number;
@@ -71,5 +76,22 @@ export declare namespace workSchedule {
     direction: boolean;
     search: string;
     companyID?: number;
+  }
+
+  interface BreakItemType {
+    breakName: string;
+    startTime: DayJS;
+    endTime: DayJS;
+  }
+
+  interface WsFormType {
+    profileName: string;
+    type: string | number;
+    dayType: Array<string | number>;
+    day: Array<string | number>
+    startHour: DayJS;
+    endHour: DayJS;
+    flexiWorkHour: string | number;
+    breakItem: Array<BreakItemType>;
   }
 }

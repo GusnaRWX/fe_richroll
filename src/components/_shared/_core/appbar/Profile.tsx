@@ -1,10 +1,9 @@
 import React from 'react';
-import { Divider, Grid, Menu, MenuItem, Typography } from '@mui/material';
-import Image from 'next/image';
-import { Image as ImageType } from '@/utils/assetsConstant';
+import { Divider, Grid, Menu, MenuItem, Typography, Avatar } from '@mui/material';
 import { IconButton } from '@/components/_shared/form';
 import { ExpandLess, ExpandMore, } from '@mui/icons-material';
 import { useRouter } from 'next/router';
+import { Image } from '@/utils/assetsConstant';
 import { signOut } from 'next-auth/react';
 import { clearStorages } from '@/utils/storage';
 import { useAppSelectors } from '@/hooks/index';
@@ -13,9 +12,11 @@ import { HiBuildingOffice } from 'react-icons/hi2';
 import { Text } from '../../common';
 import PersonIcon from '@mui/icons-material/Person';
 import { Roles } from '@/utils/roles';
+import { getUserData } from '@/utils/helper';
 
 const Profile = () => {
   const router = useRouter();
+  const userData = getUserData();
   const { profile } = useAppSelectors(state => state.me);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -54,11 +55,10 @@ const Profile = () => {
       gap={1.2}
     >
       <Grid item>
-        <Image
-          src={ImageType.EXAMPLE_USER}
-          height={32}
-          width={32}
-          alt='current-user'
+        <Avatar
+          src={userData?.picture && userData?.picture.includes('http') ? userData?.picture : Image.AVATAR_PLACEHOLDER}
+          alt='profile_picture'
+          sx={{ width: 24, height: 24 }}
         />
       </Grid>
       <Grid item>

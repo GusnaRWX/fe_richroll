@@ -89,7 +89,7 @@ function EmployeeDetailComponent() {
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
-  
+
   return (
     <>
       <TopWrapper>
@@ -129,8 +129,8 @@ function EmployeeDetailComponent() {
               <Tab sx={{ textTransform: 'none' }} label='Employee Information' {...a11yProps(0)} />
               <Tab sx={{ textTransform: 'none' }} label='Personal Information' {...a11yProps(1)} />
               <Tab sx={{ textTransform: 'none' }} label='Emergency Contact' {...a11yProps(2)} />
-              <Tab sx={{ textTransform: 'none' }} label='Compensations and Benefits' {...a11yProps(3)} />
-              <Tab sx={{ textTransform: 'none' }} label='Work Scedhule' {...a11yProps(4)} />
+              <Tab sx={{ textTransform: 'none' }} label='Compensations & Benefits' {...a11yProps(3)} />
+              <Tab sx={{ textTransform: 'none' }} label='Work Schedule' {...a11yProps(4)} />
             </Tabs>
           </Box>
           <TabPanel value={value} index={0}>

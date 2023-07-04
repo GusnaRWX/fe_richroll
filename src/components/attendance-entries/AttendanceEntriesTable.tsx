@@ -6,13 +6,11 @@ import {
   TableRow,
   Box,
   TableSortLabel,
-  Typography
 } from '@mui/material';
 import { Input } from '../_shared/form';
 import { Search } from '@mui/icons-material';
 import Table from '../_shared/form/Table';
-import { Image as ImageType } from '@/utils/assetsConstant';
-import { compareCheck, ifThenElse } from '@/utils/helper';
+import { compareCheck, ifThenElse, getCompanyData } from '@/utils/helper';
 import { visuallyHidden } from '@mui/utils';
 import { IconButton } from '@/components/_shared/form';
 import { BsTrashFill } from 'react-icons/bs';
@@ -20,6 +18,11 @@ import { HiPencilAlt } from 'react-icons/hi';
 import styled from '@emotion/styled';
 import { ConfirmationModal } from '@/components/_shared/common';
 import AttendanceEntriesEdit from './AttendanceEntriesEdit';
+import { useAppDispatch, useAppSelectors } from '@/hooks/index';
+import { getAttendanceRequested, putAttendanceRequested, deleteAttendanceRequested } from '@/store/reducers/slice/attendance-leave/attendanceEntriesSlice';
+import { AttendanceLeave } from '@/types/attendanceLeave';
+import dayjs from 'dayjs';
+import EmptyState from '../_shared/common/EmptyState';
 
 const ButtonWrapper = styled.div`
  display: flex;
@@ -39,68 +42,32 @@ const NameWrapper = styled.div`
 
 const headerItems = [
   { id: 'date', label: 'Date' },
-  { id: 'employeeID', label: 'Employee ID' },
+  { id: 'id', label: 'Employee ID' },
   { id: 'name', label: 'Employee Name' },
   { id: 'clockIn', label: 'Clock In' },
   { id: 'clockOut', label: 'Clock Out' },
+  { id: 'count', label: 'Count' },
   { id: 'action', label: '' },
 ];
 
 type Order = 'asc' | 'desc'
 
-function AttendanceEntriesTable() {
-  const data = {
-    items: [
-      {
-        id: 1,
-        employeeID: 'MIG21090101',
-        name: 'Budi Irawan',
-        date: '31/03/2023',
-        clockIn: '09:00',
-        clockOut: '17:00',
-      },
-      {
-        id: 2,
-        employeeID: 'MIG21090101',
-        name: 'Budi Irawan',
-        date: '31/03/2023',
-        clockIn: '09:00',
-        clockOut: '17:00',
-      },
-      {
-        id: 3,
-        employeeID: 'MIG21090101',
-        name: 'Budi Irawan',
-        date: '31/03/2023',
-        clockIn: '09:00',
-        clockOut: '17:00',
-      },
-      {
-        id: 4,
-        employeeID: 'MIG21090101',
-        name: 'Budi Irawan',
-        date: '31/03/2023',
-        clockIn: '09:00',
-        clockOut: '17:00',
-      },
-      {
-        id: 5,
-        employeeID: 'MIG21090101',
-        name: 'Budi Irawan',
-        date: '31/03/2023',
-        clockIn: '09:00',
-        clockOut: '17:00',
-      },
-    ],
-    itemTotals: 5
-  };
+interface AttendanceEntriesTable {
+  reload: boolean;
+}
+
+const AttendanceEntriesTable: React.FC<AttendanceEntriesTable> = ({ reload }) => {
+  const dispatch = useAppDispatch();
+  const data = useAppSelectors(state => state.attendanceEntries.data);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(1);
-  // const [search, setSearch] = useState('');
+  const [search, setSearch] = useState('');
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
+  const companyData = getCompanyData();
   const [hydrated, setHaydrated] = useState(false);
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<AttendanceLeave.AttendanceType | undefined>();
   const [editConfirmation, setEditConfirmation] = useState(false);
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -109,14 +76,33 @@ function AttendanceEntriesTable() {
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(event);
-    // setPage(0);
+  };
+
+  const handleDelete = () => {
+    setDeleteConfirmation(false);
+    dispatch({
+      type: deleteAttendanceRequested.toString(),
+      payload: selectedItem?.id
+    });
+  };
+
+  const handleUpdate = (data: AttendanceLeave.PutAttendance) => {
+    setEditConfirmation(false);
+    dispatch({
+      type: putAttendanceRequested.toString(),
+      payload: {
+        id: selectedItem?.id,
+        data: {
+          clockIn: dayjs(data.clockIn).toISOString(),
+          clockOut: dayjs(data.clockOut).toISOString()
+        }
+      }
+    });
   };
 
   const handleSearch = (e) => {
     if (e.key === 'Enter') {
-      // setSearch(e.target.value);
-      console.log(e.target.value);
-
+      setSearch(e.target.value);
     }
   };
 
@@ -125,6 +111,20 @@ function AttendanceEntriesTable() {
     setDirection(ifThenElse(isAsc, 'desc', 'asc'));
     setSort(headId);
   };
+
+  useEffect(() => {
+    dispatch({
+      type: getAttendanceRequested.toString(),
+      payload: {
+        page: page,
+        itemPerPage: rowsPerPage,
+        sort: sort,
+        direction: direction.toUpperCase(),
+        search: search,
+        companyID: companyData?.id
+      }
+    });
+  }, [rowsPerPage, page, search, sort, direction, deleteConfirmation, editConfirmation, reload]);
 
   useEffect(() => {
     setHaydrated(true);
@@ -186,32 +186,36 @@ function AttendanceEntriesTable() {
               ifThenElse(typeof data?.items !== 'undefined', (
                 ifThenElse(data?.items?.length === 0, (
                   <TableRow>
-                    <TableCell colSpan={12} align='center'><Typography>Data not found</Typography></TableCell>
+                    <TableCell colSpan={12} align='center'>
+                      <EmptyState />
+                    </TableCell>
                   </TableRow>
                 ), (
                   data?.items?.map((item, index) => (
                     <TableRow key={index}>
-                      <TableCell>{item.date}</TableCell>
-                      <TableCell>{item.employeeID}</TableCell>
+                      <TableCell>{dayjs(item.date).format('DD/MM/YY')}</TableCell>
+                      <TableCell>{item.employee.employeeID}</TableCell>
                       <TableCell>
                         <NameWrapper>
                           <Avatar
-                            src={ImageType.AVATAR_PLACEHOLDER}
-                            alt={item.name}
+                            src={item.employee.picture}
+                            alt={item.employee.name}
                             sx={{
                               width: 24, height: 24
                             }}
                           />
-                          &nbsp;{item.name}
+                          &nbsp;{item.employee.name}
                         </NameWrapper>
                       </TableCell>
-                      <TableCell>{item.clockIn}</TableCell>
-                      <TableCell>{item.clockOut}</TableCell>
+                      <TableCell>{dayjs(item.clockIn).format('HH:mm')}</TableCell>
+                      <TableCell>{dayjs(item.clockOut).format('HH:mm')}</TableCell>
+                      <TableCell>{item.count}</TableCell>
                       <TableCell>
                         <ButtonWrapper>
                           <IconButton
                             parentColor='#E9EFFF'
                             onClick={() => {
+                              setSelectedItem(item);
                               setEditConfirmation(true);
                             }}
                             icons={
@@ -220,7 +224,10 @@ function AttendanceEntriesTable() {
                           />
                           <IconButton
                             parentColor='#FEE2E2'
-                            onClick={() => setDeleteConfirmation(true)}
+                            onClick={() => {
+                              setSelectedItem(item);
+                              setDeleteConfirmation(true);
+                            }}
                             icons={
                               <BsTrashFill fontSize={20} color='#EF4444' />
                             }
@@ -232,7 +239,9 @@ function AttendanceEntriesTable() {
                 ))
               ), (
                 <TableRow>
-                  <TableCell colSpan={12} align='center'><Typography>Data not found</Typography></TableCell>
+                  <TableCell colSpan={12} align='center'>
+                    <EmptyState />
+                  </TableCell>
                 </TableRow>
               ))
             }
@@ -242,19 +251,21 @@ function AttendanceEntriesTable() {
       <ConfirmationModal
         open={deleteConfirmation}
         handleClose={() => setDeleteConfirmation(false)}
-        title='Delete Data Entry'
-        content='You are about to delete this attendance data entry. This action cannot be undone.'
+        title='Delete Attendance Entry'
+        content='You are about to delete this attendance entry. This action cannot be undone.'
         withCallback
         noChange={true}
         type='delete'
-        callback={() => setDeleteConfirmation(false)}
+        callback={() => handleDelete()}
       />
       <AttendanceEntriesEdit
         open={editConfirmation}
         handleClose={() => { setEditConfirmation(false); }}
+        callback={(data) => handleUpdate(data)}
+        item={selectedItem}
       />
     </>
   );
-}
+};
 
 export default AttendanceEntriesTable;

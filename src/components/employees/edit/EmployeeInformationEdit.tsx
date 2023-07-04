@@ -9,14 +9,21 @@ import {
   Modal,
   IconButton
 } from '@mui/material';
-import { Input, Button, Select as CustomSelect, CheckBox, DatePicker, FileUploadModal } from '@/components/_shared/form';
+import {
+  Input,
+  Button,
+  Select as CustomSelect,
+  CheckBox,
+  DatePicker,
+  FileUploadModal,
+  CropperImage
+} from '@/components/_shared/form';
 import { styled as MuiStyled } from '@mui/material/styles';
 import { Image as ImageType } from '@/utils/assetsConstant';
 import styled from '@emotion/styled';
 import { useAppSelectors, useAppDispatch } from '@/hooks/index';
 import {
-  base64ToFile,
-  convertImageParams, randomCode,
+  convertImageParams
 } from '@/utils/helper';
 import dayjs from 'dayjs';
 import { Alert, Text } from '@/components/_shared/common';
@@ -146,10 +153,11 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
     const imageSrc = webcamRef.current?.getScreenshot();
     if (imageSrc) {
       setImages(imageSrc);
-      const nameFile = randomCode(5);
-      const fileImage = base64ToFile(imageSrc, nameFile);
-      formik.setFieldValue('picture', fileImage);
-      formik.setFieldValue('pictureBackend', fileImage);
+      // const nameFile = randomCode(5);
+      // const fileImage = base64ToFile(imageSrc, nameFile);
+      // formik.setFieldValue('picture', fileImage);
+      // formik.setFieldValue('pictureBackend', fileImage);
+      setModalCrop(true);
       handleClose();
       handleCloseCamera();
     }
@@ -157,6 +165,21 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
   const { listDepartment, listPosition } = useAppSelectors(state => state.option);
   const [open, setOpen] = useState(false);
   const [images, setImages] = useState<string | null>(infoValues?.images);
+  const [modalCrop, setModalCrop] = useState(false);
+  const [tempImageCrop, setTempImageCrop] = useState(infoValues?.images);
+
+  const handleCancelCrop = () => {
+    setImages(infoValues?.images);
+    setTempImageCrop(infoValues?.images);
+    setModalCrop(false);
+  };
+
+  const handleSaveCropImage = (file, img) => {
+    setTempImageCrop(img);
+    console.log(file);
+    formik.setFieldValue('picture', file);
+    formik.setFieldValue('pictureBackend', file[0]);
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -185,6 +208,7 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
   };
 
   const handleClose = () => {
+    setModalCrop(true);
     setOpen(false);
   };
 
@@ -243,6 +267,7 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
 
   const resetImages = () => {
     setImages(null);
+    setTempImageCrop('');
   };
 
   return (
@@ -266,14 +291,14 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
       />
       <form ref={refProp} onSubmit={formik.handleSubmit}>
         <Box component='div'>
-          <Text
+          {/* <Text
             component='span'
             title='Employee Photo'
             color='primary.500'
-          />
+          /> */}
           <div style={{ position: 'relative' }}>
-            <ImageReview image={!images ? ImageType.PLACEHOLDER : images} onClick={handleOpen} />
-            {images && (
+            <ImageReview image={!tempImageCrop ? ImageType.PLACEHOLDER : tempImageCrop} onClick={handleOpen} />
+            {tempImageCrop && (
               <IconButton
                 sx={{
                   position: 'absolute',
@@ -619,6 +644,13 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
           formik.setFieldValue('pictureBackend', !e.target.files ? null : e.target.files[0]);
         }}
         onCapture={handleOpenCamera}
+      />
+      <CropperImage
+        open={modalCrop}
+        onClose={handleCancelCrop}
+        image={images}
+        setCropValue={handleSaveCropImage}
+        ratio={1/1}
       />
       <Modal
         open={openCamera}

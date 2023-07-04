@@ -193,7 +193,7 @@ function CompanyProfileBankForm({ bank, paymentMethod, formik }: CompanyBankProp
           </Grid>
         </Grid>
         <Grid container spacing={2}>
-          <Grid item xs={6} md={6} lg={6} xl={6}>
+          <Grid item xs={12}>
             <Typography component='div' variant='text-base'>Schedule Type<AsteriskComponent>*</AsteriskComponent></Typography>
             {
               compareCheck(!formik.values.isMonthly, !formik.values.isWeekly, !formik.values.isBiWeekly) && (
@@ -226,8 +226,8 @@ function CompanyProfileBankForm({ bank, paymentMethod, formik }: CompanyBankProp
         </Grid>
         {!!formik.values.isMonthly && (
           <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
-            <Grid item xs={6} md={6} lg={6} xl={6}>
-              <Box component='div' sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
+            <Grid item xs={8}>
+              <Box component='div' sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
                 <Box component='div' sx={{ mr: '14px' }}>
                   <Typography component='div' variant='text-base' sx={{ mb: '6px' }}>Monthly Pay Period (includes overtime)<AsteriskComponent>*</AsteriskComponent></Typography>
                   <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px' }}>
@@ -256,7 +256,7 @@ function CompanyProfileBankForm({ bank, paymentMethod, formik }: CompanyBankProp
                     />
                   </Box>
                 </Box>
-                <Box component='div'>
+                <Box component='div' width='50%'>
                   <Input
                     name='monthlyPayrollDate'
                     onChange={formik.handleChange}
@@ -272,7 +272,7 @@ function CompanyProfileBankForm({ bank, paymentMethod, formik }: CompanyBankProp
                 </Box>
               </Box>
             </Grid>
-            <Grid item xs={6} md={6} lg={6} xl={6}>
+            <Grid item xs={4}>
               <FormControl fullWidth error={compareCheck(formik.touched.monthlyMethod, Boolean(formik.errors.monthlyMethod))}>
                 <Typography sx={{ mb: '6px' }}>Default Payment Method<AsteriskComponent>*</AsteriskComponent></Typography>
                 <Select
@@ -310,7 +310,7 @@ function CompanyProfileBankForm({ bank, paymentMethod, formik }: CompanyBankProp
         )}
         {!!formik.values.isWeekly && (
           <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
-            <Grid item xs={6} md={6} lg={6} xl={6}>
+            <Grid item xs={8}>
               <FormControl fullWidth>
                 <Typography sx={{ mb: '6px' }}>Weekly Pay Period (includes overtime)<AsteriskComponent>*</AsteriskComponent></Typography>
                 <Select
@@ -342,7 +342,7 @@ function CompanyProfileBankForm({ bank, paymentMethod, formik }: CompanyBankProp
                 </Select>
               </FormControl>
             </Grid>
-            <Grid item xs={6} md={6} lg={6} xl={6}>
+            <Grid item xs={4}>
               <FormControl fullWidth error={compareCheck(formik.touched.weeklyMethod, Boolean(formik.errors.weeklyMethod))}>
                 <Typography sx={{ mb: '6px' }}>Default Payment Method<AsteriskComponent>*</AsteriskComponent></Typography>
                 <Select
@@ -380,7 +380,7 @@ function CompanyProfileBankForm({ bank, paymentMethod, formik }: CompanyBankProp
         )}
         {!!formik.values.isBiWeekly && (
           <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
-            <Grid item xs={6} md={6} lg={6} xl={6}>
+            <Grid item xs={8}>
               <Typography component='div' variant='text-base' sx={{ mb: '6px' }}>Bi Weekly Pay Period (includes overtime)<AsteriskComponent>*</AsteriskComponent></Typography>
               <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px' }}>
                 <FormControl fullWidth>
@@ -439,7 +439,7 @@ function CompanyProfileBankForm({ bank, paymentMethod, formik }: CompanyBankProp
                 </FormControl>
               </Box>
             </Grid>
-            <Grid item xs={6} md={6} lg={6} xl={6}>
+            <Grid item xs={4}>
               <FormControl fullWidth error={compareCheck(formik.touched.biWeeklyMethod, Boolean(formik.errors.biWeeklyMethod))}>
                 <Typography sx={{ mb: '6px' }}>Default Payment Method<AsteriskComponent>*</AsteriskComponent></Typography>
                 <Select

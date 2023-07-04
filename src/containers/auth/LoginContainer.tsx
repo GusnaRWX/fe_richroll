@@ -11,7 +11,7 @@ interface LoginProps {
 
 const LoginContainer = (props: LoginProps) => {
   const { isAdmin } = props;
-  console.log(isAdmin);
+  const [hydrated, setHydrated] = React.useState(false);
   
   const dispatch = useDispatch();
 
@@ -22,11 +22,19 @@ const LoginContainer = (props: LoginProps) => {
     });
   };
 
-  if (isAdmin) {
-    return <AdminComponent doLogin={handleLogin} />;
-  } else {
-    return <LoginComponent doLogin={handleLogin} />;
+  React.useEffect(() => {
+    setHydrated(true);
+  }, []);
+
+  if (!hydrated) {
+    return null;
   }
+  return (
+    <>
+      {!!isAdmin && <AdminComponent doLogin={handleLogin} />}
+      {!isAdmin && <LoginComponent doLogin={handleLogin} />}
+    </>
+  );
 };
 
 export default LoginContainer;

@@ -58,12 +58,21 @@ export const getCompanyData = () => {
   return null;
 };
 
+interface SectorType {
+  isActive: boolean;
+  name: string | null
+}
+
 export interface UserDataParse {
   email?: string | null;
   name?: string | null;
-  employee: {
-    companies: Array<{ logo: string | null, name: string | null, sector: string | null }>
+  employee?: {
+    companies: Array<{ logo: string | null, name: string | null, sector: SectorType | null }>
+    isActive?: boolean;
+    isSelfEmployeeService?: boolean;
+    position?: string | null;
   };
+  picture?: string | null;
   roles?: string[];
 }
 
@@ -75,6 +84,19 @@ export const getUserData = () => {
       parse = JSON.parse(user);
       return parse;
     } else {
+      return null;
+    }
+  }
+};
+
+export const getSelectedRoles = () => {
+  if (typeof window !== 'undefined') {
+    const roles = getStorage('selected_roles');
+    let parse: string | null;
+    if (roles) {
+      parse = JSON.parse(roles);
+      return parse;
+    }else{
       return null;
     }
   }
@@ -108,6 +130,7 @@ export const convertDateValue = (name, event) => {
 };
 
 export const convertImageParams = (name, value, callback?, onClose?) => {
+  console.log(value);
   const files = value;
   const reader = new FileReader();
   reader.readAsDataURL(value);

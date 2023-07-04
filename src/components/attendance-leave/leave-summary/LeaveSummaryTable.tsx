@@ -5,12 +5,12 @@ import {
   // Avatar,
   Box,
   TableSortLabel,
-  Typography,
 } from '@mui/material';
 import Table from '@/components/_shared/form/Table';
 import { IconButton } from '@/components/_shared/form';
 import styled from '@emotion/styled';
 import { visuallyHidden } from '@mui/utils';
+import EmptyState from '@/components/_shared/common/EmptyState';
 
 // Import Icon React Icon
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -181,7 +181,7 @@ function LeaveSummaryTable({
               data?.items.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={12} align='center'>
-                    <Typography>Data not found</Typography>
+                    <EmptyState />
                   </TableCell>
                 </TableRow>
               ) : (
@@ -253,7 +253,7 @@ function LeaveSummaryTable({
             ) : (
               <TableRow>
                 <TableCell colSpan={12} align='center'>
-                  <Typography>Data not found</Typography>
+                  <EmptyState />
                 </TableCell>
               </TableRow>
             )}

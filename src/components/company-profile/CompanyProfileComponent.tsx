@@ -7,7 +7,7 @@ import { Edit } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { getCompanyDetailRequested } from '@/store/reducers/slice/company/companySlice';
-import { getCompanyData, ifEmptyReplace, getPeriod } from '@/utils/helper';
+import { getCompanyData, ifEmptyReplace, getPeriod, ifThenElse } from '@/utils/helper';
 
 const ButtonWrapper = styled(Box)(({
   display: 'flex',
@@ -62,12 +62,10 @@ function CompanyProfileComponent() {
   const companyPayments = useAppSelectors(state => state.company.companyPayment);
   const router = useRouter();
   const [value, setValue] = useState(0);
+  const [hydrated, setHydrated] = useState(false);
   const companyData = getCompanyData();
-  console.log(companyPayments);
 
   useEffect(() => {
-    console.log(data);
-
     dispatch({
       type: getCompanyDetailRequested.toString(),
       payload: {
@@ -80,6 +78,13 @@ function CompanyProfileComponent() {
     setValue(newValue);
   };
 
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
+
+  if (!hydrated) {
+    return null;
+  }
   return (
 
     <>
@@ -140,7 +145,7 @@ function CompanyProfileComponent() {
             <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
               <Grid item xs={6} md={6} lg={6} xl={6}>
                 <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Company NPWP</Typography>
-                <Typography component='div' variant='text-sm' color='#4B5563'>{ifEmptyReplace(data?.taxIDNumber, '-')}</Typography>
+                <Typography component='div' variant='text-sm' color='#4B5563'>{ifThenElse((!data?.taxIDNumber || data?.taxIDNumber === 'null'), '-', data?.taxIDNumber)}</Typography>
               </Grid>
               <Grid item xs={6} md={6} lg={6} xl={6}>
                 <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Company Sector</Typography>
@@ -248,12 +253,12 @@ function CompanyProfileComponent() {
             {!companyPayments?.payrolls && (
               <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
                 <Grid item xs={12} md={12} lg={12} xl={12}>
-                  <Typography component='div' variant='text-sm' color='#4B5563'>Mont-hly</Typography>
+                  <Typography component='div' variant='text-sm' color='#4B5563'>-</Typography>
                 </Grid>
               </Grid>
             )}
-            {companyPayments?.payrolls?.map((payments) => (
-              <>
+            {companyPayments?.payrolls?.map((payments, index) => (
+              <Box key={index}>
                 {
                   payments?.type === 0 && (
                     <>
@@ -320,7 +325,7 @@ function CompanyProfileComponent() {
                     </>
                   )
                 }
-              </>
+              </Box>
             ))}
             {/* {!!data?.payroll?.monthly && (
               <>

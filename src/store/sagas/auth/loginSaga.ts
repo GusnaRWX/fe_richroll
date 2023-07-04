@@ -68,9 +68,11 @@ function* fetchAuthenticationLogin(action: AnyAction) {
         type: setResponserMessage.toString(),
         payload: {
           code: errorMessage?.code || errorValidationMessage?.code,
-          message: errorMessage.message === 'Invalid email and password' ?
-            'Incorrect email address or password' :
-            readValidationResponse(errorValidationMessage.error).map(errMessage => errMessage.replace(/"/g, ''))
+          message: errorMessage?.message === 'Invalid email and password'
+            ? 'Incorrect email address or password'
+            : errorValidationMessage?.error
+              ? readValidationResponse(errorValidationMessage.error).map(errMessage => errMessage.replace(/"/g, ''))
+              : errorMessage?.message === 'incorrect email or password' ? 'Incorrect email address or password' : ''
         }
       });
       yield put({ type: loginFailured.toString() });
