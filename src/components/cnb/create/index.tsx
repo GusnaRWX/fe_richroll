@@ -586,7 +586,7 @@ export default function CreateCNBComponent() {
                                 color: '#223567',
                               }}
                             >
-                              Suplementary
+                              Supplementary
                             </Typography>
                             <Form>
                               {formik.values.supplementary.map(

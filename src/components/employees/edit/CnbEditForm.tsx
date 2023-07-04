@@ -16,7 +16,7 @@ interface SelectItemType {
   value?: string;
 }
 
-interface TempSuplementaryType {
+interface TempSupplementaryType {
   compensation: string;
   tax: string;
   rate: string;
@@ -30,7 +30,7 @@ function CnbEditForm() {
     { title: 'Prep-Cook', value: 'Prep-cook' },
     { title: 'Waiter', value: 'Waiter' }
   ];
-  const [suplementary, setSuplementary] = useState<Array<TempSuplementaryType>>([]);
+  const [suplementary, setSupplementary] = useState<Array<TempSupplementaryType>>([]);
   const formik = useFormik({
     initialValues: {
       profile: '',
@@ -46,20 +46,20 @@ function CnbEditForm() {
   });
   const filter = createFilterOptions<SelectItemType>();
 
-  const handleAddSuplementary = () => {
+  const handleAddSupplementary = () => {
     const data = {
       compensation: '',
       tax: '',
       rate: '',
       period: '',
     };
-    setSuplementary((prevState) => [...prevState, data]);
+    setSupplementary((prevState) => [...prevState, data]);
   };
 
   const handleDeleteItems = (index: number) => {
     const temp = [...suplementary];
     temp.splice(index, 1);
-    setSuplementary(temp);
+    setSupplementary(temp);
   };
   return (
     <>
@@ -195,7 +195,7 @@ function CnbEditForm() {
             {
               suplementary.length > 0 && (
                 <>
-                  <Typography mb='1rem' color='primary' fontWeight='bold' fontSize='16px' >Suplementary</Typography>
+                  <Typography mb='1rem' color='primary' fontWeight='bold' fontSize='16px' >Supplementary</Typography>
                   {
                     suplementary.map((item, index) => (
                       <Box key={index} sx={{ width: '100%' }}>
@@ -284,7 +284,7 @@ function CnbEditForm() {
                 </>
               )
             }
-            <MuiButton size='small' variant='contained' color='secondary' sx={{ color: '#FFFFFF' }} onClick={handleAddSuplementary}><Add />&nbsp;Add Supplementary Compensation</MuiButton>
+            <MuiButton size='small' variant='contained' color='secondary' sx={{ color: '#FFFFFF' }} onClick={handleAddSupplementary}><Add />&nbsp;Add Supplementary Compensation</MuiButton>
           </>
         )
       }

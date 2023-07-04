@@ -48,6 +48,7 @@ const headerItems = [
   { id: 'isActive', label: 'Status' },
   { id: 'user.createdAt', label: 'Created on' },
   { id: 'user.lastLogin', label: 'Last Login' },
+  { id: 'action', label: '' },
 ];
 
 interface EmployeeTableProps {

@@ -172,7 +172,7 @@ const CompanyComponent = ({ companies }: Company.Component) => {
             >
               Choose the company you want to manage. You can add a maximum of 5 companies
             </Typography>
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: '25px', mt: '16px', height: '221px' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: '25px', mt: '16px', flexWrap:'wrap' }}>
               {companies?.slice(0, 5)?.map((val: object, idx) => (
                 // <WrapperCardItem key={idx} onClick={() => { router.push(`/company/${val?.['id']}`);}}>
                 <WrapperCardItem key={idx} onClick={() => { handleClick(val, '/dashboard'); }}>

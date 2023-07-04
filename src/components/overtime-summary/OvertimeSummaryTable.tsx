@@ -287,7 +287,7 @@ function OvertimeSummaryTable({ reload }: OvertimeTable) {
                         </NameWrapper>
                       </TableCell>
                       <TableCell>{dayjs(item.start).format('HH:mm')}</TableCell>
-                      <TableCell>{item.duration}</TableCell>
+                      <TableCell>{item.duration} Hour(s)</TableCell>
                       <TableCell>{item.multiplier}x</TableCell>
                       <TableCell>
                         <ButtonWrapper>
