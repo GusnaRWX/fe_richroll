@@ -209,7 +209,7 @@ const AttendanceEntriesTable: React.FC<AttendanceEntriesTable> = ({ reload }) =>
                       </TableCell>
                       <TableCell>{dayjs(item.clockIn).format('HH:mm')}</TableCell>
                       <TableCell>{dayjs(item.clockOut).format('HH:mm')}</TableCell>
-                      <TableCell>-</TableCell>
+                      <TableCell>{item.count}</TableCell>
                       <TableCell>
                         <ButtonWrapper>
                           <IconButton
@@ -251,8 +251,8 @@ const AttendanceEntriesTable: React.FC<AttendanceEntriesTable> = ({ reload }) =>
       <ConfirmationModal
         open={deleteConfirmation}
         handleClose={() => setDeleteConfirmation(false)}
-        title='Delete Data Entry'
-        content='You are about to delete this attendance data entry. This action cannot be undone.'
+        title='Delete Attendance Entry'
+        content='You are about to delete this attendance entry. This action cannot be undone.'
         withCallback
         noChange={true}
         type='delete'
