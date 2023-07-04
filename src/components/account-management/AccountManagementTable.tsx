@@ -10,7 +10,9 @@ import {
   TableSortLabel,
   Select,
   MenuItem,
-  Typography
+  Checkbox,
+  Typography,
+  Button as MuiButton
 } from '@mui/material';
 import { Input, DatePicker, CheckBox } from '../_shared/form';
 import { Search } from '@mui/icons-material';
@@ -95,7 +97,12 @@ function a11yProps(index: number) {
 }
 
 interface EmployeeTableProps {
-  tabValue: number
+  tabValue: number;
+}
+
+interface CheckedTableProps {
+  id: string;
+  checked: boolean;
 }
 
 type Order = 'asc' | 'desc'
@@ -116,13 +123,14 @@ function AttendanceTable({
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
   const [suspendInfo, setSuspendInfo] = useState(false);
   const [suspendConfirmation, setSuspendConfirmation] = useState(false);
+  const [reactivateInfo, setReactivateInfo] = useState(false);
   const [reactivateConfirmation, setReactivateConfirmation] = useState(false);
   const [selectedItem, setSelectedItem] = useState<Account.AccountType>();
   const [isPermanent, setIsPermanent] = useState(false);
   const startSuspend = dayjs();
   const [endSuspend, setEndSuspend] = useState(dayjs());
   const [value, setValue] = useState(0);
-  const [checkAll, setCheckAll] = useState(false);
+  const [selectedTemp, setSelectedTemp] = useState<CheckedTableProps[]>([]);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -164,6 +172,11 @@ function AttendanceTable({
     });
   };
 
+  const handleReactivate = () => {
+    setReactivateInfo(false);
+    setReactivateConfirmation(true);
+  };
+
   const handleReactivateConfirm = () => {
     dispatch({
       type: putAccountReactiveRequested.toString(),
@@ -192,6 +205,36 @@ function AttendanceTable({
     setSort(headId);
   };
 
+  const onSelected = (id, e) => {
+    if (e.target.checked) {
+      const temp = [...selectedTemp, { id: id, checked: true }];
+
+      setSelectedTemp(temp);
+    } else {
+      const temp = selectedTemp.filter(v => v['id'] !== id);
+      setSelectedTemp(temp);
+    }
+  };
+
+  const checkVal = (id) => {
+    return selectedTemp.some(v => v['id'] === id);
+  };
+
+  const onAll = (e) => {
+    if (e.target.checked) {
+      const temp = data?.items?.map((v) => {
+        return {id: v.id, checked: true};
+      });
+      setSelectedTemp(temp);
+    } else {
+      setSelectedTemp([]);
+    }
+  };
+
+  const checkAll = () => {
+    return selectedTemp.length === rowsPerPage;
+  };
+
   useEffect(() => {
     dispatch({
       type: getAccountRequested.toString(),
@@ -205,11 +248,51 @@ function AttendanceTable({
         searchType: searchType
       }
     });
-  }, [rowsPerPage, page, tabValue, search, searchType, sort, direction, deleteConfirmation, suspendConfirmation]);
+  }, [rowsPerPage, page, tabValue, search, searchType, sort, direction, deleteConfirmation, suspendConfirmation, reactivateConfirmation]);
 
   useEffect(() => {
     setHaydrated(true);
   }, []);
+
+  const ReactivateInfo = () => {
+    return <>
+      <Grid spacing={2} container mt='.5rem' mb='.5rem'>
+        <Grid item xs={6}>
+          <Typography component='div' variant='text-base' fontWeight={500}>Full Name</Typography>
+          <NameWrapper>
+            <Avatar
+              src={selectedItem?.userInformation && selectedItem?.userInformation['picture'] || ImageType.AVATAR_PLACEHOLDER}
+              alt={selectedItem?.name}
+              sx={{
+                width: 24, height: 24
+              }}
+            />
+            &nbsp;<Typography component='div' variant='text-sm' fontWeight={400}>{selectedItem?.name}</Typography>
+          </NameWrapper>
+        </Grid>
+        <Grid item xs={6}>
+          <Typography component='div' variant='text-base' fontWeight={500}>Start of Suspend Period</Typography>
+          <Typography component='div' variant='text-sm' fontWeight={400}>{selectedItem?.suspensionStart && dayjs(selectedItem?.suspensionStart).format('DD/MM/YY, HH:mm') || '-'}</Typography>
+        </Grid>
+      </Grid>
+      <Grid spacing={2} container mt='.5rem' mb='.5rem'>
+        <Grid item xs={6}>
+          <Typography component='div' variant='text-base' fontWeight={500}>Email</Typography>
+          <Typography component='div' variant='text-sm' fontWeight={400}>{selectedItem?.email}</Typography>
+        </Grid>
+        <Grid item xs={6}>
+          <Typography component='div' variant='text-base' fontWeight={500}>End of Suspend Period</Typography>
+          <Typography component='div' variant='text-sm' fontWeight={400}>{selectedItem?.suspensionEnd && dayjs(selectedItem?.suspensionEnd).format('DD/MM/YY, HH:mm') || '-'}</Typography>
+        </Grid>
+      </Grid>
+      <Grid spacing={2} container mt='.5rem' mb='.5rem'>
+        <Grid item xs={6}>
+          <Typography component='div' variant='text-base' fontWeight={500}>User Type</Typography>
+          <Typography component='div' variant='text-sm' fontWeight={400}>{selectedItem && !!selectedItem.roles.length && selectedItem.roles.map((i) => i.name)}</Typography>
+        </Grid>
+      </Grid>
+    </>;
+  };
 
   const SuspendInfo = () => {
     return <>
@@ -414,12 +497,7 @@ function AttendanceTable({
           <TableRow>
             {tabValue === 0 && (
               <TableCell>
-                <CheckBox
-                  customLabel=''
-                  name='checkAll'
-                  checked={checkAll}
-                  onChange={(e) => setCheckAll(e.target.checked)}
-                />
+                <Checkbox onChange={(e) => onAll(e)} checked={checkAll()} />
               </TableCell>
             )}
             {
@@ -455,12 +533,7 @@ function AttendanceTable({
                     <TableRow key={index}>
                       {tabValue === 0 && (
                         <TableCell>
-                          <CheckBox
-                            customLabel=''
-                            name='checkAll'
-                            checked={checkAll}
-                            onChange={(e) => setCheckAll(e.target.checked)}
-                          />
+                          <Checkbox onChange={(e) => onSelected(item?.id, e)} checked={checkVal(item?.id)} />
                         </TableCell>
                       )}
                       <TableCell>{item.employee && item.employee.code || '-'}</TableCell>
@@ -487,23 +560,25 @@ function AttendanceTable({
                           {tabValue === 0 && (
                             <>
                               <IconButton
-                                parentColor='#FFEDD5'
+                                disabled={!!selectedTemp.length}
+                                parentColor={ifThenElse(selectedTemp.length, '#FFEDD550', '#FFEDD5')}
                                 onClick={() => {
                                   setSelectedItem(item);
                                   setSuspendInfo(true);
                                 }}
                                 icons={
-                                  <AiOutlineStop fontSize={20} color='#F97316' />
+                                  <AiOutlineStop fontSize={20} color={ifThenElse(selectedTemp.length, '#F9731650', '#F97316')} />
                                 }
                               />
                               <IconButton
-                                parentColor='#FEE2E2'
+                                disabled={!!selectedTemp.length}
+                                parentColor={ifThenElse(selectedTemp.length, '#FEE2E250', '#FEE2E2')}
                                 onClick={() => {
                                   setSelectedItem(item);
                                   setDeleteInfo(true);
                                 }}
                                 icons={
-                                  <BsTrashFill fontSize={20} color='#EF4444' />
+                                  <BsTrashFill fontSize={20} color={ifThenElse(selectedTemp.length, '#EF444450', '#EF4444')} />
                                 }
                               />
                             </>
@@ -513,7 +588,7 @@ function AttendanceTable({
                               parentColor='#DCFCE7'
                               onClick={() => {
                                 setSelectedItem(item);
-                                setReactivateConfirmation(true);
+                                setReactivateInfo(true);
                               }}
                               icons={
                                 <RiUserReceived2Fill fontSize={20} color='#22C55E' />
@@ -534,6 +609,17 @@ function AttendanceTable({
           </>
         }
       />
+
+      {!!selectedTemp.length &&
+        <Grid container mt='.5rem'>
+          <Grid item xs={12}>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '1rem'}}>
+              <MuiButton variant='contained' onClick={() => console.log('clicked')} size='small' sx={{ background: '#FFEDD5', color: '#EA580C' }}>Suspend Account</MuiButton>
+              <MuiButton variant='contained' onClick={() => console.log('clicked')} size='small' sx={{ background: '#FECACA', color: '#DC2626' }}>Delete Account</MuiButton>
+            </Box>
+          </Grid>
+        </Grid>
+      }
 
       {/* delete popup */}
       <CustomModal
@@ -580,6 +666,16 @@ function AttendanceTable({
       />
 
       {/* reactivate popup */}
+      <CustomModal
+        open={reactivateInfo}
+        handleClose={() => setReactivateInfo(false)}
+        title='Account Reactivation'
+        width='720px'
+        handleConfirm={handleReactivate}
+        submitText='Reactivate'
+      >
+        <ReactivateInfo />
+      </CustomModal>
       <ConfirmationModal
         open={reactivateConfirmation}
         handleClose={() => setReactivateConfirmation(false)}
