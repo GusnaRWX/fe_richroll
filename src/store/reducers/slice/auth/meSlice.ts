@@ -10,6 +10,9 @@ interface MeState {
   }
 }
 
+const site = 'Indonesia';
+const timezone = 'Asia/Indonesia';
+
 const initialState: MeState = {
   profile: {
     name: '',
@@ -24,7 +27,9 @@ export const meSlice = createSlice({
   reducers: {
     meSuccessed: (state, action) => {
       setStorages([
-        { name: 'user', value: JSON.stringify({ ...action.payload }) }
+        { name: 'user', value: JSON.stringify({ ...action.payload }) },
+        { name: 'site', value: JSON.stringify(site) },
+        { name: 'timezone', value: JSON.stringify(timezone) }
       ]);
       state.profile = { ...action.payload };
     }
