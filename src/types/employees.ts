@@ -163,6 +163,7 @@ export declare namespace Employees {
     email: string
     startDate: DayJS
     endDate: DayJS
+    isActive: boolean
     isPermanent: boolean
     department: string
     position: string

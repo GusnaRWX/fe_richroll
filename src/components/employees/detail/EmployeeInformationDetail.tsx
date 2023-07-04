@@ -47,7 +47,7 @@ interface EmployeeInformationDetailProps {
     email: string | undefined;
     endDate: string | null;
     picture: string | null;
-    isPermanent: boolean;
+    isActive: boolean;
     isSelfService: boolean;
     nickname: string | null;
     phoneNumber: string | null;
@@ -191,7 +191,7 @@ function EmployeeInformationDetail({ data }: EmployeeInformationDetailProps) {
             color='primary.500'
           />
           {
-            data?.isPermanent === false ? (
+            data?.isActive === false ? (
               <Chip label='Inactive' sx={{ backgroundColor: '#FEE2E2', color: '#DC2626', fontWeight: 'bold' }} />
             ) : (
               <Chip label='Active' sx={{ backgroundColor: '#DCFCE7', color: '#166534', fontWeight: 'bold' }} />

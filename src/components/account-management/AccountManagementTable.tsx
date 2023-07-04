@@ -378,7 +378,7 @@ function AttendanceTable({
         </Box>
         <TabPanel value={value} index={0}>
           <Grid spacing={2} container mt='0px' mb='.5rem'>
-            <Grid item xs={4}>
+            <Grid item xs={6}>
               <Typography component='div' variant='text-base' fontWeight={500}>Full Name</Typography>
               <NameWrapper>
                 <Avatar
@@ -391,61 +391,68 @@ function AttendanceTable({
                 &nbsp;<Typography component='div' variant='text-sm' fontWeight={400}>{selectedItem?.name}</Typography>
               </NameWrapper>
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={3}>
               <Typography component='div' variant='text-base' fontWeight={500}>Account ID</Typography>
               <Typography component='div' variant='text-sm' fontWeight={400}>{selectedItem?.employee && selectedItem?.employee['code'] || '-'}</Typography>
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={3}>
               <Typography component='div' variant='text-base' fontWeight={500}>User Type</Typography>
               <Typography component='div' variant='text-sm' fontWeight={400}>{selectedItem && !!selectedItem.roles.length && selectedItem.roles.map((i) => i.name)}</Typography>
             </Grid>
           </Grid>
           <Grid spacing={2} container mt='.5rem' mb='1.5rem'>
-            <Grid item xs={4}>
+            <Grid item xs={6}>
               <Typography component='div' variant='text-base' fontWeight={500}>Email</Typography>
               <Typography component='div' variant='text-sm' fontWeight={400}>{selectedItem?.email}</Typography>
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={3}>
               <Typography component='div' variant='text-base' fontWeight={500}>Last Login</Typography>
               <Typography component='div' variant='text-sm' fontWeight={400}>{selectedItem?.lastLoginAt && dayjs(selectedItem?.lastLoginAt).format('DD/MM/YY, HH:mm') || '-'}</Typography>
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={3}>
               <Typography component='div' variant='text-base' fontWeight={500}>Created On</Typography>
               <Typography component='div' variant='text-sm' fontWeight={400}>{selectedItem && dayjs(selectedItem.createdAt).format('DD/MM/YY')}</Typography>
             </Grid>
           </Grid>
           <Grid container mb='.5rem'>
-            <Grid item xs={4}>
+            <Grid item xs={6}>
               <Typography component='div' variant='text-base' fontWeight={500}>Total Company</Typography>
               <Typography component='div' variant='text-sm' fontWeight={400}>{ifThenElse(selectedItem?.employee, selectedItem?.employee?.companies?.length + ' Company', '0 Company')}</Typography>
             </Grid>
           </Grid>
         </TabPanel>
         <TabPanel value={value} index={1}>
-          <Grid spacing={2} container mt='0px' sx={{ borderBottom: 'solid 1px #E5E7EB', paddingBottom: '10px' }}>
-            <Grid item xs={4}>
-              <Typography component='div' variant='text-base' fontWeight={500}>Company Name</Typography>
-            </Grid>
-            <Grid item xs={4}>
-              <Typography component='div' variant='text-base' fontWeight={500}>Total Employee</Typography>
-            </Grid>
-            <Grid item xs={4}>
-              <Typography component='div' variant='text-base' fontWeight={500}>Created On</Typography>
-            </Grid>
-          </Grid>
-          {!!selectedItem?.employee && !!selectedItem?.employee?.companies.length && selectedItem?.employee?.companies?.map((itm, index) => (
-            <Grid key={index} spacing={2} container mt='0px' sx={{ borderBottom: 'solid 1px #E5E7EB', paddingBottom: '10px' }}>
+          {!selectedItem?.employee &&
+            <Typography component='div' variant='text-base' fontWeight={500} sx={{ textAlign: 'center' }}>No Data Company</Typography>
+          }
+          {!!selectedItem?.employee && !!selectedItem?.employee?.companies.length &&
+          <>
+            <Grid spacing={2} container mt='0px' sx={{ borderBottom: 'solid 1px #E5E7EB', paddingBottom: '10px' }}>
               <Grid item xs={4}>
-                <Typography component='div' variant='text-sm' fontWeight={400}>{itm.name}</Typography>
+                <Typography component='div' variant='text-base' fontWeight={500}>Company Name</Typography>
               </Grid>
               <Grid item xs={4}>
-                <Typography component='div' variant='text-sm' fontWeight={400}>{itm.employeesTotal}</Typography>
+                <Typography component='div' variant='text-base' fontWeight={500}>Total Employee</Typography>
               </Grid>
               <Grid item xs={4}>
-                <Typography component='div' variant='text-sm' fontWeight={400}>{dayjs(itm.createdAt).format('DD/MM/YY')}</Typography>
+                <Typography component='div' variant='text-base' fontWeight={500}>Created On</Typography>
               </Grid>
             </Grid>
-          ))}
+            {selectedItem?.employee?.companies?.map((itm, index) => (
+              <Grid key={index} spacing={2} container mt='0px' sx={{ borderBottom: 'solid 1px #E5E7EB', paddingBottom: '10px' }}>
+                <Grid item xs={4}>
+                  <Typography component='div' variant='text-sm' fontWeight={400}>{itm.name}</Typography>
+                </Grid>
+                <Grid item xs={4}>
+                  <Typography component='div' variant='text-sm' fontWeight={400}>{itm.employeesTotal}</Typography>
+                </Grid>
+                <Grid item xs={4}>
+                  <Typography component='div' variant='text-sm' fontWeight={400}>{dayjs(itm.createdAt).format('DD/MM/YY')}</Typography>
+                </Grid>
+              </Grid>
+            ))}
+          </>
+          }
         </TabPanel>
       </Box>
     );

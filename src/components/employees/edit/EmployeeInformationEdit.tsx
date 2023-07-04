@@ -116,28 +116,13 @@ interface EmployeeProps {
   handleFirstInformation: () => void;
 }
 
-interface EmployeeInformationDetailProps {
-  data: {
-    fullName: string | undefined;
-    department: string | undefined;
-    email: string | undefined;
-    endDate: string | null;
-    picture: string | null;
-    isPermanent: boolean;
-    isSelfService: boolean;
-    nickname: string | null;
-    phoneNumber: string | null;
-    position: string | null;
-    startDate: string | null;
-  }
-}
 
-
-function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, setIsInformationValid, handleFirstInformation }: EmployeeProps, { data }: EmployeeInformationDetailProps) {
+function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, setIsInformationValid, handleFirstInformation }: EmployeeProps) {
   const [isCaptureEnable, setCaptureEnable] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const webcamRef = useRef<Webcam>(null);
   const [openCamera, setOpenCamera] = useState(false);
+  console.log(infoValues);
 
   const handleCloseCamera = () => {
     setCaptureEnable(false);
@@ -193,6 +178,7 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
       startDate: dayjs(infoValues?.startDate),
       endDate: dayjs(infoValues?.endDate),
       isPermanent: infoValues?.isPermanent,
+      isActive: infoValues?.isActive,
       department: infoValues?.department,
       position: infoValues?.position,
       isSelfService: infoValues?.isSelfService,
@@ -621,16 +607,18 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
               color='primary.500'
             />
             {
-              data?.isPermanent === false ? (
-                <Chip label='Non Active' sx={{ backgroundColor: '#FEE2E2', color: '#166534', fontWeight: 'bold' }} />
+              infoValues?.isActive === false ? (
+                <Chip label='Inactive' sx={{ backgroundColor: '#FEE2E2', color: '#DC2626', fontWeight: 'bold' }} />
               ) : (
                 <Chip label='Active' sx={{ backgroundColor: '#DCFCE7', color: '#166534', fontWeight: 'bold' }} />
               )
             }
           </Grid>
-          <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-            <TerminateAccount />
-          </Grid>
+          {!!infoValues?.isActive &&
+            <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+              <TerminateAccount />
+            </Grid>
+          }
         </Grid>
         <NextBtnWrapper>
           <Button fullWidth={false} size='small' label='Next' color='primary' type={'submit'} />
