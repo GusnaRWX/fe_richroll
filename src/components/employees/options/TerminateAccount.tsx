@@ -2,16 +2,20 @@ import React, { useState } from 'react';
 import { Card, Text, CustomModal } from '@/components/_shared/common';
 import { Textarea, Button } from '@/components/_shared/form';
 import { BsTrashFill } from 'react-icons/bs';
-import { Box } from '@mui/material';
+import { Alert, Box } from '@mui/material';
 import { useAppDispatch } from '@/hooks/index';
 import { postTerminateEmployeeRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
+import InfoRoundedIcon from '@mui/icons-material/InfoRounded';
+import BasicDatePicker from '@/components/_shared/form/DatePicker';
 import { useRouter } from 'next/router';
+import dayjs from 'dayjs';
 
 const TerminateAccount = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const [Open, setOpen] = useState(false);
-  const [Note, setNote] = useState('');
+  const [note, setNote] = useState('');
+  const [date, setDate] = useState('');
 
   const handleOpen = () => {
     setOpen(true);
@@ -23,8 +27,8 @@ const TerminateAccount = () => {
 
   const handleConfirmation = () => {
     const payload = {
-      terminateDate: Date(),
-      terminateNote: Note,
+      terminateDate: date,
+      terminateNote: note,
     };
     dispatch({
       type: postTerminateEmployeeRequested.toString(),
@@ -32,6 +36,7 @@ const TerminateAccount = () => {
       payload: payload,
     });
     setNote('');
+    setDate('');
     setOpen(false);
   };
 
@@ -86,18 +91,34 @@ const TerminateAccount = () => {
         open={Open}
         handleClose={handleClose}
         handleConfirm={handleConfirmation}
-        title='Confirmation Terminate Account'
-        width='543px'
-        ConfirmationDisable={Note === ''}
+        title='Termination Form'
+        width='563px'
+        ConfirmationDisable={note === '' || date === ''}
       >
-        <Box sx={{ my: 2 }}>
+        <Box sx={{ my: 2, display:'flex', flexDirection:'column', gap:'24px' }}>
+          <Alert
+            severity='info'
+            sx={{ fontWeight: 'bold', backgroundColor: '#E9EFFF' }}
+            icon={<InfoRoundedIcon sx={{ color: '#475780' }} />}
+          >
+              Important information
+            <Text sx={{fontSize:'14px', marginTop:'14px'}}>Employee Payroll Date is 19th March 2023</Text>
+          </Alert>
+          <Box>
+            <BasicDatePicker
+              customLabel='Input Effective Termination Date'
+              withAsterisk
+              onChange={(e) => setDate(dayjs(e).format('DD/MM/YYYY'))}
+            />
+          </Box>
           <Textarea
-            customLabel='Please input your notes : '
+            customLabel='Notes'
+            placeholder='Input Notes'
             withAsterisk
-            minRows={6}
-            style={{ resize: 'vertical' }}
+            minRows={3}
+            style={{ resize: 'vertical'}}
             onChange={(e) => setNote(e.target.value)}
-            value={Note}
+            value={note}
           />
         </Box>
       </CustomModal>
