@@ -143,13 +143,13 @@ function ItpAddNewProfileComponent() {
               </Step>
             ))}
           </Stepper>
-          <Box sx={{mt:'16px'}}>
-            {value == 0 && <ItpCreateTaxBasicDetail />}
-            {value == 1 && <ItpCreateTaxDeductableComponent/>}
-            {value == 2 && <ItpCreateTaxRate />}
-            {value == 3 && <ItpCreateTaxMultiplier />}
-            {value == 4 && <ItpCreateDesignedTransferAccount />}
-          </Box>
+        </Box>
+        <Box sx={{mt:'16px'}}>
+          {value == 0 && <ItpCreateTaxBasicDetail />}
+          {value == 1 && <ItpCreateTaxDeductableComponent/>}
+          {value == 2 && <ItpCreateTaxRate />}
+          {value == 3 && <ItpCreateTaxMultiplier />}
+          {value == 4 && <ItpCreateDesignedTransferAccount />}
         </Box>
       </ContentWrapper>
 
