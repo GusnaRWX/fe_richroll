@@ -1,14 +1,11 @@
-import React, {Dispatch, SetStateAction} from 'react';
+import React from 'react';
 import { Grid, Box, Typography } from '@mui/material';
-import { Button, Input, Select, Textarea } from '@/components/_shared/form';
+import { Input, Select, Textarea } from '@/components/_shared/form';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-interface CreateDesignedTransferAccountProps {
-  setValue: Dispatch<SetStateAction<number>>
-}
 
-export default function CreateBasicDetailComponent({setValue}: CreateDesignedTransferAccountProps) {
+export default function CreateBasicDetailComponent() {
   const Dummyoption = [
     { value: '1', label: 'Dummy 1' },
     { value: '2', label: 'Dummy 2' },
@@ -16,7 +13,7 @@ export default function CreateBasicDetailComponent({setValue}: CreateDesignedTra
   ];
 
   const validationSchema = Yup.object({
-    satutoryName: Yup.string().required('This field is Required!'),
+    componentName: Yup.string().required('This field is Required!'),
     country: Yup.string().required('This field is Required!'),
     province: Yup.string(),
     city: Yup.string(),
@@ -28,7 +25,7 @@ export default function CreateBasicDetailComponent({setValue}: CreateDesignedTra
 
   const formik = useFormik({
     initialValues: {
-      satutoryName: '',
+      componentName: '',
       country: '',
       province: '',
       city: '',
@@ -40,7 +37,6 @@ export default function CreateBasicDetailComponent({setValue}: CreateDesignedTra
     validationSchema: validationSchema,
     onSubmit: (values) => {
       console.log(values);
-      setValue(1);
     }
   });
 
@@ -50,15 +46,15 @@ export default function CreateBasicDetailComponent({setValue}: CreateDesignedTra
         <Grid container spacing={2}>
           <Grid item xs={12} md={12} lg={6} xl={6}>
             <Input
-              placeholder='Input Statutory Benefits Name'
-              customLabel='Satutory Name'
+              placeholder='Input Component Name'
+              customLabel='Component Name'
               withAsterisk
               size='small'
-              value={formik.values.satutoryName}
-              onChange={(e) => formik.setFieldValue('satutoryName', e.target.value)}
+              value={formik.values.componentName}
+              onChange={(e) => formik.setFieldValue('componentName', e.target.value)}
             />
-            {formik.touched.satutoryName && formik.errors.satutoryName ? (
-              <Typography sx={{color: '#DC2626',}}>{formik.errors.satutoryName}</Typography>
+            {formik.touched.componentName && formik.errors.componentName ? (
+              <Typography sx={{color: '#DC2626',}}>{formik.errors.componentName}</Typography>
             ): null}
           </Grid>
         </Grid>
@@ -177,19 +173,6 @@ export default function CreateBasicDetailComponent({setValue}: CreateDesignedTra
             >
             Max. 120 Character
             </Typography>
-          </Grid>
-        </Grid>
-
-        <Grid container spacing={2} style={{marginTop: '12px'}}>
-          <Grid item xs={12} md={12} lg={12} xl={12}>
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <Button
-                color='primary'
-                label='Next'
-                sx={{ width: '63px' }}
-                onClick={() => formik.submitForm()}
-              />
-            </Box>
           </Grid>
         </Grid>
       </Box>

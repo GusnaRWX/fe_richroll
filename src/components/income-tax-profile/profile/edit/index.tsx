@@ -7,11 +7,13 @@ import { ArrowBack } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 
 // Import Create Component
-import CreateBasicDetailComponent from './CreateBasicDetail';
-import CreateDesignedTransferAccount from './CreateDesignedTransferAccount';
-import CreateRates from './CreateRates';
+import ItpEditProfileBasicDetailComponent from './ItpEditProfileBasicDetailComponent';
+import ItpEditDesignedTransferAccount from './ItpEditDesignedTransferAccount';
+import ItpEditProfileDeductableComponent from './ItpEditProfileDeductableComponent';
+import ItpEditProfileTaxRate from './ItpEditProfileTaxRate';
+import IptEditProfileTaxMultiplier from './IptEditProfileTaxMultiplier';
 
-export default function CreateNewComponent() {
+export default function ItpEditProfileComponent() {
   const router = useRouter();
 
   const Header = styled('div')({
@@ -27,7 +29,7 @@ export default function CreateNewComponent() {
     alignItems: 'center',
   });
 
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(parseInt(router.query.status as string) || 0);
 
   interface TabPanelProps {
     children?: React.ReactNode;
@@ -69,7 +71,7 @@ export default function CreateNewComponent() {
             parentColor='primary.500'
             icons={<ArrowBack sx={{ color: '#FFFFFF' }} />}
             onClick={() => {
-              router.push('/satutory-benefit/component');
+              router.push('/income-tax-profile/profile/');
             }}
           />
           <Typography
@@ -80,28 +82,36 @@ export default function CreateNewComponent() {
               width: '250px',
             }}
           >
-            Add New Component
+            Add New Tax Profile
           </Typography>
         </HeaderPageTitle>
       </Header>
       <Paper sx={{ width: '100%', p: '21px 8px' }}>
         <Box sx={{px:'48px'}}>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <Tabs value={value} onChange={handleChange} aria-label='basic tabs'>
-            <Tab label='Basic Detail' {...a11yProps(0)} />
-            <Tab label='Designated Transfer Account' {...a11yProps(1)} />
-            <Tab label='Rates' {...a11yProps(2)} />
-          </Tabs>
-        </Box>
+          <Box sx={{ borderBottom: 1, borderColor: 'divider',  }}>
+            <Tabs value={value} onChange={handleChange} aria-label='basic tabs'>
+              <Tab label='Basic Detail' {...a11yProps(0)} />
+              <Tab label='Deductible Components' {...a11yProps(1)} />
+              <Tab label='Income Tax Rate' {...a11yProps(2)} />
+              <Tab label='Income Tax Multiplier' {...a11yProps(3)} />
+              <Tab label='Designated Transfer Account' {...a11yProps(4)} />
+            </Tabs>
+          </Box>
         </Box>
         <TabPanel value={value} index={0}>
-          <CreateBasicDetailComponent setValue={setValue} />
+          <ItpEditProfileBasicDetailComponent setValue={setValue} />
         </TabPanel>
         <TabPanel value={value} index={1}>
-          <CreateDesignedTransferAccount setValue={setValue} />
+          <ItpEditProfileDeductableComponent />
         </TabPanel>
         <TabPanel value={value} index={2}>
-          <CreateRates />
+          <ItpEditProfileTaxRate />
+        </TabPanel>
+        <TabPanel value={value} index={3}>
+          <IptEditProfileTaxMultiplier />
+        </TabPanel>
+        <TabPanel value={value} index={4}>
+          <ItpEditDesignedTransferAccount setValue={setValue} />
         </TabPanel>
       </Paper>
     </>

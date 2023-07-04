@@ -19,7 +19,7 @@ import { CustomModal } from '@/components/_shared/common';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { HiPencilAlt } from 'react-icons/hi';
 
-export default function CreateNewProfile() {
+export default function EditNewProfile() {
   const [isAddNewComponent, setIsAddNewComponent] = useState(false);
   const [isModalFormSubmitted, setIsModalFormSubmitted] = useState(false);
 

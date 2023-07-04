@@ -4,11 +4,11 @@ import { Button, Input, Select, Textarea } from '@/components/_shared/form';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-interface CreateDesignedTransferAccountProps {
+interface ItpEditBasicDetailComponentProps {
   setValue: Dispatch<SetStateAction<number>>
 }
 
-export default function CreateBasicDetailComponent({setValue}: CreateDesignedTransferAccountProps) {
+export default function ItpEditBasicDetailComponent({setValue}: ItpEditBasicDetailComponentProps) {
   const Dummyoption = [
     { value: '1', label: 'Dummy 1' },
     { value: '2', label: 'Dummy 2' },
@@ -16,7 +16,7 @@ export default function CreateBasicDetailComponent({setValue}: CreateDesignedTra
   ];
 
   const validationSchema = Yup.object({
-    satutoryName: Yup.string().required('This field is Required!'),
+    componentName: Yup.string().required('This field is Required!'),
     country: Yup.string().required('This field is Required!'),
     province: Yup.string(),
     city: Yup.string(),
@@ -28,7 +28,7 @@ export default function CreateBasicDetailComponent({setValue}: CreateDesignedTra
 
   const formik = useFormik({
     initialValues: {
-      satutoryName: '',
+      componentName: '',
       country: '',
       province: '',
       city: '',
@@ -50,15 +50,15 @@ export default function CreateBasicDetailComponent({setValue}: CreateDesignedTra
         <Grid container spacing={2}>
           <Grid item xs={12} md={12} lg={6} xl={6}>
             <Input
-              placeholder='Input Statutory Benefits Name'
-              customLabel='Satutory Name'
+              placeholder='Input Component Name'
+              customLabel='Component Name'
               withAsterisk
               size='small'
-              value={formik.values.satutoryName}
-              onChange={(e) => formik.setFieldValue('satutoryName', e.target.value)}
+              value={formik.values.componentName}
+              onChange={(e) => formik.setFieldValue('componentName', e.target.value)}
             />
-            {formik.touched.satutoryName && formik.errors.satutoryName ? (
-              <Typography sx={{color: '#DC2626',}}>{formik.errors.satutoryName}</Typography>
+            {formik.touched.componentName && formik.errors.componentName ? (
+              <Typography sx={{color: '#DC2626',}}>{formik.errors.componentName}</Typography>
             ): null}
           </Grid>
         </Grid>

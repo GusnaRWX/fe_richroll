@@ -5,7 +5,7 @@ import {
   Box,
   TableSortLabel,
   Typography,
-  Grid,
+  Grid
 } from '@mui/material';
 import Table from '@/components/_shared/form/Table';
 import { IconButton, Button, DatePicker, CheckBox } from '@/components/_shared/form';
@@ -13,7 +13,6 @@ import styled from '@emotion/styled';
 import { visuallyHidden } from '@mui/utils';
 import { useRouter } from 'next/router';
 import { ConfirmationModal, CustomModal } from '@/components/_shared/common';
-import EmptyState from '@/components/_shared/common/EmptyState';
 
 // Import Icon React Icon
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -21,6 +20,7 @@ import { HiPencilAlt } from 'react-icons/hi';
 import { FiCopy } from 'react-icons/fi';
 import { HiUpload } from 'react-icons/hi';
 import { HiOutlineArchive } from 'react-icons/hi';
+import { useTranslation } from 'react-i18next';
 
 const ButtonWrapper = styled.div`
   display: flex;
@@ -31,25 +31,23 @@ const ButtonWrapper = styled.div`
 `;
 
 const headerItems = [
-  { id: 'name', label: 'Profile Name' },
+  { id: 'profile_name', label: 'Profile Name' },
   { id: 'country', label: 'Country' },
   { id: 'province', label: 'Province' },
-  { id: 'eperiod', label: 'Effective Period' },
-  { id: 'created', label: 'Created On' },
+  { id: 'effective_period', label: 'Effective Period' },
+  { id: 'created_on', label: 'Created On' },
   { id: 'last_update', label: 'last Updated' },
-  { id: 'action', label: '' },
 ];
 
 const DraftHeaderItems = [
   { id: 'name', label: 'Name' },
   { id: 'country', label: 'Country' },
-  { id: 'eperiod', label: 'Effective Period' },
-  { id: 'created', label: 'Created On' },
+  { id: 'effective_period', label: 'Effective Period' },
+  { id: 'created_on', label: 'Created On' },
   { id: 'last_update', label: 'last Updated' },
-  { id: 'action', label: '' },
 ];
 
-interface SutatoryBenefitProfileTableProps {
+interface ItpProfileTableProps {
   tabValue: number;
   DeleteAction?: boolean;
   DetailAction?: boolean;
@@ -61,7 +59,7 @@ interface SutatoryBenefitProfileTableProps {
 
 type Order = 'asc' | 'desc';
 
-function SutatoryBenefitProfileTable({
+function ItpProfileTable({
   // tabValue,
   DeleteAction,
   DetailAction,
@@ -69,7 +67,7 @@ function SutatoryBenefitProfileTable({
   ActivateAction,
   ArchivedAction,
   Draft,
-}: SutatoryBenefitProfileTableProps) {
+}: ItpProfileTableProps) {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
   const [direction, setDirection] = useState<Order>('desc');
@@ -79,10 +77,11 @@ function SutatoryBenefitProfileTable({
   const [activateConfirmation, setActivateConfirmation] = useState(false);
   const [archiveConfirmation, setArchiveConfirmation] = useState(false);
   const [hydrated, setHaydrated] = useState(false);
+  const {t} = useTranslation();
 
   const router = useRouter();
   function DetailActionHandler () {
-    router.push('/satutory-benefit/profile/detail');
+    router.push('/income-tax-profile/profile/detail');
   }
 
   const data = {
@@ -144,7 +143,6 @@ function SutatoryBenefitProfileTable({
     setPage(0);
   };
 
-
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
     headId: string
@@ -184,7 +182,7 @@ function SutatoryBenefitProfileTable({
                     direction={sort === item.id ? direction : 'asc'}
                     onClick={(e) => handleRequestSort(e, item.id)}
                   >
-                    {item.label}
+                    {t('income_tax_profile.profile.draft_table.' + item.id)}
                     {sort === item.id ? (
                       <Box component='span' sx={visuallyHidden}>
                         {direction === 'asc'
@@ -195,6 +193,7 @@ function SutatoryBenefitProfileTable({
                   </TableSortLabel>
                 </TableCell>
               ))}
+              <TableCell />
             </TableRow>
             : <TableRow>
               {headerItems.map((item) => (
@@ -207,7 +206,7 @@ function SutatoryBenefitProfileTable({
                     direction={sort === item.id ? direction : 'asc'}
                     onClick={(e) => handleRequestSort(e, item.id)}
                   >
-                    {item.label}
+                    {t('income_tax_profile.profile.active_table.' + item.id)}
                     {sort === item.id ? (
                       <Box component='span' sx={visuallyHidden}>
                         {direction === 'asc'
@@ -218,6 +217,7 @@ function SutatoryBenefitProfileTable({
                   </TableSortLabel>
                 </TableCell>
               ))}
+              <TableCell />
             </TableRow>
         }
         bodyChildren={
@@ -226,7 +226,7 @@ function SutatoryBenefitProfileTable({
               data?.items.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={12} align='center'>
-                    <EmptyState />
+                    <Typography>Data not found</Typography>
                   </TableCell>
                 </TableRow>
               ) : (
@@ -304,7 +304,7 @@ function SutatoryBenefitProfileTable({
             ) : (
               <TableRow>
                 <TableCell colSpan={12} align='center'>
-                  <EmptyState />
+                  <Typography>Data not found</Typography>
                 </TableCell>
               </TableRow>
             )}
@@ -367,4 +367,4 @@ function SutatoryBenefitProfileTable({
   );
 }
 
-export default SutatoryBenefitProfileTable;
+export default ItpProfileTable;

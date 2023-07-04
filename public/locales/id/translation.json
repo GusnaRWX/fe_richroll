@@ -34,6 +34,106 @@
     "payroll_setting": "Pengaturan gaji",
     "employment": "Pekerjaan",
     "reports": "Laporan",
-    "article_management": "Manajemen Artikel"
+    "article_management": "Manajemen Artikel",
+    "income_tax_profile": "Profil Pajak Penghasilan",
+    "income_tax_profile_deductable_component": "Komponen yang Dapat Dikurangi",
+    "income_tax_profile_profile": "Profil"
+  },
+  "income_tax_profile": {
+    "deductable_component": {
+      "title": "Dasbor Komponen yang Dapat Dikurangi",
+      "table": {
+        "company_name": "Nama perusahaan",
+        "country": "Negara",
+        "component_condition": "Kondisi Komponen",
+        "last_update": "Pembaharuan Terakhir"
+      }
+    },
+    "profile": {
+      "title": "Konfigurasi Profil Pajak",
+      "tab": {
+        "draft": "Draf",
+        "active": "Aktif",
+        "archive": "Diarsipkan"
+      },
+      "draft_table": {
+        "name": "Nama",
+        "country": "Negara",
+        "effective_period": "Periode Efektif",
+        "created_on": "Dibuat pada",
+        "last_update": "Pembaharuan Terakhir"
+      },
+      "active_table": {
+        "profile_name": "Nama profil",
+        "country": "Negara",
+        "province": "Propinsi",
+        "effective_period": "Periode Efektif",
+        "created_on": "Dibuat pada",
+        "last_update": "Pembaharuan Terakhir"
+      },
+      "archieve_table": {
+        "profile_name": "Nama profil",
+        "country": "Negara",
+        "province": "Propinsi",
+        "effective_period": "Periode Efektif",
+        "created_on": "Dibuat pada",
+        "last_update": "Pembaharuan Terakhir"
+      },
+      "detail": {
+        "main": {
+          "title": "Profil Pajak - Status",
+          "delete": "Hapus",
+          "duplicate": "Duplikat",
+          "archive": "Arsipkan",
+          "edit": "Ubah",
+          "activate": "Aktifkan"
+        },
+        "tab": {
+          "basic_detail": "Detil Dasar",
+          "deductible_component": "Komponen yang Dapat Dikurangi",
+          "income_tax_rate": "Tarif Pajak Penghasilan",
+          "income_tax_multiplier": "Pengganda Pajak Penghasilan",
+          "designated_transfer_account": "Rekening Transfer yang Ditunjuk"
+        },
+        "basic_detail": {
+          "country": "Negara",
+          "different_currency": "Mata uang yang berbeda",
+          "tax_profile_name": "Nama Profil Pajak",
+          "effective_period": "Periode Efektif",
+          "citation": "Kutipan",
+          "internal_notes": "Catatan Internal",
+          "external_notes": "Catatan Eksternal"
+        },
+        "deductible_component": {
+          "martial_status": "Status pernikahan",
+          "factor_unit_condition": "Kondisi Satuan Faktor",
+          "amount": "Jumlah"
+        },
+        "income_tax_rate": {
+          "progressive_rate": "Tingkat Progresif",
+          "income": "Penghasilan",
+          "rate": "Rasio",
+          "min_income": "Penghasilan Min",
+          "amount": "Jumlah"
+        },
+        "income_tax_multiplier": {
+          "deductible_factor": "Faktor Pengurangan",
+          "factor_unit_condition": "Kondisi Satuan Faktor",
+          "rate": "Rasio",
+          "additional_fixed_amount": "Jumlah Tetap Tambahan"
+        },
+        "designated_transfer_account": {
+          "type": "Jenis",
+          "bank": "Bank",
+          "bank_account_holders_name": "Nama Pemegang Rekening Bank",
+          "bank_account_no": "Nomor Rekening Bank",
+          "bank_code": "Kode Bank",
+          "branch_code": "Kode cabang",
+          "branch_name": "Nama cabang",
+          "swift_code": "Tukar Kode",
+          "notes": "Catatan"
+        }
+      }
+    }
   }
 }

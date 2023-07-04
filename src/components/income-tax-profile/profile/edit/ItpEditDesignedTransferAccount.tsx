@@ -10,6 +10,7 @@ import {
   RadioGroup,
   FormControlLabel,
   Grid,
+  Paper
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import React, { Dispatch, SetStateAction, useState } from 'react';
@@ -17,11 +18,13 @@ import React, { Dispatch, SetStateAction, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-interface CreateDesignedTransferAccountProps {
-  setValue: Dispatch<SetStateAction<number>>
+interface ItpEditDesignedTransferAccountProps {
+  setValue: Dispatch<SetStateAction<number>>;
 }
 
-export default function CreateDesignedTransferAccount({ setValue }: CreateDesignedTransferAccountProps) {
+export default function ItpEditDesignedTransferAccount({
+  setValue,
+}: ItpEditDesignedTransferAccountProps) {
   const [account, setAccount] = useState('central');
 
   const AsteriskComponent = styled('span')(({ theme }) => ({
@@ -78,15 +81,27 @@ export default function CreateDesignedTransferAccount({ setValue }: CreateDesign
   }, [account]);
 
   return (
-    <Box component='div' sx={{ p: '16px' }}>
+    <Paper sx={{ p: '16px' }}>
       <Typography
         style={{ color: '#223567', fontWeight: 700, fontSize: '16px' }}
       >
         Bank Information
       </Typography>
+
+      <Typography
+        style={{
+          color: '#223567',
+          fontWeight: 400,
+          fontSize: '14px',
+          marginTop: '10px',
+        }}
+      >
+        Type
+      </Typography>
+
       <Box
         component='div'
-        sx={{ display: ' flex', gap: '32px', marginTop: '27px' }}
+        sx={{ display: ' flex', gap: '32px', marginTop: '10px' }}
       >
         <Box component='div' sx={{ display: 'flex', alignItems: 'center' }}>
           <RadioGroup row value={account} onChange={handleChange}>
@@ -108,6 +123,7 @@ export default function CreateDesignedTransferAccount({ setValue }: CreateDesign
           </RadioGroup>
         </Box>
       </Box>
+
       <Box
         component='div'
         sx={{
@@ -358,6 +374,6 @@ export default function CreateDesignedTransferAccount({ setValue }: CreateDesign
           </Box>
         </Grid>
       </Box>
-    </Box>
+    </Paper>
   );
 }

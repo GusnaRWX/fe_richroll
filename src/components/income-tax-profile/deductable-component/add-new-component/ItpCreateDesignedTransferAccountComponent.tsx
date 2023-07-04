@@ -1,4 +1,4 @@
-import { Input, Button } from '@/components/_shared/form';
+import { Input } from '@/components/_shared/form';
 import { InfoOutlined } from '@mui/icons-material';
 import {
   Box,
@@ -9,19 +9,14 @@ import {
   Typography,
   RadioGroup,
   FormControlLabel,
-  Grid,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { useState } from 'react';
 
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-interface CreateDesignedTransferAccountProps {
-  setValue: Dispatch<SetStateAction<number>>
-}
-
-export default function CreateDesignedTransferAccount({ setValue }: CreateDesignedTransferAccountProps) {
+export default function ItpCreateDesignedTransferAccountComponent() {
   const [account, setAccount] = useState('central');
 
   const AsteriskComponent = styled('span')(({ theme }) => ({
@@ -63,7 +58,6 @@ export default function CreateDesignedTransferAccount({ setValue }: CreateDesign
     validationSchema: validationSchema,
     onSubmit: (values) => {
       console.log(values);
-      setValue(2);
     },
   });
 
@@ -163,6 +157,9 @@ export default function CreateDesignedTransferAccount({ setValue }: CreateDesign
             <MenuItem value='2'>2</MenuItem>
             <MenuItem value='3'>3</MenuItem>
           </Select>
+          {formik.touched.bank && formik.errors.bank ?(
+            <Typography sx={{color: '#DC2626'}}>{formik.errors.bank}</Typography>
+          ):null}
         </Box>
         <Box sx={{ width: { xs: '100%', md: '50%' } }}>
           <Typography
@@ -187,6 +184,9 @@ export default function CreateDesignedTransferAccount({ setValue }: CreateDesign
             value={formik.values.holder}
             onChange={(e) => formik.setFieldValue('holder', e.target.value)}
           />
+          {formik.touched.holder && formik.errors.holder ?(
+            <Typography sx={{color: '#DC2626'}}>{formik.errors.holder}</Typography>
+          ):null}
         </Box>
       </Box>
 
@@ -213,6 +213,9 @@ export default function CreateDesignedTransferAccount({ setValue }: CreateDesign
             value={formik.values.no}
             onChange={(e) => formik.setFieldValue('no', e.target.value)}
           />
+          {formik.touched.no && formik.errors.no ?(
+            <Typography sx={{color: '#DC2626'}}>{formik.errors.no}</Typography>
+          ):null}
         </Box>
 
         <Box
@@ -347,16 +350,6 @@ export default function CreateDesignedTransferAccount({ setValue }: CreateDesign
         >
           Max.100 Character
         </FormHelperText>
-        <Grid item xs={12} md={12} lg={12} xl={12}>
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <Button
-              color='primary'
-              label='Next'
-              sx={{ width: '63px' }}
-              onClick={() => formik.submitForm()}
-            />
-          </Box>
-        </Grid>
       </Box>
     </Box>
   );

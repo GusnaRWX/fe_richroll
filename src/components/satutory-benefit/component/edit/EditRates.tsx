@@ -41,11 +41,11 @@ const rates = [
   },
 ];
 
-export default function CreateRates() {
+export default function EditRates() {
   const initialValues = {
     employee: true,
     employer: false,
-    employerMatch: true,
+    employerMatch: false,
     employeeData: {
       start: 0,
       end: 0,
@@ -80,27 +80,13 @@ export default function CreateRates() {
   });
 
   const handleSubmit = (values) => {
-    let payload = {};
-    if (values.employerMatch && values.employer && values.employee) {
-      payload= {
-        employee: values.employeeData,
-        employer: values.employeeData,
-      };
-    } else if (values.employee && values.employer) {
-      payload = {
-        employee: values.employeeData,
-        employer: values.employerData,
-      };
-    } else if (values.employee) {
-      payload = {
-        employee: values.employeeData,
-      };
-    } else if (values.employer) {
-      // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-      payload = {
-        employer: values.employerData,
-      };
-    }
+    const payload = {
+      employee: values.employeeData,
+      employer: values.employerMatch
+        ? values.employeeData
+        : values.employerData,
+    };
+    console.log(payload);
   };
 
   const formik = useFormik({
@@ -216,13 +202,12 @@ export default function CreateRates() {
                       customLabel='Start'
                       size='small'
                       value={formik.values.employeeData.start}
-                      onChange={(e) => {
+                      onChange={(e) =>
                         formik.setFieldValue(
                           'employeeData.start',
                           e.target.value
-                        );
-                        formik.setFieldValue('employerData.start', formik.values.employerMatch ? e.target.value : null);
-                      }}
+                        )
+                      }
                     />
                   </Box>
 
@@ -234,10 +219,9 @@ export default function CreateRates() {
                       customLabel='End'
                       size='small'
                       value={formik.values.employeeData.end}
-                      onChange={(e) => {
-                        formik.setFieldValue('employeeData.end', e.target.value);
-                        formik.setFieldValue('employerData.end', formik.values.employerMatch ? e.target.value : null);
-                      }}
+                      onChange={(e) =>
+                        formik.setFieldValue('employeeData.end', e.target.value)
+                      }
                     />
                   </Box>
                   <IconButton

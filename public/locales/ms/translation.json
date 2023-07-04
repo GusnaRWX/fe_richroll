@@ -34,6 +34,106 @@
     "payroll_setting": "Penetapan Gaji",
     "employment": "Pekerjaan",
     "reports": "Laporan",
-    "article_management": "Pengurusan Article"
+    "article_management": "Pengurusan Article",
+    "income_tax_profile": "Profil Cukai Pendapatan",
+    "income_tax_profile_deductable_component": "Komponen Boleh Tolak",
+    "income_tax_profile_profile": "Profil"
+  },
+  "income_tax_profile": {
+    "deductable_component": {
+      "title": "Papan Pemuka Komponen Boleh Potong",
+      "table": {
+        "company_name": "nama syarikat",
+        "country": "Negara",
+        "component_condition": "Keadaan Komponen",
+        "last_update": "Kemaskini terakhir"
+      }
+    },
+    "profile": {
+      "title": "Konfigurasi Profil Cukai",
+      "tab": {
+        "draft": "Draf",
+        "active": "Aktif",
+        "archive": "Diarkibkan"
+      },
+      "draft_table": {
+        "name": "Nama",
+        "country": "Negara",
+        "effective_period": "Tempoh Berkuatkuasa",
+        "created_on": "Dicipta pada",
+        "last_update": "Kemaskini terakhir"
+      },
+      "active_table": {
+        "profile_name": "Nama profil",
+        "country": "Negara",
+        "province": "Wilayah",
+        "effective_period": "Tempoh Berkuatkuasa",
+        "created_on": "Dicipta pada",
+        "last_update": "Kemaskini terakhir"
+      },
+      "archieve_table": {
+        "profile_name": "Nama profil",
+        "country": "Negara",
+        "province": "Wilayah",
+        "effective_period": "Tempoh Berkuatkuasa",
+        "created_on": "Dicipta pada",
+        "last_update": "Kemaskini terakhir"
+      },
+      "detail": {
+        "main": {
+          "title": "Profil Cukai - Status",
+          "delete": "Padam",
+          "duplicate": "Pendua",
+          "archive": "Diarkibkan",
+          "edit": "Sunting",
+          "activate": "Aktifkan"
+        },
+        "tab": {
+          "basic_detail": "Butiran Asas",
+          "deductible_component": "Komponen Boleh Tolak",
+          "income_tax_rate": "Kadar Cukai Pendapatan",
+          "income_tax_multiplier": "Pengganda Cukai Pendapatan",
+          "designated_transfer_account": "Akaun Pemindahan Ditetapkan"
+        },
+        "basic_detail": {
+          "country": "Negara",
+          "different_currency": "Mata Wang Berbeza",
+          "tax_profile_name": "Nama Profil Cukai",
+          "effective_period": "Tempoh Berkuatkuasa",
+          "citation": "Petikan",
+          "internal_notes": "Nota Dalaman",
+          "external_notes": "Nota Luaran"
+        },
+        "deductible_component": {
+          "martial_status": "Status perkahwinan",
+          "factor_unit_condition": "Keadaan Unit Faktor",
+          "amount": "Jumlah"
+        },
+        "income_tax_rate": {
+          "progressive_rate": "Kadar Progresif",
+          "income": "pendapatan",
+          "rate": "Kadar",
+          "min_income": "Pendapatan Min",
+          "amount": "Jumlah"
+        },
+        "income_tax_multiplier": {
+          "deductible_factor": "Faktor Boleh Tolak",
+          "factor_unit_condition": "Keadaan Unit Faktor",
+          "rate": "Kadar",
+          "additional_fixed_amount": "Jumlah Tetap Tambahan"
+        },
+        "designated_transfer_account": {
+          "type": "taip",
+          "bank": "Bank",
+          "bank_account_holders_name": "Nama Pemegang Akaun Bank",
+          "bank_account_no": "Akaun Bank No",
+          "bank_code": "Kod bank",
+          "branch_code": "Kod Cawangan",
+          "branch_name": "Nama cawangan",
+          "swift_code": "Kod pantas",
+          "notes": "Nota"
+        }
+      }
+    }
   }
 }

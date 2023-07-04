@@ -1,3 +1,4 @@
+// import { AiFillBank, AiFillHome } from 'react-icons/ai';
 import { AiFillHome } from 'react-icons/ai';
 // import { RiArticleLine, RiAccountCircleFill } from 'react-icons/ri';
 import { RiAccountCircleFill } from 'react-icons/ri';
@@ -289,6 +290,31 @@ export const Menus: CoreLayout.SidebarItem[] = [
   //       title: 'Profile',
   //       prefix: 'satutory_benefits_profile',
   //       roles: ['HR Admin'],
+  //     },
+  //   ],
+  // },
+  // Income Tax Profile
+  // {
+  //   key: 'income-tax-profile',
+  //   path: '/income-tax-profile/',
+  //   title: [
+  //     { key: 'HR Admin', title: 'Income Tax Profile', prefix: 'income_tax_profile' }
+  //   ],
+  //   icons: AiFillBank,
+  //   hasChild: true,
+  //   roles: ['HR Admin'],
+  //   child: [
+  //     {
+  //       path: '/income-tax-profile/deductable-component/',
+  //       title: 'Deductable Component',
+  //       prefix: 'income_tax_profile_deductable_component',
+  //       roles: ['HR Admin']
+  //     },
+  //     {
+  //       path: '/income-tax-profile/profile/',
+  //       title: 'Profile',
+  //       prefix: 'income_tax_profile_profile',
+  //       roles: ['HR Admin']
   //     },
   //   ],
   // },

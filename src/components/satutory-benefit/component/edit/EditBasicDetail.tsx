@@ -4,11 +4,11 @@ import { Button, Input, Select, Textarea } from '@/components/_shared/form';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-interface CreateDesignedTransferAccountProps {
+interface EditBasicDetailProps {
   setValue: Dispatch<SetStateAction<number>>
 }
 
-export default function CreateBasicDetailComponent({setValue}: CreateDesignedTransferAccountProps) {
+export default function EditBasicDetail({setValue}: EditBasicDetailProps) {
   const Dummyoption = [
     { value: '1', label: 'Dummy 1' },
     { value: '2', label: 'Dummy 2' },

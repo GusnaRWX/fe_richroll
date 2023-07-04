@@ -7,11 +7,11 @@ import { ArrowBack } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 
 // Import Create Component
-import CreateBasicDetailComponent from './CreateBasicDetail';
-import CreateDesignedTransferAccount from './CreateDesignedTransferAccount';
-import CreateRates from './CreateRates';
+import EditBasicDetail from './EditBasicDetail';
+import EditDesignedTransferAccount from './EditDesignedTransferAccount';
+import EditRates from './EditRates';
 
-export default function CreateNewComponent() {
+export default function EditNewComponent() {
   const router = useRouter();
 
   const Header = styled('div')({
@@ -95,13 +95,13 @@ export default function CreateNewComponent() {
         </Box>
         </Box>
         <TabPanel value={value} index={0}>
-          <CreateBasicDetailComponent setValue={setValue} />
+          <EditBasicDetail setValue={setValue} />
         </TabPanel>
         <TabPanel value={value} index={1}>
-          <CreateDesignedTransferAccount setValue={setValue} />
+          <EditDesignedTransferAccount setValue={setValue} />
         </TabPanel>
         <TabPanel value={value} index={2}>
-          <CreateRates />
+          <EditRates />
         </TabPanel>
       </Paper>
     </>

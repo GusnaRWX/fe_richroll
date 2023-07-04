@@ -1,14 +1,13 @@
-import React, {Dispatch, SetStateAction} from 'react';
-import { Grid, Box, Typography } from '@mui/material';
+import React from 'react';
+import { Grid, Box, Typography, FormHelperText, Paper } from '@mui/material';
 import { Button, Input, Select, Textarea } from '@/components/_shared/form';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import BasicDatePicker from '@/components/_shared/form/DatePicker';
+import dayjs from 'dayjs';
 
-interface CreateDesignedTransferAccountProps {
-  setValue: Dispatch<SetStateAction<number>>
-}
 
-export default function CreateBasicDetailComponent({setValue}: CreateDesignedTransferAccountProps) {
+export default function ItpCreateTaxBasicDetail() {
   const Dummyoption = [
     { value: '1', label: 'Dummy 1' },
     { value: '2', label: 'Dummy 2' },
@@ -16,11 +15,12 @@ export default function CreateBasicDetailComponent({setValue}: CreateDesignedTra
   ];
 
   const validationSchema = Yup.object({
-    satutoryName: Yup.string().required('This field is Required!'),
+    componentName: Yup.string().required('This field is Required!'),
     country: Yup.string().required('This field is Required!'),
     province: Yup.string(),
     city: Yup.string(),
     subDistrict: Yup.string(),
+    effectiveDate: Yup.string().required('This field is Required!'),
     citation: Yup.string(),
     internalNotes: Yup.string(),
     externalNotes: Yup.string(),
@@ -28,11 +28,12 @@ export default function CreateBasicDetailComponent({setValue}: CreateDesignedTra
 
   const formik = useFormik({
     initialValues: {
-      satutoryName: '',
+      componentName: '',
       country: '',
       province: '',
       city: '',
       subDistrict: '',
+      effectiveDate: '',
       citation: '',
       internalNotes: '',
       externalNotes: '',
@@ -40,30 +41,30 @@ export default function CreateBasicDetailComponent({setValue}: CreateDesignedTra
     validationSchema: validationSchema,
     onSubmit: (values) => {
       console.log(values);
-      setValue(1);
     }
   });
 
   return (
     <>
-      <Box component='div' sx={{p:'16px'}}>
-        <Grid container spacing={2}>
-          <Grid item xs={12} md={12} lg={6} xl={6}>
+      <Paper sx={{p: '16px'}}>
+        <Grid container xs={12} spacing={2}>
+          <Grid item xs={6} md={6} lg={6} xl={6} >
             <Input
               placeholder='Input Statutory Benefits Name'
-              customLabel='Satutory Name'
+              customLabel='Tax Profile Name'
               withAsterisk
               size='small'
-              value={formik.values.satutoryName}
-              onChange={(e) => formik.setFieldValue('satutoryName', e.target.value)}
+              value={formik.values.componentName}
+              onChange={(e) => formik.setFieldValue('componentName', e.target.value)}
             />
-            {formik.touched.satutoryName && formik.errors.satutoryName ? (
-              <Typography sx={{color: '#DC2626',}}>{formik.errors.satutoryName}</Typography>
+            {formik.touched.componentName && formik.errors.componentName ? (
+              <FormHelperText sx={{color: '#EF4444'}}>{formik.errors.componentName}</FormHelperText>
             ): null}
           </Grid>
+          <Grid item xs={6} md={6} lg={6} xl={6}></Grid>
         </Grid>
 
-        <Grid container spacing={2} style={{marginTop: '12px'}}>
+        <Grid container xs={12} spacing={2} style={{marginTop: '16px'}}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Select
               placeholder='Select Country'
@@ -76,10 +77,10 @@ export default function CreateBasicDetailComponent({setValue}: CreateDesignedTra
               onChange={(e) => formik.setFieldValue('country', e.target.value)}
             />
             {formik.touched.country && formik.errors.country ? (
-              <Typography sx={{color: '#DC2626'}}>{formik.errors.country}</Typography>
+              <FormHelperText sx={{color: '#EF4444'}}>{formik.errors.country}</FormHelperText>
             ): null}
           </Grid>
-          <Grid item xs={6} md={6} lg={6} xl={6}>
+          <Grid item xs={6} md={6} lg={6} xl={6} >
             <Select
               placeholder='Select Province'
               customLabel='Province'
@@ -92,7 +93,7 @@ export default function CreateBasicDetailComponent({setValue}: CreateDesignedTra
           </Grid>
         </Grid>
 
-        <Grid container spacing={2} style={{marginTop: '12px'}}>
+        <Grid container xs={12} spacing={2} style={{marginTop: '16px'}}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Select
               placeholder='Select City'
@@ -104,7 +105,7 @@ export default function CreateBasicDetailComponent({setValue}: CreateDesignedTra
               onChange={(e) => formik.setFieldValue('city', e.target.value)}
             />
           </Grid>
-          <Grid item xs={6} md={6} lg={6} xl={6}>
+          <Grid item xs={6} md={6} lg={6} xl={6} >
             <Select
               placeholder='Select Country'
               customLabel='Sub-District'
@@ -117,8 +118,26 @@ export default function CreateBasicDetailComponent({setValue}: CreateDesignedTra
           </Grid>
         </Grid>
 
-        <Grid container spacing={2} style={{marginTop: '12px'}}>
-          <Grid item xs={12} md={12} lg={12} xl={12}>
+        <Grid container xs={12} spacing={2} style={{marginTop: '16px'}}>
+          <Grid item xs={6}>
+            <BasicDatePicker
+              customLabel='Effective Date'
+              withAsterisk
+              onChange={(e)=> formik.setFieldValue('effectiveDate', dayjs(e).format('DD/MM/YYYY'))}
+            />
+            {formik.touched.effectiveDate && formik.errors.effectiveDate ? (
+              <FormHelperText sx={{color: '#EF4444'}}>{formik.errors.effectiveDate}</FormHelperText>
+            ): null}
+          </Grid>
+          <Grid item xs={6}>
+            <BasicDatePicker
+              customLabel='Expiration Date'
+            />
+          </Grid>
+        </Grid>
+
+        <Grid container xs={12} spacing={2} style={{marginTop: '16px'}}>
+          <Grid item xs={6} md={6} lg={6} xl={6} sx={{paddingRight:'8px'}}>
             <Textarea
               customLabel='Citation'
               minRows={4}
@@ -136,10 +155,11 @@ export default function CreateBasicDetailComponent({setValue}: CreateDesignedTra
             Max. 120 Character
             </Typography>
           </Grid>
+          <Grid item xs={6} md={6} lg={6} xl={6}></Grid>
         </Grid>
 
-        <Grid container spacing={2} style={{marginTop: '12px'}}>
-          <Grid item xs={12} md={12} lg={12} xl={12}>
+        <Grid container xs={12} spacing={2} style={{marginTop: '16px'}}>
+          <Grid item xs={6} md={6} lg={6} xl={6}>
             <Textarea
               customLabel='Internal Notes'
               minRows={4}
@@ -157,10 +177,7 @@ export default function CreateBasicDetailComponent({setValue}: CreateDesignedTra
             Max. 120 Character
             </Typography>
           </Grid>
-        </Grid>
-
-        <Grid container spacing={2} style={{marginTop: '12px'}}>
-          <Grid item xs={12} md={12} lg={12} xl={12}>
+          <Grid item xs={6} md={6} lg={6} xl={6}>
             <Textarea
               customLabel='External Notes'
               minRows={4}
@@ -180,7 +197,7 @@ export default function CreateBasicDetailComponent({setValue}: CreateDesignedTra
           </Grid>
         </Grid>
 
-        <Grid container spacing={2} style={{marginTop: '12px'}}>
+        <Grid container xs={12} spacing={2} style={{marginTop: '16px'}}>
           <Grid item xs={12} md={12} lg={12} xl={12}>
             <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
               <Button
@@ -192,7 +209,7 @@ export default function CreateBasicDetailComponent({setValue}: CreateDesignedTra
             </Box>
           </Grid>
         </Grid>
-      </Box>
+      </Paper>
     </>
   );
 }

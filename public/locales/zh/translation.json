@@ -34,6 +34,106 @@
     "payroll_setting": "薪资设定",
     "employment": "就业",
     "reports": "报告",
-    "article_management": "文章管理"
+    "article_management": "文章管理",
+    "income_tax_profile": "所得税概况",
+    "income_tax_profile_deductable_component": "可扣除部分",
+    "income_tax_profile_profile": "轮廓"
+  },
+  "income_tax_profile": {
+    "deductable_component": {
+      "title": "可扣除部分仪表板",
+      "table": {
+        "company_name": "公司名称",
+        "country": "国家",
+        "component_condition": "组件状况",
+        "last_update": "最后更新"
+      }
+    },
+    "profile": {
+      "title": "税务资料配置",
+      "tab": {
+        "draft": "草稿",
+        "active": "积极的",
+        "archive": "已存档"
+      },
+      "draft_table": {
+        "name": "姓名",
+        "country": "国家",
+        "effective_period": "有效期",
+        "created_on": "创建于",
+        "last_update": "最后更新"
+      },
+      "active_table": {
+        "profile_name": "个人资料名称",
+        "country": "国家",
+        "province": "省",
+        "effective_period": "有效期",
+        "created_on": "创建于",
+        "last_update": "最后更新"
+      },
+      "archieve_table": {
+        "profile_name": "个人资料名称",
+        "country": "国家",
+        "province": "省",
+        "effective_period": "有效期",
+        "created_on": "创建于",
+        "last_update": "最后更新"
+      },
+      "detail": {
+        "main": {
+          "title": "税务概况 - 状态",
+          "delete": "删除",
+          "duplicate": "复制",
+          "archive": "已存档",
+          "edit": "编辑",
+          "activate": "启用"
+        },
+        "tab": {
+          "basic_detail": "基本细节",
+          "deductible_component": "可扣除部分",
+          "income_tax_rate": "所得税税率",
+          "income_tax_multiplier": "所得税乘数",
+          "designated_transfer_account": "指定转账账户"
+        },
+        "basic_detail": {
+          "country": "国家",
+          "different_currency": "不同货币",
+          "tax_profile_name": "税务资料名称",
+          "effective_period": "有效期",
+          "citation": "引文",
+          "internal_notes": "内部注释",
+          "external_notes": "外部注释"
+        },
+        "deductible_component": {
+          "martial_status": "婚姻状况",
+          "factor_unit_condition": "因素 单位 条件",
+          "amount": "数量"
+        },
+        "income_tax_rate": {
+          "progressive_rate": "累进率",
+          "income": "收入",
+          "rate": "速度",
+          "min_income": "最低收入",
+          "amount": "数量"
+        },
+        "income_tax_multiplier": {
+          "deductible_factor": "免赔额因素",
+          "factor_unit_condition": "因素 单位 条件",
+          "rate": "速度",
+          "additional_fixed_amount": "额外固定金额"
+        },
+        "designated_transfer_account": {
+          "type": "类型",
+          "bank": "银行",
+          "bank_account_holders_name": "银行账户持有人姓名",
+          "bank_account_no": "银行帐号",
+          "bank_code": "银行代码",
+          "branch_code": "分行代码",
+          "branch_name": "分店名称",
+          "swift_code": "SWIFT代码",
+          "notes": "笔记"
+        }
+      }
+    }
   }
 }

@@ -7,11 +7,11 @@ import { ArrowBack } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 
 // Import Create Component
-import CreateBasicDetailComponent from './CreateBasicDetail';
-import CreateDesignedTransferAccount from './CreateDesignedTransferAccount';
-import CreateRates from './CreateRates';
+import ItpEditBasicDetailComponent from './ItpEditBasicDetailComponent';
+import ItpEditDesignedTransferAccountComponent from './ItpEditDesignedTransferAccountComponent';
+import ItpEditRatesComponent from './ItpEditRatesComponent';
 
-export default function CreateNewComponent() {
+export default function ItpEditNewComponentComponent() {
   const router = useRouter();
 
   const Header = styled('div')({
@@ -69,7 +69,7 @@ export default function CreateNewComponent() {
             parentColor='primary.500'
             icons={<ArrowBack sx={{ color: '#FFFFFF' }} />}
             onClick={() => {
-              router.push('/satutory-benefit/component');
+              router.push('/income-tax-profile/deductable-component');
             }}
           />
           <Typography
@@ -95,13 +95,13 @@ export default function CreateNewComponent() {
         </Box>
         </Box>
         <TabPanel value={value} index={0}>
-          <CreateBasicDetailComponent setValue={setValue} />
+          <ItpEditBasicDetailComponent setValue={setValue} />
         </TabPanel>
         <TabPanel value={value} index={1}>
-          <CreateDesignedTransferAccount setValue={setValue} />
+          <ItpEditDesignedTransferAccountComponent setValue={setValue} />
         </TabPanel>
         <TabPanel value={value} index={2}>
-          <CreateRates />
+          <ItpEditRatesComponent />
         </TabPanel>
       </Paper>
     </>

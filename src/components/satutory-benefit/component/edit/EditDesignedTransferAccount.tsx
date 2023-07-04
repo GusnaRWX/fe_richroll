@@ -17,11 +17,11 @@ import React, { Dispatch, SetStateAction, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-interface CreateDesignedTransferAccountProps {
+interface EditDesignedTransferAccountProps {
   setValue: Dispatch<SetStateAction<number>>
 }
 
-export default function CreateDesignedTransferAccount({ setValue }: CreateDesignedTransferAccountProps) {
+export default function EditDesignedTransferAccount({ setValue }: EditDesignedTransferAccountProps) {
   const [account, setAccount] = useState('central');
 
   const AsteriskComponent = styled('span')(({ theme }) => ({
