@@ -6,6 +6,7 @@ import { ArrowBack } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import { CustomModal } from '@/components/_shared/common';
 import { ConfirmationModal } from '@/components/_shared/common';
+import { useTranslation } from 'react-i18next';
 
 // Icon Import
 import { HiPencilAlt } from 'react-icons/hi';
@@ -22,6 +23,7 @@ import ItpProfileDtaDetailComponent from './ItpProfileDtaDetailComponent';
 
 export default function ItpProfileDetailComponent() {
   const router = useRouter();
+  const {t} = useTranslation();
 
   const [duplicateConfirmation, setDuplicateConfirmation] = useState(false);
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
@@ -107,7 +109,7 @@ export default function ItpProfileDetailComponent() {
                 width: '250px',
               }}
             >
-              Tax Profile - Status
+              {t('income_tax_profile.profile.detail.main.title')}
             </Typography>
             <Typography
               style={{
@@ -127,7 +129,7 @@ export default function ItpProfileDetailComponent() {
             color='red'
             sx={{ bgcolor: '#FECACA', color: '#DC2626', width: 'fit-content' }}
             startIcon={<DeleteIcon />}
-            label='Delete'
+            label={t('income_tax_profile.profile.detail.main.delete')}
             onClick={() => setDeleteConfirmation(true)}
           />
           <Button
@@ -140,28 +142,28 @@ export default function ItpProfileDetailComponent() {
               boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.05)',
             }}
             startIcon={<FiCopy />}
-            label='Duplicate'
+            label={t('income_tax_profile.profile.detail.main.duplicate')}
             onClick={() => setDuplicateConfirmation(true)}
           />
           <Button
             color='orange'
             sx={{ bgcolor: '#FFEDD5', color: '#F97316', width: 'fit-content' }}
             startIcon={<HiOutlineArchive />}
-            label='Archive'
+            label={t('income_tax_profile.profile.detail.main.archive')}
             onClick={() => setArchiveConfirmation(true)}
           />
           <Button
             color='green'
             sx={{ bgcolor: '#8DD0B8', color: '#fff', width: 'fit-content' }}
             startIcon={<HiPencilAlt />}
-            label='Edit'
+            label={t('income_tax_profile.profile.detail.main.edit')}
             onClick={EditActionHandler}
           />
           <Button
             color='lightBlue'
             sx={{ bgcolor: '#223567', color: '#fff', width: 'fit-content' }}
             startIcon={<HiUpload />}
-            label='Activate'
+            label={t('income_tax_profile.profile.detail.main.activate')}
             onClick={() => setActivateConfirmation(true)}
           />
         </NextBtnWrapper>
@@ -170,11 +172,11 @@ export default function ItpProfileDetailComponent() {
         <Box sx={{p:'16px', pt:'0px'}}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider',  }}>
             <Tabs value={value} onChange={handleChange} aria-label='basic tabs'>
-              <Tab label='Basic Detail' {...a11yProps(0)} />
-              <Tab label='Deductible Components' {...a11yProps(1)} />
-              <Tab label='Income Tax Rate' {...a11yProps(2)} />
-              <Tab label='Income Tax Multiplier' {...a11yProps(3)} />
-              <Tab label='Designated Transfer Account' {...a11yProps(4)} />
+              <Tab label={t('income_tax_profile.profile.detail.tab.basic_detail')} {...a11yProps(0)} />
+              <Tab label={t('income_tax_profile.profile.detail.tab.deductible_component')} {...a11yProps(1)} />
+              <Tab label={t('income_tax_profile.profile.detail.tab.income_tax_rate')} {...a11yProps(2)} />
+              <Tab label={t('income_tax_profile.profile.detail.tab.income_tax_multiplier')} {...a11yProps(3)} />
+              <Tab label={t('income_tax_profile.profile.detail.tab.designated_transfer_account')} {...a11yProps(4)} />
             </Tabs>
           </Box>
         </Box>

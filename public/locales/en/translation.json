@@ -38,5 +38,103 @@
     "income_tax_profile" : "Income Tax Profile",
     "income_tax_profile_deductable_component" : "Deductable Component",
     "income_tax_profile_profile" : "Profile"
+  },
+  "income_tax_profile": {
+    "deductable_component": {
+      "title": "Deductable Components Dashboard",
+      "table": {
+        "company_name": "Company Name",
+        "country": "Country",
+        "component_condition": "Component Condition",
+        "last_update": "Last Update"
+      }
+    },
+    "profile": {
+      "title": "Tax Profile Configuration",
+      "tab": {
+        "draft": "Draft",
+        "active": "Active",
+        "archive": "Archived"
+      },
+      "draft_table": {
+        "name": "Name",
+        "country": "Country",
+        "effective_period": "Effective Period",
+        "created_on": "Created On",
+        "last_update": "Last Update"
+      },
+      "active_table": {
+        "profile_name": "Profile Name",
+        "country": "Country",
+        "province": "Province",
+        "effective_period": "Effective Period",
+        "created_on": "Created On",
+        "last_update": "Last Update"
+      },
+      "archieve_table": {
+        "profile_name": "Profile Name",
+        "country": "Country",
+        "province": "Province",
+        "effective_period": "Effective Period",
+        "created_on": "Created On",
+        "last_update": "Last Update"
+      },
+      "detail": {
+        "main": {
+          "title": "Tax Profile - Status",
+          "delete": "Delete",
+          "duplicate": "Duplicate",
+          "archive": "Archived",
+          "edit": "Edit",
+          "activate": "Activate"
+        },
+        "tab": {
+          "basic_detail": "Basic Detail",
+          "deductible_component": "Deductible Components",
+          "income_tax_rate": "Income Tax Rate",
+          "income_tax_multiplier": "Income Tax Multiplier",
+          "designated_transfer_account": "Designated Transfer Account"
+        },
+        "basic_detail": {
+          "country": "Country",
+          "different_currency": "Different Currency",
+          "tax_profile_name": "Tax Profile Name",
+          "effective_period": "Effective Period",
+          "citation": "Citation",
+          "internal_notes": "Internal Notes",
+          "external_notes": "External Notes"
+        },
+        "deductible_component": {
+          "martial_status": "Marital Status",
+          "number_of_dependence": "Number of Dependance",
+          "factor_unit_condition": "Factor Unit Condition",
+          "amount": "Amount"
+        },
+        "income_tax_rate": {
+          "progressive_rate": "Progressive Rate",
+          "income": "Income",
+          "rate": "Rate",
+          "min_income": "Min Income",
+          "amount": "Amount"
+        },
+        "income_tax_multiplier": {
+          "deductible_factor": "Deductible Factor",
+          "factor_unit_condition": "Factor Unit Condition",
+          "rate": "Rate",
+          "additional_fixed_amount": "Additional Fixed Amount"
+        },
+        "designated_transfer_account": {
+          "type": "Type",
+          "bank": "Bank",
+          "bank_account_holders_name": "Bank Account Holders Name",
+          "bank_account_no": "Bank Account No",
+          "bank_code": "Bank Code",
+          "branch_code": "Branch Code",
+          "branch_name": "Branch Name",
+          "swift_code": "Swift Code",
+          "notes": "Notes"
+        }
+      }
+    }
   }
 }

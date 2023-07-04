@@ -12,6 +12,7 @@ import styled from '@emotion/styled';
 import { visuallyHidden } from '@mui/utils';
 import { useRouter } from 'next/router';
 import { ConfirmationModal } from '@/components/_shared/common';
+import { useTranslation } from 'react-i18next';
 
 // Import Icon React Icon
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -26,11 +27,10 @@ const ButtonWrapper = styled.div`
 `;
 
 const headerItems = [
-  { id: 'name', label: 'Company Name' },
+  { id: 'company_name', label: 'Company Name' },
   { id: 'country', label: 'Country' },
-  { id: 'condition', label: 'Component Condition' },
+  { id: 'component_condition', label: 'Component Condition' },
   { id: 'last_update', label: 'last Updated' },
-  { id: 'action', label: '' },
 ];
 
 interface ItpDeductableComponentTableProps {
@@ -48,6 +48,7 @@ function ItpDeductableComponentTable({
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
   const [DeleteConfirmation, setDeleteConfirmation] = useState(false);
+  const {t} = useTranslation();
   const [hydrated, setHaydrated] = useState(false);
 
   const data = {
@@ -108,17 +109,17 @@ function ItpDeductableComponentTable({
     setSort(headId);
   };
 
+  const router = useRouter();
+  function DetailActionHandler() {
+    router.push('/income-tax-profile/deductable-component/detail');
+  }
+
   useEffect(() => {
     setHaydrated(true);
   }, []);
 
   if (!hydrated) {
     return null;
-  }
-
-  const router = useRouter();
-  function DetailActionHandler() {
-    router.push('/income-tax-profile/deductable-component/detail');
   }
 
   return (
@@ -142,7 +143,7 @@ function ItpDeductableComponentTable({
                   direction={sort === item.id ? direction : 'asc'}
                   onClick={(e) => handleRequestSort(e, item.id)}
                 >
-                  {item.label}
+                  {t('income_tax_profile.deductable_component.table.'+item.id)}
                   {sort === item.id ? (
                     <Box component='span' sx={visuallyHidden}>
                       {direction === 'asc'
@@ -153,6 +154,7 @@ function ItpDeductableComponentTable({
                 </TableSortLabel>
               </TableCell>
             ))}
+            <TableCell />
           </TableRow>
         }
         bodyChildren={

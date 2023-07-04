@@ -1,7 +1,10 @@
 import React from 'react';
 import { Grid, Typography, Paper } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 export default function ItpProfileBasicDetailDetailComponent() {
+  const {t} = useTranslation();
+
   return(
     <>
       <Paper sx={{px:'16px',py:'32px'}}>
@@ -13,7 +16,7 @@ export default function ItpProfileBasicDetailDetailComponent() {
               color='#9CA3AF'
               mb='8px'
             >
-              Country
+              {t('income_tax_profile.profile.detail.basic_detail.country')}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -26,7 +29,7 @@ export default function ItpProfileBasicDetailDetailComponent() {
               color='#9CA3AF'
               mb='8px'
             >
-              Different Currency
+              {t('income_tax_profile.profile.detail.basic_detail.different_currency')}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -39,7 +42,7 @@ export default function ItpProfileBasicDetailDetailComponent() {
               color='#9CA3AF'
               mb='8px'
             >
-              Tax Profile Name
+              {t('income_tax_profile.profile.detail.basic_detail.tax_profile_name')}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -52,7 +55,7 @@ export default function ItpProfileBasicDetailDetailComponent() {
               color='#9CA3AF'
               mb='8px'
             >
-              Effective Period
+              {t('income_tax_profile.profile.detail.basic_detail.effective_period')}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -65,7 +68,7 @@ export default function ItpProfileBasicDetailDetailComponent() {
               color='#9CA3AF'
               mb='8px'
             >
-              Citation
+              {t('income_tax_profile.profile.detail.basic_detail.citation')}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -78,7 +81,7 @@ export default function ItpProfileBasicDetailDetailComponent() {
               color='#9CA3AF'
               mb='8px'
             >
-              Internal Notes
+              {t('income_tax_profile.profile.detail.basic_detail.internal_notes')}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -91,7 +94,7 @@ export default function ItpProfileBasicDetailDetailComponent() {
               color='#9CA3AF'
               mb='8px'
             >
-              External Notes
+              {t('income_tax_profile.profile.detail.basic_detail.external_notes')}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -

@@ -1,7 +1,9 @@
 import React from 'react';
 import { Grid, Typography, Paper } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 export default function ItpProfileDeductableComponentDetailComponent() {
+  const {t} = useTranslation();
 
   const MaritalStatus = [
     {FUC : 'Single', Amount : 0},
@@ -40,7 +42,7 @@ export default function ItpProfileDeductableComponentDetailComponent() {
                 marginBottom:'6px  '
               }}
             >
-              Factor Unit Condition
+              {t('income_tax_profile.profile.detail.deductible_component.martial_status')}
             </Typography>
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
@@ -52,7 +54,7 @@ export default function ItpProfileDeductableComponentDetailComponent() {
                 marginBottom:'6px  '
               }}
             >
-              Amount
+              {t('income_tax_profile.profile.detail.deductible_component.amount')}
             </Typography>
           </Grid>
         </Grid>
@@ -94,7 +96,7 @@ export default function ItpProfileDeductableComponentDetailComponent() {
             marginBottom:'16px  '
           }}
         >
-          Number of Dependance
+          {t('income_tax_profile.profile.detail.deductible_component.number_of_dependence')}
         </Typography>
         <Grid container spacing={2}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
@@ -106,7 +108,7 @@ export default function ItpProfileDeductableComponentDetailComponent() {
                 marginBottom:'6px  '
               }}
             >
-              Factor Unit Condition
+              {t('income_tax_profile.profile.detail.deductible_component.factor_unit_condition')}
             </Typography>
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
@@ -118,7 +120,7 @@ export default function ItpProfileDeductableComponentDetailComponent() {
                 marginBottom:'6px  '
               }}
             >
-              Amount
+              {t('income_tax_profile.profile.detail.deductible_component.amount')}
             </Typography>
           </Grid>
         </Grid>
@@ -160,7 +162,7 @@ export default function ItpProfileDeductableComponentDetailComponent() {
             marginBottom:'16px  '
           }}
         >
-          Number of Dependance
+          {t('income_tax_profile.profile.detail.deductible_component.number_of_dependence')}
         </Typography>
         <Grid container spacing={2}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
@@ -172,7 +174,7 @@ export default function ItpProfileDeductableComponentDetailComponent() {
                 marginBottom:'6px  '
               }}
             >
-              Factor Unit Condition
+              {t('income_tax_profile.profile.detail.deductible_component.factor_unit_condition')}
             </Typography>
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
@@ -184,7 +186,7 @@ export default function ItpProfileDeductableComponentDetailComponent() {
                 marginBottom:'6px  '
               }}
             >
-              Amount
+              {t('income_tax_profile.profile.detail.deductible_component.amount')}
             </Typography>
           </Grid>
         </Grid>

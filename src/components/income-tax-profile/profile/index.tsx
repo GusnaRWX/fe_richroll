@@ -15,6 +15,7 @@ import { useRouter } from 'next/router';
 import BasicDatePicker from '@/components/_shared/form/DatePicker';
 import styled from '@emotion/styled';
 import ItpProfileTable from './ItpProfileComponent';
+import { useTranslation } from 'react-i18next';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -47,6 +48,7 @@ function a11yProps(index: number) {
 const ItpProfileComponent = () => {
   const router = useRouter();
   const [value, setValue] = useState(0);
+  const {t} = useTranslation();
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
@@ -69,7 +71,7 @@ const ItpProfileComponent = () => {
     <>
       <TitleWrapper>
         <Typography variant='h5'>
-          Statutory Benefits Profile Dashboard
+          {t('income_tax_profile.profile.title')}
         </Typography>
         <div>
           <Button
@@ -91,9 +93,9 @@ const ItpProfileComponent = () => {
             }}
           >
             <Tabs value={value} onChange={handleChange} aria-label='basic tabs'>
-              <Tab label='Draft' {...a11yProps(0)} />
-              <Tab label='Active' {...a11yProps(1)} />
-              <Tab label='Archived' {...a11yProps(2)} />
+              <Tab label={t('income_tax_profile.profile.tab.draft')} {...a11yProps(0)} />
+              <Tab label={t('income_tax_profile.profile.tab.active')} {...a11yProps(1)} />
+              <Tab label={t('income_tax_profile.profile.tab.archive')} {...a11yProps(2)} />
             </Tabs>
           </Box>
         </Box>

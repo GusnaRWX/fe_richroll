@@ -1,7 +1,9 @@
 import React from 'react';
 import { Grid, Typography, Paper } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 export default function ItpProfileIncomeTaxRateDetailComponent() {
+  const {t} = useTranslation();
   return(
     <>
       <Paper sx={{px:'16px',py:'32px'}}>
@@ -13,7 +15,7 @@ export default function ItpProfileIncomeTaxRateDetailComponent() {
               color='#9CA3AF'
               mb='8px'
             >
-              Progressive Rate
+              {t('income_tax_profile.profile.detail.income_tax_rate.progressive_rate')}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -26,7 +28,7 @@ export default function ItpProfileIncomeTaxRateDetailComponent() {
               color='#9CA3AF'
               mb='8px'
             >
-              Income
+              {t('income_tax_profile.profile.detail.income_tax_rate.income')}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -39,7 +41,7 @@ export default function ItpProfileIncomeTaxRateDetailComponent() {
               color='#9CA3AF'
               mb='8px'
             >
-              Rate
+              {t('income_tax_profile.profile.detail.income_tax_rate.rate')}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -52,7 +54,7 @@ export default function ItpProfileIncomeTaxRateDetailComponent() {
               color='#9CA3AF'
               mb='8px'
             >
-              Min Income
+              {t('income_tax_profile.profile.detail.income_tax_rate.min_income')}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -65,7 +67,7 @@ export default function ItpProfileIncomeTaxRateDetailComponent() {
               color='#9CA3AF'
               mb='8px'
             >
-              Rate
+              {t('income_tax_profile.profile.detail.income_tax_rate.rate')}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -78,7 +80,7 @@ export default function ItpProfileIncomeTaxRateDetailComponent() {
               color='#9CA3AF'
               mb='8px'
             >
-              Amount
+              {t('income_tax_profile.profile.detail.income_tax_rate.amount')}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -91,7 +93,7 @@ export default function ItpProfileIncomeTaxRateDetailComponent() {
               color='#9CA3AF'
               mb='8px'
             >
-              Income
+              {t('income_tax_profile.profile.detail.income_tax_rate.income')}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -104,7 +106,7 @@ export default function ItpProfileIncomeTaxRateDetailComponent() {
               color='#9CA3AF'
               mb='8px'
             >
-              Rate
+              {t('income_tax_profile.profile.detail.income_tax_rate.rate')}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -

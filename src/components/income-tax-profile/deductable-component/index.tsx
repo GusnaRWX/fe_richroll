@@ -12,9 +12,11 @@ import { useRouter } from 'next/router';
 import BasicDatePicker from '@/components/_shared/form/DatePicker';
 import styled from '@emotion/styled';
 import ItpDeductableComponentTable from './ItpDeductableComponentTable';
+import { useTranslation } from 'react-i18next';
 
 const ItpDeductableComponentComponent = () => {
   const router = useRouter();
+  const {t} = useTranslation();
   const TitleWrapper = styled.div`
     display: flex;
     flex-direction: row;
@@ -33,7 +35,7 @@ const ItpDeductableComponentComponent = () => {
   return (
     <>
       <TitleWrapper>
-        <Typography variant='h5'>Deductable Components Dashboard</Typography>
+        <Typography variant='h5'>{t('income_tax_profile.deductable_component.title')}</Typography>
         <div>
           <Button
             onClick={() =>

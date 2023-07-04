@@ -20,6 +20,7 @@ import { HiPencilAlt } from 'react-icons/hi';
 import { FiCopy } from 'react-icons/fi';
 import { HiUpload } from 'react-icons/hi';
 import { HiOutlineArchive } from 'react-icons/hi';
+import { useTranslation } from 'react-i18next';
 
 const ButtonWrapper = styled.div`
   display: flex;
@@ -30,22 +31,20 @@ const ButtonWrapper = styled.div`
 `;
 
 const headerItems = [
-  { id: 'name', label: 'Profile Name' },
+  { id: 'profile_name', label: 'Profile Name' },
   { id: 'country', label: 'Country' },
   { id: 'province', label: 'Province' },
-  { id: 'eperiod', label: 'Effective Period' },
-  { id: 'created', label: 'Created On' },
+  { id: 'effective_period', label: 'Effective Period' },
+  { id: 'created_on', label: 'Created On' },
   { id: 'last_update', label: 'last Updated' },
-  { id: 'action', label: '' },
 ];
 
 const DraftHeaderItems = [
   { id: 'name', label: 'Name' },
   { id: 'country', label: 'Country' },
-  { id: 'eperiod', label: 'Effective Period' },
-  { id: 'created', label: 'Created On' },
+  { id: 'effective_period', label: 'Effective Period' },
+  { id: 'created_on', label: 'Created On' },
   { id: 'last_update', label: 'last Updated' },
-  { id: 'action', label: '' },
 ];
 
 interface ItpProfileTableProps {
@@ -78,6 +77,7 @@ function ItpProfileTable({
   const [activateConfirmation, setActivateConfirmation] = useState(false);
   const [archiveConfirmation, setArchiveConfirmation] = useState(false);
   const [hydrated, setHaydrated] = useState(false);
+  const {t} = useTranslation();
 
   const router = useRouter();
   function DetailActionHandler () {
@@ -182,7 +182,7 @@ function ItpProfileTable({
                     direction={sort === item.id ? direction : 'asc'}
                     onClick={(e) => handleRequestSort(e, item.id)}
                   >
-                    {item.label}
+                    {t('income_tax_profile.profile.draft_table.' + item.id)}
                     {sort === item.id ? (
                       <Box component='span' sx={visuallyHidden}>
                         {direction === 'asc'
@@ -193,6 +193,7 @@ function ItpProfileTable({
                   </TableSortLabel>
                 </TableCell>
               ))}
+              <TableCell />
             </TableRow>
             : <TableRow>
               {headerItems.map((item) => (
@@ -205,7 +206,7 @@ function ItpProfileTable({
                     direction={sort === item.id ? direction : 'asc'}
                     onClick={(e) => handleRequestSort(e, item.id)}
                   >
-                    {item.label}
+                    {t('income_tax_profile.profile.active_table.' + item.id)}
                     {sort === item.id ? (
                       <Box component='span' sx={visuallyHidden}>
                         {direction === 'asc'
@@ -216,6 +217,7 @@ function ItpProfileTable({
                   </TableSortLabel>
                 </TableCell>
               ))}
+              <TableCell />
             </TableRow>
         }
         bodyChildren={
