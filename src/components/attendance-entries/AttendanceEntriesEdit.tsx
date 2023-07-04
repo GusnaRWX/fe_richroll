@@ -71,7 +71,7 @@ const AttendanceEntriesEdit: React.FC<AttendanceEntriesEditProps> = ({
     >
       <Box sx={modalStyle}>
         <ModalHeader>
-          <Text title='Edit Leave Entry' fontWeight={600} fontSize='18px' />
+          <Text title='Edit Attendance Entry' fontWeight={600} fontSize='18px' />
           <IconButton onClick={handleClose}>
             <Close />
           </IconButton>
