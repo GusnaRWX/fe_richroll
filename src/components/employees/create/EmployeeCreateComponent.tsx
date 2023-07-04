@@ -111,6 +111,7 @@ function EmployeeCreateComponent() {
     fullName: '',
     images: '',
     isPermanent: false,
+    isActive: false,
     isSelfService: false,
     nickname: '',
     phoneNumber: '',
