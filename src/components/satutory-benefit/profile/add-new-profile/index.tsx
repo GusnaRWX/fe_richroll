@@ -633,7 +633,7 @@ export default function CreateNewProfile() {
                                   <CheckBox
                                     name={option.label}
                                     checked={formik.values.benefitComponent.includes(
-                                      option.label
+                                      option.label as never
                                     )}
                                     customLabel=''
                                     onChange={handleCheckBoxChange}
