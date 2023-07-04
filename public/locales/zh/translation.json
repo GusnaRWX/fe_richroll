@@ -51,6 +51,7 @@
     },
     "profile": {
       "title": "税务资料配置",
+      "add_new": "添加新的个人资料",
       "tab": {
         "draft": "草稿",
         "active": "积极的",
@@ -132,6 +133,28 @@
           "branch_name": "分店名称",
           "swift_code": "SWIFT代码",
           "notes": "笔记"
+        }
+      },
+      "modal": {
+        "activate": {
+          "title": "发布日期",
+          "description": "您想激活税务资料吗？",
+          "effective_date": "生效日期",
+          "expiration_date": "截止日期",
+          "ok_button": "确认",
+          "cancel_button": "取消"
+        },
+        "duplicate": {
+          "title": "确认",
+          "description": "您想复制此配置文件吗？",
+          "ok_button": "确认",
+          "cancel_button": "取消"
+        },
+        "delete": {
+          "title": "删除数据条目",
+          "description": "您将要删除此考勤数据条目。",
+          "ok_button": "删除",
+          "cancel_button": "取消"
         }
       }
     }

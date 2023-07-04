@@ -51,6 +51,7 @@
     },
     "profile": {
       "title": "Konfigurasi Profil Cukai",
+      "add_new": "Tambah Profil Baharu",
       "tab": {
         "draft": "Draf",
         "active": "Aktif",
@@ -132,6 +133,28 @@
           "branch_name": "Nama cawangan",
           "swift_code": "Kod pantas",
           "notes": "Nota"
+        }
+      },
+      "modal": {
+        "activate": {
+          "title": "Tarikh penerbitan",
+          "description": "Adakah anda mahu Aktifkan profil cukai?",
+          "effective_date": "Tarikh kuat kuasa",
+          "expiration_date": "Tarikh luput",
+          "ok_button": "Sahkan",
+          "cancel_button": "Batal"
+        },
+        "duplicate": {
+          "title": "Pengesahan",
+          "description": "Adakah anda mahu menduplikasi profil ini?",
+          "ok_button": "Sahkan",
+          "cancel_button": "Batal"
+        },
+        "delete": {
+          "title": "Padamkan Entri Data",
+          "description": "Anda akan memadamkan entri data kehadiran ini. ",
+          "ok_button": "Padam",
+          "cancel_button": "Batal"
         }
       }
     }

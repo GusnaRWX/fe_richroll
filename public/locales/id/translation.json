@@ -51,6 +51,7 @@
     },
     "profile": {
       "title": "Konfigurasi Profil Pajak",
+      "add_new": "Tambah Profil Baru",
       "tab": {
         "draft": "Draf",
         "active": "Aktif",
@@ -132,6 +133,28 @@
           "branch_name": "Nama cabang",
           "swift_code": "Tukar Kode",
           "notes": "Catatan"
+        }
+      },
+      "modal": {
+        "activate": {
+          "title": "Tanggal penerbitan",
+          "description": "Apakah Anda ingin Mengaktifkan profil pajak?",
+          "effective_date": "Tanggal berlaku",
+          "expiration_date": "Tanggal habis tempo",
+          "ok_button": "Konfirmasi",
+          "cancel_button": "Batalkan"
+        },
+        "duplicate": {
+          "title": "Konfirmasi",
+          "description": "Apakah Anda ingin menggandakan profil ini?",
+          "ok_button": "Konfirmasi",
+          "cancel_button": "Batalkan"
+        },
+        "delete": {
+          "title": "Hapus Entri Data",
+          "description": "Anda akan menghapus entri data kehadiran ini. ",
+          "ok_button": "Hapus",
+          "cancel_button": "Batalkan"
         }
       }
     }
