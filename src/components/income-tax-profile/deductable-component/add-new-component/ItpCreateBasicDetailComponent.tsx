@@ -1,14 +1,11 @@
-import React, {Dispatch, SetStateAction} from 'react';
+import React from 'react';
 import { Grid, Box, Typography } from '@mui/material';
-import { Button, Input, Select, Textarea } from '@/components/_shared/form';
+import { Input, Select, Textarea } from '@/components/_shared/form';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-interface CreateDesignedTransferAccountProps {
-  setValue: Dispatch<SetStateAction<number>>
-}
 
-export default function CreateBasicDetailComponent({setValue}: CreateDesignedTransferAccountProps) {
+export default function CreateBasicDetailComponent() {
   const Dummyoption = [
     { value: '1', label: 'Dummy 1' },
     { value: '2', label: 'Dummy 2' },
@@ -40,7 +37,6 @@ export default function CreateBasicDetailComponent({setValue}: CreateDesignedTra
     validationSchema: validationSchema,
     onSubmit: (values) => {
       console.log(values);
-      setValue(1);
     }
   });
 
@@ -177,19 +173,6 @@ export default function CreateBasicDetailComponent({setValue}: CreateDesignedTra
             >
             Max. 120 Character
             </Typography>
-          </Grid>
-        </Grid>
-
-        <Grid container spacing={2} style={{marginTop: '12px'}}>
-          <Grid item xs={12} md={12} lg={12} xl={12}>
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <Button
-                color='primary'
-                label='Next'
-                sx={{ width: '63px' }}
-                onClick={() => formik.submitForm()}
-              />
-            </Box>
           </Grid>
         </Grid>
       </Box>

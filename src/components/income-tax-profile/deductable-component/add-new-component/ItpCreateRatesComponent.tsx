@@ -7,7 +7,6 @@ import {
   FormControlLabel,
   Grid,
   InputAdornment,
-  Button,
   Typography,
   styled,
   Switch,
@@ -344,24 +343,6 @@ export default function ItpCreateRatesComponent() {
               </>
             )}
           </Grid>
-        </Grid>
-        <Grid
-          container
-          spacing={2}
-          sx={{ justifyContent: 'flex-end', mt: '30px', gap: '15px' }}
-        >
-          <Button
-            sx={{ boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.5)', color: '#374151' }}
-          >
-          Back
-          </Button>
-          <Button
-            sx={{ boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.5)' }}
-            variant='contained'
-            onClick={() => formik.submitForm()}
-          >
-          Save
-          </Button>
         </Grid>
       </Box>
     </>

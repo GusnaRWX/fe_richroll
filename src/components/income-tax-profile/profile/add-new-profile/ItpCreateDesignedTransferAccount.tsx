@@ -13,18 +13,12 @@ import {
   Paper
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { useState } from 'react';
 
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-interface ItpCreateDesignedTransferAccountProps {
-  setValue: Dispatch<SetStateAction<number>>;
-}
-
-export default function ItpCreateDesignedTransferAccount({
-  setValue,
-}: ItpCreateDesignedTransferAccountProps) {
+export default function ItpCreateDesignedTransferAccount() {
   const [account, setAccount] = useState('central');
 
   const AsteriskComponent = styled('span')(({ theme }) => ({
@@ -66,7 +60,6 @@ export default function ItpCreateDesignedTransferAccount({
     validationSchema: validationSchema,
     onSubmit: (values) => {
       console.log(values);
-      setValue(2);
     },
   });
 

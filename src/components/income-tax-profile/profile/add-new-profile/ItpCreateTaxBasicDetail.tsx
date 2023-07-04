@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 import { Grid, Box, Typography, FormHelperText, Paper } from '@mui/material';
 import { Button, Input, Select, Textarea } from '@/components/_shared/form';
 import { useFormik } from 'formik';
@@ -6,11 +6,8 @@ import * as Yup from 'yup';
 import BasicDatePicker from '@/components/_shared/form/DatePicker';
 import dayjs from 'dayjs';
 
-interface ItpCreateTaxBasicDetailProps {
-  setValue: Dispatch<SetStateAction<number>>
-}
 
-export default function ItpCreateTaxBasicDetail({setValue}: ItpCreateTaxBasicDetailProps) {
+export default function ItpCreateTaxBasicDetail() {
   const Dummyoption = [
     { value: '1', label: 'Dummy 1' },
     { value: '2', label: 'Dummy 2' },
@@ -44,7 +41,6 @@ export default function ItpCreateTaxBasicDetail({setValue}: ItpCreateTaxBasicDet
     validationSchema: validationSchema,
     onSubmit: (values) => {
       console.log(values);
-      setValue(1);
     }
   });
 
