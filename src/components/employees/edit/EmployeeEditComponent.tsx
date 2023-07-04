@@ -126,6 +126,7 @@ function EmployeeEditComponent() {
     fullName: dataEmployeeInformation?.fullName,
     images: ifThenElse(dataEmployeeInformation?.picture !== null, dataEmployeeInformation?.picture, ''),
     isPermanent: dataEmployeeInformation?.isPermanent,
+    isActive: dataEmployeeInformation?.isActive,
     isSelfService: dataEmployeeInformation?.isSelfService,
     nickname: dataEmployeeInformation?.nickname,
     phoneNumber: phoneNumber,
