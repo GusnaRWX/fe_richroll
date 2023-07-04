@@ -39,7 +39,7 @@ const ContentWrapper = styled(Card)(({
   marginBottom: '1rem'
 }));
 
-function ItpCreateNewComponentComponent() {
+function CreateNewComponent() {
   const router = useRouter();
   const [value, setValue] = useState(0);
   const [open, setOpen] = useState(false);
@@ -172,4 +172,4 @@ function ItpCreateNewComponentComponent() {
   );
 }
 
-export default ItpCreateNewComponentComponent;
+export default CreateNewComponent;
