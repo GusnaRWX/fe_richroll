@@ -9,7 +9,9 @@ export const LocalizationsMenu = [
       en: { nativeName: 'English' }
     },
     locale: 'en_US',
-    icons: Icons.ENGLISH_ICON
+    icons: Icons.ENGLISH_ICON,
+    site: 'Singapore',
+    timezone: 'Asia/Singapore'
   },
   {
     name: 'ID',
@@ -19,7 +21,9 @@ export const LocalizationsMenu = [
     },
     locale: 'id_ID',
     nativeName: 'ID',
-    icons: Icons.ENGLISH_ICON
+    icons: Icons.ENGLISH_ICON,
+    site: 'Indonesia',
+    timezone: 'Asia/Jakarta'
   },
   {
     name: 'MY',
@@ -29,7 +33,9 @@ export const LocalizationsMenu = [
       ms: { nativeName: 'Malay' }
     },
     locale: 'ms_MY',
-    icons: Icons.ENGLISH_ICON
+    icons: Icons.ENGLISH_ICON,
+    site: 'Malaysia',
+    timezone: 'Asia/Kuala_Lumpur'
   },
   {
     name: 'CN',
@@ -39,6 +45,8 @@ export const LocalizationsMenu = [
       zh: { nativeName: 'Chinese' }
     },
     locale: 'zh_CN',
-    icons: Icons.ENGLISH_ICON
+    icons: Icons.ENGLISH_ICON,
+    site: 'China',
+    timezone: 'Asia/Shanghai'
   },
 ];

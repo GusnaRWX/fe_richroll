@@ -2,6 +2,7 @@ import axios, { AxiosHeaderValue, AxiosRequestHeaders, AxiosResponse } from 'axi
 import { Logger } from '@/utils/logger';
 import { config } from '@config';
 import { getStorage, setStorages } from './storage';
+//import { getTimezone } from './helper';
 
 /**
  * Log Responser
@@ -33,6 +34,7 @@ const service = axios.create({
         return `Bearer ${getStorage('accessToken')}`;
       }
     } as AxiosHeaderValue,
+    'X-Timezone': 'Asia/Jakarta'
   }
 });
 

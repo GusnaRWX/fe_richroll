@@ -102,6 +102,32 @@ export const getSelectedRoles = () => {
   }
 };
 
+export const getSite = () => {
+  if (typeof window !== 'undefined') {
+    const site = getStorage('site');
+    let parse: string | null;
+    if (site) {
+      parse = JSON.parse(site);
+      return parse;
+    }else{
+      return null;
+    }
+  }
+};
+
+export const getTimezone = () => {
+  if (typeof window !== 'undefined') {
+    const timezone = getStorage('timezone');
+    let parse: string | null;
+    if (timezone) {
+      parse = JSON.parse(timezone);
+      return parse;
+    }else{
+      return null;
+    }
+  }
+};
+
 export const convertValue = (name, event) => {
   return {
     target: {
