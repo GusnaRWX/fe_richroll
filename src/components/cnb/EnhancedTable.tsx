@@ -37,6 +37,7 @@ const headerItems = [
   { id: 'supplementaries', label: 'Supplementary Compensation' },
   { id: 'createdAt', label: 'Date Created' },
   { id: 'updatedAt', label: 'Last Updated' },
+  { id: 'action', label: '' },
 ];
 
 type Order = 'asc' | 'desc'
