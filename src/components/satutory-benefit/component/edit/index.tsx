@@ -11,7 +11,7 @@ import EditBasicDetail from './EditBasicDetail';
 import EditDesignedTransferAccount from './EditDesignedTransferAccount';
 import EditRates from './EditRates';
 
-export default function EditNewComponent() {
+export default function SatutoryBenefitComponentEditComponent() {
   const router = useRouter();
 
   const Header = styled('div')({

@@ -5,7 +5,7 @@ import EditNewProfileContainer from '@/containers/satutory-benefit/EditNewProfil
 export default function Index() {
   return (
     <>
-      <MetaHead title='Satutory Benefit - Component Edit' />
+      <MetaHead title='Satutory Benefit - Profile Edit' />
       <EditNewProfileContainer />
     </>
   );

@@ -1,4 +1,4 @@
-import { Input, Button } from '@/components/_shared/form';
+import { Input } from '@/components/_shared/form';
 import { InfoOutlined } from '@mui/icons-material';
 import {
   Box,
@@ -9,19 +9,14 @@ import {
   Typography,
   RadioGroup,
   FormControlLabel,
-  Grid,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { useState } from 'react';
 
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-interface CreateDesignedTransferAccountProps {
-  setValue: Dispatch<SetStateAction<number>>
-}
-
-export default function CreateDesignedTransferAccount({ setValue }: CreateDesignedTransferAccountProps) {
+export default function CreateDesignedTransferAccount() {
   const [account, setAccount] = useState('central');
 
   const AsteriskComponent = styled('span')(({ theme }) => ({
@@ -63,7 +58,6 @@ export default function CreateDesignedTransferAccount({ setValue }: CreateDesign
     validationSchema: validationSchema,
     onSubmit: (values) => {
       console.log(values);
-      setValue(2);
     },
   });
 
@@ -78,7 +72,7 @@ export default function CreateDesignedTransferAccount({ setValue }: CreateDesign
   }, [account]);
 
   return (
-    <Box component='div' sx={{ p: '16px' }}>
+    <>
       <Typography
         style={{ color: '#223567', fontWeight: 700, fontSize: '16px' }}
       >
@@ -347,17 +341,7 @@ export default function CreateDesignedTransferAccount({ setValue }: CreateDesign
         >
           Max.100 Character
         </FormHelperText>
-        <Grid item xs={12} md={12} lg={12} xl={12}>
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <Button
-              color='primary'
-              label='Next'
-              sx={{ width: '63px' }}
-              onClick={() => formik.submitForm()}
-            />
-          </Box>
-        </Grid>
       </Box>
-    </Box>
+    </>
   );
 }

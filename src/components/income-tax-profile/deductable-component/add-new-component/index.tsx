@@ -37,7 +37,7 @@ const ContentWrapper = styled(Card)(({
   marginBottom: '1rem'
 }));
 
-function PayrollAssistantCreate() {
+function ItpCreateNewComponentComponent() {
   const router = useRouter();
   const [value, setValue] = useState(0);
   const [open, setOpen] = useState(false);
@@ -167,4 +167,4 @@ function PayrollAssistantCreate() {
   );
 }
 
-export default PayrollAssistantCreate;
+export default ItpCreateNewComponentComponent;
