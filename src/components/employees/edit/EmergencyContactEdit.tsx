@@ -46,7 +46,7 @@ function EmergencyContactEdit({ refProp, nextPage, setValues, emergencyValues, s
       // setValues(emergencyLastValue);
       setIsEmergencyValid(true);
       handleThirdEmergency();
-      nextPage(3);
+      nextPage(4);
       setErrors({});
     }
   });

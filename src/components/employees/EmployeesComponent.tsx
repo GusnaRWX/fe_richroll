@@ -7,6 +7,8 @@ import { FaFolderOpen } from 'react-icons/fa';
 import EmployeesTable from './EmployeesTable';
 import { useRouter } from 'next/router';
 import { Text } from '../_shared/common';
+import { resetListWorkSchedule } from '@/store/reducers/slice/options/optionSlice';
+import { useAppDispatch } from '@/hooks/index';
 
 const InfoComponent = styled(Box)<BoxProps>(({ theme }) => ({
   backgroundColor: theme.palette.secondary[100],
@@ -69,7 +71,7 @@ function a11yProps(index: number) {
 function EmployeesComponent() {
   const router = useRouter();
   const [value, setValue] = useState(0);
-
+  const dispatch = useAppDispatch();
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
@@ -111,7 +113,10 @@ function EmployeesComponent() {
               variant='contained'
               size='small'
               color='primary'
-              onClick={() => { router.push('/company-management/employees/create'); }}
+              onClick={() => {
+                router.push('/company-management/employees/create');
+                dispatch({ type: resetListWorkSchedule.toString() });
+              }}
             ><Add fontSize='small' />&nbsp; Add Employee</MuiButton>
           </ButtonWrapper>
         </Grid>

@@ -14,12 +14,13 @@ import { Employees } from '@/types/employees';
 import { validationSchemaWorkScheduler } from './validate';
 import dayjs from 'dayjs';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
-import { OverlayLoading, Alert } from '@/components/_shared/common';
+import { Alert } from '@/components/_shared/common';
 import { compareCheck, ifThenElse } from '@/utils/helper';
 import { getDetailWorkScheduleRequested, postSimulationEventRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
 import { Cancel } from '@mui/icons-material';
 import { AiOutlineSwapRight } from 'react-icons/ai';
 import { BsTrashFill } from 'react-icons/bs';
+import { workSchedule } from '@/types/workSchedule';
 
 const AsteriskComponent = styled('span')(({ theme }) => ({
   color: theme.palette.error.main
@@ -85,6 +86,9 @@ function EmployeeWorkScheduleEdit({ setData }: WorkScheduleFormProps) {
   const [confirmation, setConfirmation] = useState(false);
   const [isCustom, setIsCustom] = useState('');
   const [tempDay, setDayTemp] = useState<Array<string>>([]);
+  const [workScheduleName, setWorkScheduleName] = useState('');
+  const [workScheduleID, setWorkScheduleID] = useState('');
+
   const initialValues: Employees.InitialValuesWorkScheduleForm = {
     workScheduleID: '',
     profileName: '',
@@ -99,17 +103,17 @@ function EmployeeWorkScheduleEdit({ setData }: WorkScheduleFormProps) {
 
 
   const handleConfirmOpen = (formik) => {
-    if (formik.values.workScheduleID !== 0){
+    if (formik.values.workScheduleID !== 0) {
       setConfirmation(true);
-    }else{
+    } else {
       handleFormOpen(formik);
     }
   };
 
   const handleConfirmation = (formik) => {
-    if (isCustom === '1'){
+    if (isCustom === '1') {
       setConfirmation(false);
-    }else if(isCustom === '0'){
+    } else if (isCustom === '0') {
       handleFormOpen(formik);
       setConfirmation(false);
     }
@@ -129,7 +133,7 @@ function EmployeeWorkScheduleEdit({ setData }: WorkScheduleFormProps) {
       const temp: Array<string> = [...tempDay, item?.value];
       setDayTemp(temp);
       formik.setFieldValue('day', tempDay);
-    }else{
+    } else {
       const temp = tempDay.filter(v => v !== item?.value);
       setDayTemp(temp);
       formik.setFieldValue('day', tempDay);
@@ -137,7 +141,7 @@ function EmployeeWorkScheduleEdit({ setData }: WorkScheduleFormProps) {
   };
 
   const onSelecWorkDay = (formik, val) => {
-    switch(val){
+    switch (val) {
       case '0': {
         const temp: Array<string> = ['0', '1', '2', '3', '4', '5', '6'];
         formik.setFieldValue('day', temp);
@@ -178,40 +182,69 @@ function EmployeeWorkScheduleEdit({ setData }: WorkScheduleFormProps) {
 
   const handleSubmit = (formik, data) => {
     if (formik.dirty === true) {
+      // const payload = {
+      //   name: data.profileName,
+      //   scheduleType: parseInt(data.type),
+      //   startHour: dayjs(data.fixedStartTime).format('YYYY-MM-DD HH:mm'),
+      //   endHour: dayjs(data.fixedEndTime).format('YYYY-MM-DD HH:mm'),
+      //   type: parseInt(data.fixedWorkDayType),
+      //   breakHourName: data.breakName,
+      //   breakDuration: data.breakDuration,
+      //   specificBreakHour: data.specifyBreakHour,
+      //   specificBreakStartHour: data.specifyBreakHour === true ? dayjs(data.breakStartTime).format('YYYY-MM-DD HH:mm') : data.breakDuration.toString(),
+      //   specificBreakEndHour: data.specifyBreakHour === true ? dayjs(data.breakEndTime).format('YYYY-MM-DD HH:mm') : '',
+      //   isWithBreak: data.breakName === '' ? false : true
+      // };
+      // const payloadFlexi = {
+      //   name: data.profileName,
+      //   scheduleType: parseInt(data.type),
+      //   startHour: data.flexiWorkHour.toString(),
+      //   endHour: '',
+      //   type: 5,
+      //   startDay: parseInt(data.flexiWorkDay),
+      //   endDay: 0,
+      //   breakHourName: data.breakName,
+      //   breakDuration: data.breakDuration,
+      //   specificBreakHour: false,
+      //   specificBreakStartHour: data.breakDuration.toString(),
+      //   specificBreakEndHour: '',
+      //   isWithBreak: data.breakName === '' ? false : true
+      // };
+      // handleDynamicDay(payload, data, data.fixedWorkDayType);
+      // dispatch({
+      //   type: postSimulationEventRequested.toString(),
+      //   payload: data.type === '0' ? payload : payloadFlexi
+      // });
+      const tempData: Array<workSchedule.BreakItemType> = [];
+      data.breakItem.map((item) => {
+        tempData.push({
+          name: item.name,
+          start: dayjs(item.start).format('HH:mm'),
+          end: dayjs(item.end).format('HH:mm')
+        });
+      });
       const payload = {
-        name: data.profileName,
-        scheduleType: parseInt(data.type),
-        startHour: dayjs(data.fixedStartTime).format('YYYY-MM-DD HH:mm'),
-        endHour: dayjs(data.fixedEndTime).format('YYYY-MM-DD HH:mm'),
-        type: parseInt(data.fixedWorkDayType),
-        breakHourName: data.breakName,
-        breakDuration: data.breakDuration,
-        specificBreakHour: data.specifyBreakHour,
-        specificBreakStartHour: data.specifyBreakHour === true ? dayjs(data.breakStartTime).format('YYYY-MM-DD HH:mm') : data.breakDuration.toString(),
-        specificBreakEndHour: data.specifyBreakHour === true ? dayjs(data.breakEndTime).format('YYYY-MM-DD HH:mm') : '',
-        isWithBreak: data.breakName === '' ? false : true
+        name: workScheduleName,
+        scheduleType: +data.dayType,
+        type: +data.type,
+        days: data.day,
+        start: dayjs(data.startHour).format('HH:mm'),
+        end: dayjs(data.endHour).format('HH:mm'),
+        breaks: tempData
       };
       const payloadFlexi = {
-        name: data.profileName,
-        scheduleType: parseInt(data.type),
-        startHour: data.flexiWorkHour.toString(),
-        endHour: '',
-        type: 5,
-        startDay: parseInt(data.flexiWorkDay),
-        endDay: 0,
-        breakHourName: data.breakName,
-        breakDuration: data.breakDuration,
-        specificBreakHour: false,
-        specificBreakStartHour: data.breakDuration.toString(),
-        specificBreakEndHour: '',
-        isWithBreak: data.breakName === '' ? false : true
+        name: workScheduleName,
+        scheduleType: +data.dayType,
+        type: +data.type,
+        days: data.day,
+        start: data.flexiWorkHour,
+        end: '',
+        breaks: []
       };
-      handleDynamicDay(payload, data, data.fixedWorkDayType);
       dispatch({
         type: postSimulationEventRequested.toString(),
-        payload: data.type === '0' ? payload : payloadFlexi
+        payload: +data.type === 0 ? payload : payloadFlexi
       });
-
       setOpenForm(false);
     }
   };
@@ -223,51 +256,51 @@ function EmployeeWorkScheduleEdit({ setData }: WorkScheduleFormProps) {
 
 
 
-  const handleDynamicDay = (payload, data, type) => {
-    switch (type) {
-      case '0': {
-        const tempData = {
-          startDay: data.type === '0' ? parseInt(data.fixedStartDay) : parseInt(data.flexiWorkDay),
-        };
-        return Object.assign(payload, tempData);
-      }
-        break;
-      case '1': {
-        const tempData = {
-          startDay: 0,
-          endDay: 6
-        };
-        return Object.assign(payload, tempData);
-      }
-        break;
-      case '2': {
-        const tempData = {
-          startDay: 7,
-          endDay: 0
-        };
-        return Object.assign(payload, tempData);
-      }
-        break;
-      case '3': {
-        const tempData = {
-          startDay: 8,
-          endDay: 0
-        };
-        return Object.assign(payload, tempData);
-      }
-        break;
-      case '4': {
-        const tempData = {
-          startDay: data.type === '0' ? parseInt(data.fixedStartDay) : parseInt(data.flexiWorkDay),
-          endDay: data.type === '0' ? parseInt(data.fixedEndDay) : 0,
-        };
-        return Object.assign(payload, tempData);
-      }
-        break;
-      default:
-        return null;
-    }
-  };
+  // const handleDynamicDay = (payload, data, type) => {
+  //   switch (type) {
+  //     case '0': {
+  //       const tempData = {
+  //         startDay: data.type === '0' ? parseInt(data.fixedStartDay) : parseInt(data.flexiWorkDay),
+  //       };
+  //       return Object.assign(payload, tempData);
+  //     }
+  //       break;
+  //     case '1': {
+  //       const tempData = {
+  //         startDay: 0,
+  //         endDay: 6
+  //       };
+  //       return Object.assign(payload, tempData);
+  //     }
+  //       break;
+  //     case '2': {
+  //       const tempData = {
+  //         startDay: 7,
+  //         endDay: 0
+  //       };
+  //       return Object.assign(payload, tempData);
+  //     }
+  //       break;
+  //     case '3': {
+  //       const tempData = {
+  //         startDay: 8,
+  //         endDay: 0
+  //       };
+  //       return Object.assign(payload, tempData);
+  //     }
+  //       break;
+  //     case '4': {
+  //       const tempData = {
+  //         startDay: data.type === '0' ? parseInt(data.fixedStartDay) : parseInt(data.flexiWorkDay),
+  //         endDay: data.type === '0' ? parseInt(data.fixedEndDay) : 0,
+  //       };
+  //       return Object.assign(payload, tempData);
+  //     }
+  //       break;
+  //     default:
+  //       return null;
+  //   }
+  // };
 
   useEffect(() => {
     handleDeleteEventSchedule();
@@ -293,17 +326,17 @@ function EmployeeWorkScheduleEdit({ setData }: WorkScheduleFormProps) {
         type: item.type
       });
     });
-    if (initialValues.workScheduleID !== 0) {
+    if (initialValues.workScheduleID != 0) {
       setData({
-        workScheduleID: initialValues.workScheduleID,
-        name: initialValues.profileName,
+        workScheduleID: String(workScheduleID),
+        name: workScheduleName,
         grossHours: employee?.grossHour,
         netHours: employee?.netHour,
         items: dataValues
       });
-    }else {
+    } else {
       setData({
-        name: initialValues.profileName,
+        name: workScheduleName,
         grossHours: employee?.grossHour,
         netHours: employee?.netHour,
         items: dataValues
@@ -322,7 +355,7 @@ function EmployeeWorkScheduleEdit({ setData }: WorkScheduleFormProps) {
   }
   return (
     <>
-      <OverlayLoading open={employee?.isLoading}/>
+      {/* <OverlayLoading open={employee?.isLoading}/> */}
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchemaWorkScheduler}
@@ -353,19 +386,21 @@ function EmployeeWorkScheduleEdit({ setData }: WorkScheduleFormProps) {
                       customLabel='Schedule Profile Name'
                       size='small'
                       fullWidth
-                      value={formik.values.workScheduleID}
+                      value={formik.values.workScheduleID || workScheduleID}
                       onChange={(e) => {
                         formik.setFieldValue('workScheduleID', e.target.value);
-                        if (e.target.value !== 0){
+                        setWorkScheduleID(e.target.value as string);
+                        if (e.target.value !== 0) {
                           dispatch({
                             type: getDetailWorkScheduleRequested.toString(),
                             payload: e.target.value
                           });
-                        }else{
+                        } else {
                           handleDeleteEventSchedule();
                         }
                         const itemSelected = listWorkSchedule.find((el) => el.value === e.target.value);
                         formik.setFieldValue('profileName', itemSelected?.label);
+                        setWorkScheduleName(itemSelected?.label);
                       }}
                       error={compareCheck(formik.touched.workScheduleID, Boolean(formik.errors.workScheduleID))}
                       helperText={ifThenElse(formik.touched.workScheduleID, formik.errors.workScheduleID, '')}
@@ -373,7 +408,7 @@ function EmployeeWorkScheduleEdit({ setData }: WorkScheduleFormProps) {
                     />
                   </Grid>
                   <Grid item xs={1.5} sm={1.5} md={1.5} lg={1.5} xl={1.5} mt={formik.errors.profileName ? '0px' : '28px'}>
-                    <MuiButton onClick={() => {handleConfirmOpen(formik);}} variant='contained' size='small' sx={{ height: '2.5rem' }}><Add />&nbsp; Add schedule</MuiButton>
+                    <MuiButton onClick={() => { handleConfirmOpen(formik); }} variant='contained' size='small' sx={{ height: '2.5rem' }}><Add />&nbsp; Add schedule</MuiButton>
                   </Grid>
                 </Grid>
                 <Grid container spacing={2} mb='1rem'>
@@ -475,7 +510,11 @@ function EmployeeWorkScheduleEdit({ setData }: WorkScheduleFormProps) {
                   title='Work Schedule Form'
                   width='774px'
                   submitText='Save'
-                  handleConfirm={() => formik.submitForm()}
+                  handleConfirm={() => {
+                    // formik.submitForm()
+                    handleSubmit(formik, formik.values);
+                    formik.resetForm();
+                  }}
                 >
                   <Grid container mt='1rem' mb='1rem'>
                     <Grid item sm={5.8}>
@@ -507,7 +546,7 @@ function EmployeeWorkScheduleEdit({ setData }: WorkScheduleFormProps) {
                         row
                         name='dayType'
                         value={formik.values.dayType}
-                        onChange={(e) => {formik.setFieldValue('dayType', e.target.value); onSelecWorkDay(formik, e.target.value);}}
+                        onChange={(e) => { formik.setFieldValue('dayType', e.target.value); onSelecWorkDay(formik, e.target.value); }}
                         options={[
                           { label: 'Daily', value: '0' },
                           { label: 'Weekday', value: '1' },
@@ -680,7 +719,7 @@ function EmployeeWorkScheduleEdit({ setData }: WorkScheduleFormProps) {
                                                 parentColor='red.100'
                                                 onClick={() => { data.remove(index); }}
                                                 icons={
-                                                  <BsTrashFill fontSize={20} color='#EF4444'/>
+                                                  <BsTrashFill fontSize={20} color='#EF4444' />
                                                 }
                                               />
                                             </Grid>

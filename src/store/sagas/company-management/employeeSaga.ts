@@ -17,7 +17,8 @@ import {
   postSimulationEvent,
   postWorkSchedule,
   getViewWorkSchedule,
-  postTerminateEmployee
+  postTerminateEmployee,
+  patchWorkSchedule
 } from '../saga-actions/company-management/employeeActions';
 import { call, put, takeEvery, delay } from 'redux-saga/effects';
 import {
@@ -75,6 +76,9 @@ import {
   postTerminateEmployeeRequested,
   postTerminateEmployeeSuccess,
   postTerminateEmployeeFailed,
+  patchWorkScheduleRequested,
+  patchWorkScheduleSuccess,
+  patchWorkScheduleFailed
 } from '@/store/reducers/slice/company-management/employees/employeeSlice';
 import { setResponserMessage } from '@/store/reducers/slice/responserSlice';
 import { Services } from '@/types/axios';
@@ -896,6 +900,36 @@ function* fetchPostWorkSchedule(action: AnyAction) {
   }
 }
 
+function* fetchPatchWorkSchedule(action: AnyAction) {
+  try {
+    const res: AxiosResponse = yield call(patchWorkSchedule, action?.payload);
+    if (res.data.code === 200 || res.data.code === 201) {
+      yield put({ type: patchWorkScheduleSuccess.toString() });
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: res?.data?.code,
+          message: 'Successfully saved!',
+          footerMessage: 'Work schedule has been updated'
+        }
+      });
+    }
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const error = err?.response?.data as Services.ErrorResponse;
+      yield put({ type: patchWorkScheduleFailed.toString() });
+      yield delay(2000, true);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: error?.code,
+          message: error?.message
+        }
+      });
+    }
+  }
+}
+
 function* fetchGetViewWorkSchedule(action: AnyAction) {
   try {
     const res: AxiosResponse = yield call(getViewWorkSchedule, action?.payload);
@@ -975,6 +1009,7 @@ function* employeeSaga() {
   yield takeEvery(postWorkScheduleRequested.toString(), fetchPostWorkSchedule);
   yield takeEvery(getViewWorkScheduleRequested.toString(), fetchGetViewWorkSchedule);
   yield takeEvery(postTerminateEmployeeRequested.toString(), fetchPostTerminateEmployee);
+  yield takeEvery(patchWorkScheduleRequested.toString(), fetchPatchWorkSchedule);
 }
 
 export default employeeSaga;
