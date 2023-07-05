@@ -174,13 +174,19 @@
           "income": "收入",
           "rate": "速度",
           "min_income": "最低收入",
-          "amount": "数量"
+          "amount": "数量",
+          "max_income": "最高收入",
+          "additional_fixed_amount": "额外固定金额"
         },
         "income_tax_multiplier": {
           "deductible_factor": "免赔额因素",
           "factor_unit_condition": "因素 单位 条件",
           "rate": "速度",
-          "additional_fixed_amount": "额外固定金额"
+          "additional_fixed_amount": "额外固定金额",
+          "status": "地位",
+          "condition": "健康）状况",
+          "multiplier": "乘数",
+          "component": "成分"
         },
         "designated_transfer_account": {
           "type": "类型",
