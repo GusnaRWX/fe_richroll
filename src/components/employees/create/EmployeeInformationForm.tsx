@@ -170,7 +170,7 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, set
       images: String(images),
     };
     setValues(allInfoValues);
-    nextPage(1);
+    nextPage(formik.values.isSelfService ? 3 : 1);
     setIsInformationValid(true);
     setErrors({});
   };

@@ -10,6 +10,7 @@ import Select from './Select';
 import CheckBox from './CheckBox';
 import FileUploadModal from './FileUploadModal';
 import CropperImage from './CropperImage';
+import Stepper from './Stepper';
 
 export {
   Input,
@@ -23,5 +24,6 @@ export {
   Select,
   CheckBox,
   FileUploadModal,
-  CropperImage
+  CropperImage,
+  Stepper
 };

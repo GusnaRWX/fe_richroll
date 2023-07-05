@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import dynamic from 'next/dynamic';
-import { IconButton } from '@/components/_shared/form';
-import { Card, Typography, Button as MuiButton, Tab, Tabs, Box } from '@mui/material';
+import { IconButton, Stepper } from '@/components/_shared/form';
+import { Card, Typography, Button as MuiButton, Box } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import styled from '@emotion/styled';
 import ConfirmationModal from '@/components/_shared/common/ConfirmationModal';
@@ -57,44 +57,17 @@ const ButtonWrapper = styled.div`
  margin-bottom: 1rem;
 `;
 
+const steps = [
+  'Employee Information',
+  'Personal Information',
+  'Emergency Contact',
+  'Compensations & Benefits',
+  'Work Schedule'
+];
+
 const ContentWrapper = styled(Card)(({
   padding: '2rem'
 }));
-
-interface TabPanelProps {
-  children?: React.ReactNode;
-  index: number;
-  value: number
-}
-
-function TabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role='tabpanel'
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      {...other}
-    >
-      {
-        value === index && (
-          <Box sx={{ p: 3 }}>
-            {children}
-          </Box>
-        )
-      }
-    </div>
-  );
-}
-
-function a11yProps(index: number) {
-  return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`
-  };
-}
-
 
 function EmployeeCreateComponent() {
   const router = useRouter();
@@ -176,9 +149,6 @@ function EmployeeCreateComponent() {
   const [isEmergencyValid, setIsEmergencyValid] = useState(false);
 
   const dispatch = useAppDispatch();
-  const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
-  };
   const handleClick = async () => {
     const convertToBase64 = base64ToFile(informationValue.images, 'example.png');
     const inputData = new FormData();
@@ -256,24 +226,20 @@ function EmployeeCreateComponent() {
       </TopWrapper>
       <ContentWrapper>
         <Box sx={{ width: '100%' }}>
-          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-            <Tabs value={value} onChange={handleChange} aria-label='basic tabs'>
-              <Tab sx={{ textTransform: 'none' }} label='Employee Information' {...a11yProps(0)}/>
-              <Tab sx={{ textTransform: 'none' }} label='Personal Information' {...a11yProps(1)} />
-              <Tab sx={{ textTransform: 'none' }} label='Emergency Contact' {...a11yProps(2)} />
-              <Tab sx={{ textTransform: 'none' }} label='Compensations & Benefits' {...a11yProps(3)} />
-              <Tab sx={{ textTransform: 'none' }} label='Work Schedule' {...a11yProps(4)} />
-            </Tabs>
+          <Box sx={{ borderBottom: 1, borderColor: 'divider', pb: '30px', mb: '10px' }}>
+            <Stepper steps={steps} activeStep={value} />
           </Box>
-          <TabPanel value={value} index={0}>
+
+          {value == 0 &&
             <EmployeeInformationFormClient
               nextPage={handleNext}
               refProp={employeeRef}
               setValues={setInformationValue}
               infoValues={informationValue}
-              setIsInformationValid={setIsInformationValid} />
-          </TabPanel>
-          <TabPanel value={value} index={1}>
+              setIsInformationValid={setIsInformationValid}
+            />
+          }
+          {value == 1 &&
             <EmployeePersonalInformationFormClient
               nextPage={handleNext}
               refProp={personalInformationRef}
@@ -281,23 +247,24 @@ function EmployeeCreateComponent() {
               personalValues={personalInformationValue}
               setIsPersonalInformationValid={setIsPersonalInformationValid}
             />
-          </TabPanel>
-          <TabPanel value={value} index={2}>
+          }
+          {value == 2 &&
             <EmergencyContactFormClient
               nextPage={setValue}
               refProp={emergencyRef}
               setValues={setEmergencyValue}
               emergencyValues={emergencyValue}
-              setIsEmergencyValid={setIsEmergencyValid} />
-          </TabPanel>
-          <TabPanel value={value} index={3}>
+              setIsEmergencyValid={setIsEmergencyValid}
+            />
+          }
+          {value == 3 &&
             <CnbCreateForm
               setValues={setCompensationBenefitsValue}
             />
-          </TabPanel>
-          <TabPanel value={value} index={4}>
+          }
+          {value == 4 &&
             <WorkScheduleForm setData={setValueWorkSchedule} />
-          </TabPanel>
+          }
         </Box>
       </ContentWrapper>
       <ConfirmationModal
