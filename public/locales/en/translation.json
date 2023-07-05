@@ -65,6 +65,7 @@
         "mark_modal_text" : "All disbursement will marked paid and complete the Add New Component process",
         "form" : {
           "wizard_option" : {
+            "initial":"Create",
             "basic_detail": "Basic Detail",
             "designed_transfer_account": "Designed Transfer Account",
             "rates": "Rates"

@@ -15,12 +15,7 @@ import ItpCreateDesignedTransferAccountComponent from './ItpCreateDesignedTransf
 import ItpCreateRatesComponent from './ItpCreateRatesComponent';
 import CustomModal from '@/components/_shared/common/CustomModal';
 import { ifThenElse } from '@/utils/helper';
-
-const steps = [
-  'Basic Detail',
-  'Designed Detail Component',
-  'Rates',
-];
+import { useTranslation } from 'react-i18next';
 
 const ButtonWrapper = styled(Box)(({
   display: 'flex',
@@ -42,6 +37,8 @@ function ItpCreateNewComponentComponent() {
   const [value, setValue] = useState(0);
   const [open, setOpen] = useState(false);
   const [isExit, setIsExit] = useState(true);
+  const {t} = useTranslation();
+  const t_key = 'income_tax_profile.deductable_component.add_new_component';
 
   const handleClose = () => {
     setOpen(false);
@@ -51,11 +48,17 @@ function ItpCreateNewComponentComponent() {
     router.push('/income-tax-profile/deductable-component');
   };
 
+  const steps = [
+    t(`${t_key}.form.wizard_option.basic_detail`),
+    t(`${t_key}.form.wizard_option.designed_transfer_account`),
+    t(`${t_key}.form.wizard_option.rates`),
+  ];
+
   return (
     <>
       <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
         <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
-          <Typography variant='h6' color='#4B5563'><b>Add New Component</b></Typography>
+          <Typography variant='h6' color='#4B5563'><b>{t(`${t_key}.title`)}</b></Typography>
         </Grid>
         <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
           <ButtonWrapper>
@@ -64,14 +67,14 @@ function ItpCreateNewComponentComponent() {
               size='small'
               color='primary'
               onClick={() => {
-                if (value == 5) {
+                if (value == 2) {
                   setIsExit(true);
                   setOpen(true);
                 } else {
                   setOpen(true);
                 }
               }}
-            >{ifThenElse(value < 2, 'Cancel', 'Save & Exit')}</MuiButton>
+            >{ifThenElse(value < 2, t(`${t_key}.cancel_button`),  t(`${t_key}.save_button`))}</MuiButton>
             <MuiButton
               variant='contained'
               size='small'
@@ -85,7 +88,7 @@ function ItpCreateNewComponentComponent() {
                   setOpen(true);
                 }
               }}
-            >{ifThenElse(value == 0, 'Create Designed Transfer Account', ifThenElse(value == 1, 'Create Rates',  'Mark All Paid and Complete'))}</MuiButton>
+            >{ifThenElse(value == 0, 'Create Designed Transfer Account', ifThenElse(value == 1, 'Create Rates',   t(`${t_key}.mark_button`)))}</MuiButton>
           </ButtonWrapper>
         </Grid>
       </Grid>
@@ -147,7 +150,7 @@ function ItpCreateNewComponentComponent() {
       <CustomModal
         open={open}
         handleClose={handleClose}
-        title={ifThenElse(isExit, 'Save & Exit', 'Mark all paid and Complete')}
+        title={ifThenElse(isExit, t(`${t_key}.save_button`),  t(`${t_key}.mark_button`))}
         width='543px'
         handleConfirm={handleConfirm}
       >
@@ -156,8 +159,8 @@ function ItpCreateNewComponentComponent() {
             {
               ifThenElse(
                 isExit,
-                <Typography variant='text-base' color='#4B5563'>You will stop the process, and saved in Payroll Assistant.<br/>Are you sure to stop the process?</Typography>,
-                <Typography variant='text-base' color='#4B5563'>All disbursement will marked paid and complete the Payroll Assistant process</Typography>
+                <Typography variant='text-base' color='#4B5563'>{t(`${t_key}.save_modal_text` )}</Typography>,
+                <Typography variant='text-base' color='#4B5563'>{t(`${t_key}.mark_modal_text` )}</Typography>
               )
             }
           </Grid>

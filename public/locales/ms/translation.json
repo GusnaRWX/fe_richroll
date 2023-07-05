@@ -65,6 +65,7 @@
         "mark_modal_text": "Semua pengeluaran akan ditanda sebagai berbayar dan menyelesaikan proses Tambah Komponen Baharu",
         "form": {
           "wizard_option": {
+            "initial": "Buat",
             "basic_detail": "Butiran Asas",
             "designed_transfer_account": "Akaun Pemindahan Direka",
             "rates": "Kadar"

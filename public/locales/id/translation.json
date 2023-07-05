@@ -65,6 +65,7 @@
         "mark_modal_text": "Semua pencairan akan ditandai dibayar dan menyelesaikan proses Tambah Komponen Baru",
         "form": {
           "wizard_option": {
+            "initial": "Membuat",
             "basic_detail": "Detil Dasar",
             "designed_transfer_account": "Akun Transfer yang dirancang",
             "rates": "Tarif"

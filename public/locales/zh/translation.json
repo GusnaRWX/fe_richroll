@@ -65,6 +65,7 @@
         "mark_modal_text": "所有付款都将标记为已付款并完成添加新组件流程",
         "form": {
           "wizard_option": {
+            "initial": "创造",
             "basic_detail": "基本细节",
             "designed_transfer_account": "设计转账账户",
             "rates": "价格"
