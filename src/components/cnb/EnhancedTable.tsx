@@ -15,7 +15,7 @@ import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { deleteCompensationRequested, getTableRequested } from '@/store/reducers/slice/cnb/compensationSlice';
-import { compareCheck, ifThenElse } from '@/utils/helper';
+import { compareCheck, ifThenElse, getCompanyData } from '@/utils/helper';
 import dayjs from 'dayjs';
 import { visuallyHidden } from '@mui/utils';
 import DetailModal from './modal';
@@ -53,6 +53,7 @@ function EnhancedTable() {
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
   const [hydrated, setHaydrated] = useState(false);
+  const companyData = getCompanyData();
   const [detailOpen, setDetailOpen] = useState({ id: 0, open: false });
   const [deleteConfirmation, setDeleteConfirmation] = useState({ id: 0, open: false });
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -85,7 +86,8 @@ function EnhancedTable() {
           itemPerPage: rowsPerPage,
           sort: sort,
           direction: direction.toUpperCase(),
-          search: search
+          search: search,
+          companyID: companyData?.id
         }
       }
     });
@@ -107,7 +109,8 @@ function EnhancedTable() {
         itemPerPage: rowsPerPage,
         sort: sort,
         direction: direction.toUpperCase(),
-        search: search
+        search: search,
+        companyID: companyData?.id
       }
     });
   }, [rowsPerPage, page, search, sort, direction]);
