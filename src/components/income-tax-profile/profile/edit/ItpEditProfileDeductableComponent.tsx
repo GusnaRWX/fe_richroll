@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { HiSelector } from 'react-icons/hi';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { HiPencilAlt } from 'react-icons/hi';
+import { useTranslation } from 'react-i18next';
 
 const AddButton = styled(Button)({
   color: 'white',
@@ -24,6 +25,7 @@ const ItpEditProfileDeductableComponent = () => {
   const [initialDeductableValues, setInitialDeductableValues] = useState<
   string[]
   >([]);
+  const {t} = useTranslation();
 
   const selectedDeductableComponents = [
     {
@@ -106,7 +108,7 @@ const ItpEditProfileDeductableComponent = () => {
               <Button
                 color='green'
                 startIcon={<HiPencilAlt color='white' />}
-                label='Edit'
+                label={t('income_tax_profile.profile.detail.main.edit')}
                 sx={{
                   backgroundColor: '#8DD0B8',
                   width: {xs: '68px', md: '73px'},
@@ -118,7 +120,7 @@ const ItpEditProfileDeductableComponent = () => {
               <Button
                 color='red'
                 startIcon={<DeleteIcon />}
-                label='Delete'
+                label={t('income_tax_profile.profile.detail.main.delete')}
                 sx={{
                   width: {xs: '68px', md: '73px'},
                   height: {xs: '29px', md: '30px'},
@@ -136,14 +138,14 @@ const ItpEditProfileDeductableComponent = () => {
                 <Typography
                   sx={{ color: '#374151', fontWeight: 400, fontSize: '14px' }}
                 >
-                Factor Unit Condition
+                  {t('income_tax_profile.profile.detail.deductible_component.factor_unit_condition')}
                 </Typography>
               </Grid>
               <Grid item xs={6}>
                 <Typography
                   sx={{ color: '#374151', fontWeight: 400, fontSize: '14px' }}
                 >
-                Amount
+                  {t('income_tax_profile.profile.detail.deductible_component.amount')}
                 </Typography>
               </Grid>
             </Grid>
@@ -226,13 +228,13 @@ const ItpEditProfileDeductableComponent = () => {
             <Typography
               sx={{ fontWeight: 700, color: '#223567', fontSize: '18px' }}
             >
-              Number of Dependance
+              {t('income_tax_profile.profile.detail.deductible_component.number_of_dependence')}
             </Typography>
             <Box sx={{ display: 'flex', gap: '4px' }}>
               <Button
                 color='green'
                 startIcon={<HiPencilAlt color='white' />}
-                label='Edit'
+                label={t('income_tax_profile.profile.detail.main.edit')}
                 sx={{
                   backgroundColor: '#8DD0B8',
                   width: {xs: '68px', md: '73px'},
@@ -244,7 +246,7 @@ const ItpEditProfileDeductableComponent = () => {
               <Button
                 color='red'
                 startIcon={<DeleteIcon />}
-                label='Delete'
+                label={t('income_tax_profile.profile.detail.main.delete')}
                 sx={{
                   width: {xs: '68px', md: '73px'},
                   height: {xs: '29px', md: '30px'},
@@ -261,14 +263,14 @@ const ItpEditProfileDeductableComponent = () => {
               <Typography
                 sx={{ color: '#374151', fontWeight: 400, fontSize: '14px' }}
               >
-                Factor Unit Condition
+                {t('income_tax_profile.profile.detail.deductible_component.factor_unit_condition')}
               </Typography>
             </Grid>
             <Grid item xs={6}>
               <Typography
                 sx={{ color: '#374151', fontWeight: 400, fontSize: '14px' }}
               >
-                Amount
+                {t('income_tax_profile.profile.detail.deductible_component.amount')}
               </Typography>
             </Grid>
 
@@ -327,13 +329,13 @@ const ItpEditProfileDeductableComponent = () => {
             <Typography
               sx={{ fontWeight: 700, color: '#223567', fontSize: '18px' }}
             >
-              Number of Dependance
+              {t('income_tax_profile.profile.detail.deductible_component.number_of_dependence')}
             </Typography>
             <Box sx={{ display: 'flex', gap: '4px' }}>
               <Button
                 color='green'
                 startIcon={<HiPencilAlt color='white' />}
-                label='Edit'
+                label={t('income_tax_profile.profile.detail.main.edit')}
                 sx={{
                   backgroundColor: '#8DD0B8',
                   width: {xs: '68px', md: '73px'},
@@ -345,7 +347,7 @@ const ItpEditProfileDeductableComponent = () => {
               <Button
                 color='red'
                 startIcon={<DeleteIcon />}
-                label='Delete'
+                label={t('income_tax_profile.profile.detail.main.delete')}
                 sx={{
                   width: {xs: '68px', md: '73px'},
                   height: {xs: '29px', md: '30px'},
@@ -362,14 +364,14 @@ const ItpEditProfileDeductableComponent = () => {
               <Typography
                 sx={{ color: '#374151', fontWeight: 400, fontSize: '14px' }}
               >
-                Factor Unit Condition
+                {t('income_tax_profile.profile.detail.deductible_component.factor_unit_condition')}
               </Typography>
             </Grid>
             <Grid item xs={6}>
               <Typography
                 sx={{ color: '#374151', fontWeight: 400, fontSize: '14px' }}
               >
-                Amount
+                {t('income_tax_profile.profile.detail.deductible_component.amount')}
               </Typography>
             </Grid>
 
@@ -394,7 +396,7 @@ const ItpEditProfileDeductableComponent = () => {
           <Paper elevation={1} sx={{ padding: '16px' }}>
             <AddButton
               startIcon={<AddIcon />}
-              label='Deductible'
+              label={t('income_tax_profile.profile.detail.deductible_component.deductible')}
               sx={{
                 width: '136px',
                 fontSize: '14px',
@@ -419,11 +421,11 @@ const ItpEditProfileDeductableComponent = () => {
                 padding: '9px',
                 width: '65px',
               }}
-              label='Back'
+              label={t('income_tax_profile.profile.modal.back')}
             />
             <Button
               sx={{ padding: '9px', width: '65px' }}
-              label='Next'
+              label={t('income_tax_profile.profile.modal.next')}
               variant='contained'
             />
           </Box>

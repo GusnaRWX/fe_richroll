@@ -114,7 +114,8 @@
           "martial_status": "Marital Status",
           "number_of_dependence": "Number of Dependance",
           "factor_unit_condition": "Factor Unit Condition",
-          "amount": "Amount"
+          "amount": "Amount",
+          "deductible": "Deductible"
         },
         "income_tax_rate": {
           "progressive_rate": "Progressive Rate",
@@ -166,7 +167,9 @@
           "title": "Archivation Date",
           "description": "Input Effective Archivation Date",
           "checkbox": "Replace with New Profile"
-        }
+        },
+        "next": "Next",
+        "back": "Back"
       }
     }
   }

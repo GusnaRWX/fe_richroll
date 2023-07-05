@@ -113,7 +113,8 @@
         "deductible_component": {
           "martial_status": "Status pernikahan",
           "factor_unit_condition": "Kondisi Satuan Faktor",
-          "amount": "Jumlah"
+          "amount": "Jumlah",
+          "deductible": "Pengurangan"
         },
         "income_tax_rate": {
           "progressive_rate": "Tingkat Progresif",
@@ -166,7 +167,9 @@
           "description": "Masukkan Tanggal Efektif Pengarsipan",
           "checkbox": "Ganti dengan Profil Baru"
         }
-      }
+      },
+      "next": "Selanjutnya",
+      "back": "Kembali"
     }
   }
 }

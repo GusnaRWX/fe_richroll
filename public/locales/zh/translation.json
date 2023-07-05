@@ -113,7 +113,8 @@
         "deductible_component": {
           "martial_status": "婚姻状况",
           "factor_unit_condition": "因素 单位 条件",
-          "amount": "数量"
+          "amount": "数量",
+          "deductible": "免赔额"
         },
         "income_tax_rate": {
           "progressive_rate": "累进率",
@@ -166,7 +167,9 @@
           "description": "输入有效存档日期",
           "checkbox": "替换为新配置文件"
         }
-      }
+      },
+      "next": "下一个",
+      "back": "后退"
     }
   }
 }

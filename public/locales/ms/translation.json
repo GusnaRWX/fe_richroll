@@ -113,7 +113,8 @@
         "deductible_component": {
           "martial_status": "Status perkahwinan",
           "factor_unit_condition": "Keadaan Unit Faktor",
-          "amount": "Jumlah"
+          "amount": "Jumlah",
+          "deductible": "Boleh ditolak"
         },
         "income_tax_rate": {
           "progressive_rate": "Kadar Progresif",
@@ -166,7 +167,9 @@
           "description": "Input Tarikh Arkib Berkuatkuasa",
           "checkbox": "Gantikan dengan Profil Baharu"
         }
-      }
+      },
+      "next": "Seterusnya",
+      "back": "belakang"
     }
   }
 }
