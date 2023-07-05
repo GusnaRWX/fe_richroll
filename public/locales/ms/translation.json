@@ -166,10 +166,10 @@
           "title": "Tarikh Arkib",
           "description": "Input Tarikh Arkib Berkuatkuasa",
           "checkbox": "Gantikan dengan Profil Baharu"
-        }
-      },
-      "next": "Seterusnya",
-      "back": "belakang"
+        },
+        "next": "Seterusnya",
+        "back": "belakang"
+      }
     }
   }
 }

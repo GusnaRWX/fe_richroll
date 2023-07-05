@@ -166,10 +166,10 @@
           "title": "Tanggal Pengarsipan",
           "description": "Masukkan Tanggal Efektif Pengarsipan",
           "checkbox": "Ganti dengan Profil Baru"
-        }
-      },
-      "next": "Selanjutnya",
-      "back": "Kembali"
+        },
+        "next": "Selanjutnya",
+        "back": "Kembali"
+      }
     }
   }
 }
