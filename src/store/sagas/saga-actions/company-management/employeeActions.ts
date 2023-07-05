@@ -80,3 +80,8 @@ export const postWorkSchedule = (payload) => {
 export const postTerminateEmployee = (payload, id) => {
   return post(`employees/${id as string}/terminate`, payload as Employees.PostTerminateEmployee);
 };
+
+export const patchWorkSchedule = (payload) => {
+  const { id, workSchedule } = payload;
+  return patch(`employees/${id}/work-schedules`, workSchedule);
+};

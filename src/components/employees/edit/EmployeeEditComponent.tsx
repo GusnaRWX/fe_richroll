@@ -10,7 +10,7 @@ import { Employees } from '@/types/employees';
 import dayjs from 'dayjs';
 import { getCompanyData, ifThenElse } from '@/utils/helper';
 import { useAppSelectors, useAppDispatch } from '@/hooks/index';
-import { patchEmergencyContactRequested, patchEmployeeInformationRequested, patchPersonalRequested, postWorkScheduleRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
+import { patchEmergencyContactRequested, patchEmployeeInformationRequested, patchPersonalRequested, patchWorkScheduleRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
 
 const EmployeeInformationEdit = dynamic(() => import('./EmployeeInformationEdit'), {
   ssr: false
@@ -62,7 +62,7 @@ const steps = [
   'Employee Information',
   'Personal Information',
   'Emergency Contact',
-  'Compensations & Benefits',
+  // 'Compensations & Benefits',
   'Work Schedule'
 ];
 
@@ -146,7 +146,7 @@ function EmployeeEditComponent() {
     idTypePersonalID: dataPersonalInformation?.identity?.type
   });
   const [emergencyValue, setEmergencyValue] = useState<Employees.EmergencyContactPatchValues>({
-    primaryId: dataEmergencyContact?.primary?.id,
+    primaryId: dataEmergencyContact?.primary?.id || '',
     secondaryId: dataEmergencyContact?.secondary?.id,
     fullNamePrimary: dataEmergencyContact?.primary?.name,
     relationPrimary: dataEmergencyContact?.primary?.relationship,
@@ -230,7 +230,7 @@ function EmployeeEditComponent() {
 
   const handleClickUpdateWorkSchedule = () => {
     dispatch({
-      type: postWorkScheduleRequested.toString(),
+      type: patchWorkScheduleRequested.toString(),
       payload: {
         id: router.query.id,
         workSchedule: valueWorkSchedule
@@ -306,9 +306,9 @@ function EmployeeEditComponent() {
               handleThirdEmergency={handleClickEmergencyContact}
             />
           }
-          {value == 3 &&
+          {/* {value == 3 &&
             <>on Development</>
-          }
+          } */}
           {value == 4 &&
             <EmployeeWorkScheduleEdit setData={setValueWorkSchedule} />
           }

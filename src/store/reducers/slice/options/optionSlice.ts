@@ -293,6 +293,9 @@ export const optionSlice = createSlice({
     },
     getListOptionWorkScheduleFailed: (state) => {
       state.loading = false;
+    },
+    resetListWorkSchedule: (state) => {
+      state.listWorkSchedule = [];
     }
   },
   extraReducers: {
@@ -351,7 +354,8 @@ export const {
   removeListSuppTermin,
   getListOptionWorkScheduleFailed,
   getListOptionWorkScheduleRequested,
-  getListOptionWorkScheduleSuccess
+  getListOptionWorkScheduleSuccess,
+  resetListWorkSchedule
 } = optionSlice.actions;
 
 export default optionSlice.reducer;

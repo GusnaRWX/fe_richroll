@@ -7,7 +7,7 @@ interface EventType {
   title: string,
   name: string,
   start: Date,
-  end:Date,
+  end: Date,
   isBreak?: boolean,
   isDuration?: boolean,
   color?: string,
@@ -299,6 +299,15 @@ export const employeeSlice = createSlice({
     postTerminateEmployeeFailed: (state) => {
       state.isLoading = false;
     },
+    patchWorkScheduleRequested: state => {
+      state.isLoading = true;
+    },
+    patchWorkScheduleSuccess: state => {
+      state.isLoading = false;
+    },
+    patchWorkScheduleFailed: state => {
+      state.isLoading = false;
+    },
     clearWorkScheduleState: (state) => {
       state.events = [];
       state.grossHour = 0;
@@ -370,7 +379,10 @@ export const {
   postTerminateEmployeeFailed,
   postTerminateEmployeeRequested,
   postTerminateEmployeeSuccess,
-  clearWorkScheduleState
+  clearWorkScheduleState,
+  patchWorkScheduleRequested,
+  patchWorkScheduleSuccess,
+  patchWorkScheduleFailed
 } = employeeSlice.actions;
 
 export default employeeSlice.reducer;
