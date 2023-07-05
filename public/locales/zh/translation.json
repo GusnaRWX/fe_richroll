@@ -49,7 +49,11 @@
         "company_name": "公司名称",
         "country": "国家",
         "component_condition": "组件状况",
-        "last_update": "最后更新"
+        "last_update": "最后更新",
+        "delete_modal": {
+          "title": "删除数据条目",
+          "text": "您即将删除该法定福利部分。"
+        }
       },
       "add_new_component": {
         "title": "添加新组件",

@@ -49,7 +49,11 @@
         "company_name": "nama syarikat",
         "country": "Negara",
         "component_condition": "Keadaan Komponen",
-        "last_update": "Kemaskini terakhir"
+        "last_update": "Kemaskini terakhir",
+        "delete_modal": {
+          "title": "Padamkan Entri Data",
+          "text": "Anda akan memadamkan komponen faedah berkanun ini. "
+        }
       },
       "add_new_component": {
         "title": "Tambah Komponen Baharu",

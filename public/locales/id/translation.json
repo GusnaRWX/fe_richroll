@@ -49,7 +49,11 @@
         "company_name": "Nama perusahaan",
         "country": "Negara",
         "component_condition": "Kondisi Komponen",
-        "last_update": "Pembaharuan Terakhir"
+        "last_update": "Pembaharuan Terakhir",
+        "delete_modal": {
+          "title": "Hapus Entri Data",
+          "text": "Anda akan menghapus komponen manfaat wajib ini. "
+        }
       },
       "add_new_component": {
         "title": "Tambahkan Komponen Baru",
