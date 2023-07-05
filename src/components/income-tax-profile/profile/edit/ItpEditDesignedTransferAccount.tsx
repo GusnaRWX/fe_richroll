@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import React, { Dispatch, SetStateAction, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -26,6 +27,7 @@ export default function ItpEditDesignedTransferAccount({
   setValue,
 }: ItpEditDesignedTransferAccountProps) {
   const [account, setAccount] = useState('central');
+  const {t} = useTranslation();
 
   const AsteriskComponent = styled('span')(({ theme }) => ({
     color: theme.palette.error.main,
@@ -85,7 +87,7 @@ export default function ItpEditDesignedTransferAccount({
       <Typography
         style={{ color: '#223567', fontWeight: 700, fontSize: '16px' }}
       >
-        Bank Information
+        {t('income_tax_profile.profile.detail.designated_transfer_account.bank_info')}
       </Typography>
 
       <Typography
@@ -96,7 +98,7 @@ export default function ItpEditDesignedTransferAccount({
           marginTop: '10px',
         }}
       >
-        Type
+        {t('income_tax_profile.profile.detail.designated_transfer_account.type')}
       </Typography>
 
       <Box
@@ -108,17 +110,17 @@ export default function ItpEditDesignedTransferAccount({
             <FormControlLabel
               value='central'
               control={<Radio />}
-              label='Central Account'
+              label={t('income_tax_profile.profile.detail.designated_transfer_account.central_account')}
             />
             <FormControlLabel
               value='individual'
               control={<Radio />}
-              label='Individual Account'
+              label={t('income_tax_profile.profile.detail.designated_transfer_account.individual_account')}
             />
             <FormControlLabel
               value='company'
               control={<Radio />}
-              label='Company Account Only'
+              label={t('income_tax_profile.profile.detail.designated_transfer_account.company_account')}
             />
           </RadioGroup>
         </Box>
@@ -156,7 +158,7 @@ export default function ItpEditDesignedTransferAccount({
             component='div'
             sx={{ color: '#374151', fontWeight: 400 }}
           >
-            Bank <AsteriskComponent>*</AsteriskComponent>
+            {t('income_tax_profile.profile.detail.designated_transfer_account.bank')} <AsteriskComponent>*</AsteriskComponent>
           </Typography>
 
           <Select
@@ -185,7 +187,7 @@ export default function ItpEditDesignedTransferAccount({
             component='div'
             sx={{ color: '#374151', fontWeight: 400 }}
           >
-            Bank Account Holder`s Name &nbsp;
+            {t('income_tax_profile.profile.detail.designated_transfer_account.bank_account_holders_name')} &nbsp;
             <AsteriskComponent>*</AsteriskComponent>
           </Typography>
           <Input
@@ -212,7 +214,7 @@ export default function ItpEditDesignedTransferAccount({
             component='div'
             sx={{ color: '#374151', fontWeight: 400 }}
           >
-            Bank Account No <AsteriskComponent>*</AsteriskComponent>
+            {t('income_tax_profile.profile.detail.designated_transfer_account.bank_account_no')} <AsteriskComponent>*</AsteriskComponent>
           </Typography>
           <Input
             size='small'
@@ -244,7 +246,7 @@ export default function ItpEditDesignedTransferAccount({
               component='div'
               sx={{ color: '#374151', fontWeight: 400 }}
             >
-              Bank Code
+              {t('income_tax_profile.profile.detail.designated_transfer_account.bank_code')}
             </Typography>
             <Input
               size='small'
@@ -266,7 +268,7 @@ export default function ItpEditDesignedTransferAccount({
               component='div'
               sx={{ color: '#374151', fontWeight: 400 }}
             >
-              Branch Code
+              {t('income_tax_profile.profile.detail.designated_transfer_account.branch_code')}
             </Typography>
             <Input
               size='small'
@@ -295,7 +297,7 @@ export default function ItpEditDesignedTransferAccount({
             component='div'
             sx={{ color: '#374151', fontWeight: 400 }}
           >
-            Branch Name
+            {t('income_tax_profile.profile.detail.designated_transfer_account.branch_name')}
           </Typography>
 
           <Input
@@ -319,7 +321,7 @@ export default function ItpEditDesignedTransferAccount({
             component='div'
             sx={{ color: '#374151', fontWeight: 400 }}
           >
-            Swift Code
+            {t('income_tax_profile.profile.detail.designated_transfer_account.swift_code')}
           </Typography>
 
           <Input
@@ -345,7 +347,7 @@ export default function ItpEditDesignedTransferAccount({
           component='div'
           sx={{ marginBottom: '7px', color: '#374151', fontWeight: 700 }}
         >
-          Notes
+          {t('income_tax_profile.profile.detail.designated_transfer_account.notes')}
         </Typography>
         <Input
           size='small'
@@ -367,7 +369,7 @@ export default function ItpEditDesignedTransferAccount({
           <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Button
               color='primary'
-              label='Next'
+              label={t('income_tax_profile.profile.modal.next')}
               sx={{ width: '63px' }}
               onClick={() => formik.submitForm()}
             />

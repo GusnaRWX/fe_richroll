@@ -198,7 +198,11 @@
           "branch_code": "分行代码",
           "branch_name": "分店名称",
           "swift_code": "SWIFT代码",
-          "notes": "笔记"
+          "notes": "笔记",
+          "bank_info": "银行信息",
+          "central_account": "中央账户",
+          "individual_account": "个人账户",
+          "company_account": "仅限公司帐户"
         }
       },
       "modal": {

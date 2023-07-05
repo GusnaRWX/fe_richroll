@@ -198,7 +198,11 @@
           "branch_code": "Kode cabang",
           "branch_name": "Nama cabang",
           "swift_code": "Tukar Kode",
-          "notes": "Catatan"
+          "notes": "Catatan",
+          "bank_info": "Informasi Bank",
+          "central_account": "Akun Tengah",
+          "individual_account": "Akun Perorangan",
+          "company_account": "Akun Perusahaan Saja"
         }
       },
       "modal": {
