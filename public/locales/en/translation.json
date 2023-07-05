@@ -61,7 +61,7 @@
         "save_button" : "Save & Exit",
         "mark_button" : "Mark All and Complete",
         "confirm_button" : "Confirm",
-        "save_modal_text" : "You will stop the process, and saved in Add New Component. Are you sure to stop the process?",
+        "save_modal_text" : "You will stop the process, and saved in Add New Component.<br>Are you sure to stop the process?",
         "mark_modal_text" : "All disbursement will marked paid and complete the Add New Component process",
         "form" : {
           "wizard_option" : {
