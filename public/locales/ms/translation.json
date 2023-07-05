@@ -197,7 +197,11 @@
           "branch_code": "Kod Cawangan",
           "branch_name": "Nama cawangan",
           "swift_code": "Kod pantas",
-          "notes": "Nota"
+          "notes": "Nota",
+          "bank_info": "Maklumat bank",
+          "central_account": "Akaun Pusat",
+          "individual_account": "Akaun Individu",
+          "company_account": "Akaun Syarikat Sahaja"
         }
       },
       "modal": {

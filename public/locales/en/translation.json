@@ -198,7 +198,11 @@
           "branch_code": "Branch Code",
           "branch_name": "Branch Name",
           "swift_code": "Swift Code",
-          "notes": "Notes"
+          "notes": "Notes",
+          "bank_info": "Bank Information",
+          "central_account": "Central Account",
+          "individual_account": "Individual Account",
+          "company_account": "Company Account Only"
         }
       },
       "modal": {

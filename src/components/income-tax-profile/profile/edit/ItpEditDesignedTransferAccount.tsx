@@ -87,7 +87,7 @@ export default function ItpEditDesignedTransferAccount({
       <Typography
         style={{ color: '#223567', fontWeight: 700, fontSize: '16px' }}
       >
-        Bank Information
+        {t('income_tax_profile.profile.detail.designated_transfer_account.bank_info')}
       </Typography>
 
       <Typography
@@ -110,17 +110,17 @@ export default function ItpEditDesignedTransferAccount({
             <FormControlLabel
               value='central'
               control={<Radio />}
-              label='Central Account'
+              label={t('income_tax_profile.profile.detail.designated_transfer_account.central_account')}
             />
             <FormControlLabel
               value='individual'
               control={<Radio />}
-              label='Individual Account'
+              label={t('income_tax_profile.profile.detail.designated_transfer_account.individual_account')}
             />
             <FormControlLabel
               value='company'
               control={<Radio />}
-              label='Company Account Only'
+              label={t('income_tax_profile.profile.detail.designated_transfer_account.company_account')}
             />
           </RadioGroup>
         </Box>
