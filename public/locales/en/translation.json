@@ -211,7 +211,8 @@
           "bank_info": "Bank Information",
           "central_account": "Central Account",
           "individual_account": "Individual Account",
-          "company_account": "Company Account Only"
+          "company_account": "Company Account Only",
+          "message": "The Designated Transfer Account is added manually to each employee’s profile"
         }
       },
       "modal": {
