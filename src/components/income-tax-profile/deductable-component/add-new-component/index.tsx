@@ -15,7 +15,7 @@ import ItpCreateDesignedTransferAccountComponent from './ItpCreateDesignedTransf
 import ItpCreateRatesComponent from './ItpCreateRatesComponent';
 import CustomModal from '@/components/_shared/common/CustomModal';
 import { ifThenElse } from '@/utils/helper';
-import { useTranslation } from 'react-i18next';
+import { useTranslation, Trans } from 'react-i18next';
 
 const ButtonWrapper = styled(Box)(({
   display: 'flex',
@@ -159,7 +159,7 @@ function ItpCreateNewComponentComponent() {
             {
               ifThenElse(
                 isExit,
-                <Typography variant='text-base' color='#4B5563'>{t(`${t_key}.save_modal_text` )}</Typography>,
+                <Typography variant='text-base' color='#4B5563'><Trans>{`${t_key}.save_modal_text`}</Trans></Typography>,
                 <Typography variant='text-base' color='#4B5563'>{t(`${t_key}.mark_modal_text` )}</Typography>
               )
             }
