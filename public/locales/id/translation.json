@@ -39,6 +39,9 @@
     "income_tax_profile_deductable_component": "Komponen yang Dapat Dikurangi",
     "income_tax_profile_profile": "Profil"
   },
+
+
+
   "income_tax_profile": {
     "deductable_component": {
       "title": "Dasbor Komponen yang Dapat Dikurangi",
@@ -47,6 +50,52 @@
         "country": "Negara",
         "component_condition": "Kondisi Komponen",
         "last_update": "Pembaharuan Terakhir"
+      },
+      "add_new_component": {
+        "title": "Tambahkan Komponen Baru",
+        "cancel_button": "Membatalkan",
+        "save_button": "Menyimpan",
+        "mark_button": "Tandai Semua dan Selesai",
+        "confirm_button": "Mengonfirmasi",
+        "save_modal_text": "Anda akan menghentikan proses, dan disimpan di Tambahkan Komponen Baru. ",
+        "mark_modal_text": "Semua pencairan akan ditandai dibayar dan menyelesaikan proses Tambah Komponen Baru",
+        "form": {
+          "wizard_option": {
+            "basic_detail": "Detil Dasar",
+            "designed_transfer_account": "Akun Transfer yang dirancang",
+            "rates": "Tarif"
+          },
+          "create_basic_detail": {
+            "name": "nama komponen",
+            "country": "Negara",
+            "province": "Propinsi",
+            "city": "Kota",
+            "sub_district": "Kecamatan",
+            "citation": "Kutipan",
+            "internal_notes": "Catatan Internal",
+            "external_notes": "Catatan Eksternal"
+          },
+          "create_dta": {
+            "title": "Informasi bank",
+            "type": "Jenis",
+            "message": "Rekening Transfer yang Ditunjuk ditambahkan secara manual ke profil setiap karyawan",
+            "bank": "Bank",
+            "bank_account_holders_name": "Nama Pemegang Rekening Bank",
+            "bank_account_no": "Nomor Rekening Bank",
+            "bank_code": "Kode Bank",
+            "branch_code": "Kode cabang",
+            "branch_name": "Nama cabang",
+            "swift_code": "Tukar Kode",
+            "notes": "Catatan"
+          },
+          "rates": {
+            "select_type": "Pilih Jenis yang Dapat Dikurangi",
+            "dc_condition": "Kondisi Komponen yang Dapat Dikurangi",
+            "amount": "Jumlah",
+            "fu_condition": "Kondisi Satuan Faktor",
+            "sub_condition": "Sub Kondisi"
+          }
+        }
       }
     },
     "profile": {
