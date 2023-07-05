@@ -147,8 +147,7 @@ export default function ItpEditDesignedTransferAccount({
             color: '#223567',
           }}
         >
-          The Designated Transfer Account is added manually to each employee’s
-          profile
+          {t('income_tax_profile.profile.detail.designated_transfer_account.message')}
         </Typography>
       </Box>
 

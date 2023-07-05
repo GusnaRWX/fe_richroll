@@ -202,7 +202,8 @@
           "bank_info": "银行信息",
           "central_account": "中央账户",
           "individual_account": "个人账户",
-          "company_account": "仅限公司帐户"
+          "company_account": "仅限公司帐户",
+          "message": "指定转账账户手动添加到每个员工的个人资料中"
         }
       },
       "modal": {

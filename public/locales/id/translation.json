@@ -202,7 +202,8 @@
           "bank_info": "Informasi Bank",
           "central_account": "Akun Tengah",
           "individual_account": "Akun Perorangan",
-          "company_account": "Akun Perusahaan Saja"
+          "company_account": "Akun Perusahaan Saja",
+          "message": "Rekening Transfer yang Ditunjuk ditambahkan secara manual ke profil setiap karyawan"
         }
       },
       "modal": {
