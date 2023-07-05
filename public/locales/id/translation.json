@@ -155,6 +155,11 @@
           "description": "Anda akan menghapus entri data kehadiran ini. ",
           "ok_button": "Hapus",
           "cancel_button": "Batalkan"
+        },
+        "archive": {
+          "title": "Tanggal Pengarsipan",
+          "description": "Masukkan Tanggal Efektif Pengarsipan",
+          "checkbox": "Ganti dengan Profil Baru"
         }
       }
     }

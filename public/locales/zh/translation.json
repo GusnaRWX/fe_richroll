@@ -155,6 +155,11 @@
           "description": "您将要删除此考勤数据条目。",
           "ok_button": "删除",
           "cancel_button": "取消"
+        },
+        "archive": {
+          "title": "存档日期",
+          "description": "输入有效存档日期",
+          "checkbox": "替换为新配置文件"
         }
       }
     }

@@ -156,6 +156,11 @@
           "description": "You are about to delete this attendance data entry. This action cannot be undone.",
           "ok_button": "Delete",
           "cancel_button": "Cancel"
+        },
+        "archive": {
+          "title": "Archivation Date",
+          "description": "Input Effective Archivation Date",
+          "checkbox": "Replace with New Profile"
         }
       }
     }

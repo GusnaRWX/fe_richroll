@@ -257,7 +257,7 @@ function ItpProfileTable({
                             color='green'
                             sx={{ bgcolor: '#DCFCE7', color: '#16A34A' }}
                             startIcon={<HiUpload />}
-                            label='Activate'
+                            label={t('income_tax_profile.profile.detail.main.activate')}
                             onClick={() => setActivateConfirmation(true)}
                           />
                         )}
@@ -292,7 +292,7 @@ function ItpProfileTable({
                             color='orange'
                             sx={{ bgcolor: '#FFEDD5', color: '#F97316' }}
                             startIcon={<HiOutlineArchive />}
-                            label='Archive'
+                            label={t('income_tax_profile.profile.detail.main.archive')}
                             onClick={() => setArchiveConfirmation(true)}
                           />
                         )}
@@ -334,19 +334,19 @@ function ItpProfileTable({
         open={activateConfirmation}
         handleClose={() => setActivateConfirmation(false)}
         handleConfirm={() => setActivateConfirmation(false)}
-        title={t('income_tax_profile.profile.modal.active.title')}
+        title={t('income_tax_profile.profile.modal.activate.title')}
         width='40%'
       >
         <Grid container p={2} spacing={2}>
           <Grid item xs={12} md={12} lg={12} xl={12}>
-            <Typography>{t('income_tax_profile.profile.modal.active.description')}</Typography>
+            <Typography>{t('income_tax_profile.profile.modal.activate.description')}</Typography>
           </Grid>
           <Grid item container spacing={2}>
             <Grid item xs={12} md={6} lg={6} xl={6}>
-              <DatePicker customLabel={t('income_tax_profile.profile.modal.active.effective_date')} />
+              <DatePicker customLabel={t('income_tax_profile.profile.modal.activate.effective_date')} />
             </Grid>
             <Grid item xs={12} md={6} lg={6} xl={6}>
-              <DatePicker customLabel={t('income_tax_profile.profile.modal.active.expiration_date')} />
+              <DatePicker customLabel={t('income_tax_profile.profile.modal.activate.expiration_date')} />
             </Grid>
           </Grid>
         </Grid>
@@ -355,12 +355,12 @@ function ItpProfileTable({
         open={archiveConfirmation}
         handleClose={() => setArchiveConfirmation(false)}
         handleConfirm={() => setArchiveConfirmation(false)}
-        title='Archivation Date'
+        title={t('income_tax_profile.profile.modal.archive.title')}
         width='40%'
       >
         <Grid>
-          <DatePicker customLabel='Input Effective Archivation Date' withAsterisk />
-          <CheckBox customLabel='Replace with New Profile' />
+          <DatePicker customLabel={t('income_tax_profile.profile.modal.archive.description')} withAsterisk />
+          <CheckBox customLabel={t('income_tax_profile.profile.modal.archive.checkbox')} />
         </Grid>
       </CustomModal>
     </>

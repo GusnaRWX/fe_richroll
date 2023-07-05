@@ -203,8 +203,8 @@ export default function ItpProfileDetailComponent() {
         type='delete'
         open={deleteConfirmation}
         handleClose={() => setDeleteConfirmation(false)}
-        title='Delete Data Entry'
-        content='You are about to delete this attendance data entry. This action cannot be undone.'
+        title={t('income_tax_profile.profile.modal.delete.title')}
+        content={t('income_tax_profile.profile.modal.delete.description')}
         withCallback
         noChange={true}
         callback={() => setDeleteConfirmation(false)}
@@ -212,8 +212,8 @@ export default function ItpProfileDetailComponent() {
       <ConfirmationModal
         open={duplicateConfirmation}
         handleClose={() => setDuplicateConfirmation(false)}
-        title='Confirmation'
-        content='Are you sure you want to duplicate this profile ?'
+        title={t('income_tax_profile.profile.modal.duplicate.title')}
+        content={t('income_tax_profile.profile.modal.duplicate.description')}
         withCallback
         noChange={true}
         callback={() => setDuplicateConfirmation(false)}
@@ -222,31 +222,31 @@ export default function ItpProfileDetailComponent() {
         open={archiveConfirmation}
         handleClose={() => setArchiveConfirmation(false)}
         handleConfirm={() => setArchiveConfirmation(false)}
-        title='Archivation Date'
+        title={t('income_tax_profile.profile.modal.archive.title')}
         width='40%'
       >
         <Grid>
-          <DatePicker customLabel='Input Effective Archivation Date' withAsterisk />
-          <CheckBox customLabel='Replace with New Profile' />
+          <DatePicker customLabel={t('income_tax_profile.profile.modal.archive.description')} withAsterisk />
+          <CheckBox customLabel={t('income_tax_profile.profile.modal.archive.checkbox')} />
         </Grid>
       </CustomModal>
       <CustomModal
         open={activateConfirmation}
         handleClose={() => setActivateConfirmation(false)}
         handleConfirm={() => setActivateConfirmation(false)}
-        title='Publication Date'
+        title={t('income_tax_profile.profile.modal.activate.title')}
         width='40%'
       >
         <Grid container p={2} spacing={2}>
           <Grid item xs={12} md={12} lg={12} xl={12}>
-            <Typography>Do you want to Activate the tax profile?</Typography>
+            <Typography>{t('income_tax_profile.profile.modal.activate.description')}</Typography>
           </Grid>
           <Grid item container spacing={2}>
             <Grid item xs={12} md={6} lg={6} xl={6}>
-              <DatePicker customLabel='Effective Date' />
+              <DatePicker customLabel={t('income_tax_profile.profile.modal.activate.effective_date')} />
             </Grid>
             <Grid item xs={12} md={6} lg={6} xl={6}>
-              <DatePicker customLabel='Expiration Date' />
+              <DatePicker customLabel={t('income_tax_profile.profile.modal.activate.expiration_date')} />
             </Grid>
           </Grid>
         </Grid>

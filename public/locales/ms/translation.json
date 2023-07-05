@@ -155,6 +155,11 @@
           "description": "Anda akan memadamkan entri data kehadiran ini. ",
           "ok_button": "Padam",
           "cancel_button": "Batal"
+        },
+        "archive": {
+          "title": "Tarikh Arkib",
+          "description": "Input Tarikh Arkib Berkuatkuasa",
+          "checkbox": "Gantikan dengan Profil Baharu"
         }
       }
     }
