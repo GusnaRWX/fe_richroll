@@ -39,7 +39,23 @@ export declare namespace workSchedule {
   }
   interface ItemsWorkScheduleType {
     day: number,
-    eventId: number,
+    eventId: string | number,
+    label: string,
+    name: string,
+    start: Date | string,
+    end:Date | string,
+    isBreak?: boolean,
+    isDuration?: boolean,
+    color?: string,
+    duration?: number | string,
+    allDay?: boolean
+    scheduleType?: string | number,
+    type?: number
+  }
+
+  interface ItemsPatchWorkScheduleType {
+    day: number,
+    eventId: string | number,
     label: string,
     name: string,
     start: Date | string,
@@ -59,6 +75,13 @@ export declare namespace workSchedule {
     grossHours: string | number;
     netHours: string | number;
     items: Array<ItemsWorkScheduleType>;
+  }
+
+  interface PatchWorkSchedulePayloadType {
+    name: string;
+    grossHours: string | number;
+    netHours: string | number;
+    items: Array<ItemsPatchWorkScheduleType>;
   }
 
   interface WorkScheduleParams {

@@ -12,31 +12,16 @@ import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import type { SchedulerRef } from '@aldabil/react-scheduler/types';
 import { FieldArray, Formik, Form as FormikForm } from 'formik';
 import { workSchedule } from '@/types/workSchedule';
-import { validationSchemaWorkScheduler } from './validate';
+import { validationSchemaEditWorkScheduler } from './validate';
 import dayjs from 'dayjs';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
-import { postSimulationEventRequested } from '@/store/reducers/slice/company-management/work-schedule/workScheduleSlice';
-import { OverlayLoading} from '@/components/_shared/common';
-import { getCompanyData } from '@/utils/helper';
+import { postSimulationEventRequested, getDetailWorkScheduleRequested } from '@/store/reducers/slice/company-management/work-schedule/workScheduleSlice';
 import { AiOutlineSwapRight } from 'react-icons/ai';
-
+import { useRouter } from 'next/router';
 
 const AsteriskComponent = styled('span')(({ theme }) => ({
   color: theme.palette.error.main
 }));
-
-// const FlexBoxRow = styled('div')(() => ({
-//   display: 'flex',
-//   flexDirection: 'row',
-//   alignItems: 'center',
-//   justifyContent: 'flex-start',
-//   gap: '1rem'
-// }));
-
-interface WorkScheduleFormProps {
-  setData: React.Dispatch<React.SetStateAction<workSchedule.PostWorkSchedulePayloadType>>;
-  setIsValid: (_val) => void,
-}
 
 const ArrDays = [
   {
@@ -76,12 +61,17 @@ const ArrDays = [
   },
 ];
 
-function WorkScheduleCreateForm({ setData, setIsValid }: WorkScheduleFormProps) {
+interface WorkScheduleFormProps {
+  setData: React.Dispatch<React.SetStateAction<workSchedule.PatchWorkSchedulePayloadType>>;
+}
+
+function WorkScheduleEditForm({setData}: WorkScheduleFormProps) {
   const calendarRef = useRef<SchedulerRef>(null);
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const { workSchedule } = useAppSelectors((state) => state);
   const [openForm, setOPenForm] = useState(false);
-  const [hydrated, setHaydrated] = useState(false);
+  const [rendered, setRendered] = useState(false);
   const [tempName, setTempName] = useState('');
   const [tempDay, setDayTemp] = useState<Array<number>>([]);
   const initialValues: workSchedule.WsFormType = {
@@ -143,7 +133,6 @@ function WorkScheduleCreateForm({ setData, setIsValid }: WorkScheduleFormProps) 
     }
   };
 
-
   const checkValDay = (value) => {
     return tempDay.some(v => v === value);
   };
@@ -185,55 +174,61 @@ function WorkScheduleCreateForm({ setData, setIsValid }: WorkScheduleFormProps) 
         type: postSimulationEventRequested.toString(),
         payload: data.type === 0 ? payload : payloadFlexi
       });
-      setIsValid(true);
       setDayTemp([]);
       setOPenForm(false);
     }
   };
 
   useEffect(() => {
-    calendarRef.current?.scheduler.confirmEvent(workSchedule?.events, 'create');
-    const dataValues: Array<workSchedule.ItemsWorkScheduleType> = [];
-    workSchedule?.events.map((item) => {
-      dataValues.push({
-        day: item.day,
-        eventId: item.event_id,
-        label: item.title,
-        name: item.name,
-        start: dayjs(item.start).toISOString(),
-        end: dayjs(item.end).toISOString(),
-        isBreak: item.isBreak,
-        isDuration: item.isDuration,
-        color: item.color,
-        duration: item.duration,
-        allDay: item.allDay,
-        scheduleType: item.scheduleType,
-        type: item.type
-      });
+    dispatch({
+      type: getDetailWorkScheduleRequested.toString(),
+      payload: router.query.id
     });
-    setData({
-      companyID: getCompanyData()?.id?.toString() as string,
-      name: tempName,
-      grossHours: workSchedule?.grossHour,
-      netHours: workSchedule?.netHour,
-      items: dataValues
-    });
-
-  }, [workSchedule?.events]);
-
-  useEffect(() => {
-    setHaydrated(true);
+    setRendered(true);
   }, []);
 
-  if (!hydrated) {
-    return null;
-  }
+  useEffect(() => {
+    if(rendered){
+      setTempName(workSchedule?.name);
+    }
+
+  }, [workSchedule?.name]);
+
+  useEffect(() => {
+    if (rendered) {
+      calendarRef.current?.scheduler.confirmEvent(workSchedule?.events, 'create');
+      const dataValues: Array<workSchedule.ItemsPatchWorkScheduleType> = [];
+      const tempArr = calendarRef?.current?.scheduler?.events.concat(workSchedule?.events);
+      tempArr?.map((item) => {
+        dataValues.push({
+          day: item.day,
+          eventId: item.event_id,
+          label: item.title,
+          name: item.name,
+          start: dayjs(item.start).toISOString(),
+          end: dayjs(item.end).toISOString(),
+          isBreak: item.isBreak,
+          isDuration: item.isDuration,
+          color: item.color,
+          duration: item.duration,
+          allDay: item.allDay,
+          scheduleType: item.scheduleType,
+          type: item.type
+        });
+      });
+      setData({
+        name: tempName,
+        grossHours: workSchedule?.grossHour,
+        netHours: workSchedule?.netHour,
+        items: dataValues
+      });
+    }
+  }, [workSchedule?.events]);
   return (
     <>
-      <OverlayLoading open={workSchedule?.isLoading} />
       <Formik
         initialValues={initialValues}
-        validationSchema={validationSchemaWorkScheduler}
+        validationSchema={validationSchemaEditWorkScheduler}
         onSubmit={(formik, values) => {
           handleSubmit(formik, values);
         }}
@@ -315,6 +310,8 @@ function WorkScheduleCreateForm({ setData, setIsValid }: WorkScheduleFormProps) 
                   events={[]}
                   navigation={false}
                   day={null}
+                  editable={false}
+                  deletable={true}
                   month={null}
                   week={{
                     weekDays: [0, 1, 2, 3, 4, 5, 6],
@@ -593,4 +590,4 @@ function WorkScheduleCreateForm({ setData, setIsValid }: WorkScheduleFormProps) 
   );
 }
 
-export default WorkScheduleCreateForm;
+export default WorkScheduleEditForm;

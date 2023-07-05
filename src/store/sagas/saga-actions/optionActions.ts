@@ -32,7 +32,8 @@ export const getListPosition = ({ departmentID }): Promise<AxiosResponse> => {
 };
 
 export const getCnb = (): Promise<AxiosResponse> => {
-  return get(`compensations?page=1&itemPerPage=1000`);
+  const data = getCompanyData();
+  return get(`compensations?page=1&itemPerPage=1000&companyID=${data?.id}`);
 };
 
 export const getListCompensation = (): Promise<AxiosResponse> => {
