@@ -4,12 +4,11 @@ import {
   Grid,
   Button as MuiButton,
   Card,
-  Typography,
-  Tab,
-  Tabs
+  Typography
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Alert } from '@/components/_shared/common';
+import { Stepper } from '@/components/_shared/form';
 import { Company, CompanyEdit } from '@/types/component';
 import CompanyInformationForm from './CompanyProfileInformationForm';
 import CompanyBankForm from './CompanyProfileBankForm';
@@ -39,39 +38,10 @@ const ContentWrapper = styled(Card)(({
   padding: '1rem'
 }));
 
-interface TabPanelProps {
-  children?: React.ReactNode;
-  index: number;
-  value: number
-}
-
-function TabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role='tabpanel'
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      {...other}
-    >
-      {
-        value === index && (
-          <Box sx={{ p: 3 }}>
-            {children}
-          </Box>
-        )
-      }
-    </div>
-  );
-}
-
-function a11yProps(index: number) {
-  return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`
-  };
-}
+const steps = [
+  'Company Information',
+  'Bank and Payroll Information'
+];
 
 const CompanyEditComponent = ({ companyType, companySector, bank, paymentMethod, countries }: CompanyEdit.Component) => {
   const [tabSelected, setTabSelected] = useState(0);
@@ -243,13 +213,15 @@ const CompanyEditComponent = ({ companyType, companySector, bank, paymentMethod,
     });
   };
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleChange = (newValue: number) => {
     if (newValue === 1) {
       formikDetail.validateForm().then((a) => {
         if(Object.keys(a).length === 0) {
           formikDetail.submitForm();
           setIsError(false);
           setTabSelected(newValue);
+          console.log(newValue);
+          
         } else {
           setIsError(true);
         }
@@ -377,50 +349,51 @@ const CompanyEditComponent = ({ companyType, companySector, bank, paymentMethod,
               size='small'
               color='primary'
               sx={{ color: 'white' }}
-              onClick={() => { ifThenElse(tabSelected === 0, formikDetail.submitForm(), formikPayment.submitForm()); }}
-            >Save</MuiButton>
+              onClick={() => { tabSelected === 0 ? handleChange(1) : formikPayment.submitForm(); }}
+            >{ifThenElse(tabSelected === 0, 'Next', 'Save')}</MuiButton>
           </ButtonWrapper>
         </Grid>
       </Grid>
       <ContentWrapper>
         <Box sx={{ width: '100%' }}>
-          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-            <Tabs value={tabSelected} onChange={handleChange} aria-label='basic tabs'>
-              <Tab sx={{ textTransform: 'none' }} label='Company Information' {...a11yProps(0)} />
-              <Tab sx={{ textTransform: 'none' }} label='Payment Information' {...a11yProps(1)} />
-            </Tabs>
+          <Box sx={{ borderBottom: 1, borderColor: 'divider', pb: '30px', mb: '10px' }}>
+            <Stepper steps={steps} activeStep={tabSelected} />
           </Box>
-          <TabPanel value={tabSelected} index={0}>
-            {(isError) && (
-              <Alert
-                severity='error'
-                content='Please fill in all the mandatory fields'
-                icon={<Cancel />}
+          {tabSelected == 0 &&
+            <>
+              {(isError) && (
+                <Alert
+                  severity='error'
+                  content='Please fill in all the mandatory fields'
+                  icon={<Cancel />}
+                />
+              )}
+              <CompanyInformationForm
+                companyType={companyType}
+                companySector={companySector}
+                countries={countries}
+                formik={formikDetail}
+                images={images}
+                setImages={setImages}
               />
-            )}
-            <CompanyInformationForm
-              companyType={companyType}
-              companySector={companySector}
-              countries={countries}
-              formik={formikDetail}
-              images={images}
-              setImages={setImages}
-            />
-          </TabPanel>
-          <TabPanel value={tabSelected} index={1}>
-            {(isError) && (
-              <Alert
-                severity='error'
-                content='Please fill in all the mandatory fields'
-                icon={<Cancel />}
+            </>
+          }
+          {tabSelected == 1 &&
+            <>
+              {(isError) && (
+                <Alert
+                  severity='error'
+                  content='Please fill in all the mandatory fields'
+                  icon={<Cancel />}
+                />
+              )}
+              <CompanyBankForm
+                formik={formikPayment}
+                bank={bank}
+                paymentMethod={paymentMethod}
               />
-            )}
-            <CompanyBankForm
-              formik={formikPayment}
-              bank={bank}
-              paymentMethod={paymentMethod}
-            />
-          </TabPanel>
+            </>
+          }
         </Box>
       </ContentWrapper>
     </>

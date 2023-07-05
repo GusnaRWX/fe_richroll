@@ -33,6 +33,7 @@ const Layout = ({
   const [mobileOpen, setMobileOpen] = useState<boolean>(true);
   const [menuOpen, setMenuOpen] = useState<string>('');
   const [companyData, setCompanyData] = useState<CompanyDataParse | null>({});
+  const [hydrated, setHydrated] = useState(false);
   const userData = getUserData();
   const selectedRoles = getSelectedRoles();
   const dispatch = useAppDispatch();
@@ -151,6 +152,12 @@ const Layout = ({
     </Box>
   );
 
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
+  if (!hydrated) {
+    return null;
+  }
   return (
     <Box
       sx={{

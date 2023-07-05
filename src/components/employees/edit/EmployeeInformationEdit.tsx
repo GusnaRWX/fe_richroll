@@ -217,7 +217,7 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
     // setValues(allInfoValues);
     setIsInformationValid(true);
     handleFirstInformation();
-    nextPage(1);
+    nextPage(infoValues?.isSelfService ? 3 : 1);
     setErrors({});
   };
 
@@ -343,7 +343,7 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
           <Grid item xs={6} md={6} lg={6} xl={6} sx={{ marginBottom: '1.5rem' }}>
             <Typography>Contact Number<AsteriskComponent>*</AsteriskComponent></Typography>
             <Grid container spacing={2}>
-              <Grid item xs={1} sm={3} md={2} lg={2} xl={2} spacing={2}>
+              <Grid item xs={1} sm={3} md={2} lg={2} xl={2}>
                 <CustomSelect
                   variant='outlined'
                   size='small'
@@ -614,12 +614,10 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
               )
             }
           </Grid>
-          {!!infoValues?.isActive &&
-            <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-              <TerminateAccount />
-            </Grid>
-          }
         </Grid>
+        {!!infoValues?.isActive &&
+          <TerminateAccount />
+        }
         <NextBtnWrapper>
           <Button fullWidth={false} size='small' label='Next' color='primary' type={'submit'} />
         </NextBtnWrapper>

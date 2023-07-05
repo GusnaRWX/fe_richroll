@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import dynamic from 'next/dynamic';
-import { IconButton } from '@/components/_shared/form';
-import { Card, Typography, Button as MuiButton, Tab, Tabs, Box } from '@mui/material';
+import { IconButton, Stepper } from '@/components/_shared/form';
+import { Card, Typography, Button as MuiButton, Box } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
@@ -58,44 +58,17 @@ const ButtonWrapper = styled.div`
  margin-bottom: 1rem;
 `;
 
+const steps = [
+  'Employee Information',
+  'Personal Information',
+  'Emergency Contact',
+  'Compensations & Benefits',
+  'Work Schedule'
+];
+
 const ContentWrapper = styled(Card)(({
   padding: '2rem'
 }));
-
-interface TabPanelProps {
-  children?: React.ReactNode;
-  index: number;
-  value: number
-}
-
-function TabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role='tabpanel'
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      {...other}
-    >
-      {
-        value === index && (
-          <Box sx={{ p: 3 }}>
-            {children}
-          </Box>
-        )
-      }
-    </div>
-  );
-}
-
-function a11yProps(index: number) {
-  return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`
-  };
-}
-
 
 function EmployeeEditComponent() {
   const [value, setValue] = useState(0);
@@ -187,9 +160,6 @@ function EmployeeEditComponent() {
 
   const [valueWorkSchedule, setValueWorkSchedule] = useState({});
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
-  };
   const handleOpen = () => {
     setLeave(true);
   };
@@ -303,16 +273,10 @@ function EmployeeEditComponent() {
       </TopWrapper>
       <ContentWrapper>
         <Box sx={{ width: '100%' }}>
-          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-            <Tabs value={value} onChange={handleChange} aria-label='basic tabs'>
-              <Tab sx={{ textTransform: 'none' }} label='Employee Information' {...a11yProps(0)} />
-              <Tab sx={{ textTransform: 'none' }} disabled={dataEmployeeInformation?.isSelfService === true} label='Personal Information' {...a11yProps(1)} />
-              <Tab sx={{ textTransform: 'none' }} disabled={dataEmployeeInformation?.isSelfService === true} label='Emergency Contact' {...a11yProps(2)} />
-              <Tab sx={{ textTransform: 'none' }} label='Compensations & Benefits' {...a11yProps(3)} />
-              <Tab sx={{ textTransform: 'none' }} label='Work Schedule' {...a11yProps(4)} />
-            </Tabs>
+          <Box sx={{ borderBottom: 1, borderColor: 'divider', pb: '30px', mb: '10px' }}>
+            <Stepper steps={steps} activeStep={value} />
           </Box>
-          <TabPanel value={value} index={0}>
+          {value == 0 &&
             <EmployeeInformationEdit
               nextPage={handleNext}
               refProp={employeeRef}
@@ -321,8 +285,8 @@ function EmployeeEditComponent() {
               setIsInformationValid={setIsInformationValid}
               handleFirstInformation={handleClick}
             />
-          </TabPanel>
-          <TabPanel value={value} index={1}>
+          }
+          {value == 1 &&
             <PersonalInformationEdit
               nextPage={handleNext}
               refProp={personalInformationRef}
@@ -331,8 +295,8 @@ function EmployeeEditComponent() {
               setIsPersonalInformationValid={setIsPersonalInformationValid}
               handleSecondPersonal={handleClickPersonal}
             />
-          </TabPanel>
-          <TabPanel value={value} index={2}>
+          }
+          {value == 2 &&
             <EmergencyContactEdit
               nextPage={handleNext}
               refProp={emergencyRef}
@@ -341,13 +305,13 @@ function EmployeeEditComponent() {
               setIsEmergencyValid={setIsEmergencyValid}
               handleThirdEmergency={handleClickEmergencyContact}
             />
-          </TabPanel>
-          <TabPanel value={value} index={3}>
-            on Development
-          </TabPanel>
-          <TabPanel value={value} index={4}>
+          }
+          {value == 3 &&
+            <>on Development</>
+          }
+          {value == 4 &&
             <EmployeeWorkScheduleEdit setData={setValueWorkSchedule} />
-          </TabPanel>
+          }
         </Box>
       </ContentWrapper>
       <ConfirmationModal
