@@ -121,13 +121,19 @@
           "income": "Penghasilan",
           "rate": "Rasio",
           "min_income": "Penghasilan Min",
-          "amount": "Jumlah"
+          "amount": "Jumlah",
+          "max_income": "Penghasilan Maksimal",
+          "additional_fixed_amount": "Jumlah Tetap Tambahan"
         },
         "income_tax_multiplier": {
           "deductible_factor": "Faktor Pengurangan",
           "factor_unit_condition": "Kondisi Satuan Faktor",
           "rate": "Rasio",
-          "additional_fixed_amount": "Jumlah Tetap Tambahan"
+          "additional_fixed_amount": "Jumlah Tetap Tambahan",
+          "status": "Status",
+          "condition": "Kondisi",
+          "multiplier": "Pengali",
+          "component": "Komponen"
         },
         "designated_transfer_account": {
           "type": "Jenis",

@@ -122,13 +122,19 @@
           "income": "Income",
           "rate": "Rate",
           "min_income": "Min Income",
-          "amount": "Amount"
+          "amount": "Amount",
+          "max_income": "Max Income",
+          "additional_fixed_amount":"Additional Fixed Amount"
         },
         "income_tax_multiplier": {
           "deductible_factor": "Deductible Factor",
           "factor_unit_condition": "Factor Unit Condition",
           "rate": "Rate",
-          "additional_fixed_amount": "Additional Fixed Amount"
+          "additional_fixed_amount": "Additional Fixed Amount",
+          "status": "Status",
+          "condition": "Condition",
+          "multiplier": "Multiplier",
+          "component": "Component"
         },
         "designated_transfer_account": {
           "type": "Type",

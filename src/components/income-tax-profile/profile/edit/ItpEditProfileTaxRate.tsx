@@ -5,8 +5,11 @@ import { Input, Button, IconButton, Select } from '@/components/_shared/form';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
 import * as Yup from 'yup';
+import { useTranslation } from 'react-i18next';
 
 export default function ItpEditProfileTaxRate() {
+  const {t} = useTranslation();
+
   // interface InitialValues {
   //   minIncome: string;
   //   maxIncome: string;
@@ -92,7 +95,7 @@ export default function ItpEditProfileTaxRate() {
                         </Grid>
                         <Grid item md={4}>
                           <Input
-                            customLabel='Min.Income'
+                            customLabel={t('income_tax_profile.profile.detail.income_tax_rate.min_income')}
                             withAsterisk
                             size='small'
                             value={formik.values.component[index].minIncome}
@@ -108,7 +111,7 @@ export default function ItpEditProfileTaxRate() {
                         </Grid>
                         <Grid item md={4}>
                           <Input
-                            customLabel='Max.Income'
+                            customLabel={t('income_tax_profile.profile.detail.income_tax_rate.max_income')}
                             withAsterisk
                             size='small'
                             value={formik.values.component[index].maxIncome}
@@ -142,7 +145,7 @@ export default function ItpEditProfileTaxRate() {
                       <Grid item container xs={12} md={4.5} alignItems='flex-end' spacing={1}>
                         <Grid item xs={12} md={5}>
                           <Select
-                            customLabel='Rate'
+                            customLabel={t('income_tax_profile.profile.detail.income_tax_rate.rate')}
                             withAsterisk
                             fullWidth
                             size='small'
@@ -152,7 +155,7 @@ export default function ItpEditProfileTaxRate() {
                         </Grid>
                         <Grid item xs={12} md={7}>
                           <Input
-                            customLabel='Additional Fixed Amount'
+                            customLabel={t('income_tax_profile.profile.detail.income_tax_rate.additional_fixed_amount')}
                             size='small'
                             value={formik.values.component[index].additionalAmount}
                             onChange={(e) => formik.setFieldValue(`component.${index}.additionalAmount`, e.target.value)}

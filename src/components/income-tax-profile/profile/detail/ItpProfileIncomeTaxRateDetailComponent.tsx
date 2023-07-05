@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 export default function ItpProfileIncomeTaxRateDetailComponent() {
   const {t} = useTranslation();
+
   return(
     <>
       <Paper sx={{px:'16px',py:'32px'}}>
