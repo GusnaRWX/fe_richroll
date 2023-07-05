@@ -5,6 +5,7 @@ import { styled } from '@mui/material/styles';
 import { Typography, Box, Paper, Tabs, Tab } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import { useRouter } from 'next/router';
+import { useTranslation } from 'react-i18next';
 
 // Import Create Component
 import ItpEditProfileBasicDetailComponent from './ItpEditProfileBasicDetailComponent';
@@ -15,6 +16,7 @@ import IptEditProfileTaxMultiplier from './IptEditProfileTaxMultiplier';
 
 export default function ItpEditProfileComponent() {
   const router = useRouter();
+  const {t} = useTranslation();
 
   const Header = styled('div')({
     display: 'flex',
@@ -90,11 +92,11 @@ export default function ItpEditProfileComponent() {
         <Box sx={{px:'48px'}}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider',  }}>
             <Tabs value={value} onChange={handleChange} aria-label='basic tabs'>
-              <Tab label='Basic Detail' {...a11yProps(0)} />
-              <Tab label='Deductible Components' {...a11yProps(1)} />
-              <Tab label='Income Tax Rate' {...a11yProps(2)} />
-              <Tab label='Income Tax Multiplier' {...a11yProps(3)} />
-              <Tab label='Designated Transfer Account' {...a11yProps(4)} />
+              <Tab label={t('income_tax_profile.profile.detail.tab.basic_detail')} {...a11yProps(0)} />
+              <Tab label={t('income_tax_profile.profile.detail.tab.deductible_component')} {...a11yProps(1)} />
+              <Tab label={t('income_tax_profile.profile.detail.tab.income_tax_rate')} {...a11yProps(2)} />
+              <Tab label={t('income_tax_profile.profile.detail.tab.income_tax_multiplier')} {...a11yProps(3)} />
+              <Tab label={t('income_tax_profile.profile.detail.tab.designated_transfer_account')} {...a11yProps(4)} />
             </Tabs>
           </Box>
         </Box>

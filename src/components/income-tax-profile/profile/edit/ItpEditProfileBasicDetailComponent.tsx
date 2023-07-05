@@ -5,12 +5,14 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import BasicDatePicker from '@/components/_shared/form/DatePicker';
 import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
 
 interface ItpEditProfileBasicDetailComponentProps {
   setValue: Dispatch<SetStateAction<number>>
 }
 
 export default function ItpEditProfileBasicDetailComponent({setValue}: ItpEditProfileBasicDetailComponentProps) {
+  const {t} = useTranslation();
   const Dummyoption = [
     { value: '1', label: 'Dummy 1' },
     { value: '2', label: 'Dummy 2' },
@@ -55,7 +57,7 @@ export default function ItpEditProfileBasicDetailComponent({setValue}: ItpEditPr
           <Grid item xs={6} md={6} lg={6} xl={6} >
             <Input
               placeholder='Input Statutory Benefits Name'
-              customLabel='Tax Profile Name'
+              customLabel={t('income_tax_profile.profile.detail.basic_detail.tax_profile_name')}
               withAsterisk
               size='small'
               value={formik.values.componentName}
@@ -72,7 +74,7 @@ export default function ItpEditProfileBasicDetailComponent({setValue}: ItpEditPr
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Select
               placeholder='Select Country'
-              customLabel='Country'
+              customLabel={t('income_tax_profile.profile.detail.basic_detail.country')}
               withAsterisk
               size='small'
               fullWidth
@@ -87,7 +89,7 @@ export default function ItpEditProfileBasicDetailComponent({setValue}: ItpEditPr
           <Grid item xs={6} md={6} lg={6} xl={6} >
             <Select
               placeholder='Select Province'
-              customLabel='Province'
+              customLabel={t('income_tax_profile.profile.detail.basic_detail.province')}
               size='small'
               fullWidth
               options={Dummyoption}
@@ -101,7 +103,7 @@ export default function ItpEditProfileBasicDetailComponent({setValue}: ItpEditPr
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Select
               placeholder='Select City'
-              customLabel='City'
+              customLabel={t('income_tax_profile.profile.detail.basic_detail.city')}
               size='small'
               fullWidth
               options={Dummyoption}
@@ -112,7 +114,7 @@ export default function ItpEditProfileBasicDetailComponent({setValue}: ItpEditPr
           <Grid item xs={6} md={6} lg={6} xl={6} >
             <Select
               placeholder='Select Country'
-              customLabel='Sub-District'
+              customLabel={t('income_tax_profile.profile.detail.basic_detail.sub_district')}
               size='small'
               fullWidth
               options={Dummyoption}
@@ -125,7 +127,7 @@ export default function ItpEditProfileBasicDetailComponent({setValue}: ItpEditPr
         <Grid container xs={12} spacing={2} style={{marginTop: '16px'}}>
           <Grid item xs={6}>
             <BasicDatePicker
-              customLabel='Effective Date'
+              customLabel={t('income_tax_profile.profile.detail.basic_detail.effective_date')}
               withAsterisk
               onChange={(e)=> formik.setFieldValue('effectiveDate', dayjs(e).format('DD/MM/YYYY'))}
             />
@@ -135,7 +137,7 @@ export default function ItpEditProfileBasicDetailComponent({setValue}: ItpEditPr
           </Grid>
           <Grid item xs={6}>
             <BasicDatePicker
-              customLabel='Expiration Date'
+              customLabel={t('income_tax_profile.profile.detail.basic_detail.expiration_date')}
             />
           </Grid>
         </Grid>
@@ -143,7 +145,7 @@ export default function ItpEditProfileBasicDetailComponent({setValue}: ItpEditPr
         <Grid container xs={12} spacing={2} style={{marginTop: '16px'}}>
           <Grid item xs={6} md={6} lg={6} xl={6} sx={{paddingRight:'8px'}}>
             <Textarea
-              customLabel='Citation'
+              customLabel={t('income_tax_profile.profile.detail.basic_detail.citation')}
               minRows={4}
               style={{ resize: 'vertical' }}
               value={formik.values.citation}
@@ -165,7 +167,7 @@ export default function ItpEditProfileBasicDetailComponent({setValue}: ItpEditPr
         <Grid container xs={12} spacing={2} style={{marginTop: '16px'}}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Textarea
-              customLabel='Internal Notes'
+              customLabel={t('income_tax_profile.profile.detail.basic_detail.internal_notes')}
               minRows={4}
               style={{ resize: 'vertical' }}
               value={formik.values.internalNotes}
@@ -183,7 +185,7 @@ export default function ItpEditProfileBasicDetailComponent({setValue}: ItpEditPr
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Textarea
-              customLabel='External Notes'
+              customLabel={t('income_tax_profile.profile.detail.basic_detail.external_notes')}
               minRows={4}
               style={{ resize: 'vertical' }}
               value={formik.values.externalNotes}

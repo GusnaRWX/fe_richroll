@@ -103,7 +103,12 @@
           "effective_period": "Periode Efektif",
           "citation": "Kutipan",
           "internal_notes": "Catatan Internal",
-          "external_notes": "Catatan Eksternal"
+          "external_notes": "Catatan Eksternal",
+          "province": "Provinsi",
+          "city": "Kota",
+          "sub_district": "Kecamatan",
+          "effective_date": "Tanggal berlaku",
+          "expiration_date": "Tanggal habis tempo"
         },
         "deductible_component": {
           "martial_status": "Status pernikahan",

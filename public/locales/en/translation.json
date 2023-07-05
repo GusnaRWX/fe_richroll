@@ -103,7 +103,12 @@
           "effective_period": "Effective Period",
           "citation": "Citation",
           "internal_notes": "Internal Notes",
-          "external_notes": "External Notes"
+          "external_notes": "External Notes",
+          "province": "Province",
+          "city": "City",
+          "sub_district": "Sub-District",
+          "effective_date": "Effective Date",
+          "expiration_date": "Expiration Date"
         },
         "deductible_component": {
           "martial_status": "Marital Status",

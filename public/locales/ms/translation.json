@@ -103,7 +103,12 @@
           "effective_period": "Tempoh Berkuatkuasa",
           "citation": "Petikan",
           "internal_notes": "Nota Dalaman",
-          "external_notes": "Nota Luaran"
+          "external_notes": "Nota Luaran",
+          "province": "Wilayah",
+          "city": "Bandar",
+          "sub_district": "Mukim",
+          "effective_date": "Tarikh kuat kuasa",
+          "expiration_date": "Tarikh luput"
         },
         "deductible_component": {
           "martial_status": "Status perkahwinan",

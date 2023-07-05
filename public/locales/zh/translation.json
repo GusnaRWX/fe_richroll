@@ -103,7 +103,12 @@
           "effective_period": "有效期",
           "citation": "引文",
           "internal_notes": "内部注释",
-          "external_notes": "外部注释"
+          "external_notes": "外部注释",
+          "province": "省",
+          "city": "城市",
+          "sub_district": "分地区",
+          "effective_date": "生效日期",
+          "expiration_date": "截止日期"
         },
         "deductible_component": {
           "martial_status": "婚姻状况",

@@ -131,7 +131,7 @@ const ItpProfileComponent = () => {
                 -
               </Grid>
               <Grid item xs={5.5} sm={5.5} md={5.5} lg={5.5} xl={5.5}>
-                <BasicDatePicker sx={{ height: '15px' }} />{' '}
+                <BasicDatePicker sx={{ height: '15px' }} />
               </Grid>
             </Grid>
           </Grid>
