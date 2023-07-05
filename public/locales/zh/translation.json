@@ -150,6 +150,14 @@
           "income_tax_multiplier": "所得税乘数",
           "designated_transfer_account": "指定转账账户"
         },
+        "wizard_option": {
+          "initial": "创造",
+          "basic_detail": "基本细节",
+          "deductable_component": "可扣除部分",
+          "income_tax_rates": "所得税税率",
+          "income_tax_multiplier": "所得税乘数",
+          "designed_transfer_account": "设计转账账户"
+        },
         "basic_detail": {
           "country": "国家",
           "different_currency": "不同货币",

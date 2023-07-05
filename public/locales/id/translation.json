@@ -150,6 +150,14 @@
           "income_tax_multiplier": "Pengganda Pajak Penghasilan",
           "designated_transfer_account": "Rekening Transfer yang Ditunjuk"
         },
+        "wizard_option": {
+          "initial": "Membuat",
+          "basic_detail": "Detil Dasar",
+          "deductable_component": "Komponen yang Dapat Dikurangi",
+          "income_tax_rates": "Tarif Pajak Penghasilan",
+          "income_tax_multiplier": "Pengganda Pajak Penghasilan",
+          "designed_transfer_account": "Akun Transfer yang dirancang"
+        },
         "basic_detail": {
           "country": "Negara",
           "different_currency": "Mata uang yang berbeda",

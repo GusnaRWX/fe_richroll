@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { HiSelector } from 'react-icons/hi';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { HiPencilAlt } from 'react-icons/hi';
+import { useTranslation } from 'react-i18next';
 
 const AddButton = styled(Button)({
   color: 'white',
@@ -19,6 +20,9 @@ const AddButton = styled(Button)({
 });
 
 export default function  ItpCreateTaxDeductableComponent() {
+  const {t} = useTranslation();
+  const t_key = 'income_tax_profile.profile.detail.deductible_component';
+
   const [isAddNewDeductableComponent, setIsAddNewDeductableComponent] =
     useState(false);
   const [initialDeductableValues, setInitialDeductableValues] = useState<
@@ -100,7 +104,7 @@ export default function  ItpCreateTaxDeductableComponent() {
             <Typography
               sx={{ fontWeight: 700, color: '#223567', fontSize: '18px' }}
             >
-              Material Status
+              {t(`${t_key}.martial_status`)}
             </Typography>
             <Box sx={{ display: 'flex', gap: '4px' }}>
               <Button
@@ -136,14 +140,14 @@ export default function  ItpCreateTaxDeductableComponent() {
                 <Typography
                   sx={{ color: '#374151', fontWeight: 400, fontSize: '14px' }}
                 >
-                Factor Unit Condition
+                  {t(`${t_key}.factor_unit_condition`)}
                 </Typography>
               </Grid>
               <Grid item xs={6}>
                 <Typography
                   sx={{ color: '#374151', fontWeight: 400, fontSize: '14px' }}
                 >
-                Amount
+                  {t(`${t_key}.amount`)}
                 </Typography>
               </Grid>
             </Grid>
@@ -226,7 +230,7 @@ export default function  ItpCreateTaxDeductableComponent() {
             <Typography
               sx={{ fontWeight: 700, color: '#223567', fontSize: '18px' }}
             >
-              Number of Dependance
+              {t(`${t_key}.number_of_dependence`)}
             </Typography>
             <Box sx={{ display: 'flex', gap: '4px' }}>
               <Button
@@ -261,14 +265,14 @@ export default function  ItpCreateTaxDeductableComponent() {
               <Typography
                 sx={{ color: '#374151', fontWeight: 400, fontSize: '14px' }}
               >
-                Factor Unit Condition
+                {t(`${t_key}.factor_unit_condition`)}
               </Typography>
             </Grid>
             <Grid item xs={6}>
               <Typography
                 sx={{ color: '#374151', fontWeight: 400, fontSize: '14px' }}
               >
-                Amount
+                {t(`${t_key}.amount`)}
               </Typography>
             </Grid>
 
@@ -327,7 +331,7 @@ export default function  ItpCreateTaxDeductableComponent() {
             <Typography
               sx={{ fontWeight: 700, color: '#223567', fontSize: '18px' }}
             >
-              Number of Dependance
+              {t(`${t_key}.number_of_dependence`)}
             </Typography>
             <Box sx={{ display: 'flex', gap: '4px' }}>
               <Button
@@ -362,14 +366,14 @@ export default function  ItpCreateTaxDeductableComponent() {
               <Typography
                 sx={{ color: '#374151', fontWeight: 400, fontSize: '14px' }}
               >
-                Factor Unit Condition
+                {t(`${t_key}.factor_unit_condition`)}
               </Typography>
             </Grid>
             <Grid item xs={6}>
               <Typography
                 sx={{ color: '#374151', fontWeight: 400, fontSize: '14px' }}
               >
-                Amount
+                {t(`${t_key}.amount`)}
               </Typography>
             </Grid>
 

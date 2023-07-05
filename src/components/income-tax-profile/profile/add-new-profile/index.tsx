@@ -12,6 +12,7 @@ import { styled } from '@mui/material/styles';
 import { useRouter } from 'next/router';
 import CustomModal from '@/components/_shared/common/CustomModal';
 import { ifThenElse } from '@/utils/helper';
+import { useTranslation } from 'react-i18next';
 
 // Create Component Import :
 import ItpCreateTaxBasicDetail from './ItpCreateTaxBasicDetail';
@@ -19,14 +20,6 @@ import ItpCreateTaxDeductableComponent from './ItpCreateTaxDeductableComponent';
 import ItpCreateTaxRate from './ItpCreateTaxRate';
 import ItpCreateTaxMultiplier from './ItpCreateTaxMultiplier';
 import ItpCreateDesignedTransferAccount from './ItpCreateDesignedTransferAccount';
-
-const steps = [
-  'Basic Detail',
-  'Deductable Components',
-  'income Tax Rates',
-  'income Tax Multiplier',
-  'Designed Detail Component',
-];
 
 const ButtonWrapper = styled(Box)(({
   display: 'flex',
@@ -48,6 +41,8 @@ function ItpAddNewProfileComponent() {
   const [value, setValue] = useState(0);
   const [open, setOpen] = useState(false);
   const [isExit, setIsExit] = useState(true);
+  const {t} = useTranslation();
+  const t_key = 'income_tax_profile.profile.detail';
 
   const handleClose = () => {
     setOpen(false);
@@ -56,6 +51,14 @@ function ItpAddNewProfileComponent() {
   const handleConfirm = () => {
     router.push('/income-tax-profile/profile');
   };
+
+  const steps = [
+    t(`${t_key}.wizard_option.basic_detail`),
+    t(`${t_key}.wizard_option.deductable_component`),
+    t(`${t_key}.wizard_option.income_tax_rates`),
+    t(`${t_key}.wizard_option.income_tax_multiplier`),
+    t(`${t_key}.wizard_option.designed_transfer_account`),
+  ];
 
   return (
     <>

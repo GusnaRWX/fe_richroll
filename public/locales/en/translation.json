@@ -150,6 +150,14 @@
           "income_tax_multiplier": "Income Tax Multiplier",
           "designated_transfer_account": "Designated Transfer Account"
         },
+        "wizard_option":{
+          "initial":"Create",
+          "basic_detail": "Basic Detail",
+          "deductable_component": "Deductable Component",
+          "income_tax_rates": "Income Tax Rates",
+          "income_tax_multiplier": "Income Tax Multiplier",
+          "designed_transfer_account": "Designed Transfer Account"
+        },
         "basic_detail": {
           "country": "Country",
           "different_currency": "Different Currency",

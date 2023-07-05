@@ -150,6 +150,14 @@
           "income_tax_multiplier": "Pengganda Cukai Pendapatan",
           "designated_transfer_account": "Akaun Pemindahan Ditetapkan"
         },
+        "wizard_option": {
+          "initial": "Buat",
+          "basic_detail": "Butiran Asas",
+          "deductable_component": "Komponen Boleh Tolak",
+          "income_tax_rates": "Kadar Cukai Pendapatan",
+          "income_tax_multiplier": "Pengganda Cukai Pendapatan",
+          "designed_transfer_account": "Akaun Pemindahan Direka"
+        },
         "basic_detail": {
           "country": "Negara",
           "different_currency": "Mata Wang Berbeza",
