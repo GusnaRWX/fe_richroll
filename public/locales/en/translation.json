@@ -39,6 +39,9 @@
     "income_tax_profile_deductable_component" : "Deductable Component",
     "income_tax_profile_profile" : "Profile"
   },
+
+
+
   "income_tax_profile": {
     "deductable_component": {
       "title": "Deductable Components Dashboard",
@@ -46,7 +49,57 @@
         "company_name": "Company Name",
         "country": "Country",
         "component_condition": "Component Condition",
-        "last_update": "Last Update"
+        "last_update": "Last Update",
+        "delete_modal" : {
+          "title" : "Delete Data Entry",
+          "text" : "You are about to delete this statutory benefit component. This action cannot be undone."
+        }
+      },
+      "add_new_component" : {
+        "title" : "Add New Component",
+        "cancel_button" : "Cancel",
+        "save_button" : "Save & Exit",
+        "mark_button" : "Mark All and Complete",
+        "confirm_button" : "Confirm",
+        "save_modal_text" : "You will stop the process, and saved in Add New Component. Are you sure to stop the process?",
+        "mark_modal_text" : "All disbursement will marked paid and complete the Add New Component process",
+        "form" : {
+          "wizard_option" : {
+            "basic_detail": "Basic Detail",
+            "designed_transfer_account": "Designed Transfer Account",
+            "rates": "Rates"
+          },
+          "create_basic_detail" : {
+            "name" : "Component Name",
+            "country": "Country",
+            "province": "Province",
+            "city": "City",
+            "sub_district": "Sub-District",
+            "citation": "Citation",
+            "internal_notes": "Internal Notes",
+            "external_notes": "External Notes"
+          },
+          "create_dta" : {
+            "title" : "Bank Information",
+            "type": "Type",
+            "message" : "The Designated Transfer Account is added manually to each employee’s profile",
+            "bank": "Bank",
+            "bank_account_holders_name": "Bank Account Holders Name",
+            "bank_account_no": "Bank Account No",
+            "bank_code": "Bank Code",
+            "branch_code": "Branch Code",
+            "branch_name": "Branch Name",
+            "swift_code": "Swift Code",
+            "notes": "Notes"
+          },
+          "rates" : {
+            "select_type" : "Select Deductable Type",
+            "dc_condition" : "Deductable Component Condition",
+            "amount" : "Amount",
+            "fu_condition" : "Factor Unit Condition",
+            "sub_condition" : "Sub Condition"
+          }
+        }
       }
     },
     "profile": {

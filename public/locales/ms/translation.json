@@ -39,6 +39,9 @@
     "income_tax_profile_deductable_component": "Komponen Boleh Tolak",
     "income_tax_profile_profile": "Profil"
   },
+
+
+
   "income_tax_profile": {
     "deductable_component": {
       "title": "Papan Pemuka Komponen Boleh Potong",
@@ -46,7 +49,57 @@
         "company_name": "nama syarikat",
         "country": "Negara",
         "component_condition": "Keadaan Komponen",
-        "last_update": "Kemaskini terakhir"
+        "last_update": "Kemaskini terakhir",
+        "delete_modal": {
+          "title": "Padamkan Entri Data",
+          "text": "Anda akan memadamkan komponen faedah berkanun ini. "
+        }
+      },
+      "add_new_component": {
+        "title": "Tambah Komponen Baharu",
+        "cancel_button": "Batal",
+        "save_button": "Jimat",
+        "mark_button": "Tandakan Semua dan Selesai",
+        "confirm_button": "sahkan",
+        "save_modal_text": "Anda akan menghentikan proses dan disimpan dalam Tambah Komponen Baharu. ",
+        "mark_modal_text": "Semua pengeluaran akan ditanda sebagai berbayar dan menyelesaikan proses Tambah Komponen Baharu",
+        "form": {
+          "wizard_option": {
+            "basic_detail": "Butiran Asas",
+            "designed_transfer_account": "Akaun Pemindahan Direka",
+            "rates": "Kadar"
+          },
+          "create_basic_detail": {
+            "name": "Nama Komponen",
+            "country": "Negara",
+            "province": "Wilayah",
+            "city": "Bandar",
+            "sub_district": "Mukim",
+            "citation": "Petikan",
+            "internal_notes": "Nota Dalaman",
+            "external_notes": "Nota Luaran"
+          },
+          "create_dta": {
+            "title": "Maklumat bank",
+            "type": "taip",
+            "message": "Akaun Pemindahan Ditetapkan ditambah secara manual pada profil setiap pekerja",
+            "bank": "Bank",
+            "bank_account_holders_name": "Nama Pemegang Akaun Bank",
+            "bank_account_no": "Akaun Bank No",
+            "bank_code": "Kod bank",
+            "branch_code": "Kod Cawangan",
+            "branch_name": "Nama cawangan",
+            "swift_code": "Kod pantas",
+            "notes": "Nota"
+          },
+          "rates": {
+            "select_type": "Pilih Jenis Boleh Tolak",
+            "dc_condition": "Keadaan Komponen Boleh Potong",
+            "amount": "Jumlah",
+            "fu_condition": "Keadaan Unit Faktor",
+            "sub_condition": "Sub Syarat"
+          }
+        }
       }
     },
     "profile": {
