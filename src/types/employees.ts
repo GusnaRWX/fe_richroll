@@ -313,5 +313,35 @@ export declare namespace Employees {
     terminateNote: string;
   }
 
+  interface ContainerCnbDetail {
+    id: string;
+    component: {
+      id: string;
+      name: string;
+      type: number
+    },
+    term: {
+      id: string;
+      name: string;
+    },
+    isTaxable: boolean;
+    isBase: boolean;
+    amount: number;
+    amountType: number;
+    rate: number;
+    rateType: number;
+  }
+
+  interface GetEmployeeCnbDetail {
+    data: {
+      id: string;
+      name: string;
+      overtime: number;
+      createdAt: string;
+      updatedAt: string;
+      base: ContainerCnbDetail;
+      supplementaries: Array<ContainerCnbDetail>
+    }
+  }
 }
 
