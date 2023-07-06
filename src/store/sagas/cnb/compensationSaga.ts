@@ -27,7 +27,7 @@ import {
   putUpdateRequested,
   putUpdateSuccess,
   putUpdateFailed,
-  resetAllState,
+  // resetAllState,
 } from '@/store/reducers/slice/cnb/compensationSlice';
 import { setResponserMessage } from '@/store/reducers/slice/responserSlice';
 import { Services } from '@/types/axios';
@@ -92,7 +92,7 @@ function* fetchGetCompensationComponentOption() {
 // Get Detail CnB
 function* fetchCompensationDetail(action: AnyAction) {
   try {
-    yield put({ type: resetAllState.toString() });
+    // yield put({ type: resetAllState.toString() });
     const res: AxiosResponse = yield call(getDetailCnb, action?.Id);
     if (res.status === 200) {
       yield put({

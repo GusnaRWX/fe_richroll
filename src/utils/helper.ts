@@ -96,7 +96,7 @@ export const getSelectedRoles = () => {
     if (roles) {
       parse = JSON.parse(roles);
       return parse;
-    }else{
+    } else {
       return null;
     }
   }
@@ -109,7 +109,7 @@ export const getSite = () => {
     if (site) {
       parse = JSON.parse(site);
       return parse;
-    }else{
+    } else {
       return null;
     }
   }
@@ -122,7 +122,7 @@ export const getTimezone = () => {
     if (timezone) {
       parse = JSON.parse(timezone);
       return parse;
-    }else{
+    } else {
       return null;
     }
   }
@@ -388,8 +388,8 @@ export const getPaymentType = (id, arrData) => {
 };
 
 export const dynamicPayloadBaseCnb = (arrData, id, value) => {
-  const tempId = arrData.find((el) => el.value === id);
-  switch (tempId.type) {
+  const tempId = arrData.find((el) => el?.value === id);
+  switch (tempId?.type) {
     case 0:
       return {
         componentID: value.compensationComponentId,

@@ -190,6 +190,8 @@ function EmployeeCreateComponent() {
     router.push('/company-management/employees');
   };
 
+  console.log(compensationBenefitsValue, 'memel');
+
   const handleOpen = () => {
     setLeave(true);
   };
