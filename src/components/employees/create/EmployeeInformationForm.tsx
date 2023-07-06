@@ -410,7 +410,7 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, set
         />
         <Grid container spacing={2}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
-            <Text title='Department' mb='6px' />
+            <Typography mb='6px'>Department <AsteriskComponent>*</AsteriskComponent></Typography>
             <Autocomplete
               id='department'
               freeSolo
@@ -489,11 +489,18 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, set
                   )}
                 </Box>
               )}
-              renderInput={(params) => <TextField name='department' {...params} />}
+              renderInput={(params) => (
+                <TextField
+                  name='department'
+                  error={formik.touched.department && Boolean(formik.errors.department)}
+                  helperText={formik.errors.department}
+                  {...params}
+                />
+              )}
             />
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
-            <Text title='Position' mb='6px' />
+            <Typography mb='6px'>Position <AsteriskComponent>*</AsteriskComponent></Typography>
             <Autocomplete
               id='position'
               freeSolo
@@ -565,7 +572,14 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, set
                   )}
                 </Box>
               )}
-              renderInput={(params) => <TextField name='position' {...params} />}
+              renderInput={(params) => (
+                <TextField
+                  name='position'
+                  error={formik.touched.position && Boolean(formik.errors.position)}
+                  helperText={formik.errors.position}
+                  {...params}
+                />
+              )}
             />
           </Grid>
         </Grid>

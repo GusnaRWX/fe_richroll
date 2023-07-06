@@ -12,8 +12,8 @@ export const validationSchemeEmployeeInformation = Yup.object({
   startDate: Yup.date().typeError('This field is required').required(),
   endDate: Yup.string().notRequired(),
   isPermanent: Yup.bool().notRequired(),
-  department: Yup.string().notRequired(),
-  position: Yup.string().notRequired(),
+  department: Yup.string().required('This field is required'),
+  position: Yup.string().required('This field is required'),
   isSelfService: Yup.bool().notRequired()
 });
 
