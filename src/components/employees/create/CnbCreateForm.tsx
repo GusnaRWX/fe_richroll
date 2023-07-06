@@ -39,6 +39,7 @@ interface InitialValues {
   percentage: string | number | null;
   taxStatus: string;
   supplementary: SuplementType[];
+  overtime: string;
 }
 
 interface CnbCreateForm {
@@ -120,6 +121,7 @@ const CnbCreateForm = ({
     percentage: '',
     taxStatus: '',
     supplementary: [],
+    overtime: ''
   });
 
   const cnbDetail = useAppSelectors(state => state?.compensation?.detail?.data);
@@ -168,6 +170,7 @@ const CnbCreateForm = ({
       const payload = {
         templateID: initialValues.templateID,
         name: initialValues.name,
+        overtime: +initialValues.overtime,
         base: tempBase,
         supplementaries: tempSupplementary
       };
@@ -491,6 +494,7 @@ const CnbCreateForm = ({
                 </Grid>
                 {
                   formik.values.compensationComponentId !== '' && (
+                    <>
                     <Grid container mt='16px'>
                       <Grid container spacing={2} alignItems='end'>
                         <Grid item xs={3}>
@@ -551,8 +555,34 @@ const CnbCreateForm = ({
                         </Grid>
                       </Grid>
                     </Grid>
-                  )
-                }
+                    <Grid container mt='16px'>
+                      <Grid item xs={3}>
+                      <Input
+                        withAsterisk
+                        size='small'
+                        customLabel='Rate'
+                        type='number'
+                        name='overtime'
+                        value={formik.values.overtime}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        error={compareCheck(formik.touched.overtime, Boolean(formik.errors.overtime))}
+                        helperText={ifThenElse(compareCheck(formik.touched.overtime, Boolean(formik.errors.overtime)), formik.errors.overtime, '')}
+                        inputProps={{
+                          step: 0.1
+                        }}
+                        InputProps={{
+                          endAdornment: (
+                            <InputAdornment position='end'>
+                              <Text color='grey.500' title='x'/>
+                            </InputAdornment>
+                          )
+                        }}
+                      />
+                    </Grid>
+                    </Grid>
+                    </>
+                  )}
               </>
             )}
             <FieldArray

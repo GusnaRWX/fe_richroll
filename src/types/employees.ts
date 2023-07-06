@@ -205,7 +205,8 @@ export declare namespace Employees {
       rate?: number | string;
       rateType?: number | string;
     },
-    supplementaries: any
+    supplementaries: any;
+    overtime: number;
   }
 
   interface PatchEmployeeInformation {

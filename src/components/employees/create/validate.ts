@@ -86,7 +86,8 @@ export const validationSchemeCompensationBenefits = Yup.object({
       rateOrAmount: Yup.number().required('This is required').positive('Must be positive').integer('Must be number'),
       taxStatus: Yup.string().required('This is required')
     })
-  )
+  ),
+  overtime: Yup.string().required('This field is required')
 });
 export const validationSchemaWorkScheduler = Yup.object({
   workScheduleID: Yup.string().required('This field is required'),
