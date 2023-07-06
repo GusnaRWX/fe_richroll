@@ -35,7 +35,8 @@ interface EmployeeState {
     name: string;
     netHour: number;
     workScheduleId: string | number;
-  }
+  },
+  employeeCnbDetail: object
 }
 
 const initialState: EmployeeState = {
@@ -56,7 +57,8 @@ const initialState: EmployeeState = {
     grossHour: 0,
     netHour: 0,
     workScheduleId: ''
-  }
+  },
+  employeeCnbDetail: {}
 };
 
 export const employeeSlice = createSlice({
@@ -312,6 +314,16 @@ export const employeeSlice = createSlice({
       state.events = [];
       state.grossHour = 0;
       state.netHour = 0;
+    },
+    getEmployeeCnbDetailRequested: state => {
+      state.isLoading = true;
+    },
+    getEmployeeCnbDetailSuccess: (state, action) => {
+      state.isLoading = false;
+      state.employeeCnbDetail = action.payload;
+    },
+    getEmployeeCnbDetailFailed: state => {
+      state.isLoading = false;
     }
   },
   extraReducers: {
@@ -382,7 +394,10 @@ export const {
   clearWorkScheduleState,
   patchWorkScheduleRequested,
   patchWorkScheduleSuccess,
-  patchWorkScheduleFailed
+  patchWorkScheduleFailed,
+  getEmployeeCnbDetailRequested,
+  getEmployeeCnbDetailSuccess,
+  getEmployeeCnbDetailFailed
 } = employeeSlice.actions;
 
 export default employeeSlice.reducer;

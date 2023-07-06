@@ -10,6 +10,7 @@ import EmployeeInformationDetail from './EmployeeInformationDetail';
 import EmergencyContactDetail from './EmergencyContactDetail';
 import EmployeeWorkScheduleDetail from './EmployeeWorkScheduleDetail';
 import { useAppSelectors } from '@/hooks/index';
+import CnbDetail from './CnbDetail';
 
 const TopWrapper = styled.div`
  display: flex;
@@ -143,7 +144,7 @@ function EmployeeDetailComponent() {
             <EmergencyContactDetail data={employee.emergencyContactDetail} />
           </TabPanel>
           <TabPanel value={value} index={3}>
-            on Development
+            <CnbDetail data={employee.employeeCnbDetail} />
           </TabPanel>
           <TabPanel value={value} index={4}>
             <EmployeeWorkScheduleDetail />
