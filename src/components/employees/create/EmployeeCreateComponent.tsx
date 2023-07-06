@@ -61,7 +61,7 @@ const steps = [
   'Employee Information',
   'Personal Information',
   'Emergency Contact',
-  'Compensations & Benefits',
+  'C&B',
   'Work Schedule'
 ];
 
