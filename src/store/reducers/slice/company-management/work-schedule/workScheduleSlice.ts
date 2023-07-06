@@ -149,6 +149,10 @@ export const workScheduleSlice = createSlice({
     patchWorkScheduleFailed: (state) => {
       state.isLoading = false;
     },
+    calculateGrossNet: (state, action) => {
+      state.grossHour = action?.payload?.gross;
+      state.netHour = action?.payload?.net;
+    },
     clearState: (state) => {
       state.events = [];
       state.grossHour = 0;
@@ -187,6 +191,7 @@ export const {
   patchWorkScheduleFailed,
   patchWorkScheduleRequested,
   patchWorkScheduleSuccess,
+  calculateGrossNet,
   clearState
 } = workScheduleSlice.actions;
 

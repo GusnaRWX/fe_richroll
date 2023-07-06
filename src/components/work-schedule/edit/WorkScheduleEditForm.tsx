@@ -9,15 +9,16 @@ import { BsTrashFill } from 'react-icons/bs';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
-import type { SchedulerRef } from '@aldabil/react-scheduler/types';
+import type { ProcessedEvent, SchedulerRef } from '@aldabil/react-scheduler/types';
 import { FieldArray, Formik, Form as FormikForm } from 'formik';
 import { workSchedule } from '@/types/workSchedule';
 import { validationSchemaEditWorkScheduler } from './validate';
 import dayjs from 'dayjs';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
-import { postSimulationEventRequested, getDetailWorkScheduleRequested } from '@/store/reducers/slice/company-management/work-schedule/workScheduleSlice';
+import { postSimulationEventRequested, getDetailWorkScheduleRequested, postCalculateEventRequested } from '@/store/reducers/slice/company-management/work-schedule/workScheduleSlice';
 import { AiOutlineSwapRight } from 'react-icons/ai';
 import { useRouter } from 'next/router';
+import { OverlayLoading} from '@/components/_shared/common';
 
 const AsteriskComponent = styled('span')(({ theme }) => ({
   color: theme.palette.error.main
@@ -93,11 +94,11 @@ function WorkScheduleEditForm({setData}: WorkScheduleFormProps) {
     if (e.target.checked) {
       const temp: Array<number> = [...tempDay, item?.value];
       setDayTemp(temp);
-      formik.setFieldValue('day', tempDay);
+      formik.setFieldValue('day', temp);
     }else{
       const temp = tempDay.filter(v => v !== item?.value);
       setDayTemp(temp);
-      formik.setFieldValue('day', tempDay);
+      formik.setFieldValue('day', temp);
     }
   };
 
@@ -195,11 +196,24 @@ function WorkScheduleEditForm({setData}: WorkScheduleFormProps) {
   }, [workSchedule?.name]);
 
   useEffect(() => {
-    if (rendered) {
-      calendarRef.current?.scheduler.confirmEvent(workSchedule?.events, 'create');
+    if (calendarRef?.current) {
+      const mergeData = [...calendarRef?.current?.scheduler?.events as ProcessedEvent[] || [] as ProcessedEvent[]];
+      const newData = [...mergeData.filter((e) => {
+        const found = workSchedule?.events.some((el) => dayjs(el.start).format('YYYY-MM-DD') === dayjs(e.start).format('YYYY-MM-DD'));
+        if (found) {
+          return false;
+        }
+        return true;
+      }), ...workSchedule?.events as ProcessedEvent[]];
+      dispatch({ type: postCalculateEventRequested.toString(),
+        payload: {
+          items: newData
+        }});
+
+      calendarRef.current?.scheduler.confirmEvent(newData, 'create');
       const dataValues: Array<workSchedule.ItemsPatchWorkScheduleType> = [];
-      const tempArr = calendarRef?.current?.scheduler?.events.concat(workSchedule?.events);
-      tempArr?.map((item) => {
+
+      newData?.map((item) => {
         dataValues.push({
           day: item.day,
           eventId: item.event_id,
@@ -226,6 +240,7 @@ function WorkScheduleEditForm({setData}: WorkScheduleFormProps) {
   }, [workSchedule?.events]);
   return (
     <>
+      <OverlayLoading open={workSchedule?.isLoading} />
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchemaEditWorkScheduler}

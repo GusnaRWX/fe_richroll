@@ -70,18 +70,19 @@ function* fetchPostSimulationEvent(action: AnyAction) {
   try {
     const res: AxiosResponse = yield call(postSimulationEvent, action?.payload);
     if (res.data.code === 200) {
+
       yield put({
         type: postSimulationEventSuccess.toString(), payload: {
           events: res.data.data
         }
       });
-      const data = {
-        type: postCalculateEventRequested.toString(),
-        payload: {
-          items: [...res.data.data]
-        }
-      };
-      yield call(fetchPostCalculateEvent, data);
+      // const data = {
+      //   type: postCalculateEventRequested.toString(),
+      //   payload: {
+      //     items: [...res.data.data]
+      //   }
+      // };
+      // yield call(fetchPostCalculateEvent, data);
 
     }
   } catch (err) {
@@ -169,8 +170,8 @@ function* fetchGetDetailWorkSchedule(action: AnyAction) {
         payload: {
           id: res?.data?.data?.id,
           name: res?.data?.data?.name,
-          grossHour: res?.data?.data?.grossHours,
-          netHour: res?.data?.data?.netHours,
+          grossHour: 0,
+          netHour: 0,
           events: res?.data?.data?.items
         }
       });
@@ -243,6 +244,8 @@ function* fetchPatchUpdateWorkSchedule(action: AnyAction) {
           message: res.data.message
         }
       });
+      yield Router.push('/company-management/work-schedule');
+      yield put({ type: clearState.toString() });
     }
   } catch (err) {
     if (err instanceof AxiosError) {

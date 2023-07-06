@@ -154,7 +154,7 @@ const PersonalInformationPersonalTabComponent = () => {
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            {detailPersonalInfo?.citizen.country?.name}
+            {detailPersonalInfo?.citizen?.country?.name}
           </Typography>
         </Grid>
         <Grid
@@ -268,7 +268,7 @@ const PersonalInformationPersonalTabComponent = () => {
             mb={0.5}
           />
           <Typography fontWeight={400} color='grey.600'>
-            {detailPersonalInfo?.residential.country?.name}
+            {detailPersonalInfo?.residential?.country?.name}
           </Typography>
         </Grid>
         <Grid

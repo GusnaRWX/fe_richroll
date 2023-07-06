@@ -9,13 +9,13 @@ import { BsTrashFill } from 'react-icons/bs';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
-import type { SchedulerRef } from '@aldabil/react-scheduler/types';
+import type { ProcessedEvent, SchedulerRef } from '@aldabil/react-scheduler/types';
 import { FieldArray, Formik, Form as FormikForm } from 'formik';
 import { workSchedule } from '@/types/workSchedule';
 import { validationSchemaWorkScheduler } from './validate';
 import dayjs from 'dayjs';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
-import { postSimulationEventRequested } from '@/store/reducers/slice/company-management/work-schedule/workScheduleSlice';
+import { postSimulationEventRequested, postCalculateEventRequested } from '@/store/reducers/slice/company-management/work-schedule/workScheduleSlice';
 import { OverlayLoading} from '@/components/_shared/common';
 import { getCompanyData } from '@/utils/helper';
 import { AiOutlineSwapRight } from 'react-icons/ai';
@@ -24,14 +24,6 @@ import { AiOutlineSwapRight } from 'react-icons/ai';
 const AsteriskComponent = styled('span')(({ theme }) => ({
   color: theme.palette.error.main
 }));
-
-// const FlexBoxRow = styled('div')(() => ({
-//   display: 'flex',
-//   flexDirection: 'row',
-//   alignItems: 'center',
-//   justifyContent: 'flex-start',
-//   gap: '1rem'
-// }));
 
 interface WorkScheduleFormProps {
   setData: React.Dispatch<React.SetStateAction<workSchedule.PostWorkSchedulePayloadType>>;
@@ -103,11 +95,11 @@ function WorkScheduleCreateForm({ setData, setIsValid }: WorkScheduleFormProps) 
     if (e.target.checked) {
       const temp: Array<number> = [...tempDay, item?.value];
       setDayTemp(temp);
-      formik.setFieldValue('day', tempDay);
+      formik.setFieldValue('day', temp);
     }else{
       const temp = tempDay.filter(v => v !== item?.value);
       setDayTemp(temp);
-      formik.setFieldValue('day', tempDay);
+      formik.setFieldValue('day', temp);
     }
   };
 
@@ -126,7 +118,7 @@ function WorkScheduleCreateForm({ setData, setIsValid }: WorkScheduleFormProps) 
       }
         break;
       case '2': {
-        const temp: Array<number> = [5, 6,];
+        const temp: Array<number> = [5, 6];
         formik.setFieldValue('day', temp);
         return setDayTemp(temp);
       }
@@ -192,33 +184,50 @@ function WorkScheduleCreateForm({ setData, setIsValid }: WorkScheduleFormProps) 
   };
 
   useEffect(() => {
-    calendarRef.current?.scheduler.confirmEvent(workSchedule?.events, 'create');
-    const dataValues: Array<workSchedule.ItemsWorkScheduleType> = [];
-    workSchedule?.events.map((item) => {
-      dataValues.push({
-        day: item.day,
-        eventId: item.event_id,
-        label: item.title,
-        name: item.name,
-        start: dayjs(item.start).toISOString(),
-        end: dayjs(item.end).toISOString(),
-        isBreak: item.isBreak,
-        isDuration: item.isDuration,
-        color: item.color,
-        duration: item.duration,
-        allDay: item.allDay,
-        scheduleType: item.scheduleType,
-        type: item.type
-      });
-    });
-    setData({
-      companyID: getCompanyData()?.id?.toString() as string,
-      name: tempName,
-      grossHours: workSchedule?.grossHour,
-      netHours: workSchedule?.netHour,
-      items: dataValues
-    });
+    if (calendarRef?.current){
+      const mergeData = [...calendarRef?.current?.scheduler?.events as ProcessedEvent[] || [] as ProcessedEvent[]];
+      const newData = [...mergeData.filter((e) => {
+        const found = workSchedule?.events.some((el) => dayjs(el.start).format('YYYY-MM-DD') === dayjs(e.start).format('YYYY-MM-DD'));
+        if (found) {
+          return false;
+        }
+        return true;
+      }), ...workSchedule?.events as ProcessedEvent[]];
+      dispatch({ type: postCalculateEventRequested.toString(),
+        payload: {
+          items: newData
+        }});
 
+      calendarRef.current?.scheduler.confirmEvent(newData, 'create');
+      const dataValues: Array<workSchedule.ItemsWorkScheduleType> = [];
+      //const tempArr = calendarRef?.current?.scheduler?.events.concat(workSchedule?.events);
+      console.log(newData);
+      newData?.map((item) => {
+        dataValues.push({
+          day: item.day,
+          eventId: item.event_id,
+          label: item.title,
+          name: item.name,
+          start: dayjs(item.start).toISOString(),
+          end: dayjs(item.end).toISOString(),
+          isBreak: item.isBreak,
+          isDuration: item.isDuration,
+          color: item.color,
+          duration: item.duration,
+          allDay: item.allDay,
+          scheduleType: item.scheduleType,
+          type: item.type
+        });
+      });
+      setData({
+        companyID: getCompanyData()?.id?.toString() as string,
+        name: tempName,
+        grossHours: workSchedule?.grossHour,
+        netHours: workSchedule?.netHour,
+        items: dataValues
+      });
+      // setArrTempEvent(dataValues);
+    }
   }, [workSchedule?.events]);
 
   useEffect(() => {
@@ -315,6 +324,8 @@ function WorkScheduleCreateForm({ setData, setIsValid }: WorkScheduleFormProps) 
                   events={[]}
                   navigation={false}
                   day={null}
+                  editable={false}
+                  deletable={false}
                   month={null}
                   week={{
                     weekDays: [0, 1, 2, 3, 4, 5, 6],
@@ -394,7 +405,6 @@ function WorkScheduleCreateForm({ setData, setIsValid }: WorkScheduleFormProps) 
                             <FormControlLabel
                               sx={{ marginRight: '1.7rem' }}
                               key={item.label}
-                              value={item.value}
                               control={
                                 <Checkbox
                                   onChange={(e) => onSelectedDay(formik, item, e)}
@@ -438,6 +448,7 @@ function WorkScheduleCreateForm({ setData, setIsValid }: WorkScheduleFormProps) 
                             <TimePicker
                               ampm={false}
                               value={formik.values.endHour}
+                              minTime={formik.values.startHour}
                               onChange={(val) => formik.setFieldValue('endHour', val, true)}
                               sx={{
                                 '& .MuiOutlinedInput-input': {
@@ -513,6 +524,8 @@ function WorkScheduleCreateForm({ setData, setIsValid }: WorkScheduleFormProps) 
                                               <TimePicker
                                                 ampm={false}
                                                 value={item?.start}
+                                                minTime={formik.values.startHour}
+                                                maxTime={formik.values.endHour}
                                                 onChange={(val) => formik.setFieldValue(`breakItem.${index}.start`, val, true)}
                                                 sx={{
                                                   '& .MuiOutlinedInput-input': {
@@ -532,6 +545,8 @@ function WorkScheduleCreateForm({ setData, setIsValid }: WorkScheduleFormProps) 
                                               <TimePicker
                                                 ampm={false}
                                                 value={item?.end}
+                                                minTime={formik.values.startHour}
+                                                maxTime={formik.values.endHour}
                                                 onChange={(val) => formik.setFieldValue(`breakItem.${index}.end`, val, true)}
                                                 sx={{
                                                   '& .MuiOutlinedInput-input': {
