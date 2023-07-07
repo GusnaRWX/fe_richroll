@@ -12,11 +12,16 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
 export default function CreateDesignedTransferAccount() {
+  // Translation Key
+  const {t} = useTranslation();
+  const t_key = 'satutory_benefit.component.form_&_detail.create_designed_transfer_account';
+
   const [account, setAccount] = useState('central');
 
   const AsteriskComponent = styled('span')(({ theme }) => ({
@@ -76,7 +81,7 @@ export default function CreateDesignedTransferAccount() {
       <Typography
         style={{ color: '#223567', fontWeight: 700, fontSize: '16px' }}
       >
-        Bank Information
+        {t(`${t_key}.form_title`)}
       </Typography>
       <Box
         component='div'
@@ -87,17 +92,17 @@ export default function CreateDesignedTransferAccount() {
             <FormControlLabel
               value='central'
               control={<Radio />}
-              label='Central Account'
+              label={t(`${t_key}.type_option.central_account`)}
             />
             <FormControlLabel
               value='individual'
               control={<Radio />}
-              label='Individual Account'
+              label={t(`${t_key}.type_option.individual_account`)}
             />
             <FormControlLabel
               value='company'
               control={<Radio />}
-              label='Company Account Only'
+              label={t(`${t_key}.type_option.company_account_only`)}
             />
           </RadioGroup>
         </Box>
@@ -123,8 +128,7 @@ export default function CreateDesignedTransferAccount() {
             color: '#223567',
           }}
         >
-          The Designated Transfer Account is added manually to each employee’s
-          profile
+          {t(`${t_key}.message`)}
         </Typography>
       </Box>
 
@@ -134,7 +138,7 @@ export default function CreateDesignedTransferAccount() {
             component='div'
             sx={{ color: '#374151', fontWeight: 400 }}
           >
-            Bank <AsteriskComponent>*</AsteriskComponent>
+            {t(`${t_key}.bank`)} <AsteriskComponent>*</AsteriskComponent>
           </Typography>
 
           <Select
@@ -163,12 +167,12 @@ export default function CreateDesignedTransferAccount() {
             component='div'
             sx={{ color: '#374151', fontWeight: 400 }}
           >
-            Bank Account Holder`s Name &nbsp;
+            {t(`${t_key}.bank_account_holders_name`)} &nbsp;
             <AsteriskComponent>*</AsteriskComponent>
           </Typography>
           <Input
             size='small'
-            placeholder='Input Bank Account Holders Name'
+            placeholder={t(`${t_key}.bank_account_holders_name_placeholder`)}
             disabled={account !== 'central'}
             sx={
               account !== 'central'
@@ -190,11 +194,11 @@ export default function CreateDesignedTransferAccount() {
             component='div'
             sx={{ color: '#374151', fontWeight: 400 }}
           >
-            Bank Account No <AsteriskComponent>*</AsteriskComponent>
+            {t(`${t_key}.bank_account_no`)} <AsteriskComponent>*</AsteriskComponent>
           </Typography>
           <Input
             size='small'
-            placeholder='Input Bank Account No.'
+            placeholder={t(`${t_key}.bank_account_no_placeholder`)}
             disabled={account !== 'central'}
             sx={
               account !== 'central'
@@ -222,11 +226,11 @@ export default function CreateDesignedTransferAccount() {
               component='div'
               sx={{ color: '#374151', fontWeight: 400 }}
             >
-              Bank Code
+              {t(`${t_key}.bank_code`)}
             </Typography>
             <Input
               size='small'
-              placeholder='Input Bank Code'
+              placeholder={t(`${t_key}.bank_code_placeholder`)}
               disabled={account !== 'central'}
               sx={
                 account !== 'central'
@@ -244,11 +248,11 @@ export default function CreateDesignedTransferAccount() {
               component='div'
               sx={{ color: '#374151', fontWeight: 400 }}
             >
-              Branch Code
+              {t(`${t_key}.branch_code`)}
             </Typography>
             <Input
               size='small'
-              placeholder='Input Branch Code'
+              placeholder={t(`${t_key}.branch_code_placeholder`)}
               disabled={account !== 'central'}
               sx={
                 account !== 'central'
@@ -273,12 +277,12 @@ export default function CreateDesignedTransferAccount() {
             component='div'
             sx={{ color: '#374151', fontWeight: 400 }}
           >
-            Branch Name
+            {t(`${t_key}.branch_name`)}
           </Typography>
 
           <Input
             size='small'
-            placeholder='Input Branch Name'
+            placeholder={t(`${t_key}.branch_name_placeholder`)}
             disabled={account !== 'central'}
             sx={
               account !== 'central'
@@ -297,12 +301,12 @@ export default function CreateDesignedTransferAccount() {
             component='div'
             sx={{ color: '#374151', fontWeight: 400 }}
           >
-            Swift Code
+            {t(`${t_key}.swift_code`)}
           </Typography>
 
           <Input
             size='small'
-            placeholder='Input Swift Code'
+            placeholder={t(`${t_key}.swift_code_placeholder`)}
             disabled={account !== 'central'}
             sx={
               account !== 'central'
@@ -323,11 +327,11 @@ export default function CreateDesignedTransferAccount() {
           component='div'
           sx={{ marginBottom: '7px', color: '#374151', fontWeight: 700 }}
         >
-          Notes
+          {t(`${t_key}.notes`)}
         </Typography>
         <Input
           size='small'
-          placeholder='Input Notes'
+          placeholder={t(`${t_key}.notes_placeholder`)}
           required
           sx={{
             color: '#6B7280',
@@ -339,7 +343,7 @@ export default function CreateDesignedTransferAccount() {
         <FormHelperText
           sx={{ fontWeight: 500, color: '#6B7280', fontSize: '14px' }}
         >
-          Max.100 Character
+          {t(`${t_key}.max_char_info`)}
         </FormHelperText>
       </Box>
     </>

@@ -248,7 +248,7 @@
 
 
 
-  "satutory-benefit": {
+  "satutory_benefit": {
     "component": {
       "title": "Dasbor Komponen Manfaat Wajib",
       "detail_title": "Komponen Tunjangan Hukum",
@@ -258,7 +258,8 @@
         "contributors": "Kontributor(S)",
         "rate_type": "Jenis Tarif",
         "created_on": "Dibuat pada",
-        "last_update": "Pembaharuan Terakhir"
+        "last_update": "Pembaharuan Terakhir",
+        "action" : ""
       },
       "form_&_detail": {
         "dashboard_title": "Tambahkan Komponen Baru",
@@ -266,19 +267,6 @@
           "basic_detail": "Detil Dasar",
           "designed_transfer_account": "Akun Transfer yang dirancang",
           "rate": "Kecepatan"
-        },
-        "create_basic_detail": {
-          "detail_title": "Detil Dasar",
-          "name": "Nama Satutori",
-          "name_placeholder": "Masukkan Nama Manfaat Satutori",
-          "country": "Negara",
-          "province": "Propinsi",
-          "city": "Kota",
-          "sub_district": "Kecamatan",
-          "citation": "Kutipan",
-          "internal_notes": "Catatan Internal",
-          "external_notes": "Catatan Eksternal",
-          "max_char_info": "Maks. "
         },
         "create_designed_transfer_account": {
           "form_title": "Informasi bank",
@@ -288,23 +276,29 @@
             "individual_account": "Akun Perorangan",
             "company_account_only": "Akun Perusahaan Saja"
           },
-          "information": "Rekening Transfer yang Ditunjuk ditambahkan secara manual ke profil setiap karyawan",
+          "information": "Rekening Transfer yang Ditunjuk ditambahkan secara manual ke setiap profil karyawan",
           "bank": "Bank",
           "bank_account_holders_name": "Nama Pemegang Rekening Bank",
+          "bank_account_holders_name_placeholder": "Masukkan Nama Pemegang Rekening Bank",
           "bank_account_no": "Nomor Rekening Bank",
+          "bank_account_no_placeholder": "Masukkan No Rekening Bank",
           "bank_code": "Kode Bank",
+          "bank_code_placeholder": "Masukkan Kode Bank",
           "branch_code": "Kode cabang",
+          "branch_code_placeholder": "Masukkan Kode Cabang",
           "branch_name": "Nama cabang",
+          "branch_name_placeholder": "Masukkan Nama Cabang",
           "swift_code": "Tukar Kode",
+          "swift_code_placeholder": "Masukkan Kode Swift",
           "notes": "Catatan",
+          "notes_placeholder": "Catatan Masukan",
           "bank_info": "Informasi bank",
-          "central_account": "Akun Tengah",
-          "individual_account": "Akun Perorangan",
-          "company_account": "Akun Perusahaan Saja",
-          "message": "Rekening Transfer yang Ditunjuk ditambahkan secara manual ke profil setiap karyawan"
+          "message": "Rekening Transfer yang Ditunjuk ditambahkan secara manual ke setiap profil karyawan",
+          "max_char_info": "Maks. "
         },
         "rates": {
           "contributor_option": {
+            "label": "Penyumbang",
             "employee": "Karyawan",
             "employer": "Pemberi pekerjaan"
           },

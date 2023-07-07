@@ -248,7 +248,7 @@
 
 
 
-  "satutory-benefit": {
+  "satutory_benefit": {
     "component": {
       "title": "法定福利组件仪表板",
       "detail_title": "法定福利成分",
@@ -258,7 +258,8 @@
         "contributors": "贡献者(S)",
         "rate_type": "费率类型",
         "created_on": "创建于",
-        "last_update": "最后更新"
+        "last_update": "最后更新",
+        "action" : ""
       },
       "form_&_detail": {
         "dashboard_title": "添加新组件",
@@ -291,20 +292,26 @@
           "information": "指定转账账户手动添加到每个员工的个人资料中",
           "bank": "银行",
           "bank_account_holders_name": "银行账户持有人姓名",
+          "bank_account_holders_name_placeholder": "输入银行账户持有人姓名",
           "bank_account_no": "银行帐号",
+          "bank_account_no_placeholder": "输入银行帐号",
           "bank_code": "银行代码",
+          "bank_code_placeholder": "输入银行代码",
           "branch_code": "分行代码",
+          "branch_code_placeholder": "输入分行代码",
           "branch_name": "分店名称",
+          "branch_name_placeholder": "输入分行名称",
           "swift_code": "SWIFT代码",
+          "swift_code_placeholder": "输入 Swift 代码",
           "notes": "笔记",
+          "notes_placeholder": "输入注释",
           "bank_info": "银行信息",
-          "central_account": "中央账户",
-          "individual_account": "个人账户",
-          "company_account": "仅限公司帐户",
-          "message": "指定转账账户手动添加到每个员工的个人资料中"
+          "message": "指定转账账户手动添加到每个员工的个人资料中",
+          "max_char_info": "最大限度。 "
         },
         "rates": {
           "contributor_option": {
+            "label": "贡献者",
             "employee": "员工",
             "employer": "雇主"
           },

@@ -17,6 +17,7 @@ import {
 } from '@mui/material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { useTranslation } from 'react-i18next';
 
 const rates = [
   {
@@ -42,6 +43,11 @@ const rates = [
 ];
 
 export default function CreateRates() {
+  // Translation Key
+  const {t} = useTranslation();
+  const t_key = 'satutory_benefit.component.form_&_detail.rates';
+  const t_buttonKey = 'satutory_benefit.component.button';
+
   const initialValues = {
     employee: true,
     employer: false,
@@ -116,7 +122,7 @@ export default function CreateRates() {
   return (
     <>
       <Box component='div' sx={{ p: '16px' }}>
-        <Typography sx={{color: 'grey.700', fontWeight: 400, display: 'block', marginBottom: '15px'}}>Contributor<AsteriskComponent>*</AsteriskComponent></Typography>
+        <Typography sx={{color: 'grey.700', fontWeight: 400, display: 'block', marginBottom: '15px'}}>{t(`${t_key}.contributor_option.label`)}<AsteriskComponent>*</AsteriskComponent></Typography>
         <FormGroup sx={{ display: 'inline', bgcolor: 'red' }}>
           <FormControlLabel
             control={
@@ -127,7 +133,7 @@ export default function CreateRates() {
                 }
               />
             }
-            label='Employee'
+            label={t(`${t_key}.contributor_option.employee`)}
           />
           <FormControlLabel
             control={
@@ -138,13 +144,13 @@ export default function CreateRates() {
                 }
               />
             }
-            label='Employer'
+            label={t(`${t_key}.contributor_option.employer`)}
             sx={{ ml: '50px' }}
           />
           {formik.values.employee && formik.values.employer && (
             <Box margin='32px 0'>
               <FormControlLabel
-                label='Employer Match Rule'
+                label={t(`${t_key}.match_rule_button`)}
                 control={
                   <Switch
                     value={formik.values.employerMatch}
@@ -159,7 +165,7 @@ export default function CreateRates() {
         </FormGroup>
 
         {!formik.values.employee || !formik.values.employer ? (
-          <Typography sx={{color: '#223567', fontWeight: 700, marginTop: '36px', marginBottom: '30px'}}>Rates</Typography>
+          <Typography sx={{color: '#223567', fontWeight: 700, marginTop: '36px', marginBottom: '30px'}}>{t(`${t_key}.sub_title`)}</Typography>
         ) : null}
 
         <Box display='flex' flexDirection='column' gap='32px'>
@@ -180,10 +186,10 @@ export default function CreateRates() {
               {formik.values.employee && formik.values.employer && (
                 <>
                   <Typography color='#223567' fontWeight='700' fontSize={18}>
-                  Employee<AsteriskComponent>*</AsteriskComponent>
+                    {t(`${t_key}.contributor_option.employee`)}<AsteriskComponent>*</AsteriskComponent>
                   </Typography>
                   <Typography color='#223567' fontWeight='700'>
-                  Rates<AsteriskComponent>*</AsteriskComponent>
+                    {t(`${t_key}.sub_title`)}<AsteriskComponent>*</AsteriskComponent>
                   </Typography>
                 </>
               )}
@@ -213,7 +219,7 @@ export default function CreateRates() {
                   <Box component='div'  sx={{width: '100%'}}>
                     <Input
                       withAsterisk
-                      customLabel='Start'
+                      customLabel={t(`${t_key}.start`)}
                       size='small'
                       value={formik.values.employeeData.start}
                       onChange={(e) => {
@@ -231,7 +237,7 @@ export default function CreateRates() {
                   <Box component='div' sx={{width: '100%'}}>
                     <Input
                       withAsterisk
-                      customLabel='End'
+                      customLabel={t(`${t_key}.end`)}
                       size='small'
                       value={formik.values.employeeData.end}
                       onChange={(e) => {
@@ -271,7 +277,7 @@ export default function CreateRates() {
                         formik.setFieldValue('employeeData.rate', e.target.value)
                       }
                       size='small'
-                      customLabel='Rate'
+                      customLabel={t(`${t_key}.sub_title`)}
                       withAsterisk
                       endAdornment={
                         <InputAdornment position='end' sx={{ mr: '20px' }}>
@@ -289,7 +295,7 @@ export default function CreateRates() {
                   <Box component='div' sx={{width: '100%'}}>
                     <Input
                       withAsterisk
-                      customLabel='Additional Fixed Amount'
+                      customLabel={t(`${t_key}.additional_fixed_amount`)}
                       placeholder='Rp 0'
                       size='small'
                       value={formik.values.employeeData.fixed}
@@ -308,7 +314,7 @@ export default function CreateRates() {
                 <Grid item xs={6}>
                   <Box component='div'>
                     <Input
-                      customLabel='Amount Cap'
+                      customLabel={t(`${t_key}.amount_cap`)}
                       placeholder='Rp 0'
                       size='small'
                       value={
@@ -349,10 +355,10 @@ export default function CreateRates() {
               {formik.values.employee && formik.values.employer && (
                 <>
                   <Typography color='#223567' fontWeight='700' fontSize={18}>
-                  Employer<AsteriskComponent>*</AsteriskComponent>
+                    {t(`${t_key}.contributor_option.employer`)}<AsteriskComponent>*</AsteriskComponent>
                   </Typography>
                   <Typography color='#223567' fontWeight='700'>
-                  Rates<AsteriskComponent>*</AsteriskComponent>
+                    {t(`${t_key}.sub_title`)}<AsteriskComponent>*</AsteriskComponent>
                   </Typography>
                 </>
               )}
@@ -382,7 +388,7 @@ export default function CreateRates() {
                   <Box component='div'  sx={{width: '100%'}}>
                     <Input
                       withAsterisk
-                      customLabel='Start'
+                      customLabel={t(`${t_key}.start`)}
                       size='small'
                       value={formik.values.employerData.start}
                       onChange={(e) =>
@@ -399,7 +405,7 @@ export default function CreateRates() {
                   <Box component='div' sx={{width: '100%'}}>
                     <Input
                       withAsterisk
-                      customLabel='End'
+                      customLabel={t(`${t_key}.end`)}
                       size='small'
                       value={formik.values.employerData.end}
                       onChange={(e) =>
@@ -438,7 +444,7 @@ export default function CreateRates() {
                         formik.setFieldValue('employerData.rate', e.target.value)
                       }
                       size='small'
-                      customLabel='Rate'
+                      customLabel={t(`${t_key}.sub_title`)}
                       withAsterisk
                       endAdornment={
                         <InputAdornment position='end' sx={{ mr: '20px' }}>
@@ -456,7 +462,7 @@ export default function CreateRates() {
                   <Box component='div' sx={{width: '100%'}}>
                     <Input
                       withAsterisk
-                      customLabel='Additional Fixed Amount'
+                      customLabel={t(`${t_key}.additional_fixed_amount`)}
                       placeholder='Rp 0'
                       size='small'
                       value={formik.values.employerData.fixed}
@@ -475,7 +481,7 @@ export default function CreateRates() {
                 <Grid item xs={6}>
                   <Box component='div'>
                     <Input
-                      customLabel='Amount Cap'
+                      customLabel={t(`${t_key}.amount_cap`)}
                       placeholder='Rp 0'
                       size='small'
                       value={
@@ -511,14 +517,14 @@ export default function CreateRates() {
           <Button
             sx={{ boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.5)', color: '#374151' }}
           >
-          Back
+            {t(`${t_buttonKey}.back`)}
           </Button>
           <Button
             sx={{ boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.5)' }}
             variant='contained'
             onClick={() => formik.submitForm()}
           >
-          Save
+            {t(`${t_buttonKey}.save`)}
           </Button>
         </Grid>
       </Box>

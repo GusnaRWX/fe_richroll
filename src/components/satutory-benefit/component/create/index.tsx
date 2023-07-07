@@ -12,17 +12,12 @@ import { styled } from '@mui/material/styles';
 import { useRouter } from 'next/router';
 import CustomModal from '@/components/_shared/common/CustomModal';
 import { ifThenElse } from '@/utils/helper';
+import { useTranslation } from 'react-i18next';
 
 // Import Create Component :
 import CreateBasicDetailComponent from './CreateBasicDetail';
 import CreateDesignedTransferAccount from './CreateDesignedTransferAccount';
 import CreateRates from './CreateRates';
-
-const steps = [
-  'Basic Detail',
-  'Designed Detail Component',
-  'Rates',
-];
 
 const ButtonWrapper = styled(Box)(({
   display: 'flex',
@@ -40,6 +35,11 @@ const ContentWrapper = styled(Card)(({
 }));
 
 function CreateNewComponent() {
+  // Translation key :
+  const {t} = useTranslation();
+  const t_buttonKey = 'satutory_benefit.component.button';
+  const t_key = 'satutory_benefit.component.form_&_detail';
+
   const router = useRouter();
   const [value, setValue] = useState(0);
   const [open, setOpen] = useState(false);
@@ -53,11 +53,17 @@ function CreateNewComponent() {
     router.push('/income-tax-profile/deductable-component');
   };
 
+  const steps = [
+    t(`${t_key}.wizard_option.basic_detail`),
+    t(`${t_key}.wizard_option.designed_transfer_account`),
+    t(`${t_key}.wizard_option.rate`),
+  ];
+
   return (
     <>
       <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
         <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
-          <Typography variant='h6' color='#4B5563'><b>Add New Component</b></Typography>
+          <Typography variant='h6' color='#4B5563'><b>{t(`${t_key}.dashboard_title`)}</b></Typography>
         </Grid>
         <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
           <ButtonWrapper>
@@ -73,7 +79,7 @@ function CreateNewComponent() {
                   setOpen(true);
                 }
               }}
-            >{ifThenElse(value < 2, 'Cancel', 'Save & Exit')}</MuiButton>
+            >{t(`${t_buttonKey}.cancel`)}</MuiButton>
             <MuiButton
               variant='contained'
               size='small'
@@ -87,7 +93,7 @@ function CreateNewComponent() {
                   setOpen(true);
                 }
               }}
-            >{ifThenElse(value == 0, 'Create Designed Transfer Account', ifThenElse(value == 1, 'Create Rates',  'Mark All Paid and Complete'))}</MuiButton>
+            >{t(`${t_buttonKey}.save`)}</MuiButton>
           </ButtonWrapper>
         </Grid>
       </Grid>
@@ -152,7 +158,7 @@ function CreateNewComponent() {
       <CustomModal
         open={open}
         handleClose={handleClose}
-        title={ifThenElse(isExit, 'Save & Exit', 'Mark all paid and Complete')}
+        title={ifThenElse(isExit, t(`${t_buttonKey}.cancel`), t(`${t_buttonKey}.save`))}
         width='543px'
         handleConfirm={handleConfirm}
       >

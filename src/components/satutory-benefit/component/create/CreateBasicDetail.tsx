@@ -3,10 +3,14 @@ import { Grid, Typography } from '@mui/material';
 import {  Input, Select, Textarea } from '@/components/_shared/form';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-
+import { useTranslation } from 'react-i18next';
 
 
 export default function CreateBasicDetailComponent() {
+  // Translation Key
+  const {t} = useTranslation();
+  const t_key = 'satutory_benefit.component.form_&_detail.create_basic_detail';
+
   const Dummyoption = [
     { value: '1', label: 'Dummy 1' },
     { value: '2', label: 'Dummy 2' },
@@ -46,8 +50,8 @@ export default function CreateBasicDetailComponent() {
       <Grid container spacing={2}>
         <Grid item xs={12} md={12} lg={6} xl={6}>
           <Input
-            placeholder='Input Statutory Benefits Name'
-            customLabel='Satutory Name'
+            placeholder={t(`${t_key}.name_placeholder`)}
+            customLabel={t(`${t_key}.name`)}
             withAsterisk
             size='small'
             value={formik.values.satutoryName}
@@ -63,7 +67,7 @@ export default function CreateBasicDetailComponent() {
         <Grid item xs={6} md={6} lg={6} xl={6}>
           <Select
             placeholder='Select Country'
-            customLabel='Country'
+            customLabel={t(`${t_key}.country`)}
             withAsterisk
             size='small'
             fullWidth
@@ -78,7 +82,7 @@ export default function CreateBasicDetailComponent() {
         <Grid item xs={6} md={6} lg={6} xl={6}>
           <Select
             placeholder='Select Province'
-            customLabel='Province'
+            customLabel={t(`${t_key}.province`)}
             size='small'
             fullWidth
             options={Dummyoption}
@@ -92,7 +96,7 @@ export default function CreateBasicDetailComponent() {
         <Grid item xs={6} md={6} lg={6} xl={6}>
           <Select
             placeholder='Select City'
-            customLabel='City'
+            customLabel={t(`${t_key}.city`)}
             size='small'
             fullWidth
             options={Dummyoption}
@@ -103,7 +107,7 @@ export default function CreateBasicDetailComponent() {
         <Grid item xs={6} md={6} lg={6} xl={6}>
           <Select
             placeholder='Select Country'
-            customLabel='Sub-District'
+            customLabel={t(`${t_key}.sub_district`)}
             size='small'
             fullWidth
             options={Dummyoption}
@@ -116,7 +120,7 @@ export default function CreateBasicDetailComponent() {
       <Grid container spacing={2} style={{marginTop: '12px'}}>
         <Grid item xs={12} md={12} lg={12} xl={12}>
           <Textarea
-            customLabel='Citation'
+            customLabel={t(`${t_key}.citation`)}
             minRows={4}
             style={{ resize: 'vertical' }}
             value={formik.values.citation}
@@ -129,7 +133,7 @@ export default function CreateBasicDetailComponent() {
               color: '#6B7280',
             }}
           >
-            Max. 120 Character
+            {t(`${t_key}.max_char_info`)}
           </Typography>
         </Grid>
       </Grid>
@@ -137,7 +141,7 @@ export default function CreateBasicDetailComponent() {
       <Grid container spacing={2} style={{marginTop: '12px'}}>
         <Grid item xs={12} md={12} lg={12} xl={12}>
           <Textarea
-            customLabel='Internal Notes'
+            customLabel={t(`${t_key}.internal_notes`)}
             minRows={4}
             style={{ resize: 'vertical' }}
             value={formik.values.internalNotes}
@@ -150,7 +154,7 @@ export default function CreateBasicDetailComponent() {
               color: '#6B7280',
             }}
           >
-            Max. 120 Character
+            {t(`${t_key}.name_placeholder`)}
           </Typography>
         </Grid>
       </Grid>
@@ -158,7 +162,7 @@ export default function CreateBasicDetailComponent() {
       <Grid container spacing={2} style={{marginTop: '12px'}}>
         <Grid item xs={12} md={12} lg={12} xl={12}>
           <Textarea
-            customLabel='External Notes'
+            customLabel={t(`${t_key}.external_notes`)}
             minRows={4}
             style={{ resize: 'vertical' }}
             value={formik.values.externalNotes}
@@ -171,7 +175,7 @@ export default function CreateBasicDetailComponent() {
               color: '#6B7280',
             }}
           >
-            Max. 120 Character
+            {t(`${t_key}.name_placeholder`)}
           </Typography>
         </Grid>
       </Grid>

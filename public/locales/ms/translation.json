@@ -248,7 +248,7 @@
 
 
 
-  "satutory-benefit": {
+  "satutory_benefit": {
     "component": {
       "title": "Papan Pemuka Komponen Faedah Berkanun",
       "detail_title": "Komponen Faedah Berkanun",
@@ -258,7 +258,8 @@
         "contributors": "Penyumbang",
         "rate_type": "Jenis Kadar",
         "created_on": "Dicipta pada",
-        "last_update": "Kemaskini terakhir"
+        "last_update": "Kemaskini terakhir",
+        "action" : ""
       },
       "form_&_detail": {
         "dashboard_title": "Tambah Komponen Baharu",
@@ -288,23 +289,29 @@
             "individual_account": "Akaun Individu",
             "company_account_only": "Akaun Syarikat Sahaja"
           },
-          "information": "Akaun Pemindahan Ditetapkan ditambah secara manual pada profil setiap pekerja",
+          "information": "Akaun Pemindahan Ditetapkan ditambah secara manual pada setiap profil pekerja",
           "bank": "Bank",
           "bank_account_holders_name": "Nama Pemegang Akaun Bank",
+          "bank_account_holders_name_placeholder": "Masukkan Nama Pemegang Akaun Bank",
           "bank_account_no": "Akaun Bank No",
+          "bank_account_no_placeholder": "Masukkan No Akaun Bank",
           "bank_code": "Kod bank",
+          "bank_code_placeholder": "Input Kod Bank",
           "branch_code": "Kod Cawangan",
+          "branch_code_placeholder": "Kod Cawangan Input",
           "branch_name": "Nama cawangan",
+          "branch_name_placeholder": "Input Nama Cawangan",
           "swift_code": "Kod pantas",
+          "swift_code_placeholder": "Masukkan Kod Swift",
           "notes": "Nota",
+          "notes_placeholder": "Nota Input",
           "bank_info": "Maklumat bank",
-          "central_account": "Akaun Pusat",
-          "individual_account": "Akaun Individu",
-          "company_account": "Akaun Syarikat Sahaja",
-          "message": "Akaun Pemindahan Ditetapkan ditambah secara manual pada profil setiap pekerja"
+          "message": "Akaun Pemindahan Ditetapkan ditambah secara manual pada setiap profil pekerja",
+          "max_char_info": "Maks. "
         },
         "rates": {
           "contributor_option": {
+            "label": "Penyumbang",
             "employee": "Pekerja",
             "employer": "Majikan"
           },

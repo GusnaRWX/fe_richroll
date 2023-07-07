@@ -249,7 +249,7 @@
 
 
 
-  "satutory-benefit" : {
+  "satutory_benefit" : {
     "component" : {
       "title" : "Statutory Benefits Components Dashboard",
       "detail_title" : "Statutory Benefit Component",
@@ -259,7 +259,8 @@
         "contributors" : "Contributor(S)",
         "rate_type" : "Rate Type",
         "created_on" : "Created On",
-        "last_update" : "Last Update"
+        "last_update" : "Last Update",
+        "action" : ""
       },
       "form_&_detail" : {
         "dashboard_title" : "Add New Component",
@@ -289,23 +290,29 @@
             "individual_account" :"Individual Account",
             "company_account_only" : "Company Account Only"
           },
-          "information" : "The Designated Transfer Account is added manually to each employee’s profile",
+          "information" : "The Designated Transfer Account is added manually to each employees profile",
           "bank" :"Bank",
           "bank_account_holders_name": "Bank Account Holders Name",
+          "bank_account_holders_name_placeholder": "Input Bank Account Holders Name",
           "bank_account_no": "Bank Account No",
+          "bank_account_no_placeholder": "Input Bank Account No.",
           "bank_code": "Bank Code",
+          "bank_code_placeholder": "Input Bank Code",
           "branch_code": "Branch Code",
+          "branch_code_placeholder": "Input Branch Code",
           "branch_name": "Branch Name",
+          "branch_name_placeholder": "Input Branch Name",
           "swift_code": "Swift Code",
+          "swift_code_placeholder": "Input Swift Code",
           "notes": "Notes",
+          "notes_placeholder": "Input Notes",
           "bank_info": "Bank Information",
-          "central_account": "Central Account",
-          "individual_account": "Individual Account",
-          "company_account": "Company Account Only",
-          "message": "The Designated Transfer Account is added manually to each employee’s profile"
+          "message": "The Designated Transfer Account is added manually to each employees profile",
+          "max_char_info" : "Max. 100 Character"
         },
         "rates" : {
           "contributor_option" : {
+            "label" : "Contributor",
             "employee" : "Employee",
             "employer" : "Employer"
           },
@@ -330,6 +337,7 @@
         "next" : "Next",
         "back" : "Back",
         "confirm" : "Confirm"
+
       },
       "modal" : {
         "delete" : {
