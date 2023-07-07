@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Input, Select, RadioGroup, IconButton } from '@/components/_shared/form';
-import { Button as MuiButton, Grid, InputAdornment, Typography, Button, Stack, FormGroup, FormControlLabel, Checkbox } from '@mui/material';
+import { Input, Select, RadioGroup, IconButton, Button } from '@/components/_shared/form';
+import { Button as MuiButton, Grid, InputAdornment, Typography, Stack, FormGroup, FormControlLabel, Checkbox } from '@mui/material';
 import { Add } from '@mui/icons-material';
 import { Scheduler } from '@aldabil/react-scheduler';
 import CustomModal from '@/components/_shared/common/CustomModal';
@@ -14,7 +14,7 @@ import { Employees } from '@/types/employees';
 import { validationSchemaWorkScheduler } from './validate';
 import dayjs from 'dayjs';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
-import { OverlayLoading, Alert } from '@/components/_shared/common';
+import { Alert } from '@/components/_shared/common';
 import { compareCheck, ifThenElse } from '@/utils/helper';
 import { getDetailWorkScheduleRequested, postSimulationEventRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
 import { Cancel } from '@mui/icons-material';
@@ -35,7 +35,9 @@ const AsteriskComponent = styled('span')(({ theme }) => ({
 // }));
 
 interface WorkScheduleFormProps {
+  prevPage: () => void;
   setData: React.Dispatch<React.SetStateAction<Employees.PostWorkSchedulePayloadType>>;
+  workData: Employees.PostWorkSchedulePayloadType,
 }
 
 const ArrDays = [
@@ -76,7 +78,7 @@ const ArrDays = [
   },
 ];
 
-function WorkScheduleForm({ setData }: WorkScheduleFormProps) {
+function WorkScheduleForm({ setData, prevPage }: WorkScheduleFormProps) {
   const calendarRef = useRef<SchedulerRef>(null);
   const dispatch = useAppDispatch();
   const { employee } = useAppSelectors((state) => state);
@@ -345,6 +347,11 @@ function WorkScheduleForm({ setData }: WorkScheduleFormProps) {
     }
   }, [employee?.events]);
 
+  const handleBack = (e) => {
+    e.preventDefault();
+    prevPage();
+  };
+
   useEffect(() => {
     setHydrated(true);
   }, []);
@@ -355,7 +362,7 @@ function WorkScheduleForm({ setData }: WorkScheduleFormProps) {
 
   return (
     <>
-      <OverlayLoading open={employee?.isLoading} />
+      {/* <OverlayLoading open={employee?.isLoading} /> */}
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchemaWorkScheduler}
@@ -467,7 +474,7 @@ function WorkScheduleForm({ setData }: WorkScheduleFormProps) {
                     step: 60,
                     cellRenderer: () => {
                       return (
-                        <Button
+                        <MuiButton
                           onClick={(e) => {
                             e.preventDefault();
                             return null;
@@ -762,6 +769,19 @@ function WorkScheduleForm({ setData }: WorkScheduleFormProps) {
           )
         }
       </Formik>
+      <Grid
+        container
+        justifyContent='flex-end'
+        alignItems='end'
+        gap={2}
+      >
+        <Grid item>
+          <Button onClick={handleBack} label='Back' variant='outlined' />
+        </Grid>
+        <Grid item>
+          <Button color='primary' type='submit' label='Next' />
+        </Grid>
+      </Grid>
     </>
   );
 }

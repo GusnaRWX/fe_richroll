@@ -13,27 +13,29 @@ function EmployeeEditContainer() {
   const router = useRouter();
   // const { employee } = useAppSelectors((state) => state);
   useEffect(() => {
-    dispatch({
-      type: employeeInfoDetailRequested.toString(),
-      payload: router.query.id
-    });
-    dispatch({
-      type: personalInfoDetailRequested.toString(),
-      payload: router.query.id
-    });
-    dispatch({
-      type: getListDepartmentRequested.toString(),
-      payload: getCompanyData()?.id
-    });
-    dispatch({
-      type: emergencyContactDetailRequested.toString(),
-      payload: router.query.id
-    });
-    dispatch({
-      type: getListOptionWorkScheduleRequested.toString(),
-      payload: getCompanyData()?.id
-    });
-  }, []);
+    if (router.query.id) {
+      dispatch({
+        type: employeeInfoDetailRequested.toString(),
+        payload: router.query.id
+      });
+      dispatch({
+        type: personalInfoDetailRequested.toString(),
+        payload: router.query.id
+      });
+      dispatch({
+        type: getListDepartmentRequested.toString(),
+        payload: getCompanyData()?.id
+      });
+      dispatch({
+        type: emergencyContactDetailRequested.toString(),
+        payload: router.query.id
+      });
+      dispatch({
+        type: getListOptionWorkScheduleRequested.toString(),
+        payload: getCompanyData()?.id
+      });
+    }
+  }, [router.query.id]);
   return (
     <Layout>
       {/* <OverlayLoading open={employee?.isLoading} /> */}

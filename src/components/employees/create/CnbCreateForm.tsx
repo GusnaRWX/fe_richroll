@@ -43,11 +43,17 @@ interface InitialValues {
 }
 
 interface CnbCreateForm {
+  nextPage: (_val: number, _data: any) => void;
+  prevPage: () => void;
   setValues: React.Dispatch<React.SetStateAction<any>>
+  cnbValues: any;
 }
 
 const CnbCreateForm = ({
-  setValues
+  nextPage,
+  prevPage,
+  setValues,
+  cnbValues
 }: CnbCreateForm) => {
 
   const BpIcon = styled('span')(({ theme }) => ({
@@ -215,16 +221,23 @@ const CnbCreateForm = ({
   }, [parentId]);
 
   console.log(initialValues, 'here');
+  console.log(cnbValues, 'out');
+
+  const handleBack = (e) => {
+    e.preventDefault();
+    prevPage();
+  };
 
   return (
     <Formik
       initialValues={initialValues}
-      onSubmit={() => { console.log('here'); }}
+      onSubmit={() => { console.log('submit'); }}
       validationSchema={validationSchemeCompensationBenefits}
     >
       {(formik) => {
         setInitialValues(formik.values);
         return (
+        <>
           <FormikForm>
             <Grid container >
               <Grid item md={4}>
@@ -366,6 +379,10 @@ const CnbCreateForm = ({
                   <Grid item md={6}>
                     <Text title={titleView || ''} color='grey.400' fontWeight={500} fontSize='14px' />
                     <Text title={`Rp.${numberFormat(valuesEdit?.base?.amount) ?? ''} per ${valuesEdit?.base?.term?.name ?? ''}`} />
+                  </Grid>
+                  <Grid item md={12} mt='16px'>
+                    <Text title='Overtime' color='grey.400' fontWeight={500} fontSize='14px' />
+                    <Text title={`${valuesEdit?.overtime || '0'} x`} />
                   </Grid>
                 </Grid>
                 {valuesEdit?.supplementaries?.length > 0 && (
@@ -526,6 +543,9 @@ const CnbCreateForm = ({
                         </Grid>
                       </Grid>
                       <Grid container mt='16px'>
+                        <Grid item xs={12}>
+                          <Text title='Overtime' fontWeight={700} fontSize='16px' mb='10px' color='primary.500' />
+                        </Grid>
                         <Grid item xs={3}>
                           <Input
                             withAsterisk
@@ -1018,6 +1038,9 @@ const CnbCreateForm = ({
                   </Grid>
                 </Grid>
                 <Grid container mt='16px'>
+                  <Grid item xs={12}>
+                    <Text title='Overtime' fontWeight={700} fontSize='16px' mb='16px' color='primary.500' />
+                  </Grid>
                   <Grid item xs={3}>
                     <Input
                       withAsterisk
@@ -1361,7 +1384,21 @@ const CnbCreateForm = ({
                 ></FieldArray>
               </Box>
             )}
+            <Grid
+              container
+              justifyContent='flex-end'
+              alignItems='end'
+              gap={2}
+            >
+              <Grid item>
+                <Button onClick={handleBack} label='Back' variant='outlined' />
+              </Grid>
+              <Grid item>
+                <Button color='primary' onClick={() => nextPage(4, cnbValues)} label='Next' />
+              </Grid>
+            </Grid>
           </FormikForm>
+        </>
         );
       }}
     </Formik>

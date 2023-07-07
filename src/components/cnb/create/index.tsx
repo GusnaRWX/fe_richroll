@@ -28,6 +28,8 @@ import {
   getCompanyData,
   getPaymentType,
   dynamicPayloadBaseCnb,
+  compareCheck,
+  ifThenElse
 } from '@/utils/helper';
 import { FieldArray, Form as FormikForm, Formik } from 'formik';
 import * as Yup from 'yup';
@@ -173,6 +175,7 @@ export default function CreateCNBComponent() {
     compensationComponentId: string;
     taxStatus: string;
     rateOrAmount: number | string;
+    overtime: number | string;
     period: string;
     supplementary: SuplementType[];
   }
@@ -201,6 +204,7 @@ export default function CreateCNBComponent() {
       value.compensationComponentId !== '' &&
       value.period !== '' &&
       value.rateOrAmount !== '' &&
+      value.overtime !== '' &&
       value.taxStatus !== '' &&
       supplement
     ) {
@@ -227,6 +231,7 @@ export default function CreateCNBComponent() {
         type: postNewCnbProfileRequested.toString(),
         Payload: {
           companyID: companyData?.id?.toString(),
+          overtime: value.overtime,
           name: value.name,
           base: tempBase,
           supplementaries: tempSupplementary,
@@ -241,6 +246,7 @@ export default function CreateCNBComponent() {
     period: string;
     rateOrAmount: string;
     percentage: string | number | null;
+    overtime: string | number;
     taxStatus: string;
     supplementary: SuplementType[];
   } = {
@@ -249,6 +255,7 @@ export default function CreateCNBComponent() {
     period: '',
     rateOrAmount: '',
     percentage: '',
+    overtime: '',
     taxStatus: '',
     supplementary: [],
   };
@@ -569,6 +576,35 @@ export default function CreateCNBComponent() {
                         </Grid>
                       </Grid>
                     )}
+                    <Grid container mt='16px'>
+                      <Grid item xs={12}>
+                        <Text title='Overtime' fontWeight={700} fontSize='16px' mb='16px' color='primary.500' />
+                      </Grid>
+                      <Grid item xs={3}>
+                        <Input
+                          withAsterisk
+                          size='small'
+                          customLabel='Rate'
+                          type='number'
+                          name='overtime'
+                          value={formik.values.overtime}
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                          error={compareCheck(formik.touched.overtime, Boolean(formik.errors.overtime))}
+                          helperText={ifThenElse(compareCheck(formik.touched.overtime, Boolean(formik.errors.overtime)), formik.errors.overtime, '')}
+                          inputProps={{
+                            step: 0.1
+                          }}
+                          InputProps={{
+                            endAdornment: (
+                              <InputAdornment position='end'>
+                                <Text color='grey.500' title='x' />
+                              </InputAdornment>
+                            )
+                          }}
+                        />
+                      </Grid>
+                    </Grid>
                   </Grid>
                 </Form>
                 <FieldArray

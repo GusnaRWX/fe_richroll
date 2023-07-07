@@ -254,6 +254,7 @@ export const employeeSlice = createSlice({
     },
     postWorkScheduleSuccess: (state) => {
       state.isLoading = false;
+      state.employeeID = '';
     },
     postWorkScheduleFailed: (state) => {
       state.isLoading = false;

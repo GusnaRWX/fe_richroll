@@ -98,13 +98,13 @@ const ImageReview = styled.div`
 
 interface EmployeeProps {
   refProp: React.Ref<HTMLFormElement>;
-  nextPage: (_val: number) => void;
+  nextPage: (_val: number, _data: Employees.InformationValues) => void;
+  nextPermPage: (_val: number, _data: Employees.InformationValues) => void;
   setValues: React.Dispatch<React.SetStateAction<Employees.InformationValues>>
   infoValues: Employees.InformationValues,
-  setIsInformationValid: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, setIsInformationValid }: EmployeeProps) {
+function EmployeeInformationForm({ refProp, nextPage, nextPermPage, setValues, infoValues }: EmployeeProps) {
   const [isCaptureEnable, setCaptureEnable] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const webcamRef = useRef<Webcam>(null);
@@ -170,8 +170,11 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, set
       images: String(images),
     };
     setValues(allInfoValues);
-    nextPage(formik.values.isSelfService ? 3 : 1);
-    setIsInformationValid(true);
+    if (formik.values.isSelfService) {
+      nextPermPage(3, allInfoValues);
+    } else {
+      nextPage(1, allInfoValues);
+    }
     setErrors({});
   };
 
@@ -493,7 +496,7 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, set
                 <TextField
                   name='department'
                   error={formik.touched.department && Boolean(formik.errors.department)}
-                  helperText={formik.errors.department}
+                  helperText={formik.touched.department && Boolean(formik.errors.department) ? formik.errors.department : ''}
                   {...params}
                 />
               )}
@@ -576,7 +579,7 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, set
                 <TextField
                   name='position'
                   error={formik.touched.position && Boolean(formik.errors.position)}
-                  helperText={formik.errors.position}
+                  helperText={formik.touched.position && Boolean(formik.errors.position) ? formik.errors.position : ''}
                   {...params}
                 />
               )}

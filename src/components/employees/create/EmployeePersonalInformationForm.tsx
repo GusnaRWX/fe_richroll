@@ -23,14 +23,14 @@ import { ifThenElse, compareCheck } from '@/utils/helper';
 
 interface PersonalInformationProps {
   refProp: React.Ref<HTMLFormElement>
-  nextPage: (_val: number) => void;
+  nextPage: (_val: number, _data: Employees.PersonalValues) => void;
+  prevPage: () => void;
   setValues: React.Dispatch<React.SetStateAction<Employees.PersonalValues>>;
   personalValues: Employees.PersonalValues,
-  setIsPersonalInformationValid: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 
-const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, personalValues, setIsPersonalInformationValid }: PersonalInformationProps) => {
+const EmployeePersonalInformationForm = ({ refProp, nextPage, prevPage, setValues, personalValues }: PersonalInformationProps) => {
   const dispatch = useAppDispatch();
 
   const {
@@ -91,8 +91,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
     validationSchema: validationSchemePersonalInformation,
     onSubmit: (values) => {
       console.log(values);
-      nextPage(2);
-      setIsPersonalInformationValid(true);
+      nextPage(2, { ...formik.values, useResidentialAddress });
       setValues({ ...formik.values, useResidentialAddress });
     }
   });
@@ -1060,7 +1059,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
       >
         <Grid item>
           <Button onClick={() => {
-            nextPage(0);
+            prevPage();
             setValues({ ...formik.values, useResidentialAddress });
           }} label='Back' variant='outlined' />
         </Grid>
