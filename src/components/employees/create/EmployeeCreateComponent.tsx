@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { IconButton, Stepper } from '@/components/_shared/form';
 import { Card, Typography, Button as MuiButton, Box } from '@mui/material';
@@ -7,9 +7,9 @@ import styled from '@emotion/styled';
 import ConfirmationModal from '@/components/_shared/common/ConfirmationModal';
 import { useRouter } from 'next/router';
 import { Employees } from '@/types/employees';
-import { useAppDispatch } from '@/hooks/index';
+import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import dayjs from 'dayjs';
-import { postEmployeeInfoRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
+import { postEmployeeInfoRequested, postPersonalInformationRequested, postEmergencyRequested, postCnbEmployeeRequested, postWorkScheduleRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
 import { base64ToFile, getCompanyData } from '@/utils/helper';
 import { resetResponserMessage } from '@/store/reducers/slice/responserSlice';
 
@@ -72,7 +72,10 @@ const ContentWrapper = styled(Card)(({
 function EmployeeCreateComponent() {
   const router = useRouter();
   const [value, setValue] = useState(0);
+  const [finishedStep, setFinishedStep] = useState(0);
   const [leave, setLeave] = useState(false);
+  const { employeeID } = useAppSelectors(state => state.employee);
+  const { responser } = useAppSelectors((state) => state);
   const employeeRef = useRef<HTMLFormElement>(null);
   const emergencyRef = useRef<HTMLFormElement>(null);
   const personalInformationRef = useRef<HTMLFormElement>(null);
@@ -143,70 +146,144 @@ function EmployeeCreateComponent() {
   });
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [compensationBenefitsValue, setCompensationBenefitsValue] = useState<any>({});
-  const [valueWorkSchedule, setValueWorkSchedule] = useState({});
-  const [isInformationValid, setIsInformationValid] = useState(false);
-  const [isPersonalInformationValid, setIsPersonalInformationValid] = useState(false);
-  const [isEmergencyValid, setIsEmergencyValid] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [valueWorkSchedule, setValueWorkSchedule] = useState<any>({});
 
   const dispatch = useAppDispatch();
-  const handleClick = async () => {
-    const convertToBase64 = base64ToFile(informationValue.images, 'example.png');
-    const inputData = new FormData();
-    inputData.append('companyID', getCompanyData()?.id as string);
-    if ((informationValue.picture as []).length > 0 || convertToBase64) {
-      inputData.append('picture', (informationValue.picture as File)[0] || convertToBase64);
-    }
-    inputData.append('fullName', informationValue.fullName);
-    inputData.append('nickname', informationValue.nickname);
-    inputData.append('phoneNumberPrefix', informationValue.phoneNumberPrefix);
-    inputData.append('phoneNumber', informationValue.phoneNumber);
-    inputData.append('email', informationValue.email);
-    inputData.append('startDate', dayjs(informationValue.startDate).format('YYYY-MM-DD'));
-    if (!informationValue.isPermanent) {
-      inputData.append('endDate', dayjs(informationValue.endDate).format('YYYY-MM-DD'));
-    }
-    inputData.append('isPermanent', informationValue.isPermanent ? 'true' : 'false');
-    if (informationValue.department !== '') {
-      inputData.append('department', informationValue.department);
-    }
-    if (informationValue.position !== '') {
-      inputData.append('position', informationValue.position);
-    }
-    inputData.append('isSelfService', informationValue.isSelfService ? 'true' : 'false');
 
-
+  const handleSaveWorkSchedule = async (data) => {
     dispatch({
-      type: postEmployeeInfoRequested.toString(),
+      type: postWorkScheduleRequested.toString(),
       payload: {
-        employeeInformation: inputData,
-        isPersonalInformationValid,
-        personalValue: personalInformationValue,
-        isEmergencyValid,
-        emergencyContactValue: emergencyValue,
-        cnbValue: compensationBenefitsValue,
-        workSchedule: valueWorkSchedule
+        id: employeeID,
+        workSchedule: data
       }
     });
     router.push('/company-management/employees');
   };
 
-  console.log(compensationBenefitsValue, 'memel');
+  const handleSaveCnB = async (data) => {
+    if (finishedStep <= 4) {
+      dispatch({
+        type: postCnbEmployeeRequested.toString(),
+        payload: {
+          id: employeeID,
+          cnb: data
+        }
+      });
+      setFinishedStep(4);
+    }
+  };
 
-  const handleOpen = () => {
-    setLeave(true);
+  const handleSaveEmergency = async (data) => {
+    if (finishedStep <=3) {
+      dispatch({
+        type: postEmergencyRequested.toString(),
+        payload: {
+          employeeID: employeeID,
+          data: data
+        }
+      });
+      setFinishedStep(3);
+    }
+  };
+
+  const handleSavePersonal = async (data) => {
+    if (finishedStep <= 2) {
+      dispatch({
+        type: postPersonalInformationRequested.toString(),
+        payload: {
+          employeeID: employeeID,
+          data: data
+        }
+      });
+      setFinishedStep(2);
+    }
+  };
+
+  const handleSaveEmployee = async (data) => {
+    if (finishedStep <= 1 && employeeID === '') {
+      const convertToBase64 = base64ToFile(data.images, 'example.png');
+      const inputData = new FormData();
+      inputData.append('companyID', getCompanyData()?.id as string);
+      if ((data.picture as []).length > 0 || convertToBase64) {
+        inputData.append('picture', (data.picture as File)[0] || convertToBase64);
+      }
+      inputData.append('fullName', data.fullName);
+      inputData.append('nickname', data.nickname);
+      inputData.append('phoneNumberPrefix', data.phoneNumberPrefix);
+      inputData.append('phoneNumber', data.phoneNumber);
+      inputData.append('email', data.email);
+      inputData.append('startDate', dayjs(data.startDate).format('YYYY-MM-DD'));
+      if (!data.isPermanent) {
+        inputData.append('endDate', dayjs(data.endDate).format('YYYY-MM-DD'));
+      }
+      inputData.append('isPermanent', data.isPermanent ? 'true' : 'false');
+      if (data.department !== '') {
+        inputData.append('department', data.department);
+      }
+      if (data.position !== '') {
+        inputData.append('position', data.position);
+      }
+      inputData.append('isSelfService', data.isSelfService ? 'true' : 'false');
+  
+      dispatch({
+        type: postEmployeeInfoRequested.toString(),
+        payload: {
+          employeeInformation: inputData
+        }
+      });
+      setFinishedStep(1);
+    }
+  };
+
+  const handleBack = () => {
+    if (informationValue.isSelfService && value === 3) {
+      setValue(0);
+    } else {
+      setValue(value - 1);
+    }
   };
 
   const handleClose = () => {
     setLeave(false);
   };
 
-  const handleBack = () => {
+  const handleCancel = () => {
     setLeave(true);
   };
 
-  const handleNext = (val) => {
+  const handleNextPermanent = (val, data) => {
+    handleSaveEmployee(data);
     setValue(val);
   };
+
+  const handleNext = (val, data) => {
+    switch (val) {
+      case 1:
+        handleSaveEmployee(data);
+        break;
+      case 2:
+        handleSavePersonal(data);
+        break;
+      case 3:
+        handleSaveEmergency(data);
+        break;
+      case 4:
+        handleSaveCnB(data);
+        break;
+      default:
+        break;
+    }
+    setValue(val);
+  };
+
+  useEffect(() => {
+    console.log(informationValue.isSelfService);
+    
+    if (![200, 201, 0].includes(responser?.code)) handleBack(); 
+    if (![200, 201, 0].includes(responser?.code) && informationValue.isSelfService && value === 3) setValue(0);
+  }, [responser?.code]);
 
   return (
     <>
@@ -217,13 +294,13 @@ function EmployeeCreateComponent() {
             icons={
               <ArrowBack sx={{ color: '#FFFFFF' }} />
             }
-            onClick={handleBack}
+            onClick={handleCancel}
           />
           <Typography component='h3' fontWeight='bold'>Add Employee</Typography>
         </BackWrapper>
         <ButtonWrapper>
-          <MuiButton variant='outlined' size='small' onClick={() => handleOpen()}>Cancel</MuiButton>
-          <MuiButton variant='contained' onClick={handleClick} size='small' color='primary' disabled={!isInformationValid}>Save</MuiButton>
+          <MuiButton variant='outlined' size='small' onClick={() => handleCancel()}>Cancel</MuiButton>
+          <MuiButton variant='contained' onClick={handleSaveWorkSchedule} size='small' color='primary' disabled={value !== 4}>Save</MuiButton>
         </ButtonWrapper>
       </TopWrapper>
       <ContentWrapper>
@@ -235,37 +312,44 @@ function EmployeeCreateComponent() {
           {value == 0 &&
             <EmployeeInformationFormClient
               nextPage={handleNext}
+              nextPermPage={handleNextPermanent}
               refProp={employeeRef}
               setValues={setInformationValue}
               infoValues={informationValue}
-              setIsInformationValid={setIsInformationValid}
             />
           }
           {value == 1 &&
             <EmployeePersonalInformationFormClient
               nextPage={handleNext}
+              prevPage={handleBack}
               refProp={personalInformationRef}
               setValues={setPersonalInformationValue}
               personalValues={personalInformationValue}
-              setIsPersonalInformationValid={setIsPersonalInformationValid}
             />
           }
           {value == 2 &&
             <EmergencyContactFormClient
-              nextPage={setValue}
+              nextPage={handleNext}
+              prevPage={handleBack}
               refProp={emergencyRef}
               setValues={setEmergencyValue}
               emergencyValues={emergencyValue}
-              setIsEmergencyValid={setIsEmergencyValid}
             />
           }
           {value == 3 &&
             <CnbCreateForm
+              nextPage={handleNext}
+              prevPage={handleBack}
               setValues={setCompensationBenefitsValue}
+              cnbValues={compensationBenefitsValue}
             />
           }
           {value == 4 &&
-            <WorkScheduleForm setData={setValueWorkSchedule} />
+            <WorkScheduleForm
+              prevPage={handleBack}
+              setData={setValueWorkSchedule}
+              workData={valueWorkSchedule}
+            />
           }
         </Box>
       </ContentWrapper>

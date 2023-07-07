@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { IconButton } from '@/components/_shared/form';
 import { Card, Typography, Button as MuiButton, Tab, Tabs, Box } from '@mui/material';
@@ -96,8 +96,8 @@ function a11yProps(index: number) {
   };
 }
 
-
 function EmployeeEditComponent() {
+  const [hydrated, setHydrated] = useState(false);
   const [value, setValue] = useState(0);
   const [leave, setLeave] = useState(false);
   const employeeRef = useRef<HTMLFormElement>(null);
@@ -275,6 +275,83 @@ function EmployeeEditComponent() {
     4: handleClickUpdateWorkSchedule
   };
 
+  useEffect(() => {
+    setInformationValue({
+      pictureBackend: [],
+      companyID: getCompanyData()?.id as string,
+      department: dataEmployeeInformation?.department,
+      email: dataEmployeeInformation?.email,
+      endDate: ifThenElse(dataEmployeeInformation?.endDate !== null, dayjs(dataEmployeeInformation?.endDate).format('YYYY/MM/DD'), null),
+      fullName: dataEmployeeInformation?.fullName,
+      images: ifThenElse(dataEmployeeInformation?.picture !== null, dataEmployeeInformation?.picture, ''),
+      isPermanent: dataEmployeeInformation?.isPermanent,
+      isActive: dataEmployeeInformation?.isActive,
+      isSelfService: dataEmployeeInformation?.isSelfService,
+      nickname: dataEmployeeInformation?.nickname,
+      phoneNumber: phoneNumber,
+      phoneNumberPrefix: phoneNumberPrefix,
+      picture: [],
+      position: dataEmployeeInformation?.position,
+      startDate: ifThenElse(dataEmployeeInformation?.startDate !== null, dayjs(dataEmployeeInformation?.startDate).format('YYYY/MM/DD'), null)
+    });
+    setPersonalInformationValue({
+      dateofBirthPersonalInformation: ifThenElse(dataPersonalInformation?.personal?.dateOfBirth !== null, dayjs(dataPersonalInformation?.personal?.dateOfBirth).format('YYYY/MM/DD'), null),
+      genderPersonalInformation: dataPersonalInformation?.personal?.gender,
+      maritialStatusPersonalInformation: dataPersonalInformation?.personal?.maritalStatus,
+      numberOfDependantsPersonalInformation: dataPersonalInformation?.personal?.numberOfChildren,
+      nationalityPersonalInformation: dataPersonalInformation?.personal?.country.id,
+      religionPersonalInformation: dataPersonalInformation?.personal?.religion,
+
+      provinceCitizenAddress: dataPersonalInformation?.citizen?.firstLevel.code,
+      countryCitizenAddress: dataPersonalInformation?.citizen?.country.id,
+      cityCitizenAddress: dataPersonalInformation?.citizen?.secondLevel.code,
+      subDistrictCitizenAddress: dataPersonalInformation?.citizen?.thirdLevel.code,
+      addressCitizenAddress: dataPersonalInformation?.citizen?.address,
+      zipCodeCitizenAddress: dataPersonalInformation?.citizen?.zipCode,
+
+      countryResidentialAddress: dataPersonalInformation?.residential?.country.id,
+      provinceResidentialAddress: dataPersonalInformation?.residential?.firstLevel.code,
+      cityResidentialAddress: dataPersonalInformation?.residential?.secondLevel.code,
+      subDistrictResidentialAddress: dataPersonalInformation?.residential?.thirdLevel.code,
+      addressResidentialAddress: dataPersonalInformation?.residential?.address,
+      zipCodeResidentialAddress: dataPersonalInformation?.residential?.zipCode,
+
+      bankBankInformation: dataPersonalInformation?.bank?.bank.id,
+      bankAccountHolderNameBankInformation: dataPersonalInformation?.bank?.holder,
+      bankAccoutNoBankInformation: dataPersonalInformation?.bank?.accountNumber,
+      bankCodeBankInformation: dataPersonalInformation?.bank?.bankCode,
+      branchCodeBankInformation: dataPersonalInformation?.bank?.branchCode,
+      branchNameBankInformation: dataPersonalInformation?.bank?.branchName,
+      swiftCodeBankInformation: dataPersonalInformation?.bank?.swiftCode,
+
+      useResidentialAddress: dataPersonalInformation?.citizen?.isResident,
+      // isPermanentPersonalID: dataPersonalInformation?.citizen?.isPermanent,
+
+      idExpirationDatePersonalID: dataPersonalInformation?.identity?.expiredAt,
+      idNumberPersonalID: dataPersonalInformation?.identity?.number,
+      idTypePersonalID: dataPersonalInformation?.identity?.type
+    });
+    setEmergencyValue({
+      primaryId: dataEmergencyContact?.primary?.id,
+      secondaryId: dataEmergencyContact?.secondary?.id,
+      fullNamePrimary: dataEmergencyContact?.primary?.name,
+      relationPrimary: dataEmergencyContact?.primary?.relationship,
+      phoneNumberPrefixPrimary: dataEmergencyContact?.primary?.phoneNumberPrefix,
+      phoneNumberPrimary: dataEmergencyContact?.primary?.phoneNumber,
+      fullNameSecondary: dataEmergencyContact?.secondary?.name,
+      relationSecondary: dataEmergencyContact?.secondary?.relationship,
+      phoneNumberPrefixSecondary: dataEmergencyContact?.secondary?.phoneNumberPrefix,
+      phoneNumberSecondary: dataEmergencyContact?.secondary?.phoneNumber
+    });
+  }, [employee]);
+
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
+
+  if (!hydrated) {
+    return null;
+  }
   return (
     <>
       <TopWrapper>

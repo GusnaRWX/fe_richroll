@@ -4,7 +4,7 @@ export const validationSchemeEmployeeInformation = Yup.object({
   picture: Yup.mixed().notRequired(),
   fullName: Yup.string().required('This field is required'),
   nickname: Yup.string().notRequired(),
-  phoneNumberPrefix: Yup.string().notRequired(),
+  phoneNumberPrefix: Yup.string().required(),
   phoneNumber: Yup.string().matches(/^\d{11}$/, 'Phone number should have 12 or 13 digits')
     .required('Phone number is required')
     .typeError('Phone number should be a number'),

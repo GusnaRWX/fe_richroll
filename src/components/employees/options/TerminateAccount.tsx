@@ -107,6 +107,7 @@ const TerminateAccount = () => {
             <BasicDatePicker
               customLabel='Input Effective Termination Date'
               withAsterisk
+              disablePast
               onChange={(e) => setDate(dayjs(e).format('DD/MM/YYYY'))}
             />
           </Box>

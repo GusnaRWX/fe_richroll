@@ -88,6 +88,7 @@ import { setResponserMessage } from '@/store/reducers/slice/responserSlice';
 import { Services } from '@/types/axios';
 import { AxiosError, AxiosResponse } from 'axios';
 import dayjs from 'dayjs';
+import Router from 'next/router';
 import { getCompanyData, checkObject } from '@/utils/helper';
 
 
@@ -123,7 +124,7 @@ function* fetchPostEmployeeInfo(action: AnyAction) {
     const res: AxiosResponse = yield call(postEmployeeInfo, action?.payload?.employeeInformation);
     if (res.data.code === 201) {
       yield put({ type: postEmployeeInfoSuccess.toString(), payload: res.data.data });
-      yield delay(1000);
+      // yield delay(1000);
       yield put({
         type: setResponserMessage.toString(),
         payload: {
@@ -131,61 +132,61 @@ function* fetchPostEmployeeInfo(action: AnyAction) {
           message: res.data.message
         }
       });
-      yield delay(1000);
-      yield put({
-        type: setResponserMessage.toString(),
-        payload: {
-          code: 0,
-          message: null
-        }
-      });
-      if (action?.payload?.isPersonalInformationValid) {
-        const body = {
-          type: postPersonalInformationRequested.toString(),
-          payload: {
-            employeeID: res.data.data,
-            data: action?.payload?.personalValue
-          }
-        };
-        yield call(fetchPostPersonalInformation, body);
-      }
+      // yield delay(1000);
+      // yield put({
+      //   type: setResponserMessage.toString(),
+      //   payload: {
+      //     code: 0,
+      //     message: null
+      //   }
+      // });
+      // if (action?.payload?.isPersonalInformationValid) {
+      //   const body = {
+      //     type: postPersonalInformationRequested.toString(),
+      //     payload: {
+      //       employeeID: res.data.data,
+      //       data: action?.payload?.personalValue
+      //     }
+      //   };
+      //   yield call(fetchPostPersonalInformation, body);
+      // }
 
-      if (action?.payload?.isEmergencyValid) {
-        const body = {
-          type: postEmergencyRequested.toString(),
-          payload: {
-            employeeID: res.data.data,
-            data: action?.payload?.emergencyContactValue
-          }
-        };
-        yield call(fetchPostEmergency, body);
-      }
+      // if (action?.payload?.isEmergencyValid) {
+      //   const body = {
+      //     type: postEmergencyRequested.toString(),
+      //     payload: {
+      //       employeeID: res.data.data,
+      //       data: action?.payload?.emergencyContactValue
+      //     }
+      //   };
+      //   yield call(fetchPostEmergency, body);
+      // }
 
-      if (action?.payload?.isCnbValid) {
-        const body = {
-          type: postCnbEmployeeRequested.toString(),
-          payload: {
-            employeeID: res?.data?.data,
-            data: action?.payload?.cnbValue
-          }
-        };
-        yield call(fetchPostCnbEmployee, body);
-      }
-      yield put({
-        type: postCnbEmployeeRequested.toString(),
-        payload: {
-          id: res?.data?.data,
-          cnb: action?.payload?.cnbValue
-        }
-      });
+      // if (action?.payload?.isCnbValid) {
+      //   const body = {
+      //     type: postCnbEmployeeRequested.toString(),
+      //     payload: {
+      //       employeeID: res?.data?.data,
+      //       data: action?.payload?.cnbValue
+      //     }
+      //   };
+      //   yield call(fetchPostCnbEmployee, body);
+      // }
+      // yield put({
+      //   type: postCnbEmployeeRequested.toString(),
+      //   payload: {
+      //     id: res?.data?.data,
+      //     cnb: action?.payload?.cnbValue
+      //   }
+      // });
 
-      yield put({
-        type: postWorkScheduleRequested.toString(),
-        payload: {
-          id: res?.data?.data,
-          workSchedule: action?.payload?.workSchedule
-        }
-      });
+      // yield put({
+      //   type: postWorkScheduleRequested.toString(),
+      //   payload: {
+      //     id: res?.data?.data,
+      //     workSchedule: action?.payload?.workSchedule
+      //   }
+      // });
     }
   } catch (err) {
     if (err instanceof AxiosError) {
@@ -977,6 +978,7 @@ function* fetchPostTerminateEmployee(action: AnyAction) {
           message: res?.data?.data?.messages,
         }
       });
+      yield Router.back();
     }
   } catch (err) {
     if (err instanceof AxiosError) {
@@ -1022,12 +1024,13 @@ function* getEmployeeDetailCnb(action: AnyAction) {
 function* employeeSaga() {
   yield takeEvery(getEmployeeRequested.toString(), fetchGetEmployee);
   yield takeEvery(postEmployeeInfoRequested.toString(), fetchPostEmployeeInfo);
-  yield takeEvery(postEmergencyRequested.toString(), fetchPostEmergency);
   yield takeEvery(postPersonalInformationRequested.toString(), fetchPostPersonalInformation);
+  yield takeEvery(postEmergencyRequested.toString(), fetchPostEmergency);
+  yield takeEvery(postCnbEmployeeRequested.toString(), fetchPostCnbEmployee);
+  yield takeEvery(postWorkScheduleRequested.toString(), fetchPostWorkSchedule);
   yield takeEvery(employeeInfoDetailRequested.toString(), fetchGetEmployeeInformation);
   yield takeEvery(personalInfoDetailRequested.toString(), fetchGetPersonalInformationDetail);
   yield takeEvery(getDetailCnbRequested.toString(), fetchGetDetailCnb);
-  yield takeEvery(postCnbEmployeeRequested.toString(), fetchPostCnbEmployee);
   yield takeEvery(emergencyContactDetailRequested.toString(), fetchGetEmergencyContactDetail);
   yield takeEvery(patchEmployeeInformationRequested.toString(), fetchPatchEmployeeInformation);
   yield takeEvery(patchEmergencyContactRequested.toString(), fetchPatchEmergencyContact);
@@ -1035,7 +1038,6 @@ function* employeeSaga() {
   yield takeEvery(getDetailWorkScheduleRequested.toString(), fetchGetDetailWorkSchedule);
   yield takeEvery(postSimulationEventRequested.toString(), fetchPostSimulationEvent);
   yield takeEvery(postCalculateEventRequested.toString(), fetchPostCalculateEvent);
-  yield takeEvery(postWorkScheduleRequested.toString(), fetchPostWorkSchedule);
   yield takeEvery(getViewWorkScheduleRequested.toString(), fetchGetViewWorkSchedule);
   yield takeEvery(postTerminateEmployeeRequested.toString(), fetchPostTerminateEmployee);
   yield takeEvery(patchWorkScheduleRequested.toString(), fetchPatchWorkSchedule);
