@@ -245,5 +245,102 @@
         "back": "Back"
       }
     }
+  },
+
+
+
+  "satutory-benefit" : {
+    "component" : {
+      "title" : "Statutory Benefits Components Dashboard",
+      "detail_title" : "Statutory Benefit Component",
+      "table" : {
+        "company_name" : "Company Name",
+        "country" : "Country",
+        "contributors" : "Contributor(S)",
+        "rate_type" : "Rate Type",
+        "created_on" : "Created On",
+        "last_update" : "Last Update"
+      },
+      "form_&_detail" : {
+        "dashboard_title" : "Add New Component",
+        "wizard_option" : {
+          "basic_detail" :"Basic Detail",
+          "designed_transfer_account" :"Designed Transfer Account",
+          "rate" : "Rate"
+        },
+        "create_basic_detail" : {
+          "detail_title" : "Basic Detail",
+          "name" : "Satutory Name",
+          "name_placeholder" : "Input Satutory Benefits Name",
+          "country" : "Country",
+          "province" :"Province",
+          "city" : "City",
+          "sub_district" : "Sub-District",
+          "citation" : "Citation",
+          "internal_notes" : "Internal Notes",
+          "external_notes" : "External Notes",
+          "max_char_info" : "Max. 120 Character"
+        },
+        "create_designed_transfer_account" : {
+          "form_title" : "Bank Information",
+          "detail_title" : "Bank Information",
+          "type_option" : {
+            "central_account" : "Central Account",
+            "individual_account" :"Individual Account",
+            "company_account_only" : "Company Account Only"
+          },
+          "information" : "The Designated Transfer Account is added manually to each employee’s profile",
+          "bank" :"Bank",
+          "bank_account_holders_name": "Bank Account Holders Name",
+          "bank_account_no": "Bank Account No",
+          "bank_code": "Bank Code",
+          "branch_code": "Branch Code",
+          "branch_name": "Branch Name",
+          "swift_code": "Swift Code",
+          "notes": "Notes",
+          "bank_info": "Bank Information",
+          "central_account": "Central Account",
+          "individual_account": "Individual Account",
+          "company_account": "Company Account Only",
+          "message": "The Designated Transfer Account is added manually to each employee’s profile"
+        },
+        "rates" : {
+          "contributor_option" : {
+            "employee" : "Employee",
+            "employer" : "Employer"
+          },
+          "sub_title" : "Rates",
+          "match_rule_button" : "Employer Match Rule",
+          "start" : "Start",
+          "end" : "End",
+          "additional_fixed_amount" : "Additional Fixed Amount",
+          "amount_cap" : "Amount Cap",
+          "rate_type" :"Rate Type",
+          "flat_rate" : "Flat Rate"
+        },
+        "others" : {
+          "search_placeholder" : "Search"
+        }
+      },
+      "button" : {
+        "add_new_component" : "Add New Component",
+        "save" : "Save",
+        "save_exit" : "Save & Exit",
+        "cancel" : "Cancel",
+        "next" : "Next",
+        "back" : "Back",
+        "confirm" : "Confirm"
+      },
+      "modal" : {
+        "delete" : {
+          "title" : "Delete Data Entry",
+          "text" :"You are about to delete this statutory benefit component. This action cannot be undone."
+        },
+        "duplicate" : {
+          "title" : "Confirmation",
+          "text" : "Are you sure you want to duplicate this profile ?"
+        }
+      }
+    }
   }
 }

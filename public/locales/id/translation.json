@@ -244,5 +244,102 @@
         "back": "Kembali"
       }
     }
+  },
+
+
+
+  "satutory-benefit": {
+    "component": {
+      "title": "Dasbor Komponen Manfaat Wajib",
+      "detail_title": "Komponen Tunjangan Hukum",
+      "table": {
+        "company_name": "Nama perusahaan",
+        "country": "Negara",
+        "contributors": "Kontributor(S)",
+        "rate_type": "Jenis Tarif",
+        "created_on": "Dibuat pada",
+        "last_update": "Pembaharuan Terakhir"
+      },
+      "form_&_detail": {
+        "dashboard_title": "Tambahkan Komponen Baru",
+        "wizard_option": {
+          "basic_detail": "Detil Dasar",
+          "designed_transfer_account": "Akun Transfer yang dirancang",
+          "rate": "Kecepatan"
+        },
+        "create_basic_detail": {
+          "detail_title": "Detil Dasar",
+          "name": "Nama Satutori",
+          "name_placeholder": "Masukkan Nama Manfaat Satutori",
+          "country": "Negara",
+          "province": "Propinsi",
+          "city": "Kota",
+          "sub_district": "Kecamatan",
+          "citation": "Kutipan",
+          "internal_notes": "Catatan Internal",
+          "external_notes": "Catatan Eksternal",
+          "max_char_info": "Maks. "
+        },
+        "create_designed_transfer_account": {
+          "form_title": "Informasi bank",
+          "detail_title": "Informasi bank",
+          "type_option": {
+            "central_account": "Akun Tengah",
+            "individual_account": "Akun Perorangan",
+            "company_account_only": "Akun Perusahaan Saja"
+          },
+          "information": "Rekening Transfer yang Ditunjuk ditambahkan secara manual ke profil setiap karyawan",
+          "bank": "Bank",
+          "bank_account_holders_name": "Nama Pemegang Rekening Bank",
+          "bank_account_no": "Nomor Rekening Bank",
+          "bank_code": "Kode Bank",
+          "branch_code": "Kode cabang",
+          "branch_name": "Nama cabang",
+          "swift_code": "Tukar Kode",
+          "notes": "Catatan",
+          "bank_info": "Informasi bank",
+          "central_account": "Akun Tengah",
+          "individual_account": "Akun Perorangan",
+          "company_account": "Akun Perusahaan Saja",
+          "message": "Rekening Transfer yang Ditunjuk ditambahkan secara manual ke profil setiap karyawan"
+        },
+        "rates": {
+          "contributor_option": {
+            "employee": "Karyawan",
+            "employer": "Pemberi pekerjaan"
+          },
+          "sub_title": "Tarif",
+          "match_rule_button": "Aturan Kecocokan Majikan",
+          "start": "Awal",
+          "end": "Akhir",
+          "additional_fixed_amount": "Jumlah Tetap Tambahan",
+          "amount_cap": "Batas Jumlah",
+          "rate_type": "Jenis Tarif",
+          "flat_rate": "Tarif Tetap"
+        },
+        "others": {
+          "search_placeholder": "Mencari"
+        }
+      },
+      "button": {
+        "add_new_component": "Tambahkan Komponen Baru",
+        "save": "Menyimpan",
+        "save_exit": "Menyimpan",
+        "cancel": "Membatalkan",
+        "next": "Berikutnya",
+        "back": "Kembali",
+        "confirm": "Mengonfirmasi"
+      },
+      "modal": {
+        "delete": {
+          "title": "Hapus Entri Data",
+          "text": "Anda akan menghapus komponen manfaat wajib ini. "
+        },
+        "duplicate": {
+          "title": "Konfirmasi",
+          "text": "Apakah Anda yakin ingin menggandakan profil ini?"
+        }
+      }
+    }
   }
 }

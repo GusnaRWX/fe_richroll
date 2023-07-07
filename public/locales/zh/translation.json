@@ -244,5 +244,102 @@
         "back": "后退"
       }
     }
+  },
+
+
+
+  "satutory-benefit": {
+    "component": {
+      "title": "法定福利组件仪表板",
+      "detail_title": "法定福利成分",
+      "table": {
+        "company_name": "公司名称",
+        "country": "国家",
+        "contributors": "贡献者(S)",
+        "rate_type": "费率类型",
+        "created_on": "创建于",
+        "last_update": "最后更新"
+      },
+      "form_&_detail": {
+        "dashboard_title": "添加新组件",
+        "wizard_option": {
+          "basic_detail": "基本细节",
+          "designed_transfer_account": "设计转账账户",
+          "rate": "速度"
+        },
+        "create_basic_detail": {
+          "detail_title": "基本细节",
+          "name": "法定名称",
+          "name_placeholder": "输入法定福利名称",
+          "country": "国家",
+          "province": "省",
+          "city": "城市",
+          "sub_district": "分地区",
+          "citation": "引文",
+          "internal_notes": "内部注释",
+          "external_notes": "外部注释",
+          "max_char_info": "最大限度。 "
+        },
+        "create_designed_transfer_account": {
+          "form_title": "银行信息",
+          "detail_title": "银行信息",
+          "type_option": {
+            "central_account": "中央账户",
+            "individual_account": "个人账户",
+            "company_account_only": "仅限公司帐户"
+          },
+          "information": "指定转账账户手动添加到每个员工的个人资料中",
+          "bank": "银行",
+          "bank_account_holders_name": "银行账户持有人姓名",
+          "bank_account_no": "银行帐号",
+          "bank_code": "银行代码",
+          "branch_code": "分行代码",
+          "branch_name": "分店名称",
+          "swift_code": "SWIFT代码",
+          "notes": "笔记",
+          "bank_info": "银行信息",
+          "central_account": "中央账户",
+          "individual_account": "个人账户",
+          "company_account": "仅限公司帐户",
+          "message": "指定转账账户手动添加到每个员工的个人资料中"
+        },
+        "rates": {
+          "contributor_option": {
+            "employee": "员工",
+            "employer": "雇主"
+          },
+          "sub_title": "价格",
+          "match_rule_button": "雇主匹配规则",
+          "start": "开始",
+          "end": "结尾",
+          "additional_fixed_amount": "额外固定金额",
+          "amount_cap": "金额上限",
+          "rate_type": "费率类型",
+          "flat_rate": "扁平率"
+        },
+        "others": {
+          "search_placeholder": "搜索"
+        }
+      },
+      "button": {
+        "add_new_component": "添加新组件",
+        "save": "节省",
+        "save_exit": "节省",
+        "cancel": "取消",
+        "next": "下一个",
+        "back": "后退",
+        "confirm": "确认"
+      },
+      "modal": {
+        "delete": {
+          "title": "删除数据条目",
+          "text": "您即将删除该法定福利部分。"
+        },
+        "duplicate": {
+          "title": "确认",
+          "text": "您确定要复制此配置文件吗？"
+        }
+      }
+    }
   }
 }

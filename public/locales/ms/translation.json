@@ -244,5 +244,102 @@
         "back": "belakang"
       }
     }
+  },
+
+
+
+  "satutory-benefit": {
+    "component": {
+      "title": "Papan Pemuka Komponen Faedah Berkanun",
+      "detail_title": "Komponen Faedah Berkanun",
+      "table": {
+        "company_name": "nama syarikat",
+        "country": "Negara",
+        "contributors": "Penyumbang",
+        "rate_type": "Jenis Kadar",
+        "created_on": "Dicipta pada",
+        "last_update": "Kemaskini terakhir"
+      },
+      "form_&_detail": {
+        "dashboard_title": "Tambah Komponen Baharu",
+        "wizard_option": {
+          "basic_detail": "Butiran Asas",
+          "designed_transfer_account": "Akaun Pemindahan Direka",
+          "rate": "Kadar"
+        },
+        "create_basic_detail": {
+          "detail_title": "Butiran Asas",
+          "name": "Nama Tepu",
+          "name_placeholder": "Masukkan Nama Faedah Tepu",
+          "country": "Negara",
+          "province": "Wilayah",
+          "city": "Bandar",
+          "sub_district": "Mukim",
+          "citation": "Petikan",
+          "internal_notes": "Nota Dalaman",
+          "external_notes": "Nota Luaran",
+          "max_char_info": "Maks. "
+        },
+        "create_designed_transfer_account": {
+          "form_title": "Maklumat bank",
+          "detail_title": "Maklumat bank",
+          "type_option": {
+            "central_account": "Akaun Pusat",
+            "individual_account": "Akaun Individu",
+            "company_account_only": "Akaun Syarikat Sahaja"
+          },
+          "information": "Akaun Pemindahan Ditetapkan ditambah secara manual pada profil setiap pekerja",
+          "bank": "Bank",
+          "bank_account_holders_name": "Nama Pemegang Akaun Bank",
+          "bank_account_no": "Akaun Bank No",
+          "bank_code": "Kod bank",
+          "branch_code": "Kod Cawangan",
+          "branch_name": "Nama cawangan",
+          "swift_code": "Kod pantas",
+          "notes": "Nota",
+          "bank_info": "Maklumat bank",
+          "central_account": "Akaun Pusat",
+          "individual_account": "Akaun Individu",
+          "company_account": "Akaun Syarikat Sahaja",
+          "message": "Akaun Pemindahan Ditetapkan ditambah secara manual pada profil setiap pekerja"
+        },
+        "rates": {
+          "contributor_option": {
+            "employee": "Pekerja",
+            "employer": "Majikan"
+          },
+          "sub_title": "Kadar",
+          "match_rule_button": "Peraturan Padanan Majikan",
+          "start": "Mulakan",
+          "end": "tamat",
+          "additional_fixed_amount": "Jumlah Tetap Tambahan",
+          "amount_cap": "Jumlah Had",
+          "rate_type": "Jenis Kadar",
+          "flat_rate": "Kadar rata"
+        },
+        "others": {
+          "search_placeholder": "Cari"
+        }
+      },
+      "button": {
+        "add_new_component": "Tambah Komponen Baharu",
+        "save": "Jimat",
+        "save_exit": "Jimat",
+        "cancel": "Batal",
+        "next": "Seterusnya",
+        "back": "belakang",
+        "confirm": "sahkan"
+      },
+      "modal": {
+        "delete": {
+          "title": "Padamkan Entri Data",
+          "text": "Anda akan memadamkan komponen faedah berkanun ini. "
+        },
+        "duplicate": {
+          "title": "Pengesahan",
+          "text": "Adakah anda pasti mahu menduplikasi profil ini?"
+        }
+      }
+    }
   }
 }
