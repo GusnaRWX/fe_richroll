@@ -143,6 +143,14 @@ const LeaveEntriesTableComponent = ({
     }
   };
 
+  const renderIsHalfday = (halfday: boolean) => {
+    if (halfday) {
+      return <Chip label='Half-day' sx={{ color: '#9A3412', backgroundColor: '#FFEDD5' }} />;
+    } else {
+      return <Chip label='Full-day' sx={{ color: '#075985', backgroundColor: '#E0F2FE' }} />;
+    }
+  };
+
   return (
     <Card sx={{ marginTop: '16px' }}>
       <Grid container spacing={2}>
@@ -219,7 +227,12 @@ const LeaveEntriesTableComponent = ({
                       <TableCell>{dayjs(value.start).format('DD/MM/YY')}</TableCell>
                       <TableCell>{dayjs(value.end).format('DD/MM/YY')}</TableCell>
                       <TableCell>{renderLeaveType(value?.leaveType)}</TableCell>
-                      <TableCell>{renderLeaveStatus(value?.leaveStatus)}</TableCell>
+                      <TableCell>
+                        <Grid container alignItems='center' justifyContent='space-between'>
+                          <Grid item>{renderIsHalfday(value?.isHalfday as boolean)}</Grid>
+                          <Grid item>{renderLeaveStatus(value?.leaveStatus)}</Grid>
+                        </Grid>
+                      </TableCell>
                       <TableCell>
                         <ButtonWrapper>
                           <IconButton
