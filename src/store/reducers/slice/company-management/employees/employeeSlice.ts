@@ -270,6 +270,7 @@ export const employeeSlice = createSlice({
       state.workScheduleDetail.name = action?.payload?.name;
       state.grossHour = action?.payload?.grossHour;
       state.netHour = action?.payload?.netHour;
+      state.workScheduleId = action?.payload?.id;
       const tempData: Array<EventType> = [];
       action?.payload?.events.map((item) => {
         tempData.push({
@@ -289,6 +290,7 @@ export const employeeSlice = createSlice({
         });
       });
       state.workScheduleDetail.events = tempData;
+      state.events = tempData;
     },
     getViewWorkScheduleFailed: (state) => {
       state.isLoading = false;
@@ -313,6 +315,10 @@ export const employeeSlice = createSlice({
     },
     clearWorkScheduleState: (state) => {
       state.events = [];
+      state.grossHour = 0;
+      state.netHour = 0;
+    },
+    clearGrossNet: (state) => {
       state.grossHour = 0;
       state.netHour = 0;
     },
@@ -398,7 +404,8 @@ export const {
   patchWorkScheduleFailed,
   getEmployeeCnbDetailRequested,
   getEmployeeCnbDetailSuccess,
-  getEmployeeCnbDetailFailed
+  getEmployeeCnbDetailFailed,
+  clearGrossNet
 } = employeeSlice.actions;
 
 export default employeeSlice.reducer;

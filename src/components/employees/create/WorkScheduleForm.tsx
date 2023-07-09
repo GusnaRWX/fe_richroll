@@ -8,7 +8,7 @@ import { styled } from '@mui/material/styles';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
-import type { SchedulerRef } from '@aldabil/react-scheduler/types';
+import type {ProcessedEvent, SchedulerRef } from '@aldabil/react-scheduler/types';
 import { FieldArray, Formik, Form as FormikForm } from 'formik';
 import { Employees } from '@/types/employees';
 import { validationSchemaWorkScheduler } from './validate';
@@ -16,7 +16,7 @@ import dayjs from 'dayjs';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { Alert } from '@/components/_shared/common';
 import { compareCheck, ifThenElse } from '@/utils/helper';
-import { getDetailWorkScheduleRequested, postSimulationEventRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
+import { getDetailWorkScheduleRequested, postSimulationEventRequested, postCalculateEventRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
 import { Cancel } from '@mui/icons-material';
 import { AiOutlineSwapRight } from 'react-icons/ai';
 import { BsTrashFill } from 'react-icons/bs';
@@ -25,14 +25,6 @@ import { workSchedule } from '@/types/workSchedule';
 const AsteriskComponent = styled('span')(({ theme }) => ({
   color: theme.palette.error.main
 }));
-
-// const FlexBoxRow = styled('div')(() => ({
-//   display: 'flex',
-//   flexDirection: 'row',
-//   alignItems: 'center',
-//   justifyContent: 'flex-start',
-//   gap: '1rem'
-// }));
 
 interface WorkScheduleFormProps {
   prevPage: () => void;
@@ -43,37 +35,37 @@ interface WorkScheduleFormProps {
 const ArrDays = [
   {
     label: 'Mon',
-    value: '0',
+    value: 0,
     checked: false
   },
   {
     label: 'Tue',
-    value: '1',
+    value: 1,
     checked: false
   },
   {
     label: 'Wed',
-    value: '2',
+    value: 2,
     checked: false
   },
   {
     label: 'Thu',
-    value: '3',
+    value: 3,
     checked: false
   },
   {
     label: 'Fri',
-    value: '4',
+    value: 4,
     checked: false
   },
   {
     label: 'Sat',
-    value: '5',
+    value: 5,
     checked: false
   },
   {
     label: 'Sun',
-    value: '6',
+    value: 6,
     checked: false
   },
 ];
@@ -86,15 +78,15 @@ function WorkScheduleForm({ setData, prevPage }: WorkScheduleFormProps) {
   const [openForm, setOpenForm] = useState(false);
   const [hydrated, setHydrated] = useState(false);
   const [confirmation, setConfirmation] = useState(false);
-  const [isCustom, setIsCustom] = useState('');
-  const [tempDay, setDayTemp] = useState<Array<string>>([]);
+  const [isCustom, setIsCustom] = useState(0);
+  const [tempDay, setDayTemp] = useState<Array<number>>([]);
   const [workScheduleID, setWorkScheduleID] = useState('');
   const [workScheduleName, setWorkScheduleName] = useState('');
   const initialValues: Employees.InitialValuesWorkScheduleForm = {
     workScheduleID: '',
     profileName: '',
-    type: '0',
-    dayType: [],
+    type: 0,
+    dayType: 0,
     day: [],
     startHour: dayjs(new Date()),
     endHour: dayjs(new Date()),
@@ -112,9 +104,9 @@ function WorkScheduleForm({ setData, prevPage }: WorkScheduleFormProps) {
   };
 
   const handleConfirmation = (formik) => {
-    if (isCustom === '1') {
+    if (isCustom === 1) {
       setConfirmation(false);
-    } else if (isCustom === '0') {
+    } else if (isCustom === 0) {
       handleFormOpen(formik);
       setConfirmation(false);
     }
@@ -131,38 +123,38 @@ function WorkScheduleForm({ setData, prevPage }: WorkScheduleFormProps) {
 
   const onSelectedDay = (formik, item, e) => {
     if (e.target.checked) {
-      const temp: Array<string> = [...tempDay, item?.value];
+      const temp: Array<number> = [...tempDay, item?.value];
       setDayTemp(temp);
-      formik.setFieldValue('day', tempDay);
+      formik.setFieldValue('day', temp);
     } else {
       const temp = tempDay.filter(v => v !== item?.value);
       setDayTemp(temp);
-      formik.setFieldValue('day', tempDay);
+      formik.setFieldValue('day', temp);
     }
   };
 
   const onSelecWorkDay = (formik, val) => {
     switch (val) {
       case '0': {
-        const temp: Array<string> = ['0', '1', '2', '3', '4', '5', '6'];
+        const temp: Array<number> = [0, 1, 2, 3, 4, 5, 6];
         formik.setFieldValue('day', temp);
         return setDayTemp(temp);
       }
         break;
       case '1': {
-        const temp: Array<string> = ['0', '1', '2', '3', '4'];
+        const temp: Array<number> = [0, 1, 2, 3, 4];
         formik.setFieldValue('day', temp);
         return setDayTemp(temp);
       }
         break;
       case '2': {
-        const temp: Array<string> = ['5', '6',];
+        const temp: Array<number> = [5, 6,];
         formik.setFieldValue('day', temp);
         return setDayTemp(temp);
       }
         break;
       case '3': {
-        const temp: Array<string> = [];
+        const temp: Array<number> = [];
         formik.setFieldValue('day', temp);
         return setDayTemp(temp);
       }
@@ -183,41 +175,6 @@ function WorkScheduleForm({ setData, prevPage }: WorkScheduleFormProps) {
 
   const handleSubmit = (formik, data) => {
     if (formik.dirty === true) {
-      // const payload = {
-      //   name: data.profileName,
-      //   scheduleType: parseInt(data.type),
-      //   startHour: dayjs(data.fixedStartTime).format('HH:mm'),
-      //   endHour: dayjs(data.fixedEndTime).format('HH:mm'),
-      //   type: parseInt(data.fixedWorkDayType),
-      //   breakHourName: data.breakName,
-      //   days: data.day,
-      //   breakDuration: data.breakDuration,
-      //   specificBreakHour: data.specifyBreakHour,
-      //   specificBreakStartHour: data.specifyBreakHour === true ? dayjs(data.breakStartTime).format('HH:mm') : '',
-      //   specificBreakEndHour: data.specifyBreakHour === true ? dayjs(data.breakEndTime).format('HH:mm') : '',
-      //   isWithBreak: data.breakName === '' ? false : true
-      // };
-      // const payloadFlexi = {
-      //   name: data.profileName,
-      //   scheduleType: parseInt(data.type),
-      //   startHour: data.flexiWorkHour.toString(),
-      //   endHour: '',
-      //   type: 5,
-      //   startDay: parseInt(data.flexiWorkDay),
-      //   endDay: 0,
-      //   breakHourName: data.breakName,
-      //   breakDuration: data.breakDuration,
-      //   days: data.day,
-      //   specificBreakHour: false,
-      //   specificBreakStartHour: data?.breakDuration?.toString(),
-      //   specificBreakEndHour: '',
-      //   isWithBreak: data.breakName === '' ? false : true
-      // };
-      // handleDynamicDay(payload, data, data.fixedWorkDayType);
-      // dispatch({
-      //   type: postSimulationEventRequested.toString(),
-      //   payload: data.type === '0' ? payload : payloadFlexi
-      // });
       const tempData: Array<workSchedule.BreakItemType> = [];
       data.breakItem.map((item) => {
         tempData.push({
@@ -228,8 +185,8 @@ function WorkScheduleForm({ setData, prevPage }: WorkScheduleFormProps) {
       });
       const payload = {
         name: workScheduleName,
-        scheduleType: +data.dayType,
-        type: +data.type,
+        scheduleType: Number(data.type),
+        type: Number(data.dayType),
         days: data.day,
         start: dayjs(data.startHour).format('HH:mm'),
         end: dayjs(data.endHour).format('HH:mm'),
@@ -237,8 +194,8 @@ function WorkScheduleForm({ setData, prevPage }: WorkScheduleFormProps) {
       };
       const payloadFlexi = {
         name: workScheduleName,
-        scheduleType: +data.dayType,
-        type: +data.type,
+        scheduleType: Number(data.type),
+        type: Number(data.dayType),
         days: data.day,
         start: data.flexiWorkHour,
         end: '',
@@ -246,8 +203,9 @@ function WorkScheduleForm({ setData, prevPage }: WorkScheduleFormProps) {
       };
       dispatch({
         type: postSimulationEventRequested.toString(),
-        payload: +data.type === 0 ? payload : payloadFlexi
+        payload: Number(data.type) === 0 ? payload : payloadFlexi
       });
+      setDayTemp([]);
       setOpenForm(false);
     }
   };
@@ -257,93 +215,60 @@ function WorkScheduleForm({ setData, prevPage }: WorkScheduleFormProps) {
     calendarRef?.current?.scheduler?.events?.splice(0, eventLength);
   };
 
-
-
-  // const handleDynamicDay = (payload, data, type) => {
-  //   switch (type) {
-  //     case '0': {
-  //       const tempData = {
-  //         startDay: data.type === '0' ? parseInt(data.fixedStartDay) : parseInt(data.flexiWorkDay),
-  //       };
-  //       return Object.assign(payload, tempData);
-  //     }
-  //       break;
-  //     case '1': {
-  //       const tempData = {
-  //         startDay: 0,
-  //         endDay: 6
-  //       };
-  //       return Object.assign(payload, tempData);
-  //     }
-  //       break;
-  //     case '2': {
-  //       const tempData = {
-  //         startDay: 7,
-  //         endDay: 0
-  //       };
-  //       return Object.assign(payload, tempData);
-  //     }
-  //       break;
-  //     case '3': {
-  //       const tempData = {
-  //         startDay: 8,
-  //         endDay: 0
-  //       };
-  //       return Object.assign(payload, tempData);
-  //     }
-  //       break;
-  //     case '4': {
-  //       const tempData = {
-  //         startDay: data.type === '0' ? parseInt(data.fixedStartDay) : parseInt(data.flexiWorkDay),
-  //         endDay: data.type === '0' ? parseInt(data.fixedEndDay) : 0,
-  //       };
-  //       return Object.assign(payload, tempData);
-  //     }
-  //       break;
-  //     default:
-  //       return null;
-  //   }
-  // };
-
   useEffect(() => {
     handleDeleteEventSchedule();
   }, []);
 
   useEffect(() => {
-    calendarRef?.current?.scheduler?.confirmEvent(employee?.events, 'create');
-    const dataValues: Array<Employees.ItemsWorkScheduleType> = [];
-    employee?.events.map((item) => {
-      dataValues.push({
-        day: item.day,
-        eventId: item.event_id,
-        label: item.title,
-        name: item.name,
-        start: dayjs(item.start).format('YYYY-MM-DD HH:mm'),
-        end: dayjs(item.end).format('YYYY-MM-DD HH:mm'),
-        isBreak: item.isBreak,
-        isDuration: item.isDuration,
-        color: item.color,
-        duration: +item.duration,
-        allDay: item.allDay,
-        scheduleType: item.scheduleType,
-        type: item.type
+    if (calendarRef?.current) {
+      const mergeData = [...calendarRef?.current?.scheduler?.events as ProcessedEvent[] || [] as ProcessedEvent[]];
+      const newData = [...mergeData.filter((e) => {
+        const found = employee?.events.some((el) => dayjs(el.start).format('YYYY-MM-DD') === dayjs(e.start).format('YYYY-MM-DD'));
+        if (found) {
+          return false;
+        }
+        return true;
+      }), ...employee?.events as ProcessedEvent[]];
+      dispatch({ type: postCalculateEventRequested.toString(),
+        payload: {
+          items: newData
+        }
       });
-    });
-    if (initialValues.workScheduleID != 0) {
-      setData({
-        workScheduleID: String(workScheduleID),
-        name: workScheduleName,
-        grossHours: employee?.grossHour,
-        netHours: employee?.netHour,
-        items: dataValues
+      calendarRef?.current?.scheduler?.confirmEvent(newData, 'create');
+      const dataValues: Array<Employees.ItemsWorkScheduleType> = [];
+      newData?.map((item) => {
+        dataValues.push({
+          day: item.day,
+          eventId: item.event_id,
+          label: item.title,
+          name: item.name,
+          start: dayjs(item.start).toISOString(),
+          end: dayjs(item.end).toISOString(),
+          isBreak: item.isBreak,
+          isDuration: item.isDuration,
+          color: item.color,
+          duration: Number(item.duration),
+          allDay: item.allDay,
+          scheduleType: item.scheduleType,
+          type: item.type
+        });
       });
-    } else {
-      setData({
-        name: workScheduleName,
-        grossHours: employee?.grossHour,
-        netHours: employee?.netHour,
-        items: dataValues
-      });
+      if (Number(workScheduleID) != 0) {
+        setData({
+          workScheduleID: String(workScheduleID),
+          name: workScheduleName,
+          grossHours: employee?.grossHour,
+          netHours: employee?.netHour,
+          items: dataValues
+        });
+      } else {
+        setData({
+          name: workScheduleName,
+          grossHours: employee?.grossHour,
+          netHours: employee?.netHour,
+          items: dataValues
+        });
+      }
     }
   }, [employee?.events]);
 
@@ -386,7 +311,7 @@ function WorkScheduleForm({ setData, prevPage }: WorkScheduleFormProps) {
               }
               <FormikForm>
                 <Grid container spacing={3} mb='1rem' alignItems='center'>
-                  <Grid item xs={10.5} sm={10.5} md={10.5} lg={10.5} xl={10.5}>
+                  <Grid item xs={6.5} sm={6.5} md={6.5} lg={6.5} xl={6.5}>
                     <Select
                       name='workScheduleID'
                       withAsterisk={true}
@@ -417,9 +342,7 @@ function WorkScheduleForm({ setData, prevPage }: WorkScheduleFormProps) {
                   <Grid item xs={1.5} sm={1.5} md={1.5} lg={1.5} xl={1.5} mt={formik.errors.profileName ? '0px' : '28px'}>
                     <MuiButton onClick={() => { handleConfirmOpen(formik); }} variant='contained' size='small' sx={{ height: '2.5rem' }}><Add />&nbsp; Add schedule</MuiButton>
                   </Grid>
-                </Grid>
-                <Grid container spacing={2} mb='1rem'>
-                  <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+                  <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
                     <Input
                       name='weeklyGross'
                       withAsterisk={false}
@@ -438,7 +361,7 @@ function WorkScheduleForm({ setData, prevPage }: WorkScheduleFormProps) {
                       }}
                     />
                   </Grid>
-                  <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+                  <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
                     <Input
                       name='weeklyNet'
                       withAsterisk={false}
@@ -460,11 +383,12 @@ function WorkScheduleForm({ setData, prevPage }: WorkScheduleFormProps) {
                 </Grid>
                 <Scheduler
                   view='week'
-                  disableViewNavigator={false}
                   ref={calendarRef}
                   events={[]}
                   navigation={false}
                   day={null}
+                  editable={false}
+                  deletable={false}
                   month={null}
                   week={{
                     weekDays: [0, 1, 2, 3, 4, 5, 6],
@@ -500,12 +424,12 @@ function WorkScheduleForm({ setData, prevPage }: WorkScheduleFormProps) {
                         name='isCustom'
                         value={isCustom}
                         onChange={(e) => {
-                          setIsCustom(e.target.value);
+                          setIsCustom(Number(e.target.value));
                         }}
                         row
                         options={[
-                          { label: 'Yes', value: '1' },
-                          { label: 'No', value: '0' }
+                          { label: 'Yes', value: 1 },
+                          { label: 'No', value: 0 }
                         ]}
                       />
                     </Grid>
@@ -532,10 +456,10 @@ function WorkScheduleForm({ setData, prevPage }: WorkScheduleFormProps) {
                         label=''
                         name='type'
                         value={formik.values.type}
-                        onChange={formik.handleChange}
+                        onChange={(e) => { formik.setFieldValue('type', e.target.value); }}
                         options={[
-                          { label: 'Fixed Work Hour', value: '0' },
-                          { label: 'Flexi Work Hour', value: '1' }
+                          { label: 'Fixed Work Hour', value: 0 },
+                          { label: 'Flexi Work Hour', value: 1 }
                         ]}
                         row
                         sx={{ fontSize: '12px' }}
@@ -592,7 +516,7 @@ function WorkScheduleForm({ setData, prevPage }: WorkScheduleFormProps) {
                       <Typography>Work Hour&nbsp;<AsteriskComponent>*</AsteriskComponent></Typography>
                     </Grid>
                     {
-                      formik.values.type === '0' && (
+                      formik.values.type == '0' && (
                         <>
                           <Grid item xs={4.5} sm={4.5} md={4.5} lg={4.5} xl={4.5}>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -618,6 +542,7 @@ function WorkScheduleForm({ setData, prevPage }: WorkScheduleFormProps) {
                               <TimePicker
                                 ampm={false}
                                 value={formik.values.endHour}
+                                minTime={formik.values.startHour}
                                 onChange={(val) => formik.setFieldValue('endHour', val, true)}
                                 sx={{
                                   '& .MuiOutlinedInput-input': {
@@ -633,15 +558,14 @@ function WorkScheduleForm({ setData, prevPage }: WorkScheduleFormProps) {
                       )
                     }
                     {
-                      formik.values.type === '1' && (
+                      formik.values.type == '1' && (
                         <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
                           <Input
                             withAsterisk={false}
                             size='small'
-                            type='number'
                             name='flexiWorkHour'
                             value={formik.values.flexiWorkHour}
-                            onChange={formik.handleChange}
+                            onChange={(e) => { formik.setFieldValue('flexiWorkHour', e.target.value);}}
                             onBlur={formik.handleBlur}
                             InputProps={{
                               endAdornment: (
@@ -656,113 +580,113 @@ function WorkScheduleForm({ setData, prevPage }: WorkScheduleFormProps) {
                     }
 
                   </Grid>
-                  <FieldArray
-                    name='breakItem'
-                    render={(data) => {
-                      return (
-                        <>
-                          {
-                            formik.values.type === '0' && (
-                              <>
-                                <Typography mb='12px' fontWeight='bold' color='primary'>Add Break</Typography>
-                                {
-                                  formik.values.breakItem.length > 0 && (
-                                    <>
-                                      <Grid container spacing={2}>
-                                        <Grid item xs={4} sm={4} md={4} lg={4} xl={4}><Typography>Break Name</Typography></Grid>
-                                        <Grid item xs={3} sm={3} md={3} lg={3} xl={3}><Typography>Start Time</Typography></Grid>
-                                        <Grid item xs={.5} sm={.5} md={.5} lg={.5} xl={.5}><Typography></Typography></Grid>
-                                        <Grid item xs={3} sm={3} md={3} lg={3} xl={3}><Typography>End Time</Typography></Grid>
-                                        <Grid item xs={1} sm={1} md={1} lg={1} xl={1}></Grid>
-                                      </Grid>
-                                      {
-                                        formik?.values?.breakItem.map((item, index) => (
-                                          <Grid key={index} container spacing={2} mb='1rem'>
-                                            <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
-                                              <Input
-                                                withAsterisk={false}
-                                                size='small'
-                                                type='number'
-                                                value={item?.breakName}
-                                                onChange={(e) => { formik.setFieldValue(`breakItem.${index}.breakName`, e.target.value); }}
-                                              />
-                                            </Grid>
-                                            <Grid item xs={3.1} sm={3.1} md={3.1} lg={3.1} xl={3.1}>
-                                              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                <TimePicker
-                                                  ampm={false}
-                                                  value={item?.startTime}
-                                                  onChange={(val) => formik.setFieldValue(`breakItem.${index}.startTime`, val, true)}
-                                                  sx={{
-                                                    '& .MuiOutlinedInput-input': {
-                                                      padding: '8.5px 14px',
-                                                      border: 'none !important'
-                                                    },
-                                                    width: '100%'
-                                                  }}
-                                                />
-                                              </LocalizationProvider>
-                                            </Grid>
-                                            <Grid item xs={.5} sm={.5} md={.5} lg={.5} xl={.5} alignSelf='center'>
-                                              <AiOutlineSwapRight />
-                                            </Grid>
-                                            <Grid item xs={3.1} sm={3.1} md={3.1} lg={3.1} xl={3.1}>
-                                              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                <TimePicker
-                                                  ampm={false}
-                                                  value={item?.startTime}
-                                                  onChange={(val) => formik.setFieldValue(`breakItem.${index}.endTime`, val, true)}
-                                                  sx={{
-                                                    '& .MuiOutlinedInput-input': {
-                                                      padding: '8.5px 14px',
-                                                      border: 'none !important'
-                                                    },
-                                                    width: '100%'
-                                                  }}
-                                                />
-                                              </LocalizationProvider>
-                                            </Grid>
-                                            <Grid item xs={1} sm={1} md={1} lg={1} xl={1}>
-                                              <IconButton
-                                                parentColor='red.100'
-                                                onClick={() => { data.remove(index); }}
-                                                icons={
-                                                  <BsTrashFill fontSize={20} color='#EF4444' />
-                                                }
-                                              />
-                                            </Grid>
+                  {
+                    formik.values.type == '0' && (
+                      <FieldArray
+                        name='breakItem'
+                        render={(data) => {
+                          return (
+                            <>
+                              <Typography mb='12px' fontWeight='bold' color='primary'>Add Break</Typography>
+                              {
+                                formik.values.breakItem.length > 0 && (
+                                  <>
+                                    <Grid container spacing={2}>
+                                      <Grid item xs={4} sm={4} md={4} lg={4} xl={4}><Typography>Break Name</Typography></Grid>
+                                      <Grid item xs={3} sm={3} md={3} lg={3} xl={3}><Typography>Start Time</Typography></Grid>
+                                      <Grid item xs={.5} sm={.5} md={.5} lg={.5} xl={.5}><Typography></Typography></Grid>
+                                      <Grid item xs={3} sm={3} md={3} lg={3} xl={3}><Typography>End Time</Typography></Grid>
+                                      <Grid item xs={1} sm={1} md={1} lg={1} xl={1}></Grid>
+                                    </Grid>
+                                    {
+                                      formik?.values?.breakItem.map((item, index) => (
+                                        <Grid key={index} container spacing={2} mb='1rem'>
+                                          <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
+                                            <Input
+                                              withAsterisk={false}
+                                              size='small'
+                                              value={item?.name}
+                                              onChange={(e) => { formik.setFieldValue(`breakItem.${index}.name`, e.target.value); }}
+                                            />
                                           </Grid>
-                                        ))
-                                      }
-                                    </>
-                                  )
-                                }
-                                <MuiButton
-                                  size='medium'
-                                  sx={{ marginBottom: '1rem', color: '#FFFFFF' }}
-                                  variant='contained'
-                                  color='secondary'
-                                  onClick={() => {
-                                    data.insert(
-                                      formik.values.breakItem.length + 1,
-                                      {
-                                        breakName: '',
-                                        startTime: dayjs(new Date()),
-                                        durationHour: 0,
-                                        durationMinute: 0
-                                      }
-                                    );
-                                  }}
-                                >
-                                  <Add />Add Break
-                                </MuiButton>
-                              </>
-                            )
-                          }
-                        </>
-                      );
-                    }}
-                  />
+                                          <Grid item xs={3.1} sm={3.1} md={3.1} lg={3.1} xl={3.1}>
+                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                              <TimePicker
+                                                ampm={false}
+                                                value={item?.start}
+                                                minTime={formik.values.startHour}
+                                                maxTime={formik.values.endHour}
+                                                onChange={(val) => formik.setFieldValue(`breakItem.${index}.start`, val)}
+                                                sx={{
+                                                  '& .MuiOutlinedInput-input': {
+                                                    padding: '8.5px 14px',
+                                                    border: 'none !important'
+                                                  },
+                                                  width: '100%'
+                                                }}
+                                              />
+                                            </LocalizationProvider>
+                                          </Grid>
+                                          <Grid item xs={.5} sm={.5} md={.5} lg={.5} xl={.5} alignSelf='center'>
+                                            <AiOutlineSwapRight />
+                                          </Grid>
+                                          <Grid item xs={3.1} sm={3.1} md={3.1} lg={3.1} xl={3.1}>
+                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                              <TimePicker
+                                                ampm={false}
+                                                value={item?.end}
+                                                minTime={formik.values.startHour}
+                                                maxTime={formik.values.endHour}
+                                                onChange={(val) => formik.setFieldValue(`breakItem.${index}.end`, val)}
+                                                sx={{
+                                                  '& .MuiOutlinedInput-input': {
+                                                    padding: '8.5px 14px',
+                                                    border: 'none !important'
+                                                  },
+                                                  width: '100%'
+                                                }}
+                                              />
+                                            </LocalizationProvider>
+                                          </Grid>
+                                          <Grid item xs={1} sm={1} md={1} lg={1} xl={1}>
+                                            <IconButton
+                                              parentColor='red.100'
+                                              onClick={() => { data.remove(index); }}
+                                              icons={
+                                                <BsTrashFill fontSize={20} color='#EF4444'/>
+                                              }
+                                            />
+                                          </Grid>
+                                        </Grid>
+                                      ))
+                                    }
+                                  </>
+                                )
+                              }
+                              <MuiButton
+                                size='medium'
+                                sx={{ marginBottom: '1rem', color: '#FFFFFF' }}
+                                variant='contained'
+                                color='secondary'
+                                onClick={() => {
+                                  data.insert(
+                                    formik.values.breakItem.length + 1,
+                                    {
+                                      name: '',
+                                      start: dayjs(new Date()),
+                                      end: dayjs(new Date())
+                                    }
+                                  );
+                                }}
+                              >
+                                <Add />Add Break
+                              </MuiButton>
+                            </>
+                          );
+                        }}
+                      />
+                    )
+                  }
                 </CustomModal>
               </FormikForm>
             </>

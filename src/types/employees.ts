@@ -239,17 +239,17 @@ export declare namespace Employees {
   }
 
   interface BreakItemType {
-    breakName: string;
-    startTime: DayJS;
-    endTime: DayJS;
+    name: string;
+    start: DayJS;
+    end: DayJS;
   }
 
   interface InitialValuesWorkScheduleForm {
     workScheduleID: string | number;
     profileName: string;
     type: string | number;
-    dayType: Array<string | number>;
-    day: Array<string | number>
+    dayType: number;
+    day: Array<string | number>;
     startHour: DayJS;
     endHour: DayJS;
     flexiWorkHour: string | number;
@@ -285,7 +285,7 @@ export declare namespace Employees {
 
   interface ItemsWorkScheduleType {
     day: number,
-    eventId: number,
+    eventId: string | number,
     label: string,
     name: string,
     start: Date | string,

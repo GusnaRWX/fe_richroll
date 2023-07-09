@@ -822,14 +822,6 @@ function* fetchPostSimulationEvent(action: AnyAction) {
           events: res.data.data
         }
       });
-      const data = {
-        type: postCalculateEventRequested.toString(),
-        payload: {
-          items: [...res.data.data]
-        }
-      };
-      yield call(fetchPostCalculateEvent, data);
-
     }
   } catch (err) {
     if (err instanceof AxiosError) {

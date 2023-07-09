@@ -151,12 +151,12 @@ function EmployeeCreateComponent() {
 
   const dispatch = useAppDispatch();
 
-  const handleSaveWorkSchedule = async (data) => {
+  const handleSaveWorkSchedule = async () => {
     dispatch({
       type: postWorkScheduleRequested.toString(),
       payload: {
         id: employeeID,
-        workSchedule: data
+        workSchedule: valueWorkSchedule
       }
     });
     router.push('/company-management/employees');
@@ -226,7 +226,7 @@ function EmployeeCreateComponent() {
         inputData.append('position', data.position);
       }
       inputData.append('isSelfService', data.isSelfService ? 'true' : 'false');
-  
+
       dispatch({
         type: postEmployeeInfoRequested.toString(),
         payload: {
@@ -280,8 +280,8 @@ function EmployeeCreateComponent() {
 
   useEffect(() => {
     console.log(informationValue.isSelfService);
-    
-    if (![200, 201, 0].includes(responser?.code)) handleBack(); 
+
+    if (![200, 201, 0].includes(responser?.code)) handleBack();
     if (![200, 201, 0].includes(responser?.code) && informationValue.isSelfService && value === 3) setValue(0);
   }, [responser?.code]);
 
