@@ -15,8 +15,6 @@ import { Text } from '@/components/_shared/common';
 import { validationSchemeLogin } from './validate';
 import { useFormik } from 'formik';
 import { Auth } from '@/types/authentication';
-import { LoginSocialFacebook, IResolveParams } from 'reactjs-social-login';
-// import { env } from 'process';
 
 const LinkComponent = styled(Link)(({ theme }) => ({
   color: theme.palette.primary.main,
@@ -64,13 +62,13 @@ const LoginForm = ({
     }
   };
 
-  // const handleFacebookLogin = async () => {
-  //   try {
-  //     await signIn('facebook', { callbackUrl: '/company' });
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
+  const handleFacebookLogin = async () => {
+    try {
+      await signIn('facebook', { callbackUrl: '/company' });
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <Box padding={`${![200, 201, 0].includes(responser?.code) ? 35 : 45}px 0`}>
@@ -177,32 +175,14 @@ const LoginForm = ({
             onClick={handleGoogleLogin}
           />
           <Typography fontSize={14}>Or</Typography>
-          <LoginSocialFacebook
-            appId={'256047170435977'}
-            fieldsProfile={
-              'id,first_name,last_name,middle_name,name,name_format,picture,short_name,email,gender'
-            }
-            onResolve={({ provider, data }: IResolveParams) => {
-              setProvider(provider);
-              setProfile(data);
-              console.log(provider, 'provider');
-              console.log(data, 'data');
-            }}
-            redirect_uri={''}
-            onReject={err => {
-              console.log(err);
-            }}
-            onLoginStart={() => { console.log('started'); }}
-          >
-            <Image
-              src={Icons.SSO_FACEBOOK}
-              width={40}
-              height={40}
-              style={{ cursor: 'pointer' }}
-              alt='sso-facebook'
-            // onClick={handleFacebookLogin}
-            />
-          </LoginSocialFacebook>
+          <Image
+            src={Icons.SSO_FACEBOOK}
+            width={40}
+            height={40}
+            style={{ cursor: 'pointer' }}
+            alt='sso-facebook'
+            onClick={handleFacebookLogin}
+          />
         </WrapperSSO>
         <Typography
           color='grey.400'

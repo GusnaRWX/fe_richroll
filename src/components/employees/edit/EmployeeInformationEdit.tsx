@@ -227,6 +227,7 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
       images: String(images)
     };
     setValues(allInfoValues as any);
+    console.log(formik.values);
   }, [formik.values]);
 
   const filter = createFilterOptions<Option.FreesoloType>();
@@ -431,7 +432,7 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
                 if (typeof newValue === 'string') {
                   formik.setFieldValue('department', newValue, false);
                 } else if (newValue && newValue.inputValue) {
-                  formik.setFieldValue('deparment', newValue.inputValue, false);
+                  formik.setFieldValue('department', newValue.inputValue, false);
                   setMappedDeparment((prev) => [...prev, {
                     label: newValue.inputValue,
                     id: String(Math.random() * Math.PI)
@@ -650,7 +651,7 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
         onClose={handleCancelCrop}
         image={images}
         setCropValue={handleSaveCropImage}
-        ratio={1/1}
+        ratio={1 / 1}
       />
       <Modal
         open={openCamera}
