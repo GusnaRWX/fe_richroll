@@ -39,6 +39,25 @@
     "income_tax_profile_deductable_component" : "Deductable Component",
     "income_tax_profile_profile" : "Profile"
   },
+  "button" : {
+    "next" : "Next",
+    "back" : "Back",
+    "save" : "Save",
+    "save_approve" : "Save and Approve",
+    "save_exit" : "Save and Exit",
+    "confirm" : "Confirm",
+    "cancel" : "Cancel",
+    "delete" : "Delete",
+    "edit" :"Edit",
+    "activate" : "Activate",
+    "archive" : "Archived",
+    "duplicate" : "Duplicate",
+    "mark_complete" : "Mark All and Complete",
+    "add_new_profile" : "Add New Profile",
+    "add_component" : "Add Component",
+    "add_new_component" : "Add New Component",
+    "component" :"Component"
+  },
 
 
 

@@ -39,6 +39,25 @@
     "income_tax_profile_deductable_component": "可扣除部分",
     "income_tax_profile_profile": "轮廓"
   },
+  "button": {
+    "next": "下一个",
+    "back": "后退",
+    "save": "节省",
+    "save_approve": "保存并批准",
+    "save_exit": "保存并退出",
+    "confirm": "确认",
+    "cancel": "取消",
+    "delete": "删除",
+    "edit": "编辑",
+    "activate": "启用",
+    "archive": "已存档",
+    "duplicate": "复制",
+    "mark_complete": "标记全部并完成",
+    "add_new_profile": "添加新的个人资料",
+    "add_new_component": "添加新组件",
+    "add_component": "添加组件",
+    "component": "成分"
+  },
 
 
 

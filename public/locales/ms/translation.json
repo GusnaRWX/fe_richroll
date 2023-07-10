@@ -39,6 +39,25 @@
     "income_tax_profile_deductable_component": "Komponen Boleh Tolak",
     "income_tax_profile_profile": "Profil"
   },
+  "button": {
+    "next": "Seterusnya",
+    "back": "belakang",
+    "save": "Jimat",
+    "save_approve": "Simpan dan Luluskan",
+    "save_exit": "Simpan dan keluar",
+    "confirm": "sahkan",
+    "cancel": "Batal",
+    "delete": "Padam",
+    "edit": "Sunting",
+    "activate": "Aktifkan",
+    "archive": "Diarkibkan",
+    "duplicate": "Pendua",
+    "mark_complete": "Tandakan Semua dan Selesai",
+    "add_new_profile": "Tambah Profil Baharu",
+    "add_new_component": "Tambah Komponen Baharu",
+    "add_component": "Tambah Komponen",
+    "component": "Komponen"
+  },
 
 
 

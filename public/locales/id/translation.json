@@ -39,6 +39,25 @@
     "income_tax_profile_deductable_component": "Komponen yang Dapat Dikurangi",
     "income_tax_profile_profile": "Profil"
   },
+  "button": {
+    "next": "Berikutnya",
+    "back": "Kembali",
+    "save": "Menyimpan",
+    "save_approve": "Simpan dan Setujui",
+    "save_exit": "Simpan dan keluar",
+    "confirm": "Mengonfirmasi",
+    "cancel": "Membatalkan",
+    "delete": "Menghapus",
+    "edit": "Sunting",
+    "activate": "Mengaktifkan",
+    "archive": "Diarsipkan",
+    "duplicate": "Duplikat",
+    "mark_complete": "Tandai Semua dan Selesai",
+    "add_new_profile": "Tambahkan Profil Baru",
+    "add_new_component": "Tambahkan Komponen Baru",
+    "add_component": "Tambahkan Komponen",
+    "component": "Komponen"
+  },
 
 
 
