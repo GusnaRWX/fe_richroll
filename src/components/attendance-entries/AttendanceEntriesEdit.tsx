@@ -99,6 +99,7 @@ const AttendanceEntriesEdit: React.FC<AttendanceEntriesEditProps> = ({
                   <Text title='From' fontWeight={400} sx={{ marginBottom: '6px' }} />
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <TimePicker
+                      ampm={false}
                       format='HH:mm'
                       sx={{
                         '& .MuiOutlinedInput-input': {
@@ -116,6 +117,7 @@ const AttendanceEntriesEdit: React.FC<AttendanceEntriesEditProps> = ({
                   <Text title='To' fontWeight={400} sx={{ marginBottom: '6px' }} />
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <TimePicker
+                      ampm={false}
                       format='HH:mm'
                       sx={{
                         '& .MuiOutlinedInput-input': {
