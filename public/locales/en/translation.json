@@ -418,20 +418,6 @@
           "amount_cap" :"Amount Cap"
         }
       },
-      "button" : {
-        "edit" :"Edit",
-        "delete" :"Delete",
-        "save" :"Save",
-        "save_approve" :"Save and Approve",
-        "cancel" :"Cancel",
-        "activate" :"Activate",
-        "archive" :"Archived",
-        "confirm" :"Confirm",
-        "add_new_profile" : "Add New Profile",
-        "add_component" : "Add Component",
-        "component" :"Component",
-        "duplicate" :"Duplicate"
-      },
       "modal" : {
         "delete" : {
           "title" : "Delete Data Entry",

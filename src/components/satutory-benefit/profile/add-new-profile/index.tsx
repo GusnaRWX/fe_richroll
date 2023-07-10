@@ -172,7 +172,7 @@ export default function CreateNewProfile() {
                 <Button
                   fullWidth={false}
                   size='small'
-                  label={t('satutory_benefit.profile.button.cancel')}
+                  label={t('button.cancel')}
                   variant='outlined'
                   sx={{ mr: '12px' }}
                   color='primary'
@@ -183,7 +183,7 @@ export default function CreateNewProfile() {
                 <Button
                   fullWidth={false}
                   size='small'
-                  label={t('satutory_benefit.profile.button.save_approve')}
+                  label={t('button.save_approve')}
                   color='primary'
                   onClick={() => formik.handleSubmit()}
                 />
@@ -566,7 +566,7 @@ export default function CreateNewProfile() {
                           onClick={() => setIsAddNewComponent(true)}
                           color='secondary'
                           startIcon={<AddIcon />}
-                          label={t('satutory_benefit.profile.button.add_component')}
+                          label={t('button.add_component')}
                           sx={{ fontSize: '18px' }}
                         />
                       </Box>
@@ -619,7 +619,7 @@ export default function CreateNewProfile() {
                               <AddButton
                                 variant='contained'
                                 startIcon={<AddIcon />}
-                                label={t('satutory_benefit.profile.button.component')}
+                                label={t('button.component')}
                                 sx={{ width: '136px', fontSize: '14px' }}
                               />
                             </Grid>
