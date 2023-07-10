@@ -280,7 +280,8 @@
           "citation" : "Citation",
           "internal_notes" : "Internal Notes",
           "external_notes" : "External Notes",
-          "max_char_info" : "Max. 120 Character"
+          "max_char_info" : "Max. 120 Character",
+          "component_name": "Component Name"
         },
         "create_designed_transfer_account" : {
           "form_title" : "Bank Information",
@@ -308,7 +309,8 @@
           "notes_placeholder": "Input Notes",
           "bank_info": "Bank Information",
           "message": "The Designated Transfer Account is added manually to each employees profile",
-          "max_char_info" : "Max. 100 Character"
+          "max_char_info" : "Max. 100 Character",
+          "transfer_info": "Transfer Information"
         },
         "rates" : {
           "contributor_option" : {
@@ -336,7 +338,10 @@
         "cancel" : "Cancel",
         "next" : "Next",
         "back" : "Back",
-        "confirm" : "Confirm"
+        "confirm" : "Confirm",
+        "duplicate": "Duplicate",
+        "delete": "Delete",
+        "edit": "Edit"
       },
       "modal" : {
         "delete" : {

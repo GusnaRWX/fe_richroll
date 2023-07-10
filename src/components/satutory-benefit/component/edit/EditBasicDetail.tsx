@@ -3,12 +3,14 @@ import { Grid, Box, Typography } from '@mui/material';
 import { Button, Input, Select, Textarea } from '@/components/_shared/form';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { useTranslation } from 'react-i18next';
 
 interface EditBasicDetailProps {
   setValue: Dispatch<SetStateAction<number>>
 }
 
 export default function EditBasicDetail({setValue}: EditBasicDetailProps) {
+  const {t} = useTranslation();
   const Dummyoption = [
     { value: '1', label: 'Dummy 1' },
     { value: '2', label: 'Dummy 2' },
@@ -50,8 +52,8 @@ export default function EditBasicDetail({setValue}: EditBasicDetailProps) {
         <Grid container spacing={2}>
           <Grid item xs={12} md={12} lg={6} xl={6}>
             <Input
-              placeholder='Input Statutory Benefits Name'
-              customLabel='Satutory Name'
+              placeholder={t('satutory_benefit.component.form_&_detail.create_basic_detail.name_placeholder')}
+              customLabel={t('satutory_benefit.component.form_&_detail.create_basic_detail.name')}
               withAsterisk
               size='small'
               value={formik.values.satutoryName}
@@ -67,7 +69,7 @@ export default function EditBasicDetail({setValue}: EditBasicDetailProps) {
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Select
               placeholder='Select Country'
-              customLabel='Country'
+              customLabel={t('satutory_benefit.component.form_&_detail.create_basic_detail.country')}
               withAsterisk
               size='small'
               fullWidth
@@ -82,7 +84,7 @@ export default function EditBasicDetail({setValue}: EditBasicDetailProps) {
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Select
               placeholder='Select Province'
-              customLabel='Province'
+              customLabel={t('satutory_benefit.component.form_&_detail.create_basic_detail.province')}
               size='small'
               fullWidth
               options={Dummyoption}
@@ -96,7 +98,7 @@ export default function EditBasicDetail({setValue}: EditBasicDetailProps) {
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Select
               placeholder='Select City'
-              customLabel='City'
+              customLabel={t('satutory_benefit.component.form_&_detail.create_basic_detail.city')}
               size='small'
               fullWidth
               options={Dummyoption}
@@ -107,7 +109,7 @@ export default function EditBasicDetail({setValue}: EditBasicDetailProps) {
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Select
               placeholder='Select Country'
-              customLabel='Sub-District'
+              customLabel={t('satutory_benefit.component.form_&_detail.create_basic_detail.sub_district')}
               size='small'
               fullWidth
               options={Dummyoption}
@@ -120,7 +122,7 @@ export default function EditBasicDetail({setValue}: EditBasicDetailProps) {
         <Grid container spacing={2} style={{marginTop: '12px'}}>
           <Grid item xs={12} md={12} lg={12} xl={12}>
             <Textarea
-              customLabel='Citation'
+              customLabel={t('satutory_benefit.component.form_&_detail.create_basic_detail.citation')}
               minRows={4}
               style={{ resize: 'vertical' }}
               value={formik.values.citation}
@@ -133,7 +135,7 @@ export default function EditBasicDetail({setValue}: EditBasicDetailProps) {
                 color: '#6B7280',
               }}
             >
-            Max. 120 Character
+              {t('satutory_benefit.component.form_&_detail.create_basic_detail.max_char_info')}
             </Typography>
           </Grid>
         </Grid>
@@ -141,7 +143,7 @@ export default function EditBasicDetail({setValue}: EditBasicDetailProps) {
         <Grid container spacing={2} style={{marginTop: '12px'}}>
           <Grid item xs={12} md={12} lg={12} xl={12}>
             <Textarea
-              customLabel='Internal Notes'
+              customLabel={t('satutory_benefit.component.form_&_detail.create_basic_detail.internal_notes')}
               minRows={4}
               style={{ resize: 'vertical' }}
               value={formik.values.internalNotes}
@@ -154,7 +156,7 @@ export default function EditBasicDetail({setValue}: EditBasicDetailProps) {
                 color: '#6B7280',
               }}
             >
-            Max. 120 Character
+              {t('satutory_benefit.component.form_&_detail.create_basic_detail.max_char_info')}
             </Typography>
           </Grid>
         </Grid>
@@ -162,7 +164,7 @@ export default function EditBasicDetail({setValue}: EditBasicDetailProps) {
         <Grid container spacing={2} style={{marginTop: '12px'}}>
           <Grid item xs={12} md={12} lg={12} xl={12}>
             <Textarea
-              customLabel='External Notes'
+              customLabel={t('satutory_benefit.component.form_&_detail.create_basic_detail.external_notes')}
               minRows={4}
               style={{ resize: 'vertical' }}
               value={formik.values.externalNotes}
@@ -175,7 +177,7 @@ export default function EditBasicDetail({setValue}: EditBasicDetailProps) {
                 color: '#6B7280',
               }}
             >
-            Max. 120 Character
+              {t('satutory_benefit.component.form_&_detail.create_basic_detail.max_char_info')}
             </Typography>
           </Grid>
         </Grid>

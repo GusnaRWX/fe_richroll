@@ -17,6 +17,7 @@ import {
 } from '@mui/material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { useTranslation } from 'react-i18next';
 
 const rates = [
   {
@@ -42,6 +43,9 @@ const rates = [
 ];
 
 export default function EditRates() {
+  const {t} = useTranslation();
+  const tPath = 'satutory_benefit.component.form_&_detail.rates.';
+
   const initialValues = {
     employee: true,
     employer: false,
@@ -102,7 +106,10 @@ export default function EditRates() {
   return (
     <>
       <Box component='div' sx={{ p: '16px' }}>
-        <Typography sx={{color: 'grey.700', fontWeight: 400, display: 'block', marginBottom: '15px'}}>Contributor<AsteriskComponent>*</AsteriskComponent></Typography>
+        <Typography sx={{color: 'grey.700', fontWeight: 400, display: 'block', marginBottom: '15px'}}>
+          {t(`${tPath}contributor_option.label`)}
+          <AsteriskComponent>*</AsteriskComponent>
+        </Typography>
         <FormGroup sx={{ display: 'inline', bgcolor: 'red' }}>
           <FormControlLabel
             control={
@@ -113,7 +120,7 @@ export default function EditRates() {
                 }
               />
             }
-            label='Employee'
+            label={t(`${tPath}contributor_option.employee`)}
           />
           <FormControlLabel
             control={
@@ -124,13 +131,13 @@ export default function EditRates() {
                 }
               />
             }
-            label='Employer'
+            label={t(`${tPath}contributor_option.employer`)}
             sx={{ ml: '50px' }}
           />
           {formik.values.employee && formik.values.employer && (
             <Box margin='32px 0'>
               <FormControlLabel
-                label='Employer Match Rule'
+                label={t(`${tPath}match_rule_button`)}
                 control={
                   <Switch
                     value={formik.values.employerMatch}
@@ -145,7 +152,9 @@ export default function EditRates() {
         </FormGroup>
 
         {!formik.values.employee || !formik.values.employer ? (
-          <Typography sx={{color: '#223567', fontWeight: 700, marginTop: '36px', marginBottom: '30px'}}>Rates</Typography>
+          <Typography sx={{color: '#223567', fontWeight: 700, marginTop: '36px', marginBottom: '30px'}}>
+            {t(`${tPath}sub_title`)}
+          </Typography>
         ) : null}
 
         <Box display='flex' flexDirection='column' gap='32px'>
@@ -166,10 +175,10 @@ export default function EditRates() {
               {formik.values.employee && formik.values.employer && (
                 <>
                   <Typography color='#223567' fontWeight='700' fontSize={18}>
-                  Employee<AsteriskComponent>*</AsteriskComponent>
+                    {t(`${tPath}contributor_option.employee`)}<AsteriskComponent>*</AsteriskComponent>
                   </Typography>
                   <Typography color='#223567' fontWeight='700'>
-                  Rates<AsteriskComponent>*</AsteriskComponent>
+                    {t(`${tPath}sub_title`)}<AsteriskComponent>*</AsteriskComponent>
                   </Typography>
                 </>
               )}
@@ -199,7 +208,7 @@ export default function EditRates() {
                   <Box component='div'  sx={{width: '100%'}}>
                     <Input
                       withAsterisk
-                      customLabel='Start'
+                      customLabel={t(`${tPath}start`)}
                       size='small'
                       value={formik.values.employeeData.start}
                       onChange={(e) =>
@@ -216,7 +225,7 @@ export default function EditRates() {
                   <Box component='div' sx={{width: '100%'}}>
                     <Input
                       withAsterisk
-                      customLabel='End'
+                      customLabel={t(`${tPath}end`)}
                       size='small'
                       value={formik.values.employeeData.end}
                       onChange={(e) =>
@@ -255,7 +264,7 @@ export default function EditRates() {
                         formik.setFieldValue('employeeData.rate', e.target.value)
                       }
                       size='small'
-                      customLabel='Rate'
+                      customLabel={t(`${tPath}sub_title`)}
                       withAsterisk
                       endAdornment={
                         <InputAdornment position='end' sx={{ mr: '20px' }}>
@@ -273,7 +282,7 @@ export default function EditRates() {
                   <Box component='div' sx={{width: '100%'}}>
                     <Input
                       withAsterisk
-                      customLabel='Additional Fixed Amount'
+                      customLabel={t(`${tPath}additional_fixed_amount`)}
                       placeholder='Rp 0'
                       size='small'
                       value={formik.values.employeeData.fixed}
@@ -292,7 +301,7 @@ export default function EditRates() {
                 <Grid item xs={6}>
                   <Box component='div'>
                     <Input
-                      customLabel='Amount Cap'
+                      customLabel={t(`${tPath}amount_cap`)}
                       placeholder='Rp 0'
                       size='small'
                       value={
@@ -333,10 +342,10 @@ export default function EditRates() {
               {formik.values.employee && formik.values.employer && (
                 <>
                   <Typography color='#223567' fontWeight='700' fontSize={18}>
-                  Employer<AsteriskComponent>*</AsteriskComponent>
+                    {t(`${tPath}contributor_option.employer`)}<AsteriskComponent>*</AsteriskComponent>
                   </Typography>
                   <Typography color='#223567' fontWeight='700'>
-                  Rates<AsteriskComponent>*</AsteriskComponent>
+                    {t(`${tPath}sub_title`)}<AsteriskComponent>*</AsteriskComponent>
                   </Typography>
                 </>
               )}
@@ -366,7 +375,7 @@ export default function EditRates() {
                   <Box component='div'  sx={{width: '100%'}}>
                     <Input
                       withAsterisk
-                      customLabel='Start'
+                      customLabel={t(`${tPath}start`)}
                       size='small'
                       value={formik.values.employerData.start}
                       onChange={(e) =>
@@ -383,7 +392,7 @@ export default function EditRates() {
                   <Box component='div' sx={{width: '100%'}}>
                     <Input
                       withAsterisk
-                      customLabel='End'
+                      customLabel={t(`${tPath}end`)}
                       size='small'
                       value={formik.values.employerData.end}
                       onChange={(e) =>
@@ -422,7 +431,7 @@ export default function EditRates() {
                         formik.setFieldValue('employerData.rate', e.target.value)
                       }
                       size='small'
-                      customLabel='Rate'
+                      customLabel={t(`${tPath}sub_title`)}
                       withAsterisk
                       endAdornment={
                         <InputAdornment position='end' sx={{ mr: '20px' }}>
@@ -440,7 +449,7 @@ export default function EditRates() {
                   <Box component='div' sx={{width: '100%'}}>
                     <Input
                       withAsterisk
-                      customLabel='Additional Fixed Amount'
+                      customLabel={t(`${tPath}additional_fixed_amount`)}
                       placeholder='Rp 0'
                       size='small'
                       value={formik.values.employerData.fixed}
@@ -459,7 +468,7 @@ export default function EditRates() {
                 <Grid item xs={6}>
                   <Box component='div'>
                     <Input
-                      customLabel='Amount Cap'
+                      customLabel={t(`${tPath}amount_cap`)}
                       placeholder='Rp 0'
                       size='small'
                       value={
@@ -495,14 +504,14 @@ export default function EditRates() {
           <Button
             sx={{ boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.5)', color: '#374151' }}
           >
-          Back
+            {t('satutory_benefit.component.button.back')}
           </Button>
           <Button
             sx={{ boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.5)' }}
             variant='contained'
             onClick={() => formik.submitForm()}
           >
-          Save
+            {t('satutory_benefit.component.button.save')}
           </Button>
         </Grid>
       </Box>

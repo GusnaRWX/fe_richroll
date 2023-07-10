@@ -5,6 +5,7 @@ import { Typography, Box, Paper, Grid } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import { ConfirmationModal } from '@/components/_shared/common';
+import { useTranslation } from 'react-i18next';
 
 // Icon Import
 import { HiPencilAlt } from 'react-icons/hi';
@@ -13,6 +14,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 export default function SatutoryBenefitComponentDetail() {
   const router = useRouter();
+  const {t} = useTranslation();
   const [DeleteConfirmation, setDeleteConfirmation] = useState(false);
   const [DuplicateConfirmation, setDuplicateConfirmation] = useState(false);
 
@@ -62,7 +64,7 @@ export default function SatutoryBenefitComponentDetail() {
                 width: '350px',
               }}
             >
-              Statutory Benefit Component
+              {t('satutory_benefit.component.detail_title')}
             </Typography>
             <Typography
               style={{
@@ -88,21 +90,21 @@ export default function SatutoryBenefitComponentDetail() {
               boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.05)',
             }}
             startIcon={<FiCopy />}
-            label='Duplicate'
+            label={t('satutory_benefit.component.button.duplicate')}
             onClick={() => setDuplicateConfirmation(true)}
           />
           <Button
             color='rose'
             sx={{ bgcolor: '#FECACA', color: '#DC2626', width: 'fit-content' }}
             startIcon={<DeleteIcon />}
-            label='Delete'
+            label={t('satutory_benefit.component.button.delete')}
             onClick={() => setDeleteConfirmation(true)}
           />
           <Button
             color='green'
             sx={{ bgcolor: '#8DD0B8', color: '#fff', width: 'fit-content' }}
             startIcon={<HiPencilAlt />}
-            label='Edit'
+            label={t('satutory_benefit.component.button.edit')}
             onClick={EditActionHandler}
           />
         </NextBtnWrapper>
@@ -118,7 +120,7 @@ export default function SatutoryBenefitComponentDetail() {
                 fontWeight: '700',
               }}
             >
-              Basic Detail
+              {t('satutory_benefit.component.form_&_detail.create_basic_detail.detail_title')}
             </Typography>
           </Grid>
           <Grid item xs={2.5} md={2.5} lg={2.5} xl={2.5}>
@@ -128,7 +130,7 @@ export default function SatutoryBenefitComponentDetail() {
               color='#9CA3AF'
               mb='8px'
             >
-              Component Name
+              {t('satutory_benefit.component.form_&_detail.create_basic_detail.component_name')}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -141,7 +143,7 @@ export default function SatutoryBenefitComponentDetail() {
               color='#9CA3AF'
               mb='8px'
             >
-              Country
+              {t('satutory_benefit.component.form_&_detail.create_basic_detail.country')}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -154,7 +156,7 @@ export default function SatutoryBenefitComponentDetail() {
               color='#9CA3AF'
               mb='8px'
             >
-              Province
+              {t('satutory_benefit.component.form_&_detail.create_basic_detail.province')}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -167,7 +169,7 @@ export default function SatutoryBenefitComponentDetail() {
               color='#9CA3AF'
               mb='8px'
             >
-              City
+              {t('satutory_benefit.component.form_&_detail.create_basic_detail.city')}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -180,7 +182,7 @@ export default function SatutoryBenefitComponentDetail() {
               color='#9CA3AF'
               mb='8px'
             >
-              Sub-Distric
+              {t('satutory_benefit.component.form_&_detail.create_basic_detail.sub_district')}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -193,7 +195,7 @@ export default function SatutoryBenefitComponentDetail() {
               color='#9CA3AF'
               mb='8px'
             >
-              Citation
+              {t('satutory_benefit.component.form_&_detail.create_basic_detail.citation')}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -206,7 +208,7 @@ export default function SatutoryBenefitComponentDetail() {
               color='#9CA3AF'
               mb='8px'
             >
-              Internal Notes
+              {t('satutory_benefit.component.form_&_detail.create_basic_detail.internal_notes')}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -219,7 +221,7 @@ export default function SatutoryBenefitComponentDetail() {
               color='#9CA3AF'
               mb='8px'
             >
-              External Notes
+              {t('satutory_benefit.component.form_&_detail.create_basic_detail.external_notes')}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -236,7 +238,7 @@ export default function SatutoryBenefitComponentDetail() {
                 fontWeight: '700',
               }}
             >
-              Transfer Information
+              {t('satutory_benefit.component.form_&_detail.create_designed_transfer_account.transfer_info')}
             </Typography>
           </Grid>
           <Grid item xs={3} md={3} lg={3} xl={3}>
@@ -246,7 +248,7 @@ export default function SatutoryBenefitComponentDetail() {
               color='#9CA3AF'
               mb='8px'
             >
-              Bank
+              {t('satutory_benefit.component.form_&_detail.create_designed_transfer_account.bank')}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -259,7 +261,7 @@ export default function SatutoryBenefitComponentDetail() {
               color='#9CA3AF'
               mb='8px'
             >
-              Bank Account Holder’s Name
+              {t('satutory_benefit.component.form_&_detail.create_designed_transfer_account.bank_account_holders_name')}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -272,7 +274,7 @@ export default function SatutoryBenefitComponentDetail() {
               color='#9CA3AF'
               mb='8px'
             >
-              Bank Account No
+              {t('satutory_benefit.component.form_&_detail.create_designed_transfer_account.bank_account_no')}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -285,7 +287,7 @@ export default function SatutoryBenefitComponentDetail() {
               color='#9CA3AF'
               mb='8px'
             >
-              Bank Code
+              {t('satutory_benefit.component.form_&_detail.create_designed_transfer_account.bank_code')}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -298,7 +300,7 @@ export default function SatutoryBenefitComponentDetail() {
               color='#9CA3AF'
               mb='8px'
             >
-              Branch Code
+              {t('satutory_benefit.component.form_&_detail.create_designed_transfer_account.branch_code')}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -311,7 +313,7 @@ export default function SatutoryBenefitComponentDetail() {
               color='#9CA3AF'
               mb='8px'
             >
-              Branch Name
+              {t('satutory_benefit.component.form_&_detail.create_designed_transfer_account.branch_name')}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -324,7 +326,7 @@ export default function SatutoryBenefitComponentDetail() {
               color='#9CA3AF'
               mb='8px'
             >
-              Swift Code
+              {t('satutory_benefit.component.form_&_detail.create_designed_transfer_account.swift_code')}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -351,7 +353,7 @@ export default function SatutoryBenefitComponentDetail() {
               color='#9CA3AF'
               mb='8px'
             >
-              Rate Types
+              {t('satutory_benefit.component.form_&_detail.rates.rate_type')}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -364,7 +366,7 @@ export default function SatutoryBenefitComponentDetail() {
               color='#9CA3AF'
               mb='8px'
             >
-              Flat Rate
+              {t('satutory_benefit.component.form_&_detail.rates.flat_rate')}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -377,7 +379,7 @@ export default function SatutoryBenefitComponentDetail() {
               color='#9CA3AF'
               mb='8px'
             >
-              Amount Cap
+              {t('satutory_benefit.component.form_&_detail.rates.amount_cap')}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -389,8 +391,8 @@ export default function SatutoryBenefitComponentDetail() {
         type='delete'
         open={DeleteConfirmation}
         handleClose={() => setDeleteConfirmation(false)}
-        title='Delete Data Entry'
-        content='You are about to delete this statutory benefit component. This action cannot be undone.'
+        title={t('satutory_benefit.component.modal.delete.title')}
+        content={t('satutory_benefit.component.modal.delete.text')}
         withCallback
         noChange={true}
         callback={() => setDeleteConfirmation(false)}
@@ -398,8 +400,8 @@ export default function SatutoryBenefitComponentDetail() {
       <ConfirmationModal
         open={DuplicateConfirmation}
         handleClose={() => setDuplicateConfirmation(false)}
-        title='Confirmation'
-        content='Are you sure you want to duplicate this profile ?'
+        title={t('satutory_benefit.component.modal.duplicate.title')}
+        content={t('satutory_benefit.component.modal.duplicate.text')}
         withCallback
         noChange={true}
         callback={() => setDuplicateConfirmation(false)}
