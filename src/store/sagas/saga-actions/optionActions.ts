@@ -36,8 +36,12 @@ export const getCnb = (): Promise<AxiosResponse> => {
   return get(`compensations?page=1&itemPerPage=1000&companyID=${data?.id}`);
 };
 
-export const getListCompensation = (): Promise<AxiosResponse> => {
-  return get(`compensation-components?page=1&itemPerPage=10000&direction=DESC`);
+export const getListBaseCompensation = (): Promise<AxiosResponse> => {
+  return get(`compensation-components?page=1&itemPerPage=10000&direction=DESC&isBase=true`);
+};
+
+export const getListSuppCompensation = (): Promise<AxiosResponse> => {
+  return get(`compensation-components?page=1&itemPerPage=10000&direction=DESC&isBase=false`);
 };
 
 export const getListTermin = (payload: number): Promise<AxiosResponse> => {

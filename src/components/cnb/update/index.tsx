@@ -29,7 +29,7 @@ import { dynamicPayloadBaseCnb, getCompanyData, getPaymentType } from '@/utils/h
 import { FieldArray, Form as FormikForm, Formik } from 'formik';
 import * as Yup from 'yup';
 import ConfirmationModal from '@/components/_shared/common/ConfirmationModal';
-import { getListCompensationRequested, getListSuppTerminRequested, getListTerminReqeusted, removeListSuppTermin } from '@/store/reducers/slice/options/optionSlice';
+import { getListBaseCompensationRequested, getListSuppCompensationRequested, getListSuppTerminRequested, getListTerminReqeusted, removeListSuppTermin } from '@/store/reducers/slice/options/optionSlice';
 import { Text } from '@/components/_shared/common';
 import { resetResponserMessage } from '@/store/reducers/slice/responserSlice';
 
@@ -52,6 +52,7 @@ interface BaseType {
   taxStatus: string;
   rateOrAmount: number | string;
   period: string;
+  overtime: string | number;
   supplementary: SuplementType[];
 }
 
@@ -60,6 +61,7 @@ type InitialValues = {
   compensationComponentId: string;
   period: string;
   rateOrAmount: string;
+  overtime: number | string;
   taxStatus: string;
   supplementary: SuplementType[];
 }
@@ -68,8 +70,7 @@ export default function UpdateCNBComponent() {
   const router = useRouter();
   const companyData = getCompanyData();
   const dispatch = useAppDispatch();
-  const { listCompensation, listTermin, listSuppTermin } = useAppSelectors(state => state.option);
-  console.log(listCompensation);
+  const { listBaseCompensation, listSuppCompensation, listTermin, listSuppTermin } = useAppSelectors(state => state.option);
   const detailLoading = useAppSelectors(
     (state) => state.compensation?.detailLoading
   );
@@ -79,6 +80,7 @@ export default function UpdateCNBComponent() {
     period: '',
     taxStatus: '',
     rateOrAmount: '',
+    overtime: '',
     supplementary: []
   });
   const [isDataReady, setIsDataReady] = useState(false);
@@ -105,7 +107,10 @@ export default function UpdateCNBComponent() {
 
   React.useEffect(() => {
     dispatch({
-      type: getListCompensationRequested.toString()
+      type: getListBaseCompensationRequested.toString()
+    });
+    dispatch({
+      type: getListSuppCompensationRequested.toString()
     });
   }, []);
 
@@ -222,13 +227,13 @@ export default function UpdateCNBComponent() {
       // value.taxStatus !== '' &&
       supplement
     ) {
-      const tempBase = dynamicPayloadBaseCnb(listCompensation, value.compensationComponentId, value);
+      const tempBase = dynamicPayloadBaseCnb(listBaseCompensation, value.compensationComponentId, value);
 
       const tempSupplementary: any = [];
       if (value.supplementary.length > 0) {
         for (let i = 0; i <= value.supplementary.length; i++) {
           if (typeof value.supplementary[i] !== 'undefined') {
-            const tempData = dynamicPayloadBaseCnb(listCompensation, value.supplementary[i].compensationComponentId, value.supplementary[i]);
+            const tempData = dynamicPayloadBaseCnb(listSuppCompensation, value.supplementary[i].compensationComponentId, value.supplementary[i]);
             const idSupplementary = { id: value?.supplementary[i]?.id || '' };
             const mergeObject = { ...tempData, ...idSupplementary };
             tempSupplementary.push(mergeObject);
@@ -243,6 +248,7 @@ export default function UpdateCNBComponent() {
           companyID: companyData?.id?.toString(),
           name: value.name,
           base: mutateBase,
+          overtime: value.overtime,
           supplementaries: tempSupplementary
         }
       });
@@ -252,8 +258,8 @@ export default function UpdateCNBComponent() {
   useEffect(() => {
     const fetchData = async () => {
       if (cnbDetail?.base?.component?.id) {
-        setTitle(getPaymentType(cnbDetail.base.component.id, listCompensation)?.title);
-        setWithPercentage(getPaymentType(cnbDetail.base.component.id, listCompensation)?.withPercentage);
+        setTitle(getPaymentType(cnbDetail.base.component.id, listBaseCompensation)?.title);
+        setWithPercentage(getPaymentType(cnbDetail.base.component.id, listBaseCompensation)?.withPercentage);
 
         dispatch({
           type: getListTerminReqeusted.toString(),
@@ -263,7 +269,7 @@ export default function UpdateCNBComponent() {
     };
 
     fetchData();
-  }, [cnbDetail, listCompensation]);
+  }, [cnbDetail, listBaseCompensation]);
 
   useEffect(() => {
     if (cnbDetail) {
@@ -273,11 +279,12 @@ export default function UpdateCNBComponent() {
         period: cnbDetail.base?.term?.id || '',
         taxStatus: cnbDetail.base?.isTaxable ? 'true' : 'false' || '',
         rateOrAmount: cnbDetail.base?.amount || '',
+        overtime: cnbDetail?.overtime || '',
         supplementary: cnbDetail.supplementaries?.map(val => {
           return {
             compensationComponentId: val.component?.id || '',
             period: val.term?.id || '',
-            rateOrAmount: getPaymentType(val.component?.id, listCompensation)?.withPercentage ? val.rate : val.amount || '',
+            rateOrAmount: getPaymentType(val.component?.id, listSuppCompensation)?.withPercentage ? val.rate : val.amount || '',
             taxStatus: val.isTaxable || '',
             id: val?.id || ''
           };
@@ -401,8 +408,8 @@ export default function UpdateCNBComponent() {
                                 type: getListSuppTerminRequested.toString(),
                                 payload: e.target.value
                               });
-                              setTitle(getPaymentType(e.target.value, listCompensation)?.title);
-                              setWithPercentage(getPaymentType(e.target.value, listCompensation)?.withPercentage);
+                              setTitle(getPaymentType(e.target.value, listBaseCompensation)?.title);
+                              setWithPercentage(getPaymentType(e.target.value, listBaseCompensation)?.withPercentage);
                             }
                             }
                             displayEmpty
@@ -410,14 +417,14 @@ export default function UpdateCNBComponent() {
                               if ((value as string)?.length === 0) {
                                 return <Text title='Select Compensation' color='grey.400' />;
                               }
-                              const selected = listCompensation.find(list => list.value === value);
+                              const selected = listBaseCompensation.find(list => list.value === value);
                               if (selected) {
                                 return `${selected.label}`;
                               }
                               return null;
                             }}
                           >
-                            {listCompensation?.map((Option, i) => (
+                            {listBaseCompensation?.map((Option, i) => (
                               <MenuItem key={i} value={Option.value}>
                                 {Option.label}
                               </MenuItem>
@@ -571,6 +578,33 @@ export default function UpdateCNBComponent() {
                     </Grid>
                   </Grid>
                 </Grid>
+                <Grid container mt='16px'>
+                  <Grid item xs={12}>
+                    <Text title='Overtime' fontWeight={700} fontSize='16px' mb='16px' color='primary.500' />
+                  </Grid>
+                  <Grid item xs={3}>
+                    <Input
+                      withAsterisk
+                      size='small'
+                      customLabel='Rate'
+                      type='number'
+                      name='overtime'
+                      value={formik.values.overtime}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      inputProps={{
+                        step: 0.1
+                      }}
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position='end'>
+                            <Text color='grey.500' title='x' />
+                          </InputAdornment>
+                        )
+                      }}
+                    />
+                  </Grid>
+                </Grid>
               </Form>
               <FieldArray
                 name='supplementary'
@@ -633,11 +667,11 @@ export default function UpdateCNBComponent() {
                                               payload: e?.target?.value
                                             });
                                             formik.setFieldValue(`supplementary.${i}.titleRate`,
-                                              getPaymentType(e?.target?.value, listCompensation)?.title
+                                              getPaymentType(e?.target?.value, listSuppCompensation)?.title
                                             );
                                             formik.setFieldValue(
                                               `supplementary.${i}.withPercentage`,
-                                              getPaymentType(e?.target?.value, listCompensation)?.withPercentage
+                                              getPaymentType(e?.target?.value, listSuppCompensation)?.withPercentage
                                             );
                                           }
                                           }
@@ -646,14 +680,14 @@ export default function UpdateCNBComponent() {
                                             if ((value as string)?.length === 0) {
                                               return <Text title='Select Compensation' color='grey.400' />;
                                             }
-                                            const selected = listCompensation.find(list => list.value === value);
+                                            const selected = listSuppCompensation.find(list => list.value === value);
                                             if (selected) {
                                               return `${selected.label}`;
                                             }
                                             return null;
                                           }}
                                         >
-                                          {listCompensation?.map(
+                                          {listSuppCompensation?.map(
                                             (Option, i) => (
                                               <MenuItem key={i} value={Option.value}>
                                                 {Option.label}
@@ -764,7 +798,7 @@ export default function UpdateCNBComponent() {
                                 <Grid container spacing={2}>
                                   <Grid item xs={3} md={3} lg={3} xl={3}>
                                     <Typography>
-                                      {getPaymentType(suplement?.compensationComponentId, listCompensation)?.title}
+                                      {getPaymentType(suplement?.compensationComponentId, listSuppCompensation)?.title}
                                       <span style={{ color: 'red' }}>*</span>
                                     </Typography>
                                     <TextField

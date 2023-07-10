@@ -14,7 +14,8 @@ interface OptionState {
   listDepartment: Array<{ label: string, value: string }>
   listPosition: Array<{ label: string, value: string }>
   listCnb: Array<{ label: string, value: number | string }>
-  listCompensation: Array<{ label: string, value: string | number, type: string | number }>
+  listBaseCompensation: Array<{ label: string, value: string | number, type: string | number }>
+  listSuppCompensation: Array<{ label: string, value: string | number, type: string | number }>
   listTermin: Array<{ label: string, value: string | number }>
   listSuppTermin: Array<Array<{ label: string | number, value: string | number }>>,
   listCompensationBenefits: {
@@ -43,7 +44,8 @@ const initialState: OptionState = {
   secondAdministrativeSecond: [],
   secondAdministrativeThird: [],
   listCnb: [],
-  listCompensation: [],
+  listBaseCompensation: [],
+  listSuppCompensation: [],
   listTermin: [],
   listSuppTermin: [[]],
   listCompensationBenefits: {},
@@ -219,16 +221,28 @@ export const optionSlice = createSlice({
     getListCnbFailed: (state) => {
       state.loading = false;
     },
-    getListCompensationRequested: (state) => {
+    getListBaseCompensationRequested: (state) => {
       state.loading = true;
     },
-    getListCompensationSuccess: (state, action) => {
+    getListBaseCompensationSuccess: (state, action) => {
       state.loading = false;
-      state.listCompensation = action?.payload?.items?.map(item => {
+      state.listBaseCompensation = action?.payload?.items?.map(item => {
         return returnCompensationId(item);
       });
     },
-    getListCompensationFailed: (state) => {
+    getListBaseCompensationFailed: (state) => {
+      state.loading = false;
+    },
+    getListSuppCompensationRequested: (state) => {
+      state.loading = true;
+    },
+    getListSuppCompensationSuccess: (state, action) => {
+      state.loading = false;
+      state.listSuppCompensation = action?.payload?.items?.map(item => {
+        return returnCompensationId(item);
+      });
+    },
+    getListSuppCompensationFailed: (state) => {
       state.loading = false;
     },
     getListTerminReqeusted: (state) => {
@@ -342,9 +356,12 @@ export const {
   getListCnbRequested,
   getListCnbFailed,
   getListCnbSuccess,
-  getListCompensationFailed,
-  getListCompensationSuccess,
-  getListCompensationRequested,
+  getListBaseCompensationFailed,
+  getListBaseCompensationSuccess,
+  getListBaseCompensationRequested,
+  getListSuppCompensationFailed,
+  getListSuppCompensationSuccess,
+  getListSuppCompensationRequested,
   getListTerminFailed,
   getListTerminReqeusted,
   getListTerminSuccess,
