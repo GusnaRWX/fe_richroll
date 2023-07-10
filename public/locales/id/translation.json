@@ -352,6 +352,85 @@
           "text": "Apakah Anda yakin ingin menggandakan profil ini?"
         }
       }
+    },
+    "profile": {
+      "title": "Dasbor Profil Manfaat Wajib",
+      "detail_title": "Profil Tunjangan Hukum",
+      "table": {
+        "table_tabs": {
+          "draft": "Draf",
+          "active": "Aktif",
+          "archived": "Diarsipkan"
+        },
+        "name": "Nama",
+        "profile_name": "Nama profil",
+        "country": "Negara",
+        "province": "Propinsi",
+        "effective_period": "Periode Efektif",
+        "created_on": "Dibuat pada",
+        "last_update": "Pembaharuan Terakhir"
+      },
+      "form_&_detail": {
+        "create_title": "Ciptakan Manfaat Kejenuhan",
+        "update_title": "Perbarui Manfaat Satutory",
+        "name": "Nama Satutori",
+        "name_placeholder": "Masukkan Nama Manfaat Satutori",
+        "country": "Negara",
+        "province": "Propinsi",
+        "city": "Kota",
+        "sub_district": "Kecamatan",
+        "effective_date": "Tanggal berlaku",
+        "expiration_date": "Tanggal habis tempo",
+        "citation": "Kutipan",
+        "internal_notes": "Catatan Internal",
+        "external_notes": "Catatan Eksternal",
+        "max_char_info": "Maks. ",
+        "component": {
+          "popup_title": "Pilih Komponen Manfaat Satutory",
+          "employee_name": "nama karyawan",
+          "effective_period": "Periode Efektif",
+          "rate_type": "Jenis Tarif",
+          "contributor": "Penyumbang",
+          "rate_types": "Jenis Tarif",
+          "flat_rate": "Tarif Tetap",
+          "amount_cap": "Batas Jumlah"
+        }
+      },
+      "button": {
+        "edit": "Sunting",
+        "delete": "Menghapus",
+        "save": "Menyimpan",
+        "save_approve": "Simpan dan Setujui",
+        "cancel": "Membatalkan",
+        "activate": "Mengaktifkan",
+        "archive": "Diarsipkan",
+        "confirm": "Mengonfirmasi",
+        "add_new_profile": "Tambahkan Profil Baru",
+        "add_component": "Tambahkan Komponen",
+        "component": "Komponen",
+        "duplicate": "Duplikat"
+      },
+      "modal": {
+        "delete": {
+          "title": "Hapus Entri Data",
+          "text": "Anda akan menghapus entri data kehadiran ini. "
+        },
+        "duplicate": {
+          "title": "Konfirmasi",
+          "text": "Apakah Anda yakin ingin menggandakan profil ini?"
+        },
+        "archive": {
+          "title": "Tanggal Pengarsipan",
+          "input_date": "Masukkan Tanggal Efektif Pengarsipan",
+          "replace": "Ganti dengan Profil Baru"
+        },
+        "activate": {
+          "title": "Tanggal penerbitan",
+          "text": "Apakah Anda ingin Mengaktifkan profil pajak?",
+          "effective_date": "Tanggal berlaku",
+          "expiration_date": "Tanggal habis tempo"
+        }
+      }
     }
   }
 }

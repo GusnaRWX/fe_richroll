@@ -352,6 +352,85 @@
           "text": "Adakah anda pasti mahu menduplikasi profil ini?"
         }
       }
+    },
+    "profile": {
+      "title": "Papan Pemuka Profil Manfaat Berkanun",
+      "detail_title": "Profil Faedah Berkanun",
+      "table": {
+        "table_tabs": {
+          "draft": "Draf",
+          "active": "Aktif",
+          "archived": "Diarkibkan"
+        },
+        "name": "Nama",
+        "profile_name": "Nama profil",
+        "country": "Negara",
+        "province": "Wilayah",
+        "effective_period": "Tempoh Berkuatkuasa",
+        "created_on": "Dicipta pada",
+        "last_update": "Kemaskini terakhir"
+      },
+      "form_&_detail": {
+        "create_title": "Cipta Manfaat Tepu",
+        "update_title": "Kemas kini Faedah Tepu",
+        "name": "Nama Tepu",
+        "name_placeholder": "Masukkan Nama Manfaat Tepu",
+        "country": "Negara",
+        "province": "Wilayah",
+        "city": "Bandar",
+        "sub_district": "Mukim",
+        "effective_date": "Tarikh kuat kuasa",
+        "expiration_date": "Tarikh luput",
+        "citation": "Petikan",
+        "internal_notes": "Nota Dalaman",
+        "external_notes": "Nota Luaran",
+        "max_char_info": "Maks. ",
+        "component": {
+          "popup_title": "Pilih Komponen Faedah Tepu",
+          "employee_name": "Nama Pekerja",
+          "effective_period": "Tempoh Berkuatkuasa",
+          "rate_type": "Jenis Kadar",
+          "contributor": "Penyumbang",
+          "rate_types": "Jenis Kadar",
+          "flat_rate": "Kadar rata",
+          "amount_cap": "Jumlah Had"
+        }
+      },
+      "button": {
+        "edit": "Sunting",
+        "delete": "Padam",
+        "save": "Jimat",
+        "save_approve": "Simpan dan Luluskan",
+        "cancel": "Batal",
+        "activate": "Aktifkan",
+        "archive": "Diarkibkan",
+        "confirm": "sahkan",
+        "add_new_profile": "Tambah Profil Baharu",
+        "add_component": "Tambah Komponen",
+        "component": "Komponen",
+        "duplicate": "Pendua"
+      },
+      "modal": {
+        "delete": {
+          "title": "Padamkan Entri Data",
+          "text": "Anda akan memadamkan entri data kehadiran ini. "
+        },
+        "duplicate": {
+          "title": "Pengesahan",
+          "text": "Adakah anda pasti mahu menduplikasi profil ini?"
+        },
+        "archive": {
+          "title": "Tarikh Arkib",
+          "input_date": "Input Tarikh Arkib Berkuatkuasa",
+          "replace": "Gantikan dengan Profil Baharu"
+        },
+        "activate": {
+          "title": "Tarikh penerbitan",
+          "text": "Adakah anda mahu Aktifkan profil cukai?",
+          "effective_date": "Tarikh kuat kuasa",
+          "expiration_date": "Tarikh luput"
+        }
+      }
     }
   }
 }
