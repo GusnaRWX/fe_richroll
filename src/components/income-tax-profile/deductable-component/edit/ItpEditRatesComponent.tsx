@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { useTranslation } from 'react-i18next';
 
 const condition = [
   {
@@ -42,6 +43,7 @@ const listMenuItem = [
 ];
 
 export default function ItpEditRatesComponent() {
+  const {t} = useTranslation();
   const [deductableType, setDeductableType] = React.useState(true);
 
   const initialValues = {
@@ -353,14 +355,14 @@ export default function ItpEditRatesComponent() {
           <Button
             sx={{ boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.5)', color: '#374151' }}
           >
-          Back
+            {t('button.back')}
           </Button>
           <Button
             sx={{ boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.5)' }}
             variant='contained'
             onClick={() => formik.submitForm()}
           >
-          Save
+            {t('button.save')}
           </Button>
         </Grid>
       </Box>

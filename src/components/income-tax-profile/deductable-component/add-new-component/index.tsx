@@ -74,7 +74,7 @@ function ItpCreateNewComponentComponent() {
                   setOpen(true);
                 }
               }}
-            >{ifThenElse(value < 2, t(`${t_key}.cancel_button`),  t(`${t_key}.save_button`))}</MuiButton>
+            >{t('button.cancel')}</MuiButton>
             <MuiButton
               variant='contained'
               size='small'
@@ -88,7 +88,7 @@ function ItpCreateNewComponentComponent() {
                   setOpen(true);
                 }
               }}
-            >{ifThenElse(value == 0, 'Create Designed Transfer Account', ifThenElse(value == 1, 'Create Rates',   t(`${t_key}.mark_button`)))}</MuiButton>
+            >{ifThenElse(value == 2, t(`button.mark_complete`),  t(`button.save`))}</MuiButton>
           </ButtonWrapper>
         </Grid>
       </Grid>
@@ -150,7 +150,7 @@ function ItpCreateNewComponentComponent() {
       <CustomModal
         open={open}
         handleClose={handleClose}
-        title={ifThenElse(isExit, t(`${t_key}.save_button`),  t(`${t_key}.mark_button`))}
+        title={ifThenElse(isExit, t('button.cancel'),  t('button.mark_complete'))}
         width='543px'
         handleConfirm={handleConfirm}
       >

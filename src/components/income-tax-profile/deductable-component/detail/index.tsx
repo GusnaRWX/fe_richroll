@@ -5,6 +5,7 @@ import { Typography, Box, Paper, Grid } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import { ConfirmationModal } from '@/components/_shared/common';
+import { useTranslation } from 'react-i18next';
 
 // Icon Import
 import { HiPencilAlt } from 'react-icons/hi';
@@ -13,6 +14,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 export default function ItpDeductableComponentDetailComponent() {
   const router = useRouter();
+  const {t} = useTranslation();
   const [DeleteConfirmation, setDeleteConfirmation] = useState(false);
   const [DuplicateConfirmation, setDuplicateConfirmation] = useState(false);
 
@@ -88,21 +90,21 @@ export default function ItpDeductableComponentDetailComponent() {
               boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.05)',
             }}
             startIcon={<FiCopy />}
-            label='Duplicate'
+            label={t('button.duplicate')}
             onClick={() => setDuplicateConfirmation(true)}
           />
           <Button
             color='rose'
             sx={{ bgcolor: '#FECACA', color: '#DC2626', width: 'fit-content' }}
             startIcon={<DeleteIcon />}
-            label='Delete'
+            label={t('button.delete')}
             onClick={() => setDeleteConfirmation(true)}
           />
           <Button
             color='green'
             sx={{ bgcolor: '#8DD0B8', color: '#fff', width: 'fit-content' }}
             startIcon={<HiPencilAlt />}
-            label='Edit'
+            label={t('button.edit')}
             onClick={EditActionHandler}
           />
         </NextBtnWrapper>

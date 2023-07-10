@@ -2,6 +2,7 @@ import React, {Dispatch, SetStateAction} from 'react';
 import { Grid, Box, Typography } from '@mui/material';
 import { Button, Input, Select, Textarea } from '@/components/_shared/form';
 import { useFormik } from 'formik';
+import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 
 interface ItpEditBasicDetailComponentProps {
@@ -9,6 +10,8 @@ interface ItpEditBasicDetailComponentProps {
 }
 
 export default function ItpEditBasicDetailComponent({setValue}: ItpEditBasicDetailComponentProps) {
+  const {t} = useTranslation();
+
   const Dummyoption = [
     { value: '1', label: 'Dummy 1' },
     { value: '2', label: 'Dummy 2' },
@@ -185,8 +188,8 @@ export default function ItpEditBasicDetailComponent({setValue}: ItpEditBasicDeta
             <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
               <Button
                 color='primary'
-                label='Next'
-                sx={{ width: '63px' }}
+                label={t('button.next')}
+                sx={{ width: 'fit-content' }}
                 onClick={() => formik.submitForm()}
               />
             </Box>

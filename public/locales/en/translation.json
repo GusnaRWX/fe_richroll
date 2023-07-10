@@ -157,12 +157,7 @@
       },
       "detail": {
         "main": {
-          "title": "Tax Profile - Status",
-          "delete": "Delete",
-          "duplicate": "Duplicate",
-          "archive": "Archived",
-          "edit": "Edit",
-          "activate": "Activate"
+          "title": "Tax Profile - Status"
         },
         "tab": {
           "basic_detail": "Basic Detail",
@@ -241,29 +236,21 @@
           "title": "Publication Date",
           "description": "Do you want to Activate the tax profile?",
           "effective_date": "Effective Date",
-          "expiration_date": "Expiration Date",
-          "ok_button": "Confirm",
-          "cancel_button": "Cancel"
+          "expiration_date": "Expiration Date"
         },
         "duplicate": {
           "title": "Confirmation",
-          "description": "Do you want to duplicate this profile?",
-          "ok_button": "Confirm",
-          "cancel_button": "Cancel"
+          "description": "Do you want to duplicate this profile?"
         },
         "delete": {
           "title": "Delete Data Entry",
-          "description": "You are about to delete this attendance data entry. This action cannot be undone.",
-          "ok_button": "Delete",
-          "cancel_button": "Cancel"
+          "description": "You are about to delete this attendance data entry. This action cannot be undone."
         },
         "archive": {
           "title": "Archivation Date",
           "description": "Input Effective Archivation Date",
           "checkbox": "Replace with New Profile"
-        },
-        "next": "Next",
-        "back": "Back"
+        }
       }
     }
   },

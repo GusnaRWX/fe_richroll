@@ -13,6 +13,7 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import React, { Dispatch, SetStateAction, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -22,6 +23,7 @@ interface ItpEditDesignedTransferAccountComponentProps {
 }
 
 export default function ItpEditDesignedTransferAccountComponent({ setValue }: ItpEditDesignedTransferAccountComponentProps) {
+  const {t} = useTranslation();
   const [account, setAccount] = useState('central');
 
   const AsteriskComponent = styled('span')(({ theme }) => ({
@@ -357,11 +359,11 @@ export default function ItpEditDesignedTransferAccountComponent({ setValue }: It
           Max.100 Character
         </FormHelperText>
         <Grid item xs={12} md={12} lg={12} xl={12}>
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap:'15px' }}>
             <Button
               color='primary'
-              label='Next'
-              sx={{ width: '63px' }}
+              label={t('button.next')}
+              sx={{ width: 'fit-content' }}
               onClick={() => formik.submitForm()}
             />
           </Box>

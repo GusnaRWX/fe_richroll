@@ -42,7 +42,7 @@ const ItpDeductableComponentComponent = () => {
               router.push('/income-tax-profile/deductable-component/add-new-component')
             }
             startIcon={<AddIcon />}
-            label='Add New Component'
+            label={t('button.add_new_component')}
           />
         </div>
       </TitleWrapper>
