@@ -103,7 +103,6 @@ function AttendanceEntriesComponent() {
   const [openAddEmployee, setOpenAddEmployee] = useState(false);
   const [hydrated, setHydrated] = useState(false);
   const [isAuto, setIsAuto] = useState(false);
-  const [isReload, setIsReload] = useState(false);
   const [selected, setSelected] = useState(Array<object>);
   const [selectDate, setSelectDate] = useState(dayjs());
 
@@ -170,6 +169,7 @@ function AttendanceEntriesComponent() {
     return (
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <TimePicker
+          ampm={false}
           format='HH:mm'
           onAccept={(e) => handleChange(e)}
           slotProps={{
@@ -204,7 +204,7 @@ function AttendanceEntriesComponent() {
     { field: 'clockIn',
       width: 165,
       sortable: false,
-      headerName: 'Clock In',
+      headerName: 'Check In',
       renderCell: (params) => <GridClockCell {...params} />
     },
     { field: 'icon',
@@ -216,7 +216,7 @@ function AttendanceEntriesComponent() {
     { field: 'clockOut',
       width: 165,
       sortable: false,
-      headerName: 'Clock Out',
+      headerName: 'Check Out',
       renderCell: (params) => <GridClockCell {...params} />
     },
     { field: 'action',
@@ -249,7 +249,6 @@ function AttendanceEntriesComponent() {
       }
     });
     handleClose();
-    setIsReload(!isReload);
   };
 
   const handleAuto = (v: boolean) => {
@@ -284,7 +283,7 @@ function AttendanceEntriesComponent() {
 
   useEffect(() => {
     console.log(selected);
-  }, [selected]);
+  }, [selected.length]);
 
   useEffect(() => {
     setHydrated(true);
@@ -316,7 +315,7 @@ function AttendanceEntriesComponent() {
 
       <ContentWrapper>
         <Box sx={{ width: '100%' }}>
-          <AttendanceTable reload={isReload}/>
+          <AttendanceTable />
         </Box>
       </ContentWrapper>
 
