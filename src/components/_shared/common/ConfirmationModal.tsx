@@ -3,6 +3,7 @@ import { Modal, Box, IconButton, Typography, Button as MuiButton } from '@mui/ma
 import { Close } from '@mui/icons-material';
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
+import { useTranslation } from 'react-i18next';
 
 const modalStyle = {
   position: 'absolute',
@@ -53,6 +54,7 @@ interface ConfirmationModalProp {
 
 
 function ConfirmationModal({ open, handleClose, title, content, withCallback, callback, noChange, type }: ConfirmationModalProp) {
+  const {t} = useTranslation();
   const router = useRouter();
   const handleClick = () => {
     handleClose();
@@ -81,18 +83,18 @@ function ConfirmationModal({ open, handleClose, title, content, withCallback, ca
           <Typography component='span' fontSize='14px' color='#4B5563'>{content}</Typography>
         </div>
         <ModalFooter>
-          <MuiButton variant='outlined' size='small' onClick={handleClose}>Cancel</MuiButton>
+          <MuiButton variant='outlined' size='small' onClick={handleClose}>{t('button.cancel')}</MuiButton>
           {!type &&
-            <MuiButton variant='contained' onClick={handleClick} size='small' color='primary'>Confirm</MuiButton>
+            <MuiButton variant='contained' onClick={handleClick} size='small' color='primary'>{t('button.confirm')}</MuiButton>
           }
           {type === 'delete' &&
-            <MuiButton variant='contained' onClick={handleClick} size='small' sx={{ background: '#FECACA', color: '#DC2626', ':hover': { background: '#FECACA', color: '#DC2626' } }}>Delete</MuiButton>
+            <MuiButton variant='contained' onClick={handleClick} size='small' sx={{ background: '#FECACA', color: '#DC2626', ':hover': { background: '#FECACA', color: '#DC2626' } }}>{t('button.delete')}</MuiButton>
           }
           {type === 'suspend' &&
-            <MuiButton variant='contained' onClick={handleClick} size='small' sx={{ background: '#FFEDD5', color: '#EA580C' }}>Suspend</MuiButton>
+            <MuiButton variant='contained' onClick={handleClick} size='small' sx={{ background: '#FFEDD5', color: '#EA580C' }}>{t('button.suspend')}</MuiButton>
           }
           {type === 'reactivate' &&
-            <MuiButton variant='contained' onClick={handleClick} size='small' sx={{ background: '#DCFCE7', color: '#16A34A' }}>Reactivate</MuiButton>
+            <MuiButton variant='contained' onClick={handleClick} size='small' sx={{ background: '#DCFCE7', color: '#16A34A' }}>{t('button.reactivate')}</MuiButton>
           }
         </ModalFooter>
       </Box>

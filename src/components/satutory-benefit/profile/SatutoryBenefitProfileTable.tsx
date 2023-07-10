@@ -258,7 +258,7 @@ function SutatoryBenefitProfileTable({
                             color='green'
                             sx={{ bgcolor: '#DCFCE7', color: '#16A34A' }}
                             startIcon={<HiUpload />}
-                            label={t('satutory_benefit.profile.button.activate')}
+                            label={t('button.activate')}
                             onClick={() => setActivateConfirmation(true)}
                           />
                         )}
@@ -293,7 +293,7 @@ function SutatoryBenefitProfileTable({
                             color='orange'
                             sx={{ bgcolor: '#FFEDD5', color: '#F97316' }}
                             startIcon={<HiOutlineArchive />}
-                            label={t('satutory_benefit.profile.button.archive')}
+                            label={t('button.archive')}
                             onClick={() => setArchiveConfirmation(true)}
                           />
                         )}

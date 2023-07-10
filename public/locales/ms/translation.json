@@ -50,6 +50,8 @@
     "delete": "Padam",
     "edit": "Sunting",
     "activate": "Aktifkan",
+    "reactivate": "Aktifkan semula",
+    "suspend": "tangguh",
     "archive": "Diarkibkan",
     "duplicate": "Pendua",
     "mark_complete": "Tandakan Semua dan Selesai",

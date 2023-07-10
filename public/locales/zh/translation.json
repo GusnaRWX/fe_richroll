@@ -50,6 +50,8 @@
     "delete": "删除",
     "edit": "编辑",
     "activate": "启用",
+    "reactivate": "重新激活",
+    "suspend": "暂停",
     "archive": "已存档",
     "duplicate": "复制",
     "mark_complete": "标记全部并完成",

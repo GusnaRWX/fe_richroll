@@ -50,6 +50,8 @@
     "delete" : "Delete",
     "edit" :"Edit",
     "activate" : "Activate",
+    "reactivate" : "Reactivate",
+    "suspend" : "Suspend",
     "archive" : "Archived",
     "duplicate" : "Duplicate",
     "mark_complete" : "Mark All and Complete",

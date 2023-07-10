@@ -50,6 +50,8 @@
     "delete": "Menghapus",
     "edit": "Sunting",
     "activate": "Mengaktifkan",
+    "reactivate": "Mengaktifkan kembali",
+    "suspend": "Menskors",
     "archive": "Diarsipkan",
     "duplicate": "Duplikat",
     "mark_complete": "Tandai Semua dan Selesai",

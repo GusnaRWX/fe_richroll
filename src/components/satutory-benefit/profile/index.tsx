@@ -81,7 +81,7 @@ const SatutoryBenefitProfile = () => {
               router.push('/satutory-benefit/profile/add-new-profile')
             }
             startIcon={<AddIcon />}
-            label={t('satutory_benefit.profile.button.add_new_profile')}
+            label={t('button.add_new_profile')}
           />
         </div>
       </TitleWrapper>
