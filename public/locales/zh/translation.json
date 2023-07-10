@@ -279,7 +279,8 @@
           "citation": "引文",
           "internal_notes": "内部注释",
           "external_notes": "外部注释",
-          "max_char_info": "最大限度。 "
+          "max_char_info": "最大限度。 ",
+          "component_name": "组件名称"
         },
         "create_designed_transfer_account": {
           "form_title": "银行信息",
@@ -307,7 +308,8 @@
           "notes_placeholder": "输入注释",
           "bank_info": "银行信息",
           "message": "指定转账账户手动添加到每个员工的个人资料中",
-          "max_char_info": "最大限度。 "
+          "max_char_info": "最大限度。 ",
+          "transfer_info": "转账信息"
         },
         "rates": {
           "contributor_option": {
@@ -335,7 +337,10 @@
         "cancel": "取消",
         "next": "下一个",
         "back": "后退",
-        "confirm": "确认"
+        "confirm": "确认",
+        "duplicate": "复制",
+        "delete": "删除",
+        "edit": "编辑"
       },
       "modal": {
         "delete": {

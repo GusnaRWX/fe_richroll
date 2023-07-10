@@ -279,7 +279,8 @@
           "citation": "Petikan",
           "internal_notes": "Nota Dalaman",
           "external_notes": "Nota Luaran",
-          "max_char_info": "Maks. "
+          "max_char_info": "Maks. ",
+          "component_name": "Nama Komponen"
         },
         "create_designed_transfer_account": {
           "form_title": "Maklumat bank",
@@ -307,7 +308,8 @@
           "notes_placeholder": "Nota Input",
           "bank_info": "Maklumat bank",
           "message": "Akaun Pemindahan Ditetapkan ditambah secara manual pada setiap profil pekerja",
-          "max_char_info": "Maks. "
+          "max_char_info": "Maks. ",
+          "transfer_info": "Pemindahan Maklumat"
         },
         "rates": {
           "contributor_option": {
@@ -335,7 +337,10 @@
         "cancel": "Batal",
         "next": "Seterusnya",
         "back": "belakang",
-        "confirm": "sahkan"
+        "confirm": "sahkan",
+        "duplicate": "Pendua",
+        "delete": "Padam",
+        "edit": "Sunting"
       },
       "modal": {
         "delete": {
