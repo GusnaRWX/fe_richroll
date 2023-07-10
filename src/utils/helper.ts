@@ -107,7 +107,7 @@ export const getSite = () => {
     const site = getStorage('site');
     let parse: string | null;
     if (site) {
-      parse = JSON.parse(site);
+      parse = site;
       return parse;
     } else {
       return null;
@@ -120,7 +120,7 @@ export const getTimezone = () => {
     const timezone = getStorage('timezone');
     let parse: string | null;
     if (timezone) {
-      parse = JSON.parse(timezone);
+      parse = timezone;
       return parse;
     } else {
       return null;
