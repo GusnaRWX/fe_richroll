@@ -46,7 +46,7 @@ export default function CreateCNBComponent() {
   const router = useRouter();
   const companyData = getCompanyData();
   const dispatch = useAppDispatch();
-  const { listCompensation, listTermin, listSuppTermin } = useAppSelectors(
+  const { listBaseCompensation, listSuppCompensation, listTermin, listSuppTermin } = useAppSelectors(
     (state) => state.option
   );
   const [title, setTitle] = React.useState('Amount');
@@ -209,7 +209,7 @@ export default function CreateCNBComponent() {
       supplement
     ) {
       const tempBase = dynamicPayloadBaseCnb(
-        listCompensation,
+        listBaseCompensation,
         value.compensationComponentId,
         value
       );
@@ -218,7 +218,7 @@ export default function CreateCNBComponent() {
         for (let i = 0; i <= value.supplementary.length; i++) {
           if (typeof value.supplementary[i] !== 'undefined') {
             const tempData = dynamicPayloadBaseCnb(
-              listCompensation,
+              listSuppCompensation,
               value.supplementary[i].compensationComponentId,
               value.supplementary[i]
             );
@@ -395,13 +395,13 @@ export default function CreateCNBComponent() {
                                 setTitle(
                                   getPaymentType(
                                     e.target.value,
-                                    listCompensation
+                                    listBaseCompensation
                                   )?.title
                                 );
                                 setWithPercentage(
                                   getPaymentType(
                                     e.target.value,
-                                    listCompensation
+                                    listBaseCompensation
                                   )?.withPercentage
                                 );
                               }}
@@ -415,7 +415,7 @@ export default function CreateCNBComponent() {
                                     />
                                   );
                                 }
-                                const selected = listCompensation?.find(
+                                const selected = listBaseCompensation?.find(
                                   (list) => list.value === value
                                 );
                                 if (selected) {
@@ -424,7 +424,7 @@ export default function CreateCNBComponent() {
                                 return null;
                               }}
                             >
-                              {listCompensation?.map((item, i) => (
+                              {listBaseCompensation?.map((item, i) => (
                                 <MenuItem key={i} value={item.value}>
                                   {item.label}
                                 </MenuItem>
@@ -677,19 +677,19 @@ export default function CreateCNBComponent() {
                                                   `supplementary.${i}.titleRate`,
                                                   getPaymentType(
                                                     e.target.value,
-                                                    listCompensation
+                                                    listSuppCompensation
                                                   )?.title
                                                 );
                                                 formik.setFieldValue(
                                                   `supplementary.${i}.withPercentage`,
                                                   getPaymentType(
                                                     e.target.value,
-                                                    listCompensation
+                                                    listSuppCompensation
                                                   )?.withPercentage
                                                 );
                                               }}
                                             >
-                                              {listCompensation?.map(
+                                              {listSuppCompensation?.map(
                                                 (item, i) => (
                                                   <MenuItem
                                                     key={i}

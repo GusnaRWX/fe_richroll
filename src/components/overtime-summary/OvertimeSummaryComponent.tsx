@@ -111,7 +111,6 @@ function OvertimeSummaryComponent() {
   const dispatch = useAppDispatch();
   const [open, setOpen] = useState(false);
   const [isAuto, setIsAuto] = useState(false);
-  const [isReload, setIsReload] = useState(false);
   const [selected, setSelected] = useState(Array<object>);
   const [hydrated, setHaydrated] = useState(false);
   const [employeeOpen, setEmployeeOpen] = useState(false);
@@ -166,6 +165,7 @@ function OvertimeSummaryComponent() {
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <TimePicker
           format='HH:mm'
+          ampm={false}
           onAccept={(e) => setVal(e)}
           value={value}
           sx={{
@@ -290,7 +290,6 @@ function OvertimeSummaryComponent() {
   };
 
   const handleConfirm = () => {
-    console.log(selected);
     const tempData = selected.map((val) => {
       return ({
         employeeID: val['id'],
@@ -307,7 +306,6 @@ function OvertimeSummaryComponent() {
       }
     });
     handleClose();
-    setIsReload(!isReload);
   };
 
   const handleAuto = (v: boolean) => {
@@ -356,7 +354,7 @@ function OvertimeSummaryComponent() {
 
       <ContentWrapper>
         <Box sx={{ width: '100%' }}>
-          <OvertimeSummaryTable reload={isReload}/>
+          <OvertimeSummaryTable />
         </Box>
       </ContentWrapper>
 

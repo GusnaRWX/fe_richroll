@@ -8,7 +8,8 @@ import {
   getListDepartment,
   getListPosition,
   getCnb,
-  getListCompensation,
+  getListBaseCompensation,
+  getListSuppCompensation,
   getListTermin,
   getListSuppTermin,
   getListWorkSchedule
@@ -49,9 +50,12 @@ import {
   getListCnbRequested,
   getListCnbFailed,
   getListCnbSuccess,
-  getListCompensationFailed,
-  getListCompensationRequested,
-  getListCompensationSuccess,
+  getListBaseCompensationFailed,
+  getListBaseCompensationRequested,
+  getListBaseCompensationSuccess,
+  getListSuppCompensationFailed,
+  getListSuppCompensationRequested,
+  getListSuppCompensationSuccess,
   getListTerminFailed,
   getListTerminReqeusted,
   getListTerminSuccess,
@@ -434,15 +438,15 @@ function* fetchListCnb() {
   }
 }
 
-function* fetchListCompensation() {
+function* fetchListBaseCompensation() {
   try {
-    const res: AxiosResponse = yield call(getListCompensation);
+    const res: AxiosResponse = yield call(getListBaseCompensation);
 
     if (res.status === 200) {
       const { items } = res?.data?.data as Option.Compensation;
 
       yield put({
-        type: getListCompensationSuccess.toString(),
+        type: getListBaseCompensationSuccess.toString(),
         payload: {
           items: items
         }
@@ -452,7 +456,37 @@ function* fetchListCompensation() {
     if (err instanceof AxiosError) {
       const errorMessage = err?.response?.data as Services.ErrorResponse;
       yield delay(2000, true);
-      yield put({ type: getListCompensationFailed.toString() });
+      yield put({ type: getListBaseCompensationFailed.toString() });
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message,
+        }
+      });
+    }
+  }
+}
+
+function* fetchListSuppCompensation() {
+  try {
+    const res: AxiosResponse = yield call(getListSuppCompensation);
+
+    if (res.status === 200) {
+      const { items } = res?.data?.data as Option.Compensation;
+
+      yield put({
+        type: getListSuppCompensationSuccess.toString(),
+        payload: {
+          items: items
+        }
+      });
+    }
+  } catch(err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      yield delay(2000, true);
+      yield put({ type: getListSuppCompensationFailed.toString() });
       yield put({
         type: setResponserMessage.toString(),
         payload: {
@@ -567,7 +601,8 @@ function* optionSaga() {
   yield takeEvery(getSecondAdministrativeSecondLevelRequested.toString(), fetchSecondAdministrativeLevelSecond);
   yield takeEvery(getSecondAdministrativeThirdLevelRequested.toString(), fetchSecondAdministrativeLevelThird);
   yield takeEvery(getListCnbRequested.toString(), fetchListCnb);
-  yield takeEvery(getListCompensationRequested.toString(), fetchListCompensation);
+  yield takeEvery(getListBaseCompensationRequested.toString(), fetchListBaseCompensation);
+  yield takeEvery(getListSuppCompensationRequested.toString(), fetchListSuppCompensation);
   yield takeEvery(getListTerminReqeusted.toString(), fetchListTermin);
   yield takeEvery(getListSuppTerminRequested.toString(), fetchListSuppTermin);
   yield takeEvery(getListOptionWorkScheduleRequested.toString(), fetchListOptionWorkSchedule);

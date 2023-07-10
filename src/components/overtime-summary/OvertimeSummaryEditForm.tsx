@@ -97,6 +97,8 @@ function OvertimeSummaryEditForm({editOpen, handleEditClose, callback, item}: Ed
           <Typography mb='7px' fontSize='16px'>Start Time</Typography>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <TimePicker
+              format='HH:mm'
+              ampm={false}
               sx={{
                 '& .MuiOutlinedInput-input': {
                   padding: '8.5px 14px',

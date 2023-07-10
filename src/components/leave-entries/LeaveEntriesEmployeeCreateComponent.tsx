@@ -135,6 +135,7 @@ const LeaveEntriesEmployeeCreateComponent = ({
             <Text title='From' color='grey.700' mb='6px' />
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <TimePicker
+                ampm={false}
                 format='HH:mm'
                 value={formik.values.halfFrom}
                 onChange={(val) => formik.setFieldValue('halfFrom', val, false)}
@@ -155,6 +156,7 @@ const LeaveEntriesEmployeeCreateComponent = ({
             <Text title='To' color='grey.700' mb='6px' />
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <TimePicker
+                ampm={false}
                 format='HH:mm'
                 value={formik.values.halfTo}
                 onChange={(val) => formik.setFieldValue('halfTo', val, false)}

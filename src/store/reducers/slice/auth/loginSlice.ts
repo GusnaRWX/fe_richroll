@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { HYDRATE } from 'next-redux-wrapper';
-import { setStorages } from '@/utils/storage';
+import { setStorages, getStorage } from '@/utils/storage';
 
 interface LoginState {
   isLoading: boolean;
@@ -26,6 +26,8 @@ export const loginSlice = createSlice({
       setStorages([
         { name: 'accessToken', value: action.payload.token },
         { name: 'refreshToken', value: action.payload.refreshToken }]);
+      if (!getStorage('site')) setStorages([{ name: 'site', value: 'Indonesia' }]);
+      if (!getStorage('timezone')) setStorages([{ name: 'timezone', value: 'Asia/Indonesia' }]);
       state.isAuth = true;
       state.isLoading = false;
     },
