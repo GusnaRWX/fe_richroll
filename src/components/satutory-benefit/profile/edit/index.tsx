@@ -18,10 +18,13 @@ import * as Yup from 'yup';
 import { CustomModal } from '@/components/_shared/common';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { HiPencilAlt } from 'react-icons/hi';
+import { useTranslation } from 'react-i18next';
 
 export default function EditNewProfile() {
   const [isAddNewComponent, setIsAddNewComponent] = useState(false);
   const [isModalFormSubmitted, setIsModalFormSubmitted] = useState(false);
+  const {t} = useTranslation();
+  const tPath = 'satutory_benefit.profile.form_&_detail.';
 
   function isCloseAddComponent() {
     setIsAddNewComponent(false);
@@ -162,14 +165,14 @@ export default function EditNewProfile() {
                     width: '250px',
                   }}
                 >
-                  Create Statutory Benefit
+                  {t(`${tPath}update_title`)}
                 </Typography>
               </HeaderPageTitle>
               <NextBtnWrapper>
                 <Button
                   fullWidth={false}
                   size='small'
-                  label='Cancel'
+                  label={t('satutory_benefit.profile.button.cancel')}
                   variant='outlined'
                   sx={{ mr: '12px' }}
                   color='primary'
@@ -180,7 +183,7 @@ export default function EditNewProfile() {
                 <Button
                   fullWidth={false}
                   size='small'
-                  label='Save and Approve'
+                  label={t('satutory_benefit.profile.button.save_approve')}
                   color='primary'
                   onClick={() => formik.handleSubmit()}
                 />
@@ -192,8 +195,8 @@ export default function EditNewProfile() {
                 <Grid container spacing={2}>
                   <Grid item xs={6} md={6} lg={6} xl={6}>
                     <Input
-                      placeholder='Input Statutory Benefits Name'
-                      customLabel='Satutory Name'
+                      placeholder={t(`${tPath}name_placeholder`)}
+                      customLabel={t(`${tPath}name`)}
                       required
                       withAsterisk
                       size='small'
@@ -215,7 +218,7 @@ export default function EditNewProfile() {
                   <Grid item xs={6} md={6} lg={6} xl={6}>
                     <Select
                       placeholder='Select Country'
-                      customLabel='Country'
+                      customLabel={t(`${tPath}country`)}
                       required
                       withAsterisk
                       size='small'
@@ -234,7 +237,7 @@ export default function EditNewProfile() {
                   <Grid item xs={6} md={6} lg={6} xl={6}>
                     <Select
                       placeholder='Select Country'
-                      customLabel='Province'
+                      customLabel={t(`${tPath}province`)}
                       size='small'
                       fullWidth
                       onChange={(e) => {
@@ -249,7 +252,7 @@ export default function EditNewProfile() {
                   <Grid item xs={6} md={6} lg={6} xl={6}>
                     <Select
                       placeholder='Select Country'
-                      customLabel='City'
+                      customLabel={t(`${tPath}city`)}
                       size='small'
                       fullWidth
                       onChange={(e) => {
@@ -261,7 +264,7 @@ export default function EditNewProfile() {
                   <Grid item xs={6} md={6} lg={6} xl={6}>
                     <Select
                       placeholder='Select Country'
-                      customLabel='Sub-District'
+                      customLabel={t(`${tPath}sub_district`)}
                       size='small'
                       fullWidth
                       onChange={(e) => {
@@ -275,7 +278,7 @@ export default function EditNewProfile() {
                 <Grid container spacing={2} style={{marginTop: '12px'}}>
                   <Grid item xs={6} md={6} lg={6} xl={6}>
                     <BasicDatePicker
-                      customLabel='Effective Date'
+                      customLabel={t(`${tPath}effective_date`)}
                       withAsterisk
                       onChange={(date) => {
                         formik.setFieldValue('effectiveDate', date);
@@ -289,14 +292,14 @@ export default function EditNewProfile() {
                       ) : null}
                   </Grid>
                   <Grid item xs={6} md={6} lg={6} xl={6}>
-                    <BasicDatePicker customLabel='Expiration Date' />
+                    <BasicDatePicker customLabel={t(`${tPath}expiration_date`)} />
                   </Grid>
                 </Grid>
 
                 <Grid container spacing={2} style={{marginTop: '12px'}}>
                   <Grid item xs={12} md={12} lg={12} xl={12}>
                     <Textarea
-                      customLabel='Citation'
+                      customLabel={t(`${tPath}citation`)}
                       minRows={4}
                       style={{ resize: 'vertical' }}
                     />
@@ -307,7 +310,7 @@ export default function EditNewProfile() {
                         color: '#6B7280',
                       }}
                     >
-                      Max. 120 Character
+                      {t(`${tPath}max_char_info`)} 120
                     </Typography>
                   </Grid>
                 </Grid>
@@ -315,7 +318,7 @@ export default function EditNewProfile() {
                 <Grid container spacing={2} style={{marginTop: '12px'}}>
                   <Grid item xs={12} md={12} lg={12} xl={12}>
                     <Textarea
-                      customLabel='Internal Notes'
+                      customLabel={t(`${tPath}internal_notes`)}
                       minRows={4}
                       style={{ resize: 'vertical' }}
                     />
@@ -326,7 +329,7 @@ export default function EditNewProfile() {
                         color: '#6B7280',
                       }}
                     >
-                      Max. 120 Character
+                      {t(`${tPath}max_char_info`)} 120
                     </Typography>
                   </Grid>
                 </Grid>
@@ -345,7 +348,7 @@ export default function EditNewProfile() {
                         color: '#6B7280',
                       }}
                     >
-                      Max. 120 Character
+                      {t(`${tPath}max_char_info`)} 120
                     </Typography>
                   </Grid>
                 </Grid>
@@ -422,7 +425,7 @@ export default function EditNewProfile() {
                                         startIcon={
                                           <HiPencilAlt color='white' />
                                         }
-                                        label='Edit'
+                                        label={t('satutory_benefit.profile.button.edit')}
                                         sx={{
                                           backgroundColor: '#8DD0B8',
                                           color: ' white',
@@ -432,7 +435,7 @@ export default function EditNewProfile() {
                                         color='red'
                                         size='medium'
                                         startIcon={<DeleteIcon />}
-                                        label='Delete'
+                                        label={t('satutory_benefit.profile.button.delete')}
                                         sx={{
                                           backgroundColor: '#FEE2E2',
                                           color: '#B91C1C',
@@ -451,7 +454,7 @@ export default function EditNewProfile() {
                                           fontSize: '14px',
                                         }}
                                       >
-                                          Contributor
+                                        {t(`${tPath}component.contributor`)}
                                       </Typography>
                                     </Grid>
                                     <Grid item xs={2} md={2} lg={2} xl={2}>
@@ -462,7 +465,7 @@ export default function EditNewProfile() {
                                           fontSize: '14px',
                                         }}
                                       >
-                                          Rate Types
+                                        {t(`${tPath}component.rate_types`)}
                                       </Typography>
                                     </Grid>
                                     <Grid item xs={2} md={2} lg={2} xl={2}>
@@ -473,7 +476,7 @@ export default function EditNewProfile() {
                                           fontSize: '14px',
                                         }}
                                       >
-                                          Flat Rate
+                                        {t(`${tPath}component.flat_rate`)}
                                       </Typography>
                                     </Grid>
                                     <Grid item xs={3} md={3} lg={3} xl={3}>
@@ -484,7 +487,7 @@ export default function EditNewProfile() {
                                           fontSize: '14px',
                                         }}
                                       >
-                                          Amount Cap
+                                        {t(`${tPath}component.amount_cap`)}
                                       </Typography>
                                     </Grid>
                                     <Grid item xs={3} md={3} lg={3} xl={3}>
@@ -495,7 +498,7 @@ export default function EditNewProfile() {
                                           fontSize: '14px',
                                         }}
                                       >
-                                          Effective Periode
+                                        {t(`${tPath}component.effective_period`)}
                                       </Typography>
                                     </Grid>
                                   </Grid>
@@ -563,14 +566,14 @@ export default function EditNewProfile() {
                           onClick={() => setIsAddNewComponent(true)}
                           color='secondary'
                           startIcon={<AddIcon />}
-                          label='Add Component'
+                          label={t('satutory_benefit.profile.button.add_component')}
                           sx={{ fontSize: '18px' }}
                         />
                       </Box>
 
                       <CustomModal
                         open={isAddNewComponent}
-                        title='Select Satutory Benefits Components'
+                        title={t(`${tPath}component.popup_title`)}
                         width='698px'
                         handleClose={isCloseAddComponent}
                         handleConfirm={() => formik.handleSubmit()}
@@ -595,28 +598,28 @@ export default function EditNewProfile() {
                               <Typography
                                 sx={{ fontWeight: 500, color: '#1F2937' }}
                               >
-                                Employee Name
+                                {t(`${tPath}component.employee_name`)}
                               </Typography>
                             </Grid>
                             <Grid item xs={3} md={3} lg={3} xl={3}>
                               <Typography
                                 sx={{ fontWeight: 500, color: '#1F2937' }}
                               >
-                                Effective Periode
+                                {t(`${tPath}component.effective_period`)}
                               </Typography>
                             </Grid>
                             <Grid item xs={2} md={2} lg={2} xl={2}>
                               <Typography
                                 sx={{ fontWeight: 500, color: '#1F2937' }}
                               >
-                                Rate Type
+                                {t(`${tPath}component.rate_type`)}
                               </Typography>
                             </Grid>
                             <Grid item xs={2} md={2} lg={2} xl={2}>
                               <AddButton
                                 variant='contained'
                                 startIcon={<AddIcon />}
-                                label='Component'
+                                label={t('satutory_benefit.profile.button.component')}
                                 sx={{ width: '136px', fontSize: '14px' }}
                               />
                             </Grid>
