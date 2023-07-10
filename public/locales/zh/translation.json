@@ -347,6 +347,85 @@
           "text": "您确定要复制此配置文件吗？"
         }
       }
+    },
+    "profile": {
+      "title": "法定福利概况仪表板",
+      "detail_title": "法定福利概况",
+      "table": {
+        "table_tabs": {
+          "draft": "草稿",
+          "active": "积极的",
+          "archived": "已存档"
+        },
+        "name": "姓名",
+        "profile_name": "个人资料名称",
+        "country": "国家",
+        "province": "省",
+        "effective_period": "有效期",
+        "created_on": "创建于",
+        "last_update": "最后更新"
+      },
+      "form_&_detail": {
+        "create_title": "创造法定效益",
+        "update_title": "更新法定福利",
+        "name": "法定名称",
+        "name_placeholder": "输入法定福利名称",
+        "country": "国家",
+        "province": "省",
+        "city": "城市",
+        "sub_district": "分地区",
+        "effective_date": "生效日期",
+        "expiration_date": "截止日期",
+        "citation": "引文",
+        "internal_notes": "内部注释",
+        "external_notes": "外部注释",
+        "max_char_info": "最大限度。 ",
+        "component": {
+          "popup_title": "选择法定福利组成部分",
+          "employee_name": "员工姓名",
+          "effective_period": "有效期",
+          "rate_type": "费率类型",
+          "contributor": "贡献者",
+          "rate_types": "费率类型",
+          "flat_rate": "扁平率",
+          "amount_cap": "金额上限"
+        }
+      },
+      "button": {
+        "edit": "编辑",
+        "delete": "删除",
+        "save": "节省",
+        "save_approve": "保存并批准",
+        "cancel": "取消",
+        "activate": "启用",
+        "archive": "已存档",
+        "confirm": "确认",
+        "add_new_profile": "添加新的个人资料",
+        "add_component": "添加组件",
+        "component": "成分",
+        "duplicate": "复制"
+      },
+      "modal": {
+        "delete": {
+          "title": "删除数据条目",
+          "text": "您将要删除此考勤数据条目。"
+        },
+        "duplicate": {
+          "title": "确认",
+          "text": "您确定要复制此配置文件吗？"
+        },
+        "archive": {
+          "title": "存档日期",
+          "input_date": "输入有效存档日期",
+          "replace": "替换为新配置文件"
+        },
+        "activate": {
+          "title": "发布日期",
+          "text": "您想激活税务资料吗？",
+          "effective_date": "生效日期",
+          "expiration_date": "截止日期"
+        }
+      }
     }
   }
 }

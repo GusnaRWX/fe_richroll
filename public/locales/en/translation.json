@@ -337,7 +337,6 @@
         "next" : "Next",
         "back" : "Back",
         "confirm" : "Confirm"
-
       },
       "modal" : {
         "delete" : {
@@ -347,6 +346,85 @@
         "duplicate" : {
           "title" : "Confirmation",
           "text" : "Are you sure you want to duplicate this profile ?"
+        }
+      }
+    },
+    "profile" : {
+      "title" : "Statutory Benefits Profile Dashboard",
+      "detail_title" : "Statutory Benefit Profile",
+      "table" : {
+        "table_tabs" : {
+          "draft" : "Draft",
+          "active" :"Active",
+          "archived" : "Archived"
+        },
+        "name" :"Name",
+        "profile_name" :"Profile Name",
+        "country" :"Country",
+        "province" :"Province",
+        "effective_period" :"Effective Period",
+        "created_on" :"Created On",
+        "last_update" :"Last Update"
+      },
+      "form_&_detail" : {
+        "create_title" : "Create Satutory Benefit",
+        "update_title" : "Update Satutory Benefit",
+        "name" : "Satutory Name",
+        "name_placeholder" : "Input Satutory Benefit Name",
+        "country" : "Country",
+        "province" :"Province",
+        "city" : "City",
+        "sub_district" : "Sub-District",
+        "effective_date" :"Effective Date",
+        "expiration_date" :"Expiration Date",
+        "citation" : "Citation",
+        "internal_notes" : "Internal Notes",
+        "external_notes" : "External Notes",
+        "max_char_info" : "Max. 120 Character",
+        "component" : {
+          "popup_title" : "Select Satutory Benefits Components",
+          "employee_name" : "Employee Name",
+          "effective_period" :"Effective Period",
+          "rate_type" :"Rate Type",
+          "contributor" : "Contributor",
+          "rate_types" : "Rate Types",
+          "flat_rate" :"Flat Rate",
+          "amount_cap" :"Amount Cap"
+        }
+      },
+      "button" : {
+        "edit" :"Edit",
+        "delete" :"Delete",
+        "save" :"Save",
+        "save_approve" :"Save and Approve",
+        "cancel" :"Cancel",
+        "activate" :"Activate",
+        "archive" :"Archived",
+        "confirm" :"Confirm",
+        "add_new_profile" : "Add New Profile",
+        "add_component" : "Add Component",
+        "component" :"Component",
+        "duplicate" :"Duplicate"
+      },
+      "modal" : {
+        "delete" : {
+          "title" : "Delete Data Entry",
+          "text" : "You are about to delete this attendance data entry. This action cannot be undone."
+        },
+        "duplicate" : {
+          "title" : "Confirmation",
+          "text" : "Are you sure you want to duplicate this profile ?"
+        },
+        "archive" : {
+          "title" : "Archivation Date",
+          "input_date" : "Input Effective Archivation Date",
+          "replace" : "Replace with New Profile"
+        },
+        "activate" : {
+          "title" : "Publication Date",
+          "text" : "Do you want to Activate the tax profile?",
+          "effective_date" :"Effective Date",
+          "expiration_date" :"Expiration Date"
         }
       }
     }
