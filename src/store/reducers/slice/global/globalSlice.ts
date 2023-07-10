@@ -13,10 +13,12 @@ const storedLanguage = typeof window !== 'undefined' ? getStorage('lang') : null
 const storedSite = typeof window !== 'undefined' ? getSite() : null;
 const storedTimezone = typeof window !== 'undefined' ? getTimezone() : null;
 
+console.log(storedSite, storedTimezone);
+
 const initialState: GlobalState = {
   language: storedLanguage ? storedLanguage as string : 'EN', // default
-  site: storedSite ? storedSite as string : 'Indonesia',
-  timezone: storedTimezone ? storedTimezone as string : 'Asia/Jakarta'
+  site: storedSite ? storedSite : 'Indonesia',
+  timezone: storedTimezone ? storedTimezone : 'Asia/Jakarta'
 };
 
 export const globalSlice = createSlice({
@@ -32,13 +34,13 @@ export const globalSlice = createSlice({
     setSite: (state, action) => {
       state.site = action.payload;
       setStorages([
-        { name: 'site', value: JSON.stringify(action.payload) }
+        { name: 'site', value: action.payload }
       ]);
     },
     setTimezone: (state, action) => {
       state.timezone = action.payload;
       setStorages([
-        { name: 'timezone', value: JSON.stringify(action.payload) }
+        { name: 'timezone', value: action.payload }
       ]);
     }
   },

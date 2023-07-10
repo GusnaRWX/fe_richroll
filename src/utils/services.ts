@@ -2,7 +2,7 @@ import axios, { AxiosHeaderValue, AxiosRequestHeaders, AxiosResponse } from 'axi
 import { Logger } from '@/utils/logger';
 import { config } from '@config';
 import { getStorage, setStorages } from './storage';
-//import { getTimezone } from './helper';
+import { getTimezone } from './helper';
 
 /**
  * Log Responser
@@ -33,8 +33,7 @@ const service = axios.create({
       toString() {
         return `Bearer ${getStorage('accessToken')}`;
       }
-    } as AxiosHeaderValue,
-    'X-Timezone': 'Asia/Jakarta'
+    } as AxiosHeaderValue
   }
 });
 
@@ -60,6 +59,17 @@ async function refreshAccessToken() {
     throw error;
   }
 }
+
+// Add a request interceptor to handle X-Timezone
+service.interceptors.request.use(
+  (config) => {
+    config.headers['X-Timezone'] = getTimezone();
+    return config;
+  },
+  async (error) => {
+    return Promise.reject(error);
+  }
+);
 
 // Add a response interceptor to handle unauthorized errors
 service.interceptors.response.use(
