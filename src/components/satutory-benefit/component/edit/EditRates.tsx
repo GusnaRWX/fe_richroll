@@ -504,14 +504,14 @@ export default function EditRates() {
           <Button
             sx={{ boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.5)', color: '#374151' }}
           >
-            {t('satutory_benefit.component.button.back')}
+            {t('button.back')}
           </Button>
           <Button
             sx={{ boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.5)' }}
             variant='contained'
             onClick={() => formik.submitForm()}
           >
-            {t('satutory_benefit.component.button.save')}
+            {t('button.save')}
           </Button>
         </Grid>
       </Box>

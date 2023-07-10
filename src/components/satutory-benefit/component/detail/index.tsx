@@ -90,21 +90,21 @@ export default function SatutoryBenefitComponentDetail() {
               boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.05)',
             }}
             startIcon={<FiCopy />}
-            label={t('satutory_benefit.component.button.duplicate')}
+            label={t('button.duplicate')}
             onClick={() => setDuplicateConfirmation(true)}
           />
           <Button
             color='rose'
             sx={{ bgcolor: '#FECACA', color: '#DC2626', width: 'fit-content' }}
             startIcon={<DeleteIcon />}
-            label={t('satutory_benefit.component.button.delete')}
+            label={t('button.delete')}
             onClick={() => setDeleteConfirmation(true)}
           />
           <Button
             color='green'
             sx={{ bgcolor: '#8DD0B8', color: '#fff', width: 'fit-content' }}
             startIcon={<HiPencilAlt />}
-            label={t('satutory_benefit.component.button.edit')}
+            label={t('button.edit')}
             onClick={EditActionHandler}
           />
         </NextBtnWrapper>

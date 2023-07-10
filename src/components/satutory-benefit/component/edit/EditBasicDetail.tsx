@@ -187,8 +187,8 @@ export default function EditBasicDetail({setValue}: EditBasicDetailProps) {
             <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
               <Button
                 color='primary'
-                label='Next'
-                sx={{ width: '63px' }}
+                label={t('button.next')}
+                sx={{ width: 'fit-content' }}
                 onClick={() => formik.submitForm()}
               />
             </Box>

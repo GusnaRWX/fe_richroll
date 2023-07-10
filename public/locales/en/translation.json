@@ -352,18 +352,6 @@
           "search_placeholder" : "Search"
         }
       },
-      "button" : {
-        "add_new_component" : "Add New Component",
-        "save" : "Save",
-        "save_exit" : "Save & Exit",
-        "cancel" : "Cancel",
-        "next" : "Next",
-        "back" : "Back",
-        "confirm" : "Confirm",
-        "duplicate": "Duplicate",
-        "delete": "Delete",
-        "edit": "Edit"
-      },
       "modal" : {
         "delete" : {
           "title" : "Delete Data Entry",

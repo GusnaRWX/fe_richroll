@@ -48,7 +48,7 @@ const SatutoryBenefitComponent = () => {
               router.push('/satutory-benefit/component/add-new-component')
             }
             startIcon={<AddIcon />}
-            label={t(`${t_key}.button.add_new_component`)}
+            label={t(`button.add_new_component`)}
           />
         </div>
       </TitleWrapper>

@@ -79,7 +79,7 @@ function CreateNewComponent() {
                   setOpen(true);
                 }
               }}
-            >{t(`${t_buttonKey}.cancel`)}</MuiButton>
+            >{t(`button.cancel`)}</MuiButton>
             <MuiButton
               variant='contained'
               size='small'
@@ -93,7 +93,7 @@ function CreateNewComponent() {
                   setOpen(true);
                 }
               }}
-            >{t(`${t_buttonKey}.save`)}</MuiButton>
+            >{t(`button.save`)}</MuiButton>
           </ButtonWrapper>
         </Grid>
       </Grid>

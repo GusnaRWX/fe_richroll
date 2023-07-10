@@ -46,7 +46,6 @@ export default function CreateRates() {
   // Translation Key
   const {t} = useTranslation();
   const t_key = 'satutory_benefit.component.form_&_detail.rates';
-  const t_buttonKey = 'satutory_benefit.component.button';
 
   const initialValues = {
     employee: true,
@@ -517,14 +516,14 @@ export default function CreateRates() {
           <Button
             sx={{ boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.5)', color: '#374151' }}
           >
-            {t(`${t_buttonKey}.back`)}
+            {t(`button.back`)}
           </Button>
           <Button
             sx={{ boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.5)' }}
             variant='contained'
             onClick={() => formik.submitForm()}
           >
-            {t(`${t_buttonKey}.save`)}
+            {t(`button.save`)}
           </Button>
         </Grid>
       </Box>

@@ -353,8 +353,8 @@ export default function EditDesignedTransferAccount({ setValue }: EditDesignedTr
           <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Button
               color='primary'
-              label={t('satutory_benefit.component.button.next')}
-              sx={{ width: '63px' }}
+              label={t('button.next')}
+              sx={{ width: 'fit-content' }}
               onClick={() => formik.submitForm()}
             />
           </Box>
