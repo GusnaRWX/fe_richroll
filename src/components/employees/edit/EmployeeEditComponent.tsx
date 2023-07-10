@@ -26,6 +26,10 @@ const EmployeeWorkScheduleEdit = dynamic(() => import('./EmployeeWorkScheduleEdi
   ssr: false
 });
 
+const EmployeeCnbForm = dynamic(() => import('./CnbFormEdit'), {
+  ssr: false
+});
+
 const TopWrapper = styled.div`
  display: flex;
  flex-direction: row;
@@ -420,7 +424,7 @@ function EmployeeEditComponent() {
             />
           </TabPanel>
           <TabPanel value={value} index={3}>
-            on Development
+            <EmployeeCnbForm />
           </TabPanel>
           <TabPanel value={value} index={4}>
             <EmployeeWorkScheduleEdit setData={setValueWorkSchedule} />

@@ -267,8 +267,20 @@ export default function UpdateCNBComponent() {
         });
       }
     };
+    const fetchSupplementary = async () => {
+      if (cnbDetail?.supplementaries?.length > 0) {
+        cnbDetail?.supplementaries?.map(val => {
+          dispatch({
+            type: getListSuppTerminRequested.toString(),
+            payload: val?.component?.id
+          });
+        });
+      }
+    };
+
 
     fetchData();
+    fetchSupplementary();
   }, [cnbDetail, listBaseCompensation]);
 
   useEffect(() => {
