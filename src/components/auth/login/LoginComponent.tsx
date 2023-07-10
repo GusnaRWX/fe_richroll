@@ -1,5 +1,5 @@
 import React from 'react';
-import LoginForm from '@/components/auth/login/LoginForm';
+// import LoginForm from '@/components/auth/login/LoginForm';
 import { Login } from '@/types/component';
 import {
   Box,
@@ -15,7 +15,12 @@ import { Image as ImageType } from '@/utils/assetsConstant';
 import LocalizationMenu from '@/components/_shared/_core/localization/LocalizationMenu';
 import { useAppSelectors } from '@/hooks/index';
 import Notify from '../../_shared/common/Notify';
+import dynamic from 'next/dynamic';
 
+
+const LoginClientForm = dynamic(() => import('./LoginForm'), {
+  ssr: false
+});
 
 const WrapperAuth = styled(Box)<BoxProps>(({ theme }) => ({
   background: theme.palette.secondary[100],
@@ -90,7 +95,7 @@ const LoginComponent = ({
               />
             </Box>
             <Box width='100%' height='621px' sx={{ background: '#FFFFFF' }}>
-              <LoginForm doLogin={doLogin} />
+              <LoginClientForm doLogin={doLogin} />
             </Box>
           </WrapperCardContent>
         </WrapperCard>
