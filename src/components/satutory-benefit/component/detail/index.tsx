@@ -228,59 +228,6 @@ export default function SatutoryBenefitComponentDetail() {
             </Typography>
           </Grid>
         </Grid>
-        {/* Employee Section ==================== */}
-        <Grid container spacing={2} style={{ marginTop: '32px' }}>
-          <Grid item xs={12} md={12} lg={12} xl={12}>
-            <Typography
-              style={{
-                color: '#223567',
-                fontSize: '18px',
-                fontWeight: '700',
-              }}
-            >
-              Employee
-            </Typography>
-          </Grid>
-          <Grid item xs={12} md={12} lg={12} xl={12}>
-            <Typography
-              component='div'
-              variant='text-sm'
-              color='#9CA3AF'
-              mb='8px'
-            >
-              {t('satutory_benefit.component.form_&_detail.rates.rate_type')}
-            </Typography>
-            <Typography component='div' variant='text-sm' color='#4B5563'>
-              -
-            </Typography>
-          </Grid>
-          <Grid item xs={3} md={3} lg={3} xl={3}>
-            <Typography
-              component='div'
-              variant='text-sm'
-              color='#9CA3AF'
-              mb='8px'
-            >
-              {t('satutory_benefit.component.form_&_detail.rates.flat_rate')}
-            </Typography>
-            <Typography component='div' variant='text-sm' color='#4B5563'>
-              -
-            </Typography>
-          </Grid>
-          <Grid item xs={3} md={3} lg={3} xl={3}>
-            <Typography
-              component='div'
-              variant='text-sm'
-              color='#9CA3AF'
-              mb='8px'
-            >
-              {t('satutory_benefit.component.form_&_detail.rates.amount_cap')}
-            </Typography>
-            <Typography component='div' variant='text-sm' color='#4B5563'>
-              -
-            </Typography>
-          </Grid>
-        </Grid>
         {/* Transfer Information Section ==================== */}
         <Grid container spacing={2} style={{ marginTop: '32px' }}>
           <Grid item xs={12} md={12} lg={12} xl={12}>
@@ -380,6 +327,59 @@ export default function SatutoryBenefitComponentDetail() {
               mb='8px'
             >
               {t('satutory_benefit.component.form_&_detail.create_designed_transfer_account.swift_code')}
+            </Typography>
+            <Typography component='div' variant='text-sm' color='#4B5563'>
+              -
+            </Typography>
+          </Grid>
+        </Grid>
+        {/* Employee Section ==================== */}
+        <Grid container spacing={2} style={{ marginTop: '32px' }}>
+          <Grid item xs={12} md={12} lg={12} xl={12}>
+            <Typography
+              style={{
+                color: '#223567',
+                fontSize: '18px',
+                fontWeight: '700',
+              }}
+            >
+              Employee
+            </Typography>
+          </Grid>
+          <Grid item xs={12} md={12} lg={12} xl={12}>
+            <Typography
+              component='div'
+              variant='text-sm'
+              color='#9CA3AF'
+              mb='8px'
+            >
+              {t('satutory_benefit.component.form_&_detail.rates.rate_type')}
+            </Typography>
+            <Typography component='div' variant='text-sm' color='#4B5563'>
+              -
+            </Typography>
+          </Grid>
+          <Grid item xs={3} md={3} lg={3} xl={3}>
+            <Typography
+              component='div'
+              variant='text-sm'
+              color='#9CA3AF'
+              mb='8px'
+            >
+              {t('satutory_benefit.component.form_&_detail.rates.flat_rate')}
+            </Typography>
+            <Typography component='div' variant='text-sm' color='#4B5563'>
+              -
+            </Typography>
+          </Grid>
+          <Grid item xs={3} md={3} lg={3} xl={3}>
+            <Typography
+              component='div'
+              variant='text-sm'
+              color='#9CA3AF'
+              mb='8px'
+            >
+              {t('satutory_benefit.component.form_&_detail.rates.amount_cap')}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
