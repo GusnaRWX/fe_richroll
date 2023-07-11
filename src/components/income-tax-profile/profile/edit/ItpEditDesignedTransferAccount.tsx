@@ -191,7 +191,7 @@ export default function ItpEditDesignedTransferAccount({
           </Typography>
           <Input
             size='small'
-            placeholder='Input Bank Account Holders Name'
+            placeholder={t('income_tax_profile.profile.detail.designated_transfer_account.bank_account_holders_name_placeholder')}
             disabled={account !== 'central'}
             sx={
               account !== 'central'
@@ -217,7 +217,7 @@ export default function ItpEditDesignedTransferAccount({
           </Typography>
           <Input
             size='small'
-            placeholder='Input Bank Account No.'
+            placeholder={t('income_tax_profile.profile.detail.designated_transfer_account.bank_account_no_placeholder')}
             disabled={account !== 'central'}
             sx={
               account !== 'central'
@@ -249,7 +249,7 @@ export default function ItpEditDesignedTransferAccount({
             </Typography>
             <Input
               size='small'
-              placeholder='Input Bank Code'
+              placeholder={t('income_tax_profile.profile.detail.designated_transfer_account.bank_code_placeholder')}
               disabled={account !== 'central'}
               sx={
                 account !== 'central'
@@ -271,7 +271,7 @@ export default function ItpEditDesignedTransferAccount({
             </Typography>
             <Input
               size='small'
-              placeholder='Input Branch Code'
+              placeholder={t('income_tax_profile.profile.detail.designated_transfer_account.branch_code_placeholder')}
               disabled={account !== 'central'}
               sx={
                 account !== 'central'
@@ -301,7 +301,7 @@ export default function ItpEditDesignedTransferAccount({
 
           <Input
             size='small'
-            placeholder='Input Branch Name'
+            placeholder={t('income_tax_profile.profile.detail.designated_transfer_account.branch_name_placeholder')}
             disabled={account !== 'central'}
             sx={
               account !== 'central'
@@ -325,7 +325,7 @@ export default function ItpEditDesignedTransferAccount({
 
           <Input
             size='small'
-            placeholder='Input Swift Code'
+            placeholder={t('income_tax_profile.profile.detail.designated_transfer_account.swift_code_placeholder')}
             disabled={account !== 'central'}
             sx={
               account !== 'central'
@@ -350,7 +350,7 @@ export default function ItpEditDesignedTransferAccount({
         </Typography>
         <Input
           size='small'
-          placeholder='Input Notes'
+          placeholder={t('income_tax_profile.profile.detail.designated_transfer_account.notes_placeholder')}
           required
           sx={{
             color: '#6B7280',
@@ -362,13 +362,13 @@ export default function ItpEditDesignedTransferAccount({
         <FormHelperText
           sx={{ fontWeight: 500, color: '#6B7280', fontSize: '14px' }}
         >
-          Max.100 Character
+          {t('income_tax_profile.profile.detail.designated_transfer_account.max_char_info')}
         </FormHelperText>
         <Grid item xs={12} md={12} lg={12} xl={12}>
           <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Button
               color='primary'
-              label={t('income_tax_profile.profile.modal.next')}
+              label={t('button.next')}
               sx={{ width: '63px' }}
               onClick={() => formik.submitForm()}
             />

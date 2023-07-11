@@ -94,13 +94,13 @@ export default function IptEditProfileTaxMultiplier() {
                                 marginTop: '-3px',
                               }}
                             >
-                              Component {i + 1}
+                              {t('income_tax_profile.profile.detail.income_tax_multiplier.component')} {i + 1}
                             </Typography>
                             <Button
                               color='rose'
                               sx={{ bgcolor: '#FECACA', color: '#DC2626', width: 'fit-content' }}
                               startIcon={<DeleteIcon />}
-                              label={t('income_tax_profile.profile.modal.delete.ok_button')}
+                              label={t('button.delete')}
                               onClick={() => arrayHelper.remove(i)}
                             />
                           </Box>
@@ -226,8 +226,8 @@ export default function IptEditProfileTaxMultiplier() {
                           <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                             <Button
                               color='primary'
-                              label={t('income_tax_profile.profile.modal.next')}
-                              sx={{ width: '63px' }}
+                              label={t('button.next')}
+                              sx={{ width: 'fit-content' }}
                               onClick={() => formik.submitForm()}
                             />
                           </Box>

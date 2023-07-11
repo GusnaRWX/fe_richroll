@@ -112,7 +112,7 @@ const ItpEditProfileDeductableComponent = () => {
               <Button
                 color='green'
                 startIcon={<HiPencilAlt color='white' />}
-                label={t('income_tax_profile.profile.detail.main.edit')}
+                label={t('button.edit')}
                 sx={{
                   backgroundColor: '#8DD0B8',
                   width: {xs: '68px', md: '73px'},
@@ -124,7 +124,7 @@ const ItpEditProfileDeductableComponent = () => {
               <Button
                 color='red'
                 startIcon={<DeleteIcon />}
-                label={t('income_tax_profile.profile.detail.main.delete')}
+                label={t('button.delete')}
                 sx={{
                   width: {xs: '68px', md: '73px'},
                   height: {xs: '29px', md: '30px'},
@@ -238,7 +238,7 @@ const ItpEditProfileDeductableComponent = () => {
               <Button
                 color='green'
                 startIcon={<HiPencilAlt color='white' />}
-                label={t('income_tax_profile.profile.detail.main.edit')}
+                label={t('button.edit')}
                 sx={{
                   backgroundColor: '#8DD0B8',
                   width: {xs: '68px', md: '73px'},
@@ -250,7 +250,7 @@ const ItpEditProfileDeductableComponent = () => {
               <Button
                 color='red'
                 startIcon={<DeleteIcon />}
-                label={t('income_tax_profile.profile.detail.main.delete')}
+                label={t('button.delete')}
                 sx={{
                   width: {xs: '68px', md: '73px'},
                   height: {xs: '29px', md: '30px'},
@@ -339,7 +339,7 @@ const ItpEditProfileDeductableComponent = () => {
               <Button
                 color='green'
                 startIcon={<HiPencilAlt color='white' />}
-                label={t('income_tax_profile.profile.detail.main.edit')}
+                label={t('button.edit')}
                 sx={{
                   backgroundColor: '#8DD0B8',
                   width: {xs: '68px', md: '73px'},
@@ -351,7 +351,7 @@ const ItpEditProfileDeductableComponent = () => {
               <Button
                 color='red'
                 startIcon={<DeleteIcon />}
-                label={t('income_tax_profile.profile.detail.main.delete')}
+                label={t('button.delete')}
                 sx={{
                   width: {xs: '68px', md: '73px'},
                   height: {xs: '29px', md: '30px'},
@@ -425,11 +425,11 @@ const ItpEditProfileDeductableComponent = () => {
                 padding: '9px',
                 width: '65px',
               }}
-              label={t('income_tax_profile.profile.modal.back')}
+              label={t('button.back')}
             />
             <Button
               sx={{ padding: '9px', width: '65px' }}
-              label={t('income_tax_profile.profile.modal.next')}
+              label={t('button.next')}
               variant='contained'
             />
           </Box>
@@ -486,7 +486,7 @@ const ItpEditProfileDeductableComponent = () => {
                 <AddButton
                   variant='contained'
                   startIcon={<AddIcon />}
-                  label='Component'
+                  label={t('button.component')}
                   sx={{ width: '136px', fontSize: '14px' }}
                 />
               </Grid>

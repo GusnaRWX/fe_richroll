@@ -78,10 +78,6 @@
       },
       "add_new_component" : {
         "title" : "Add New Component",
-        "cancel_button" : "Cancel",
-        "save_button" : "Save & Exit",
-        "mark_button" : "Mark All and Complete",
-        "confirm_button" : "Confirm",
         "save_modal_text" : "You will stop the process, and saved in Add New Component.<br>Are you sure to stop the process?",
         "mark_modal_text" : "All disbursement will marked paid and complete the Add New Component process",
         "form" : {
@@ -131,6 +127,7 @@
     },
     "profile": {
       "title": "Tax Profile Configuration",
+      "add_new_title" : "Add New Tax Profile",
       "tab": {
         "draft": "Draft",
         "active": "Active",
@@ -179,9 +176,10 @@
           "designed_transfer_account": "Designed Transfer Account"
         },
         "basic_detail": {
+          "tax_profile_name": "Tax Profile Name",
+          "tax_profile_name_placeholder": "Input Profile Name",
           "country": "Country",
           "different_currency": "Different Currency",
-          "tax_profile_name": "Tax Profile Name",
           "effective_period": "Effective Period",
           "citation": "Citation",
           "internal_notes": "Internal Notes",
@@ -190,7 +188,8 @@
           "city": "City",
           "sub_district": "Sub-District",
           "effective_date": "Effective Date",
-          "expiration_date": "Expiration Date"
+          "expiration_date": "Expiration Date",
+          "max_char_info" : "Max. 120 Character"
         },
         "deductible_component": {
           "martial_status": "Marital Status",
@@ -222,17 +221,25 @@
           "type": "Type",
           "bank": "Bank",
           "bank_account_holders_name": "Bank Account Holders Name",
+          "bank_account_holders_name_placeholder": "Input Bank Account Holders Name",
           "bank_account_no": "Bank Account No",
+          "bank_account_no_placeholder": "Input Bank Account No",
           "bank_code": "Bank Code",
+          "bank_code_placeholder": "Input Bank Code",
           "branch_code": "Branch Code",
+          "branch_code_placeholder": "Input Branch Code",
           "branch_name": "Branch Name",
+          "branch_name_placeholder": "Input Branch Name",
           "swift_code": "Swift Code",
+          "swift_code_placeholder": "Input Swift Code",
           "notes": "Notes",
+          "notes_placeholder": "Input Notes",
           "bank_info": "Bank Information",
           "central_account": "Central Account",
           "individual_account": "Individual Account",
           "company_account": "Company Account Only",
-          "message": "The Designated Transfer Account is added manually to each employee’s profile"
+          "message": "The Designated Transfer Account is added manually to each employee’s profile",
+          "max_char_info" :"Max. 100 Character"
         }
       },
       "modal": {

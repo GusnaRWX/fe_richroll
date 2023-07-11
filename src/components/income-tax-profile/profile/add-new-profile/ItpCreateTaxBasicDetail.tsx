@@ -53,7 +53,7 @@ export default function ItpCreateTaxBasicDetail() {
       <Grid container xs={12} spacing={2}>
         <Grid item xs={6} md={6} lg={6} xl={6} >
           <Input
-            placeholder='Input Statutory Benefits Name'
+            placeholder={t(`${t_key}.tax_profile_name_placeholder`)}
             customLabel={t(`${t_key}.tax_profile_name`)}
             withAsterisk
             size='small'
@@ -155,7 +155,7 @@ export default function ItpCreateTaxBasicDetail() {
               color: '#6B7280',
             }}
           >
-            Max. 120 Character
+            {t(`${t_key}.max_char_info`)}
           </Typography>
         </Grid>
         <Grid item xs={6} md={6} lg={6} xl={6}></Grid>
@@ -177,7 +177,7 @@ export default function ItpCreateTaxBasicDetail() {
               color: '#6B7280',
             }}
           >
-            Max. 120 Character
+            {t(`${t_key}.max_char_info`)}
           </Typography>
         </Grid>
         <Grid item xs={6} md={6} lg={6} xl={6}>
@@ -195,7 +195,7 @@ export default function ItpCreateTaxBasicDetail() {
               color: '#6B7280',
             }}
           >
-            Max. 120 Character
+            {t(`${t_key}.max_char_info`)}
           </Typography>
         </Grid>
       </Grid>
@@ -205,8 +205,8 @@ export default function ItpCreateTaxBasicDetail() {
           <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Button
               color='primary'
-              label='Next'
-              sx={{ width: '63px' }}
+              label={t('button.next')}
+              sx={{ width: 'fit-content' }}
               onClick={() => formik.submitForm()}
             />
           </Box>

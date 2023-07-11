@@ -84,7 +84,7 @@ export default function ItpEditProfileComponent() {
               width: '250px',
             }}
           >
-            Add New Tax Profile
+            {t('income_tax_profile.profile.add_new_title')}
           </Typography>
         </HeaderPageTitle>
       </Header>

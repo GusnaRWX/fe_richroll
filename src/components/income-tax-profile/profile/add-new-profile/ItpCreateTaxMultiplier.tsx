@@ -2,6 +2,7 @@ import React from 'react';
 import { Box, Typography, Grid } from '@mui/material';
 import { Button, Select, Input } from '@/components/_shared/form';
 import { FieldArray, Form as FormikForm, Formik } from 'formik';
+import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 
 // Import Icon
@@ -10,6 +11,8 @@ import AddIcon from '@mui/icons-material/Add';
 
 
 export default function ItpCreateTaxMultiplier() {
+  const {t} = useTranslation();
+  const t_key = 'income_tax_profile.profile.detail.income_tax_multiplier';
 
   const DummyStatusOption = [
     {value:'1',label:'NPWP'},
@@ -92,20 +95,20 @@ export default function ItpCreateTaxMultiplier() {
                                 marginTop: '-3px',
                               }}
                             >
-                              Component {i + 1}
+                              {t(`${t_key}.component`)} {i + 1}
                             </Typography>
                             <Button
                               color='rose'
                               sx={{ bgcolor: '#FECACA', color: '#DC2626', width: 'fit-content' }}
                               startIcon={<DeleteIcon />}
-                              label='Delete'
+                              label={t('button.delete')}
                               onClick={() => arrayHelper.remove(i)}
                             />
                           </Box>
                           <Grid container spacing={2} rowSpacing={4}>
                             <Grid item xs={6} md={6} lg={6} xl={6}>
                               <Select
-                                customLabel='Status'
+                                customLabel={t(`${t_key}.status`)}
                                 withAsterisk
                                 size='small'
                                 fullWidth
@@ -137,7 +140,7 @@ export default function ItpCreateTaxMultiplier() {
                                       <Grid container spacing={2} sx={{marginBottom:'32px'}}>
                                         <Grid item xs={2} md={2} lg={2} xl={2}>
                                           <Select
-                                            customLabel={`Condition ${index + 1}`}
+                                            customLabel={t(`${t_key}.condition`) + (` ${index + 1}`)}
                                             withAsterisk
                                             size='small'
                                             fullWidth
@@ -164,7 +167,7 @@ export default function ItpCreateTaxMultiplier() {
                                         </Grid>
                                         <Grid item xs={2} md={2} lg={2} xl={2}>
                                           <Select
-                                            customLabel='Multlipier'
+                                            customLabel={t(`${t_key}.multiplier`)}
                                             withAsterisk
                                             size='small'
                                             fullWidth
@@ -196,7 +199,7 @@ export default function ItpCreateTaxMultiplier() {
                           color='secondary'
                           sx={{width: 'fit-content', color:'#FFF' }}
                           startIcon={<AddIcon />}
-                          label='Component'
+                          label={t('button.component')}
                           onClick={() =>
                             arrayHelper.insert(
                               formik.values.component.length + 1,
@@ -224,8 +227,8 @@ export default function ItpCreateTaxMultiplier() {
                           <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                             <Button
                               color='primary'
-                              label='Next'
-                              sx={{ width: '63px' }}
+                              label={t('button.next')}
+                              sx={{ width: 'fit-content' }}
                               onClick={() => formik.submitForm()}
                             />
                           </Box>

@@ -4,9 +4,12 @@ import { FieldArray, Formik } from 'formik';
 import { Input, Button, IconButton, Select } from '@/components/_shared/form';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
+import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 
 export default function ItpCreateTaxRate() {
+  const {t} = useTranslation();
+  const t_key = 'income_tax_profile.profile.detail.income_tax_rate';
   // interface InitialValues {
   //   minIncome: string;
   //   maxIncome: string;
@@ -92,7 +95,7 @@ export default function ItpCreateTaxRate() {
                         </Grid>
                         <Grid item md={4}>
                           <Input
-                            customLabel='Min.Income'
+                            customLabel={t(`${t_key}.min_income`)}
                             withAsterisk
                             size='small'
                             value={formik.values.component[index].minIncome}
@@ -108,7 +111,7 @@ export default function ItpCreateTaxRate() {
                         </Grid>
                         <Grid item md={4}>
                           <Input
-                            customLabel='Max.Income'
+                            customLabel={t(`${t_key}.max_income`)}
                             withAsterisk
                             size='small'
                             value={formik.values.component[index].maxIncome}
@@ -142,7 +145,7 @@ export default function ItpCreateTaxRate() {
                       <Grid item container xs={12} md={4.5} alignItems='flex-end' spacing={1}>
                         <Grid item xs={12} md={5}>
                           <Select
-                            customLabel='Rate'
+                            customLabel={t(`${t_key}.rate`)}
                             withAsterisk
                             fullWidth
                             size='small'
@@ -152,7 +155,7 @@ export default function ItpCreateTaxRate() {
                         </Grid>
                         <Grid item xs={12} md={7}>
                           <Input
-                            customLabel='Additional Fixed Amount'
+                            customLabel={t(`${t_key}.additional_fixed_amount`)}
                             size='small'
                             value={formik.values.component[index].additionalAmount}
                             onChange={(e) => formik.setFieldValue(`component.${index}.additionalAmount`, e.target.value)}
@@ -166,10 +169,10 @@ export default function ItpCreateTaxRate() {
             )} />
             <Grid container direction='row-reverse' spacing={2} p={2} alignItems='center'>
               <Grid item>
-                <Button label='Next' onClick={() => formik.submitForm()} />
+                <Button label={t('button.next')} onClick={() => formik.submitForm()} />
               </Grid>
               <Grid item>
-                <Button label='Back' variant='outlined' onClick={() => formik.submitForm()} />
+                <Button label={t('button.back')} variant='outlined' onClick={() => formik.submitForm()} />
               </Grid>
             </Grid>
           </form>

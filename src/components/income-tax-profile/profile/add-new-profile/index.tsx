@@ -64,7 +64,7 @@ function ItpAddNewProfileComponent() {
     <>
       <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
         <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
-          <Typography variant='h6' color='#4B5563'><b>Add New Tax Profile</b></Typography>
+          <Typography variant='h6' color='#4B5563'><b>{t('income_tax_profile.profile.add_new_title')}</b></Typography>
         </Grid>
         <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
           <ButtonWrapper>
@@ -80,7 +80,7 @@ function ItpAddNewProfileComponent() {
                   setOpen(true);
                 }
               }}
-            >{ifThenElse(value < 2, 'Cancel', 'Save & Exit')}</MuiButton>
+            >{t('button.cancel')}</MuiButton>
             <MuiButton
               variant='contained'
               size='small'
@@ -94,7 +94,7 @@ function ItpAddNewProfileComponent() {
                   setOpen(true);
                 }
               }}
-            >{ifThenElse(value == 0, 'Create Deductible Components',ifThenElse(value == 1, 'Create income Tax Rates',ifThenElse(value == 2, 'Create income Tax Multiplier',ifThenElse(value == 3, 'Create Designed Detail Component',  'Mark All Paid and Complete'))))}</MuiButton>
+            >{ifThenElse(value == 4, t(`button.mark_complete`),  t(`button.save`))}</MuiButton>
           </ButtonWrapper>
         </Grid>
       </Grid>

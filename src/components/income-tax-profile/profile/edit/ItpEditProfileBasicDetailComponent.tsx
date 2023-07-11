@@ -56,7 +56,7 @@ export default function ItpEditProfileBasicDetailComponent({setValue}: ItpEditPr
         <Grid container xs={12} spacing={2}>
           <Grid item xs={6} md={6} lg={6} xl={6} >
             <Input
-              placeholder='Input Statutory Benefits Name'
+              placeholder={t('income_tax_profile.profile.detail.basic_detail.tax_profile_name_placeholder')}
               customLabel={t('income_tax_profile.profile.detail.basic_detail.tax_profile_name')}
               withAsterisk
               size='small'
