@@ -35,7 +35,7 @@ interface InitialValues {
   name: string;
   compensationComponentId: string;
   period: string;
-  rateOrAmount: string;
+  rateOrAmount: string | number;
   percentage: string | number | null;
   taxStatus: string;
   supplementary: SuplementType[];
@@ -125,8 +125,8 @@ const CnbCreateForm = ({
     name: '',
     compensationComponentId: '',
     period: '',
-    rateOrAmount: '',
-    percentage: '',
+    rateOrAmount: 0,
+    percentage: 0,
     taxStatus: '',
     supplementary: [],
     overtime: ''
@@ -168,12 +168,12 @@ const CnbCreateForm = ({
       && initialValues?.period !== '' &&
       supplement
     ) {
-      const tempBase = dynamicPayloadBaseCnb(option?.listCompensation, initialValues?.compensationComponentId, initialValues);
+      const tempBase = dynamicPayloadBaseCnb(option?.listBaseCompensation, initialValues?.compensationComponentId, initialValues);
       const tempSupplementary: any = [];
       if (initialValues.supplementary.length > 0) {
         for (let i = 0; i <= initialValues.supplementary.length; i++) {
           if (typeof initialValues.supplementary[i] !== 'undefined') {
-            const tempData = dynamicPayloadBaseCnb(option?.listCompensation, initialValues.supplementary[i].compensationComponentId, initialValues.supplementary[i]);
+            const tempData = dynamicPayloadBaseCnb(option?.listSuppCompensation, initialValues.supplementary[i].compensationComponentId, initialValues.supplementary[i]);
             tempSupplementary.push(tempData);
           }
         }
@@ -192,7 +192,7 @@ const CnbCreateForm = ({
   useEffect(() => {
     const fetchData = () => {
       if (cnbDetail?.base?.component?.id) {
-        setTitleView(getPaymentType(cnbDetail?.base?.component?.id, option?.listCompensation)?.title);
+        setTitleView(getPaymentType(cnbDetail?.base?.component?.id, option?.listBaseCompensation)?.title);
       }
     };
     fetchData();
@@ -283,7 +283,7 @@ const CnbCreateForm = ({
                           return {
                             compensationComponentId: val.component?.id || '',
                             period: val.term?.id || '',
-                            rateOrAmount: getPaymentType(val.component?.id, option?.listCompensation)?.withPercentage ? val.rate : val.amount || '',
+                            rateOrAmount: getPaymentType(val.component?.id, option?.listBaseCompensation)?.withPercentage ? val.rate : val.amount || '',
                             taxStatus: val.isTaxable || '',
                             id: val?.id || ''
                           };
@@ -402,7 +402,7 @@ const CnbCreateForm = ({
                             <Chip label={suplement?.isTaxable ? 'Taxable' : 'Non-Taxable'} />
                           </Grid>
                           <Grid item md={6}>
-                            <Text title={getPaymentType(suplement?.component?.id, option?.listCompensation)?.title} color='grey.400' fontWeight={500} fontSize='14px' />
+                            <Text title={getPaymentType(suplement?.component?.id, option?.listSuppCompensation)?.title} color='grey.400' fontWeight={500} fontSize='14px' />
                             <Text title={`Rp.${numberFormat(suplement?.amount) ?? ''} per ${suplement?.term?.name ?? ''}`} />
                           </Grid>
                         </Grid>
@@ -445,21 +445,21 @@ const CnbCreateForm = ({
                             type: getListTerminReqeusted.toString(),
                             payload: e.target.value
                           });
-                          setTitle(getPaymentType(e.target.value, option?.listCompensation)?.title);
-                          setWithPercentage(getPaymentType(e.target.value, option?.listCompensation)?.withPercentage);
+                          setTitle(getPaymentType(e.target.value, option?.listBaseCompensation)?.title);
+                          setWithPercentage(getPaymentType(e.target.value, option?.listBaseCompensation)?.withPercentage);
                         }}
                         displayEmpty
                         renderValue={(value: unknown) => {
                           if ((value as string)?.length === 0) {
                             return <Text title='Select base compensation component' color='grey.400' />;
                           }
-                          const selected = option?.listCompensation?.find(item => item.value === value);
+                          const selected = option?.listBaseCompensation?.find(item => item.value === value);
                           if (selected) {
                             return `${selected?.label}`;
                           }
                           return null;
                         }}
-                        options={option?.listCompensation}
+                        options={option?.listBaseCompensation}
                         variant='outlined'
                         error={compareCheck(formik.touched.compensationComponentId, Boolean(formik.errors.compensationComponentId))}
                         helperText={ifThenElse(compareCheck(formik.touched.compensationComponentId, Boolean(formik.errors.compensationComponentId)), formik.errors.compensationComponentId, '')}
@@ -624,15 +624,15 @@ const CnbCreateForm = ({
                                             });
                                             formik.setFieldValue(
                                               `supplementary.${i}.titleRate`,
-                                              getPaymentType(e.target.value, option?.listCompensation)?.title
+                                              getPaymentType(e.target.value, option?.listSuppCompensation)?.title
                                             );
                                             formik.setFieldValue(
                                               `supplementary.${i}.withPercentage`,
-                                              getPaymentType(e.target.value, option?.listCompensation)?.withPercentage
+                                              getPaymentType(e.target.value, option?.listSuppCompensation)?.withPercentage
                                             );
                                           }}
                                         >
-                                          {option?.listCompensation?.map((item, i) => (
+                                          {option?.listSuppCompensation?.map((item, i) => (
                                             <MenuItem key={i} value={item.value}>
                                               {item.label}
                                             </MenuItem>
@@ -934,13 +934,13 @@ const CnbCreateForm = ({
                           if ((value as string)?.length === 0 || typeof value === 'undefined') {
                             return <Text title='Select base compensation component' color='grey.400' />;
                           }
-                          const selected = option?.listCompensation?.find(item => item.value === value);
+                          const selected = option?.listBaseCompensation?.find(item => item.value === value);
                           if (selected) {
                             return `${selected?.label}`;
                           }
                           return null;
                         }}
-                        options={option?.listCompensation}
+                        options={option?.listBaseCompensation}
                         variant='outlined'
                         onChange={(e) => {
                           formik.setFieldValue('compensationComponentId', e.target.value);
@@ -949,8 +949,8 @@ const CnbCreateForm = ({
                             type: getListTerminReqeusted.toString(),
                             payload: e.target.value
                           });
-                          setTitle(getPaymentType(e.target.value, option?.listCompensation)?.title);
-                          setWithPercentage(getPaymentType(e.target.value, option?.listCompensation)?.withPercentage);
+                          setTitle(getPaymentType(e.target.value, option?.listBaseCompensation)?.title);
+                          setWithPercentage(getPaymentType(e.target.value, option?.listBaseCompensation)?.withPercentage);
                         }}
                       />
                     </Grid>
@@ -1002,6 +1002,8 @@ const CnbCreateForm = ({
                               variant='outlined'
                               size='small'
                               type='number'
+                              value={formik.values.percentage || initialValues.percentage}
+                              onChange={(e) => { formik.setFieldValue('percentage', e.target.value); }}
                               InputProps={{
                                 endAdornment: (
                                   <InputAdornment position='end'>%</InputAdornment>
@@ -1115,15 +1117,15 @@ const CnbCreateForm = ({
                                               });
                                               formik.setFieldValue(
                                                 `supplementary.${i}.titleRate`,
-                                                getPaymentType(e.target.value, option?.listCompensation)?.title
+                                                getPaymentType(e.target.value, option?.listSuppCompensation)?.title
                                               );
                                               formik.setFieldValue(
                                                 `supplementary.${i}.withPercentage`,
-                                                getPaymentType(e.target.value, option?.listCompensation)?.withPercentage
+                                                getPaymentType(e.target.value, option?.listSuppCompensation)?.withPercentage
                                               );
                                             }}
                                           >
-                                            {option?.listCompensation?.map((item, i) => (
+                                            {option?.listSuppCompensation?.map((item, i) => (
                                               <MenuItem key={i} value={item.value}>
                                                 {item.label}
                                               </MenuItem>

@@ -53,6 +53,7 @@ interface BaseType {
   rateOrAmount: number | string;
   period: string;
   overtime: string | number;
+  percentage: string | number | null;
   supplementary: SuplementType[];
 }
 
@@ -63,6 +64,7 @@ type InitialValues = {
   rateOrAmount: string;
   overtime: number | string;
   taxStatus: string;
+  percentage: string | number | null;
   supplementary: SuplementType[];
 }
 
@@ -81,6 +83,7 @@ export default function UpdateCNBComponent() {
     taxStatus: '',
     rateOrAmount: '',
     overtime: '',
+    percentage: 0,
     supplementary: []
   });
   const [isDataReady, setIsDataReady] = useState(false);
@@ -292,6 +295,7 @@ export default function UpdateCNBComponent() {
         taxStatus: cnbDetail.base?.isTaxable ? 'true' : 'false' || '',
         rateOrAmount: cnbDetail.base?.amount || '',
         overtime: cnbDetail?.overtime || '',
+        percentage: cnbDetail?.base?.rate || 0,
         supplementary: cnbDetail.supplementaries?.map(val => {
           return {
             compensationComponentId: val.component?.id || '',
@@ -537,6 +541,8 @@ export default function UpdateCNBComponent() {
                                 customLabel='Rate'
                                 variant='outlined'
                                 type='number'
+                                value={formik.values.percentage}
+                                onChange={(e) => { formik.setFieldValue('percentage', e.target.value); }}
                                 size='small'
                                 InputProps={{
                                   endAdornment: (
