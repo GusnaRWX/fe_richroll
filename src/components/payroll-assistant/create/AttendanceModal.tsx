@@ -21,7 +21,7 @@ const ButtonWrapper = styled.div`
  display: flex;
  flex-direction: row;
  align-items: center;
- justify-content: flex-end;
+ justify-content: flex-start;
  gap: .5rem;
 `;
 
@@ -34,6 +34,7 @@ const NameWrapper = styled.div`
 `;
 
 const headerItemsEmployees = [
+  { id: 'action', label: '' },
   { id: 'user.name', label: 'Employee Name' },
   { id: 'position', label: 'Position' },
   { id: 'department', label: 'Department' },
@@ -119,7 +120,7 @@ function AttendanceModal({
   useEffect(() => {
     setHaydrated(true);
   }, []);
-  
+
   useEffect(() => {
     setSelectedTemp(selected);
     setRowsPerPage(5);
@@ -186,6 +187,11 @@ function AttendanceModal({
                       data?.items?.map((item, index) => (
                         <TableRow key={index}>
                           <TableCell>
+                            <ButtonWrapper>
+                              <Checkbox onChange={(e) => onSelected(item, e)} checked={checkVal(item?.id)} />
+                            </ButtonWrapper>
+                          </TableCell>
+                          <TableCell>
                             <NameWrapper>
                               <Avatar
                                 src={ifThenElse(item?.user?.userInformation !== null, item?.user?.userInformation?.picture, item?.user?.name)}
@@ -199,11 +205,6 @@ function AttendanceModal({
                           </TableCell>
                           <TableCell>{item?.position?.name}</TableCell>
                           <TableCell>{item?.department?.name}</TableCell>
-                          <TableCell>
-                            <ButtonWrapper>
-                              <Checkbox onChange={(e) => onSelected(item, e)} checked={checkVal(item?.id)} />
-                            </ButtonWrapper>
-                          </TableCell>
                         </TableRow>
                       ))
                     ))
