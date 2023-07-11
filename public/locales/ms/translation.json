@@ -63,6 +63,7 @@
   "income_tax_profile": {
     "deductable_component": {
       "title": "Papan Pemuka Komponen Boleh Potong",
+      "detail_title": "Butiran Komponen Boleh Potong",
       "table": {
         "company_name": "nama syarikat",
         "country": "Negara",
@@ -75,10 +76,6 @@
       },
       "add_new_component": {
         "title": "Tambah Komponen Baharu",
-        "cancel_button": "Batal",
-        "save_button": "Jimat",
-        "mark_button": "Tandakan Semua dan Selesai",
-        "confirm_button": "sahkan",
         "save_modal_text": "Anda akan menghentikan proses dan disimpan dalam Tambah Komponen Baharu.<br>Adakah anda pasti menghentikan proses tersebut?",
         "mark_modal_text": "Semua pengeluaran akan ditanda sebagai berbayar dan menyelesaikan proses Tambah Komponen Baharu",
         "form": {
@@ -86,17 +83,20 @@
             "initial": "Buat",
             "basic_detail": "Butiran Asas",
             "designed_transfer_account": "Akaun Pemindahan Direka",
+            "transfer_account": "Akaun Pindahan",
             "rates": "Kadar"
           },
           "create_basic_detail": {
             "name": "Nama Komponen",
+            "name_placeholder": "Input Nama Komponen",
             "country": "Negara",
             "province": "Wilayah",
             "city": "Bandar",
             "sub_district": "Mukim",
             "citation": "Petikan",
             "internal_notes": "Nota Dalaman",
-            "external_notes": "Nota Luaran"
+            "external_notes": "Nota Luaran",
+            "max_char_info": "Maks. "
           },
           "create_dta": {
             "title": "Maklumat bank",
@@ -114,7 +114,15 @@
             "branch_code": "Kod Cawangan",
             "branch_name": "Nama cawangan",
             "swift_code": "Kod pantas",
-            "notes": "Nota"
+            "notes": "Nota",
+            "bank_account_holders_name_placeholder": "Masukkan Nama Pemegang Akaun Bank",
+            "bank_account_no_placeholder": "Masukkan No Akaun Bank",
+            "bank_code_placeholder": "Input Kod Bank",
+            "branch_code_placeholder": "Kod Cawangan Input",
+            "branch_name_placeholder": "Input Nama Cawangan",
+            "swift_code_placeholder": "Masukkan Kod Swift",
+            "notes_placeholder": "Nota Input",
+            "max_char_info": "Maks. "
           },
           "rates": {
             "select_type": "Pilih Jenis Boleh Tolak",
@@ -128,6 +136,7 @@
     },
     "profile": {
       "title": "Konfigurasi Profil Cukai",
+      "add_new_title": "Tambah Profil Cukai Baharu",
       "tab": {
         "draft": "Draf",
         "active": "Aktif",
@@ -176,9 +185,10 @@
           "designed_transfer_account": "Akaun Pemindahan Direka"
         },
         "basic_detail": {
+          "tax_profile_name": "Nama Profil Cukai",
+          "tax_profile_name_placeholder": "Masukkan Nama Profil",
           "country": "Negara",
           "different_currency": "Mata Wang Berbeza",
-          "tax_profile_name": "Nama Profil Cukai",
           "effective_period": "Tempoh Berkuatkuasa",
           "citation": "Petikan",
           "internal_notes": "Nota Dalaman",
@@ -187,7 +197,8 @@
           "city": "Bandar",
           "sub_district": "Mukim",
           "effective_date": "Tarikh kuat kuasa",
-          "expiration_date": "Tarikh luput"
+          "expiration_date": "Tarikh luput",
+          "max_char_info": "Maks. "
         },
         "deductible_component": {
           "martial_status": "Status perkahwinan",
@@ -219,17 +230,25 @@
           "type": "taip",
           "bank": "Bank",
           "bank_account_holders_name": "Nama Pemegang Akaun Bank",
+          "bank_account_holders_name_placeholder": "Masukkan Nama Pemegang Akaun Bank",
           "bank_account_no": "Akaun Bank No",
+          "bank_account_no_placeholder": "Masukkan No Akaun Bank",
           "bank_code": "Kod bank",
+          "bank_code_placeholder": "Input Kod Bank",
           "branch_code": "Kod Cawangan",
+          "branch_code_placeholder": "Kod Cawangan Input",
           "branch_name": "Nama cawangan",
+          "branch_name_placeholder": "Input Nama Cawangan",
           "swift_code": "Kod pantas",
+          "swift_code_placeholder": "Masukkan Kod Swift",
           "notes": "Nota",
+          "notes_placeholder": "Nota Input",
           "bank_info": "Maklumat bank",
           "central_account": "Akaun Pusat",
           "individual_account": "Akaun Individu",
           "company_account": "Akaun Syarikat Sahaja",
-          "message": "Akaun Pemindahan Ditetapkan ditambah secara manual pada profil setiap pekerja"
+          "message": "Akaun Pemindahan Ditetapkan ditambah secara manual pada profil setiap pekerja",
+          "max_char_info": "Maks. "
         }
       },
       "modal": {

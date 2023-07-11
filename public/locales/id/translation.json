@@ -63,6 +63,7 @@
   "income_tax_profile": {
     "deductable_component": {
       "title": "Dasbor Komponen yang Dapat Dikurangi",
+      "detail_title": "Detail Komponen yang Dapat Dikurangi",
       "table": {
         "company_name": "Nama perusahaan",
         "country": "Negara",
@@ -75,10 +76,6 @@
       },
       "add_new_component": {
         "title": "Tambahkan Komponen Baru",
-        "cancel_button": "Membatalkan",
-        "save_button": "Menyimpan",
-        "mark_button": "Tandai Semua dan Selesai",
-        "confirm_button": "Mengonfirmasi",
         "save_modal_text": "Anda akan menghentikan proses, dan disimpan di Tambahkan Komponen Baru.<br>Apakah Anda yakin akan menghentikan prosesnya?",
         "mark_modal_text": "Semua pencairan akan ditandai dibayar dan menyelesaikan proses Tambah Komponen Baru",
         "form": {
@@ -86,17 +83,20 @@
             "initial": "Membuat",
             "basic_detail": "Detil Dasar",
             "designed_transfer_account": "Akun Transfer yang dirancang",
+            "transfer_account": "Transfer Akun",
             "rates": "Tarif"
           },
           "create_basic_detail": {
             "name": "nama komponen",
+            "name_placeholder": "Masukkan Nama Komponen",
             "country": "Negara",
             "province": "Propinsi",
             "city": "Kota",
             "sub_district": "Kecamatan",
             "citation": "Kutipan",
             "internal_notes": "Catatan Internal",
-            "external_notes": "Catatan Eksternal"
+            "external_notes": "Catatan Eksternal",
+            "max_char_info": "Maks. "
           },
           "create_dta": {
             "title": "Informasi bank",
@@ -114,7 +114,15 @@
             "branch_code": "Kode cabang",
             "branch_name": "Nama cabang",
             "swift_code": "Tukar Kode",
-            "notes": "Catatan"
+            "notes": "Catatan",
+            "bank_account_holders_name_placeholder": "Masukkan Nama Pemegang Rekening Bank",
+            "bank_account_no_placeholder": "Masukkan No Rekening Bank",
+            "bank_code_placeholder": "Masukkan Kode Bank",
+            "branch_code_placeholder": "Masukkan Kode Cabang",
+            "branch_name_placeholder": "Masukkan Nama Cabang",
+            "swift_code_placeholder": "Masukkan Kode Swift",
+            "notes_placeholder": "Catatan Masukan",
+            "max_char_info": "Maks. "
           },
           "rates": {
             "select_type": "Pilih Jenis yang Dapat Dikurangi",
@@ -128,6 +136,7 @@
     },
     "profile": {
       "title": "Konfigurasi Profil Pajak",
+      "add_new_title": "Tambahkan Profil Pajak Baru",
       "tab": {
         "draft": "Draf",
         "active": "Aktif",
@@ -176,9 +185,10 @@
           "designed_transfer_account": "Akun Transfer yang dirancang"
         },
         "basic_detail": {
+          "tax_profile_name": "Nama Profil Pajak",
+          "tax_profile_name_placeholder": "Masukkan Nama Profil",
           "country": "Negara",
           "different_currency": "Mata uang yang berbeda",
-          "tax_profile_name": "Nama Profil Pajak",
           "effective_period": "Periode Efektif",
           "citation": "Kutipan",
           "internal_notes": "Catatan Internal",
@@ -187,7 +197,8 @@
           "city": "Kota",
           "sub_district": "Kecamatan",
           "effective_date": "Tanggal berlaku",
-          "expiration_date": "Tanggal habis tempo"
+          "expiration_date": "Tanggal habis tempo",
+          "max_char_info": "Maks. "
         },
         "deductible_component": {
           "martial_status": "Status pernikahan",
@@ -219,17 +230,25 @@
           "type": "Jenis",
           "bank": "Bank",
           "bank_account_holders_name": "Nama Pemegang Rekening Bank",
+          "bank_account_holders_name_placeholder": "Masukkan Nama Pemegang Rekening Bank",
           "bank_account_no": "Nomor Rekening Bank",
+          "bank_account_no_placeholder": "Masukkan No Rekening Bank",
           "bank_code": "Kode Bank",
+          "bank_code_placeholder": "Masukkan Kode Bank",
           "branch_code": "Kode cabang",
+          "branch_code_placeholder": "Masukkan Kode Cabang",
           "branch_name": "Nama cabang",
+          "branch_name_placeholder": "Masukkan Nama Cabang",
           "swift_code": "Tukar Kode",
+          "swift_code_placeholder": "Masukkan Kode Swift",
           "notes": "Catatan",
+          "notes_placeholder": "Catatan Masukan",
           "bank_info": "Informasi bank",
           "central_account": "Akun Tengah",
           "individual_account": "Akun Perorangan",
           "company_account": "Akun Perusahaan Saja",
-          "message": "Rekening Transfer yang Ditunjuk ditambahkan secara manual ke profil setiap karyawan"
+          "message": "Rekening Transfer yang Ditunjuk ditambahkan secara manual ke profil setiap karyawan",
+          "max_char_info": "Maks. "
         }
       },
       "modal": {

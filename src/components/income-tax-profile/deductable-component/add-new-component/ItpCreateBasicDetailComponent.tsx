@@ -50,7 +50,7 @@ export default function CreateBasicDetailComponent() {
         <Grid container spacing={2}>
           <Grid item xs={12} md={12} lg={6} xl={6}>
             <Input
-              placeholder='Input Component Name'
+              placeholder={t(`${t_key}.name_placeholder`)}
               customLabel={t(`${t_key}.name`)}
               withAsterisk
               size='small'
@@ -133,7 +133,7 @@ export default function CreateBasicDetailComponent() {
                 color: '#6B7280',
               }}
             >
-            Max. 120 Character
+              {t(`${t_key}.max_char_info`)}
             </Typography>
           </Grid>
         </Grid>
@@ -154,7 +154,7 @@ export default function CreateBasicDetailComponent() {
                 color: '#6B7280',
               }}
             >
-            Max. 120 Character
+              {t(`${t_key}.max_char_info`)}
             </Typography>
           </Grid>
         </Grid>
@@ -175,7 +175,7 @@ export default function CreateBasicDetailComponent() {
                 color: '#6B7280',
               }}
             >
-            Max. 120 Character
+              {t(`${t_key}.max_char_info`)}
             </Typography>
           </Grid>
         </Grid>

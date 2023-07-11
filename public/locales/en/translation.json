@@ -66,6 +66,7 @@
   "income_tax_profile": {
     "deductable_component": {
       "title": "Deductable Components Dashboard",
+      "detail_title" : "Deductable Component Detail",
       "table": {
         "company_name": "Company Name",
         "country": "Country",
@@ -85,17 +86,20 @@
             "initial":"Create",
             "basic_detail": "Basic Detail",
             "designed_transfer_account": "Designed Transfer Account",
+            "transfer_account": "Transfer Account",
             "rates": "Rates"
           },
           "create_basic_detail" : {
             "name" : "Component Name",
+            "name_placeholder" : "Input Component Name",
             "country": "Country",
             "province": "Province",
             "city": "City",
             "sub_district": "Sub-District",
             "citation": "Citation",
             "internal_notes": "Internal Notes",
-            "external_notes": "External Notes"
+            "external_notes": "External Notes",
+            "max_char_info" :"Max. 120 Character"
           },
           "create_dta" : {
             "title" : "Bank Information",
@@ -113,7 +117,15 @@
             "branch_code": "Branch Code",
             "branch_name": "Branch Name",
             "swift_code": "Swift Code",
-            "notes": "Notes"
+            "notes": "Notes",
+            "bank_account_holders_name_placeholder": "Input Bank Account Holders Name",
+            "bank_account_no_placeholder": "Input Bank Account No",
+            "bank_code_placeholder": "Input Bank Code",
+            "branch_code_placeholder": "Input Branch Code",
+            "branch_name_placeholder": "Input Branch Name",
+            "swift_code_placeholder": "Input Swift Code",
+            "notes_placeholder": "Input Notes",
+            "max_char_info" :"Max. 100 Character"
           },
           "rates" : {
             "select_type" : "Select Deductable Type",

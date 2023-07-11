@@ -172,7 +172,7 @@ export default function ItpCreateDesignedTransferAccountComponent() {
           </Typography>
           <Input
             size='small'
-            placeholder='Input Bank Account Holders Name'
+            placeholder={t(`${tPath}bank_account_holders_name_placeholder`)}
             disabled={account !== 'central'}
             sx={
               account !== 'central'
@@ -201,7 +201,7 @@ export default function ItpCreateDesignedTransferAccountComponent() {
           </Typography>
           <Input
             size='small'
-            placeholder='Input Bank Account No.'
+            placeholder={t(`${tPath}bank_account_no_placeholder`)}
             disabled={account !== 'central'}
             sx={
               account !== 'central'
@@ -236,7 +236,7 @@ export default function ItpCreateDesignedTransferAccountComponent() {
             </Typography>
             <Input
               size='small'
-              placeholder='Input Bank Code'
+              placeholder={t(`${tPath}bank_code_placeholder`)}
               disabled={account !== 'central'}
               sx={
                 account !== 'central'
@@ -258,7 +258,7 @@ export default function ItpCreateDesignedTransferAccountComponent() {
             </Typography>
             <Input
               size='small'
-              placeholder='Input Branch Code'
+              placeholder={t(`${tPath}branch_code_placeholder`)}
               disabled={account !== 'central'}
               sx={
                 account !== 'central'
@@ -288,7 +288,7 @@ export default function ItpCreateDesignedTransferAccountComponent() {
 
           <Input
             size='small'
-            placeholder='Input Branch Name'
+            placeholder= {t(`${tPath}branch_name_placeholder`)}
             disabled={account !== 'central'}
             sx={
               account !== 'central'
@@ -312,7 +312,7 @@ export default function ItpCreateDesignedTransferAccountComponent() {
 
           <Input
             size='small'
-            placeholder='Input Swift Code'
+            placeholder={t(`${tPath}swift_code_placeholder`)}
             disabled={account !== 'central'}
             sx={
               account !== 'central'
@@ -337,7 +337,7 @@ export default function ItpCreateDesignedTransferAccountComponent() {
         </Typography>
         <Input
           size='small'
-          placeholder='Input Notes'
+          placeholder={t(`${tPath}notes_placeholder`)}
           required
           sx={{
             color: '#6B7280',
@@ -349,7 +349,7 @@ export default function ItpCreateDesignedTransferAccountComponent() {
         <FormHelperText
           sx={{ fontWeight: 500, color: '#6B7280', fontSize: '14px' }}
         >
-          Max.100 Character
+          {t(`${tPath}max_char_info`)}
         </FormHelperText>
       </Box>
     </Box>

@@ -65,7 +65,7 @@ export default function ItpDeductableComponentDetailComponent() {
                 width: '350px',
               }}
             >
-              Deductable Component Detail
+              {t('income_tax_profile.deductable_component.detail_title')}
             </Typography>
             <Typography
               style={{
@@ -239,7 +239,7 @@ export default function ItpDeductableComponentDetailComponent() {
                 fontWeight: '700',
               }}
             >
-              Transfer Information
+              {t(`${tPath}wizard_option.transfer_account`)}
             </Typography>
           </Grid>
           <Grid item xs={3} md={3} lg={3} xl={3}>
@@ -249,7 +249,7 @@ export default function ItpDeductableComponentDetailComponent() {
               color='#9CA3AF'
               mb='8px'
             >
-              Bank
+              {t(`${tPath}create_dta.bank`)}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -262,7 +262,7 @@ export default function ItpDeductableComponentDetailComponent() {
               color='#9CA3AF'
               mb='8px'
             >
-              Bank Account Holder’s Name
+              {t(`${tPath}create_dta.bank_account_holders_name`)}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -275,7 +275,7 @@ export default function ItpDeductableComponentDetailComponent() {
               color='#9CA3AF'
               mb='8px'
             >
-              Bank Account No
+              {t(`${tPath}create_dta.bank_account_no`)}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -288,7 +288,7 @@ export default function ItpDeductableComponentDetailComponent() {
               color='#9CA3AF'
               mb='8px'
             >
-              Bank Code
+              {t(`${tPath}create_dta.bank_code`)}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -301,7 +301,7 @@ export default function ItpDeductableComponentDetailComponent() {
               color='#9CA3AF'
               mb='8px'
             >
-              Branch Code
+              {t(`${tPath}create_dta.branch_code`)}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -314,7 +314,7 @@ export default function ItpDeductableComponentDetailComponent() {
               color='#9CA3AF'
               mb='8px'
             >
-              Branch Name
+              {t(`${tPath}create_dta.branch_name`)}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -327,7 +327,7 @@ export default function ItpDeductableComponentDetailComponent() {
               color='#9CA3AF'
               mb='8px'
             >
-              Swift Code
+              {t(`${tPath}create_dta.swift_code`)}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -354,7 +354,7 @@ export default function ItpDeductableComponentDetailComponent() {
               color='#9CA3AF'
               mb='8px'
             >
-              Factor Unit Condition - 1
+              {t(`${tPath}rates.fu_condition`)} - 1
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -

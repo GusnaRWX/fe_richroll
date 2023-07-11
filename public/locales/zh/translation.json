@@ -63,6 +63,7 @@
   "income_tax_profile": {
     "deductable_component": {
       "title": "可扣除部分仪表板",
+      "detail_title": "可扣除部分详细信息",
       "table": {
         "company_name": "公司名称",
         "country": "国家",
@@ -75,10 +76,6 @@
       },
       "add_new_component": {
         "title": "添加新组件",
-        "cancel_button": "取消",
-        "save_button": "节省",
-        "mark_button": "标记全部并完成",
-        "confirm_button": "确认",
         "save_modal_text": "您将停止该过程，并保存在“添加新组件”中。<br>您确定要停止该进程吗？",
         "mark_modal_text": "所有付款都将标记为已付款并完成添加新组件流程",
         "form": {
@@ -86,17 +83,20 @@
             "initial": "创造",
             "basic_detail": "基本细节",
             "designed_transfer_account": "设计转账账户",
+            "transfer_account": "转账账户",
             "rates": "价格"
           },
           "create_basic_detail": {
             "name": "组件名称",
+            "name_placeholder": "输入组件名称",
             "country": "国家",
             "province": "省",
             "city": "城市",
             "sub_district": "分地区",
             "citation": "引文",
             "internal_notes": "内部注释",
-            "external_notes": "外部注释"
+            "external_notes": "外部注释",
+            "max_char_info": "最大限度。 "
           },
           "create_dta": {
             "title": "银行信息",
@@ -114,7 +114,15 @@
             "branch_code": "分行代码",
             "branch_name": "分店名称",
             "swift_code": "SWIFT代码",
-            "notes": "笔记"
+            "notes": "笔记",
+            "bank_account_holders_name_placeholder": "输入银行账户持有人姓名",
+            "bank_account_no_placeholder": "输入银行帐号",
+            "bank_code_placeholder": "输入银行代码",
+            "branch_code_placeholder": "输入分行代码",
+            "branch_name_placeholder": "输入分行名称",
+            "swift_code_placeholder": "输入 Swift 代码",
+            "notes_placeholder": "输入注释",
+            "max_char_info": "最大限度。 "
           },
           "rates": {
             "select_type": "选择免赔额类型",
@@ -128,6 +136,7 @@
     },
     "profile": {
       "title": "税务资料配置",
+      "add_new_title": "添加新的税务资料",
       "tab": {
         "draft": "草稿",
         "active": "积极的",
@@ -176,9 +185,10 @@
           "designed_transfer_account": "设计转账账户"
         },
         "basic_detail": {
+          "tax_profile_name": "税务资料名称",
+          "tax_profile_name_placeholder": "输入配置文件名称",
           "country": "国家",
           "different_currency": "不同货币",
-          "tax_profile_name": "税务资料名称",
           "effective_period": "有效期",
           "citation": "引文",
           "internal_notes": "内部注释",
@@ -187,7 +197,8 @@
           "city": "城市",
           "sub_district": "分地区",
           "effective_date": "生效日期",
-          "expiration_date": "截止日期"
+          "expiration_date": "截止日期",
+          "max_char_info": "最大限度。 "
         },
         "deductible_component": {
           "martial_status": "婚姻状况",
@@ -219,17 +230,25 @@
           "type": "类型",
           "bank": "银行",
           "bank_account_holders_name": "银行账户持有人姓名",
+          "bank_account_holders_name_placeholder": "输入银行账户持有人姓名",
           "bank_account_no": "银行帐号",
+          "bank_account_no_placeholder": "输入银行帐号",
           "bank_code": "银行代码",
+          "bank_code_placeholder": "输入银行代码",
           "branch_code": "分行代码",
+          "branch_code_placeholder": "输入分行代码",
           "branch_name": "分店名称",
+          "branch_name_placeholder": "输入分行名称",
           "swift_code": "SWIFT代码",
+          "swift_code_placeholder": "输入 Swift 代码",
           "notes": "笔记",
+          "notes_placeholder": "输入注释",
           "bank_info": "银行信息",
           "central_account": "中央账户",
           "individual_account": "个人账户",
           "company_account": "仅限公司帐户",
-          "message": "指定转账账户手动添加到每个员工的个人资料中"
+          "message": "指定转账账户手动添加到每个员工的个人资料中",
+          "max_char_info": "最大限度。 "
         }
       },
       "modal": {
