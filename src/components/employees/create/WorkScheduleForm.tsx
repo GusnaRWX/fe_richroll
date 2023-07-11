@@ -96,29 +96,26 @@ function WorkScheduleForm({ setData, prevPage }: WorkScheduleFormProps) {
 
 
   const handleConfirmOpen = (formik) => {
-    if (formik.values.workScheduleID !== 0) {
+    console.log(formik);
+    if (formik.values.workScheduleID !== 0 ) {
       setConfirmation(true);
     } else {
-      handleFormOpen(formik);
+      handleFormOpen();
     }
   };
 
-  const handleConfirmation = (formik) => {
+  const handleConfirmation = () => {
+    console.log(isCustom);
     if (isCustom === 1) {
       setConfirmation(false);
     } else if (isCustom === 0) {
-      handleFormOpen(formik);
+      handleFormOpen();
       setConfirmation(false);
     }
   };
 
-  const handleFormOpen = (formik) => {
-    if (!formik.errors.profileName && formik.values.profileName !== '') {
-      setOpenForm(true);
-    } else {
-      formik.setFieldError('profileName', 'This field is required');
-      formik.setFieldTouched('profileName', true, true);
-    }
+  const handleFormOpen = () => {
+    setOpenForm(true);
   };
 
   const onSelectedDay = (formik, item, e) => {
@@ -215,9 +212,9 @@ function WorkScheduleForm({ setData, prevPage }: WorkScheduleFormProps) {
     calendarRef?.current?.scheduler?.events?.splice(0, eventLength);
   };
 
-  useEffect(() => {
-    handleDeleteEventSchedule();
-  }, []);
+  // useEffect(() => {
+  //   handleDeleteEventSchedule();
+  // }, []);
 
   useEffect(() => {
     if (calendarRef?.current) {
@@ -234,6 +231,7 @@ function WorkScheduleForm({ setData, prevPage }: WorkScheduleFormProps) {
           items: newData
         }
       });
+      handleDeleteEventSchedule();
       calendarRef?.current?.scheduler?.confirmEvent(newData, 'create');
       const dataValues: Array<Employees.ItemsWorkScheduleType> = [];
       newData?.map((item) => {
@@ -318,7 +316,7 @@ function WorkScheduleForm({ setData, prevPage }: WorkScheduleFormProps) {
                       customLabel='Schedule Profile Name'
                       size='small'
                       fullWidth
-                      value={formik.values.workScheduleID}
+                      value={formik.values.workScheduleID || workScheduleID}
                       onChange={(e) => {
                         formik.setFieldValue('workScheduleID', e.target.value);
                         setWorkScheduleID(e.target.value as string);
@@ -385,7 +383,6 @@ function WorkScheduleForm({ setData, prevPage }: WorkScheduleFormProps) {
                   view='week'
                   ref={calendarRef}
                   events={[]}
-                  navigation={false}
                   day={null}
                   editable={false}
                   deletable={false}
@@ -413,7 +410,7 @@ function WorkScheduleForm({ setData, prevPage }: WorkScheduleFormProps) {
                   handleClose={() => setConfirmation(false)}
                   title='Modify Default Work Schedule'
                   width='774px'
-                  handleConfirm={() => handleConfirmation(formik)}
+                  handleConfirm={() => handleConfirmation()}
                 >
                   <Grid container>
                     <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
@@ -446,6 +443,7 @@ function WorkScheduleForm({ setData, prevPage }: WorkScheduleFormProps) {
                     // handleFormClose();
                     handleSubmit(formik, formik.values);
                     formik.resetForm();
+                    formik.setFieldValue('workScheduleID', workScheduleID);
                   }}
                 >
                   <Grid container mt='1rem' mb='1rem'>

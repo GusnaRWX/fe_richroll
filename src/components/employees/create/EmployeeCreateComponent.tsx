@@ -163,6 +163,7 @@ function EmployeeCreateComponent() {
   };
 
   const handleSaveCnB = async (data) => {
+    console.log('cnb employee: ', data);
     if (finishedStep <= 4) {
       dispatch({
         type: postCnbEmployeeRequested.toString(),

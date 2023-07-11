@@ -303,7 +303,9 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
                       }}
                     >
                       <MenuItem value='+62'>+62</MenuItem>
-                      <MenuItem value='+44'>+44</MenuItem>
+                      <MenuItem value='+65'>+65</MenuItem>
+                      <MenuItem value='+60'>+60</MenuItem>
+                      <MenuItem value='+86'>+86</MenuItem>
                     </Select>
                   </Grid>
                   <Grid item xs={9} sm={9} md={9} lg={9} xl={9}>

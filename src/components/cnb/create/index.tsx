@@ -176,6 +176,7 @@ export default function CreateCNBComponent() {
     taxStatus: string;
     rateOrAmount: number | string;
     overtime: number | string;
+    percentage: string | number | null;
     period: string;
     supplementary: SuplementType[];
   }
@@ -254,7 +255,7 @@ export default function CreateCNBComponent() {
     compensationComponentId: '',
     period: '',
     rateOrAmount: '',
-    percentage: '',
+    percentage: 0,
     overtime: '',
     taxStatus: '',
     supplementary: [],
@@ -534,6 +535,8 @@ export default function CreateCNBComponent() {
                                   variant='outlined'
                                   type='number'
                                   size='small'
+                                  value={formik.values.percentage}
+                                  onChange={(e) => { formik.setFieldValue('percentage', e.target.value); }}
                                   InputProps={{
                                     endAdornment: (
                                       <InputAdornment position='end'>
