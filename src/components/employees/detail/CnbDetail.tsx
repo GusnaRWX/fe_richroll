@@ -25,29 +25,35 @@ const CnbDetail = ({ data }: Employees.GetEmployeeCnbDetail) => {
           <Text title={data?.name || ''} color='grey.400' fontWeight={500} />
         </Grid>
       </Grid>
-      <Grid container>
-        <Grid item xs={12}>
-          <Text title='Base' fontWeight={600} color='primary' fontSize={18} mb='1rem' />
-        </Grid>
-      </Grid>
-      <Grid container flexDirection='column' mb='1rem'>
-        <Grid item md={6} mb='1rem'>
-          <Grid container justifyContent='space-between' alignItems='flex-start'>
-            <Grid item>
-              <Text title='Compensation Component' fontWeight={600} color='primary' fontSize={16} mb='.5rem' />
-              <Text title={data?.base?.component?.name || ''} color='grey.400' fontWeight={500} />
-            </Grid>
-            <Grid item>
-              <Text title='Tax Status' fontWeight={600} color='primary' fontSize={16} mb='.5rem' />
-              <TaxData>{data?.base?.isTaxable ? 'Taxable' : 'NTaxable'}</TaxData>
+      {/* Base Compensation */}
+      {data?.base && (
+        <>
+          <Grid container>
+            <Grid item xs={12}>
+              <Text title='Base' fontWeight={600} color='primary' fontSize={18} mb='1rem' />
             </Grid>
           </Grid>
-        </Grid>
-        <Grid item md={6}>
-          <Text title={data?.base?.amount !== null ? 'Amount' : 'Rate' + 'per' + data?.base?.term ? data?.base?.term?.name : '-'} fontWeight={600} color='primary' fontSize={16} mb='.5rem' />
-          <Text title={`Rp ${numberFormat(data?.base?.amount !== null ? (data?.base?.amount !== null ? data?.base?.amount : data?.base?.rate) : 0)}`} color='grey.400' fontWeight={500} />
-        </Grid>
-      </Grid>
+          <Grid container flexDirection='column' mb='1rem'>
+            <Grid item md={6} mb='1rem'>
+              <Grid container justifyContent='space-between' alignItems='flex-start'>
+                <Grid item>
+                  <Text title='Compensation Component' fontWeight={600} color='primary' fontSize={16} mb='.5rem' />
+                  <Text title={data?.base?.component?.name || ''} color='grey.400' fontWeight={500} />
+                </Grid>
+                <Grid item>
+                  <Text title='Tax Status' fontWeight={600} color='primary' fontSize={16} mb='.5rem' />
+                  <TaxData>{data?.base?.isTaxable ? 'Taxable' : 'NTaxable'}</TaxData>
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid item md={6}>
+              <Text title={data?.base?.amount !== null ? 'Amount' : 'Rate' + 'per' + data?.base?.term ? data?.base?.term?.name : '-'} fontWeight={600} color='primary' fontSize={16} mb='.5rem' />
+              <Text title={`Rp ${numberFormat(data?.base?.amount !== null ? (data?.base?.amount !== null ? data?.base?.amount : data?.base?.rate) : 0)}`} color='grey.400' fontWeight={500} />
+            </Grid>
+          </Grid>
+        </>
+      )}
+      {/* End of Base Compensation */}
       {data?.supplementaries.length > 0 && (
         <Grid container>
           <Grid item xs={12}>
