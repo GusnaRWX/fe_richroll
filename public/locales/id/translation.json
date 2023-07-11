@@ -101,6 +101,11 @@
           "create_dta": {
             "title": "Informasi bank",
             "type": "Jenis",
+            "type_option": {
+              "central_account": "Akun Tengah",
+              "individual_account": "Akun Perorangan",
+              "company_account_only": "Akun Perusahaan Saja"
+            },
             "message": "Rekening Transfer yang Ditunjuk ditambahkan secara manual ke profil setiap karyawan",
             "bank": "Bank",
             "bank_account_holders_name": "Nama Pemegang Rekening Bank",

@@ -101,6 +101,11 @@
           "create_dta": {
             "title": "Maklumat bank",
             "type": "taip",
+            "type_option": {
+              "central_account": "Akaun Pusat",
+              "individual_account": "Akaun Individu",
+              "company_account_only": "Akaun Syarikat Sahaja"
+            },
             "message": "Akaun Pemindahan Ditetapkan ditambah secara manual pada profil setiap pekerja",
             "bank": "Bank",
             "bank_account_holders_name": "Nama Pemegang Akaun Bank",

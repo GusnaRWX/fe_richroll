@@ -200,8 +200,8 @@ function ItpDeductableComponentTable({
             <ConfirmationModal
               open={DeleteConfirmation}
               handleClose={() => setDeleteConfirmation(false)}
-              title='Delete Data Entry'
-              content='You are about to delete this statutory benefit component. This action cannot be undone.'
+              title={t('income_tax_profile.deductable_component.table.delete_modal.title')}
+              content={t('income_tax_profile.deductable_component.table.delete_modal.text')}
               withCallback
               noChange={true}
               callback={() => setDeleteConfirmation(false)}

@@ -15,6 +15,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 export default function ItpDeductableComponentDetailComponent() {
   const router = useRouter();
   const {t} = useTranslation();
+  const tPath = 'income_tax_profile.deductable_component.add_new_component.form.';
   const [DeleteConfirmation, setDeleteConfirmation] = useState(false);
   const [DuplicateConfirmation, setDuplicateConfirmation] = useState(false);
 
@@ -120,7 +121,7 @@ export default function ItpDeductableComponentDetailComponent() {
                 fontWeight: '700',
               }}
             >
-              Basic Detail
+              {t(`${tPath}wizard_option.basic_detail`)}
             </Typography>
           </Grid>
           <Grid item xs={2.5} md={2.5} lg={2.5} xl={2.5}>
@@ -130,7 +131,7 @@ export default function ItpDeductableComponentDetailComponent() {
               color='#9CA3AF'
               mb='8px'
             >
-              Component Name
+              {t(`${tPath}create_basic_detail.name`)}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -143,7 +144,7 @@ export default function ItpDeductableComponentDetailComponent() {
               color='#9CA3AF'
               mb='8px'
             >
-              Country
+              {t(`${tPath}create_basic_detail.country`)}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -156,7 +157,7 @@ export default function ItpDeductableComponentDetailComponent() {
               color='#9CA3AF'
               mb='8px'
             >
-              Province
+              {t(`${tPath}create_basic_detail.province`)}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -169,7 +170,7 @@ export default function ItpDeductableComponentDetailComponent() {
               color='#9CA3AF'
               mb='8px'
             >
-              City
+              {t(`${tPath}create_basic_detail.city`)}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -182,7 +183,7 @@ export default function ItpDeductableComponentDetailComponent() {
               color='#9CA3AF'
               mb='8px'
             >
-              Sub-Distric
+              {t(`${tPath}create_basic_detail.sub_district`)}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -195,7 +196,7 @@ export default function ItpDeductableComponentDetailComponent() {
               color='#9CA3AF'
               mb='8px'
             >
-              Citation
+              {t(`${tPath}create_basic_detail.citation`)}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -208,7 +209,7 @@ export default function ItpDeductableComponentDetailComponent() {
               color='#9CA3AF'
               mb='8px'
             >
-              Internal Notes
+              {t(`${tPath}create_basic_detail.internal_notes`)}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -221,7 +222,7 @@ export default function ItpDeductableComponentDetailComponent() {
               color='#9CA3AF'
               mb='8px'
             >
-              External Notes
+              {t(`${tPath}create_basic_detail.external_notes`)}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -

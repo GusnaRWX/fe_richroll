@@ -13,6 +13,7 @@ import {
 } from '@mui/material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { useTranslation } from 'react-i18next';
 
 const condition = [
   {
@@ -41,7 +42,9 @@ const listMenuItem = [
 ];
 
 export default function ItpCreateRatesComponent() {
+  const {t} = useTranslation();
   const [deductableType, setDeductableType] = React.useState(true);
+  const tPath = 'income_tax_profile.deductable_component.add_new_component.form.rates.';
 
   const initialValues = {
     deductableCondition: '',
@@ -109,7 +112,7 @@ export default function ItpCreateRatesComponent() {
           <Grid item>
             <FormGroup>
               <Text
-                title='Select Deductible Type'
+                title={t(`${tPath}select_type`)}
                 color='grey.700'
                 fontWeight='400'
               />
@@ -132,7 +135,7 @@ export default function ItpCreateRatesComponent() {
           {deductableType && (
             <Grid item>
               <Select
-                customLabel='Deductible Component Condition'
+                customLabel={t(`${tPath}dc_condition`)}
                 withAsterisk
                 size='small'
                 options={condition}
@@ -146,7 +149,7 @@ export default function ItpCreateRatesComponent() {
               <Form p={2} display='flex' flexDirection='column' gap='24px' sx={{backgroundColor: 'grey.50'}}>
                 <Grid container flexDirection='row'>
                   <Grid item xs={12} md={6}>
-                    <Typography mb='6px'>Factor Unit Condition 1 <AsteriskComponent>*</AsteriskComponent></Typography>
+                    <Typography mb='6px'>{t(`${tPath}fu_condition`)} 1 <AsteriskComponent>*</AsteriskComponent></Typography>
                     <Grid item container flexDirection='row' gap={1.5}>
                       <Grid item xs={1.5}>
                         <Select
@@ -168,7 +171,7 @@ export default function ItpCreateRatesComponent() {
                   <Grid item xs={12} md={6}>
                     <Input
                       size='small'
-                      customLabel='Amount'
+                      customLabel={t(`${tPath}amount`)}
                       withAsterisk
                       value={formik.values.condition1.amount}
                       onChange={(e) => formik.setFieldValue('condition1.amount', e.target.value)}
@@ -182,7 +185,7 @@ export default function ItpCreateRatesComponent() {
                 </Grid>
                 <Grid container flexDirection='row'>
                   <Grid item xs={12} md={6}>
-                    <Typography mb='6px'>Factor Unit Condition 2 <AsteriskComponent>*</AsteriskComponent></Typography>
+                    <Typography mb='6px'>{t(`${tPath}fu_condition`)} 2 <AsteriskComponent>*</AsteriskComponent></Typography>
                     <Grid item container flexDirection='row' gap={1.5}>
                       <Grid item xs={1.5}>
                         <Select
@@ -204,7 +207,7 @@ export default function ItpCreateRatesComponent() {
                   <Grid item xs={12} md={6}>
                     <Input
                       size='small'
-                      customLabel='Amount'
+                      customLabel={t(`${tPath}amount`)}
                       withAsterisk
                       value={formik.values.condition2.amount}
                       onChange={(e) => formik.setFieldValue('condition2.amount', e.target.value)}
@@ -218,7 +221,7 @@ export default function ItpCreateRatesComponent() {
                 </Grid>
                 <Grid container flexDirection='row'>
                   <Grid item xs={12} md={6}>
-                    <Typography mb='6px'>Factor Unit Condition 3 <AsteriskComponent>*</AsteriskComponent></Typography>
+                    <Typography mb='6px'>{t(`${tPath}fu_condition`)} 3 <AsteriskComponent>*</AsteriskComponent></Typography>
                     <Grid item container flexDirection='row' gap={1.5}>
                       <Grid item xs={1.5}>
                         <Select
@@ -241,7 +244,7 @@ export default function ItpCreateRatesComponent() {
                 </Grid>
                 <Grid container flexDirection='row'>
                   <Grid pl={8.5} item xs={12} md={6}>
-                    <Typography mb='6px'>Sub Condition 1 <AsteriskComponent>*</AsteriskComponent></Typography>
+                    <Typography mb='6px'>{t(`${tPath}sub_condition`)} 1 <AsteriskComponent>*</AsteriskComponent></Typography>
                     <Grid item container flexDirection='row' gap={1.5}>
                       <Grid item xs={1.5}>
                         <Select
@@ -263,7 +266,7 @@ export default function ItpCreateRatesComponent() {
                   <Grid item xs={12} md={6}>
                     <Input
                       size='small'
-                      customLabel='Amount'
+                      customLabel={t(`${tPath}amount`)}
                       withAsterisk
                       value={formik.values.subCondition1.amount}
                       onChange={(e) => formik.setFieldValue('subCondition1.amount', e.target.value)}
@@ -277,7 +280,7 @@ export default function ItpCreateRatesComponent() {
                 </Grid>
                 <Grid container flexDirection='row'>
                   <Grid pl={8.5} item xs={12} md={6}>
-                    <Typography mb='6px'>Sub Condition 2 <AsteriskComponent>*</AsteriskComponent></Typography>
+                    <Typography mb='6px'>{t(`${tPath}sub_condition`)} 2 <AsteriskComponent>*</AsteriskComponent></Typography>
                     <Grid item container flexDirection='row' gap={1.5}>
                       <Grid item xs={1.5}>
                         <Select
@@ -299,7 +302,7 @@ export default function ItpCreateRatesComponent() {
                   <Grid item xs={12} md={6}>
                     <Input
                       size='small'
-                      customLabel='Amount'
+                      customLabel={t(`${tPath}amount`)}
                       withAsterisk
                       value={formik.values.subCondition2.amount}
                       onChange={(e) => formik.setFieldValue('subCondition2.amount', e.target.value)}
@@ -319,7 +322,7 @@ export default function ItpCreateRatesComponent() {
                   <Grid item xs={12} md={5.5}>
                     <Input
                       size='small'
-                      customLabel='Deductible Component Condition'
+                      customLabel={t(`${tPath}dc_condition`)}
                       withAsterisk
                       value={formik.values.condition1.amount}
                       onChange={(e) => formik.setFieldValue('condition1.amount', e.target.value)}
@@ -328,7 +331,7 @@ export default function ItpCreateRatesComponent() {
                   <Grid item xs={12} md={5.5}>
                     <Input
                       size='small'
-                      customLabel='Amount'
+                      customLabel={t(`${tPath}amount`)}
                       withAsterisk
                       value={formik.values.condition1.amount}
                       onChange={(e) => formik.setFieldValue('condition1.amount', e.target.value)}

@@ -104,6 +104,11 @@
           "create_dta" : {
             "title" : "Bank Information",
             "type": "Type",
+            "type_option" : {
+              "central_account" : "Central Account",
+              "individual_account" :"Individual Account",
+              "company_account_only" : "Company Account Only"
+            },
             "message" : "The Designated Transfer Account is added manually to each employee’s profile",
             "bank": "Bank",
             "bank_account_holders_name": "Bank Account Holders Name",
