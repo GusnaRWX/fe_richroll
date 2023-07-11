@@ -134,7 +134,7 @@ function AttendanceModal({
   }
 
   const onSelectedAll = (items, e) => {
-    const pageItems = items.map(item => ({
+    const pageItems = items?.map(item => ({
       id: item.id,
       picture: item?.user?.userInformation?.picture,
       name: item.user.name
@@ -143,12 +143,12 @@ function AttendanceModal({
     if (e.target.checked) {
       setSelectedTemp(prevSelectedTemp => [...prevSelectedTemp, ...pageItems]);
     } else {
-      setSelectedTemp(prevSelectedTemp => prevSelectedTemp.filter(selectedItem => !pageItems.some(item => item.id === selectedItem['id'])));
+      setSelectedTemp(prevSelectedTemp => prevSelectedTemp.filter(selectedItem => !pageItems?.some(item => item?.id === selectedItem['id'])));
     }
   };
 
   const checkValAll = (items) => {
-    const checkedPerPage = selectedTemp.filter(selectedItem => items.some(item => item.id === selectedItem['id'])).length;
+    const checkedPerPage = selectedTemp?.filter(selectedItem => items?.some(item => item?.id === selectedItem['id'])).length;
     const lengthPerPage = rowsPerPage;
 
     return checkedPerPage === lengthPerPage;
