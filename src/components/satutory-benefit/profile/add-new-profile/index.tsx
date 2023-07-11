@@ -431,7 +431,7 @@ export default function CreateNewProfile() {
                                       startIcon={
                                         <HiPencilAlt color='white' />
                                       }
-                                      label={t('satutory_benefit.profile.button.edit')}
+                                      label={t('button.edit')}
                                       sx={{
                                         backgroundColor: '#8DD0B8',
                                         color: 'white',
@@ -441,7 +441,7 @@ export default function CreateNewProfile() {
                                       color='red'
                                       size='medium'
                                       startIcon={<DeleteIcon />}
-                                      label={t('satutory_benefit.profile.button.delete')}
+                                      label={t('button.delete')}
                                       sx={{
                                         backgroundColor: '#FEE2E2',
                                         color: '#B91C1C',

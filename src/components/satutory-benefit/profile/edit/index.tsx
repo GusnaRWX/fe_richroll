@@ -337,7 +337,7 @@ export default function EditNewProfile() {
                 <Grid container spacing={2} style={{marginTop: '12px'}}>
                   <Grid item xs={12} md={12} lg={12} xl={12}>
                     <Textarea
-                      customLabel='External Notes'
+                      customLabel={t(`${tPath}external_notes`)}
                       minRows={4}
                       style={{ resize: 'vertical' }}
                     />
