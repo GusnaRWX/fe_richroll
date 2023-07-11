@@ -1,10 +1,9 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { Button, CheckBox } from '@/components/_shared/form';
 import { styled } from '@mui/material/styles';
 import { Box, Grid, Paper, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { CustomModal } from '@/components/_shared/common';
-import { useState } from 'react';
 import { HiSelector } from 'react-icons/hi';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { HiPencilAlt } from 'react-icons/hi';
@@ -25,7 +24,12 @@ const ItpEditProfileDeductableComponent = () => {
   const [initialDeductableValues, setInitialDeductableValues] = useState<
   string[]
   >([]);
+  const [holdValue, setHoldValue] = useState<string[]>([]);
   const {t} = useTranslation();
+
+  useEffect(() => {
+    console.log(initialDeductableValues);
+  }, [initialDeductableValues]);
 
   const selectedDeductableComponents = [
     {
@@ -55,7 +59,7 @@ const ItpEditProfileDeductableComponent = () => {
   };
 
   const handleSubmit = () => {
-    console.log('submit');
+    setInitialDeductableValues(holdValue);
   };
 
   const onChangeCheckboxHandler = (e) => {
@@ -68,11 +72,11 @@ const ItpEditProfileDeductableComponent = () => {
         const allValues: string[] = selectedDeductableComponents.map(
           (option) => option.componentName
         );
-        setInitialDeductableValues([...allValues]);
+        setHoldValue([...allValues]);
 
         // Select One
       } else {
-        setInitialDeductableValues((prevValues: string[]): any[] => [
+        setHoldValue((prevValues: string[]): any[] => [
           ...prevValues,
           name,
         ]);
@@ -80,11 +84,11 @@ const ItpEditProfileDeductableComponent = () => {
     } else {
       // Unchecked Select All
       if (name === 'Component Name') {
-        setInitialDeductableValues([]);
+        setHoldValue([]);
 
         // Unchecked Select One
       } else {
-        setInitialDeductableValues((prevValues) =>
+        setHoldValue((prevValues) =>
           prevValues.filter((selectedCheckbox) => selectedCheckbox !== name)
         );
       }
@@ -445,8 +449,7 @@ const ItpEditProfileDeductableComponent = () => {
                   name='Component Name'
                   customLabel=''
                   checked={
-                    initialDeductableValues.length ===
-                  selectedDeductableComponents.length
+                    holdValue.length === selectedDeductableComponents.length
                   }
                   onChange={onChangeCheckboxHandler}
                 />
@@ -498,7 +501,7 @@ const ItpEditProfileDeductableComponent = () => {
                     <CheckBox
                       name={value.componentName}
                       customLabel=''
-                      checked={initialDeductableValues.includes(
+                      checked={holdValue.includes(
                         value.componentName
                       )}
                       onChange={onChangeCheckboxHandler}
