@@ -133,6 +133,27 @@ function AttendanceModal({
     return null;
   }
 
+  const onSelectedAll = (items, e) => {
+    const pageItems = items.map(item => ({
+      id: item.id,
+      picture: item?.user?.userInformation?.picture,
+      name: item.user.name
+    }));
+
+    if (e.target.checked) {
+      setSelectedTemp(prevSelectedTemp => [...prevSelectedTemp, ...pageItems]);
+    } else {
+      setSelectedTemp(prevSelectedTemp => prevSelectedTemp.filter(selectedItem => !pageItems.some(item => item.id === selectedItem['id'])));
+    }
+  };
+
+  const checkValAll = (items) => {
+    const checkedPerPage = selectedTemp.filter(selectedItem => items.some(item => item.id === selectedItem['id'])).length;
+    const lengthPerPage = rowsPerPage;
+
+    return checkedPerPage === lengthPerPage;
+  };
+
   return (
     <CustomModal
       open={open}
@@ -156,20 +177,27 @@ function AttendanceModal({
               <TableRow>
                 {
                   headerItemsEmployees.map((item) => (
-                    <TableCell key={item.id} sortDirection={ifThenElse(sort === item.id, direction, false)}>
-                      <TableSortLabel
-                        active={sort === item.id}
-                        direction={sort === item.id ? direction : 'asc'}
-                        onClick={(e) => handleRequestSort(e, item.id)}
-                      >
-                        {item.label}
-                        {sort === item.id ? (
-                          <Box component='span' sx={visuallyHidden}>
-                            {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
-                          </Box>
-                        ) : null}
-                      </TableSortLabel>
-                    </TableCell>
+                    item.id === 'action' ? (
+                      <TableCell key={item.id}>
+                        <Checkbox onChange={(e) => onSelectedAll(data?.items?.slice(0, rowsPerPage), e)} checked={checkValAll(data?.items?.slice(0, rowsPerPage))} />
+                      </TableCell>
+                    ) : (
+                      <TableCell key={item.id} sortDirection={ifThenElse(sort === item.id, direction, false)}>
+                        <TableSortLabel
+                          active={sort === item.id}
+                          direction={sort === item.id ? direction : 'asc'}
+                          onClick={(e) => handleRequestSort(e, item.id)}
+                        >
+                          {item.label}
+                          {sort === item.id ? (
+                            <Box component='span' sx={visuallyHidden}>
+                              {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
+                            </Box>
+                          ) : null}
+                        </TableSortLabel>
+                      </TableCell>
+                    )
+
                   ))
                 }
                 <TableCell></TableCell>
