@@ -12,14 +12,15 @@ import { useAppDispatch } from '@/hooks/index';
 
 const InfoComponent = styled(Box)<BoxProps>(({ theme }) => ({
   backgroundColor: theme.palette.secondary[100],
-  padding: '.5rem',
-  borderRadius: '6px',
+  padding: '.43rem',
+  borderRadius: '5px',
   display: 'flex',
+  marginTop: '2px',
   flexDirection: 'row',
   alignItems: 'center',
   justifyContent: 'flex-start',
-  width: '100%',
   gap: '.5rem',
+  cursor: 'pointer'
 }));
 const ButtonWrapper = styled(Box)(({
   display: 'flex',
@@ -78,11 +79,11 @@ function EmployeesComponent() {
   return (
     <>
       <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
-        <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
+        <Grid item xs={3.5} sm={3.5} md={3.5} lg={3.5} xl={3.5}>
           {/* <Typography variant='h5' color='primary.main'>Employees</Typography> */}
           <Text title='Employees' fontWeight='bold' color='primary.main' fontSize='24px' />
         </Grid>
-        <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
+        <Grid item>
           <InfoComponent>
             <InfoRounded color='secondary' sx={{ height: '17px', width: '17px' }} />
             <Typography component='span' sx={{ fontSize: '12px' }}>Please download the excel template here</Typography>
