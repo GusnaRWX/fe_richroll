@@ -210,16 +210,16 @@ function* fetchPostEmergency(action: AnyAction) {
     const payload = {
       employeeID: action?.payload?.employeeID,
       primary: {
-        name: action?.payload?.data?.fullNamePrimary,
+        name: String(action?.payload?.data?.fullNamePrimary),
         relationship: +action?.payload?.data.relationPrimary,
-        phoneNumberPrefix: action?.payload.data.phoneNumberPrefixPrimary,
-        phoneNumber: action?.payload.data.phoneNumberPrimary
+        phoneNumberPrefix: String(action?.payload.data.phoneNumberPrefixPrimary),
+        phoneNumber: String(action?.payload.data.phoneNumberPrimary)
       },
       secondary: {
-        name: action?.payload?.data?.fullNameSecondary,
+        name: String(action?.payload?.data?.fullNameSecondary),
         relationship: +action?.payload?.data.relationSecondary,
-        phoneNumberPrefix: action?.payload.data.phoneNumberPrefixSecondary,
-        phoneNumber: action?.payload.data.phoneNumberSecondary
+        phoneNumberPrefix: String(action?.payload.data.phoneNumberPrefixSecondary),
+        phoneNumber: String(action?.payload.data.phoneNumberSecondary)
       }
     };
     let emergencyPayload = {};
