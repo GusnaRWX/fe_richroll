@@ -109,6 +109,7 @@ function EmployeeEditComponent() {
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   const [isInformationValid, setIsInformationValid] = useState(false);
   const personalInformationRef = useRef<HTMLFormElement>(null);
+  const cnbEditRef = useRef<HTMLFormElement>(null);
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   const [isEmergencyValid, setIsEmergencyValid] = useState(false);
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
@@ -424,7 +425,7 @@ function EmployeeEditComponent() {
             />
           </TabPanel>
           <TabPanel value={value} index={3}>
-            <EmployeeCnbForm />
+            <EmployeeCnbForm cnbValues={employee?.employeeCnbDetail} refProp={cnbEditRef} />
           </TabPanel>
           <TabPanel value={value} index={4}>
             <EmployeeWorkScheduleEdit setData={setValueWorkSchedule} />
