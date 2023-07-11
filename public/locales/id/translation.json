@@ -1,32 +1,32 @@
 {
   "sidebar": {
     "dashboard": "Dasbor",
-    "company_management": "Manajemen Perusahaan",
+    "company_management": "Manajemen perusahaan",
     "company_management_profile": "Profil Perusahaan",
     "company_management_departments": "Departemen",
     "company_management_work_schedule": "Jadwal kerja",
     "company_management_employees": "Karyawan",
     "company_management_annual_work_calendars": "Kalender Kerja Tahunan",
     "company_management_profile_information": "Informasi Profil",
-    "attendance_&_leave": "Kehadiran & Cuti",
+    "attendance_&_leave": "Kehadiran",
     "attendance_&_leave_attendance_entries": "Entri Kehadiran",
-    "attendance_&_leave_leave_entries": "Entri Meninggalkan",
-    "attendance_&_leave_leave_summary": "Ringkasan Cuti",
-    "attendance_&_leave_overtime_summary": "Ringkasan Lembur",
+    "attendance_&_leave_leave_entries": "Tinggalkan Entri",
+    "attendance_&_leave_leave_summary": "Tinggalkan Ringkasan",
+    "attendance_&_leave_overtime_summary": "Ringkasan lembur",
     "attendance_&_leave_configuration": "Konfigurasi",
-    "attendance_&_leave_balance": "Saldo",
-    "attendance_&_leave_off_in_lieu": "Pengganti Libur",
-    "attendance_&_leave_enchasment": "Pencairan",
-    "compensation_&_benefits": "Kompensasi & Manfaat",
+    "attendance_&_leave_balance": "Keseimbangan",
+    "attendance_&_leave_off_in_lieu": "Mati di Pengganti",
+    "attendance_&_leave_enchasment": "Pesona",
+    "compensation_&_benefits": "Kompensasi",
     "reimbursement": "Pengembalian",
     "internal_reports": "Laporan Internal",
-    "payroll_&_disbursement": "Penggajian & Pembayaran",
+    "payroll_&_disbursement": "Daftar gaji",
     "payroll_&_disbursement_payroll_assistant": "Asisten penggajian",
     "payroll_&_disbursement_attendance_summary": "Ringkasan Kehadiran",
-    "payroll_&_disbursement_payroll_reports": "Payroll Reports",
+    "payroll_&_disbursement_payroll_reports": "Laporan Penggajian",
     "payroll_&_disbursement_disbursement": "Pembayaran",
     "package_management": "Manajemen Paket",
-    "satutory_benefits": "Tunjangan Wajib",
+    "satutory_benefits": "Manfaat Jenuh",
     "satutory_benefits_component": "Komponen",
     "satutory_benefits_profile": "Profil",
     "account_management": "Manajemen akun",
@@ -56,13 +56,10 @@
     "duplicate": "Duplikat",
     "mark_complete": "Tandai Semua dan Selesai",
     "add_new_profile": "Tambahkan Profil Baru",
-    "add_new_component": "Tambahkan Komponen Baru",
     "add_component": "Tambahkan Komponen",
+    "add_new_component": "Tambahkan Komponen Baru",
     "component": "Komponen"
   },
-
-
-
   "income_tax_profile": {
     "deductable_component": {
       "title": "Dasbor Komponen yang Dapat Dikurangi",
@@ -82,7 +79,7 @@
         "save_button": "Menyimpan",
         "mark_button": "Tandai Semua dan Selesai",
         "confirm_button": "Mengonfirmasi",
-        "save_modal_text": "Anda akan menghentikan proses, dan disimpan di Tambahkan Komponen Baru. ",
+        "save_modal_text": "Anda akan menghentikan proses, dan disimpan di Tambahkan Komponen Baru.<br>Apakah Anda yakin akan menghentikan prosesnya?",
         "mark_modal_text": "Semua pencairan akan ditandai dibayar dan menyelesaikan proses Tambah Komponen Baru",
         "form": {
           "wizard_option": {
@@ -126,7 +123,6 @@
     },
     "profile": {
       "title": "Konfigurasi Profil Pajak",
-      "add_new": "Tambah Profil Baru",
       "tab": {
         "draft": "Draf",
         "active": "Aktif",
@@ -157,12 +153,7 @@
       },
       "detail": {
         "main": {
-          "title": "Profil Pajak - Status",
-          "delete": "Hapus",
-          "duplicate": "Duplikat",
-          "archive": "Arsipkan",
-          "edit": "Ubah",
-          "activate": "Aktifkan"
+          "title": "Profil Pajak - Status"
         },
         "tab": {
           "basic_detail": "Detil Dasar",
@@ -187,7 +178,7 @@
           "citation": "Kutipan",
           "internal_notes": "Catatan Internal",
           "external_notes": "Catatan Eksternal",
-          "province": "Provinsi",
+          "province": "Propinsi",
           "city": "Kota",
           "sub_district": "Kecamatan",
           "effective_date": "Tanggal berlaku",
@@ -195,23 +186,24 @@
         },
         "deductible_component": {
           "martial_status": "Status pernikahan",
+          "number_of_dependence": "Jumlah Ketergantungan",
           "factor_unit_condition": "Kondisi Satuan Faktor",
           "amount": "Jumlah",
-          "deductible": "Pengurangan"
+          "deductible": "Dapat dikurangkan"
         },
         "income_tax_rate": {
           "progressive_rate": "Tingkat Progresif",
           "income": "Penghasilan",
-          "rate": "Rasio",
+          "rate": "Kecepatan",
           "min_income": "Penghasilan Min",
           "amount": "Jumlah",
-          "max_income": "Penghasilan Maksimal",
+          "max_income": "Penghasilan Maks",
           "additional_fixed_amount": "Jumlah Tetap Tambahan"
         },
         "income_tax_multiplier": {
           "deductible_factor": "Faktor Pengurangan",
           "factor_unit_condition": "Kondisi Satuan Faktor",
-          "rate": "Rasio",
+          "rate": "Kecepatan",
           "additional_fixed_amount": "Jumlah Tetap Tambahan",
           "status": "Status",
           "condition": "Kondisi",
@@ -228,7 +220,7 @@
           "branch_name": "Nama cabang",
           "swift_code": "Tukar Kode",
           "notes": "Catatan",
-          "bank_info": "Informasi Bank",
+          "bank_info": "Informasi bank",
           "central_account": "Akun Tengah",
           "individual_account": "Akun Perorangan",
           "company_account": "Akun Perusahaan Saja",
@@ -240,35 +232,24 @@
           "title": "Tanggal penerbitan",
           "description": "Apakah Anda ingin Mengaktifkan profil pajak?",
           "effective_date": "Tanggal berlaku",
-          "expiration_date": "Tanggal habis tempo",
-          "ok_button": "Konfirmasi",
-          "cancel_button": "Batalkan"
+          "expiration_date": "Tanggal habis tempo"
         },
         "duplicate": {
           "title": "Konfirmasi",
-          "description": "Apakah Anda ingin menggandakan profil ini?",
-          "ok_button": "Konfirmasi",
-          "cancel_button": "Batalkan"
+          "description": "Apakah Anda ingin menggandakan profil ini?"
         },
         "delete": {
           "title": "Hapus Entri Data",
-          "description": "Anda akan menghapus entri data kehadiran ini. ",
-          "ok_button": "Hapus",
-          "cancel_button": "Batalkan"
+          "description": "Anda akan menghapus entri data kehadiran ini. "
         },
         "archive": {
           "title": "Tanggal Pengarsipan",
           "description": "Masukkan Tanggal Efektif Pengarsipan",
           "checkbox": "Ganti dengan Profil Baru"
-        },
-        "next": "Selanjutnya",
-        "back": "Kembali"
+        }
       }
     }
   },
-
-
-
   "satutory_benefit": {
     "component": {
       "title": "Dasbor Komponen Manfaat Wajib",
@@ -280,7 +261,7 @@
         "rate_type": "Jenis Tarif",
         "created_on": "Dibuat pada",
         "last_update": "Pembaharuan Terakhir",
-        "action" : ""
+        "action": ""
       },
       "form_&_detail": {
         "dashboard_title": "Tambahkan Komponen Baru",
@@ -351,18 +332,6 @@
           "search_placeholder": "Mencari"
         }
       },
-      "button": {
-        "add_new_component": "Tambahkan Komponen Baru",
-        "save": "Menyimpan",
-        "save_exit": "Menyimpan",
-        "cancel": "Membatalkan",
-        "next": "Berikutnya",
-        "back": "Kembali",
-        "confirm": "Mengonfirmasi",
-        "duplicate": "Duplikat",
-        "delete": "Hapus",
-        "edit": "Ubah"
-      },
       "modal": {
         "delete": {
           "title": "Hapus Entri Data",
@@ -416,20 +385,6 @@
           "flat_rate": "Tarif Tetap",
           "amount_cap": "Batas Jumlah"
         }
-      },
-      "button": {
-        "edit": "Sunting",
-        "delete": "Menghapus",
-        "save": "Menyimpan",
-        "save_approve": "Simpan dan Setujui",
-        "cancel": "Membatalkan",
-        "activate": "Mengaktifkan",
-        "archive": "Diarsipkan",
-        "confirm": "Mengonfirmasi",
-        "add_new_profile": "Tambahkan Profil Baru",
-        "add_component": "Tambahkan Komponen",
-        "component": "Komponen",
-        "duplicate": "Duplikat"
       },
       "modal": {
         "delete": {

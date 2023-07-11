@@ -79,7 +79,7 @@ const ItpProfileComponent = () => {
               router.push('/income-tax-profile/profile/add-new-profile')
             }
             startIcon={<AddIcon />}
-            label={t('income_tax_profile.profile.add_new')}
+            label={t('button.add_new_profile')}
           />
         </div>
       </TitleWrapper>

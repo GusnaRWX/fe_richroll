@@ -257,7 +257,7 @@ function ItpProfileTable({
                             color='green'
                             sx={{ bgcolor: '#DCFCE7', color: '#16A34A' }}
                             startIcon={<HiUpload />}
-                            label={t('income_tax_profile.profile.detail.main.activate')}
+                            label={t('button.activate')}
                             onClick={() => setActivateConfirmation(true)}
                           />
                         )}
@@ -292,7 +292,7 @@ function ItpProfileTable({
                             color='orange'
                             sx={{ bgcolor: '#FFEDD5', color: '#F97316' }}
                             startIcon={<HiOutlineArchive />}
-                            label={t('income_tax_profile.profile.detail.main.archive')}
+                            label={t('button.archive')}
                             onClick={() => setArchiveConfirmation(true)}
                           />
                         )}

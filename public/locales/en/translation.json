@@ -126,7 +126,6 @@
     },
     "profile": {
       "title": "Tax Profile Configuration",
-      "add_new": "Add New Profile",
       "tab": {
         "draft": "Draft",
         "active": "Active",

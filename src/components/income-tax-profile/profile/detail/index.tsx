@@ -129,7 +129,7 @@ export default function ItpProfileDetailComponent() {
             color='red'
             sx={{ bgcolor: '#FECACA', color: '#DC2626', width: 'fit-content' }}
             startIcon={<DeleteIcon />}
-            label={t('income_tax_profile.profile.detail.main.delete')}
+            label={t('button.delete')}
             onClick={() => setDeleteConfirmation(true)}
           />
           <Button
@@ -142,28 +142,28 @@ export default function ItpProfileDetailComponent() {
               boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.05)',
             }}
             startIcon={<FiCopy />}
-            label={t('income_tax_profile.profile.detail.main.duplicate')}
+            label={t('button.duplicate')}
             onClick={() => setDuplicateConfirmation(true)}
           />
           <Button
             color='orange'
             sx={{ bgcolor: '#FFEDD5', color: '#F97316', width: 'fit-content' }}
             startIcon={<HiOutlineArchive />}
-            label={t('income_tax_profile.profile.detail.main.archive')}
+            label={t('button.archive')}
             onClick={() => setArchiveConfirmation(true)}
           />
           <Button
             color='green'
             sx={{ bgcolor: '#8DD0B8', color: '#fff', width: 'fit-content' }}
             startIcon={<HiPencilAlt />}
-            label={t('income_tax_profile.profile.detail.main.edit')}
+            label={t('button.edit')}
             onClick={EditActionHandler}
           />
           <Button
             color='lightBlue'
             sx={{ bgcolor: '#223567', color: '#fff', width: 'fit-content' }}
             startIcon={<HiUpload />}
-            label={t('income_tax_profile.profile.detail.main.activate')}
+            label={t('button.activate')}
             onClick={() => setActivateConfirmation(true)}
           />
         </NextBtnWrapper>
