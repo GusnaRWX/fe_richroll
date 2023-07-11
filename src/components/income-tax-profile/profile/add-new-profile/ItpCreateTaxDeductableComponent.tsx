@@ -110,7 +110,7 @@ export default function  ItpCreateTaxDeductableComponent() {
               <Button
                 color='green'
                 startIcon={<HiPencilAlt color='white' />}
-                label='Edit'
+                label={t('button.edit')}
                 sx={{
                   backgroundColor: '#8DD0B8',
                   width: {xs: '68px', md: '73px'},
@@ -122,7 +122,7 @@ export default function  ItpCreateTaxDeductableComponent() {
               <Button
                 color='red'
                 startIcon={<DeleteIcon />}
-                label='Delete'
+                label={t('button.delete')}
                 sx={{
                   width: {xs: '68px', md: '73px'},
                   height: {xs: '29px', md: '30px'},
@@ -236,7 +236,7 @@ export default function  ItpCreateTaxDeductableComponent() {
               <Button
                 color='green'
                 startIcon={<HiPencilAlt color='white' />}
-                label='Edit'
+                label={t('button.edit')}
                 sx={{
                   backgroundColor: '#8DD0B8',
                   width: {xs: '68px', md: '73px'},
@@ -248,7 +248,7 @@ export default function  ItpCreateTaxDeductableComponent() {
               <Button
                 color='red'
                 startIcon={<DeleteIcon />}
-                label='Delete'
+                label={t('button.delete')}
                 sx={{
                   width: {xs: '68px', md: '73px'},
                   height: {xs: '29px', md: '30px'},
@@ -337,7 +337,7 @@ export default function  ItpCreateTaxDeductableComponent() {
               <Button
                 color='green'
                 startIcon={<HiPencilAlt color='white' />}
-                label='Edit'
+                label={t('button.edit')}
                 sx={{
                   backgroundColor: '#8DD0B8',
                   width: {xs: '68px', md: '73px'},
@@ -349,7 +349,7 @@ export default function  ItpCreateTaxDeductableComponent() {
               <Button
                 color='red'
                 startIcon={<DeleteIcon />}
-                label='Delete'
+                label={t('button.delete')}
                 sx={{
                   width: {xs: '68px', md: '73px'},
                   height: {xs: '29px', md: '30px'},
