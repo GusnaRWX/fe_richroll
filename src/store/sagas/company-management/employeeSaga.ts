@@ -19,7 +19,8 @@ import {
   getViewWorkSchedule,
   postTerminateEmployee,
   patchWorkSchedule,
-  getEmployeeCnb
+  getEmployeeCnb,
+  patchEmployeeCnb
 } from '../saga-actions/company-management/employeeActions';
 import { call, put, takeEvery, delay } from 'redux-saga/effects';
 import {
@@ -82,7 +83,10 @@ import {
   patchWorkScheduleFailed,
   getEmployeeCnbDetailRequested,
   getEmployeeCnbDetailSuccess,
-  getEmployeeCnbDetailFailed
+  getEmployeeCnbDetailFailed,
+  patchEmployeeCnbRequested,
+  patchEmployeeCnbSuccess,
+  patchEmployeeCnbFailed
 } from '@/store/reducers/slice/company-management/employees/employeeSlice';
 import { setResponserMessage } from '@/store/reducers/slice/responserSlice';
 import { Services } from '@/types/axios';
@@ -1013,6 +1017,39 @@ function* getEmployeeDetailCnb(action: AnyAction) {
   }
 }
 
+function* fetchPatchEmployeeCnb(action: AnyAction) {
+  try {
+    console.log(action, 'aksi');
+    const res: AxiosResponse = yield call(patchEmployeeCnb, action?.payload);
+
+    if (res.data.code === 201 || res.data.code === 200) {
+      yield put({ type: patchEmployeeCnbSuccess.toString() });
+      yield delay(1000);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: res?.data?.code,
+          message: 'Successfully Saved!',
+          footerMessage: 'Employee Cnb has been updated'
+        }
+      });
+    }
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.request?.data as Services.ErrorResponse;
+      yield put({ type: patchEmployeeCnbFailed.toString() });
+      yield delay(2000, true);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message
+        }
+      });
+    }
+  }
+}
+
 function* employeeSaga() {
   yield takeEvery(getEmployeeRequested.toString(), fetchGetEmployee);
   yield takeEvery(postEmployeeInfoRequested.toString(), fetchPostEmployeeInfo);
@@ -1034,6 +1071,7 @@ function* employeeSaga() {
   yield takeEvery(postTerminateEmployeeRequested.toString(), fetchPostTerminateEmployee);
   yield takeEvery(patchWorkScheduleRequested.toString(), fetchPatchWorkSchedule);
   yield takeEvery(getEmployeeCnbDetailRequested.toString(), getEmployeeDetailCnb);
+  yield takeEvery(patchEmployeeCnbRequested.toString(), fetchPatchEmployeeCnb);
 }
 
 export default employeeSaga;
