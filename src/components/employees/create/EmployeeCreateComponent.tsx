@@ -177,7 +177,7 @@ function EmployeeCreateComponent() {
   };
 
   const handleSaveEmergency = async (data) => {
-    if (finishedStep <=3) {
+    if (finishedStep <= 3) {
       dispatch({
         type: postEmergencyRequested.toString(),
         payload: {
