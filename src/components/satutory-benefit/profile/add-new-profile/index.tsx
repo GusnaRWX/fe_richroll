@@ -135,10 +135,6 @@ export default function CreateNewProfile() {
     },
   ];
 
-  React.useEffect(() => {
-    console.log(holdValue);
-  }, [holdValue]);
-
   return (
     <>
       <Formik
@@ -455,7 +451,6 @@ export default function CreateNewProfile() {
                                         setHoldValue((prevValues) =>
                                           prevValues.filter((selectedCheckbox) => selectedCheckbox !== benefit)
                                         );
-                                        console.log(benefit);
                                       }}
                                     />
                                   </Box>
