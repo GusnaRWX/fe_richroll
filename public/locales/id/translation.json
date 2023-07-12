@@ -58,7 +58,8 @@
     "add_new_profile": "Tambahkan Profil Baru",
     "add_component": "Tambahkan Komponen",
     "add_new_component": "Tambahkan Komponen Baru",
-    "component": "Komponen"
+    "component": "Komponen",
+    "deductable": "Dapat dikurangkan"
   },
   "income_tax_profile": {
     "deductable_component": {

@@ -398,7 +398,7 @@ export default function  ItpCreateTaxDeductableComponent() {
           <Paper elevation={1} sx={{ padding: '16px' }}>
             <AddButton
               startIcon={<AddIcon />}
-              label='Deductible'
+              label={t('button.deductable')}
               sx={{
                 width: '136px',
                 fontSize: '14px',
@@ -423,11 +423,11 @@ export default function  ItpCreateTaxDeductableComponent() {
                 padding: '9px',
                 width: '65px',
               }}
-              label='Back'
+              label={t('button.back')}
             />
             <Button
               sx={{ padding: '9px', width: '65px' }}
-              label='Next'
+              label={t('button.next')}
               variant='contained'
             />
           </Box>

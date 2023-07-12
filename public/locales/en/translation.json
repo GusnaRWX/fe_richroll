@@ -58,7 +58,8 @@
     "add_new_profile" : "Add New Profile",
     "add_component" : "Add Component",
     "add_new_component" : "Add New Component",
-    "component" :"Component"
+    "component" : "Component",
+    "deductable": "Deductable"
   },
 
 
