@@ -120,7 +120,7 @@ export default function CreateRates() {
 
   return (
     <>
-      <Box component='div' sx={{ p: '16px' }}>
+      <>
         <Typography sx={{color: 'grey.700', fontWeight: 400, display: 'block', marginBottom: '15px'}}>{t(`${t_key}.contributor_option.label`)}<AsteriskComponent>*</AsteriskComponent></Typography>
         <FormGroup sx={{ display: 'inline', bgcolor: 'red' }}>
           <FormControlLabel
@@ -526,7 +526,7 @@ export default function CreateRates() {
             {t(`button.save`)}
           </Button>
         </Grid>
-      </Box>
+      </>
     </>
   );
 }

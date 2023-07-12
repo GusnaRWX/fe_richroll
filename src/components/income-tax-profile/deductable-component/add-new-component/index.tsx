@@ -152,11 +152,12 @@ function ItpCreateNewComponentComponent() {
             ))}
           </Stepper>
         </Box>
+        <Box sx={{mt:'16px'}}>
+          {value == 0 && <CreateBasicDetailComponent />}
+          {value == 1 && <ItpCreateDesignedTransferAccountComponent/>}
+          {value == 2 && <ItpCreateRatesComponent />}
+        </Box>
       </ContentWrapper>
-
-      {value == 0 && <CreateBasicDetailComponent />}
-      {value == 1 && <ItpCreateDesignedTransferAccountComponent/>}
-      {value == 2 && <ItpCreateRatesComponent />}
 
       <CustomModal
         open={open}

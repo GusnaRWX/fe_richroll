@@ -2,7 +2,6 @@ import React from 'react';
 import { Form, Input, Select } from '@/components/_shared/form';
 import { Text } from '@/components/_shared/common';
 import {
-  Box,
   FormGroup,
   FormControlLabel,
   Grid,
@@ -107,7 +106,7 @@ export default function ItpCreateRatesComponent() {
 
   return (
     <>
-      <Box component='div' sx={{ p: '16px' }}>
+      <>
         <Grid container flexDirection='column' gap={4}>
           <Grid item>
             <FormGroup>
@@ -347,7 +346,7 @@ export default function ItpCreateRatesComponent() {
             )}
           </Grid>
         </Grid>
-      </Box>
+      </>
     </>
   );
 }
