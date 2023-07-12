@@ -273,6 +273,14 @@
           "title": "Archivation Date",
           "description": "Input Effective Archivation Date",
           "checkbox": "Replace with New Profile"
+        },
+        "mark_all": {
+          "title": "Mark all paid and Complete",
+          "description": "All disbursement will marked paid and complete the Payroll Assistant process"
+        },
+        "cancel": {
+          "title": "Save & Exit",
+          "description": "You will stop the process, and saved in Payroll Assistant Are you sure to stop the process?"
         }
       }
     }

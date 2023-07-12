@@ -73,7 +73,7 @@ function ItpAddNewProfileComponent() {
               size='small'
               color='primary'
               onClick={() => {
-                if (value == 5) {
+                if (value == 4) {
                   setIsExit(true);
                   setOpen(true);
                 } else {
@@ -159,7 +159,7 @@ function ItpAddNewProfileComponent() {
       <CustomModal
         open={open}
         handleClose={handleClose}
-        title={ifThenElse(isExit, 'Save & Exit', 'Mark all paid and Complete')}
+        title={ifThenElse(isExit, t('income_tax_profile.profile.modal.cancel.description'), t('income_tax_profile.profile.modal.mark_all.description'))}
         width='543px'
         handleConfirm={handleConfirm}
       >
@@ -168,8 +168,12 @@ function ItpAddNewProfileComponent() {
             {
               ifThenElse(
                 isExit,
-                <Typography variant='text-base' color='#4B5563'>You will stop the process, and saved in Payroll Assistant.<br/>Are you sure to stop the process?</Typography>,
-                <Typography variant='text-base' color='#4B5563'>All disbursement will marked paid and complete the Payroll Assistant process</Typography>
+                <Typography variant='text-base' color='#4B5563'>
+                  {t('income_tax_profile.profile.modal.cancel.description')}
+                </Typography>,
+                <Typography variant='text-base' color='#4B5563'>
+                  {t('income_tax_profile.profile.modal.mark_all.description')}
+                </Typography>
               )
             }
           </Grid>
