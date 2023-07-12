@@ -288,6 +288,11 @@
         "cancel": {
           "title": "节省 & 出口",
           "description": "您将停止该过程，并保存在薪资助手中。您确定要停止该进程吗？"
+        },
+        "add_deductable": {
+          "title": "选择可扣税部分",
+          "component_name": "组件名称",
+          "component_condition": "组件状况"
         }
       }
     }

@@ -437,7 +437,7 @@ export default function  ItpCreateTaxDeductableComponent() {
           open={isAddNewDeductableComponent}
           handleClose={handleClose}
           handleConfirm={handleSubmit}
-          title='Select Tax Deductable Components'
+          title={t('income_tax_profile.profile.modal.add_deductable.title')}
           width='678px'
         >
           <Box sx={{ flexGrow: 1 }}>
@@ -463,7 +463,7 @@ export default function  ItpCreateTaxDeductableComponent() {
                 sx={{ display: 'flex', alignItems: 'center' }}
               >
                 <Typography sx={{ fontWeight: 500, color: '#1F2937' }}>
-                Component Name
+                  {t('income_tax_profile.profile.modal.add_deductable.component_name')}
                 </Typography>
                 <HiSelector />
               </Grid>
@@ -477,7 +477,7 @@ export default function  ItpCreateTaxDeductableComponent() {
                 sx={{ display: 'flex', alignItems: 'center' }}
               >
                 <Typography sx={{ fontWeight: 500, color: '#1F2937' }}>
-                Component Condition
+                  {t('income_tax_profile.profile.modal.add_deductable.component_condition')}
                 </Typography>
                 <HiSelector />
               </Grid>
@@ -485,7 +485,7 @@ export default function  ItpCreateTaxDeductableComponent() {
                 <AddButton
                   variant='contained'
                   startIcon={<AddIcon />}
-                  label='Component'
+                  label={t('button.component')}
                   sx={{ width: '136px', fontSize: '14px' }}
                 />
               </Grid>
