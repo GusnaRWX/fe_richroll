@@ -58,7 +58,8 @@
     "add_new_profile": "添加新的个人资料",
     "add_component": "添加组件",
     "add_new_component": "添加新组件",
-    "component": "成分"
+    "component": "成分",
+    "deductable": "免赔额"
   },
   "income_tax_profile": {
     "deductable_component": {

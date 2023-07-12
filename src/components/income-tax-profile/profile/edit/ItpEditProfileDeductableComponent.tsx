@@ -115,7 +115,7 @@ const ItpEditProfileDeductableComponent = () => {
                 label={t('button.edit')}
                 sx={{
                   backgroundColor: '#8DD0B8',
-                  width: {xs: '68px', md: '73px'},
+                  width: 'fit-content',
                   height: {xs: '29px', md: '30px'},
                   padding:{xs: '2px', md:'8px'},
                   color: ' white',
@@ -126,7 +126,7 @@ const ItpEditProfileDeductableComponent = () => {
                 startIcon={<DeleteIcon />}
                 label={t('button.delete')}
                 sx={{
-                  width: {xs: '68px', md: '73px'},
+                  width: 'fit-content',
                   height: {xs: '29px', md: '30px'},
                   padding:{xs: '2px', md:'8px'},
                   backgroundColor: '#FEE2E2',
@@ -241,7 +241,7 @@ const ItpEditProfileDeductableComponent = () => {
                 label={t('button.edit')}
                 sx={{
                   backgroundColor: '#8DD0B8',
-                  width: {xs: '68px', md: '73px'},
+                  width: 'fit-content',
                   height: {xs: '29px', md: '30px'},
                   padding:{xs: '2px', md:'8px'},
                   color: ' white',
@@ -252,7 +252,7 @@ const ItpEditProfileDeductableComponent = () => {
                 startIcon={<DeleteIcon />}
                 label={t('button.delete')}
                 sx={{
-                  width: {xs: '68px', md: '73px'},
+                  width: 'fit-content',
                   height: {xs: '29px', md: '30px'},
                   padding:{xs: '2px', md:'8px'},
                   backgroundColor: '#FEE2E2',
@@ -342,7 +342,7 @@ const ItpEditProfileDeductableComponent = () => {
                 label={t('button.edit')}
                 sx={{
                   backgroundColor: '#8DD0B8',
-                  width: {xs: '68px', md: '73px'},
+                  width: 'fit-content',
                   height: {xs: '29px', md: '30px'},
                   padding:{xs: '2px', md:'8px'},
                   color: ' white',
@@ -353,7 +353,7 @@ const ItpEditProfileDeductableComponent = () => {
                 startIcon={<DeleteIcon />}
                 label={t('button.delete')}
                 sx={{
-                  width: {xs: '68px', md: '73px'},
+                  width: 'fit-content',
                   height: {xs: '29px', md: '30px'},
                   padding:{xs: '2px', md:'8px'},
                   backgroundColor: '#FEE2E2',
@@ -402,7 +402,7 @@ const ItpEditProfileDeductableComponent = () => {
               startIcon={<AddIcon />}
               label={t('income_tax_profile.profile.detail.deductible_component.deductible')}
               sx={{
-                width: '136px',
+                width: 'fit-content',
                 fontSize: '14px',
                 backgroundColor: '#8DD0B8',
               }}
@@ -423,12 +423,12 @@ const ItpEditProfileDeductableComponent = () => {
               variant='outlined'
               sx={{
                 padding: '9px',
-                width: '65px',
+                width: 'fit-content',
               }}
               label={t('button.back')}
             />
             <Button
-              sx={{ padding: '9px', width: '65px' }}
+              sx={{ padding: '9px', width: 'fit-content' }}
               label={t('button.next')}
               variant='contained'
             />
@@ -439,7 +439,7 @@ const ItpEditProfileDeductableComponent = () => {
           open={isAddNewDeductableComponent}
           handleClose={handleClose}
           handleConfirm={handleSubmit}
-          title='Select Tax Deductable Components'
+          title={t('income_tax_profile.profile.modal.add_deductable.title')}
           width='678px'
         >
           <Box sx={{ flexGrow: 1 }}>
@@ -464,7 +464,7 @@ const ItpEditProfileDeductableComponent = () => {
                 sx={{ display: 'flex', alignItems: 'center' }}
               >
                 <Typography sx={{ fontWeight: 500, color: '#1F2937' }}>
-                Component Name
+                  {t('income_tax_profile.profile.modal.add_deductable.component_name')}
                 </Typography>
                 <HiSelector />
               </Grid>
@@ -478,7 +478,7 @@ const ItpEditProfileDeductableComponent = () => {
                 sx={{ display: 'flex', alignItems: 'center' }}
               >
                 <Typography sx={{ fontWeight: 500, color: '#1F2937' }}>
-                Component Condition
+                  {t('income_tax_profile.profile.modal.add_deductable.component_condition')}
                 </Typography>
                 <HiSelector />
               </Grid>

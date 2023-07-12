@@ -362,7 +362,7 @@ export default function ItpCreateDesignedTransferAccount() {
             <Button
               color='primary'
               label={t('button.next')}
-              sx={{ width: '63px' }}
+              sx={{ width: 'fit-content' }}
               onClick={() => formik.submitForm()}
             />
           </Box>

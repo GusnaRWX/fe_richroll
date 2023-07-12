@@ -58,7 +58,8 @@
     "add_new_profile": "Tambah Profil Baharu",
     "add_component": "Tambah Komponen",
     "add_new_component": "Tambah Komponen Baharu",
-    "component": "Komponen"
+    "component": "Komponen",
+    "deductable": "Boleh ditolak"
   },
   "income_tax_profile": {
     "deductable_component": {
