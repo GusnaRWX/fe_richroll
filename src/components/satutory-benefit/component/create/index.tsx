@@ -13,6 +13,8 @@ import { useRouter } from 'next/router';
 import CustomModal from '@/components/_shared/common/CustomModal';
 import { ifThenElse } from '@/utils/helper';
 import { useTranslation } from 'react-i18next';
+import { IconButton } from '@/components/_shared/form';
+import { ArrowBack } from '@mui/icons-material';
 
 // Import Create Component :
 import CreateBasicDetailComponent from './CreateBasicDetail';
@@ -63,7 +65,16 @@ function CreateNewComponent() {
     <>
       <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
         <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
-          <Typography variant='h6' color='#4B5563'><b>{t(`${t_key}.dashboard_title`)}</b></Typography>
+          <Box sx={{display:'flex', alignItems : 'center',gap:'16px'}}>
+            <IconButton
+              parentColor='primary.500'
+              icons={<ArrowBack sx={{ color: '#FFFFFF' }} />}
+              onClick={() => {
+                router.push('/satutory-benefit/component');
+              }}
+            />
+            <Typography variant='h6' color='#4B5563'><b>{t(`${t_key}.dashboard_title`)}</b></Typography>
+          </Box>
         </Grid>
         <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
           <ButtonWrapper>

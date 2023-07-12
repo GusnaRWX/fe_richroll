@@ -42,7 +42,7 @@ export default function ItpDeductableComponentDetailComponent() {
   });
 
   function EditActionHandler() {
-    router.push('/satutory-benefit/component/add-new-component');
+    router.push('/income-tax-profile/deductable-component/edit');
   }
 
   return (
@@ -53,7 +53,7 @@ export default function ItpDeductableComponentDetailComponent() {
             parentColor='primary.500'
             icons={<ArrowBack sx={{ color: '#FFFFFF' }} />}
             onClick={() => {
-              router.push('/satutory-benefit/component');
+              router.push('/income-tax-profile/deductable-component');
             }}
           />
           <div>

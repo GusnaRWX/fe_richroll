@@ -16,6 +16,8 @@ import ItpCreateRatesComponent from './ItpCreateRatesComponent';
 import CustomModal from '@/components/_shared/common/CustomModal';
 import { ifThenElse } from '@/utils/helper';
 import { useTranslation, Trans } from 'react-i18next';
+import { IconButton } from '@/components/_shared/form';
+import { ArrowBack } from '@mui/icons-material';
 
 const ButtonWrapper = styled(Box)(({
   display: 'flex',
@@ -58,7 +60,16 @@ function ItpCreateNewComponentComponent() {
     <>
       <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
         <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
-          <Typography variant='h6' color='#4B5563'><b>{t(`${t_key}.title`)}</b></Typography>
+          <Box sx={{display:'flex', alignItems : 'center',gap:'16px'}}>
+            <IconButton
+              parentColor='primary.500'
+              icons={<ArrowBack sx={{ color: '#FFFFFF' }} />}
+              onClick={() => {
+                router.push('/income-tax-profile/deductable-component');
+              }}
+            />
+            <Typography variant='h6' color='#4B5563'><b>{t(`${t_key}.title`)}</b></Typography>
+          </Box>
         </Grid>
         <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
           <ButtonWrapper>
