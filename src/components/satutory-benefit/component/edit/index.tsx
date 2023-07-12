@@ -5,6 +5,7 @@ import { styled } from '@mui/material/styles';
 import { Typography, Box, Paper, Tabs, Tab } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import { useRouter } from 'next/router';
+import { useTranslation } from 'react-i18next';
 
 // Import Create Component
 import EditBasicDetail from './EditBasicDetail';
@@ -12,6 +13,7 @@ import EditDesignedTransferAccount from './EditDesignedTransferAccount';
 import EditRates from './EditRates';
 
 export default function SatutoryBenefitComponentEditComponent() {
+  const {t} = useTranslation();
   const router = useRouter();
 
   const Header = styled('div')({
@@ -80,7 +82,7 @@ export default function SatutoryBenefitComponentEditComponent() {
               width: '250px',
             }}
           >
-            Add New Component
+            {t('satutory_benefit.component.form_&_detail.dashboard_title')}
           </Typography>
         </HeaderPageTitle>
       </Header>
@@ -88,9 +90,9 @@ export default function SatutoryBenefitComponentEditComponent() {
         <Box sx={{px:'48px'}}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs value={value} onChange={handleChange} aria-label='basic tabs'>
-            <Tab label='Basic Detail' {...a11yProps(0)} />
-            <Tab label='Designated Transfer Account' {...a11yProps(1)} />
-            <Tab label='Rates' {...a11yProps(2)} />
+            <Tab label={t('satutory_benefit.component.form_&_detail.wizard_option.basic_detail')} {...a11yProps(0)} />
+            <Tab label={t('satutory_benefit.component.form_&_detail.wizard_option.designed_transfer_account')} {...a11yProps(1)} />
+            <Tab label={t('satutory_benefit.component.form_&_detail.wizard_option.rate')} {...a11yProps(2)} />
           </Tabs>
         </Box>
         </Box>

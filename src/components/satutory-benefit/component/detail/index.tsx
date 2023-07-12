@@ -41,7 +41,7 @@ export default function SatutoryBenefitComponentDetail() {
   });
 
   function EditActionHandler() {
-    router.push('/satutory-benefit/component/add-new-component');
+    router.push('/satutory-benefit/component/edit');
   }
 
   return (
