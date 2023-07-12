@@ -83,7 +83,7 @@ function EmployeesComponent() {
           {/* <Typography variant='h5' color='primary.main'>Employees</Typography> */}
           <Text title='Employees' fontWeight='bold' color='primary.main' fontSize='24px' />
         </Grid>
-        <Grid item>
+        <Grid item xs={2.5} sm={2.5} md={2.5} lg={2.5} xl={2.5}>
           <InfoComponent>
             <InfoRounded color='secondary' sx={{ height: '17px', width: '17px' }} />
             <Typography component='span' sx={{ fontSize: '12px' }}>Please download the excel template here</Typography>
