@@ -1,12 +1,15 @@
-import React from 'react';
+import React, {SetStateAction, Dispatch} from 'react';
 import { Grid, Typography } from '@mui/material';
-import {  Input, Select, Textarea } from '@/components/_shared/form';
+import {  Input, Select, Textarea, Button } from '@/components/_shared/form';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
 
+interface PropsInterface {
+  nextPage: Dispatch<SetStateAction<number>>
+}
 
-export default function CreateBasicDetailComponent() {
+export default function CreateBasicDetailComponent({nextPage}: PropsInterface) {
   // Translation Key
   const {t} = useTranslation();
   const t_key = 'satutory_benefit.component.form_&_detail.create_basic_detail';
@@ -42,6 +45,7 @@ export default function CreateBasicDetailComponent() {
     validationSchema: validationSchema,
     onSubmit: (values) => {
       console.log(values);
+      nextPage(1);
     }
   });
 
@@ -154,7 +158,7 @@ export default function CreateBasicDetailComponent() {
               color: '#6B7280',
             }}
           >
-            {t(`${t_key}.name_placeholder`)}
+            {t(`${t_key}.max_char_info`)}
           </Typography>
         </Grid>
       </Grid>
@@ -175,8 +179,24 @@ export default function CreateBasicDetailComponent() {
               color: '#6B7280',
             }}
           >
-            {t(`${t_key}.name_placeholder`)}
+            {t(`${t_key}.max_char_info`)}
           </Typography>
+        </Grid>
+
+        <Grid
+          container
+          spacing={2}
+          sx={{ justifyContent: 'flex-end', mt: '30px' }}
+        >
+          <Button
+            fullWidth={false}
+            size='small'
+            label={t('button.next')}
+            color='primary'
+            onClick={() => {
+              formik.submitForm();
+            }}
+          />
         </Grid>
       </Grid>
     </>

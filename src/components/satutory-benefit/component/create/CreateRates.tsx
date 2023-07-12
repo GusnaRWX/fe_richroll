@@ -1,5 +1,5 @@
-import React from 'react';
-import { IconButton, Input, Select } from '@/components/_shared/form';
+import React, { SetStateAction, Dispatch } from 'react';
+import { IconButton, Input, Select, Button } from '@/components/_shared/form';
 import { Text, Card } from '@/components/_shared/common';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
@@ -9,7 +9,6 @@ import {
   Checkbox,
   Grid,
   InputAdornment,
-  Button,
   Box,
   Typography,
   styled,
@@ -42,7 +41,11 @@ const rates = [
   },
 ];
 
-export default function CreateRates() {
+interface PropsInterface {
+  nextPage: Dispatch<SetStateAction<number>>
+}
+
+export default function CreateRates({nextPage}: PropsInterface) {
   // Translation Key
   const {t} = useTranslation();
   const t_key = 'satutory_benefit.component.form_&_detail.rates';
@@ -514,17 +517,13 @@ export default function CreateRates() {
           sx={{ justifyContent: 'flex-end', mt: '30px', gap: '15px' }}
         >
           <Button
-            sx={{ boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.5)', color: '#374151' }}
-          >
-            {t(`button.back`)}
-          </Button>
-          <Button
-            sx={{ boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.5)' }}
-            variant='contained'
-            onClick={() => formik.submitForm()}
-          >
-            {t(`button.save`)}
-          </Button>
+            fullWidth={false}
+            size='small'
+            label={t('button.back')}
+            variant='outlined'
+            color='primary'
+            onClick={() => nextPage(1)}
+          />
         </Grid>
       </>
     </>

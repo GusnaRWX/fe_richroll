@@ -78,33 +78,28 @@ function CreateNewComponent() {
         </Grid>
         <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
           <ButtonWrapper>
-            <MuiButton
-              variant='outlined'
-              size='small'
-              color='primary'
-              onClick={() => {
-                if (value == 5) {
-                  setIsExit(true);
-                  setOpen(true);
-                } else {
-                  setOpen(true);
-                }
-              }}
-            >{t(`button.cancel`)}</MuiButton>
-            <MuiButton
-              variant='contained'
-              size='small'
-              color='primary'
-              onClick={() => {
-                if (value < 2) {
-                  setValue(value + 1);
-                }
-                if (value == 2) {
-                  setIsExit(false);
-                  setOpen(true);
-                }
-              }}
-            >{t(`button.save`)}</MuiButton>
+            {value === 2 ?
+              <>
+                <MuiButton
+                  variant='outlined'
+                  size='small'
+                  color='primary'
+                  onClick={() => {
+                    setIsExit(true);
+                    setOpen(true);
+                  }}
+                >{t(`button.cancel`)}</MuiButton>
+                <MuiButton
+                  variant='contained'
+                  size='small'
+                  color='primary'
+                  onClick={() => {
+                    setIsExit(false);
+                    setOpen(true);
+                  }}
+                >{t(`button.save`)}</MuiButton>
+              </>
+              : <></>}
           </ButtonWrapper>
         </Grid>
       </Grid>
@@ -158,9 +153,9 @@ function CreateNewComponent() {
           </Stepper>
         </Box>
         <Box sx={{mt:'16px'}}>
-          {value == 0 && <CreateBasicDetailComponent />}
-          {value == 1 && <CreateDesignedTransferAccount/>}
-          {value == 2 && <CreateRates />}
+          {value == 0 && <CreateBasicDetailComponent nextPage={setValue}/>}
+          {value == 1 && <CreateDesignedTransferAccount nextPage={setValue}/>}
+          {value == 2 && <CreateRates nextPage={setValue}/>}
         </Box>
       </ContentWrapper>
 

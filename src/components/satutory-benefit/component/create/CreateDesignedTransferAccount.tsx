@@ -1,4 +1,4 @@
-import { Input } from '@/components/_shared/form';
+import { Input, Button} from '@/components/_shared/form';
 import { InfoOutlined } from '@mui/icons-material';
 import {
   Box,
@@ -11,13 +11,16 @@ import {
   FormControlLabel,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import React, { useState } from 'react';
+import React, { useState, SetStateAction, Dispatch } from 'react';
 import { useTranslation } from 'react-i18next';
-
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-export default function CreateDesignedTransferAccount() {
+interface PropsInterface {
+  nextPage: Dispatch<SetStateAction<number>>
+}
+
+export default function CreateDesignedTransferAccount({nextPage}: PropsInterface) {
   // Translation Key
   const {t} = useTranslation();
   const t_key = 'satutory_benefit.component.form_&_detail.create_designed_transfer_account';
@@ -63,6 +66,7 @@ export default function CreateDesignedTransferAccount() {
     validationSchema: validationSchema,
     onSubmit: (values) => {
       console.log(values);
+      nextPage(2);
     },
   });
 
@@ -345,6 +349,25 @@ export default function CreateDesignedTransferAccount() {
         >
           {t(`${t_key}.max_char_info`)}
         </FormHelperText>
+      </Box>
+      <Box sx={{display:'flex', gap:'12px', justifyContent:'end', mt:'30px'}}>
+        <Button
+          fullWidth={false}
+          size='small'
+          label={t('button.back')}
+          variant='outlined'
+          color='primary'
+          onClick={() => nextPage(0)}
+        />
+        <Button
+          fullWidth={false}
+          size='small'
+          label={t('button.next')}
+          color='primary'
+          onClick={() => {
+            formik.submitForm();
+          }}
+        />
       </Box>
     </>
   );
