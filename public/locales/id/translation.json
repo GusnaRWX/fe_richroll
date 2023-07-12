@@ -132,6 +132,16 @@
             "sub_condition": "Sub Kondisi"
           }
         }
+      },
+      "modal": {
+        "delete": {
+          "title": "Hapus Entri Data",
+          "text": "Anda akan menghapus komponen manfaat wajib ini. "
+        },
+        "duplicate": {
+          "title": "Konfirmasi",
+          "text": "Apakah Anda yakin ingin menggandakan profil ini?"
+        }
       }
     },
     "profile": {

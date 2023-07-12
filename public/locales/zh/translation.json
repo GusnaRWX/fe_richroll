@@ -132,6 +132,16 @@
             "sub_condition": "子条件"
           }
         }
+      },
+      "modal": {
+        "delete": {
+          "title": "删除数据条目",
+          "text": "您即将删除该法定福利部分。"
+        },
+        "duplicate": {
+          "title": "确认",
+          "text": "您确定要复制此配置文件吗？"
+        }
       }
     },
     "profile": {

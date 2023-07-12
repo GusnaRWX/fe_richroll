@@ -132,6 +132,16 @@
             "sub_condition": "Sub Syarat"
           }
         }
+      },
+      "modal": {
+        "delete": {
+          "title": "Padamkan Entri Data",
+          "text": "Anda akan memadamkan komponen faedah berkanun ini. "
+        },
+        "duplicate": {
+          "title": "Pengesahan",
+          "text": "Adakah anda pasti mahu menduplikasi profil ini?"
+        }
       }
     },
     "profile": {
