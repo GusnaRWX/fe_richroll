@@ -1,6 +1,6 @@
 import React from 'react';
-import { Grid, Typography } from '@mui/material';
-import { Input, Select, Textarea } from '@/components/_shared/form';
+import { Box, Grid, Typography } from '@mui/material';
+import { Button, Input, Select, Textarea } from '@/components/_shared/form';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
@@ -178,6 +178,23 @@ export default function CreateBasicDetailComponent() {
           </Typography>
         </Grid>
       </Grid>
+      <Box
+        component='div'
+        sx={{
+          marginTop: '16px',
+          display: 'flex',
+          width: '100%',
+          justifyContent: 'flex-end',
+          gap: '16px',
+        }}
+      >
+        <Button
+          sx={{ padding: '9px', width: 'fit-content' }}
+          label={t('button.next')}
+          variant='contained'
+          onClick={() => formik.submitForm()}
+        />
+      </Box>
     </>
   );
 }

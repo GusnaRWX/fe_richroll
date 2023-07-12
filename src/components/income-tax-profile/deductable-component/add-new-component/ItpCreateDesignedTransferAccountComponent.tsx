@@ -1,4 +1,4 @@
-import { Input } from '@/components/_shared/form';
+import { Button, Input } from '@/components/_shared/form';
 import { InfoOutlined } from '@mui/icons-material';
 import {
   Box,
@@ -351,6 +351,31 @@ export default function ItpCreateDesignedTransferAccountComponent() {
         >
           {t(`${tPath}max_char_info`)}
         </FormHelperText>
+      </Box>
+      <Box
+        component='div'
+        sx={{
+          marginTop: '16px',
+          display: 'flex',
+          width: '100%',
+          justifyContent: 'flex-end',
+          gap: '16px',
+        }}
+      >
+        <Button
+          variant='outlined'
+          sx={{
+            padding: '9px',
+            width: 'fit-content',
+          }}
+          label={t('button.back')}
+        />
+        <Button
+          sx={{ padding: '9px', width: 'fit-content' }}
+          label={t('button.next')}
+          variant='contained'
+          onClick={() => formik.submitForm()}
+        />
       </Box>
     </>
   );
