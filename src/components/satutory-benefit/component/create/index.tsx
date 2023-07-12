@@ -15,6 +15,8 @@ import { ifThenElse } from '@/utils/helper';
 import { useTranslation } from 'react-i18next';
 import { IconButton } from '@/components/_shared/form';
 import { ArrowBack } from '@mui/icons-material';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 
 // Import Create Component :
 import CreateBasicDetailComponent from './CreateBasicDetail';
@@ -46,6 +48,29 @@ function CreateNewComponent() {
   const [value, setValue] = useState(0);
   const [open, setOpen] = useState(false);
   const [isExit, setIsExit] = useState(true);
+
+  const validationSchema = Yup.object({
+    basicDetail: Yup.object({
+      satutoryName: Yup.string().required('This field is Required!'),
+      country: Yup.string().required('This field is Required!'),
+      province: Yup.string(),
+      city: Yup.string(),
+      subDistrict: Yup.string(),
+      citation: Yup.string(),
+      internalNotes: Yup.string(),
+      externalNotes: Yup.string(),
+    })
+  });
+
+  const formik = useFormik({
+    initialValues: {
+      basicDetail: {},
+      dta: {},
+      rates: {}
+    },
+    onSubmit: (value) => console.log(value),
+    validationSchema: validationSchema
+  });
 
   const handleClose = () => {
     setOpen(false);
@@ -153,9 +178,9 @@ function CreateNewComponent() {
           </Stepper>
         </Box>
         <Box sx={{mt:'16px'}}>
-          {value == 0 && <CreateBasicDetailComponent nextPage={setValue}/>}
-          {value == 1 && <CreateDesignedTransferAccount nextPage={setValue}/>}
-          {value == 2 && <CreateRates nextPage={setValue}/>}
+          {value == 0 && <CreateBasicDetailComponent nextPage={setValue} formik={formik} />}
+          {value == 1 && <CreateDesignedTransferAccount nextPage={setValue} />}
+          {value == 2 && <CreateRates nextPage={setValue} />}
         </Box>
       </ContentWrapper>
 

@@ -1,15 +1,17 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, {SetStateAction, Dispatch} from 'react';
 import { Grid, Typography } from '@mui/material';
 import {  Input, Select, Textarea, Button } from '@/components/_shared/form';
-import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
 
 interface PropsInterface {
   nextPage: Dispatch<SetStateAction<number>>
+  formik
 }
 
-export default function CreateBasicDetailComponent({nextPage}: PropsInterface) {
+export default function CreateBasicDetailComponent({nextPage, formik}: PropsInterface) {
   // Translation Key
   const {t} = useTranslation();
   const t_key = 'satutory_benefit.component.form_&_detail.create_basic_detail';
@@ -20,34 +22,34 @@ export default function CreateBasicDetailComponent({nextPage}: PropsInterface) {
     { value: '3', label: 'Dummy 3' },
   ];
 
-  const validationSchema = Yup.object({
-    satutoryName: Yup.string().required('This field is Required!'),
-    country: Yup.string().required('This field is Required!'),
-    province: Yup.string(),
-    city: Yup.string(),
-    subDistrict: Yup.string(),
-    citation: Yup.string(),
-    internalNotes: Yup.string(),
-    externalNotes: Yup.string(),
-  });
+  // const validationSchema = Yup.object({
+  //   satutoryName: Yup.string().required('This field is Required!'),
+  //   country: Yup.string().required('This field is Required!'),
+  //   province: Yup.string(),
+  //   city: Yup.string(),
+  //   subDistrict: Yup.string(),
+  //   citation: Yup.string(),
+  //   internalNotes: Yup.string(),
+  //   externalNotes: Yup.string(),
+  // });
 
-  const formik = useFormik({
-    initialValues: {
-      satutoryName: '',
-      country: '',
-      province: '',
-      city: '',
-      subDistrict: '',
-      citation: '',
-      internalNotes: '',
-      externalNotes: '',
-    },
-    validationSchema: validationSchema,
-    onSubmit: (values) => {
-      console.log(values);
-      nextPage(1);
-    }
-  });
+  // const formik = useFormik({
+  //   initialValues: {
+  //     satutoryName: '',
+  //     country: '',
+  //     province: '',
+  //     city: '',
+  //     subDistrict: '',
+  //     citation: '',
+  //     internalNotes: '',
+  //     externalNotes: '',
+  //   },
+  //   validationSchema: validationSchema,
+  //   onSubmit: (values) => {
+  //     console.log(values);
+  //     nextPage(1);
+  //   }
+  // });
 
   return (
     <>
@@ -59,7 +61,7 @@ export default function CreateBasicDetailComponent({nextPage}: PropsInterface) {
             withAsterisk
             size='small'
             value={formik.values.satutoryName}
-            onChange={(e) => formik.setFieldValue('satutoryName', e.target.value)}
+            onChange={(e) => formik.setFieldValue('basicDetail.satutoryName', e.target.value)}
           />
           {formik.touched.satutoryName && formik.errors.satutoryName ? (
             <Typography sx={{color: '#DC2626',}}>{formik.errors.satutoryName}</Typography>
@@ -77,7 +79,7 @@ export default function CreateBasicDetailComponent({nextPage}: PropsInterface) {
             fullWidth
             options={Dummyoption}
             value={formik.values.country}
-            onChange={(e) => formik.setFieldValue('country', e.target.value)}
+            onChange={(e) => formik.setFieldValue('basicDetail.country', e.target.value)}
           />
           {formik.touched.country && formik.errors.country ? (
             <Typography sx={{color: '#DC2626'}}>{formik.errors.country}</Typography>
@@ -91,7 +93,7 @@ export default function CreateBasicDetailComponent({nextPage}: PropsInterface) {
             fullWidth
             options={Dummyoption}
             value={formik.values.province}
-            onChange={(e) => formik.setFieldValue('province', e.target.value)}
+            onChange={(e) => formik.setFieldValue('basicDetail.province', e.target.value)}
           />
         </Grid>
       </Grid>
@@ -105,7 +107,7 @@ export default function CreateBasicDetailComponent({nextPage}: PropsInterface) {
             fullWidth
             options={Dummyoption}
             value={formik.values.city}
-            onChange={(e) => formik.setFieldValue('city', e.target.value)}
+            onChange={(e) => formik.setFieldValue('basicDetail.city', e.target.value)}
           />
         </Grid>
         <Grid item xs={6} md={6} lg={6} xl={6}>
@@ -116,7 +118,7 @@ export default function CreateBasicDetailComponent({nextPage}: PropsInterface) {
             fullWidth
             options={Dummyoption}
             value={formik.values.subDistrict}
-            onChange={(e) => formik.setFieldValue('subDistrict', e.target.value)}
+            onChange={(e) => formik.setFieldValue('basicDetail.subDistrict', e.target.value)}
           />
         </Grid>
       </Grid>
@@ -128,7 +130,7 @@ export default function CreateBasicDetailComponent({nextPage}: PropsInterface) {
             minRows={4}
             style={{ resize: 'vertical' }}
             value={formik.values.citation}
-            onChange={(e) => formik.setFieldValue('citation', e.target.value)}
+            onChange={(e) => formik.setFieldValue('basicDetail.citation', e.target.value)}
           />
           <Typography
             style={{
@@ -149,7 +151,7 @@ export default function CreateBasicDetailComponent({nextPage}: PropsInterface) {
             minRows={4}
             style={{ resize: 'vertical' }}
             value={formik.values.internalNotes}
-            onChange={(e) => formik.setFieldValue('internalNotes', e.target.value)}
+            onChange={(e) => formik.setFieldValue('basicDetail.internalNotes', e.target.value)}
           />
           <Typography
             style={{
@@ -170,7 +172,7 @@ export default function CreateBasicDetailComponent({nextPage}: PropsInterface) {
             minRows={4}
             style={{ resize: 'vertical' }}
             value={formik.values.externalNotes}
-            onChange={(e) => formik.setFieldValue('externalNotes', e.target.value)}
+            onChange={(e) => formik.setFieldValue('basicDetail.externalNotes', e.target.value)}
           />
           <Typography
             style={{
