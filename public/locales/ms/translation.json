@@ -132,6 +132,16 @@
             "sub_condition": "Sub Syarat"
           }
         }
+      },
+      "modal": {
+        "delete": {
+          "title": "Padamkan Entri Data",
+          "text": "Anda akan memadamkan komponen faedah berkanun ini. "
+        },
+        "duplicate": {
+          "title": "Pengesahan",
+          "text": "Adakah anda pasti mahu menduplikasi profil ini?"
+        }
       }
     },
     "profile": {
@@ -278,6 +288,11 @@
         "cancel": {
           "title": "Jimat & keluar",
           "description": "Anda akan menghentikan proses dan disimpan dalam Pembantu Gaji. Adakah anda pasti menghentikan proses tersebut?"
+        },
+        "add_deductable": {
+          "title": "Pilih Komponen Boleh Potong Cukai",
+          "component_name": "Nama Komponen",
+          "component_condition": "Keadaan Komponen"
         }
       }
     }

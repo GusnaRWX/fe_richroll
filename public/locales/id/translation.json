@@ -132,6 +132,16 @@
             "sub_condition": "Sub Kondisi"
           }
         }
+      },
+      "modal": {
+        "delete": {
+          "title": "Hapus Entri Data",
+          "text": "Anda akan menghapus komponen manfaat wajib ini. "
+        },
+        "duplicate": {
+          "title": "Konfirmasi",
+          "text": "Apakah Anda yakin ingin menggandakan profil ini?"
+        }
       }
     },
     "profile": {
@@ -278,6 +288,11 @@
         "cancel": {
           "title": "Simpan & keluar",
           "description": "Anda akan menghentikan prosesnya, dan disimpan di Payroll Assistant. Apakah Anda yakin akan menghentikan prosesnya?"
+        },
+        "add_deductable": {
+          "title": "Pilih Komponen yang Dapat Dikurangi Pajak",
+          "component_name": "nama komponen",
+          "component_condition": "Kondisi Komponen"
         }
       }
     }

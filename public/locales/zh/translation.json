@@ -132,6 +132,16 @@
             "sub_condition": "子条件"
           }
         }
+      },
+      "modal": {
+        "delete": {
+          "title": "删除数据条目",
+          "text": "您即将删除该法定福利部分。"
+        },
+        "duplicate": {
+          "title": "确认",
+          "text": "您确定要复制此配置文件吗？"
+        }
       }
     },
     "profile": {
@@ -278,6 +288,11 @@
         "cancel": {
           "title": "节省 & 出口",
           "description": "您将停止该过程，并保存在薪资助手中。您确定要停止该进程吗？"
+        },
+        "add_deductable": {
+          "title": "选择可扣税部分",
+          "component_name": "组件名称",
+          "component_condition": "组件状况"
         }
       }
     }

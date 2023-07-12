@@ -379,8 +379,8 @@ export default function ItpDeductableComponentDetailComponent() {
         type='delete'
         open={DeleteConfirmation}
         handleClose={() => setDeleteConfirmation(false)}
-        title='Delete Data Entry'
-        content='You are about to delete this statutory benefit component. This action cannot be undone.'
+        title={t('income_tax_profile.deductable_component.modal.delete.title')}
+        content={t('income_tax_profile.deductable_component.modal.delete.text')}
         withCallback
         noChange={true}
         callback={() => setDeleteConfirmation(false)}
@@ -388,8 +388,8 @@ export default function ItpDeductableComponentDetailComponent() {
       <ConfirmationModal
         open={DuplicateConfirmation}
         handleClose={() => setDuplicateConfirmation(false)}
-        title='Confirmation'
-        content='Are you sure you want to duplicate this profile ?'
+        title={t('income_tax_profile.deductable_component.modal.duplicate.title')}
+        content={t('income_tax_profile.deductable_component.modal.duplicate.text')}
         withCallback
         noChange={true}
         callback={() => setDuplicateConfirmation(false)}

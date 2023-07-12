@@ -135,6 +135,16 @@
             "sub_condition" : "Sub Condition"
           }
         }
+      },
+      "modal": {
+        "delete": {
+          "title": "Delete Data Entry",
+          "text": "You are about to delete this statutory benefit component. This action cannot be undone."
+        },
+        "duplicate": {
+          "title": "Confirmation",
+          "text": "Are you sure you want to duplicate this profile ?"
+        }
       }
     },
     "profile": {
@@ -281,6 +291,11 @@
         "cancel": {
           "title": "Save & Exit",
           "description": "You will stop the process, and saved in Payroll Assistant Are you sure to stop the process?"
+        },
+        "add_deductable": {
+          "title": "Select Tax Deductable Components",
+          "component_name": "Component Name",
+          "component_condition": "Component Condition"
         }
       }
     }

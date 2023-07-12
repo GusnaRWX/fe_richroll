@@ -25,6 +25,7 @@ interface ItpEditDesignedTransferAccountComponentProps {
 export default function ItpEditDesignedTransferAccountComponent({ setValue }: ItpEditDesignedTransferAccountComponentProps) {
   const {t} = useTranslation();
   const [account, setAccount] = useState('central');
+  const tPath = 'income_tax_profile.deductable_component.add_new_component.form.create_dta.';
 
   const AsteriskComponent = styled('span')(({ theme }) => ({
     color: theme.palette.error.main,
@@ -84,7 +85,7 @@ export default function ItpEditDesignedTransferAccountComponent({ setValue }: It
       <Typography
         style={{ color: '#223567', fontWeight: 700, fontSize: '16px' }}
       >
-        Bank Information
+        {t(`${tPath}title`)}
       </Typography>
       <Box
         component='div'
@@ -95,17 +96,17 @@ export default function ItpEditDesignedTransferAccountComponent({ setValue }: It
             <FormControlLabel
               value='central'
               control={<Radio />}
-              label='Central Account'
+              label={t(`${tPath}type_option.central_account`)}
             />
             <FormControlLabel
               value='individual'
               control={<Radio />}
-              label='Individual Account'
+              label={t(`${tPath}type_option.individual_account`)}
             />
             <FormControlLabel
               value='company'
               control={<Radio />}
-              label='Company Account Only'
+              label={t(`${tPath}type_option.company_account_only`)}
             />
           </RadioGroup>
         </Box>
@@ -131,8 +132,7 @@ export default function ItpEditDesignedTransferAccountComponent({ setValue }: It
             color: '#223567',
           }}
         >
-          The Designated Transfer Account is added manually to each employee’s
-          profile
+          {t(`${tPath}message`)}
         </Typography>
       </Box>
 
@@ -142,7 +142,7 @@ export default function ItpEditDesignedTransferAccountComponent({ setValue }: It
             component='div'
             sx={{ color: '#374151', fontWeight: 400 }}
           >
-            Bank <AsteriskComponent>*</AsteriskComponent>
+            {t(`${tPath}bank`)} <AsteriskComponent>*</AsteriskComponent>
           </Typography>
 
           <Select
@@ -174,12 +174,11 @@ export default function ItpEditDesignedTransferAccountComponent({ setValue }: It
             component='div'
             sx={{ color: '#374151', fontWeight: 400 }}
           >
-            Bank Account Holder`s Name &nbsp;
-            <AsteriskComponent>*</AsteriskComponent>
+            {t(`${tPath}bank_account_holders_name`)} <AsteriskComponent>*</AsteriskComponent>
           </Typography>
           <Input
             size='small'
-            placeholder='Input Bank Account Holders Name'
+            placeholder={t(`${tPath}bank_account_holders_name_placeholder`)}
             disabled={account !== 'central'}
             sx={
               account !== 'central'
@@ -204,11 +203,11 @@ export default function ItpEditDesignedTransferAccountComponent({ setValue }: It
             component='div'
             sx={{ color: '#374151', fontWeight: 400 }}
           >
-            Bank Account No <AsteriskComponent>*</AsteriskComponent>
+            {t(`${tPath}bank_account_no`)} <AsteriskComponent>*</AsteriskComponent>
           </Typography>
           <Input
             size='small'
-            placeholder='Input Bank Account No.'
+            placeholder={t(`${tPath}bank_account_no_placeholder`)}
             disabled={account !== 'central'}
             sx={
               account !== 'central'
@@ -239,11 +238,11 @@ export default function ItpEditDesignedTransferAccountComponent({ setValue }: It
               component='div'
               sx={{ color: '#374151', fontWeight: 400 }}
             >
-              Bank Code
+              {t(`${tPath}bank_code`)}
             </Typography>
             <Input
               size='small'
-              placeholder='Input Bank Code'
+              placeholder={t(`${tPath}bank_code_placeholder`)}
               disabled={account !== 'central'}
               sx={
                 account !== 'central'
@@ -261,11 +260,11 @@ export default function ItpEditDesignedTransferAccountComponent({ setValue }: It
               component='div'
               sx={{ color: '#374151', fontWeight: 400 }}
             >
-              Branch Code
+              {t(`${tPath}branch_code`)}
             </Typography>
             <Input
               size='small'
-              placeholder='Input Branch Code'
+              placeholder={t(`${tPath}branch_code_placeholder`)}
               disabled={account !== 'central'}
               sx={
                 account !== 'central'
@@ -290,12 +289,12 @@ export default function ItpEditDesignedTransferAccountComponent({ setValue }: It
             component='div'
             sx={{ color: '#374151', fontWeight: 400 }}
           >
-            Branch Name
+            {t(`${tPath}branch_name`)}
           </Typography>
 
           <Input
             size='small'
-            placeholder='Input Branch Name'
+            placeholder={t(`${tPath}branch_name_placeholder`)}
             disabled={account !== 'central'}
             sx={
               account !== 'central'
@@ -314,12 +313,12 @@ export default function ItpEditDesignedTransferAccountComponent({ setValue }: It
             component='div'
             sx={{ color: '#374151', fontWeight: 400 }}
           >
-            Swift Code
+            {t(`${tPath}swift_code`)}
           </Typography>
 
           <Input
             size='small'
-            placeholder='Input Swift Code'
+            placeholder={t(`${tPath}swift_code_placeholder`)}
             disabled={account !== 'central'}
             sx={
               account !== 'central'
@@ -340,11 +339,11 @@ export default function ItpEditDesignedTransferAccountComponent({ setValue }: It
           component='div'
           sx={{ marginBottom: '7px', color: '#374151', fontWeight: 700 }}
         >
-          Notes
+          {t(`${tPath}notes`)}
         </Typography>
         <Input
           size='small'
-          placeholder='Input Notes'
+          placeholder={t(`${tPath}notes_placeholder`)}
           required
           sx={{
             color: '#6B7280',
@@ -356,7 +355,7 @@ export default function ItpEditDesignedTransferAccountComponent({ setValue }: It
         <FormHelperText
           sx={{ fontWeight: 500, color: '#6B7280', fontSize: '14px' }}
         >
-          Max.100 Character
+          {t(`${tPath}max_char_info`)}
         </FormHelperText>
         <Grid item xs={12} md={12} lg={12} xl={12}>
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap:'15px' }}>

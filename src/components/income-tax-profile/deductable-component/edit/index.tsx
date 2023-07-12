@@ -5,6 +5,7 @@ import { styled } from '@mui/material/styles';
 import { Typography, Box, Paper, Tabs, Tab } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import { useRouter } from 'next/router';
+import { useTranslation } from 'react-i18next';
 
 // Import Create Component
 import ItpEditBasicDetailComponent from './ItpEditBasicDetailComponent';
@@ -13,6 +14,8 @@ import ItpEditRatesComponent from './ItpEditRatesComponent';
 
 export default function ItpEditNewComponentComponent() {
   const router = useRouter();
+  const {t} = useTranslation();
+  const tPath = 'income_tax_profile.deductable_component.add_new_component.';
 
   const Header = styled('div')({
     display: 'flex',
@@ -80,7 +83,7 @@ export default function ItpEditNewComponentComponent() {
               width: '250px',
             }}
           >
-            Add New Component
+            {t(`${tPath}title`)}
           </Typography>
         </HeaderPageTitle>
       </Header>
@@ -88,9 +91,9 @@ export default function ItpEditNewComponentComponent() {
         <Box sx={{px:'48px'}}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs value={value} onChange={handleChange} aria-label='basic tabs'>
-            <Tab label='Basic Detail' {...a11yProps(0)} />
-            <Tab label='Designated Transfer Account' {...a11yProps(1)} />
-            <Tab label='Rates' {...a11yProps(2)} />
+            <Tab label={t(`${tPath}form.wizard_option.basic_detail`)} {...a11yProps(0)} />
+            <Tab label={t(`${tPath}form.wizard_option.designed_transfer_account`)} {...a11yProps(1)} />
+            <Tab label={t(`${tPath}form.wizard_option.rates`)} {...a11yProps(2)} />
           </Tabs>
         </Box>
         </Box>

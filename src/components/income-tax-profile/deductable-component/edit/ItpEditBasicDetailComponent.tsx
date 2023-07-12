@@ -11,6 +11,7 @@ interface ItpEditBasicDetailComponentProps {
 
 export default function ItpEditBasicDetailComponent({setValue}: ItpEditBasicDetailComponentProps) {
   const {t} = useTranslation();
+  const tPath = 'income_tax_profile.deductable_component.add_new_component.form.create_basic_detail.';
 
   const Dummyoption = [
     { value: '1', label: 'Dummy 1' },
@@ -53,8 +54,8 @@ export default function ItpEditBasicDetailComponent({setValue}: ItpEditBasicDeta
         <Grid container spacing={2}>
           <Grid item xs={12} md={12} lg={6} xl={6}>
             <Input
-              placeholder='Input Component Name'
-              customLabel='Component Name'
+              placeholder={t(`${tPath}name_placeholder`)}
+              customLabel={t(`${tPath}name`)}
               withAsterisk
               size='small'
               value={formik.values.componentName}
@@ -70,7 +71,7 @@ export default function ItpEditBasicDetailComponent({setValue}: ItpEditBasicDeta
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Select
               placeholder='Select Country'
-              customLabel='Country'
+              customLabel={t(`${tPath}country`)}
               withAsterisk
               size='small'
               fullWidth
@@ -85,7 +86,7 @@ export default function ItpEditBasicDetailComponent({setValue}: ItpEditBasicDeta
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Select
               placeholder='Select Province'
-              customLabel='Province'
+              customLabel={t(`${tPath}province`)}
               size='small'
               fullWidth
               options={Dummyoption}
@@ -99,7 +100,7 @@ export default function ItpEditBasicDetailComponent({setValue}: ItpEditBasicDeta
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Select
               placeholder='Select City'
-              customLabel='City'
+              customLabel={t(`${tPath}city`)}
               size='small'
               fullWidth
               options={Dummyoption}
@@ -110,7 +111,7 @@ export default function ItpEditBasicDetailComponent({setValue}: ItpEditBasicDeta
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Select
               placeholder='Select Country'
-              customLabel='Sub-District'
+              customLabel={t(`${tPath}sub_district`)}
               size='small'
               fullWidth
               options={Dummyoption}
@@ -123,7 +124,7 @@ export default function ItpEditBasicDetailComponent({setValue}: ItpEditBasicDeta
         <Grid container spacing={2} style={{marginTop: '12px'}}>
           <Grid item xs={12} md={12} lg={12} xl={12}>
             <Textarea
-              customLabel='Citation'
+              customLabel={t(`${tPath}citation`)}
               minRows={4}
               style={{ resize: 'vertical' }}
               value={formik.values.citation}
@@ -136,7 +137,7 @@ export default function ItpEditBasicDetailComponent({setValue}: ItpEditBasicDeta
                 color: '#6B7280',
               }}
             >
-            Max. 120 Character
+              {t(`${tPath}max_char_info`)}
             </Typography>
           </Grid>
         </Grid>
@@ -144,7 +145,7 @@ export default function ItpEditBasicDetailComponent({setValue}: ItpEditBasicDeta
         <Grid container spacing={2} style={{marginTop: '12px'}}>
           <Grid item xs={12} md={12} lg={12} xl={12}>
             <Textarea
-              customLabel='Internal Notes'
+              customLabel={t(`${tPath}internal_notes`)}
               minRows={4}
               style={{ resize: 'vertical' }}
               value={formik.values.internalNotes}
@@ -157,7 +158,7 @@ export default function ItpEditBasicDetailComponent({setValue}: ItpEditBasicDeta
                 color: '#6B7280',
               }}
             >
-            Max. 120 Character
+              {t(`${tPath}max_char_info`)}
             </Typography>
           </Grid>
         </Grid>
@@ -165,7 +166,7 @@ export default function ItpEditBasicDetailComponent({setValue}: ItpEditBasicDeta
         <Grid container spacing={2} style={{marginTop: '12px'}}>
           <Grid item xs={12} md={12} lg={12} xl={12}>
             <Textarea
-              customLabel='External Notes'
+              customLabel={t(`${tPath}external_notes`)}
               minRows={4}
               style={{ resize: 'vertical' }}
               value={formik.values.externalNotes}
@@ -178,7 +179,7 @@ export default function ItpEditBasicDetailComponent({setValue}: ItpEditBasicDeta
                 color: '#6B7280',
               }}
             >
-            Max. 120 Character
+              {t(`${tPath}max_char_info`)}
             </Typography>
           </Grid>
         </Grid>
