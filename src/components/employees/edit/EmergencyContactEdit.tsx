@@ -72,7 +72,7 @@ function EmergencyContactEdit({ refProp, nextPage, setValues, emergencyValues, s
   };
 
   const checkRelationship = (value: unknown) => {
-    if ((value as string)?.length === 0) {
+    if ((value as string)?.length === 0 || typeof value === 'undefined') {
       return <Text title='Select Relationship' color='grey.400' />;
     }
     const selected = relationshipItems?.find(item => item.value === value);
