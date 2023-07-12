@@ -89,7 +89,7 @@ function OvertimeSummaryEditForm({editOpen, handleEditClose, callback, item}: Ed
         />
         <NameWrapper>
           <Typography fontSize='18px'>{item?.employee?.name}</Typography>
-          <Typography fontSize='14px'>{item?.employee?.department || '-'}</Typography>
+          <Typography fontSize='14px'>{item?.employee?.department === null ? '-' : item?.employee?.department?.name}</Typography>
         </NameWrapper>
       </AvatarWrapper>
       <Grid container mb='1rem' spacing={2}>

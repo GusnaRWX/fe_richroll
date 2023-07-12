@@ -15,8 +15,12 @@ export declare namespace AttendanceLeave {
   interface EmployeeType {
     employeeID: string | null,
     name: string,
-    department: string | null,
+    department: DepartmentType,
     picture: string | null,
+  }
+
+  interface DepartmentType {
+    name: string;
   }
 
   interface AttendanceType {
