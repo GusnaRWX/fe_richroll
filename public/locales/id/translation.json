@@ -270,6 +270,14 @@
           "title": "Tanggal Pengarsipan",
           "description": "Masukkan Tanggal Efektif Pengarsipan",
           "checkbox": "Ganti dengan Profil Baru"
+        },
+        "mark_all": {
+          "title": "Tandai semua sudah dibayar dan Selesai",
+          "description": "Semua pencairan akan ditandai sebagai dibayar dan menyelesaikan proses Asisten Penggajian"
+        },
+        "cancel": {
+          "title": "Simpan & keluar",
+          "description": "Anda akan menghentikan prosesnya, dan disimpan di Payroll Assistant. Apakah Anda yakin akan menghentikan prosesnya?"
         }
       }
     }

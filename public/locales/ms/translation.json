@@ -270,6 +270,14 @@
           "title": "Tarikh Arkib",
           "description": "Input Tarikh Arkib Berkuatkuasa",
           "checkbox": "Gantikan dengan Profil Baharu"
+        },
+        "mark_all": {
+          "title": "Tandakan semua telah dibayar dan Selesai",
+          "description": "Semua pengeluaran akan ditanda sebagai berbayar dan menyelesaikan proses Pembantu Gaji"
+        },
+        "cancel": {
+          "title": "Jimat & keluar",
+          "description": "Anda akan menghentikan proses dan disimpan dalam Pembantu Gaji. Adakah anda pasti menghentikan proses tersebut?"
         }
       }
     }
