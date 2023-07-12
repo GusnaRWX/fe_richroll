@@ -196,7 +196,7 @@ function EmployeeEditComponent() {
     templateId: employee?.employeeCnbDetail?.id,
     name: employee?.employeeCnbDetail?.name,
     compensationComponentId: employee?.employeeCnbDetail?.base?.component?.id,
-    idBaseCompensationComponent: employee?.employeeCnbDetail?.base?.id,
+    // idBaseCompensationComponent: employee?.employeeCnbDetail?.base?.id,
     period: employee?.employeeCnbDetail?.base?.term?.id,
     rateOrAmount: employee?.employeeCnbDetail?.base?.amount,
     percentage: '',
@@ -212,6 +212,9 @@ function EmployeeEditComponent() {
     }),
     overtime: employee?.employeeCnbDetail?.overtime
   });
+
+  console.log(cnbValue, 'jadah');
+
   const [valueWorkSchedule, setValueWorkSchedule] = useState<any>();
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -295,17 +298,20 @@ function EmployeeEditComponent() {
     });
   };
 
+  console.log(employee?.employeeCnbDetail?.base?.id);
+
   const handleClickUpdateCnb = () => {
     const lastPayload = {
-      templateID: '',
+      templateID: cnbValue?.templateId,
       name: cnbValue?.name,
       overtime: +cnbValue?.overtime,
-      base: { id: cnbValue?.idBaseCompensationComponent, ...dynamicPayloadBaseCnb(option?.listBaseCompensation, '1', cnbValue) },
+      base: { id: employee?.employeeCnbDetail?.base?.id, ...dynamicPayloadBaseCnb(option?.listBaseCompensation, cnbValue?.compensationComponentId, cnbValue) },
       supplementaries: cnbValue?.supplementary?.map((val) => {
         console.log(val, 'val');
         return dynamicPayloadBaseCnb(option?.listSuppCompensation, '5', val);
       })
     };
+    console.log(lastPayload, ' here');
     dispatch({
       type: patchEmployeeCnbRequested.toString(),
       payload: {

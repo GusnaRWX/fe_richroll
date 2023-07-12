@@ -20,6 +20,7 @@ interface CnbFormEditProps {
 }
 
 const CnbFormEdit = ({ cnbValues, refProp, setCnbValue, cnbValuesForm }: CnbFormEditProps) => {
+  console.log(cnbValuesForm, 'here');
   const option = useAppSelectors(state => state.option);
   const [title, setTitle] = useState('');
   const [editMode, setEditMode] = useState(false);
@@ -27,42 +28,38 @@ const CnbFormEdit = ({ cnbValues, refProp, setCnbValue, cnbValuesForm }: CnbForm
   const dispatch = useAppDispatch();
   const formik = useFormik({
     initialValues: {
-      templateId: '',
-      name: '',
-      compensationComponentId: '',
-      period: '',
-      rateOrAmount: '',
-      percentage: '',
-      taxStatus: '',
-      supplementary: [],
-      overtime: ''
+      templateId: cnbValuesForm?.templateId,
+      name: cnbValuesForm?.name,
+      compensationComponentId: cnbValuesForm?.compensationComponentId,
+      period: cnbValuesForm?.period,
+      rateOrAmount: cnbValuesForm?.rateOrAmount,
+      percentage: cnbValuesForm?.percentage,
+      taxStatus: cnbValuesForm?.taxStatus,
+      supplementary: cnbValuesForm?.supplementary,
+      overtime: cnbValuesForm?.overtime
     },
     onSubmit: (_val) => {
       console.log(_val);
     }
   });
 
-  // useEffect(() => {
-  //   if (cnbValues) {
-  //     formik.setFieldValue('templateId', cnbValues?.id);
-  //     formik.setFieldValue('name', cnbValues?.name);
-  //     formik.setFieldValue('compensationComponentId', cnbValues?.base?.component?.id);
-  //     formik.setFieldValue('period', cnbValues?.base?.term?.id);
-  //     formik.setFieldValue('rateOrAmount', cnbValues?.base?.amout || '');
-  //     formik.setFieldValue('taxStatus', cnbValues?.base?.isTaxable ? 'true' : 'false');
-  //     formik.setFieldValue('overtime', cnbValues?.overtime);
-  //     formik.setFieldValue('supplementary', cnbValues?.supplementaries?.map(val => {
-  //       return {
-  //         compensationComponentId: val?.component?.id,
-  //         period: val?.term?.id,
-  //         rateOrAmount: '',
-  //         taxStatus: val?.isTaxable ? 'true' : 'false',
-  //         id: val?.id
-  //       };
-  //     }));
-  //   }
+  useEffect(() => {
+    if (cnbValuesForm) {
+      formik.setFieldValue('templateId', cnbValuesForm?.templateId);
+      formik.setFieldValue('name', cnbValuesForm?.name);
+      formik.setFieldValue('compensationComponentId', cnbValuesForm?.compensationComponentId);
+      formik.setFieldValue('period', cnbValuesForm?.period);
+      formik.setFieldValue('rateOrAmount', cnbValuesForm?.rateOrAmount);
+      formik.setFieldValue('percentage', cnbValuesForm?.percentage);
+      formik.setFieldValue('taxStatus', cnbValuesForm?.taxStatus);
+      formik.setFieldValue('supplementary', cnbValuesForm?.supplementary);
+      formik.setFieldValue('overtime', cnbValuesForm?.overtime);
+    }
+  }, [cnbValuesForm]);
 
-  // }, [cnbValues]);
+  useEffect(() => {
+    setCnbValue(formik.values);
+  }, [formik.values]);
 
   useEffect(() => {
     const fetchData = () => {
@@ -273,6 +270,7 @@ const CnbFormEdit = ({ cnbValues, refProp, setCnbValue, cnbValuesForm }: CnbForm
                   withAsterisk
                   size='small'
                   fullWidth
+                  value={formik.values.rateOrAmount}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position='start'>Rp.</InputAdornment>
@@ -289,6 +287,7 @@ const CnbFormEdit = ({ cnbValues, refProp, setCnbValue, cnbValuesForm }: CnbForm
                     fullWidth
                     customLabel='Rate'
                     // variant='outlined'
+                    // value={formik.values.}
                     size='small'
                     type='number'
                     InputProps={{
@@ -305,6 +304,7 @@ const CnbFormEdit = ({ cnbValues, refProp, setCnbValue, cnbValuesForm }: CnbForm
                   fullWidth
                   customLabel=''
                   size='small'
+                  value={formik.values.period}
                   options={option?.listTermin || []}
                 />
               </Grid>
