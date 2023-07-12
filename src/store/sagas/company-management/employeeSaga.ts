@@ -605,7 +605,7 @@ function* fetchPatchEmergencyContact(action: AnyAction) {
         phoneNumber: action?.payload?.emergencyContactPatch?.emergency?.phoneNumberPrimary
       },
       secondary: {
-        id: action?.payload?.emergencyContactPatch?.emergency?.secondaryId,
+        // id: action?.payload?.emergencyContactPatch?.emergency?.secondaryId ?? '',
         name: action?.payload?.emergencyContactPatch?.emergency?.fullNameSecondary,
         relationship: +action?.payload?.emergencyContactPatch?.emergency?.relationSecondary,
         phoneNumberPrefix: action?.payload?.emergencyContactPatch?.emergency?.phoneNumberPrefixSecondary,
@@ -625,7 +625,12 @@ function* fetchPatchEmergencyContact(action: AnyAction) {
         ...emergencyPayload,
         employeeID: payload.employeeID,
         primary: payload.primary,
-        secondary: payload.secondary
+        secondary: {
+          ...payload.secondary,
+          ...(action?.payload?.emergencyContactPatch?.emergency?.secondaryId
+            ? { id: action?.payload?.emergencyContactPatch?.emergency?.secondaryId }
+            : {}),
+        }
       };
     }
 
