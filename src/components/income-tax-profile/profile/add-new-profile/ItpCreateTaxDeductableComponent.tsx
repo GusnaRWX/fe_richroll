@@ -113,7 +113,7 @@ export default function  ItpCreateTaxDeductableComponent() {
                 label={t('button.edit')}
                 sx={{
                   backgroundColor: '#8DD0B8',
-                  width: {xs: '68px', md: '73px'},
+                  width: 'fit-content',
                   height: {xs: '29px', md: '30px'},
                   padding:{xs: '2px', md:'8px'},
                   color: ' white',
@@ -124,7 +124,7 @@ export default function  ItpCreateTaxDeductableComponent() {
                 startIcon={<DeleteIcon />}
                 label={t('button.delete')}
                 sx={{
-                  width: {xs: '68px', md: '73px'},
+                  width: 'fit-content',
                   height: {xs: '29px', md: '30px'},
                   padding:{xs: '2px', md:'8px'},
                   backgroundColor: '#FEE2E2',
@@ -239,7 +239,7 @@ export default function  ItpCreateTaxDeductableComponent() {
                 label={t('button.edit')}
                 sx={{
                   backgroundColor: '#8DD0B8',
-                  width: {xs: '68px', md: '73px'},
+                  width: 'fit-content',
                   height: {xs: '29px', md: '30px'},
                   padding:{xs: '2px', md:'8px'},
                   color: ' white',
@@ -250,7 +250,7 @@ export default function  ItpCreateTaxDeductableComponent() {
                 startIcon={<DeleteIcon />}
                 label={t('button.delete')}
                 sx={{
-                  width: {xs: '68px', md: '73px'},
+                  width: 'fit-content',
                   height: {xs: '29px', md: '30px'},
                   padding:{xs: '2px', md:'8px'},
                   backgroundColor: '#FEE2E2',
@@ -340,7 +340,7 @@ export default function  ItpCreateTaxDeductableComponent() {
                 label={t('button.edit')}
                 sx={{
                   backgroundColor: '#8DD0B8',
-                  width: {xs: '68px', md: '73px'},
+                  width: 'fit-content',
                   height: {xs: '29px', md: '30px'},
                   padding:{xs: '2px', md:'8px'},
                   color: ' white',
@@ -351,7 +351,7 @@ export default function  ItpCreateTaxDeductableComponent() {
                 startIcon={<DeleteIcon />}
                 label={t('button.delete')}
                 sx={{
-                  width: {xs: '68px', md: '73px'},
+                  width: 'fit-content',
                   height: {xs: '29px', md: '30px'},
                   padding:{xs: '2px', md:'8px'},
                   backgroundColor: '#FEE2E2',
@@ -400,7 +400,7 @@ export default function  ItpCreateTaxDeductableComponent() {
               startIcon={<AddIcon />}
               label={t('button.deductable')}
               sx={{
-                width: '136px',
+                width: 'fit-content',
                 fontSize: '14px',
                 backgroundColor: '#8DD0B8',
               }}
@@ -421,12 +421,12 @@ export default function  ItpCreateTaxDeductableComponent() {
               variant='outlined'
               sx={{
                 padding: '9px',
-                width: '65px',
+                width: 'fit-content',
               }}
               label={t('button.back')}
             />
             <Button
-              sx={{ padding: '9px', width: '65px' }}
+              sx={{ padding: '9px', width: 'fit-content' }}
               label={t('button.next')}
               variant='contained'
             />
