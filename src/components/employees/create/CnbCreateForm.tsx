@@ -145,7 +145,6 @@ const CnbCreateForm = ({
   }, []);
 
   useEffect(() => {
-    console.log(initialValues, 'iwant to know');
     let supplement = false;
     initialValues?.supplementary?.map(item => {
       if (initialValues.supplementary.length === 0) {
@@ -163,6 +162,7 @@ const CnbCreateForm = ({
         supplement = false;
       }
     });
+
     if (initialValues?.name !== '' &&
       initialValues?.compensationComponentId !== ''
       && initialValues?.period !== '' &&
@@ -279,12 +279,14 @@ const CnbCreateForm = ({
                         formik.setFieldValue('period', cnbDetail?.base?.term?.id);
                         formik.setFieldValue('rateOrAmount', isNaN(cnbDetail?.base?.amount) ? +cnbDetail?.base?.rate : +cnbDetail?.base?.amount);
                         formik.setFieldValue('taxStatus', cnbDetail?.base?.isTaxable ? 'true' : 'false');
+                        formik.setFieldValue('overtime', cnbDetail?.overtime);
+                        formik.setFieldValue('percentage', +cnbDetail?.base?.rate);
                         formik.setFieldValue('supplementary', cnbDetail?.supplementaries?.map((val: any) => {
                           return {
                             compensationComponentId: val.component?.id || '',
                             period: val.term?.id || '',
                             rateOrAmount: getPaymentType(val.component?.id, option?.listBaseCompensation)?.withPercentage ? val.rate : val.amount || '',
-                            taxStatus: val.isTaxable || '',
+                            taxStatus: val.isTaxable === true ? 'true' : 'false',
                             id: val?.id || ''
                           };
                         }) || []);
