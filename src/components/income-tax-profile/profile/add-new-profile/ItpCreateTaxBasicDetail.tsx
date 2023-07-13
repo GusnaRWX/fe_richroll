@@ -7,8 +7,25 @@ import * as Yup from 'yup';
 import BasicDatePicker from '@/components/_shared/form/DatePicker';
 import dayjs from 'dayjs';
 
+interface BasicValue {
+  componentName : string
+  country : string
+  province : string
+  city : string
+  subDistrict : string
+  effectiveDate : string
+  citation : string
+  internalNotes : string
+  externalNotes : string
+}
 
-export default function ItpCreateTaxBasicDetail() {
+interface BasicProp {
+  basicValue: BasicValue
+  setValue: React.Dispatch<React.SetStateAction<BasicValue>>
+  nextStep: React.Dispatch<React.SetStateAction<number>>
+}
+
+export default function ItpCreateTaxBasicDetail({basicValue, setValue, nextStep} : BasicProp) {
   const {t} = useTranslation();
   const t_key = 'income_tax_profile.profile.detail.basic_detail';
 
@@ -32,19 +49,20 @@ export default function ItpCreateTaxBasicDetail() {
 
   const formik = useFormik({
     initialValues: {
-      componentName: '',
-      country: '',
-      province: '',
-      city: '',
-      subDistrict: '',
-      effectiveDate: '',
-      citation: '',
-      internalNotes: '',
-      externalNotes: '',
+      componentName: basicValue.componentName,
+      country: basicValue.country,
+      province: basicValue.province,
+      city: basicValue.city,
+      subDistrict: basicValue.subDistrict,
+      effectiveDate: basicValue.effectiveDate,
+      citation: basicValue.citation,
+      internalNotes: basicValue.internalNotes,
+      externalNotes: basicValue.externalNotes,
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      console.log(values);
+      setValue(values);
+      nextStep(1);
     }
   });
 

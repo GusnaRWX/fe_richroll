@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   Typography,
   Card,
@@ -45,13 +45,69 @@ function ItpAddNewProfileComponent() {
   const [isExit, setIsExit] = useState(true);
   const {t} = useTranslation();
   const t_key = 'income_tax_profile.profile.detail';
+  const btnRef = useRef<HTMLButtonElement>(null);
+
+  const [basicValue, setBasicValue] = useState({
+    componentName: '',
+    country: '',
+    province: '',
+    city: '',
+    subDistrict: '',
+    effectiveDate: '',
+    citation: '',
+    internalNotes: '',
+    externalNotes: '',
+  });
+
+  const [rateValue, setRateValue] = useState({
+    component: [{
+      minIncome: '',
+      maxIncome: '',
+      rate: '',
+      additionalAmount: ''
+    }]
+  });
+
+  // const [multiplierValue, setMultiplierValue] = useState({
+  //   component: [
+  //     {
+  //       status: '',
+  //       condition: [
+  //         {
+  //           conditionAction : '',
+  //           conditionStatus : '',
+  //           multiplier : '',
+  //         }
+  //       ]
+  //     }
+  //   ]
+  // });
+
+  const [dtaValue, setDtaValue] = useState({
+    bank: '',
+    holder: '',
+    no: '',
+    bankCode: '',
+    branchCode: '',
+    branchName: '',
+    swiftCode: '',
+    notes: '',
+  });
+
+  React.useEffect(() => {
+    console.log(rateValue);
+  }, [rateValue]);
+
 
   const handleClose = () => {
     setOpen(false);
   };
 
   const handleConfirm = () => {
-    router.push('/income-tax-profile/profile');
+    // router.push('/income-tax-profile/profile');
+    console.log('basicValue: ', basicValue);
+    console.log('rateValue: ', rateValue.component);
+    console.log('dtaValue: ', dtaValue);
   };
 
   const steps = [
@@ -103,6 +159,7 @@ function ItpAddNewProfileComponent() {
                 if (value == 4) {
                   setIsExit(false);
                   setOpen(true);
+                  btnRef.current?.click();
                 }
               }}
             >{ifThenElse(value == 4, t(`button.mark_complete`),  t(`button.save`))}</MuiButton>
@@ -159,11 +216,11 @@ function ItpAddNewProfileComponent() {
           </Stepper>
         </Box>
         <Box sx={{mt:'16px'}}>
-          {value == 0 && <ItpCreateTaxBasicDetail />}
-          {value == 1 && <ItpCreateTaxDeductableComponent/>}
-          {value == 2 && <ItpCreateTaxRate />}
+          {value == 0 && <ItpCreateTaxBasicDetail basicValue={basicValue} setValue={setBasicValue} nextStep={setValue} />}
+          {value == 1 && <ItpCreateTaxDeductableComponent nextStep={setValue} />}
+          {value == 2 && <ItpCreateTaxRate rateValue={rateValue} setValue={setRateValue} nextStep={setValue} />}
           {value == 3 && <ItpCreateTaxMultiplier />}
-          {value == 4 && <ItpCreateDesignedTransferAccount />}
+          {value == 4 && <ItpCreateDesignedTransferAccount dtaValue={dtaValue} setValue={setDtaValue} nextStep={setValue} refProp={btnRef} />}
         </Box>
       </ContentWrapper>
 

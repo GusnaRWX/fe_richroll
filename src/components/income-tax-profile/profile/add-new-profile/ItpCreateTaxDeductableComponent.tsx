@@ -19,7 +19,11 @@ const AddButton = styled(Button)({
   },
 });
 
-export default function  ItpCreateTaxDeductableComponent() {
+interface DeductableProp {
+  nextStep: React.Dispatch<React.SetStateAction<number>>
+}
+
+export default function  ItpCreateTaxDeductableComponent({nextStep}: DeductableProp) {
   const {t} = useTranslation();
   const t_key = 'income_tax_profile.profile.detail.deductible_component';
 
@@ -74,7 +78,7 @@ export default function  ItpCreateTaxDeductableComponent() {
 
         // Select One
       } else {
-        setInitialDeductableValues((prevValues: string[]): any[] => [
+        setInitialDeductableValues((prevValues: string[]) => [
           ...prevValues,
           name,
         ]);
@@ -424,11 +428,13 @@ export default function  ItpCreateTaxDeductableComponent() {
                 width: 'fit-content',
               }}
               label={t('button.back')}
+              onClick={() => nextStep(0)}
             />
             <Button
               sx={{ padding: '9px', width: 'fit-content' }}
               label={t('button.next')}
               variant='contained'
+              onClick={() => nextStep(2)}
             />
           </Box>
         </Box>

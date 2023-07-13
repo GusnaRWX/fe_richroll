@@ -7,23 +7,27 @@ import AddIcon from '@mui/icons-material/Add';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 
-export default function ItpCreateTaxRate() {
+interface RateValue {
+  component: {
+    minIncome: string
+    maxIncome: string
+    rate: string
+    additionalAmount: string
+  }[]
+}
+
+interface RateProp {
+  rateValue: RateValue
+  setValue: React.Dispatch<React.SetStateAction<RateValue>>
+  nextStep: React.Dispatch<React.SetStateAction<number>>
+}
+
+export default function ItpCreateTaxRate({rateValue, setValue, nextStep}: RateProp) {
   const {t} = useTranslation();
   const t_key = 'income_tax_profile.profile.detail.income_tax_rate';
-  // interface InitialValues {
-  //   minIncome: string;
-  //   maxIncome: string;
-  //   rate: string;
-  //   additionalAmount?: string;
-  // }
 
   const initialValues = {
-    component: [{
-      minIncome: '',
-      maxIncome: '',
-      rate: '',
-      additionalAmount: ''
-    }]
+    component: rateValue?.component
   };
 
   const validationSchema = Yup.object({
@@ -38,7 +42,8 @@ export default function ItpCreateTaxRate() {
   });
 
   const onSubmit = (values) => {
-    console.log(values);
+    setValue(values);
+    nextStep(3);
   };
 
   const option = [
@@ -54,7 +59,7 @@ export default function ItpCreateTaxRate() {
           <form>
             <FieldArray name='component' render={(arrayHelpers) => (
               <>
-                {formik.values.component.map((_, index) => (
+                {formik?.values?.component?.map((_, index) => (
                   <>
                     <Grid
                       key={index}

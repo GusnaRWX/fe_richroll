@@ -12,13 +12,31 @@ import {
   Grid,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import React, { useState } from 'react';
+import React, { useState, Dispatch, SetStateAction, RefObject, forwardRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-export default function ItpCreateDesignedTransferAccount() {
+interface DtaValue {
+  bank: string;
+  holder: string;
+  no: string;
+  bankCode: string;
+  branchCode: string;
+  branchName: string;
+  swiftCode: string;
+  notes: string;
+}
+
+interface DtaProp {
+  nextStep: Dispatch<SetStateAction<number>>
+  setValue: Dispatch<SetStateAction<DtaValue>>
+  dtaValue: DtaValue
+  refProp: RefObject<HTMLButtonElement>
+}
+
+function ItpCreateDesignedTransferAccount({nextStep, setValue, dtaValue, refProp}: DtaProp) {
   const [account, setAccount] = useState('central');
   const {t} = useTranslation();
   const t_key = 'income_tax_profile.profile.detail.designated_transfer_account';
@@ -49,19 +67,11 @@ export default function ItpCreateDesignedTransferAccount() {
   });
 
   const formik = useFormik({
-    initialValues: {
-      bank: '',
-      holder: '',
-      no: '',
-      bankCode: '',
-      branchCode: '',
-      branchName: '',
-      swiftCode: '',
-      notes: '',
-    },
+    initialValues: dtaValue,
     validationSchema: validationSchema,
     onSubmit: (values) => {
       console.log(values);
+      setValue(values);
     },
   });
 
@@ -361,13 +371,16 @@ export default function ItpCreateDesignedTransferAccount() {
           <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Button
               color='primary'
-              label={t('button.next')}
+              label={t('button.back')}
               sx={{ width: 'fit-content' }}
-              onClick={() => formik.submitForm()}
+              onClick={() => nextStep(3)}
             />
+            <button hidden ref={refProp} onClick={() => formik.submitForm()} />
           </Box>
         </Grid>
       </Box>
     </>
   );
 }
+
+export default forwardRef(ItpCreateDesignedTransferAccount);
