@@ -15,6 +15,7 @@ import { BsTrashFill } from 'react-icons/bs';
 import { Image as ImageType } from '@/utils/assetsConstant';
 import { HiChevronDown, HiChevronUp } from 'react-icons/hi';
 import styled from '@emotion/styled';
+import { Payroll } from '@/types/payroll';
 
 const AsteriskComponent = styled.span`
   color: #DC2626;
@@ -36,9 +37,17 @@ const NameWrapper = styled.div`
  margin: 0;
 `;
 
-function NetRow (att) {
+function NetRow(att) {
   const { item } = att;
   const [open, setOpen] = useState(false);
+
+  const [nonTaxable, setNonTaxable] = useState<Payroll.AddNonTaxable[] | []>([]);
+
+  const handleAddNonTaxable = () => {
+    setNonTaxable((prev) => [...prev, { componentId: '', amount: '' }]);
+  };
+
+  console.log(nonTaxable);
 
   return (
     <React.Fragment>
@@ -67,8 +76,8 @@ function NetRow (att) {
               onClick={() => { setOpen(!open); }}
               icons={
                 open ?
-                  <HiChevronUp fontSize={20} color='#223567'/> :
-                  <HiChevronDown fontSize={20} color='#223567'/>
+                  <HiChevronUp fontSize={20} color='#223567' /> :
+                  <HiChevronDown fontSize={20} color='#223567' />
               }
             />
           </ButtonWrapper>
@@ -162,7 +171,7 @@ function NetRow (att) {
                 />
               </Grid>
             </Grid>
-            
+
             <Grid container spacing={2}>
               <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
                 <Typography component='div' variant='text-base'>NPWP</Typography>
@@ -183,7 +192,7 @@ function NetRow (att) {
                 />
               </Grid>
             </Grid>
-            
+
             <Box sx={{ background: '#F9FAFB', p: '8px', mt: '2rem' }}>
               <Typography component='div' variant='text-base' fontWeight='bold' color='primary.main' sx={{ mb: '1rem' }}>Statutory Benefits</Typography>
               <Grid container spacing={2} sx={{ mb: '1rem' }}>
@@ -198,10 +207,10 @@ function NetRow (att) {
                     customLabel='Statutory Component 1'
                     value={''}
                     options={[
-                      {value: '', label: 'All Status'},
-                      {value: 'active', label: 'Active'},
-                      {value: 'inactive', label: 'Inactive'},
-                      {value: 'draft', label: 'Draft'},
+                      { value: '', label: 'All Status' },
+                      { value: 'active', label: 'Active' },
+                      { value: 'inactive', label: 'Inactive' },
+                      { value: 'draft', label: 'Draft' },
                     ]}
                   />
                 </Grid>
@@ -270,7 +279,7 @@ function NetRow (att) {
                     parentColor='#FEE2E2'
                     onClick={() => { console.log(); }}
                     icons={
-                      <BsTrashFill fontSize={20} color='#B91C1C'/>
+                      <BsTrashFill fontSize={20} color='#B91C1C' />
                     }
                   />
                 </Grid>
@@ -363,10 +372,10 @@ function NetRow (att) {
                     customLabel='Statutory Component 2'
                     value={''}
                     options={[
-                      {value: '', label: 'All Status'},
-                      {value: 'active', label: 'Active'},
-                      {value: 'inactive', label: 'Inactive'},
-                      {value: 'draft', label: 'Draft'},
+                      { value: '', label: 'All Status' },
+                      { value: 'active', label: 'Active' },
+                      { value: 'inactive', label: 'Inactive' },
+                      { value: 'draft', label: 'Draft' },
                     ]}
                   />
                 </Grid>
@@ -435,7 +444,7 @@ function NetRow (att) {
                     parentColor='#FEE2E2'
                     onClick={() => { console.log(); }}
                     icons={
-                      <BsTrashFill fontSize={20} color='#B91C1C'/>
+                      <BsTrashFill fontSize={20} color='#B91C1C' />
                     }
                   />
                 </Grid>
@@ -536,10 +545,10 @@ function NetRow (att) {
                     customLabel='Deduction Component 1'
                     value={''}
                     options={[
-                      {value: '', label: 'All Status'},
-                      {value: 'active', label: 'Active'},
-                      {value: 'inactive', label: 'Inactive'},
-                      {value: 'draft', label: 'Draft'},
+                      { value: '', label: 'All Status' },
+                      { value: 'active', label: 'Active' },
+                      { value: 'inactive', label: 'Inactive' },
+                      { value: 'draft', label: 'Draft' },
                     ]}
                   />
                 </Grid>
@@ -554,10 +563,10 @@ function NetRow (att) {
                     customLabel='Status'
                     value={''}
                     options={[
-                      {value: '', label: 'All Status'},
-                      {value: 'active', label: 'Active'},
-                      {value: 'inactive', label: 'Inactive'},
-                      {value: 'draft', label: 'Draft'},
+                      { value: '', label: 'All Status' },
+                      { value: 'active', label: 'Active' },
+                      { value: 'inactive', label: 'Inactive' },
+                      { value: 'draft', label: 'Draft' },
                     ]}
                   />
                 </Grid>
@@ -585,7 +594,7 @@ function NetRow (att) {
                     parentColor='#FEE2E2'
                     onClick={() => { console.log(); }}
                     icons={
-                      <BsTrashFill fontSize={20} color='#B91C1C'/>
+                      <BsTrashFill fontSize={20} color='#B91C1C' />
                     }
                   />
                 </Grid>
@@ -603,10 +612,10 @@ function NetRow (att) {
                     customLabel='Deduction Component 2'
                     value={''}
                     options={[
-                      {value: '', label: 'All Status'},
-                      {value: 'active', label: 'Active'},
-                      {value: 'inactive', label: 'Inactive'},
-                      {value: 'draft', label: 'Draft'},
+                      { value: '', label: 'All Status' },
+                      { value: 'active', label: 'Active' },
+                      { value: 'inactive', label: 'Inactive' },
+                      { value: 'draft', label: 'Draft' },
                     ]}
                   />
                 </Grid>
@@ -675,7 +684,7 @@ function NetRow (att) {
                     parentColor='#FEE2E2'
                     onClick={() => { console.log(); }}
                     icons={
-                      <BsTrashFill fontSize={20} color='#B91C1C'/>
+                      <BsTrashFill fontSize={20} color='#B91C1C' />
                     }
                   />
                 </Grid>
@@ -758,7 +767,7 @@ function NetRow (att) {
                     parentColor='#FEE2E2'
                     onClick={() => { console.log(); }}
                     icons={
-                      <BsTrashFill fontSize={20} color='#B91C1C'/>
+                      <BsTrashFill fontSize={20} color='#B91C1C' />
                     }
                   />
                 </Grid>
@@ -788,14 +797,54 @@ function NetRow (att) {
               </Grid>
             </Box>
 
-            <Typography component='div' variant='text-base' fontWeight='bold' color='primary.main' sx={{ mt: '2rem', mb: '1rem' }}>Non-Taxable Adjustment</Typography>
+            <Typography
+              component='div'
+              variant='text-base'
+              fontWeight='bold'
+              color='primary.main'
+              sx={{ mt: '2rem', mb: '1rem' }}
+            >Non-Taxable Adjustment</Typography>
+            {nonTaxable?.length > 0 && (
+              nonTaxable?.map((nonTax: Payroll.AddNonTaxable) => (
+                <Grid key={nonTax.componentId} container flexDirection='row' gap={3} alignItems='end' mb='1rem'>
+                  <Grid item>
+                    <Select
+                      options={[]}
+                      customLabel='Non-Taxable Component'
+                      size='small'
+                    />
+                  </Grid>
+                  <Grid item>
+                    <Input
+                      customLabel='Amount'
+                      InputProps={{
+                        startAdornment: 'Rp.',
+                        endAdornment: 'IDR'
+                      }}
+                      withAsterisk
+                      size='small'
+                    />
+                  </Grid>
+                  <Grid item>
+                    <IconButton
+                      parentColor='#FEE2E2'
+                      onClick={() => { console.log(); }}
+                      icons={
+                        <BsTrashFill fontSize={20} color='#B91C1C' />
+                      }
+                    />
+                  </Grid>
+                </Grid>
+              ))
+            )}
             <MuiButton
               variant='contained'
               size='small'
               color='secondary'
               sx={{ color: '#FFF' }}
-              onClick={() => { console.log(true); }}
+              onClick={handleAddNonTaxable}
             ><Add fontSize='small' />&nbsp; Add Non-Taxable Adjustment</MuiButton>
+
           </Collapse>
         </TableCell>
       </TableRow>
