@@ -9,6 +9,7 @@ import { CustomModal } from '@/components/_shared/common';
 import { getCompanyData } from '@/utils/helper';
 import { useAppDispatch } from '@/hooks/index';
 import { postPayrollRequested } from '@/store/reducers/slice/payroll/payrollSlice';
+import dayjs from 'dayjs';
 
 const ButtonWrapper = styled(Box)(({
   display: 'flex',
@@ -62,8 +63,8 @@ function PayrollAssistantComponent() {
   const router = useRouter();
   const companyData = getCompanyData();
   const [value, setValue] = useState(0);
-  // const [date, setDate] = useState<string>();
-  // const [name, setName] = useState<HTMLInputElement>();
+  const [date, setDate] = useState<Array<Date>>([]);
+  const [name, setName] = useState('');
   const [open, setOpen] = useState(false);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -75,14 +76,14 @@ function PayrollAssistantComponent() {
   };
 
   const handleConfirm = () => {
-    // const [start, end] = date.split(' - ');
+    const [start, end] = date;
     dispatch({
       type: postPayrollRequested.toString(),
       payload: {
         companyID: companyData?.id,
-        name: companyData?.id,
-        start: companyData?.id,
-        end: companyData?.id
+        name: name,
+        start: dayjs(start).toISOString(),
+        end: dayjs(end).toISOString()
       }
     });
     router.push('/payroll-disbursement/payroll-assistant/create');
@@ -140,7 +141,7 @@ function PayrollAssistantComponent() {
               customLabel='Name'
               placeholder='Input Name'
               size='small'
-              // onChange={setName}
+              onChange={(e) => setName(e.target.value)}
             />
           </Grid>
         </Grid>
@@ -150,9 +151,7 @@ function PayrollAssistantComponent() {
               withAsterisk
               customLabelStart='Start Date'
               customLabelEnd='End Date'
-              // value={formik.values.startDate as unknown as Date}
-              // onChange={(date: string) => setDate(date)}
-              // error={formik.touched.startDate && formik.errors.startDate ? String(formik.errors.startDate) : ''}
+              onChange={(v) => setDate(v)}
             />
           </Grid>
         </Grid>

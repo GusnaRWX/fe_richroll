@@ -6,7 +6,7 @@ import {
   Box,
   TableSortLabel
 } from '@mui/material';
-import { Input, DateRangePicker } from '../_shared/form';
+import { Input } from '../_shared/form';
 import { Search } from '@mui/icons-material';
 import Table from '../_shared/form/Table';
 import { compareCheck, ifThenElse, getCompanyData } from '@/utils/helper';
@@ -39,7 +39,6 @@ function PayrollAssistantTable({
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
   const [direction, setDirection] = useState<Order>('desc');
-  // const [date, setDate] = useState<Date | null>(new Date());
   const [sort, setSort] = useState('');
   const companyData = getCompanyData();
   const [hydrated, setHaydrated] = useState(false);
@@ -105,16 +104,6 @@ function PayrollAssistantTable({
                 <Search sx={{ color: '#9CA3AF' }} />
               )
             }}
-          />
-        </Grid>
-        <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
-          <DateRangePicker
-            withAsterisk
-            // value={formik.values.startDate as unknown as Date}
-            // value={date}
-            // onChange={(date: unknown) => console.log(date)}
-            onChange={(v) => console.log(v)}
-          // error={formik.touched.startDate && formik.errors.startDate ? String(formik.errors.startDate) : ''}
           />
         </Grid>
       </Grid>
