@@ -66,6 +66,13 @@ interface WorkScheduleFormProps {
   setData: React.Dispatch<React.SetStateAction<workSchedule.PatchWorkSchedulePayloadType>>;
 }
 
+interface temporaryPayload {
+  name: string;
+  grossHours: string | number;
+  netHours: string | number;
+  items: Array<workSchedule.ItemsPatchWorkScheduleType>
+}
+
 function WorkScheduleEditForm({setData}: WorkScheduleFormProps) {
   const calendarRef = useRef<SchedulerRef>(null);
   const router = useRouter();
@@ -74,6 +81,12 @@ function WorkScheduleEditForm({setData}: WorkScheduleFormProps) {
   const [openForm, setOPenForm] = useState(false);
   const [rendered, setRendered] = useState(false);
   const [tempName, setTempName] = useState('');
+  const [tempPayload, setTempPayload] = useState<temporaryPayload>({
+    name: '',
+    grossHours: 0,
+    netHours: 0,
+    items: []
+  });
   const [tempDay, setDayTemp] = useState<Array<number>>([]);
   const initialValues: workSchedule.WsFormType = {
     profileName: '',
@@ -138,6 +151,16 @@ function WorkScheduleEditForm({setData}: WorkScheduleFormProps) {
     return tempDay.some(v => v === value);
   };
 
+  const handleChangeName = (e) => {
+    setTempName(e.target.value);
+    setData({
+      name: e.target.value,
+      grossHours: tempPayload?.grossHours,
+      netHours: tempPayload?.netHours,
+      items: tempPayload?.items
+    });
+  };
+
   const handleFormClose = () => {
     setOPenForm(false);
   };
@@ -190,6 +213,7 @@ function WorkScheduleEditForm({setData}: WorkScheduleFormProps) {
 
   useEffect(() => {
     if(rendered){
+      console.log('HERE');
       setTempName(workSchedule?.name);
     }
 
@@ -236,6 +260,12 @@ function WorkScheduleEditForm({setData}: WorkScheduleFormProps) {
         netHours: workSchedule?.netHour,
         items: dataValues
       });
+      setTempPayload({
+        name: tempName,
+        grossHours: workSchedule?.grossHour,
+        netHours: workSchedule?.netHour,
+        items: dataValues
+      });
     }
   }, [workSchedule?.events]);
   return (
@@ -272,8 +302,7 @@ function WorkScheduleEditForm({setData}: WorkScheduleFormProps) {
                       placeholder='Input Profile Name'
                       size='small'
                       value={tempName}
-                      onChange={(e) => {formik.setFieldValue('profileName', e.target.value); setTempName(e.target.value);}}
-                      onBlur={formik.handleBlur}
+                      onChange={(e) => {handleChangeName(e);}}
                     />
                   </Grid>
                   <Grid item xs={1.5} sm={1.5} md={1.5} lg={1.5} xl={1.5} mt={'28px'}>
