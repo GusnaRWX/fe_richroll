@@ -6,9 +6,17 @@ export const getPayroll = (payload: Payroll.GetParams) => {
   return get(`payrolls?page=${page}&itemPerPage=${itemPerPage}&sort=${sort}&direction=${direction}&search=${search}&countryCode=${countryCode}&companyID=${companyID}&workflow=${workflow}&status=${status}`);
 };
 
-export const postPayroll = (payload) => {
-  return post(`payrolls`, payload?.data as Payroll.PostPayrollType);
+export const postPayroll = (payload: Payroll.PostPayrollType) => {
+  return post(`payrolls`, payload);
 };
+
+export const getGenerateGross = (payload: Payroll.GetParams) => {
+  const { page, itemPerPage, sort, direction, countryCode } = payload;
+  return get(`payrolls/1/grosses?page=${page}&itemPerPage=${itemPerPage}&sort=${sort}&direction=${direction}&countryCode=${countryCode}`);
+};
+// export const postPayroll = (payload) => {
+//   return post(`payrolls`, payload?.data as Payroll.PostPayrollType);
+// };
 
 export const postPayrollAttendance = (payload) => {
   return post(`payrolls/${payload?.id}/attendances`, payload?.attendance as Payroll.PostPayrollAttendanceType);
@@ -25,6 +33,6 @@ export const postSelectedEmployee = (payload) => {
 };
 
 export const getSelectedEmployee = (payload: Payroll.ParamsSelectedEmployee) => {
-  const { page, itemPerPage, sort, direction, search, countryCode, payrollID} = payload;
+  const { page, itemPerPage, sort, direction, search, countryCode, payrollID } = payload;
   return get(`payrolls/${payrollID}/attendances?page=${page}&itemPerPage=${itemPerPage}&sort=${sort}&direction=${direction}&search=${search}&countryCode=${countryCode}`);
 };

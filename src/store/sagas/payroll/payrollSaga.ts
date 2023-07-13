@@ -2,6 +2,7 @@ import { AnyAction } from '@reduxjs/toolkit';
 import {
   getPayroll,
   postPayroll,
+  getGenerateGross,
   postPayrollAttendance,
   getDetailPayroll,
   getSelectedEmployee,
@@ -15,6 +16,9 @@ import {
   postPayrollRequested,
   postPayrollSuccess,
   postPayrollFailed,
+  getGenerateGrossPayrollRequested,
+  getGenerateGrossPayrollSuccess,
+  getGenerateGrossPayrollFailed,
   postPayrollAttendanceFailed,
   postPayrollAttendanceRequested,
   postPayrollAttendanceSuccess,
@@ -93,6 +97,22 @@ function* fetchPostPayroll(action: AnyAction) {
   }
 }
 
+function* fetchGetGenerateGross(action: AnyAction) {
+  try {
+    const res: AxiosResponse = yield call(getGenerateGross, action?.payload);
+    if (res.data.code === 200) {
+      yield put({
+        type: getGenerateGrossPayrollSuccess.toString(),
+        payload: {
+          data: res?.data?.data
+        }
+      });
+    }
+  } catch (err) {
+    yield put({ type: getGenerateGrossPayrollFailed.toString() });
+  }
+}
+
 function* fetchPostPayrollAttendance(action: AnyAction) {
   try {
     const res: AxiosResponse = yield call(postPayrollAttendance, action?.payload);
@@ -126,15 +146,17 @@ function* fetchgetDetailPayroll(action: AnyAction) {
   try {
     const res: AxiosResponse = yield call(getDetailPayroll, action?.payload);
     if (res.data.code === 200) {
-      yield put({ type: getDetailPayrollSuccess.toString(), payload: {
-        id: res?.data?.data?.id,
-        name: res?.data?.data.name,
-        start: res?.data?.data.start,
-        end: res?.data?.data?.end,
-        workflow: res?.data?.data?.workflow
-      } });
+      yield put({
+        type: getDetailPayrollSuccess.toString(), payload: {
+          id: res?.data?.data?.id,
+          name: res?.data?.data.name,
+          start: res?.data?.data.start,
+          end: res?.data?.data?.end,
+          workflow: res?.data?.data?.workflow
+        }
+      });
     }
-  } catch(err) {
+  } catch (err) {
     if (err instanceof AxiosError) {
       const errorMessage = err?.response?.data as Services.ErrorResponse;
       yield put({ type: getDetailPayrollFailed.toString() });
@@ -183,9 +205,11 @@ function* fetchGetSelectedEmployee(action: AnyAction) {
   try {
     const res: AxiosResponse = yield call(getSelectedEmployee, action?.payload);
     if (res.data.code === 200) {
-      yield put({ type: getSelectedEmployeeSuccess.toString(), payload: {
-        data: res?.data?.data
-      } });
+      yield put({
+        type: getSelectedEmployeeSuccess.toString(), payload: {
+          data: res?.data?.data
+        }
+      });
     }
   } catch (err) {
     if (err instanceof AxiosError) {
@@ -206,6 +230,7 @@ function* fetchGetSelectedEmployee(action: AnyAction) {
 function* payrollSaga() {
   yield takeEvery(getPayrollRequested.toString(), fetchGetPayroll);
   yield takeEvery(postPayrollRequested.toString(), fetchPostPayroll);
+  yield takeEvery(getGenerateGrossPayrollRequested.toString(), fetchGetGenerateGross);
   yield takeEvery(postPayrollAttendanceRequested.toString(), fetchPostPayrollAttendance);
   yield takeEvery(getDetailPayrollRequested.toString(), fetchgetDetailPayroll);
   yield takeEvery(postSelectedEmployeeRequested.toString(), fetchPostSelectedEmployee);

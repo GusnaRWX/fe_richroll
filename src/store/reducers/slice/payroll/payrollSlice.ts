@@ -5,6 +5,7 @@ import { Payroll } from '@/types/payroll';
 interface AccountState {
   isLoading: boolean;
   data: Array<Payroll.PayrollType>;
+  generateGrossPayroll: []
   id: string | number;
   name: string;
   start: string;
@@ -16,6 +17,7 @@ interface AccountState {
 const initialState: AccountState = {
   isLoading: false,
   data: [],
+  generateGrossPayroll: [],
   id: '',
   name: '',
   start: '',
@@ -48,6 +50,14 @@ export const payrollSlice = createSlice({
     postPayrollFailed: (state) => {
       state.isLoading = false;
     },
+    getGenerateGrossPayrollRequested: state => {
+      state.isLoading = true;
+    },
+    getGenerateGrossPayrollSuccess: (state, action) => {
+      state.isLoading = false;
+      state.generateGrossPayroll = action.payload?.data;
+    },
+    getGenerateGrossPayrollFailed: state => { state.isLoading = false; },
     getDetailPayrollRequested: (state) => {
       state.isLoading = true;
     },
@@ -108,6 +118,9 @@ export const {
   postPayrollRequested,
   postPayrollSuccess,
   postPayrollFailed,
+  getGenerateGrossPayrollRequested,
+  getGenerateGrossPayrollSuccess,
+  getGenerateGrossPayrollFailed,
   postPayrollAttendanceFailed,
   postPayrollAttendanceRequested,
   postPayrollAttendanceSuccess,
