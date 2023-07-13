@@ -15,18 +15,20 @@ interface DatePickerType {
   customLabelEnd?: string;
   withAsterisk?: boolean;
   value?: Date | null;
-  onChange?: React.Dispatch<Date | null>;
+  onChange?: (_date: string) => void;
   error?: string;
 }
 
 const CustomInput = forwardRef((props: any, ref) => {
-  console.log(props?.value);
+  console.log(props);
   const [start, end] = props.value.split(' - ');
+  // props?.onChange(props?.value);
   return (
     <Box component='button' ref={ref} onClick={props?.onClick} sx={{
       border: 'none',
       background: 'transparent',
       width: '100%',
+      padding: '0px',
       color: '#4B5563',
       fontSize: '15px',
       fontWeight: 400,
@@ -61,7 +63,7 @@ CustomInput.displayName = 'CustomInput';
 const DateRangePicker = ({
   customLabelStart,
   customLabelEnd,
-  // onChange,
+  onChange,
   // value,
   withAsterisk,
   error
@@ -69,7 +71,7 @@ const DateRangePicker = ({
   const customRef = useRef(null);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
-  const onChange = (dates) => {
+  const onChangeDate = (dates) => {
     const [start, end] = dates;
     setStartDate(start);
     setEndDate(end);
@@ -100,17 +102,22 @@ const DateRangePicker = ({
         borderRadius: '4px',
         '> .react-datepicker-wrapper': {
           width: '100%',
-          padding: '8.5px 14px'
+          padding: '4px 0px'
+        },
+        '> .react-datepicker__tab-loop > .react-datepicker-popper > div > .react-datepicker > .react-datepicker__triangle': {
+          '&:before, &:after': {
+            left: '-30px'
+          }
         }
       }}>
         <DatePicker
           dateFormat='dd/MM/yyyy'
           selected={startDate}
-          onChange={onChange}
+          onChange={onChangeDate}
           startDate={startDate}
           endDate={endDate}
           selectsRange
-          customInput={ <CustomInput customRef={customRef} />}
+          customInput={ <CustomInput onChange={onChange} customRef={customRef} />}
 
           // customInput={(props) => {
           //   console.log(props);

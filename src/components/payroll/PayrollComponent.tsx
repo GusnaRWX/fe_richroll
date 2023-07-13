@@ -77,7 +77,7 @@ function PayrollComponent() {
               <Tab sx={{ textTransform: 'none' }} label='Draft' {...a11yProps(0)} />
               <Tab sx={{ textTransform: 'none' }} label='Confirmed' {...a11yProps(1)} />
               <Tab sx={{ textTransform: 'none' }} label='Completed' {...a11yProps(2)} />
-              <Tab sx={{ textTransform: 'none' }} label='Archived' {...a11yProps(3)} />
+              <Tab sx={{ textTransform: 'none' }} label='Archive' {...a11yProps(3)} />
             </Tabs>
           </Box>
           <TabPanel value={value} index={0}>

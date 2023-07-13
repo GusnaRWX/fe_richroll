@@ -23,7 +23,7 @@ import { ConfirmationModal } from '@/components/_shared/common';
 import EmptyState from '../_shared/common/EmptyState';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { getPayrollRequested } from '@/store/reducers/slice/payroll/payrollSlice';
-
+import dayjs from 'dayjs';
 
 const ButtonWrapper = styled.div`
  display: flex;
@@ -79,11 +79,13 @@ function PayrollTable({
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(1);
-  // const [search, setSearch] = useState('');
+  const [search, setSearch] = useState('');
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
   const [hydrated, setHaydrated] = useState(false);
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
+  const companyData = getCompanyData();
+  const { responser } = useAppSelectors((state) => state);
   const router = useRouter();
   const dispatch = useAppDispatch();
 
@@ -93,14 +95,12 @@ function PayrollTable({
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(event);
+    setPage(0);
   };
 
   const handleSearch = (e) => {
     if (e.key === 'Enter') {
-      // setSearch(e.target.value);
-      console.log(e.target.value);
-      console.log(tabValue);
-
+      setSearch(e.target.value);
     }
   };
 
@@ -118,14 +118,14 @@ function PayrollTable({
         itemPerPage: rowsPerPage,
         sort: sort,
         direction: direction,
-        search: '',
+        search: search,
         countryCode: global?.language,
-        companyID: getCompanyData()?.id,
+        companyID: companyData?.id,
         workflow: 'NET_PAYROLL',
         status: Tabs[tabValue]
       }
     });
-  }, [page, rowsPerPage, sort, direction, tabValue]);
+  }, [page, rowsPerPage, sort, direction, search, responser.code, tabValue]);
 
   useEffect(() => {
     setHaydrated(true);
@@ -203,10 +203,10 @@ function PayrollTable({
                   payroll?.items?.map((item, index) => (
                     <TableRow key={index}>
                       <TableCell>{item.name}</TableCell>
-                      <TableCell>{item.daterange}</TableCell>
-                      <TableCell>{ifThenElse(item.reportType === 'gross', <GrossComponent>{item.reportName}</GrossComponent>, <NetComponent>{item.reportName}</NetComponent>)}</TableCell>
-                      <TableCell>{item.createdAt}</TableCell>
-                      <TableCell>{item.lastUpdated}</TableCell>
+                      <TableCell>{dayjs(item.start).format('DD/MM/YYYY')} - {dayjs(item.end).format('DD/MM/YYYY')}</TableCell>
+                      <TableCell>{ifThenElse(item.workflow === 0, <GrossComponent>Gross Payroll Report</GrossComponent>, <NetComponent>Net Payroll Report</NetComponent>)}</TableCell>
+                      <TableCell>{dayjs(item.createdAt).format('DD/MM/YYYY')}</TableCell>
+                      <TableCell>{dayjs(item.updatedAt).format('DD/MM/YYYY')}</TableCell>
                       <TableCell>
                         <MuiButton
                           variant='contained'
@@ -215,7 +215,7 @@ function PayrollTable({
                           sx={{ color: '#111827' }}
                           onClick={() => { console.log(true); }}
                         >
-                          {ifThenElse(item.reportType === 'gross', 'Gross Payroll Report.pdf', 'Net Payroll Report.pdf')} &nbsp;<FiDownload fontSize='small' />
+                          {item.attachment.filename} &nbsp;<FiDownload fontSize='small' />
                         </MuiButton>
                       </TableCell>
                       <TableCell>
