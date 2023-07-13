@@ -44,6 +44,19 @@ export declare namespace Payroll {
     componentId: string,
     amount: string,
   }
+  interface PostPayrollAttendanceType {
+    employees: Array<number | string>;
+  }
+
+  interface ParamsSelectedEmployee {
+    page: number;
+    itemPerPage: number;
+    sort?: string;
+    direction?: boolean;
+    search?: string;
+    countryCode?: string;
+    payrollID?: string|number;
+  }
 
 }
 
