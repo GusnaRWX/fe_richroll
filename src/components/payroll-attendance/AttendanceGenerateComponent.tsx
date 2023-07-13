@@ -8,21 +8,23 @@ import {
   Button as MuiButton,
   TableCell,
   TableRow,
-  TableSortLabel,
-  Select,
-  MenuItem
+  TableSortLabel
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useRouter } from 'next/router';
-import { Input, IconButton, DateRangePicker } from '@/components/_shared/form';
+import { Input, IconButton } from '@/components/_shared/form';
 import { Add } from '@mui/icons-material';
 import Table from '@/components/_shared/form/Table';
 import { Search, ArrowBack } from '@mui/icons-material';
 import { FiCalendar } from 'react-icons/fi';
-import AddEmployeesModal from '../payroll-assistant/create/AttendanceModal';
+import ListEmployeeModal from '../payroll-assistant/create/ListEmployeeModal';
+//import AddEmployeesModal from '../payroll-assistant/create/AttendanceModal';
 import AttendanceCalendarModal from '../payroll-assistant/create/AttendanceCalendar';
 import { compareCheck, ifThenElse } from '@/utils/helper';
 import { visuallyHidden } from '@mui/utils';
+import EmptyState from '../_shared/common/EmptyState';
+import { useAppSelectors, useAppDispatch } from '@/hooks/index';
+import { getSelectedEmployeeRequested } from '@/store/reducers/slice/payroll/payrollSlice';
 
 const ButtonWrapper = styled(Box)(({
   display: 'flex',
@@ -129,30 +131,42 @@ type Order = 'asc' | 'desc'
 //   itemTotals: 5
 // };
 
+interface SelectedProp {
+  id: string;
+  name: string;
+  picture?: string;
+}
+
 function AttendanceGenerateComponent() {
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const [open, setOpen] = useState(false);
+  const payrollId = router?.query?.id;
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(1);
-  const [selected, setSelected] = useState(Array<object>);
-  // const [search, setSearch] = useState('');
+  const [selected, setSelected] = useState<Array<SelectedProp>>(Array<SelectedProp>);
+  const { name, start, end, selectedEmployee } = useAppSelectors((state) => state.payroll);
+  const [search, setSearch] = useState('');
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
   const [hydrated, setHaydrated] = useState(false);
   const [openCal, setOpenCal] = useState(false);
+  const { responser } = useAppSelectors((state) => state);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
 
+  console.log(payrollId);
+
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(event);
-    // setPage(0);
+    setPage(0);
   };
 
   const handleSearch = (e) => {
     if (e.key === 'Enter') {
-      // setSearch(e.target.value);
+      setSearch(e.target.value);
       console.log(e.target.value);
 
     }
@@ -163,6 +177,21 @@ function AttendanceGenerateComponent() {
     setDirection(ifThenElse(isAsc, 'desc', 'asc'));
     setSort(headId);
   };
+
+  useEffect(() => {
+    dispatch({
+      type: getSelectedEmployeeRequested.toString(),
+      payload: {
+        page: page,
+        itemPerPage: rowsPerPage,
+        sort: sort,
+        direction: direction.toUpperCase(),
+        search: search,
+        countryCode: '',
+        payrollID: payrollId
+      }
+    });
+  }, [rowsPerPage, page, search, sort, direction, responser.code]);
 
   const handleClose = () => {
     setOpen(false);
@@ -189,7 +218,7 @@ function AttendanceGenerateComponent() {
             />
             <Box>
               <Typography variant='h6' color='#4B5563'><b>Generate Attendant Report</b></Typography>
-              <Typography variant='text-base' color='#4B5563'><b>Payroll 280123 — </b>1/03/2023 - 14/03/2023</Typography>
+              <Typography variant='text-base' color='#4B5563'><b>{name} — </b>{start} - {end}</Typography>
             </Box>
           </BackWrapper>
         </Grid>
@@ -230,7 +259,7 @@ function AttendanceGenerateComponent() {
               />
             </Grid>
             <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
-              <Select
+              {/* <Select
                 fullWidth
                 variant='outlined'
                 size='small'
@@ -241,19 +270,19 @@ function AttendanceGenerateComponent() {
                 <MenuItem value='active'>Active</MenuItem>
                 <MenuItem value='inactive'>Inactive</MenuItem>
                 <MenuItem value='draft'>Draft</MenuItem>
-              </Select>
+              </Select> */}
             </Grid>
             <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
-              <DateRangePicker
+              {/* <DateRangePicker
                 withAsterisk
                 // value={formik.values.startDate as unknown as Date}
                 onChange={(date: unknown) => console.log(date)}
               // error={formik.touched.startDate && formik.errors.startDate ? String(formik.errors.startDate) : ''}
-              />
+              /> */}
             </Grid>
           </Grid>
           <Table
-            count={selected.length}
+            count={selectedEmployee?.itemTotals}
             rowsPerPageOptions={[5, 10, 15]}
             rowsPerPage={rowsPerPage}
             page={page}
@@ -284,24 +313,26 @@ function AttendanceGenerateComponent() {
             bodyChildren={
               <>
                 {
-                  ifThenElse(typeof selected !== 'undefined', (
-                    ifThenElse(selected?.length === 0, (
+                  ifThenElse(typeof selectedEmployee?.items !== 'undefined', (
+                    ifThenElse(selectedEmployee?.items?.length === 0, (
                       <TableRow>
-                        <TableCell colSpan={12} align='center'><Typography>Data not found</Typography></TableCell>
+                        <TableCell colSpan={12} align='center'>
+                          <EmptyState />
+                        </TableCell>
                       </TableRow>
                     ), (
-                      selected?.map((item, index) => (
+                      selectedEmployee?.items?.map((item, index) => (
                         <TableRow key={index}>
                           <TableCell>
                             <NameWrapper>
                               <Avatar
-                                src={item['picture']}
-                                alt={item['name']}
+                                src={item?.employee?.picture || item?.employee?.name}
+                                alt={item?.employee?.name}
                                 sx={{
                                   width: 24, height: 24
                                 }}
                               />
-                              &nbsp;{item['name']}
+                              &nbsp;{item?.employee?.name}
                             </NameWrapper>
                           </TableCell>
                           <TableCell>{item['attendance']}</TableCell>
@@ -327,7 +358,9 @@ function AttendanceGenerateComponent() {
                     ))
                   ), (
                     <TableRow>
-                      <TableCell colSpan={12} align='center'><Typography>Data not found</Typography></TableCell>
+                      <TableCell colSpan={12} align='center'>
+                        <EmptyState />
+                      </TableCell>
                     </TableRow>
                   ))
                 }
@@ -353,13 +386,20 @@ function AttendanceGenerateComponent() {
         handleClose={() => setOpenCal(false)}
         handleConfirm={() => setOpenCal(false)}
       />
-
-      <AddEmployeesModal
+      <ListEmployeeModal
         open={open}
         handleClose={handleClose}
         selected={selected}
         setSelected={setSelected}
       />
+      {/* <AddEmployeesModal
+        open={open}
+        handleClose={handleClose}
+        selected={selected}
+        setSelected={setSelected}
+        withConfirm={true}
+        handleConfirm={() => console.log('test')}
+      /> */}
     </>
   );
 }
