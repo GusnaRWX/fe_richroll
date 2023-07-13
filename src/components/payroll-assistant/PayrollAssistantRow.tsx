@@ -13,6 +13,7 @@ import { FiFile, FiDownload } from 'react-icons/fi';
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
 import { ConfirmationModal } from '@/components/_shared/common';
+import dayjs from 'dayjs';
 
 const ButtonWrapper = styled.div`
  display: flex;
@@ -32,9 +33,9 @@ function PayrollAssistantRow (row) {
     <React.Fragment>
       <TableRow sx={{ '& > *': { borderBottom: 'unset' }, boxShadow: open ? '0px 1px 2px rgba(0, 0, 0, 0.06), 0px 1px 3px rgba(0, 0, 0, 0.1)' : 'none' }}>
         <TableCell>{item.name}</TableCell>
-        <TableCell>{item.daterange}</TableCell>
-        <TableCell>{item.createdAt}</TableCell>
-        <TableCell>{item.lastUpdated}</TableCell>
+        <TableCell>{dayjs(item.start).format('DD/MM/YYYY')} - {dayjs(item.end).format('DD/MM/YYYY')}</TableCell>
+        <TableCell>{dayjs(item.createdAt).format('DD/MM/YYYY')}</TableCell>
+        <TableCell>{dayjs(item.updatedAt).format('DD/MM/YYYY')}</TableCell>
         <TableCell>
           <ButtonWrapper>
             {tabValue === 0 && (

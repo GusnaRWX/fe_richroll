@@ -6,6 +6,9 @@ import { Add } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import PayrollAssistantTable from './PayrollAssistantTable';
 import { CustomModal } from '@/components/_shared/common';
+import { getCompanyData } from '@/utils/helper';
+import { useAppDispatch } from '@/hooks/index';
+import { postPayrollRequested } from '@/store/reducers/slice/payroll/payrollSlice';
 
 const ButtonWrapper = styled(Box)(({
   display: 'flex',
@@ -55,8 +58,12 @@ function a11yProps(index: number) {
 }
 
 function PayrollAssistantComponent() {
+  const dispatch = useAppDispatch();
   const router = useRouter();
+  const companyData = getCompanyData();
   const [value, setValue] = useState(0);
+  // const [date, setDate] = useState<string>();
+  // const [name, setName] = useState<HTMLInputElement>();
   const [open, setOpen] = useState(false);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -68,6 +75,16 @@ function PayrollAssistantComponent() {
   };
 
   const handleConfirm = () => {
+    // const [start, end] = date.split(' - ');
+    dispatch({
+      type: postPayrollRequested.toString(),
+      payload: {
+        companyID: companyData?.id,
+        name: companyData?.id,
+        start: companyData?.id,
+        end: companyData?.id
+      }
+    });
     router.push('/payroll-disbursement/payroll-assistant/create');
   };
 
@@ -123,6 +140,7 @@ function PayrollAssistantComponent() {
               customLabel='Name'
               placeholder='Input Name'
               size='small'
+              // onChange={setName}
             />
           </Grid>
         </Grid>
@@ -133,7 +151,7 @@ function PayrollAssistantComponent() {
               customLabelStart='Start Date'
               customLabelEnd='End Date'
               // value={formik.values.startDate as unknown as Date}
-              onChange={(date: unknown) => console.log(date)}
+              // onChange={(date: string) => setDate(date)}
               // error={formik.touched.startDate && formik.errors.startDate ? String(formik.errors.startDate) : ''}
             />
           </Grid>
