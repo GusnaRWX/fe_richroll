@@ -40,5 +40,10 @@ export declare namespace Payroll {
     end: string;
   }
 
+  interface AddNonTaxable {
+    componentId: string,
+    amount: string,
+  }
+
 }
 
