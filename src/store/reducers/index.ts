@@ -16,7 +16,7 @@ import attendanceEntriesSlice from './slice/attendance-leave/attendanceEntriesSl
 import globalSlice from './slice/global/globalSlice';
 import overtimeSlice from './slice/attendance-leave/overtimeSlice';
 import leaveEntriesSlice from './slice/attendance-leave/leaveEntriesSlice';
-
+import payrollSlice from './slice/payroll/payrollSlice';
 
 const reducers: Reducer = combineReducers({
   responser: responserSlice,
@@ -35,7 +35,8 @@ const reducers: Reducer = combineReducers({
   attendanceEntries: attendanceEntriesSlice,
   global: globalSlice, // global state
   overtime: overtimeSlice,
-  leaveEntries: leaveEntriesSlice
+  leaveEntries: leaveEntriesSlice,
+  payroll: payrollSlice
 });
 
 export default reducers;

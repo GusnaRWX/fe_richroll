@@ -7,10 +7,10 @@ import {
   TableSortLabel,
   Button as MuiButton
 } from '@mui/material';
-import { Input, DateRangePicker } from '../_shared/form';
+import { Input } from '../_shared/form';
 import { Search } from '@mui/icons-material';
 import Table from '../_shared/form/Table';
-import { compareCheck, ifThenElse } from '@/utils/helper';
+import { compareCheck, ifThenElse, getCompanyData } from '@/utils/helper';
 import { visuallyHidden } from '@mui/utils';
 import { IconButton } from '@/components/_shared/form';
 import { BsTrashFill, BsFillEyeFill } from 'react-icons/bs';
@@ -21,6 +21,9 @@ import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
 import { ConfirmationModal } from '@/components/_shared/common';
 import EmptyState from '../_shared/common/EmptyState';
+import { useAppDispatch, useAppSelectors } from '@/hooks/index';
+import { getPayrollRequested } from '@/store/reducers/slice/payroll/payrollSlice';
+
 
 const ButtonWrapper = styled.div`
  display: flex;
@@ -65,56 +68,15 @@ type Order = 'asc' | 'desc'
 function PayrollTable({
   tabValue
 }: EmployeeTableProps) {
-  const data = {
-    items: [
-      {
-        id: 1,
-        name: 'Payroll February 2023',
-        daterange: '1/03/2023 - 31/03/2023',
-        reportType: 'gross',
-        reportName: 'Gross Payroll Report',
-        createdAt: '20/03/2023',
-        lastUpdated: '20/03/2023',
-      },
-      {
-        id: 2,
-        name: 'Payroll February 2023',
-        daterange: '1/03/2023 - 31/03/2023',
-        reportType: 'net',
-        reportName: 'Net Payroll Report',
-        createdAt: '20/03/2023',
-        lastUpdated: '20/03/2023',
-      },
-      {
-        id: 3,
-        name: 'Payroll February 2023',
-        daterange: '1/03/2023 - 31/03/2023',
-        reportType: 'gross',
-        reportName: 'Gross Payroll Report',
-        createdAt: '20/03/2023',
-        lastUpdated: '20/03/2023',
-      },
-      {
-        id: 4,
-        name: 'Payroll February 2023',
-        daterange: '1/03/2023 - 31/03/2023',
-        reportType: 'net',
-        reportName: 'Net Payroll Report',
-        createdAt: '20/03/2023',
-        lastUpdated: '20/03/2023',
-      },
-      {
-        id: 5,
-        name: 'Payroll February 2023',
-        daterange: '1/03/2023 - 31/03/2023',
-        reportType: 'gross',
-        reportName: 'Gross Payroll Report',
-        createdAt: '20/03/2023',
-        lastUpdated: '20/03/2023',
-      },
-    ],
-    itemTotals: 5
+  const { payroll, global } = useAppSelectors(state => state);
+
+  const Tabs = {
+    0: 'DRAFT',
+    1: 'CONFIRMED',
+    2: 'COMPLETED',
+    3: 'ARCHIVE'
   };
+
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(1);
   // const [search, setSearch] = useState('');
@@ -123,6 +85,7 @@ function PayrollTable({
   const [hydrated, setHaydrated] = useState(false);
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
   const router = useRouter();
+  const dispatch = useAppDispatch();
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -148,6 +111,23 @@ function PayrollTable({
   };
 
   useEffect(() => {
+    dispatch({
+      type: getPayrollRequested.toString(),
+      payload: {
+        page: page,
+        itemPerPage: rowsPerPage,
+        sort: sort,
+        direction: direction,
+        search: '',
+        countryCode: global?.language,
+        companyID: getCompanyData()?.id,
+        workflow: 'NET_PAYROLL',
+        status: Tabs[tabValue]
+      }
+    });
+  }, [page, rowsPerPage, sort, direction, tabValue]);
+
+  useEffect(() => {
     setHaydrated(true);
   }, []);
 
@@ -171,17 +151,17 @@ function PayrollTable({
             }}
           />
         </Grid>
-        <Grid item xs={6}>
+        {/* <Grid item xs={6}>
           <DateRangePicker
             withAsterisk
             // value={formik.values.startDate as unknown as Date}
             onChange={(date: unknown) => console.log(date)}
           // error={formik.touched.startDate && formik.errors.startDate ? String(formik.errors.startDate) : ''}
           />
-        </Grid>
+        </Grid> */}
       </Grid>
       <Table
-        count={data?.itemTotals}
+        count={payroll?.data?.length}
         rowsPerPageOptions={[5, 10, 15]}
         rowsPerPage={rowsPerPage}
         page={page}
@@ -212,15 +192,15 @@ function PayrollTable({
         bodyChildren={
           <>
             {
-              ifThenElse(typeof data?.items !== 'undefined', (
-                ifThenElse(data?.items?.length === 0, (
+              ifThenElse(typeof payroll?.items !== 'undefined', (
+                ifThenElse(payroll?.items?.length === 0, (
                   <TableRow>
                     <TableCell colSpan={12} align='center'>
                       <EmptyState />
                     </TableCell>
                   </TableRow>
                 ), (
-                  data?.items?.map((item, index) => (
+                  payroll?.items?.map((item, index) => (
                     <TableRow key={index}>
                       <TableCell>{item.name}</TableCell>
                       <TableCell>{item.daterange}</TableCell>
