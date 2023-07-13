@@ -15,14 +15,12 @@ interface DatePickerType {
   customLabelEnd?: string;
   withAsterisk?: boolean;
   value?: Date | null;
-  onChange?: (_date: string) => void;
+  onChange: (_date: Array<Date>) => void;
   error?: string;
 }
 
 const CustomInput = forwardRef((props: any, ref) => {
-  console.log(props);
   const [start, end] = props.value.split(' - ');
-  // props?.onChange(props?.value);
   return (
     <Box component='button' ref={ref} onClick={props?.onClick} sx={{
       border: 'none',
@@ -69,12 +67,13 @@ const DateRangePicker = ({
   error
 }: DatePickerType) => {
   const customRef = useRef(null);
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
-  const onChangeDate = (dates) => {
+  const [startDate, setStartDate] = useState<Date>();
+  const [endDate, setEndDate] = useState<Date>();
+  const onChangeDate = (dates: Array<Date>) => {
     const [start, end] = dates;
     setStartDate(start);
     setEndDate(end);
+    onChange(dates);
   };
   return (
     <>
@@ -117,14 +116,7 @@ const DateRangePicker = ({
           startDate={startDate}
           endDate={endDate}
           selectsRange
-          customInput={ <CustomInput onChange={onChange} customRef={customRef} />}
-
-          // customInput={(props) => {
-          //   console.log(props);
-          //   return (
-          //     <AiOutlineSwapRight />
-          //   );
-          // }}
+          customInput={ <CustomInput customRef={customRef} />}
         />
         {error && (
           <FormHelperText sx={{ color: '#EF4444' }}>{error}</FormHelperText>
