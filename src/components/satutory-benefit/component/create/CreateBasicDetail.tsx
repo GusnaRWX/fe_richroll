@@ -3,7 +3,6 @@
 import React, {SetStateAction, Dispatch} from 'react';
 import { Grid, Typography } from '@mui/material';
 import {  Input, Select, Textarea, Button } from '@/components/_shared/form';
-import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
 
 interface PropsInterface {
@@ -78,7 +77,7 @@ export default function CreateBasicDetailComponent({nextPage, formik}: PropsInte
             size='small'
             fullWidth
             options={Dummyoption}
-            value={formik.values.country}
+            value={formik.values.basicDetail.country}
             onChange={(e) => formik.setFieldValue('basicDetail.country', e.target.value)}
           />
           {formik.touched.country && formik.errors.country ? (
@@ -92,7 +91,7 @@ export default function CreateBasicDetailComponent({nextPage, formik}: PropsInte
             size='small'
             fullWidth
             options={Dummyoption}
-            value={formik.values.province}
+            value={formik.values.basicDetail.province}
             onChange={(e) => formik.setFieldValue('basicDetail.province', e.target.value)}
           />
         </Grid>
@@ -106,7 +105,7 @@ export default function CreateBasicDetailComponent({nextPage, formik}: PropsInte
             size='small'
             fullWidth
             options={Dummyoption}
-            value={formik.values.city}
+            value={formik.values.basicDetail.city}
             onChange={(e) => formik.setFieldValue('basicDetail.city', e.target.value)}
           />
         </Grid>
@@ -117,7 +116,7 @@ export default function CreateBasicDetailComponent({nextPage, formik}: PropsInte
             size='small'
             fullWidth
             options={Dummyoption}
-            value={formik.values.subDistrict}
+            value={formik.values.basicDetail.subDistrict}
             onChange={(e) => formik.setFieldValue('basicDetail.subDistrict', e.target.value)}
           />
         </Grid>
@@ -129,7 +128,7 @@ export default function CreateBasicDetailComponent({nextPage, formik}: PropsInte
             customLabel={t(`${t_key}.citation`)}
             minRows={4}
             style={{ resize: 'vertical' }}
-            value={formik.values.citation}
+            value={formik.values.basicDetail.citation}
             onChange={(e) => formik.setFieldValue('basicDetail.citation', e.target.value)}
           />
           <Typography
@@ -150,7 +149,7 @@ export default function CreateBasicDetailComponent({nextPage, formik}: PropsInte
             customLabel={t(`${t_key}.internal_notes`)}
             minRows={4}
             style={{ resize: 'vertical' }}
-            value={formik.values.internalNotes}
+            value={formik.values.basicDetail.internalNotes}
             onChange={(e) => formik.setFieldValue('basicDetail.internalNotes', e.target.value)}
           />
           <Typography
@@ -171,7 +170,7 @@ export default function CreateBasicDetailComponent({nextPage, formik}: PropsInte
             customLabel={t(`${t_key}.external_notes`)}
             minRows={4}
             style={{ resize: 'vertical' }}
-            value={formik.values.externalNotes}
+            value={formik.values.basicDetail.externalNotes}
             onChange={(e) => formik.setFieldValue('basicDetail.externalNotes', e.target.value)}
           />
           <Typography
@@ -196,7 +195,14 @@ export default function CreateBasicDetailComponent({nextPage, formik}: PropsInte
             label={t('button.next')}
             color='primary'
             onClick={() => {
-              formik.submitForm();
+              // formik.submitForm();
+              formik.validateForm().then((res) => {
+                if ('basicDetail' in res) {
+                  console.log('gagal');
+                } else {
+                  nextPage(1);
+                }
+              });
             }}
           />
         </Grid>

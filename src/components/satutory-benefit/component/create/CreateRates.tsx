@@ -14,8 +14,6 @@ import {
   styled,
   Switch,
 } from '@mui/material';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
 
 const rates = [
@@ -43,79 +41,13 @@ const rates = [
 
 interface PropsInterface {
   nextPage: Dispatch<SetStateAction<number>>
+  formik
 }
 
-export default function CreateRates({nextPage}: PropsInterface) {
+export default function CreateRates({nextPage, formik}: PropsInterface) {
   // Translation Key
   const {t} = useTranslation();
   const t_key = 'satutory_benefit.component.form_&_detail.rates';
-
-  const initialValues = {
-    employee: true,
-    employer: false,
-    employerMatch: true,
-    employeeData: {
-      start: 0,
-      end: 0,
-      rate: '',
-      fixed: 0,
-      amountCap: 0,
-    },
-    employerData: {
-      start: 0,
-      end: 0,
-      rate: '',
-      fixed: 0,
-      amountCap: 0,
-    },
-  };
-
-  const validationSchema = Yup.object({
-    employeeData: Yup.object({
-      start: Yup.string().required('This Field is Required'),
-      end: Yup.string().required('This Field is Required'),
-      rate: Yup.string().required('This Field is Required'),
-      fixed: Yup.string().required('This Field is Required'),
-      amountCap: Yup.string().required('This Field is Required'),
-    }),
-    employerData: Yup.object({
-      start: Yup.string().required('This Field is Required'),
-      end: Yup.string().required('This Field is Required'),
-      rate: Yup.string().required('This Field is Required'),
-      fixed: Yup.string().required('This Field is Required'),
-      amountCap: Yup.string().required('This Field is Required'),
-    })
-  });
-
-  const handleSubmit = (values) => {
-    let payload = {};
-    if (values.employerMatch && values.employer && values.employee) {
-      payload= {
-        employee: values.employeeData,
-        employer: values.employeeData,
-      };
-    } else if (values.employee && values.employer) {
-      payload = {
-        employee: values.employeeData,
-        employer: values.employerData,
-      };
-    } else if (values.employee) {
-      payload = {
-        employee: values.employeeData,
-      };
-    } else if (values.employer) {
-      // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-      payload = {
-        employer: values.employerData,
-      };
-    }
-  };
-
-  const formik = useFormik({
-    initialValues: initialValues,
-    onSubmit: (values) => handleSubmit(values),
-    validationSchema : validationSchema
-  });
 
   const AsteriskComponent = styled('span')(({ theme }) => ({
     color: theme.palette.error.main,
@@ -129,9 +61,9 @@ export default function CreateRates({nextPage}: PropsInterface) {
           <FormControlLabel
             control={
               <Checkbox
-                checked={formik.values.employee}
+                checked={formik.values.rates.employee}
                 onChange={(e) =>
-                  formik.setFieldValue('employee', e.target.checked)
+                  formik.setFieldValue('rates.employee', e.target.checked)
                 }
               />
             }
@@ -140,24 +72,24 @@ export default function CreateRates({nextPage}: PropsInterface) {
           <FormControlLabel
             control={
               <Checkbox
-                checked={formik.values.employer}
+                checked={formik.values.rates.employer}
                 onChange={(e) =>
-                  formik.setFieldValue('employer', e.target.checked)
+                  formik.setFieldValue('rates.employer', e.target.checked)
                 }
               />
             }
             label={t(`${t_key}.contributor_option.employer`)}
             sx={{ ml: '50px' }}
           />
-          {formik.values.employee && formik.values.employer && (
+          {formik.values.rates.employee && formik.values.rates.employer && (
             <Box margin='32px 0'>
               <FormControlLabel
                 label={t(`${t_key}.match_rule_button`)}
                 control={
                   <Switch
-                    value={formik.values.employerMatch}
+                    value={formik.values.rates.employerMatch}
                     onChange={(e) =>
-                      formik.setFieldValue('employerMatch', e.target.checked)
+                      formik.setFieldValue('rates.employerMatch', e.target.checked)
                     }
                   />
                 }
@@ -166,12 +98,12 @@ export default function CreateRates({nextPage}: PropsInterface) {
           )}
         </FormGroup>
 
-        {!formik.values.employee || !formik.values.employer ? (
+        {!formik.values.rates.employee || !formik.values.rates.employer ? (
           <Typography sx={{color: '#223567', fontWeight: 700, marginTop: '36px', marginBottom: '30px'}}>{t(`${t_key}.sub_title`)}</Typography>
         ) : null}
 
         <Box display='flex' flexDirection='column' gap='32px'>
-          {formik.values.employee && (
+          {formik.values.rates.employee && (
             <Card
               sx={{
                 paddingY: '20px',
@@ -185,7 +117,7 @@ export default function CreateRates({nextPage}: PropsInterface) {
                 },
               }}
             >
-              {formik.values.employee && formik.values.employer && (
+              {formik.values.rates.employee && formik.values.rates.employer && (
                 <>
                   <Typography color='#223567' fontWeight='700' fontSize={18}>
                     {t(`${t_key}.contributor_option.employee`)}<AsteriskComponent>*</AsteriskComponent>
@@ -213,8 +145,8 @@ export default function CreateRates({nextPage}: PropsInterface) {
                     }
                     onClick={() =>
                       formik.setFieldValue(
-                        'employeeData.start',
-                        formik.values.employeeData.start - 1
+                        'rates.employeeData.start',
+                        formik.values.rates.employeeData.start - 1
                       )
                     }
                   />
@@ -223,13 +155,13 @@ export default function CreateRates({nextPage}: PropsInterface) {
                       withAsterisk
                       customLabel={t(`${t_key}.start`)}
                       size='small'
-                      value={formik.values.employeeData.start}
+                      value={formik.values.rates.employeeData.start}
                       onChange={(e) => {
                         formik.setFieldValue(
-                          'employeeData.start',
+                          'rates.employeeData.start',
                           e.target.value
                         );
-                        formik.setFieldValue('employerData.start', formik.values.employerMatch ? e.target.value : null);
+                        formik.setFieldValue('rates.employerData.start', formik.values.rates.employerMatch ? e.target.value : null);
                       }}
                     />
                   </Box>
@@ -241,10 +173,10 @@ export default function CreateRates({nextPage}: PropsInterface) {
                       withAsterisk
                       customLabel={t(`${t_key}.end`)}
                       size='small'
-                      value={formik.values.employeeData.end}
+                      value={formik.values.rates.employeeData.end}
                       onChange={(e) => {
-                        formik.setFieldValue('employeeData.end', e.target.value);
-                        formik.setFieldValue('employerData.end', formik.values.employerMatch ? e.target.value : null);
+                        formik.setFieldValue('rates.employeeData.end', e.target.value);
+                        formik.setFieldValue('rates.employerData.end', formik.values.rates.employerMatch ? e.target.value : null);
                       }}
                     />
                   </Box>
@@ -263,8 +195,8 @@ export default function CreateRates({nextPage}: PropsInterface) {
                     }
                     onClick={() =>
                       formik.setFieldValue(
-                        'employeeData.end',
-                        formik.values.employeeData.end + 1
+                        'rates.employeeData.end',
+                        formik.values.rates.employeeData.end + 1
                       )
                     }
                   />
@@ -274,10 +206,13 @@ export default function CreateRates({nextPage}: PropsInterface) {
                   <Box component='div' sx={{width: '100px'}}>
                     <Select
                       displayEmpty
-                      value={formik.values.employeeData.rate}
-                      onChange={(e) =>
-                        formik.setFieldValue('employeeData.rate', e.target.value)
-                      }
+                      value={formik.values.rates.employeeData.rate}
+                      onChange={(e) => {
+                        formik.setFieldValue('rates.employeeData.rate', e.target.value);
+                        if (formik.values.rates.employerMatch && !formik.values.rates.employer) {
+                          formik.setFieldValue('rates.employerData.rate', e.target.value);
+                        }
+                      }}
                       size='small'
                       customLabel={t(`${t_key}.sub_title`)}
                       withAsterisk
@@ -300,9 +235,9 @@ export default function CreateRates({nextPage}: PropsInterface) {
                       customLabel={t(`${t_key}.additional_fixed_amount`)}
                       placeholder='Rp 0'
                       size='small'
-                      value={formik.values.employeeData.fixed}
+                      value={formik.values.rates.employeeData.fixed}
                       onChange={(e) =>
-                        formik.setFieldValue('employeeData.fixed', e.target.value)
+                        formik.setFieldValue('rates.employeeData.fixed', e.target.value)
                       }
                       InputProps={{
                         endAdornment: (
@@ -320,14 +255,14 @@ export default function CreateRates({nextPage}: PropsInterface) {
                       placeholder='Rp 0'
                       size='small'
                       value={
-                        formik.values.employerMatch
-                          ? formik.values.employeeData.amountCap
-                          : formik.values.employerData.amountCap
+                        formik.values.rates.employerMatch
+                          ? formik.values.rates.employeeData.amountCap
+                          : formik.values.rates.employerData.amountCap
                       }
-                      disabled={formik.values.employerMatch}
+                      disabled={formik.values.rates.employerMatch}
                       onChange={(e) =>
                         formik.setFieldValue(
-                          'employerData.amountCap',
+                          'rates.employerData.amountCap',
                           e.target.value
                         )
                       }
@@ -343,7 +278,7 @@ export default function CreateRates({nextPage}: PropsInterface) {
             </Card>
           )}
 
-          {formik.values.employer && (
+          {formik.values.rates.employer && (
             <Card
               sx={{
                 paddingY: '20px',
@@ -354,7 +289,7 @@ export default function CreateRates({nextPage}: PropsInterface) {
                 },
               }}
             >
-              {formik.values.employee && formik.values.employer && (
+              {formik.values.rates.employee && formik.values.rates.employer && (
                 <>
                   <Typography color='#223567' fontWeight='700' fontSize={18}>
                     {t(`${t_key}.contributor_option.employer`)}<AsteriskComponent>*</AsteriskComponent>
@@ -382,8 +317,8 @@ export default function CreateRates({nextPage}: PropsInterface) {
                     }
                     onClick={() =>
                       formik.setFieldValue(
-                        'employerData.start',
-                        formik.values.employerData.start - 1
+                        'rates.employerData.start',
+                        formik.values.rates.employerData.start - 1
                       )
                     }
                   />
@@ -392,10 +327,10 @@ export default function CreateRates({nextPage}: PropsInterface) {
                       withAsterisk
                       customLabel={t(`${t_key}.start`)}
                       size='small'
-                      value={formik.values.employerData.start}
+                      value={formik.values.rates.employerData.start}
                       onChange={(e) =>
                         formik.setFieldValue(
-                          'employerData.start',
+                          'rates.employerData.start',
                           e.target.value
                         )
                       }
@@ -409,9 +344,9 @@ export default function CreateRates({nextPage}: PropsInterface) {
                       withAsterisk
                       customLabel={t(`${t_key}.end`)}
                       size='small'
-                      value={formik.values.employerData.end}
+                      value={formik.values.rates.employerData.end}
                       onChange={(e) =>
-                        formik.setFieldValue('employerData.end', e.target.value)
+                        formik.setFieldValue('rates.employerData.end', e.target.value)
                       }
                     />
                   </Box>
@@ -430,8 +365,8 @@ export default function CreateRates({nextPage}: PropsInterface) {
                     }
                     onClick={() =>
                       formik.setFieldValue(
-                        'employerData.end',
-                        formik.values.employerData.end + 1
+                        'rates.employerData.end',
+                        formik.values.rates.employerData.end + 1
                       )
                     }
                   />
@@ -441,9 +376,9 @@ export default function CreateRates({nextPage}: PropsInterface) {
                   <Box component='div' sx={{width: '100px'}}>
                     <Select
                       displayEmpty
-                      value={formik.values.employerData.rate}
+                      value={formik.values.rates.employerData.rate}
                       onChange={(e) =>
-                        formik.setFieldValue('employerData.rate', e.target.value)
+                        formik.setFieldValue('rates.employerData.rate', e.target.value)
                       }
                       size='small'
                       customLabel={t(`${t_key}.sub_title`)}
@@ -467,9 +402,9 @@ export default function CreateRates({nextPage}: PropsInterface) {
                       customLabel={t(`${t_key}.additional_fixed_amount`)}
                       placeholder='Rp 0'
                       size='small'
-                      value={formik.values.employerData.fixed}
+                      value={formik.values.rates.employerData.fixed}
                       onChange={(e) =>
-                        formik.setFieldValue('employerData.fixed', e.target.value)
+                        formik.setFieldValue('rates.employerData.fixed', e.target.value)
                       }
                       InputProps={{
                         endAdornment: (
@@ -487,14 +422,14 @@ export default function CreateRates({nextPage}: PropsInterface) {
                       placeholder='Rp 0'
                       size='small'
                       value={
-                        formik.values.employerMatch
-                          ? formik.values.employeeData.amountCap
-                          : formik.values.employerData.amountCap
+                        formik.values.rates.employerMatch
+                          ? formik.values.rates.employeeData.amountCap
+                          : formik.values.rates.employerData.amountCap
                       }
-                      disabled={formik.values.employerMatch}
+                      disabled={formik.values.rates.employerMatch}
                       onChange={(e) =>
                         formik.setFieldValue(
-                          'employerData.amountCap',
+                          'rates.employerData.amountCap',
                           e.target.value
                         )
                       }
