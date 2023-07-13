@@ -9,3 +9,8 @@ export const getPayroll = (payload: Payroll.GetParams) => {
 export const postPayroll = (payload: Payroll.PostPayrollType) => {
   return post(`payrolls`, payload);
 };
+
+export const getGenerateGross = (payload: Payroll.GetParams) => {
+  const { page, itemPerPage, sort, direction, countryCode } = payload;
+  return get(`payrolls/1/grosses?page=${page}&itemPerPage=${itemPerPage}&sort=${sort}&direction=${direction}&countryCode=${countryCode}`);
+};

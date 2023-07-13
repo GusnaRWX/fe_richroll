@@ -8,7 +8,8 @@ import {
   Button as MuiButton,
   TableCell,
   TableRow,
-  TableSortLabel
+  TableSortLabel,
+  Checkbox
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useRouter } from 'next/router';
@@ -18,6 +19,9 @@ import { Image as ImageType } from '@/utils/assetsConstant';
 import { ArrowBack } from '@mui/icons-material';
 import { compareCheck, ifThenElse } from '@/utils/helper';
 import { visuallyHidden } from '@mui/utils';
+import { useAppDispatch, useAppSelectors } from '@/hooks/index';
+import { getGenerateGrossPayrollRequested } from '@/store/reducers/slice/payroll/payrollSlice';
+import EmptyState from '@/components/_shared/common/EmptyState';
 
 const ButtonWrapper = styled(Box)(({
   display: 'flex',
@@ -27,6 +31,14 @@ const ButtonWrapper = styled(Box)(({
   gap: '1rem',
   marginTop: '.1rem'
 }));
+
+const CheckboxWrapper = styled(Box)({
+  display: 'flex',
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'flex-start',
+  gap: '.5rem'
+});
 
 const BackWrapper = styled(Box)(({
   display: 'flex',
@@ -50,6 +62,7 @@ const ContentWrapper = styled(Card)(({
 }));
 
 const headerItems = [
+  { id: 'action', label: '' },
   { id: 'user.name', label: 'Employee Name' },
   { id: 'attendance', label: 'Attendance' },
   { id: 'absent', label: 'Absent' },
@@ -62,75 +75,78 @@ const headerItems = [
 
 type Order = 'asc' | 'desc'
 
-const data = {
-  items: [
-    {
-      id: 1,
-      name: 'Budi Irawan',
-      attendance: '30 Days',
-      absent: '2 Days',
-      paidLeave: '3 Days',
-      unpaidLeave: '4 Days',
-      overtime: '8 Days',
-      totalHours: '175 Days',
-      averageHours: '30 Days',
-    },
-    {
-      id: 2,
-      name: 'Budi Irawan',
-      attendance: '30 Days',
-      absent: '2 Days',
-      paidLeave: '3 Days',
-      unpaidLeave: '4 Days',
-      overtime: '8 Days',
-      totalHours: '175 Days',
-      averageHours: '30 Days',
-    },
-    {
-      id: 3,
-      name: 'Budi Irawan',
-      attendance: '30 Days',
-      absent: '2 Days',
-      paidLeave: '3 Days',
-      unpaidLeave: '4 Days',
-      overtime: '8 Days',
-      totalHours: '175 Days',
-      averageHours: '30 Days',
-    },
-    {
-      id: 4,
-      name: 'Budi Irawan',
-      attendance: '30 Days',
-      absent: '2 Days',
-      paidLeave: '3 Days',
-      unpaidLeave: '4 Days',
-      overtime: '8 Days',
-      totalHours: '175 Days',
-      averageHours: '30 Days',
-    },
-    {
-      id: 5,
-      name: 'Budi Irawan',
-      attendance: '30 Days',
-      absent: '2 Days',
-      paidLeave: '3 Days',
-      unpaidLeave: '4 Days',
-      overtime: '8 Days',
-      totalHours: '175 Days',
-      averageHours: '30 Days',
-    },
-  ],
-  itemTotals: 5
-};
+// const data = {
+//   items: [
+//     {
+//       id: 1,
+//       name: 'Budi Irawan',
+//       attendance: '30 Days',
+//       absent: '2 Days',
+//       paidLeave: '3 Days',
+//       unpaidLeave: '4 Days',
+//       overtime: '8 Days',
+//       totalHours: '175 Days',
+//       averageHours: '30 Days',
+//     },
+//     {
+//       id: 2,
+//       name: 'Budi Irawan',
+//       attendance: '30 Days',
+//       absent: '2 Days',
+//       paidLeave: '3 Days',
+//       unpaidLeave: '4 Days',
+//       overtime: '8 Days',
+//       totalHours: '175 Days',
+//       averageHours: '30 Days',
+//     },
+//     {
+//       id: 3,
+//       name: 'Budi Irawan',
+//       attendance: '30 Days',
+//       absent: '2 Days',
+//       paidLeave: '3 Days',
+//       unpaidLeave: '4 Days',
+//       overtime: '8 Days',
+//       totalHours: '175 Days',
+//       averageHours: '30 Days',
+//     },
+//     {
+//       id: 4,
+//       name: 'Budi Irawan',
+//       attendance: '30 Days',
+//       absent: '2 Days',
+//       paidLeave: '3 Days',
+//       unpaidLeave: '4 Days',
+//       overtime: '8 Days',
+//       totalHours: '175 Days',
+//       averageHours: '30 Days',
+//     },
+//     {
+//       id: 5,
+//       name: 'Budi Irawan',
+//       attendance: '30 Days',
+//       absent: '2 Days',
+//       paidLeave: '3 Days',
+//       unpaidLeave: '4 Days',
+//       overtime: '8 Days',
+//       totalHours: '175 Days',
+//       averageHours: '30 Days',
+//     },
+//   ],
+//   itemTotals: 5
+// };
 
 function GenerateGrossEmployee() {
   const router = useRouter();
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(1);
+  const { global, payroll } = useAppSelectors(state => state);
   // const [search, setSearch] = useState('');
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
   const [hydrated, setHaydrated] = useState(false);
+  const [selectedTemp, setSelectedTemp] = useState<any>([]);
+  const dispatch = useAppDispatch();
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -139,6 +155,51 @@ function GenerateGrossEmployee() {
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(event);
     // setPage(0);
+  };
+
+  const onSelected = (item, e) => {
+    if (e.target.checked) {
+      const temp = [...selectedTemp, {
+        id: item.id, name: item.name, attendance: item.attendance, absent: '2 Days',
+        paidLeave: item.paidLeave,
+        unpaidLeave: item.unpaidLeave,
+        overtime: item.overtime,
+        totalHours: item.totalHours,
+        averageHours: item.averageHours,
+      }];
+      setSelectedTemp(temp as any);
+    } else {
+      const temp = selectedTemp.filter(v => v['id'] !== item.id);
+      setSelectedTemp(temp);
+    }
+  };
+
+  const checkVal = (id) => {
+    return selectedTemp.some(v => v['id'] === id);
+  };
+
+  const onSelectedAll = (items, e) => {
+    const pageItems = items?.map(item => ({
+      id: item.id, name: item.name, attendance: item.attendance, absent: '2 Days',
+      paidLeave: item.paidLeave,
+      unpaidLeave: item.unpaidLeave,
+      overtime: item.overtime,
+      totalHours: item.totalHours,
+      averageHours: item.averageHours,
+    }));
+
+    if (e.target.checked) {
+      setSelectedTemp(prevSelectedTemp => [...prevSelectedTemp, ...pageItems]);
+    } else {
+      setSelectedTemp(prevSelectedTemp => prevSelectedTemp.filter(selectedItem => !pageItems?.some(item => item?.id === selectedItem['id'])));
+    }
+  };
+
+  const checkValAll = (items) => {
+    const checkedPerPage = selectedTemp?.filter(selectedItem => items?.some(item => item?.id === selectedItem['id'])).length;
+    const lengthPerPage = rowsPerPage;
+
+    return checkedPerPage === lengthPerPage;
   };
 
   const handleRequestSort = (event: React.MouseEvent<unknown>, headId: string) => {
@@ -150,6 +211,19 @@ function GenerateGrossEmployee() {
   useEffect(() => {
     setHaydrated(true);
   }, []);
+
+  useEffect(() => {
+    dispatch({
+      type: getGenerateGrossPayrollRequested.toString(),
+      payload: {
+        page: 1,
+        itemPerPage: rowsPerPage,
+        sort: sort,
+        direction: direction,
+        countryCode: global?.language
+      }
+    });
+  }, [rowsPerPage, sort, direction, global?.language]);
 
   if (!hydrated) {
     return null;
@@ -177,7 +251,7 @@ function GenerateGrossEmployee() {
       <ContentWrapper>
         <Box sx={{ width: '100%' }}>
           <Table
-            count={data?.itemTotals}
+            count={payroll?.generateGrossPayroll?.itemTotals}
             rowsPerPageOptions={[5, 10, 15]}
             rowsPerPage={rowsPerPage}
             page={page}
@@ -187,20 +261,26 @@ function GenerateGrossEmployee() {
               <TableRow>
                 {
                   headerItems.map((item) => (
-                    <TableCell key={item.id} sortDirection={ifThenElse(sort === item.id, direction, false)}>
-                      <TableSortLabel
-                        active={sort === item.id}
-                        direction={sort === item.id ? direction : 'asc'}
-                        onClick={(e) => handleRequestSort(e, item.id)}
-                      >
-                        {item.label}
-                        {sort === item.id ? (
-                          <Box component='span' sx={visuallyHidden}>
-                            {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
-                          </Box>
-                        ) : null}
-                      </TableSortLabel>
-                    </TableCell>
+                    item.id === 'action' ? (
+                      <TableCell key={item.id}>
+                        <Checkbox onChange={(e) => onSelectedAll(payroll?.generateGrossPayroll?.items?.slice(0, rowsPerPage), e)} checked={checkValAll(payroll?.generateGrossPayroll?.items?.slice(0, rowsPerPage))} />
+                      </TableCell>
+                    ) : (
+                      <TableCell key={item.id} sortDirection={ifThenElse(sort === item.id, direction, false)}>
+                        <TableSortLabel
+                          active={sort === item.id}
+                          direction={sort === item.id ? direction : 'asc'}
+                          onClick={(e) => handleRequestSort(e, item.id)}
+                        >
+                          {item.label}
+                          {sort === item.id ? (
+                            <Box component='span' sx={visuallyHidden}>
+                              {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
+                            </Box>
+                          ) : null}
+                        </TableSortLabel>
+                      </TableCell>
+                    )
                   ))
                 }
               </TableRow>
@@ -208,14 +288,21 @@ function GenerateGrossEmployee() {
             bodyChildren={
               <>
                 {
-                  ifThenElse(typeof data?.items !== 'undefined', (
-                    ifThenElse(data?.items?.length === 0, (
+                  ifThenElse(typeof payroll?.generateGrossPayroll?.items !== 'undefined', (
+                    ifThenElse(payroll?.generateGrossPayroll?.items?.length === 0, (
                       <TableRow>
-                        <TableCell colSpan={12} align='center'><Typography>Data not found</Typography></TableCell>
+                        <TableCell colSpan={12} align='center'>
+                          <EmptyState />
+                        </TableCell>
                       </TableRow>
                     ), (
-                      data?.items?.map((item, index) => (
+                      payroll?.generateGrossPayroll?.items?.map((item, index) => (
                         <TableRow key={index}>
+                          <TableCell>
+                            <CheckboxWrapper>
+                              <Checkbox onChange={(e) => onSelected(item, e)} checked={checkVal(item?.id)} />
+                            </CheckboxWrapper>
+                          </TableCell>
                           <TableCell>
                             <NameWrapper>
                               <Avatar
@@ -240,7 +327,9 @@ function GenerateGrossEmployee() {
                     ))
                   ), (
                     <TableRow>
-                      <TableCell colSpan={12} align='center'><Typography>Data not found</Typography></TableCell>
+                      <TableCell colSpan={12} align='center'>
+                        <EmptyState />
+                      </TableCell>
                     </TableRow>
                   ))
                 }

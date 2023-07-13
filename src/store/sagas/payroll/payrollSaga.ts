@@ -2,6 +2,7 @@ import { AnyAction } from '@reduxjs/toolkit';
 import {
   getPayroll,
   postPayroll,
+  getGenerateGross
 } from '../saga-actions/payroll/payrollActions';
 import { call, put, takeEvery, delay } from 'redux-saga/effects';
 import {
@@ -10,7 +11,10 @@ import {
   getPayrollFailed,
   postPayrollRequested,
   postPayrollSuccess,
-  postPayrollFailed
+  postPayrollFailed,
+  getGenerateGrossPayrollRequested,
+  getGenerateGrossPayrollSuccess,
+  getGenerateGrossPayrollFailed
 } from '@/store/reducers/slice/payroll/payrollSlice';
 import { setResponserMessage } from '@/store/reducers/slice/responserSlice';
 import { Services } from '@/types/axios';
@@ -73,9 +77,37 @@ function* fetchPostPayroll(action: AnyAction) {
   }
 }
 
+function* fetchGetGenerateGross(action: AnyAction) {
+  try {
+    const res: AxiosResponse = yield call(getGenerateGross, action?.payload);
+    if (res.data.code === 200) {
+      yield put({
+        type: getGenerateGrossPayrollSuccess.toString(),
+        payload: {
+          data: res?.data?.data
+        }
+      });
+    }
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      yield put({ type: getGenerateGrossPayrollFailed.toString() });
+      yield delay(2000, true);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage.code,
+          message: errorMessage.message
+        }
+      });
+    }
+  }
+}
+
 function* payrollSaga() {
   yield takeEvery(getPayrollRequested.toString(), fetchGetPayroll);
   yield takeEvery(postPayrollRequested.toString(), fetchPostPayroll);
+  yield takeEvery(getGenerateGrossPayrollRequested.toString(), fetchGetGenerateGross);
 }
 
 export default payrollSaga;

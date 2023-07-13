@@ -45,5 +45,26 @@ export declare namespace Payroll {
     amount: string,
   }
 
+  interface HocComponent {
+    componentName: string;
+    amount: string
+  }
+
+  interface OvertimeComponent {
+    // rates: string;
+    overtime: string;
+    rate: string;
+  }
+
+  interface GrossRowForm {
+    baseCompensationComponentId: string;
+    amountBase: string;
+    periodBase: string;
+    taxStatusBase: string,
+
+    hocComponent: HocComponent[] | [],
+    overtimeComponent: OvertimeComponent
+  }
+
 }
 

@@ -251,7 +251,11 @@ function GrossContent(att) {
                         </TableRow>
                       ), (
                         data?.items?.map((item, index) => (
-                          <GrossRow key={index} isPreview={isPreview} item={item} />
+                          <GrossRow
+                            key={index}
+                            isPreview={isPreview}
+                            item={item}
+                          />
                         ))
                       ))
                     ), (

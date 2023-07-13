@@ -46,7 +46,7 @@ function GenerateGrossDetail() {
               icons={
                 <ArrowBack sx={{ color: '#FFFFFF' }} />
               }
-              onClick={() => {router.push('/payroll-disbursement/attendance');}}
+              onClick={() => { router.push('/payroll-disbursement/attendance'); }}
             />
             <Box>
               <Typography variant='h6' color='#4B5563'><b>Generate Gross Payroll Report</b></Typography>
@@ -68,13 +68,13 @@ function GenerateGrossDetail() {
                   variant='outlined'
                   size='small'
                   color='primary'
-                  onClick={() => {router.push('/payroll-disbursement/attendance');}}
+                  onClick={() => { router.push('/payroll-disbursement/attendance'); }}
                 >Cancel</MuiButton>
                 <MuiButton
                   variant='contained'
                   size='small'
                   color='primary'
-                  onClick={() => {router.push('/payroll-disbursement/payroll');}}
+                  onClick={() => { router.push('/payroll-disbursement/payroll'); }}
                   sx={{ color: 'white' }}
                 >Confirm</MuiButton>
               </ButtonWrapper>

@@ -5,11 +5,13 @@ import { Payroll } from '@/types/payroll';
 interface AccountState {
   isLoading: boolean;
   data: Array<Payroll.PayrollType>;
+  generateGrossPayroll: []
 }
 
 const initialState: AccountState = {
   isLoading: false,
   data: [],
+  generateGrossPayroll: []
 };
 
 export const payrollSlice = createSlice({
@@ -35,6 +37,16 @@ export const payrollSlice = createSlice({
     postPayrollFailed: (state) => {
       state.isLoading = false;
     },
+    getGenerateGrossPayrollRequested: state => {
+      state.isLoading = true;
+    },
+    getGenerateGrossPayrollSuccess: (state, action) => {
+      state.isLoading = false;
+      state.generateGrossPayroll = action.payload?.data;
+    },
+    getGenerateGrossPayrollFailed: state => {
+      state.isLoading = false;
+    }
   },
   extraReducers: {
     [HYDRATE]: (state, action) => {
@@ -52,7 +64,10 @@ export const {
   getPayrollFailed,
   postPayrollRequested,
   postPayrollSuccess,
-  postPayrollFailed
+  postPayrollFailed,
+  getGenerateGrossPayrollRequested,
+  getGenerateGrossPayrollSuccess,
+  getGenerateGrossPayrollFailed
 } = payrollSlice.actions;
 
 export default payrollSlice.reducer;
