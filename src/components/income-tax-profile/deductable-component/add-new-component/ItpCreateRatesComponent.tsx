@@ -45,7 +45,7 @@ const listMenuItem = [
 
 interface ItpRatesProps {
   refProp: React.Ref<HTMLFormElement>;
-  nextPage: (_val: number) => void;
+  nextPage: React.Dispatch<React.SetStateAction<number>>
   setValues: React.Dispatch<React.SetStateAction<Tax.ItpRatesParams>>
   infoValues: Tax.ItpRatesParams,
   setIsInRatesValid: React.Dispatch<React.SetStateAction<boolean>>
@@ -53,7 +53,7 @@ interface ItpRatesProps {
 
 export default function ItpCreateRatesComponent({ refProp, nextPage, setValues, infoValues, setIsInRatesValid }: ItpRatesProps) {
   const {t} = useTranslation();
-  const [deductableType, setDeductableType] = React.useState(true);
+  const [deductableType, setDeductableType] = React.useState(infoValues?.type);
   const tPath = 'income_tax_profile.deductable_component.add_new_component.form.rates.';
 
   const initialValues = {
@@ -65,6 +65,9 @@ export default function ItpCreateRatesComponent({ refProp, nextPage, setValues, 
 
   const handleSubmit = (values) => {
     console.log(values);
+    setIsInRatesValid(true);
+    setValues(values);
+    nextPage(2);
   };
 
   const formik = useFormik({
@@ -109,7 +112,7 @@ export default function ItpCreateRatesComponent({ refProp, nextPage, setValues, 
               />
             </FormGroup>
           </Grid>
-          {/* {deductableType && (
+          {deductableType && (
             <Grid item>
               <Select
                 customLabel={t(`${tPath}dc_condition`)}
@@ -124,9 +127,9 @@ export default function ItpCreateRatesComponent({ refProp, nextPage, setValues, 
               // helperText={formik.touched.deductableCondition && formik.errors.deductableCondition}
               />
             </Grid>
-          )} */}
+          )}
           <Grid item>
-            {/* {deductableType && (
+            {deductableType && (
               <Form p={2} display='flex' flexDirection='column' gap='24px' sx={{backgroundColor: 'grey.50'}}>
                 <Grid container flexDirection='row'>
                   <Grid item xs={12} md={6}>
@@ -136,9 +139,8 @@ export default function ItpCreateRatesComponent({ refProp, nextPage, setValues, 
                         <Select
                           size='small'
                           options={listMenuItem}
-                          name='condition'
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
+                          name='factorUnitCondition.0.condition'
+                          onChange={(e) => formik.setFieldValue(`factorUnitCondition[0].condition`, e.target.value)}
                         // error={formik.touched.deductableCondition && Boolean(formik.errors.deductableCondition)}
                         // helperText={formik.touched.deductableCondition && formik.errors.deductableCondition}
                         />
@@ -146,7 +148,7 @@ export default function ItpCreateRatesComponent({ refProp, nextPage, setValues, 
                       <Grid item xs={9}>
                         <Input
                           size='small'
-                          onChange={(e) => formik.setFieldValue('condition3.name', e.target.value)}
+                          onChange={(e) => formik.setFieldValue(`factorUnitCondition.0.factorUnitName`, e.target.value)}
                         />
                       </Grid>
                     </Grid>
@@ -161,13 +163,13 @@ export default function ItpCreateRatesComponent({ refProp, nextPage, setValues, 
                         <Select
                           size='small'
                           options={listMenuItem}
-                          onChange={(e) => formik.setFieldValue('subCondition1.condition', e.target.value)}
+                          onChange={(e) => formik.setFieldValue('subCondition.0.condition', e.target.value)}
                         />
                       </Grid>
                       <Grid item xs={8.8}>
                         <Input
                           size='small'
-                          onChange={(e) => formik.setFieldValue('subCondition1.name', e.target.value)}
+                          onChange={(e) => formik.setFieldValue('subCondition.0.name', e.target.value)}
                         />
                       </Grid>
                     </Grid>
@@ -177,7 +179,7 @@ export default function ItpCreateRatesComponent({ refProp, nextPage, setValues, 
                       size='small'
                       customLabel={t(`${tPath}amount`)}
                       withAsterisk
-                      onChange={(e) => formik.setFieldValue('subCondition1.amount', e.target.value)}
+                      onChange={(e) => formik.setFieldValue('subCondition.0.amount', e.target.value)}
                       InputProps={{
                         startAdornment: (
                           <InputAdornment position='start'>Rp</InputAdornment>
@@ -194,13 +196,13 @@ export default function ItpCreateRatesComponent({ refProp, nextPage, setValues, 
                         <Select
                           size='small'
                           options={listMenuItem}
-                          onChange={(e) => formik.setFieldValue('subCondition2.condition', e.target.value)}
+                          onChange={(e) => formik.setFieldValue('subCondition.1.condition', e.target.value)}
                         />
                       </Grid>
                       <Grid item xs={8.8}>
                         <Input
                           size='small'
-                          onChange={(e) => formik.setFieldValue('subCondition2.name', e.target.value)}
+                          onChange={(e) => formik.setFieldValue('subCondition.1.name', e.target.value)}
                         />
                       </Grid>
                     </Grid>
@@ -210,7 +212,7 @@ export default function ItpCreateRatesComponent({ refProp, nextPage, setValues, 
                       size='small'
                       customLabel={t(`${tPath}amount`)}
                       withAsterisk
-                      onChange={(e) => formik.setFieldValue('subCondition2.amount', e.target.value)}
+                      onChange={(e) => formik.setFieldValue('subCondition.1.amount', e.target.value)}
                       InputProps={{
                         startAdornment: (
                           <InputAdornment position='start'>Rp</InputAdornment>
@@ -220,8 +222,8 @@ export default function ItpCreateRatesComponent({ refProp, nextPage, setValues, 
                   </Grid>
                 </Grid>
               </Form>
-            )} */}
-            {/* {!deductableType && (
+            )}
+            {!deductableType && (
               <>
                 <Grid container flexDirection='row' gap={3}>
                   <Grid item xs={12} md={5.5}>
@@ -229,7 +231,7 @@ export default function ItpCreateRatesComponent({ refProp, nextPage, setValues, 
                       size='small'
                       customLabel={t(`${tPath}dc_condition`)}
                       withAsterisk
-                      onChange={(e) => formik.setFieldValue('condition1.amount', e.target.value)}
+                      onChange={(e) => formik.setFieldValue('deductableCondition', e.target.value)}
                     />
                   </Grid>
                   <Grid item xs={12} md={5.5}>
@@ -237,7 +239,7 @@ export default function ItpCreateRatesComponent({ refProp, nextPage, setValues, 
                       size='small'
                       customLabel={t(`${tPath}amount`)}
                       withAsterisk
-                      onChange={(e) => formik.setFieldValue('condition1.amount', e.target.value)}
+                      onChange={(e) => formik.setFieldValue('amount', e.target.value)}
                       InputProps={{
                         startAdornment: (
                           <InputAdornment position='start'>Rp</InputAdornment>
@@ -247,7 +249,7 @@ export default function ItpCreateRatesComponent({ refProp, nextPage, setValues, 
                   </Grid>
                 </Grid>
               </>
-            )} */}
+            )}
           </Grid>
         </Grid>
         <Box
