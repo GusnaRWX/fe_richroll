@@ -12,8 +12,10 @@ import {
   Box,
 } from '@mui/material';
 import { useFormik } from 'formik';
-import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
+import { validationSchemeItpRates } from './validate';
+import { Tax } from '@/types/tax';
+
 
 const condition = [
   {
@@ -41,55 +43,25 @@ const listMenuItem = [
   },
 ];
 
-export default function ItpCreateRatesComponent() {
+interface ItpRatesProps {
+  refProp: React.Ref<HTMLFormElement>;
+  nextPage: (_val: number) => void;
+  setValues: React.Dispatch<React.SetStateAction<Tax.ItpRatesParams>>
+  infoValues: Tax.ItpRatesParams,
+  setIsInRatesValid: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export default function ItpCreateRatesComponent({ refProp, nextPage, setValues, infoValues, setIsInRatesValid }: ItpRatesProps) {
   const {t} = useTranslation();
   const [deductableType, setDeductableType] = React.useState(true);
   const tPath = 'income_tax_profile.deductable_component.add_new_component.form.rates.';
 
   const initialValues = {
-    deductableCondition: '',
-    condition1: {
-      condition: '',
-      name: '',
-      amount: ''
-    },
-    condition2: {
-      condition: '',
-      name: '',
-      amount: ''
-    },
-    condition3: {
-      condition: '',
-      name: '',
-    },
-    subCondition1: {
-      condition: '',
-      name: '',
-      amount: ''
-    },
-    subCondition2: {
-      condition: '',
-      name: '',
-      amount: ''
-    },
+    type : infoValues.type,
+    deductableCondition : infoValues.deductableCondition,
+    amount : infoValues.amount,
+    factorUnitCondition : infoValues.factorUnitCondition
   };
-
-  const validationSchema = Yup.object({
-    // employeeData: Yup.object({
-    //   start: Yup.string().required('This Field is Required'),
-    //   end: Yup.string().required('This Field is Required'),
-    //   rate: Yup.string().required('This Field is Required'),
-    //   fixed: Yup.string().required('This Field is Required'),
-    //   amountCap: Yup.string().required('This Field is Required'),
-    // }),
-    // employerData: Yup.object({
-    //   start: Yup.string().required('This Field is Required'),
-    //   end: Yup.string().required('This Field is Required'),
-    //   rate: Yup.string().required('This Field is Required'),
-    //   fixed: Yup.string().required('This Field is Required'),
-    //   amountCap: Yup.string().required('This Field is Required'),
-    // })
-  });
 
   const handleSubmit = (values) => {
     console.log(values);
@@ -98,7 +70,7 @@ export default function ItpCreateRatesComponent() {
   const formik = useFormik({
     initialValues: initialValues,
     onSubmit: (values) => handleSubmit(values),
-    validationSchema : validationSchema
+    validationSchema : validationSchemeItpRates
   });
 
   const AsteriskComponent = styled('span')(({ theme }) => ({
@@ -107,264 +79,195 @@ export default function ItpCreateRatesComponent() {
 
   return (
     <>
-      <Grid container flexDirection='column' gap={4}>
-        <Grid item>
-          <FormGroup>
-            <Text
-              title={t(`${tPath}select_type`)}
-              color='grey.700'
-              fontWeight='400'
-            />
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={deductableType}
-                  onChange={(e) => setDeductableType(e.target.checked)}
-                />}
-              label={
-                <Text
-                  title='Auto'
-                  color='primary.600'
-                  fontWeight='700'
-                />
-              }
-            />
-          </FormGroup>
-        </Grid>
-        {deductableType && (
+      <form ref={refProp} onSubmit={formik.handleSubmit}>
+        <Grid container flexDirection='column' gap={4}>
           <Grid item>
-            <Select
-              customLabel={t(`${tPath}dc_condition`)}
-              withAsterisk
-              size='small'
-              options={condition}
-              value={formik.values.deductableCondition}
-              onChange={(e) => formik.setFieldValue('deductableCondition', e.target.value)}
-            />
+            <FormGroup>
+              <Text
+                title={t(`${tPath}select_type`)}
+                color='grey.700'
+                fontWeight='400'
+              />
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={deductableType}
+                    name='type'
+                    onChange={(e) => setDeductableType(e.target.checked)}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.type}
+                  // error={formik.touched.type && Boolean(formik.errors.type)}
+                  // helperText={formik.touched.type && formik.errors.type}
+                  />}
+                label={
+                  <Text
+                    title='Auto'
+                    color='primary.600'
+                    fontWeight='700'
+                  />
+                }
+              />
+            </FormGroup>
           </Grid>
-        )}
-        <Grid item>
-          {deductableType && (
-            <Form p={2} display='flex' flexDirection='column' gap='24px' sx={{backgroundColor: 'grey.50'}}>
-              <Grid container flexDirection='row'>
-                <Grid item xs={12} md={6}>
-                  <Typography mb='6px'>{t(`${tPath}fu_condition`)} 1 <AsteriskComponent>*</AsteriskComponent></Typography>
-                  <Grid item container flexDirection='row' gap={1.5}>
-                    <Grid item xs={1.5}>
-                      <Select
-                        size='small'
-                        options={listMenuItem}
-                        value={formik.values.condition1.condition}
-                        onChange={(e) => formik.setFieldValue('condition1.condition', e.target.value)}
-                      />
-                    </Grid>
-                    <Grid item xs={9}>
-                      <Input
-                        size='small'
-                        value={formik.values.condition1.name}
-                        onChange={(e) => formik.setFieldValue('condition1.name', e.target.value)}
-                      />
-                    </Grid>
-                  </Grid>
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <Input
-                    size='small'
-                    customLabel={t(`${tPath}amount`)}
-                    withAsterisk
-                    value={formik.values.condition1.amount}
-                    onChange={(e) => formik.setFieldValue('condition1.amount', e.target.value)}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position='start'>Rp</InputAdornment>
-                      ),
-                    }}
-                  />
-                </Grid>
-              </Grid>
-              <Grid container flexDirection='row'>
-                <Grid item xs={12} md={6}>
-                  <Typography mb='6px'>{t(`${tPath}fu_condition`)} 2 <AsteriskComponent>*</AsteriskComponent></Typography>
-                  <Grid item container flexDirection='row' gap={1.5}>
-                    <Grid item xs={1.5}>
-                      <Select
-                        size='small'
-                        options={listMenuItem}
-                        value={formik.values.condition2.condition}
-                        onChange={(e) => formik.setFieldValue('condition2.condition', e.target.value)}
-                      />
-                    </Grid>
-                    <Grid item xs={9}>
-                      <Input
-                        size='small'
-                        value={formik.values.condition2.name}
-                        onChange={(e) => formik.setFieldValue('condition2.name', e.target.value)}
-                      />
+          {/* {deductableType && (
+            <Grid item>
+              <Select
+                customLabel={t(`${tPath}dc_condition`)}
+                withAsterisk
+                size='small'
+                options={condition}
+                name='deductableCondition'
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.deductableCondition}
+              // error={formik.touched.deductableCondition && Boolean(formik.errors.deductableCondition)}
+              // helperText={formik.touched.deductableCondition && formik.errors.deductableCondition}
+              />
+            </Grid>
+          )} */}
+          <Grid item>
+            {/* {deductableType && (
+              <Form p={2} display='flex' flexDirection='column' gap='24px' sx={{backgroundColor: 'grey.50'}}>
+                <Grid container flexDirection='row'>
+                  <Grid item xs={12} md={6}>
+                    <Typography mb='6px'>{t(`${tPath}fu_condition`)} 1 <AsteriskComponent>*</AsteriskComponent></Typography>
+                    <Grid item container flexDirection='row' gap={1.5}>
+                      <Grid item xs={1.5}>
+                        <Select
+                          size='small'
+                          options={listMenuItem}
+                          name='condition'
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                        // error={formik.touched.deductableCondition && Boolean(formik.errors.deductableCondition)}
+                        // helperText={formik.touched.deductableCondition && formik.errors.deductableCondition}
+                        />
+                      </Grid>
+                      <Grid item xs={9}>
+                        <Input
+                          size='small'
+                          onChange={(e) => formik.setFieldValue('condition3.name', e.target.value)}
+                        />
+                      </Grid>
                     </Grid>
                   </Grid>
+                  <Grid item xs={0} md={6} />
                 </Grid>
-                <Grid item xs={12} md={6}>
-                  <Input
-                    size='small'
-                    customLabel={t(`${tPath}amount`)}
-                    withAsterisk
-                    value={formik.values.condition2.amount}
-                    onChange={(e) => formik.setFieldValue('condition2.amount', e.target.value)}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position='start'>Rp</InputAdornment>
-                      ),
-                    }}
-                  />
-                </Grid>
-              </Grid>
-              <Grid container flexDirection='row'>
-                <Grid item xs={12} md={6}>
-                  <Typography mb='6px'>{t(`${tPath}fu_condition`)} 3 <AsteriskComponent>*</AsteriskComponent></Typography>
-                  <Grid item container flexDirection='row' gap={1.5}>
-                    <Grid item xs={1.5}>
-                      <Select
-                        size='small'
-                        options={listMenuItem}
-                        value={formik.values.condition3.condition}
-                        onChange={(e) => formik.setFieldValue('condition3.condition', e.target.value)}
-                      />
-                    </Grid>
-                    <Grid item xs={9}>
-                      <Input
-                        size='small'
-                        value={formik.values.condition3.name}
-                        onChange={(e) => formik.setFieldValue('condition3.name', e.target.value)}
-                      />
+                <Grid container flexDirection='row'>
+                  <Grid pl={8.5} item xs={12} md={6}>
+                    <Typography mb='6px'>{t(`${tPath}sub_condition`)} 1 <AsteriskComponent>*</AsteriskComponent></Typography>
+                    <Grid item container flexDirection='row' gap={1.5}>
+                      <Grid item xs={1.5}>
+                        <Select
+                          size='small'
+                          options={listMenuItem}
+                          onChange={(e) => formik.setFieldValue('subCondition1.condition', e.target.value)}
+                        />
+                      </Grid>
+                      <Grid item xs={8.8}>
+                        <Input
+                          size='small'
+                          onChange={(e) => formik.setFieldValue('subCondition1.name', e.target.value)}
+                        />
+                      </Grid>
                     </Grid>
                   </Grid>
-                </Grid>
-                <Grid item xs={0} md={6} />
-              </Grid>
-              <Grid container flexDirection='row'>
-                <Grid pl={8.5} item xs={12} md={6}>
-                  <Typography mb='6px'>{t(`${tPath}sub_condition`)} 1 <AsteriskComponent>*</AsteriskComponent></Typography>
-                  <Grid item container flexDirection='row' gap={1.5}>
-                    <Grid item xs={1.5}>
-                      <Select
-                        size='small'
-                        options={listMenuItem}
-                        value={formik.values.subCondition1.condition}
-                        onChange={(e) => formik.setFieldValue('subCondition1.condition', e.target.value)}
-                      />
-                    </Grid>
-                    <Grid item xs={8.8}>
-                      <Input
-                        size='small'
-                        value={formik.values.subCondition1.name}
-                        onChange={(e) => formik.setFieldValue('subCondition1.name', e.target.value)}
-                      />
-                    </Grid>
+                  <Grid item xs={12} md={6}>
+                    <Input
+                      size='small'
+                      customLabel={t(`${tPath}amount`)}
+                      withAsterisk
+                      onChange={(e) => formik.setFieldValue('subCondition1.amount', e.target.value)}
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position='start'>Rp</InputAdornment>
+                        ),
+                      }}
+                    />
                   </Grid>
                 </Grid>
-                <Grid item xs={12} md={6}>
-                  <Input
-                    size='small'
-                    customLabel={t(`${tPath}amount`)}
-                    withAsterisk
-                    value={formik.values.subCondition1.amount}
-                    onChange={(e) => formik.setFieldValue('subCondition1.amount', e.target.value)}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position='start'>Rp</InputAdornment>
-                      ),
-                    }}
-                  />
-                </Grid>
-              </Grid>
-              <Grid container flexDirection='row'>
-                <Grid pl={8.5} item xs={12} md={6}>
-                  <Typography mb='6px'>{t(`${tPath}sub_condition`)} 2 <AsteriskComponent>*</AsteriskComponent></Typography>
-                  <Grid item container flexDirection='row' gap={1.5}>
-                    <Grid item xs={1.5}>
-                      <Select
-                        size='small'
-                        options={listMenuItem}
-                        value={formik.values.subCondition2.condition}
-                        onChange={(e) => formik.setFieldValue('subCondition2.condition', e.target.value)}
-                      />
-                    </Grid>
-                    <Grid item xs={8.8}>
-                      <Input
-                        size='small'
-                        value={formik.values.subCondition2.name}
-                        onChange={(e) => formik.setFieldValue('subCondition2.name', e.target.value)}
-                      />
+                <Grid container flexDirection='row'>
+                  <Grid pl={8.5} item xs={12} md={6}>
+                    <Typography mb='6px'>{t(`${tPath}sub_condition`)} 2 <AsteriskComponent>*</AsteriskComponent></Typography>
+                    <Grid item container flexDirection='row' gap={1.5}>
+                      <Grid item xs={1.5}>
+                        <Select
+                          size='small'
+                          options={listMenuItem}
+                          onChange={(e) => formik.setFieldValue('subCondition2.condition', e.target.value)}
+                        />
+                      </Grid>
+                      <Grid item xs={8.8}>
+                        <Input
+                          size='small'
+                          onChange={(e) => formik.setFieldValue('subCondition2.name', e.target.value)}
+                        />
+                      </Grid>
                     </Grid>
                   </Grid>
+                  <Grid item xs={12} md={6}>
+                    <Input
+                      size='small'
+                      customLabel={t(`${tPath}amount`)}
+                      withAsterisk
+                      onChange={(e) => formik.setFieldValue('subCondition2.amount', e.target.value)}
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position='start'>Rp</InputAdornment>
+                        ),
+                      }}
+                    />
+                  </Grid>
                 </Grid>
-                <Grid item xs={12} md={6}>
-                  <Input
-                    size='small'
-                    customLabel={t(`${tPath}amount`)}
-                    withAsterisk
-                    value={formik.values.subCondition2.amount}
-                    onChange={(e) => formik.setFieldValue('subCondition2.amount', e.target.value)}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position='start'>Rp</InputAdornment>
-                      ),
-                    }}
-                  />
+              </Form>
+            )} */}
+            {/* {!deductableType && (
+              <>
+                <Grid container flexDirection='row' gap={3}>
+                  <Grid item xs={12} md={5.5}>
+                    <Input
+                      size='small'
+                      customLabel={t(`${tPath}dc_condition`)}
+                      withAsterisk
+                      onChange={(e) => formik.setFieldValue('condition1.amount', e.target.value)}
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={5.5}>
+                    <Input
+                      size='small'
+                      customLabel={t(`${tPath}amount`)}
+                      withAsterisk
+                      onChange={(e) => formik.setFieldValue('condition1.amount', e.target.value)}
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position='start'>Rp</InputAdornment>
+                        ),
+                      }}
+                    />
+                  </Grid>
                 </Grid>
-              </Grid>
-            </Form>
-          )}
-          {!deductableType && (
-            <>
-              <Grid container flexDirection='row' gap={3}>
-                <Grid item xs={12} md={5.5}>
-                  <Input
-                    size='small'
-                    customLabel={t(`${tPath}dc_condition`)}
-                    withAsterisk
-                    value={formik.values.condition1.amount}
-                    onChange={(e) => formik.setFieldValue('condition1.amount', e.target.value)}
-                  />
-                </Grid>
-                <Grid item xs={12} md={5.5}>
-                  <Input
-                    size='small'
-                    customLabel={t(`${tPath}amount`)}
-                    withAsterisk
-                    value={formik.values.condition1.amount}
-                    onChange={(e) => formik.setFieldValue('condition1.amount', e.target.value)}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position='start'>Rp</InputAdornment>
-                      ),
-                    }}
-                  />
-                </Grid>
-              </Grid>
-            </>
-          )}
+              </>
+            )} */}
+          </Grid>
         </Grid>
-      </Grid>
-      <Box
-        component='div'
-        sx={{
-          marginTop: '16px',
-          display: 'flex',
-          width: '100%',
-          justifyContent: 'flex-end',
-          gap: '16px',
-        }}
-      >
-        <Button
-          variant='outlined'
+        <Box
+          component='div'
           sx={{
-            padding: '9px',
-            width: 'fit-content',
+            marginTop: '16px',
+            display: 'flex',
+            width: '100%',
+            justifyContent: 'flex-end',
+            gap: '16px',
           }}
-          label={t('button.back')}
-        />
-      </Box>
+        >
+          <Button
+            sx={{ padding: '9px', width: 'fit-content' }}
+            label={t('button.back')}
+            variant='outlined'
+            onClick={() => nextPage(1)}
+          />
+        </Box>
+      </form>
     </>
   );
 }
