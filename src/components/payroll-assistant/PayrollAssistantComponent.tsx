@@ -3,7 +3,6 @@ import { Typography, Card, Grid, Box, Button as MuiButton, Tab, Tabs } from '@mu
 import { DateRangePicker, Input } from '@/components/_shared/form';
 import { styled } from '@mui/material/styles';
 import { Add } from '@mui/icons-material';
-import { useRouter } from 'next/router';
 import PayrollAssistantTable from './PayrollAssistantTable';
 import { CustomModal } from '@/components/_shared/common';
 import { getCompanyData } from '@/utils/helper';
@@ -60,7 +59,6 @@ function a11yProps(index: number) {
 
 function PayrollAssistantComponent() {
   const dispatch = useAppDispatch();
-  const router = useRouter();
   const companyData = getCompanyData();
   const [value, setValue] = useState(0);
   const [date, setDate] = useState<Array<Date>>([]);
@@ -80,13 +78,15 @@ function PayrollAssistantComponent() {
     dispatch({
       type: postPayrollRequested.toString(),
       payload: {
-        companyID: companyData?.id,
-        name: name,
-        start: dayjs(start).toISOString(),
-        end: dayjs(end).toISOString()
+        data: {
+          companyID: companyData?.id,
+          name: name,
+          start: dayjs(start).toISOString(),
+          end: dayjs(end).toISOString()
+        },
+        isAttendance: false
       }
     });
-    router.push('/payroll-disbursement/payroll-assistant/create');
   };
 
   return (

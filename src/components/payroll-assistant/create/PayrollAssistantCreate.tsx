@@ -15,6 +15,7 @@ import DisbursementContent from './DisbursementContent';
 import CompleteContent from './CompleteContent';
 import CustomModal from '@/components/_shared/common/CustomModal';
 import { ifThenElse } from '@/utils/helper';
+import { useAppSelectors } from '@/hooks/index';
 
 const steps = [
   'Create Payroll',
@@ -42,6 +43,8 @@ const ContentWrapper = styled(Card)(({
 
 function PayrollAssistantCreate() {
   const router = useRouter();
+  const payrollId = router?.query?.id;
+  const { name, start, end } = useAppSelectors((state) => state.payroll);
   const [value, setValue] = useState(1);
   const [open, setOpen] = useState(false);
   const [isExit, setIsExit] = useState(true);
@@ -59,7 +62,7 @@ function PayrollAssistantCreate() {
       <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
         <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
           <Typography variant='h6' color='#4B5563'><b>Payroll Assistant</b></Typography>
-          <Typography variant='text-base' color='#4B5563'><b>Payroll 280123 — </b>1/03/2023 - 14/03/2023</Typography>
+          <Typography variant='text-base' color='#4B5563'><b>{name} — </b>{start} - {end}</Typography>
         </Grid>
         <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
           <ButtonWrapper>
@@ -100,7 +103,7 @@ function PayrollAssistantCreate() {
         </Box>
       </ContentWrapper>
       
-      {value == 1 && <AttendanceContent />}
+      {value == 1 && <AttendanceContent payrollID={payrollId} />}
       {value == 2 && <GrossContent isPreview={false} />}
       {value == 3 && <NetContent />}
       {value == 4 && <DisbursementContent />}
