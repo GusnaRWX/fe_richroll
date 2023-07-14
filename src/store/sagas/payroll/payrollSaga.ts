@@ -72,6 +72,8 @@ function* fetchPostPayroll(action: AnyAction) {
       yield put({ type: postPayrollSuccess.toString(), payload: res.data.data });
       if (action?.payload?.isAttendance === true) {
         Router.push({ pathname: '/payroll-disbursement/attendance/generate', query: { id: res.data.data } });
+      } else {
+        Router.push({ pathname: '/payroll-disbursement/payroll-assistant/create', query: { id: res.data.data } });
       }
       yield put({
         type: setResponserMessage.toString(),
