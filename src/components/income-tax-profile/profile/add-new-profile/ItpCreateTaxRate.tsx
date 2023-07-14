@@ -177,7 +177,14 @@ export default function ItpCreateTaxRate({rateValue, setValue, nextStep}: RatePr
                 <Button label={t('button.next')} onClick={() => formik.submitForm()} />
               </Grid>
               <Grid item>
-                <Button label={t('button.back')} variant='outlined' onClick={() => formik.submitForm()} />
+                <Button
+                  label={t('button.back')}
+                  variant='outlined'
+                  onClick={() => {
+                    formik.submitForm();
+                    nextStep(1);
+                  }}
+                />
               </Grid>
             </Grid>
           </form>

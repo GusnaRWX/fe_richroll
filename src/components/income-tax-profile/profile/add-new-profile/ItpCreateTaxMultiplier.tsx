@@ -9,8 +9,24 @@ import * as Yup from 'yup';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 
+interface ConditionType {
+  conditionAction : string;
+  conditionStatus : string;
+  multiplier : string;
+}
 
-export default function ItpCreateTaxMultiplier() {
+interface Component {
+  status: string;
+  condition : ConditionType[];
+}
+
+interface MultiplierProp {
+  nextStep: React.Dispatch<React.SetStateAction<number>>
+  setValue: React.Dispatch<React.SetStateAction<{component: Component[]}>>
+  multiplierValue: {component: Component[]}
+}
+
+export default function ItpCreateTaxMultiplier({nextStep, setValue, multiplierValue}: MultiplierProp) {
   const {t} = useTranslation();
   const t_key = 'income_tax_profile.profile.detail.income_tax_multiplier';
 
@@ -49,29 +65,15 @@ export default function ItpCreateTaxMultiplier() {
     )
   });
 
-  interface ConditionType {
-    conditionAction : string;
-    conditionStatus : string;
-    multiplier : string;
-  }
-
-  interface Component {
-    status: string;
-    condition : ConditionType[];
-  }
-
-  const initialValues: {
-    component : Component[];
-  } = {
-    component : []
-  };
+  const initialValues: {component : Component[]} = multiplierValue;
 
   return (
     <>
       <Formik
         initialValues={initialValues}
         onSubmit={(values) => {
-          console.log(values);
+          setValue(values);
+          nextStep(4);
         }}
         validationSchema={validationSchecma}
       >
@@ -224,7 +226,16 @@ export default function ItpCreateTaxMultiplier() {
                       </Box>
                       <Grid container xs={12} spacing={2} style={{marginTop: '16px'}}>
                         <Grid item xs={12} md={12} lg={12} xl={12}>
-                          <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                          <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
+                            <Button
+                              label={t('button.back')}
+                              variant='outlined'
+                              onClick={() => {
+                                formik.submitForm();
+                                nextStep(2);
+                              }}
+                              sx={{ width: 'fit-content' }}
+                            />
                             <Button
                               color='primary'
                               label={t('button.next')}

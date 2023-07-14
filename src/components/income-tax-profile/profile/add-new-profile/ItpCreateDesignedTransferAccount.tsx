@@ -70,7 +70,6 @@ function ItpCreateDesignedTransferAccount({nextStep, setValue, dtaValue, refProp
     initialValues: dtaValue,
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      console.log(values);
       setValue(values);
     },
   });
@@ -370,10 +369,13 @@ function ItpCreateDesignedTransferAccount({nextStep, setValue, dtaValue, refProp
         <Grid item xs={12} md={12} lg={12} xl={12}>
           <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Button
-              color='primary'
               label={t('button.back')}
               sx={{ width: 'fit-content' }}
-              onClick={() => nextStep(3)}
+              onClick={() => {
+                formik.submitForm();
+                nextStep(3);
+              }}
+              variant='outlined'
             />
             <button hidden ref={refProp} onClick={() => formik.submitForm()} />
           </Box>

@@ -68,20 +68,20 @@ function ItpAddNewProfileComponent() {
     }]
   });
 
-  // const [multiplierValue, setMultiplierValue] = useState({
-  //   component: [
-  //     {
-  //       status: '',
-  //       condition: [
-  //         {
-  //           conditionAction : '',
-  //           conditionStatus : '',
-  //           multiplier : '',
-  //         }
-  //       ]
-  //     }
-  //   ]
-  // });
+  const [multiplierValue, setMultiplierValue] = useState({
+    component: [
+      {
+        status: '',
+        condition: [
+          {
+            conditionAction : '',
+            conditionStatus : '',
+            multiplier : '',
+          }
+        ]
+      }
+    ]
+  });
 
   const [dtaValue, setDtaValue] = useState({
     bank: '',
@@ -94,10 +94,6 @@ function ItpAddNewProfileComponent() {
     notes: '',
   });
 
-  React.useEffect(() => {
-    console.log(rateValue);
-  }, [rateValue]);
-
 
   const handleClose = () => {
     setOpen(false);
@@ -108,6 +104,7 @@ function ItpAddNewProfileComponent() {
     console.log('basicValue: ', basicValue);
     console.log('rateValue: ', rateValue.component);
     console.log('dtaValue: ', dtaValue);
+    console.log('multiplierValue: ', multiplierValue.component);
   };
 
   const steps = [
@@ -219,7 +216,7 @@ function ItpAddNewProfileComponent() {
           {value == 0 && <ItpCreateTaxBasicDetail basicValue={basicValue} setValue={setBasicValue} nextStep={setValue} />}
           {value == 1 && <ItpCreateTaxDeductableComponent nextStep={setValue} />}
           {value == 2 && <ItpCreateTaxRate rateValue={rateValue} setValue={setRateValue} nextStep={setValue} />}
-          {value == 3 && <ItpCreateTaxMultiplier />}
+          {value == 3 && <ItpCreateTaxMultiplier nextStep={setValue} setValue={setMultiplierValue} multiplierValue={multiplierValue} />}
           {value == 4 && <ItpCreateDesignedTransferAccount dtaValue={dtaValue} setValue={setDtaValue} nextStep={setValue} refProp={btnRef} />}
         </Box>
       </ContentWrapper>
