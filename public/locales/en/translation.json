@@ -34,6 +34,433 @@
     "payroll_setting": "Payroll Setting",
     "employment": "Employment",
     "reports": "Reports",
-    "article_management": "Article Management"
+    "article_management": "Article Management",
+    "income_tax_profile" : "Income Tax Profile",
+    "income_tax_profile_deductable_component" : "Deductable Component",
+    "income_tax_profile_profile" : "Profile"
+  },
+  "button" : {
+    "next" : "Next",
+    "back" : "Back",
+    "save" : "Save",
+    "save_approve" : "Save and Approve",
+    "save_exit" : "Save and Exit",
+    "confirm" : "Confirm",
+    "cancel" : "Cancel",
+    "delete" : "Delete",
+    "edit" :"Edit",
+    "activate" : "Activate",
+    "reactivate" : "Reactivate",
+    "suspend" : "Suspend",
+    "archive" : "Archived",
+    "duplicate" : "Duplicate",
+    "mark_complete" : "Mark All and Complete",
+    "add_new_profile" : "Add New Profile",
+    "add_component" : "Add Component",
+    "add_new_component" : "Add New Component",
+    "component" : "Component",
+    "deductable": "Deductable"
+  },
+
+
+
+  "income_tax_profile": {
+    "deductable_component": {
+      "title": "Deductable Components Dashboard",
+      "detail_title" : "Deductable Component Detail",
+      "table": {
+        "company_name": "Company Name",
+        "country": "Country",
+        "component_condition": "Component Condition",
+        "last_update": "Last Update",
+        "delete_modal" : {
+          "title" : "Delete Data Entry",
+          "text" : "You are about to delete this statutory benefit component. This action cannot be undone."
+        }
+      },
+      "add_new_component" : {
+        "title" : "Add New Component",
+        "save_modal_text" : "You will stop the process, and saved in Add New Component.<br>Are you sure to stop the process?",
+        "mark_modal_text" : "All disbursement will marked paid and complete the Add New Component process",
+        "form" : {
+          "wizard_option" : {
+            "initial":"Create",
+            "basic_detail": "Basic Detail",
+            "designed_transfer_account": "Designed Transfer Account",
+            "transfer_account": "Transfer Account",
+            "rates": "Rates"
+          },
+          "create_basic_detail" : {
+            "name" : "Component Name",
+            "name_placeholder" : "Input Component Name",
+            "country": "Country",
+            "province": "Province",
+            "city": "City",
+            "sub_district": "Sub-District",
+            "citation": "Citation",
+            "internal_notes": "Internal Notes",
+            "external_notes": "External Notes",
+            "max_char_info" :"Max. 120 Character"
+          },
+          "create_dta" : {
+            "title" : "Bank Information",
+            "type": "Type",
+            "type_option" : {
+              "central_account" : "Central Account",
+              "individual_account" :"Individual Account",
+              "company_account_only" : "Company Account Only"
+            },
+            "message" : "The Designated Transfer Account is added manually to each employee’s profile",
+            "bank": "Bank",
+            "bank_account_holders_name": "Bank Account Holders Name",
+            "bank_account_no": "Bank Account No",
+            "bank_code": "Bank Code",
+            "branch_code": "Branch Code",
+            "branch_name": "Branch Name",
+            "swift_code": "Swift Code",
+            "notes": "Notes",
+            "bank_account_holders_name_placeholder": "Input Bank Account Holders Name",
+            "bank_account_no_placeholder": "Input Bank Account No",
+            "bank_code_placeholder": "Input Bank Code",
+            "branch_code_placeholder": "Input Branch Code",
+            "branch_name_placeholder": "Input Branch Name",
+            "swift_code_placeholder": "Input Swift Code",
+            "notes_placeholder": "Input Notes",
+            "max_char_info" :"Max. 100 Character"
+          },
+          "rates" : {
+            "select_type" : "Select Deductable Type",
+            "dc_condition" : "Deductable Component Condition",
+            "amount" : "Amount",
+            "fu_condition" : "Factor Unit Condition",
+            "sub_condition" : "Sub Condition"
+          }
+        }
+      },
+      "modal": {
+        "delete": {
+          "title": "Delete Data Entry",
+          "text": "You are about to delete this statutory benefit component. This action cannot be undone."
+        },
+        "duplicate": {
+          "title": "Confirmation",
+          "text": "Are you sure you want to duplicate this profile ?"
+        }
+      }
+    },
+    "profile": {
+      "title": "Tax Profile Configuration",
+      "add_new_title" : "Add New Tax Profile",
+      "tab": {
+        "draft": "Draft",
+        "active": "Active",
+        "archive": "Archived"
+      },
+      "draft_table": {
+        "name": "Name",
+        "country": "Country",
+        "effective_period": "Effective Period",
+        "created_on": "Created On",
+        "last_update": "Last Update"
+      },
+      "active_table": {
+        "profile_name": "Profile Name",
+        "country": "Country",
+        "province": "Province",
+        "effective_period": "Effective Period",
+        "created_on": "Created On",
+        "last_update": "Last Update"
+      },
+      "archieve_table": {
+        "profile_name": "Profile Name",
+        "country": "Country",
+        "province": "Province",
+        "effective_period": "Effective Period",
+        "created_on": "Created On",
+        "last_update": "Last Update"
+      },
+      "detail": {
+        "main": {
+          "title": "Tax Profile - Status"
+        },
+        "tab": {
+          "basic_detail": "Basic Detail",
+          "deductible_component": "Deductible Components",
+          "income_tax_rate": "Income Tax Rate",
+          "income_tax_multiplier": "Income Tax Multiplier",
+          "designated_transfer_account": "Designated Transfer Account"
+        },
+        "wizard_option":{
+          "initial":"Create",
+          "basic_detail": "Basic Detail",
+          "deductable_component": "Deductable Component",
+          "income_tax_rates": "Income Tax Rates",
+          "income_tax_multiplier": "Income Tax Multiplier",
+          "designed_transfer_account": "Designed Transfer Account"
+        },
+        "basic_detail": {
+          "tax_profile_name": "Tax Profile Name",
+          "tax_profile_name_placeholder": "Input Profile Name",
+          "country": "Country",
+          "different_currency": "Different Currency",
+          "effective_period": "Effective Period",
+          "citation": "Citation",
+          "internal_notes": "Internal Notes",
+          "external_notes": "External Notes",
+          "province": "Province",
+          "city": "City",
+          "sub_district": "Sub-District",
+          "effective_date": "Effective Date",
+          "expiration_date": "Expiration Date",
+          "max_char_info" : "Max. 120 Character"
+        },
+        "deductible_component": {
+          "martial_status": "Marital Status",
+          "number_of_dependence": "Number of Dependance",
+          "factor_unit_condition": "Factor Unit Condition",
+          "amount": "Amount",
+          "deductible": "Deductible"
+        },
+        "income_tax_rate": {
+          "progressive_rate": "Progressive Rate",
+          "income": "Income",
+          "rate": "Rate",
+          "min_income": "Min Income",
+          "amount": "Amount",
+          "max_income": "Max Income",
+          "additional_fixed_amount":"Additional Fixed Amount"
+        },
+        "income_tax_multiplier": {
+          "deductible_factor": "Deductible Factor",
+          "factor_unit_condition": "Factor Unit Condition",
+          "rate": "Rate",
+          "additional_fixed_amount": "Additional Fixed Amount",
+          "status": "Status",
+          "condition": "Condition",
+          "multiplier": "Multiplier",
+          "component": "Component"
+        },
+        "designated_transfer_account": {
+          "type": "Type",
+          "bank": "Bank",
+          "bank_account_holders_name": "Bank Account Holders Name",
+          "bank_account_holders_name_placeholder": "Input Bank Account Holders Name",
+          "bank_account_no": "Bank Account No",
+          "bank_account_no_placeholder": "Input Bank Account No",
+          "bank_code": "Bank Code",
+          "bank_code_placeholder": "Input Bank Code",
+          "branch_code": "Branch Code",
+          "branch_code_placeholder": "Input Branch Code",
+          "branch_name": "Branch Name",
+          "branch_name_placeholder": "Input Branch Name",
+          "swift_code": "Swift Code",
+          "swift_code_placeholder": "Input Swift Code",
+          "notes": "Notes",
+          "notes_placeholder": "Input Notes",
+          "bank_info": "Bank Information",
+          "central_account": "Central Account",
+          "individual_account": "Individual Account",
+          "company_account": "Company Account Only",
+          "message": "The Designated Transfer Account is added manually to each employee’s profile",
+          "max_char_info" :"Max. 100 Character"
+        }
+      },
+      "modal": {
+        "activate": {
+          "title": "Publication Date",
+          "description": "Do you want to Activate the tax profile?",
+          "effective_date": "Effective Date",
+          "expiration_date": "Expiration Date"
+        },
+        "duplicate": {
+          "title": "Confirmation",
+          "description": "Do you want to duplicate this profile?"
+        },
+        "delete": {
+          "title": "Delete Data Entry",
+          "description": "You are about to delete this attendance data entry. This action cannot be undone."
+        },
+        "archive": {
+          "title": "Archivation Date",
+          "description": "Input Effective Archivation Date",
+          "checkbox": "Replace with New Profile"
+        },
+        "mark_all": {
+          "title": "Mark all paid and Complete",
+          "description": "All disbursement will marked paid and complete the Payroll Assistant process"
+        },
+        "cancel": {
+          "title": "Save & Exit",
+          "description": "You will stop the process, and saved in Payroll Assistant Are you sure to stop the process?"
+        },
+        "add_deductable": {
+          "title": "Select Tax Deductable Components",
+          "component_name": "Component Name",
+          "component_condition": "Component Condition"
+        }
+      }
+    }
+  },
+
+
+
+  "satutory_benefit" : {
+    "component" : {
+      "title" : "Statutory Benefits Components Dashboard",
+      "detail_title" : "Statutory Benefit Component",
+      "table" : {
+        "company_name" : "Company Name",
+        "country" : "Country",
+        "contributors" : "Contributor(S)",
+        "rate_type" : "Rate Type",
+        "created_on" : "Created On",
+        "last_update" : "Last Update",
+        "action" : ""
+      },
+      "form_&_detail" : {
+        "dashboard_title" : "Add New Component",
+        "wizard_option" : {
+          "basic_detail" :"Basic Detail",
+          "designed_transfer_account" :"Designed Transfer Account",
+          "rate" : "Rate"
+        },
+        "create_basic_detail" : {
+          "detail_title" : "Basic Detail",
+          "name" : "Satutory Name",
+          "name_placeholder" : "Input Satutory Benefits Name",
+          "country" : "Country",
+          "province" :"Province",
+          "city" : "City",
+          "sub_district" : "Sub-District",
+          "citation" : "Citation",
+          "internal_notes" : "Internal Notes",
+          "external_notes" : "External Notes",
+          "max_char_info" : "Max. 120 Character",
+          "component_name": "Component Name"
+        },
+        "create_designed_transfer_account" : {
+          "form_title" : "Bank Information",
+          "detail_title" : "Bank Information",
+          "type_option" : {
+            "central_account" : "Central Account",
+            "individual_account" :"Individual Account",
+            "company_account_only" : "Company Account Only"
+          },
+          "information" : "The Designated Transfer Account is added manually to each employees profile",
+          "bank" :"Bank",
+          "bank_account_holders_name": "Bank Account Holders Name",
+          "bank_account_holders_name_placeholder": "Input Bank Account Holders Name",
+          "bank_account_no": "Bank Account No",
+          "bank_account_no_placeholder": "Input Bank Account No.",
+          "bank_code": "Bank Code",
+          "bank_code_placeholder": "Input Bank Code",
+          "branch_code": "Branch Code",
+          "branch_code_placeholder": "Input Branch Code",
+          "branch_name": "Branch Name",
+          "branch_name_placeholder": "Input Branch Name",
+          "swift_code": "Swift Code",
+          "swift_code_placeholder": "Input Swift Code",
+          "notes": "Notes",
+          "notes_placeholder": "Input Notes",
+          "bank_info": "Bank Information",
+          "message": "The Designated Transfer Account is added manually to each employees profile",
+          "max_char_info" : "Max. 100 Character",
+          "transfer_info": "Transfer Information"
+        },
+        "rates" : {
+          "contributor_option" : {
+            "label" : "Contributor",
+            "employee" : "Employee",
+            "employer" : "Employer"
+          },
+          "sub_title" : "Rates",
+          "match_rule_button" : "Employer Match Rule",
+          "start" : "Start",
+          "end" : "End",
+          "additional_fixed_amount" : "Additional Fixed Amount",
+          "amount_cap" : "Amount Cap",
+          "rate_type" :"Rate Type",
+          "flat_rate" : "Flat Rate"
+        },
+        "others" : {
+          "search_placeholder" : "Search"
+        }
+      },
+      "modal" : {
+        "delete" : {
+          "title" : "Delete Data Entry",
+          "text" :"You are about to delete this statutory benefit component. This action cannot be undone."
+        },
+        "duplicate" : {
+          "title" : "Confirmation",
+          "text" : "Are you sure you want to duplicate this profile ?"
+        }
+      }
+    },
+    "profile" : {
+      "title" : "Statutory Benefits Profile Dashboard",
+      "detail_title" : "Statutory Benefit Profile",
+      "table" : {
+        "table_tabs" : {
+          "draft" : "Draft",
+          "active" :"Active",
+          "archived" : "Archived"
+        },
+        "name" :"Name",
+        "profile_name" :"Profile Name",
+        "country" :"Country",
+        "province" :"Province",
+        "effective_period" :"Effective Period",
+        "created_on" :"Created On",
+        "last_update" :"Last Update"
+      },
+      "form_&_detail" : {
+        "create_title" : "Create Satutory Benefit",
+        "update_title" : "Update Satutory Benefit",
+        "name" : "Satutory Name",
+        "name_placeholder" : "Input Satutory Benefit Name",
+        "country" : "Country",
+        "province" :"Province",
+        "city" : "City",
+        "sub_district" : "Sub-District",
+        "effective_date" :"Effective Date",
+        "expiration_date" :"Expiration Date",
+        "citation" : "Citation",
+        "internal_notes" : "Internal Notes",
+        "external_notes" : "External Notes",
+        "max_char_info" : "Max. 120 Character",
+        "component" : {
+          "popup_title" : "Select Satutory Benefits Components",
+          "employee_name" : "Employee Name",
+          "effective_period" :"Effective Period",
+          "rate_type" :"Rate Type",
+          "contributor" : "Contributor",
+          "rate_types" : "Rate Types",
+          "flat_rate" :"Flat Rate",
+          "amount_cap" :"Amount Cap"
+        }
+      },
+      "modal" : {
+        "delete" : {
+          "title" : "Delete Data Entry",
+          "text" : "You are about to delete this attendance data entry. This action cannot be undone."
+        },
+        "duplicate" : {
+          "title" : "Confirmation",
+          "text" : "Are you sure you want to duplicate this profile ?"
+        },
+        "archive" : {
+          "title" : "Archivation Date",
+          "input_date" : "Input Effective Archivation Date",
+          "replace" : "Replace with New Profile"
+        },
+        "activate" : {
+          "title" : "Publication Date",
+          "text" : "Do you want to Activate the tax profile?",
+          "effective_date" :"Effective Date",
+          "expiration_date" :"Expiration Date"
+        }
+      }
+    }
   }
 }

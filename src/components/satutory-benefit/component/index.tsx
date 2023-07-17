@@ -14,9 +14,14 @@ import { useRouter } from 'next/router';
 import BasicDatePicker from '@/components/_shared/form/DatePicker';
 import styled from '@emotion/styled';
 import SutatoryBenefitTable from './SatutoryBenefitComponentTable';
+import { useTranslation } from 'react-i18next';
 
 
 const SatutoryBenefitComponent = () => {
+  // Translate Key
+  const {t} = useTranslation();
+  const t_key = 'satutory_benefit.component';
+
   const router = useRouter();
   const TitleWrapper = styled.div`
     display: flex;
@@ -36,14 +41,14 @@ const SatutoryBenefitComponent = () => {
   return (
     <>
       <TitleWrapper>
-        <Typography variant='h5'>Statutory Benefits Components Dashboard</Typography>
+        <Typography variant='h5'>{t(`${t_key}.title`)}</Typography>
         <div>
           <Button
             onClick={() =>
               router.push('/satutory-benefit/component/add-new-component')
             }
             startIcon={<AddIcon />}
-            label='Add New Component'
+            label={t(`button.add_new_component`)}
           />
         </div>
       </TitleWrapper>

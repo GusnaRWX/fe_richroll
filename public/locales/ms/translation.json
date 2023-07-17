@@ -1,6 +1,6 @@
 {
   "sidebar": {
-    "dashboard": "Papan Pemuka",
+    "dashboard": "Papan pemuka",
     "company_management": "Pengurusan Syarikat",
     "company_management_profile": "Profil Syarikat",
     "company_management_departments": "Jabatan",
@@ -8,19 +8,19 @@
     "company_management_employees": "Pekerja",
     "company_management_annual_work_calendars": "Kalendar Kerja Tahunan",
     "company_management_profile_information": "Maklumat Profil",
-    "attendance_&_leave": "Kehadiran & Cuti",
+    "attendance_&_leave": "Kehadiran",
     "attendance_&_leave_attendance_entries": "Penyertaan Kehadiran",
-    "attendance_&_leave_leave_entries": "Penyertaan Meninggalkan",
-    "attendance_&_leave_leave_summary": "Ringkasan Cuti",
-    "attendance_&_leave_overtime_summary": "Ringkasan Lembur",
+    "attendance_&_leave_leave_entries": "Tinggalkan Penyertaan",
+    "attendance_&_leave_leave_summary": "Ringkasan Tinggalkan",
+    "attendance_&_leave_overtime_summary": "Ringkasan Kerja Lebih Masa",
     "attendance_&_leave_configuration": "Konfigurasi",
-    "attendance_&_leave_balance": "Saldo",
-    "attendance_&_leave_off_in_lieu": "Pengganti Libur",
-    "attendance_&_leave_enchasment": "Tunai",
-    "compensation_&_benefits": "Pampasan & Faedah",
+    "attendance_&_leave_balance": "Seimbang",
+    "attendance_&_leave_off_in_lieu": "Berhenti sebagai Ganti",
+    "attendance_&_leave_enchasment": "Enchasment",
+    "compensation_&_benefits": "Pampasan",
     "reimbursement": "Bayaran balik",
     "internal_reports": "Laporan Dalaman",
-    "payroll_&_disbursement": "Gaji & Pengeluaran",
+    "payroll_&_disbursement": "Gaji",
     "payroll_&_disbursement_payroll_assistant": "Pembantu Gaji",
     "payroll_&_disbursement_attendance_summary": "Ringkasan Kehadiran",
     "payroll_&_disbursement_payroll_reports": "Laporan Gaji",
@@ -34,6 +34,427 @@
     "payroll_setting": "Penetapan Gaji",
     "employment": "Pekerjaan",
     "reports": "Laporan",
-    "article_management": "Pengurusan Article"
+    "article_management": "Pengurusan Artikel",
+    "income_tax_profile": "Profil Cukai Pendapatan",
+    "income_tax_profile_deductable_component": "Komponen Boleh Tolak",
+    "income_tax_profile_profile": "Profil"
+  },
+  "button": {
+    "next": "Seterusnya",
+    "back": "belakang",
+    "save": "Jimat",
+    "save_approve": "Simpan dan Luluskan",
+    "save_exit": "Simpan dan keluar",
+    "confirm": "sahkan",
+    "cancel": "Batal",
+    "delete": "Padam",
+    "edit": "Sunting",
+    "activate": "Aktifkan",
+    "reactivate": "Aktifkan semula",
+    "suspend": "tangguh",
+    "archive": "Diarkibkan",
+    "duplicate": "Pendua",
+    "mark_complete": "Tandakan Semua dan Selesai",
+    "add_new_profile": "Tambah Profil Baharu",
+    "add_component": "Tambah Komponen",
+    "add_new_component": "Tambah Komponen Baharu",
+    "component": "Komponen",
+    "deductable": "Boleh ditolak"
+  },
+  "income_tax_profile": {
+    "deductable_component": {
+      "title": "Papan Pemuka Komponen Boleh Potong",
+      "detail_title": "Butiran Komponen Boleh Potong",
+      "table": {
+        "company_name": "nama syarikat",
+        "country": "Negara",
+        "component_condition": "Keadaan Komponen",
+        "last_update": "Kemaskini terakhir",
+        "delete_modal": {
+          "title": "Padamkan Entri Data",
+          "text": "Anda akan memadamkan komponen faedah berkanun ini. "
+        }
+      },
+      "add_new_component": {
+        "title": "Tambah Komponen Baharu",
+        "save_modal_text": "Anda akan menghentikan proses dan disimpan dalam Tambah Komponen Baharu.<br>Adakah anda pasti menghentikan proses tersebut?",
+        "mark_modal_text": "Semua pengeluaran akan ditanda sebagai berbayar dan menyelesaikan proses Tambah Komponen Baharu",
+        "form": {
+          "wizard_option": {
+            "initial": "Buat",
+            "basic_detail": "Butiran Asas",
+            "designed_transfer_account": "Akaun Pemindahan Direka",
+            "transfer_account": "Akaun Pindahan",
+            "rates": "Kadar"
+          },
+          "create_basic_detail": {
+            "name": "Nama Komponen",
+            "name_placeholder": "Input Nama Komponen",
+            "country": "Negara",
+            "province": "Wilayah",
+            "city": "Bandar",
+            "sub_district": "Mukim",
+            "citation": "Petikan",
+            "internal_notes": "Nota Dalaman",
+            "external_notes": "Nota Luaran",
+            "max_char_info": "Maks. "
+          },
+          "create_dta": {
+            "title": "Maklumat bank",
+            "type": "taip",
+            "type_option": {
+              "central_account": "Akaun Pusat",
+              "individual_account": "Akaun Individu",
+              "company_account_only": "Akaun Syarikat Sahaja"
+            },
+            "message": "Akaun Pemindahan Ditetapkan ditambah secara manual pada profil setiap pekerja",
+            "bank": "Bank",
+            "bank_account_holders_name": "Nama Pemegang Akaun Bank",
+            "bank_account_no": "Akaun Bank No",
+            "bank_code": "Kod bank",
+            "branch_code": "Kod Cawangan",
+            "branch_name": "Nama cawangan",
+            "swift_code": "Kod pantas",
+            "notes": "Nota",
+            "bank_account_holders_name_placeholder": "Masukkan Nama Pemegang Akaun Bank",
+            "bank_account_no_placeholder": "Masukkan No Akaun Bank",
+            "bank_code_placeholder": "Input Kod Bank",
+            "branch_code_placeholder": "Kod Cawangan Input",
+            "branch_name_placeholder": "Input Nama Cawangan",
+            "swift_code_placeholder": "Masukkan Kod Swift",
+            "notes_placeholder": "Nota Input",
+            "max_char_info": "Maks. "
+          },
+          "rates": {
+            "select_type": "Pilih Jenis Boleh Tolak",
+            "dc_condition": "Keadaan Komponen Boleh Potong",
+            "amount": "Jumlah",
+            "fu_condition": "Keadaan Unit Faktor",
+            "sub_condition": "Sub Syarat"
+          }
+        }
+      },
+      "modal": {
+        "delete": {
+          "title": "Padamkan Entri Data",
+          "text": "Anda akan memadamkan komponen faedah berkanun ini. "
+        },
+        "duplicate": {
+          "title": "Pengesahan",
+          "text": "Adakah anda pasti mahu menduplikasi profil ini?"
+        }
+      }
+    },
+    "profile": {
+      "title": "Konfigurasi Profil Cukai",
+      "add_new_title": "Tambah Profil Cukai Baharu",
+      "tab": {
+        "draft": "Draf",
+        "active": "Aktif",
+        "archive": "Diarkibkan"
+      },
+      "draft_table": {
+        "name": "Nama",
+        "country": "Negara",
+        "effective_period": "Tempoh Berkuatkuasa",
+        "created_on": "Dicipta pada",
+        "last_update": "Kemaskini terakhir"
+      },
+      "active_table": {
+        "profile_name": "Nama profil",
+        "country": "Negara",
+        "province": "Wilayah",
+        "effective_period": "Tempoh Berkuatkuasa",
+        "created_on": "Dicipta pada",
+        "last_update": "Kemaskini terakhir"
+      },
+      "archieve_table": {
+        "profile_name": "Nama profil",
+        "country": "Negara",
+        "province": "Wilayah",
+        "effective_period": "Tempoh Berkuatkuasa",
+        "created_on": "Dicipta pada",
+        "last_update": "Kemaskini terakhir"
+      },
+      "detail": {
+        "main": {
+          "title": "Profil Cukai - Status"
+        },
+        "tab": {
+          "basic_detail": "Butiran Asas",
+          "deductible_component": "Komponen Boleh Tolak",
+          "income_tax_rate": "Kadar Cukai Pendapatan",
+          "income_tax_multiplier": "Pengganda Cukai Pendapatan",
+          "designated_transfer_account": "Akaun Pemindahan Ditetapkan"
+        },
+        "wizard_option": {
+          "initial": "Buat",
+          "basic_detail": "Butiran Asas",
+          "deductable_component": "Komponen Boleh Tolak",
+          "income_tax_rates": "Kadar Cukai Pendapatan",
+          "income_tax_multiplier": "Pengganda Cukai Pendapatan",
+          "designed_transfer_account": "Akaun Pemindahan Direka"
+        },
+        "basic_detail": {
+          "tax_profile_name": "Nama Profil Cukai",
+          "tax_profile_name_placeholder": "Masukkan Nama Profil",
+          "country": "Negara",
+          "different_currency": "Mata Wang Berbeza",
+          "effective_period": "Tempoh Berkuatkuasa",
+          "citation": "Petikan",
+          "internal_notes": "Nota Dalaman",
+          "external_notes": "Nota Luaran",
+          "province": "Wilayah",
+          "city": "Bandar",
+          "sub_district": "Mukim",
+          "effective_date": "Tarikh kuat kuasa",
+          "expiration_date": "Tarikh luput",
+          "max_char_info": "Maks. "
+        },
+        "deductible_component": {
+          "martial_status": "Status perkahwinan",
+          "number_of_dependence": "Bilangan Pergantungan",
+          "factor_unit_condition": "Keadaan Unit Faktor",
+          "amount": "Jumlah",
+          "deductible": "Boleh ditolak"
+        },
+        "income_tax_rate": {
+          "progressive_rate": "Kadar Progresif",
+          "income": "pendapatan",
+          "rate": "Kadar",
+          "min_income": "Pendapatan Min",
+          "amount": "Jumlah",
+          "max_income": "Pendapatan Maks",
+          "additional_fixed_amount": "Jumlah Tetap Tambahan"
+        },
+        "income_tax_multiplier": {
+          "deductible_factor": "Faktor Boleh Tolak",
+          "factor_unit_condition": "Keadaan Unit Faktor",
+          "rate": "Kadar",
+          "additional_fixed_amount": "Jumlah Tetap Tambahan",
+          "status": "Status",
+          "condition": "keadaan",
+          "multiplier": "Pengganda",
+          "component": "Komponen"
+        },
+        "designated_transfer_account": {
+          "type": "taip",
+          "bank": "Bank",
+          "bank_account_holders_name": "Nama Pemegang Akaun Bank",
+          "bank_account_holders_name_placeholder": "Masukkan Nama Pemegang Akaun Bank",
+          "bank_account_no": "Akaun Bank No",
+          "bank_account_no_placeholder": "Masukkan No Akaun Bank",
+          "bank_code": "Kod bank",
+          "bank_code_placeholder": "Input Kod Bank",
+          "branch_code": "Kod Cawangan",
+          "branch_code_placeholder": "Kod Cawangan Input",
+          "branch_name": "Nama cawangan",
+          "branch_name_placeholder": "Input Nama Cawangan",
+          "swift_code": "Kod pantas",
+          "swift_code_placeholder": "Masukkan Kod Swift",
+          "notes": "Nota",
+          "notes_placeholder": "Nota Input",
+          "bank_info": "Maklumat bank",
+          "central_account": "Akaun Pusat",
+          "individual_account": "Akaun Individu",
+          "company_account": "Akaun Syarikat Sahaja",
+          "message": "Akaun Pemindahan Ditetapkan ditambah secara manual pada profil setiap pekerja",
+          "max_char_info": "Maks. "
+        }
+      },
+      "modal": {
+        "activate": {
+          "title": "Tarikh penerbitan",
+          "description": "Adakah anda mahu Aktifkan profil cukai?",
+          "effective_date": "Tarikh kuat kuasa",
+          "expiration_date": "Tarikh luput"
+        },
+        "duplicate": {
+          "title": "Pengesahan",
+          "description": "Adakah anda mahu menduplikasi profil ini?"
+        },
+        "delete": {
+          "title": "Padamkan Entri Data",
+          "description": "Anda akan memadamkan entri data kehadiran ini. "
+        },
+        "archive": {
+          "title": "Tarikh Arkib",
+          "description": "Input Tarikh Arkib Berkuatkuasa",
+          "checkbox": "Gantikan dengan Profil Baharu"
+        },
+        "mark_all": {
+          "title": "Tandakan semua telah dibayar dan Selesai",
+          "description": "Semua pengeluaran akan ditanda sebagai berbayar dan menyelesaikan proses Pembantu Gaji"
+        },
+        "cancel": {
+          "title": "Jimat & keluar",
+          "description": "Anda akan menghentikan proses dan disimpan dalam Pembantu Gaji. Adakah anda pasti menghentikan proses tersebut?"
+        },
+        "add_deductable": {
+          "title": "Pilih Komponen Boleh Potong Cukai",
+          "component_name": "Nama Komponen",
+          "component_condition": "Keadaan Komponen"
+        }
+      }
+    }
+  },
+  "satutory_benefit": {
+    "component": {
+      "title": "Papan Pemuka Komponen Faedah Berkanun",
+      "detail_title": "Komponen Faedah Berkanun",
+      "table": {
+        "company_name": "nama syarikat",
+        "country": "Negara",
+        "contributors": "Penyumbang",
+        "rate_type": "Jenis Kadar",
+        "created_on": "Dicipta pada",
+        "last_update": "Kemaskini terakhir",
+        "action": ""
+      },
+      "form_&_detail": {
+        "dashboard_title": "Tambah Komponen Baharu",
+        "wizard_option": {
+          "basic_detail": "Butiran Asas",
+          "designed_transfer_account": "Akaun Pemindahan Direka",
+          "rate": "Kadar"
+        },
+        "create_basic_detail": {
+          "detail_title": "Butiran Asas",
+          "name": "Nama Tepu",
+          "name_placeholder": "Input Nama Manfaat Tepu",
+          "country": "Negara",
+          "province": "Wilayah",
+          "city": "Bandar",
+          "sub_district": "Mukim",
+          "citation": "Petikan",
+          "internal_notes": "Nota Dalaman",
+          "external_notes": "Nota Luaran",
+          "max_char_info": "Maks. ",
+          "component_name": "Nama Komponen"
+        },
+        "create_designed_transfer_account": {
+          "form_title": "Maklumat bank",
+          "detail_title": "Maklumat bank",
+          "type_option": {
+            "central_account": "Akaun Pusat",
+            "individual_account": "Akaun Individu",
+            "company_account_only": "Akaun Syarikat Sahaja"
+          },
+          "information": "Akaun Pemindahan Ditetapkan ditambah secara manual pada setiap profil pekerja",
+          "bank": "Bank",
+          "bank_account_holders_name": "Nama Pemegang Akaun Bank",
+          "bank_account_holders_name_placeholder": "Masukkan Nama Pemegang Akaun Bank",
+          "bank_account_no": "Akaun Bank No",
+          "bank_account_no_placeholder": "Masukkan No Akaun Bank",
+          "bank_code": "Kod bank",
+          "bank_code_placeholder": "Input Kod Bank",
+          "branch_code": "Kod Cawangan",
+          "branch_code_placeholder": "Kod Cawangan Input",
+          "branch_name": "Nama cawangan",
+          "branch_name_placeholder": "Input Nama Cawangan",
+          "swift_code": "Kod pantas",
+          "swift_code_placeholder": "Masukkan Kod Swift",
+          "notes": "Nota",
+          "notes_placeholder": "Nota Input",
+          "bank_info": "Maklumat bank",
+          "message": "Akaun Pemindahan Ditetapkan ditambah secara manual pada setiap profil pekerja",
+          "max_char_info": "Maks. ",
+          "transfer_info": "Pemindahan Maklumat"
+        },
+        "rates": {
+          "contributor_option": {
+            "label": "Penyumbang",
+            "employee": "Pekerja",
+            "employer": "Majikan"
+          },
+          "sub_title": "Kadar",
+          "match_rule_button": "Peraturan Padanan Majikan",
+          "start": "Mulakan",
+          "end": "tamat",
+          "additional_fixed_amount": "Jumlah Tetap Tambahan",
+          "amount_cap": "Jumlah Had",
+          "rate_type": "Jenis Kadar",
+          "flat_rate": "Kadar rata"
+        },
+        "others": {
+          "search_placeholder": "Cari"
+        }
+      },
+      "modal": {
+        "delete": {
+          "title": "Padamkan Entri Data",
+          "text": "Anda akan memadamkan komponen faedah berkanun ini. "
+        },
+        "duplicate": {
+          "title": "Pengesahan",
+          "text": "Adakah anda pasti mahu menduplikasi profil ini?"
+        }
+      }
+    },
+    "profile": {
+      "title": "Papan Pemuka Profil Manfaat Berkanun",
+      "detail_title": "Profil Faedah Berkanun",
+      "table": {
+        "table_tabs": {
+          "draft": "Draf",
+          "active": "Aktif",
+          "archived": "Diarkibkan"
+        },
+        "name": "Nama",
+        "profile_name": "Nama profil",
+        "country": "Negara",
+        "province": "Wilayah",
+        "effective_period": "Tempoh Berkuatkuasa",
+        "created_on": "Dicipta pada",
+        "last_update": "Kemaskini terakhir"
+      },
+      "form_&_detail": {
+        "create_title": "Cipta Manfaat Tepu",
+        "update_title": "Kemas kini Faedah Tepu",
+        "name": "Nama Tepu",
+        "name_placeholder": "Masukkan Nama Manfaat Tepu",
+        "country": "Negara",
+        "province": "Wilayah",
+        "city": "Bandar",
+        "sub_district": "Mukim",
+        "effective_date": "Tarikh kuat kuasa",
+        "expiration_date": "Tarikh luput",
+        "citation": "Petikan",
+        "internal_notes": "Nota Dalaman",
+        "external_notes": "Nota Luaran",
+        "max_char_info": "Maks. ",
+        "component": {
+          "popup_title": "Pilih Komponen Faedah Tepu",
+          "employee_name": "Nama Pekerja",
+          "effective_period": "Tempoh Berkuatkuasa",
+          "rate_type": "Jenis Kadar",
+          "contributor": "Penyumbang",
+          "rate_types": "Jenis Kadar",
+          "flat_rate": "Kadar rata",
+          "amount_cap": "Jumlah Had"
+        }
+      },
+      "modal": {
+        "delete": {
+          "title": "Padamkan Entri Data",
+          "text": "Anda akan memadamkan entri data kehadiran ini. "
+        },
+        "duplicate": {
+          "title": "Pengesahan",
+          "text": "Adakah anda pasti mahu menduplikasi profil ini?"
+        },
+        "archive": {
+          "title": "Tarikh Arkib",
+          "input_date": "Input Tarikh Arkib Berkuatkuasa",
+          "replace": "Gantikan dengan Profil Baharu"
+        },
+        "activate": {
+          "title": "Tarikh penerbitan",
+          "text": "Adakah anda mahu Aktifkan profil cukai?",
+          "effective_date": "Tarikh kuat kuasa",
+          "expiration_date": "Tarikh luput"
+        }
+      }
+    }
   }
 }
