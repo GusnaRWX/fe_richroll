@@ -10,7 +10,8 @@ import {
   postPayrollGrosses,
   getGenerateGrossEmployee,
   putGenerateGrosses,
-  getPayrollGrosses
+  getPayrollGrosses,
+  getDetailAttendance
 } from '../saga-actions/payroll/payrollActions';
 import { call, put, takeEvery, delay } from 'redux-saga/effects';
 import {
@@ -46,7 +47,10 @@ import {
   putGenerateGrossesEmployeeFailed,
   getPayrollGrossesRequested,
   getPayrollGrossesSuccess,
-  getPayrollGrossesFailed
+  getPayrollGrossesFailed,
+  getDetailAttendanceFailed,
+  getDetailAttendanceRequested,
+  getDetailAttendanceSuccess
 } from '@/store/reducers/slice/payroll/payrollSlice';
 import { setResponserMessage } from '@/store/reducers/slice/responserSlice';
 import { Services } from '@/types/axios';
@@ -323,6 +327,13 @@ function* fetchPutGenerateGrossEmployee(action: AnyAction) {
   }
 }
 
+// function* fetchGetPayrollEmployee(action: AnyAction) {
+//   try {
+//     const res: AxiosResponse = yield call(getPayrollGrosses, action?.payload);
+
+//     if (res.data.code === 200) {
+//       yield put({ type: getPayrollGrossesSuccess.toString(), payload: { data: res.data.data } });
+
 function* fetchGetPayrollEmployee(action: AnyAction) {
   try {
     const res: AxiosResponse = yield call(getPayrollGrosses, action?.payload);
@@ -334,6 +345,47 @@ function* fetchGetPayrollEmployee(action: AnyAction) {
     if (err instanceof AxiosError) {
       const errorMessage = err?.response?.data as Services.ErrorResponse;
       yield put({ type: getPayrollGrossesFailed.toString() });
+      yield delay(2000, true);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message
+        }
+      });
+    }
+  }
+}
+
+function* fetchGetDetailAttendance(action: AnyAction) {
+  try {
+    const res: AxiosResponse = yield call(getDetailAttendance, action?.payload);
+    if (res.data.code === 200) {
+      yield put({
+        type: getDetailAttendanceSuccess.toString(),
+        payload: {
+          id: res?.data?.data?.id,
+          employee: {
+            id: res?.data?.data?.employee?.id,
+            name: res?.data?.data?.employee?.name,
+            picture: res?.data?.data?.employee?.picture
+          },
+          attendance: res?.data?.data?.attendance,
+          absent: res?.data?.data?.absent,
+          paidLeave: res?.data?.data?.paidLeave,
+          unpaidLeave: res?.data?.data?.unpaidLeave,
+          overtime: res?.data?.data?.overtime,
+          totalHours: res?.data?.data?.totalHours,
+          averageHours: res?.data?.data?.averageHours,
+          events: res?.data?.data?.entries
+        }
+      });
+    }
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      // yield put({ type: getPayrollGrossesFailed.toString() });
+      yield put({ type: getDetailAttendanceFailed.toString() });
       yield delay(2000, true);
       yield put({
         type: setResponserMessage.toString(),
@@ -358,6 +410,7 @@ function* payrollSaga() {
   yield takeEvery(getGenerateGrossesEmployeeRequested.toString(), fetchGetGenerateGrossEmployee);
   yield takeEvery(putGenerateGrossesEmployeeRequested.toString(), fetchPutGenerateGrossEmployee);
   yield takeEvery(getPayrollGrossesRequested.toString(), fetchGetPayrollEmployee);
+  yield takeEvery(getDetailAttendanceRequested.toString(), fetchGetDetailAttendance);
 }
 
 export default payrollSaga;

@@ -49,4 +49,7 @@ export const putGenerateGrosses = (payload) => {
 
 export const getPayrollGrosses = (payload: string) => {
   return get(`payrolls/${payload}/grosses`);
-}; 
+};
+export const getDetailAttendance = (payload: Payroll.ParamsDetailAttendance) => {
+  return get(`payrolls/${payload?.id}/attendances/${payload?.attendanceID}/employees/${payload?.employeeID}`);
+};

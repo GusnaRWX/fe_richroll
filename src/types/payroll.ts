@@ -143,5 +143,44 @@ export declare namespace Payroll {
     totalGrossCompensation: number;
     gross: Gross[];
   }
+  interface ParamsDetailAttendance {
+    id: string | number;
+    attendanceID: string | number;
+    employeeID: string | number;
+  }
+
+  interface EventType {
+    id: string | number;
+    name: string;
+    title: string;
+    event_id: number;
+    start: Date;
+    end: Date;
+    leaveType: number;
+    isOvertime: boolean;
+    multiplier: number;
+    note: string;
+    leaveStatus: number;
+    color: string;
+    isHalfDay: boolean;
+  }
+
+  interface AttendanceDetailType {
+    id: string | number,
+    employee: {
+      id: string | number,
+      name: string | number,
+      picture: string | null
+    },
+    attendance: number,
+    absent: number,
+    paidLeave: number,
+    unpaidLeave: number,
+    overtime: number,
+    totalHours: number,
+    averageHours: number,
+    events: Array<EventType>
+  }
+
 }
 
