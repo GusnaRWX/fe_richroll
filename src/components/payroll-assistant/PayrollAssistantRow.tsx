@@ -14,6 +14,7 @@ import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
 import { ConfirmationModal } from '@/components/_shared/common';
 import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
 
 const ButtonWrapper = styled.div`
  display: flex;
@@ -27,6 +28,8 @@ function PayrollAssistantRow (row) {
   const { item, tabValue } = row;
   const [open, setOpen] = useState(false);
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
+  const {t} = useTranslation();
+  const t_popupKey = 'payroll_and_disbursement.payroll_assistant.popup';
   const router = useRouter();
 
   return (
@@ -157,8 +160,8 @@ function PayrollAssistantRow (row) {
       <ConfirmationModal
         open={deleteConfirmation}
         handleClose={() => setDeleteConfirmation(false)}
-        title='Delete Payroll Operation from Payroll Assistant?'
-        content='You are about to delete this payroll report. This action cannot be undone.'
+        title={t(`${t_popupKey}.delete.title`)}
+        content={t(`${t_popupKey}.delete.desc`)}
         withCallback
         noChange={true}
         callback={() => setDeleteConfirmation(false)}
