@@ -144,22 +144,30 @@ function ItpAddNewProfileComponent() {
                   setOpen(true);
                 }
               }}
-            >{t('button.cancel')}</MuiButton>
-            <MuiButton
-              variant='contained'
-              size='small'
-              color='primary'
-              onClick={() => {
-                if (value < 4) {
-                  setValue(value + 1);
-                }
-                if (value == 4) {
-                  setIsExit(false);
-                  setOpen(true);
-                  btnRef.current?.click();
-                }
-              }}
-            >{ifThenElse(value == 4, t(`button.mark_complete`),  t(`button.save`))}</MuiButton>
+            >
+              {t('button.cancel')}
+            </MuiButton>
+            {
+              value === 4 && (
+                <MuiButton
+                  variant='contained'
+                  size='small'
+                  color='primary'
+                  onClick={() => {
+                    if (value < 4) {
+                      setValue(value + 1);
+                    }
+                    if (value == 4) {
+                      setIsExit(false);
+                      setOpen(true);
+                      btnRef.current?.click();
+                    }
+                  }}
+                >
+                  {ifThenElse(value == 4, t(`button.mark_complete`),  t(`button.save`))}
+                </MuiButton>
+              )
+            }
           </ButtonWrapper>
         </Grid>
       </Grid>

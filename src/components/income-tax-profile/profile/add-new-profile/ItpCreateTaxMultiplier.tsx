@@ -231,7 +231,7 @@ export default function ItpCreateTaxMultiplier({nextStep, setValue, multiplierVa
                               label={t('button.back')}
                               variant='outlined'
                               onClick={() => {
-                                formik.submitForm();
+                                setValue(formik.values);
                                 nextStep(2);
                               }}
                               sx={{ width: 'fit-content' }}

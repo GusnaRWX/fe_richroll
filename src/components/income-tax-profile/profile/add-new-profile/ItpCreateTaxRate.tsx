@@ -181,7 +181,7 @@ export default function ItpCreateTaxRate({rateValue, setValue, nextStep}: RatePr
                   label={t('button.back')}
                   variant='outlined'
                   onClick={() => {
-                    formik.submitForm();
+                    setValue(formik.values);
                     nextStep(1);
                   }}
                 />
