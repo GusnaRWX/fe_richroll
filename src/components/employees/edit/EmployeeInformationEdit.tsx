@@ -116,28 +116,13 @@ interface EmployeeProps {
   handleFirstInformation: () => void;
 }
 
-interface EmployeeInformationDetailProps {
-  data: {
-    fullName: string | undefined;
-    department: string | undefined;
-    email: string | undefined;
-    endDate: string | null;
-    picture: string | null;
-    isPermanent: boolean;
-    isSelfService: boolean;
-    nickname: string | null;
-    phoneNumber: string | null;
-    position: string | null;
-    startDate: string | null;
-  }
-}
 
-
-function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, setIsInformationValid, handleFirstInformation }: EmployeeProps, { data }: EmployeeInformationDetailProps) {
+function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, setIsInformationValid, handleFirstInformation }: EmployeeProps) {
   const [isCaptureEnable, setCaptureEnable] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const webcamRef = useRef<Webcam>(null);
   const [openCamera, setOpenCamera] = useState(false);
+  console.log(infoValues);
 
   const handleCloseCamera = () => {
     setCaptureEnable(false);
@@ -193,6 +178,7 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
       startDate: dayjs(infoValues?.startDate),
       endDate: dayjs(infoValues?.endDate),
       isPermanent: infoValues?.isPermanent,
+      isActive: infoValues?.isActive,
       department: infoValues?.department,
       position: infoValues?.position,
       isSelfService: infoValues?.isSelfService,
@@ -231,7 +217,7 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
     // setValues(allInfoValues);
     setIsInformationValid(true);
     handleFirstInformation();
-    nextPage(1);
+    nextPage(infoValues?.isSelfService ? 3 : 1);
     setErrors({});
   };
 
@@ -241,6 +227,7 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
       images: String(images)
     };
     setValues(allInfoValues as any);
+    console.log(formik.values);
   }, [formik.values]);
 
   const filter = createFilterOptions<Option.FreesoloType>();
@@ -357,7 +344,7 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
           <Grid item xs={6} md={6} lg={6} xl={6} sx={{ marginBottom: '1.5rem' }}>
             <Typography>Contact Number<AsteriskComponent>*</AsteriskComponent></Typography>
             <Grid container spacing={2}>
-              <Grid item xs={1} sm={3} md={2} lg={2} xl={2} spacing={2}>
+              <Grid item xs={1} sm={3} md={2} lg={2} xl={2}>
                 <CustomSelect
                   variant='outlined'
                   size='small'
@@ -436,7 +423,7 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
         />
         <Grid container spacing={2}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
-            <Text title='Department' mb='6px' />
+            <Typography mb='6px'>Department <AsteriskComponent>*</AsteriskComponent></Typography>
             <Autocomplete
               id='department'
               freeSolo
@@ -445,7 +432,7 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
                 if (typeof newValue === 'string') {
                   formik.setFieldValue('department', newValue, false);
                 } else if (newValue && newValue.inputValue) {
-                  formik.setFieldValue('deparment', newValue.inputValue, false);
+                  formik.setFieldValue('department', newValue.inputValue, false);
                   setMappedDeparment((prev) => [...prev, {
                     label: newValue.inputValue,
                     id: String(Math.random() * Math.PI)
@@ -517,11 +504,18 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
                   )}
                 </Box>
               )}
-              renderInput={(params) => <TextField name='department' {...params} />}
+              renderInput={(params) => (
+                <TextField
+                  name='department'
+                  error={formik.touched.department && Boolean(formik.errors.department)}
+                  helperText={formik.touched.department && Boolean(formik.errors.department) ? formik.errors.department : ''}
+                  {...params}
+                />
+              )}
             />
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
-            <Text title='Position' mb='6px' />
+            <Typography mb='6px'>Position <AsteriskComponent>*</AsteriskComponent></Typography>
             <Autocomplete
               id='position'
               freeSolo
@@ -596,7 +590,14 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
                   )}
                 </Box>
               )}
-              renderInput={(params) => <TextField name='position' {...params} />}
+              renderInput={(params) => (
+                <TextField
+                  name='position'
+                  error={formik.touched.position && Boolean(formik.errors.position)}
+                  helperText={formik.touched.position && Boolean(formik.errors.position) ? formik.errors.position : ''}
+                  {...params}
+                />
+              )}
             />
           </Grid>
         </Grid>
@@ -621,17 +622,17 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
               color='primary.500'
             />
             {
-              data?.isPermanent === false ? (
-                <Chip label='Non Active' sx={{ backgroundColor: '#FEE2E2', color: '#166534', fontWeight: 'bold' }} />
+              infoValues?.isActive === false ? (
+                <Chip label='Inactive' sx={{ backgroundColor: '#FEE2E2', color: '#DC2626', fontWeight: 'bold' }} />
               ) : (
                 <Chip label='Active' sx={{ backgroundColor: '#DCFCE7', color: '#166534', fontWeight: 'bold' }} />
               )
             }
           </Grid>
-          <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-            <TerminateAccount />
-          </Grid>
         </Grid>
+        {!!infoValues?.isActive &&
+          <TerminateAccount />
+        }
         <NextBtnWrapper>
           <Button fullWidth={false} size='small' label='Next' color='primary' type={'submit'} />
         </NextBtnWrapper>
@@ -650,7 +651,7 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
         onClose={handleCancelCrop}
         image={images}
         setCropValue={handleSaveCropImage}
-        ratio={1/1}
+        ratio={1 / 1}
       />
       <Modal
         open={openCamera}

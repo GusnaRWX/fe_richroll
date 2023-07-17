@@ -97,13 +97,10 @@ const headerItems = [
 
 type Order = 'asc' | 'desc'
 
-interface OvertimeTable {
-  reload?: boolean;
-}
-
-function OvertimeSummaryTable({ reload }: OvertimeTable) {
+function OvertimeSummaryTable() {
   const dispatch = useAppDispatch();
   const { data } = useAppSelectors(state => state.overtime);
+  const { responser } = useAppSelectors(state => state);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
@@ -174,7 +171,7 @@ function OvertimeSummaryTable({ reload }: OvertimeTable) {
         companyID: companyData?.id
       }
     });
-  }, [rowsPerPage, page, search, sort, direction, reload,]);
+  }, [rowsPerPage, page, search, sort, direction, responser?.code]);
   useEffect(() => {
     setHaydrated(true);
   }, []);

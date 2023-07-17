@@ -89,7 +89,7 @@ function OvertimeSummaryEditForm({editOpen, handleEditClose, callback, item}: Ed
         />
         <NameWrapper>
           <Typography fontSize='18px'>{item?.employee?.name}</Typography>
-          <Typography fontSize='14px'>{item?.employee?.department || '-'}</Typography>
+          <Typography fontSize='14px'>{item?.employee?.department === null ? '-' : item?.employee?.department?.name}</Typography>
         </NameWrapper>
       </AvatarWrapper>
       <Grid container mb='1rem' spacing={2}>
@@ -97,6 +97,8 @@ function OvertimeSummaryEditForm({editOpen, handleEditClose, callback, item}: Ed
           <Typography mb='7px' fontSize='16px'>Start Time</Typography>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <TimePicker
+              format='HH:mm'
+              ampm={false}
               sx={{
                 '& .MuiOutlinedInput-input': {
                   padding: '8.5px 14px',

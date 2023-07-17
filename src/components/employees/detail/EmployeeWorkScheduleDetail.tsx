@@ -15,6 +15,11 @@ function EmployeeWorkScheduleDetail() {
   const { employee } = useAppSelectors((state) => state);
   const { listWorkSchedule } = useAppSelectors((state) => state.option);
 
+  const handleDeleteEventSchedule = () => {
+    const eventLength = calendarRef?.current?.scheduler?.events?.length;
+    calendarRef?.current?.scheduler?.events?.splice(0, eventLength);
+  };
+
   useEffect(() => {
     dispatch({
       type: getViewWorkScheduleRequested.toString(),
@@ -22,6 +27,7 @@ function EmployeeWorkScheduleDetail() {
     });
   }, []);
   useEffect(() => {
+    handleDeleteEventSchedule();
     calendarRef?.current?.scheduler?.confirmEvent(employee?.workScheduleDetail?.events, 'create');
   }, [employee?.workScheduleDetail?.events]);
 
@@ -31,7 +37,7 @@ function EmployeeWorkScheduleDetail() {
   return (
     <>
       <Grid container spacing={4} mb='1rem' alignItems='center'>
-        <Grid item xs={10} sm={10} md={10} lg={10} xl={10}>
+        <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
           <Select
             name='workScheduleID'
             withAsterisk={true}
@@ -43,9 +49,7 @@ function EmployeeWorkScheduleDetail() {
             options={listWorkSchedule}
           />
         </Grid>
-      </Grid>
-      <Grid container spacing={2} mb='1rem'>
-        <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+        <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
           <Input
             name='weeklyGross'
             withAsterisk={false}
@@ -64,7 +68,7 @@ function EmployeeWorkScheduleDetail() {
             }}
           />
         </Grid>
-        <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+        <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
           <Input
             name='weeklyNet'
             withAsterisk={false}
@@ -86,10 +90,8 @@ function EmployeeWorkScheduleDetail() {
       </Grid>
       <Scheduler
         view='week'
-        disableViewNavigator={false}
         ref={calendarRef}
         events={[]}
-        navigation={false}
         editable={false}
         deletable={false}
         day={null}

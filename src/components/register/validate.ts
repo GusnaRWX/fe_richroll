@@ -11,5 +11,10 @@ export const validationSchemeRegister = Yup.object({
   phoneNumber: Yup.string()
     .matches(/^\d{11}$/, 'Contact number should have 12 or 13 digits include the national code')
     .required('Contact number is required')
-    .typeError('Contact number should be a number')
+    .typeError('Contact number should be a number'),
 });
+
+// phoneNumber: Yup.string()
+//     .matches(/^\d{11}$/, 'Contact number should have 12 or 13 digits include the national code')
+//     .required('Contact number is required')
+//     .typeError('Contact number should be a number'),

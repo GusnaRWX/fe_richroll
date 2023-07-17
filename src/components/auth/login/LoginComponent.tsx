@@ -16,7 +16,6 @@ import LocalizationMenu from '@/components/_shared/_core/localization/Localizati
 import { useAppSelectors } from '@/hooks/index';
 import Notify from '../../_shared/common/Notify';
 
-
 const WrapperAuth = styled(Box)<BoxProps>(({ theme }) => ({
   background: theme.palette.secondary[100],
   minHeight: '100vh'

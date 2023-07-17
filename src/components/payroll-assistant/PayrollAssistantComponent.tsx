@@ -3,9 +3,12 @@ import { Typography, Card, Grid, Box, Button as MuiButton, Tab, Tabs } from '@mu
 import { DateRangePicker, Input } from '@/components/_shared/form';
 import { styled } from '@mui/material/styles';
 import { Add } from '@mui/icons-material';
-import { useRouter } from 'next/router';
 import PayrollAssistantTable from './PayrollAssistantTable';
 import { CustomModal } from '@/components/_shared/common';
+import { getCompanyData } from '@/utils/helper';
+import { useAppDispatch } from '@/hooks/index';
+import { postPayrollRequested } from '@/store/reducers/slice/payroll/payrollSlice';
+import dayjs from 'dayjs';
 
 const ButtonWrapper = styled(Box)(({
   display: 'flex',
@@ -55,8 +58,11 @@ function a11yProps(index: number) {
 }
 
 function PayrollAssistantComponent() {
-  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const companyData = getCompanyData();
   const [value, setValue] = useState(0);
+  const [date, setDate] = useState<Array<Date>>([]);
+  const [name, setName] = useState('');
   const [open, setOpen] = useState(false);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -68,7 +74,19 @@ function PayrollAssistantComponent() {
   };
 
   const handleConfirm = () => {
-    router.push('/payroll-disbursement/payroll-assistant/create');
+    const [start, end] = date;
+    dispatch({
+      type: postPayrollRequested.toString(),
+      payload: {
+        data: {
+          companyID: companyData?.id,
+          name: name,
+          start: dayjs(start).toISOString(),
+          end: dayjs(end).toISOString()
+        },
+        isAttendance: false
+      }
+    });
   };
 
   return (
@@ -123,6 +141,7 @@ function PayrollAssistantComponent() {
               customLabel='Name'
               placeholder='Input Name'
               size='small'
+              onChange={(e) => setName(e.target.value)}
             />
           </Grid>
         </Grid>
@@ -132,9 +151,7 @@ function PayrollAssistantComponent() {
               withAsterisk
               customLabelStart='Start Date'
               customLabelEnd='End Date'
-              // value={formik.values.startDate as unknown as Date}
-              onChange={(date: unknown) => console.log(date)}
-              // error={formik.touched.startDate && formik.errors.startDate ? String(formik.errors.startDate) : ''}
+              onChange={(v) => setDate(v)}
             />
           </Grid>
         </Grid>

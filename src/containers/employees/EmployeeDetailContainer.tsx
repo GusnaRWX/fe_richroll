@@ -6,6 +6,7 @@ import {
   employeeInfoDetailRequested,
   personalInfoDetailRequested,
   emergencyContactDetailRequested,
+  getEmployeeCnbDetailRequested
 } from '@/store/reducers/slice/company-management/employees/employeeSlice';
 import { getListOptionWorkScheduleRequested } from '@/store/reducers/slice/options/optionSlice';
 import { useRouter } from 'next/router';
@@ -32,6 +33,10 @@ function EmployeeDetailContainer() {
       dispatch({
         type: getListOptionWorkScheduleRequested.toString(),
         payload: getCompanyData()?.id
+      });
+      dispatch({
+        type: getEmployeeCnbDetailRequested.toString(),
+        payload: router.query.id
       });
     };
     fetchData();

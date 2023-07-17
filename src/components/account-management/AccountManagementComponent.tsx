@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Typography, Card, Grid, Box, Button as MuiButton, Tab, Tabs } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { FiDownload } from 'react-icons/fi';
@@ -53,11 +53,19 @@ function a11yProps(index: number) {
 
 function AccountManagementComponent() {
   const [value, setValue] = useState(0);
+  const [hydrated, setHaydrated] = useState(false);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 
+  useEffect(() => {
+    setHaydrated(true);
+  }, []);
+
+  if (!hydrated) {
+    return null;
+  }
   return (
     <>
       <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>

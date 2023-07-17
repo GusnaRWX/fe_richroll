@@ -7,11 +7,12 @@ interface CnbParams {
   sort: string;
   direction: boolean;
   search: string;
+  companyID: string | number;
 }
 // Get Table Data
 export const getDataTable = (payload: CnbParams) => {
-  const { page, itemPerPage, sort, direction, search } = payload;
-  return get(`compensations?page=${page}&itemPerPage=${itemPerPage}&sort=${sort}&direction=${direction}&search=${search}`);
+  const { page, itemPerPage, sort, direction, search, companyID } = payload;
+  return get(`compensations?page=${page}&itemPerPage=${itemPerPage}&sort=${sort}&direction=${direction}&search=${search}&companyID=${companyID}`);
 };
 // Get Compensation Component Option
 export const getCompensationComponentOption = () => {

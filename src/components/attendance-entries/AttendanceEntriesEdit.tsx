@@ -90,7 +90,7 @@ const AttendanceEntriesEdit: React.FC<AttendanceEntriesEditProps> = ({
               </div>
               <div>
                 <Text title={item?.employee?.name} fontWeight={700} fontSize='18px' />
-                <Text title={item?.employee?.department || '-'} fontWeight={400} fontSize='14px' />
+                <Text title={item?.employee?.department?.name || '-'} fontWeight={400} fontSize='14px' />
               </div>
             </Box>
             <Box sx={{ marginTop: '10px' }}>
@@ -99,6 +99,7 @@ const AttendanceEntriesEdit: React.FC<AttendanceEntriesEditProps> = ({
                   <Text title='From' fontWeight={400} sx={{ marginBottom: '6px' }} />
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <TimePicker
+                      ampm={false}
                       format='HH:mm'
                       sx={{
                         '& .MuiOutlinedInput-input': {
@@ -116,6 +117,7 @@ const AttendanceEntriesEdit: React.FC<AttendanceEntriesEditProps> = ({
                   <Text title='To' fontWeight={400} sx={{ marginBottom: '6px' }} />
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <TimePicker
+                      ampm={false}
                       format='HH:mm'
                       sx={{
                         '& .MuiOutlinedInput-input': {

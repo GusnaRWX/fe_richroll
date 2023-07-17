@@ -16,13 +16,13 @@ const AsteriskComponent = MuiStyled('span')(({ theme }) => ({
 
 interface EmergencyProps {
   refProp: React.Ref<HTMLFormElement>
-  nextPage: (_val: number) => void;
+  nextPage: (_val: number, _data: Employees.EmergencyContactValues) => void;
+  prevPage: () => void;
   setValues: React.Dispatch<React.SetStateAction<Employees.EmergencyContactValues>>;
   emergencyValues: Employees.EmergencyContactValues;
-  setIsEmergencyValid: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-function EmergencyContactForm({ refProp, nextPage, setValues, emergencyValues, setIsEmergencyValid }: EmergencyProps) {
+function EmergencyContactForm({ refProp, nextPage, prevPage, setValues, emergencyValues }: EmergencyProps) {
   const { responser } = useAppSelectors(state => state);
   const formik = useFormik({
     initialValues: {
@@ -43,8 +43,7 @@ function EmergencyContactForm({ refProp, nextPage, setValues, emergencyValues, s
         phoneNumberPrimary: String(formik.values.phoneNumberPrimary)
       };
       setValues(emergencyLastValue);
-      nextPage(3);
-      setIsEmergencyValid(true);
+      nextPage(3, emergencyLastValue);
       setErrors({});
     }
   });
@@ -53,12 +52,8 @@ function EmergencyContactForm({ refProp, nextPage, setValues, emergencyValues, s
     e.preventDefault();
     if (formik.isValid) {
       setValues({ ...formik.values });
-      nextPage(1);
-      setIsEmergencyValid(true);
-    } else {
-      setIsEmergencyValid(false);
+      prevPage();
     }
-
   };
 
   const checkRelationship = (value: unknown) => {
@@ -280,7 +275,7 @@ function EmergencyContactForm({ refProp, nextPage, setValues, emergencyValues, s
             <Button onClick={handleBack} label='Back' variant='outlined' />
           </Grid>
           <Grid item>
-            <Button fullWidth={false} size='small' color='primary' type='submit' label='Next' />
+            <Button color='primary' type='submit' label='Next' />
           </Grid>
         </Grid>
       </form>

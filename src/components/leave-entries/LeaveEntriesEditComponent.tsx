@@ -164,6 +164,7 @@ const LeaveEntriesEditComponent: React.FC<LeaveEntriesEditProps> = ({
               <Text title='From' color='grey.700' mb='6px' />
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <TimePicker
+                  ampm={false}
                   format='HH:mm'
                   sx={{
                     '& .MuiOutlinedInput-input': {
@@ -184,6 +185,7 @@ const LeaveEntriesEditComponent: React.FC<LeaveEntriesEditProps> = ({
               <Text title='To' color='grey.700' mb='6px' />
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <TimePicker
+                  ampm={false}
                   format='HH:mm'
                   sx={{
                     '& .MuiOutlinedInput-input': {

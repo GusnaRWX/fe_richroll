@@ -189,13 +189,13 @@ function EmployeesTable({
                       <TableCell>
                         <NameWrapper>
                           <Avatar
-                            src={ifThenElse(item?.user?.userInformation !== null, item?.user?.userInformation?.picture, item.user.name)}
-                            alt={ifThenElse(item?.user?.userInformation !== null, item?.user?.userInformation?.picture, item.user.name)}
+                            src={ifThenElse(item?.user?.userInformation !== null, item?.user?.userInformation?.picture, item?.user?.name)}
+                            alt={ifThenElse(item?.user?.userInformation !== null, item?.user?.userInformation?.picture, item?.user?.name)}
                             sx={{
                               width: 24, height: 24
                             }}
                           />
-                          &nbsp;{item.user.name}
+                          &nbsp;{item?.user?.name}
                         </NameWrapper>
                       </TableCell>
                       <TableCell>{item.position.name}</TableCell>

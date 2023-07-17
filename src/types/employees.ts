@@ -163,6 +163,7 @@ export declare namespace Employees {
     email: string
     startDate: DayJS
     endDate: DayJS
+    isActive: boolean
     isPermanent: boolean
     department: string
     position: string
@@ -204,7 +205,8 @@ export declare namespace Employees {
       rate?: number | string;
       rateType?: number | string;
     },
-    supplementaries: any
+    supplementaries: any;
+    overtime: number;
   }
 
   interface PatchEmployeeInformation {
@@ -237,17 +239,17 @@ export declare namespace Employees {
   }
 
   interface BreakItemType {
-    breakName: string;
-    startTime: DayJS;
-    endTime: DayJS;
+    name: string;
+    start: DayJS;
+    end: DayJS;
   }
 
   interface InitialValuesWorkScheduleForm {
     workScheduleID: string | number;
     profileName: string;
     type: string | number;
-    dayType: Array<string | number>;
-    day: Array<string | number>
+    dayType: number;
+    day: Array<string | number>;
     startHour: DayJS;
     endHour: DayJS;
     flexiWorkHour: string | number;
@@ -283,7 +285,7 @@ export declare namespace Employees {
 
   interface ItemsWorkScheduleType {
     day: number,
-    eventId: number,
+    eventId: string | number,
     label: string,
     name: string,
     start: Date | string,
@@ -311,5 +313,35 @@ export declare namespace Employees {
     terminateNote: string;
   }
 
+  interface ContainerCnbDetail {
+    id: string;
+    component: {
+      id: string;
+      name: string;
+      type: number
+    },
+    term: {
+      id: string;
+      name: string;
+    },
+    isTaxable: boolean;
+    isBase: boolean;
+    amount: number;
+    amountType: number;
+    rate: number;
+    rateType: number;
+  }
+
+  interface GetEmployeeCnbDetail {
+    data: {
+      id: string;
+      name: string;
+      overtime: number;
+      createdAt: string;
+      updatedAt: string;
+      base: ContainerCnbDetail;
+      supplementaries: Array<ContainerCnbDetail>
+    }
+  }
 }
 

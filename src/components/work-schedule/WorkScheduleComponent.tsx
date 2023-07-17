@@ -8,10 +8,12 @@ import { HiPencilAlt } from 'react-icons/hi';
 import { useRouter } from 'next/router';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { getCompanyData, compareCheck, ifThenElse } from '@/utils/helper';
-import { getListWorkScheduleRequested } from '@/store/reducers/slice/company-management/work-schedule/workScheduleSlice';
+import { getListWorkScheduleRequested, deleteWorkScheduleRequested } from '@/store/reducers/slice/company-management/work-schedule/workScheduleSlice';
 import { visuallyHidden } from '@mui/utils';
 import dayjs from 'dayjs';
 import EmptyState from '../_shared/common/EmptyState';
+import { BsTrashFill } from 'react-icons/bs';
+import { ConfirmationModal } from '../_shared/common';
 
 const TopWrapper = styled.div`
  display: flex;
@@ -35,7 +37,8 @@ const headerItems = [
   { id: 'grossHours', label: 'Weekly Gross (hours)' },
   { id: 'netHours', label: 'Weekly Net (hours)' },
   { id: 'createdAt', label: 'Date Created' },
-  { id: 'updatedAt', label: 'Last Updated' }
+  { id: 'updatedAt', label: 'Last Updated' },
+  { id: 'actions', label: '' }
 ];
 
 type Order = 'asc' | 'desc'
@@ -46,6 +49,8 @@ function WorkScheduleComponent() {
   const [page, setPage] = useState(1);
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
+  const [deletedId, setDeletedId] = useState(0);
+  const [deleteConfirmation, setDeleteConfirmation] = useState(false);
   const [hydrated, setHaydrated] = useState(false);
   const companyData = getCompanyData();
   const dispatch = useAppDispatch();
@@ -62,6 +67,14 @@ function WorkScheduleComponent() {
     const isAsc = compareCheck(sort === headId, direction === 'asc');
     setDirection(ifThenElse(isAsc, 'desc', 'asc'));
     setSort(headId);
+  };
+
+  const handleDeleteSchedule = () => {
+    dispatch({
+      type: deleteWorkScheduleRequested.toString(),
+      payload: deletedId
+    });
+    setDeleteConfirmation(false);
   };
 
   useEffect(() => {
@@ -147,6 +160,17 @@ function WorkScheduleComponent() {
                               icons={
                                 <HiPencilAlt fontSize={20} color='#223567' />
                               }
+                              onClick={() => { router.push('/company-management/work-schedule/edit/' + item.id); }}
+                            />
+                            <IconButton
+                              parentColor='red.100'
+                              icons={
+                                <BsTrashFill fontSize={20} color='#EF4444' />
+                              }
+                              onClick={() => {
+                                setDeleteConfirmation(true);
+                                setDeletedId(item?.id);
+                              }}
                             />
                           </ButtonWrapper>
                         </TableCell>
@@ -165,6 +189,16 @@ function WorkScheduleComponent() {
           }
         />
       </Card>
+      <ConfirmationModal
+        open={deleteConfirmation}
+        handleClose={() => setDeleteConfirmation(false)}
+        title='Delete Profile from Work Schedule'
+        content='You are about to delete this event from the Work Schedule. This action cannot be undone.'
+        withCallback
+        type='delete'
+        noChange={true}
+        callback={() => {handleDeleteSchedule();}}
+      />
     </>
   );
 }

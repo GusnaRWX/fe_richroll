@@ -21,7 +21,7 @@ const ButtonWrapper = styled.div`
  display: flex;
  flex-direction: row;
  align-items: center;
- justify-content: flex-end;
+ justify-content: flex-start;
  gap: .5rem;
 `;
 
@@ -34,6 +34,7 @@ const NameWrapper = styled.div`
 `;
 
 const headerItemsEmployees = [
+  { id: 'action', label: '' },
   { id: 'user.name', label: 'Employee Name' },
   { id: 'position', label: 'Position' },
   { id: 'department', label: 'Department' },
@@ -119,7 +120,7 @@ function AttendanceModal({
   useEffect(() => {
     setHaydrated(true);
   }, []);
-  
+
   useEffect(() => {
     setSelectedTemp(selected);
     setRowsPerPage(5);
@@ -131,6 +132,27 @@ function AttendanceModal({
   if (!hydrated) {
     return null;
   }
+
+  const onSelectedAll = (items, e) => {
+    const pageItems = items?.map(item => ({
+      id: item.id,
+      picture: item?.user?.userInformation?.picture,
+      name: item.user.name
+    }));
+
+    if (e.target.checked) {
+      setSelectedTemp(prevSelectedTemp => [...prevSelectedTemp, ...pageItems]);
+    } else {
+      setSelectedTemp(prevSelectedTemp => prevSelectedTemp.filter(selectedItem => !pageItems?.some(item => item?.id === selectedItem['id'])));
+    }
+  };
+
+  const checkValAll = (items) => {
+    const checkedPerPage = selectedTemp?.filter(selectedItem => items?.some(item => item?.id === selectedItem['id'])).length;
+    const lengthPerPage = rowsPerPage;
+
+    return checkedPerPage === lengthPerPage;
+  };
 
   return (
     <CustomModal
@@ -155,20 +177,27 @@ function AttendanceModal({
               <TableRow>
                 {
                   headerItemsEmployees.map((item) => (
-                    <TableCell key={item.id} sortDirection={ifThenElse(sort === item.id, direction, false)}>
-                      <TableSortLabel
-                        active={sort === item.id}
-                        direction={sort === item.id ? direction : 'asc'}
-                        onClick={(e) => handleRequestSort(e, item.id)}
-                      >
-                        {item.label}
-                        {sort === item.id ? (
-                          <Box component='span' sx={visuallyHidden}>
-                            {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
-                          </Box>
-                        ) : null}
-                      </TableSortLabel>
-                    </TableCell>
+                    item.id === 'action' ? (
+                      <TableCell key={item.id}>
+                        <Checkbox onChange={(e) => onSelectedAll(data?.items?.slice(0, rowsPerPage), e)} checked={checkValAll(data?.items?.slice(0, rowsPerPage))} />
+                      </TableCell>
+                    ) : (
+                      <TableCell key={item.id} sortDirection={ifThenElse(sort === item.id, direction, false)}>
+                        <TableSortLabel
+                          active={sort === item.id}
+                          direction={sort === item.id ? direction : 'asc'}
+                          onClick={(e) => handleRequestSort(e, item.id)}
+                        >
+                          {item.label}
+                          {sort === item.id ? (
+                            <Box component='span' sx={visuallyHidden}>
+                              {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
+                            </Box>
+                          ) : null}
+                        </TableSortLabel>
+                      </TableCell>
+                    )
+
                   ))
                 }
                 <TableCell></TableCell>
@@ -186,6 +215,11 @@ function AttendanceModal({
                       data?.items?.map((item, index) => (
                         <TableRow key={index}>
                           <TableCell>
+                            <ButtonWrapper>
+                              <Checkbox onChange={(e) => onSelected(item, e)} checked={checkVal(item?.id)} />
+                            </ButtonWrapper>
+                          </TableCell>
+                          <TableCell>
                             <NameWrapper>
                               <Avatar
                                 src={ifThenElse(item?.user?.userInformation !== null, item?.user?.userInformation?.picture, item?.user?.name)}
@@ -199,11 +233,6 @@ function AttendanceModal({
                           </TableCell>
                           <TableCell>{item?.position?.name}</TableCell>
                           <TableCell>{item?.department?.name}</TableCell>
-                          <TableCell>
-                            <ButtonWrapper>
-                              <Checkbox onChange={(e) => onSelected(item, e)} checked={checkVal(item?.id)} />
-                            </ButtonWrapper>
-                          </TableCell>
                         </TableRow>
                       ))
                     ))

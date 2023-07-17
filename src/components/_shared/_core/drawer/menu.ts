@@ -6,7 +6,7 @@ import { HiBuildingOffice, HiCurrencyDollar } from 'react-icons/hi2';
 import { CoreLayout } from '@/types/component';
 import { BsFillCalendar2Fill } from 'react-icons/bs';
 // import { GiReceiveMoney } from 'react-icons/gi';
-// import { TbMoodDollar } from 'react-icons/tb';
+import { TbMoodDollar } from 'react-icons/tb';
 // import { HiDocumentReport, HiTicket, HiUserGroup } from 'react-icons/hi';
 
 export const Menus: CoreLayout.SidebarItem[] = [
@@ -163,40 +163,40 @@ export const Menus: CoreLayout.SidebarItem[] = [
   //   roles: ['HR Admin'],
   // },
   // Payroll & Disbursement
-  // {
-  //   key: 'payroll-disbursement',
-  //   path: '/payroll-disbursement',
-  //   title: [{ key: 'HR Admin', title: 'Payroll & Disbursement', prefix: 'payroll_&_disbursement' }],
-  //   icons: TbMoodDollar,
-  //   hasChild: true,
-  //   roles: ['HR Admin'],
-  //   child: [
-  //     {
-  //       path: '/payroll-disbursement/payroll-assistant',
-  //       title: 'Payroll Assistant',
-  //       prefix: 'payroll_&_disbursement_payroll_assistant',
-  //       roles: ['HR Admin'],
-  //     },
-  //     {
-  //       path: '/payroll-disbursement/attendance',
-  //       title: 'Attendance Summary',
-  //       prefix: 'payroll_&_disbursement_attendance_summary',
-  //       roles: ['HR Admin']
-  //     },
-  //     {
-  //       path: '/payroll-disbursement/payroll',
-  //       title: 'Payroll Reports',
-  //       prefix: 'payroll_&_disbursement_payroll_reports',
-  //       roles: ['HR Admin']
-  //     },
-  //     {
-  //       path: '/payroll-disbursement/disbursement',
-  //       title: 'Disbursement',
-  //       prefix: 'payroll_&_disbursement_disbursement',
-  //       roles: ['HR Admin'],
-  //     },
-  //   ],
-  // },
+  {
+    key: 'payroll-disbursement',
+    path: '/payroll-disbursement',
+    title: [{ key: 'HR Admin', title: 'Payroll & Disbursement', prefix: 'payroll_&_disbursement' }],
+    icons: TbMoodDollar,
+    hasChild: true,
+    roles: ['HR Admin'],
+    child: [
+      {
+        path: '/payroll-disbursement/payroll-assistant',
+        title: 'Payroll Assistant',
+        prefix: 'payroll_&_disbursement_payroll_assistant',
+        roles: ['HR Admin'],
+      },
+      {
+        path: '/payroll-disbursement/attendance',
+        title: 'Attendance Summary',
+        prefix: 'payroll_&_disbursement_attendance_summary',
+        roles: ['HR Admin']
+      },
+      {
+        path: '/payroll-disbursement/payroll',
+        title: 'Payroll Reports',
+        prefix: 'payroll_&_disbursement_payroll_reports',
+        roles: ['HR Admin']
+      },
+      {
+        path: '/payroll-disbursement/disbursement',
+        title: 'Disbursement',
+        prefix: 'payroll_&_disbursement_disbursement',
+        roles: ['HR Admin'],
+      },
+    ],
+  },
   // Company Management (Super Admin)
   // {
   //   key: 'company-management-admin',

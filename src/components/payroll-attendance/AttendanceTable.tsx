@@ -10,7 +10,7 @@ import {
 import { Input, DateRangePicker } from '../_shared/form';
 import { Search } from '@mui/icons-material';
 import Table from '../_shared/form/Table';
-import { compareCheck, ifThenElse } from '@/utils/helper';
+import { compareCheck, ifThenElse, getCompanyData } from '@/utils/helper';
 import { visuallyHidden } from '@mui/utils';
 import { IconButton } from '@/components/_shared/form';
 import { BsTrashFill, BsFillEyeFill } from 'react-icons/bs';
@@ -21,6 +21,9 @@ import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
 import { ConfirmationModal } from '@/components/_shared/common';
 import EmptyState from '../_shared/common/EmptyState';
+import { useAppDispatch, useAppSelectors } from '@/hooks/index';
+import { getPayrollRequested } from '@/store/reducers/slice/payroll/payrollSlice';
+import dayjs from 'dayjs';
 
 const ButtonWrapper = styled.div`
  display: flex;
@@ -57,58 +60,17 @@ type Order = 'asc' | 'desc'
 function AttendanceTable({
   tabValue
 }: EmployeeTableProps) {
-  const data = {
-    items: [
-      {
-        id: 1,
-        name: 'Payroll February 2023',
-        daterange: '1/03/2023 - 31/03/2023',
-        type: 'Attendance Report',
-        createdAt: '20/03/2023',
-        lastUpdated: '20/03/2023',
-      },
-      {
-        id: 2,
-        name: 'Payroll February 2023',
-        daterange: '1/03/2023 - 31/03/2023',
-        type: 'Attendance Report',
-        createdAt: '20/03/2023',
-        lastUpdated: '20/03/2023',
-      },
-      {
-        id: 3,
-        name: 'Payroll February 2023',
-        daterange: '1/03/2023 - 31/03/2023',
-        type: 'Attendance Report',
-        createdAt: '20/03/2023',
-        lastUpdated: '20/03/2023',
-      },
-      {
-        id: 4,
-        name: 'Payroll February 2023',
-        daterange: '1/03/2023 - 31/03/2023',
-        type: 'Attendance Report',
-        createdAt: '20/03/2023',
-        lastUpdated: '20/03/2023',
-      },
-      {
-        id: 5,
-        name: 'Payroll February 2023',
-        daterange: '1/03/2023 - 31/03/2023',
-        type: 'Attendance Report',
-        createdAt: '20/03/2023',
-        lastUpdated: '20/03/2023',
-      },
-    ],
-    itemTotals: 5
-  };
+  const dispatch = useAppDispatch();
+  const data = useAppSelectors(state => state.payroll.data);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(1);
-  // const [search, setSearch] = useState('');
+  const [search, setSearch] = useState('');
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
   const [hydrated, setHaydrated] = useState(false);
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
+  const companyData = getCompanyData();
+  const { responser } = useAppSelectors((state) => state);
   const router = useRouter();
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -117,15 +79,12 @@ function AttendanceTable({
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(event);
-    // setPage(0);
+    setPage(0);
   };
 
   const handleSearch = (e) => {
     if (e.key === 'Enter') {
-      // setSearch(e.target.value);
-      console.log(e.target.value);
-      console.log(tabValue);
-
+      setSearch(e.target.value);
     }
   };
 
@@ -134,6 +93,23 @@ function AttendanceTable({
     setDirection(ifThenElse(isAsc, 'desc', 'asc'));
     setSort(headId);
   };
+
+  useEffect(() => {
+    dispatch({
+      type: getPayrollRequested.toString(),
+      payload: {
+        page: page,
+        itemPerPage: rowsPerPage,
+        sort: sort,
+        direction: direction.toUpperCase(),
+        search: search,
+        countryCode: 'ID',
+        companyID: companyData?.id,
+        workflow: 'ATTENDANCE',
+        status: ifThenElse(tabValue === 0, 'DRAFT', ifThenElse(tabValue === 1, 'CONFIRMED', ifThenElse(tabValue === 2,  'COMPLETED', 'ARCHIVE')))
+      }
+    });
+  }, [rowsPerPage, page, search, sort, direction, responser.code, tabValue]);
 
   useEffect(() => {
     setHaydrated(true);
@@ -211,10 +187,10 @@ function AttendanceTable({
                   data?.items?.map((item, index) => (
                     <TableRow key={index}>
                       <TableCell>{item.name}</TableCell>
-                      <TableCell>{item.daterange}</TableCell>
-                      <TableCell><TypeComponent>{item.type}</TypeComponent></TableCell>
-                      <TableCell>{item.createdAt}</TableCell>
-                      <TableCell>{item.lastUpdated}</TableCell>
+                      <TableCell>{dayjs(item.start).format('DD/MM/YYYY')} - {dayjs(item.end).format('DD/MM/YYYY')}</TableCell>
+                      <TableCell><TypeComponent>Attendance Report</TypeComponent></TableCell>
+                      <TableCell>{dayjs(item.createdAt).format('DD/MM/YYYY')}</TableCell>
+                      <TableCell>{dayjs(item.updatedAt).format('DD/MM/YYYY')}</TableCell>
                       <TableCell>
                         <MuiButton
                           variant='contained'
@@ -223,7 +199,7 @@ function AttendanceTable({
                           sx={{ color: '#111827' }}
                           onClick={() => { console.log(true); }}
                         >
-                          Attendance report.pdf &nbsp;<FiDownload fontSize='small' />
+                          {item.attachment.filename} &nbsp;<FiDownload fontSize='small' />
                         </MuiButton>
                       </TableCell>
                       <TableCell>

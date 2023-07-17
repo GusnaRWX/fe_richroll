@@ -4,7 +4,7 @@ export const validationSchemeEmployeeInformation = Yup.object({
   picture: Yup.mixed().notRequired(),
   fullName: Yup.string().required('This field is required'),
   nickname: Yup.string().notRequired(),
-  phoneNumberPrefix: Yup.string().notRequired(),
+  phoneNumberPrefix: Yup.string().required(),
   phoneNumber: Yup.string().matches(/^\d{11}$/, 'Phone number should have 12 or 13 digits')
     .required('Phone number is required')
     .typeError('Phone number should be a number'),
@@ -12,8 +12,8 @@ export const validationSchemeEmployeeInformation = Yup.object({
   startDate: Yup.date().typeError('This field is required').required(),
   endDate: Yup.string().notRequired(),
   isPermanent: Yup.bool().notRequired(),
-  department: Yup.string().notRequired(),
-  position: Yup.string().notRequired(),
+  department: Yup.string().required('This field is required'),
+  position: Yup.string().required('This field is required'),
   isSelfService: Yup.bool().notRequired()
 });
 
@@ -86,14 +86,15 @@ export const validationSchemeCompensationBenefits = Yup.object({
       rateOrAmount: Yup.number().required('This is required').positive('Must be positive').integer('Must be number'),
       taxStatus: Yup.string().required('This is required')
     })
-  )
+  ),
+  overtime: Yup.string().required('This field is required')
 });
 export const validationSchemaWorkScheduler = Yup.object({
   workScheduleID: Yup.string().required('This field is required'),
   type: Yup.string(),
-  flexiWorkHour: Yup.string().typeError('This field is required').when('type', { is: '1', then: (schema) => schema.required('This field is required') }),
-  flexiWorkDay: Yup.string().typeError('This field is required').when('type', { is: '1', then: (schema) => schema.required('This field is required') }),
-  fixedStartTime: Yup.string().typeError('This field is required').when('type', { is: '0', then: (schema) => schema.required('This field is required') }),
-  fixedEndTime: Yup.string().typeError('This field is required').when('type', { is: '0', then: (schema) => schema.required('This field is required') }),
-  fixedWorkDayType: Yup.string().typeError('This field is required').when('type', { is: '0', then: (schema) => schema.required('This field is required') }),
+  flexiWorkHour: Yup.string().typeError('This field is required').when('type', { is: 1, then: (schema) => schema.required('This field is required') }),
+  flexiWorkDay: Yup.string().typeError('This field is required').when('type', { is: 1, then: (schema) => schema.required('This field is required') }),
+  fixedStartTime: Yup.string().typeError('This field is required').when('type', { is: 0, then: (schema) => schema.required('This field is required') }),
+  fixedEndTime: Yup.string().typeError('This field is required').when('type', { is: 0, then: (schema) => schema.required('This field is required') }),
+  fixedWorkDayType: Yup.string().typeError('This field is required').when('type', { is: 0, then: (schema) => schema.required('This field is required') }),
 });

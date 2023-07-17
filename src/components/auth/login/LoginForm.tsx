@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import { useAppSelectors } from '@/hooks/index';
 import { Login } from '@/types/component';
@@ -36,7 +38,9 @@ const LoginForm = ({
   doLogin
 }: Login.Component) => {
   const [openPassword, setOpenPassword] = useState(false);
-
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [provider, setProvider] = useState('');
+  const [profile, setProfile] = useState<any>();
   const { responser, login } = useAppSelectors(state => state);
 
   const formik = useFormik({

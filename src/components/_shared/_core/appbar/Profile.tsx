@@ -28,7 +28,7 @@ const Profile = () => {
     setAnchorEl(null);
   };
 
-  const handleRemoveToken = async (type?: string) => {
+  const handleRemoveToken = async (type?: string, role?: string) => {
     switch (type) {
       case 'logout':
         clearStorages(['accessToken', 'refreshToken', 'user']);
@@ -38,7 +38,7 @@ const Profile = () => {
         clearStorages(['emp-information', 'emp-personal-information', 'emp-emergency-contact']);
         break;
       case 'profile':
-        router.push('/profile');
+        router.push({ pathname: '/profile', query: { role: role } }, '/profile');
         setAnchorEl(null);
         break;
       case 'company':
@@ -113,7 +113,7 @@ const Profile = () => {
         {
           checkRoles?.includes('HR Admin') && (
             <div>
-              <MenuItem onClick={() => { handleRemoveToken('profile'); }}>
+              <MenuItem onClick={() => { handleRemoveToken('profile', 'HR Admin'); }}>
                 <PersonIcon width={20} fontSize='small' />
                 <Text variant='text-sm' title='Profile' ml='10px' />
               </MenuItem>
@@ -133,7 +133,7 @@ const Profile = () => {
         {
           checkRoles?.includes('Employee') && (
             <div>
-              <MenuItem onClick={() => { handleRemoveToken('profile'); }}>
+              <MenuItem onClick={() => { handleRemoveToken('profile', 'Employee'); }}>
                 <Text title='Account Settings' />
               </MenuItem>
               <MenuItem onClick={() => { handleRemoveToken('company'); }}>

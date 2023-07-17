@@ -6,13 +6,15 @@ import {
   Box,
   TableSortLabel
 } from '@mui/material';
-import { Input, DateRangePicker } from '../_shared/form';
+import { Input } from '../_shared/form';
 import { Search } from '@mui/icons-material';
 import Table from '../_shared/form/Table';
-import { compareCheck, ifThenElse } from '@/utils/helper';
+import { compareCheck, ifThenElse, getCompanyData } from '@/utils/helper';
 import { visuallyHidden } from '@mui/utils';
 import PayrollAssistantRow from './PayrollAssistantRow';
 import EmptyState from '../_shared/common/EmptyState';
+import { useAppDispatch, useAppSelectors } from '@/hooks/index';
+import { getPayrollRequested } from '@/store/reducers/slice/payroll/payrollSlice';
 
 const headerItems = [
   { id: 'user.name', label: 'Name' },
@@ -31,52 +33,16 @@ type Order = 'asc' | 'desc'
 function PayrollAssistantTable({
   tabValue
 }: EmployeeTableProps) {
-  const data = {
-    items: [
-      {
-        id: 1,
-        name: 'Payroll 280123',
-        daterange: '1/03/2023 - 31/03/2023',
-        createdAt: '20/03/2023',
-        lastUpdated: '20/03/2023',
-      },
-      {
-        id: 2,
-        name: 'Payroll 280123',
-        daterange: '1/03/2023 - 31/03/2023',
-        createdAt: '20/03/2023',
-        lastUpdated: '20/03/2023',
-      },
-      {
-        id: 3,
-        name: 'Payroll 280123',
-        daterange: '1/03/2023 - 31/03/2023',
-        createdAt: '20/03/2023',
-        lastUpdated: '20/03/2023',
-      },
-      {
-        id: 4,
-        name: 'Payroll 280123',
-        daterange: '1/03/2023 - 31/03/2023',
-        createdAt: '20/03/2023',
-        lastUpdated: '20/03/2023',
-      },
-      {
-        id: 5,
-        name: 'Payroll 280123',
-        daterange: '1/03/2023 - 31/03/2023',
-        createdAt: '20/03/2023',
-        lastUpdated: '20/03/2023',
-      },
-    ],
-    itemTotals: 5
-  };
+  const dispatch = useAppDispatch();
+  const data = useAppSelectors(state => state.payroll.data);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(1);
-  // const [search, setSearch] = useState('');
+  const [search, setSearch] = useState('');
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
+  const companyData = getCompanyData();
   const [hydrated, setHaydrated] = useState(false);
+  const { responser } = useAppSelectors((state) => state);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -84,15 +50,12 @@ function PayrollAssistantTable({
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(event);
-    // setPage(0);
+    setPage(1);
   };
 
   const handleSearch = (e) => {
     if (e.key === 'Enter') {
-      // setSearch(e.target.value);
-      console.log(e.target.value);
-      console.log(tabValue);
-
+      setSearch(e.target.value);
     }
   };
 
@@ -101,6 +64,23 @@ function PayrollAssistantTable({
     setDirection(ifThenElse(isAsc, 'desc', 'asc'));
     setSort(headId);
   };
+
+  useEffect(() => {
+    dispatch({
+      type: getPayrollRequested.toString(),
+      payload: {
+        page: page,
+        itemPerPage: rowsPerPage,
+        sort: sort,
+        direction: direction.toUpperCase(),
+        search: search,
+        countryCode: 'ID',
+        companyID: companyData?.id,
+        workflow: ifThenElse(tabValue === 0, 'ATTENDANCE', 'PAYROLL_COMPLETE'),
+        status: ifThenElse(tabValue === 0, 'DRAFT', 'COMPLETED')
+      }
+    });
+  }, [rowsPerPage, page, search, sort, direction, responser.code, tabValue]);
 
   useEffect(() => {
     setHaydrated(true);
@@ -124,14 +104,6 @@ function PayrollAssistantTable({
                 <Search sx={{ color: '#9CA3AF' }} />
               )
             }}
-          />
-        </Grid>
-        <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
-          <DateRangePicker
-            withAsterisk
-            // value={formik.values.startDate as unknown as Date}
-            onChange={(date: unknown) => console.log(date)}
-          // error={formik.touched.startDate && formik.errors.startDate ? String(formik.errors.startDate) : ''}
           />
         </Grid>
       </Grid>

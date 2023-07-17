@@ -4,10 +4,8 @@ import {
   Card,
   Grid,
   Box,
-  Stepper,
-  Step,
-  StepLabel,
   Button as MuiButton } from '@mui/material';
+import { Stepper } from '@/components/_shared/form';
 import { styled } from '@mui/material/styles';
 import { useRouter } from 'next/router';
 import AttendanceContent from './AttendanceContent';
@@ -17,6 +15,7 @@ import DisbursementContent from './DisbursementContent';
 import CompleteContent from './CompleteContent';
 import CustomModal from '@/components/_shared/common/CustomModal';
 import { ifThenElse } from '@/utils/helper';
+import { useAppSelectors } from '@/hooks/index';
 
 const steps = [
   'Create Payroll',
@@ -44,6 +43,8 @@ const ContentWrapper = styled(Card)(({
 
 function PayrollAssistantCreate() {
   const router = useRouter();
+  const payrollId = router?.query?.id;
+  const { name, start, end } = useAppSelectors((state) => state.payroll);
   const [value, setValue] = useState(1);
   const [open, setOpen] = useState(false);
   const [isExit, setIsExit] = useState(true);
@@ -61,7 +62,7 @@ function PayrollAssistantCreate() {
       <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
         <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
           <Typography variant='h6' color='#4B5563'><b>Payroll Assistant</b></Typography>
-          <Typography variant='text-base' color='#4B5563'><b>Payroll 280123 — </b>1/03/2023 - 14/03/2023</Typography>
+          <Typography variant='text-base' color='#4B5563'><b>{name} — </b>{start} - {end}</Typography>
         </Grid>
         <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
           <ButtonWrapper>
@@ -98,55 +99,11 @@ function PayrollAssistantCreate() {
 
       <ContentWrapper>
         <Box sx={{ width: '100%' }}>
-          <Stepper activeStep={value} alternativeLabel sx={{ marginTop: '45px' }}>
-            {steps.map((label) => (
-              <Step key={label} sx={{
-                '> .MuiStepConnector-root': {
-                  left: 'calc(-50% + 10px)',
-                  right: 'calc(50% + 10px)',
-                  '> .MuiStepConnector-line': {
-                    borderTopWidth: '2px',
-                    marginTop: '-20px !important'
-                  }
-                },
-                '> .Mui-active > .MuiStepConnector-line, > .Mui-completed > .MuiStepConnector-line': {
-                  borderColor: '#1C2C56'
-                },
-                '> .Mui-disabled > .MuiStepConnector-line': {
-                  borderColor: '#D1D5DB'
-                },
-              }}>
-                <StepLabel
-                  sx={{
-                    '& .Mui-completed, & .Mui-disabled': {
-                      color: '#D1D5DB !important',
-                    },
-                    '& .MuiStepLabel-alternativeLabel': {
-                      fontWeight: '400 !important',
-                      marginTop: '-20px !important'
-                    },
-                  }}
-                  StepIconComponent={({ active, completed }) => {
-                    return ifThenElse(
-                      active,
-                      <Box sx={{ width: '12px', height: '12px', border: '2px solid #1C2C56', borderRadius: '12px', background: '#FFF', top: '6px', position: 'relative' }}></Box>,
-                      ifThenElse(
-                        completed,
-                        <Box sx={{ width: '12px', height: '12px', borderRadius: '12px', background: '#1C2C56', top: '6px', position: 'relative' }}></Box>,
-                        <Box sx={{ width: '12px', height: '12px', borderRadius: '12px', background: '#D1D5DB', top: '6px', position: 'relative' }}></Box>
-                      )
-                    );
-                  }}
-                >
-                  {label}
-                </StepLabel>
-              </Step>
-            ))}
-          </Stepper>
+          <Stepper activeStep={value} steps={steps} />
         </Box>
       </ContentWrapper>
       
-      {value == 1 && <AttendanceContent />}
+      {value == 1 && <AttendanceContent payrollID={payrollId} />}
       {value == 2 && <GrossContent isPreview={false} />}
       {value == 3 && <NetContent />}
       {value == 4 && <DisbursementContent />}

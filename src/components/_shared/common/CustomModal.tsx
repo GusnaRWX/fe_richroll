@@ -97,6 +97,9 @@ function CustomModal({
               {submitText === 'Reactivate' &&
                 <MuiButton variant='contained' disabled={ConfirmationDisable} onClick={handleConfirm} size='small' sx={{ background: '#DCFCE7', color: '#16A34A' }}>Reactivate</MuiButton>
               }
+              {submitText === 'Reactivate' &&
+                <MuiButton variant='contained' disabled={ConfirmationDisable} onClick={handleConfirm} size='small' sx={{ background: '#DCFCE7', color: '#16A34A' }}>Reactivate</MuiButton>
+              }
             </ModalFooter>
           )
         }

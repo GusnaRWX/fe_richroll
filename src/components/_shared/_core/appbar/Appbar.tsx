@@ -12,6 +12,7 @@ import { Image as ImageType } from '@/utils/assetsConstant';
 import { IconButton } from '@/components/_shared/form';
 import { BsBellFill } from 'react-icons/bs';
 import LocalizationMenu from '@/components/_shared/_core/localization/LocalizationMenu';
+import SiteMenu from '../localization/SiteMenu';
 import Profile from './Profile';
 import { Menu } from '@mui/icons-material';
 
@@ -76,9 +77,11 @@ const Appbar: FC<AppbarProps> = (props) => {
         !matches && (
           <WrapperNavbarContent>
             <Box sx={{ display: { xs: 'none', sm: 'flex' }, gap: { sm: 1 } }}>
-              <IconButton icons={<BsBellFill />} parentColor='' size='small' />
+              <SiteMenu />
               <Divider sx={{ borderWidth: '0.5px' }} />
               <LocalizationMenu />
+              <Divider sx={{ borderWidth: '0.5px' }} />
+              <IconButton icons={<BsBellFill />} parentColor='' size='small' />
               <Divider sx={{ borderWidth: '0.5px' }} />
               <Profile />
             </Box>
@@ -103,9 +106,10 @@ const Appbar: FC<AppbarProps> = (props) => {
                   xs: 1.5
                 },
               }}>
+              <SiteMenu />
+              <LocalizationMenu />
               <IconButton icons={<BsBellFill />} parentColor='' size='small' />
               {/* <Divider sx={{ borderWidth: '0.5px' }} /> */}
-              <LocalizationMenu />
               {/* <Divider sx={{ borderWidth: '0.5px' }} /> */}
               <Profile />
             </Box>

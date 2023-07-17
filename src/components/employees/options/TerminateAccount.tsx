@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Typography } from '@mui/material';
 import { Card, Text, CustomModal } from '@/components/_shared/common';
 import { Textarea, Button } from '@/components/_shared/form';
 import { BsTrashFill } from 'react-icons/bs';
@@ -45,6 +46,7 @@ const TerminateAccount = () => {
       sx={{
         padding: '10px 20px',
         mb: '20px',
+        mt: '20px',
         border: '1px solid #DC2626',
       }}
     >
@@ -64,12 +66,9 @@ const TerminateAccount = () => {
         />
       </Box>
       <Box mb='17px'>
-        <Text
-          title='Once this account is terminated, all of its resources and data will be permanently deleted. Before terminating this account, please make sure.'
-          color='grey.400'
-          variant='text-base'
-          fontWeight={400}
-        />
+        <Typography variant='text-base' fontWeight={400} color='grey.400'>
+          Once this account is terminated, all of its resources and data will be permanently deleted. Before terminating this account,<br />please make sure.
+        </Typography>
       </Box>
       <Button
         label='Terminate'
@@ -108,6 +107,7 @@ const TerminateAccount = () => {
             <BasicDatePicker
               customLabel='Input Effective Termination Date'
               withAsterisk
+              disablePast
               onChange={(e) => setDate(dayjs(e).format('DD/MM/YYYY'))}
             />
           </Box>

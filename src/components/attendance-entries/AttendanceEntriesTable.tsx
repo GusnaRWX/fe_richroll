@@ -44,19 +44,15 @@ const headerItems = [
   { id: 'date', label: 'Date' },
   { id: 'id', label: 'Employee ID' },
   { id: 'name', label: 'Employee Name' },
-  { id: 'clockIn', label: 'Clock In' },
-  { id: 'clockOut', label: 'Clock Out' },
+  { id: 'clockIn', label: 'Check In' },
+  { id: 'clockOut', label: 'Check Out' },
   { id: 'count', label: 'Count' },
   { id: 'action', label: '' },
 ];
 
 type Order = 'asc' | 'desc'
 
-interface AttendanceEntriesTable {
-  reload: boolean;
-}
-
-const AttendanceEntriesTable: React.FC<AttendanceEntriesTable> = ({ reload }) => {
+const AttendanceEntriesTable = () => {
   const dispatch = useAppDispatch();
   const data = useAppSelectors(state => state.attendanceEntries.data);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -69,6 +65,7 @@ const AttendanceEntriesTable: React.FC<AttendanceEntriesTable> = ({ reload }) =>
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
   const [selectedItem, setSelectedItem] = useState<AttendanceLeave.AttendanceType | undefined>();
   const [editConfirmation, setEditConfirmation] = useState(false);
+  const { responser } = useAppSelectors((state) => state);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -124,7 +121,7 @@ const AttendanceEntriesTable: React.FC<AttendanceEntriesTable> = ({ reload }) =>
         companyID: companyData?.id
       }
     });
-  }, [rowsPerPage, page, search, sort, direction, deleteConfirmation, editConfirmation, reload]);
+  }, [rowsPerPage, page, search, sort, direction, responser.code]);
 
   useEffect(() => {
     setHaydrated(true);

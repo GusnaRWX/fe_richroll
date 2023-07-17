@@ -28,6 +28,8 @@ import {
   getCompanyData,
   getPaymentType,
   dynamicPayloadBaseCnb,
+  compareCheck,
+  ifThenElse
 } from '@/utils/helper';
 import { FieldArray, Form as FormikForm, Formik } from 'formik';
 import * as Yup from 'yup';
@@ -44,7 +46,7 @@ export default function CreateCNBComponent() {
   const router = useRouter();
   const companyData = getCompanyData();
   const dispatch = useAppDispatch();
-  const { listCompensation, listTermin, listSuppTermin } = useAppSelectors(
+  const { listBaseCompensation, listSuppCompensation, listTermin, listSuppTermin } = useAppSelectors(
     (state) => state.option
   );
   const [title, setTitle] = React.useState('Amount');
@@ -173,6 +175,8 @@ export default function CreateCNBComponent() {
     compensationComponentId: string;
     taxStatus: string;
     rateOrAmount: number | string;
+    overtime: number | string;
+    percentage: string | number | null;
     period: string;
     supplementary: SuplementType[];
   }
@@ -201,11 +205,12 @@ export default function CreateCNBComponent() {
       value.compensationComponentId !== '' &&
       value.period !== '' &&
       value.rateOrAmount !== '' &&
+      value.overtime !== '' &&
       value.taxStatus !== '' &&
       supplement
     ) {
       const tempBase = dynamicPayloadBaseCnb(
-        listCompensation,
+        listBaseCompensation,
         value.compensationComponentId,
         value
       );
@@ -214,7 +219,7 @@ export default function CreateCNBComponent() {
         for (let i = 0; i <= value.supplementary.length; i++) {
           if (typeof value.supplementary[i] !== 'undefined') {
             const tempData = dynamicPayloadBaseCnb(
-              listCompensation,
+              listSuppCompensation,
               value.supplementary[i].compensationComponentId,
               value.supplementary[i]
             );
@@ -227,6 +232,7 @@ export default function CreateCNBComponent() {
         type: postNewCnbProfileRequested.toString(),
         Payload: {
           companyID: companyData?.id?.toString(),
+          overtime: value.overtime,
           name: value.name,
           base: tempBase,
           supplementaries: tempSupplementary,
@@ -241,6 +247,7 @@ export default function CreateCNBComponent() {
     period: string;
     rateOrAmount: string;
     percentage: string | number | null;
+    overtime: string | number;
     taxStatus: string;
     supplementary: SuplementType[];
   } = {
@@ -248,7 +255,8 @@ export default function CreateCNBComponent() {
     compensationComponentId: '',
     period: '',
     rateOrAmount: '',
-    percentage: '',
+    percentage: 0,
+    overtime: '',
     taxStatus: '',
     supplementary: [],
   };
@@ -388,13 +396,13 @@ export default function CreateCNBComponent() {
                                 setTitle(
                                   getPaymentType(
                                     e.target.value,
-                                    listCompensation
+                                    listBaseCompensation
                                   )?.title
                                 );
                                 setWithPercentage(
                                   getPaymentType(
                                     e.target.value,
-                                    listCompensation
+                                    listBaseCompensation
                                   )?.withPercentage
                                 );
                               }}
@@ -408,7 +416,7 @@ export default function CreateCNBComponent() {
                                     />
                                   );
                                 }
-                                const selected = listCompensation?.find(
+                                const selected = listBaseCompensation?.find(
                                   (list) => list.value === value
                                 );
                                 if (selected) {
@@ -417,7 +425,7 @@ export default function CreateCNBComponent() {
                                 return null;
                               }}
                             >
-                              {listCompensation?.map((item, i) => (
+                              {listBaseCompensation?.map((item, i) => (
                                 <MenuItem key={i} value={item.value}>
                                   {item.label}
                                 </MenuItem>
@@ -527,6 +535,8 @@ export default function CreateCNBComponent() {
                                   variant='outlined'
                                   type='number'
                                   size='small'
+                                  value={formik.values.percentage}
+                                  onChange={(e) => { formik.setFieldValue('percentage', e.target.value); }}
                                   InputProps={{
                                     endAdornment: (
                                       <InputAdornment position='end'>
@@ -569,6 +579,35 @@ export default function CreateCNBComponent() {
                         </Grid>
                       </Grid>
                     )}
+                    <Grid container mt='16px'>
+                      <Grid item xs={12}>
+                        <Text title='Overtime' fontWeight={700} fontSize='16px' mb='16px' color='primary.500' />
+                      </Grid>
+                      <Grid item xs={3}>
+                        <Input
+                          withAsterisk
+                          size='small'
+                          customLabel='Rate'
+                          type='number'
+                          name='overtime'
+                          value={formik.values.overtime}
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                          error={compareCheck(formik.touched.overtime, Boolean(formik.errors.overtime))}
+                          helperText={ifThenElse(compareCheck(formik.touched.overtime, Boolean(formik.errors.overtime)), formik.errors.overtime, '')}
+                          inputProps={{
+                            step: 0.1
+                          }}
+                          InputProps={{
+                            endAdornment: (
+                              <InputAdornment position='end'>
+                                <Text color='grey.500' title='x' />
+                              </InputAdornment>
+                            )
+                          }}
+                        />
+                      </Grid>
+                    </Grid>
                   </Grid>
                 </Form>
                 <FieldArray
@@ -641,19 +680,19 @@ export default function CreateCNBComponent() {
                                                   `supplementary.${i}.titleRate`,
                                                   getPaymentType(
                                                     e.target.value,
-                                                    listCompensation
+                                                    listSuppCompensation
                                                   )?.title
                                                 );
                                                 formik.setFieldValue(
                                                   `supplementary.${i}.withPercentage`,
                                                   getPaymentType(
                                                     e.target.value,
-                                                    listCompensation
+                                                    listSuppCompensation
                                                   )?.withPercentage
                                                 );
                                               }}
                                             >
-                                              {listCompensation?.map(
+                                              {listSuppCompensation?.map(
                                                 (item, i) => (
                                                   <MenuItem
                                                     key={i}

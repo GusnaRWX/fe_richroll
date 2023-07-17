@@ -7,15 +7,13 @@ import {
   Card,
   CardProps,
   Divider,
-  Typography,
-  Tab,
-  Tabs
+  Typography
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import Image from 'next/image';
 import { Company, CompanyCreate } from '@/types/component';
 import { Image as ImageType } from '@/utils/assetsConstant';
-import { IconButton } from '@/components/_shared/form';
+import { IconButton, Stepper } from '@/components/_shared/form';
 import { BsBellFill } from 'react-icons/bs';
 import LocalizationMenu from '@/components/_shared/_core/localization/LocalizationMenu';
 import Profile from '@/components/_shared/_core/appbar/Profile';
@@ -53,39 +51,10 @@ const WrapperNavbarContent = styled(Toolbar)(() => ({
   justifyContent: 'space-between'
 }));
 
-interface TabPanelProps {
-  children?: React.ReactNode;
-  index: number;
-  value: number
-}
-
-function TabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role='tabpanel'
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      {...other}
-    >
-      {
-        value === index && (
-          <Box sx={{ p: 3 }}>
-            {children}
-          </Box>
-        )
-      }
-    </div>
-  );
-}
-
-function a11yProps(index: number) {
-  return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`
-  };
-}
+const steps = [
+  'Company Information',
+  'Bank and Payroll Information'
+];
 
 const Navbar = () => {
   return (
@@ -283,9 +252,6 @@ const CompanyCreateComponent = ({ companyType, companySector, bank, paymentMetho
     });
   };
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setTabSelected(newValue);
-  };
   const handleNext = (val: number) => {
     setTabSelected(val);
   };
@@ -304,13 +270,10 @@ const CompanyCreateComponent = ({ companyType, companySector, bank, paymentMetho
           </Typography>
           <WrapperCardContent>
             <Box sx={{ width: '100%' }}>
-              <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                <Tabs value={tabSelected} onChange={handleChange} aria-label='basic tabs'>
-                  <Tab sx={{ textTransform: 'none' }} label='Company Information' {...a11yProps(0)} />
-                  <Tab sx={{ textTransform: 'none' }} disabled={tabSelected === 0} label='Bank and Payroll Information' {...a11yProps(1)} />
-                </Tabs>
+              <Box sx={{ borderBottom: 1, borderColor: 'divider', pb: '30px', mb: '10px' }}>
+                <Stepper steps={steps} activeStep={tabSelected} />
               </Box>
-              <TabPanel value={tabSelected} index={0}>
+              {tabSelected == 0 &&
                 <CompanyInformationForm
                   nextPage={handleNext}
                   companyType={companyType}
@@ -321,14 +284,14 @@ const CompanyCreateComponent = ({ companyType, companySector, bank, paymentMetho
                   setImages={setImages}
                   listAllCompany={listAllCompany}
                 />
-              </TabPanel>
-              <TabPanel value={tabSelected} index={1}>
+              }
+              {tabSelected == 1 &&
                 <CompanyBankForm
                   formik={formikPayment}
                   bank={bank}
                   paymentMethod={paymentMethod}
                 />
-              </TabPanel>
+              }
             </Box>
           </WrapperCardContent>
         </WrapperCard>

@@ -98,13 +98,13 @@ const ImageReview = styled.div`
 
 interface EmployeeProps {
   refProp: React.Ref<HTMLFormElement>;
-  nextPage: (_val: number) => void;
+  nextPage: (_val: number, _data: Employees.InformationValues) => void;
+  nextPermPage: (_val: number, _data: Employees.InformationValues) => void;
   setValues: React.Dispatch<React.SetStateAction<Employees.InformationValues>>
   infoValues: Employees.InformationValues,
-  setIsInformationValid: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, setIsInformationValid }: EmployeeProps) {
+function EmployeeInformationForm({ refProp, nextPage, nextPermPage, setValues, infoValues }: EmployeeProps) {
   const [isCaptureEnable, setCaptureEnable] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const webcamRef = useRef<Webcam>(null);
@@ -170,8 +170,11 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, set
       images: String(images),
     };
     setValues(allInfoValues);
-    nextPage(1);
-    setIsInformationValid(true);
+    if (formik.values.isSelfService) {
+      nextPermPage(3, allInfoValues);
+    } else {
+      nextPage(1, allInfoValues);
+    }
     setErrors({});
   };
 
@@ -410,7 +413,7 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, set
         />
         <Grid container spacing={2}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
-            <Text title='Department' mb='6px' />
+            <Typography mb='6px'>Department <AsteriskComponent>*</AsteriskComponent></Typography>
             <Autocomplete
               id='department'
               freeSolo
@@ -489,11 +492,18 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, set
                   )}
                 </Box>
               )}
-              renderInput={(params) => <TextField name='department' {...params} />}
+              renderInput={(params) => (
+                <TextField
+                  name='department'
+                  error={formik.touched.department && Boolean(formik.errors.department)}
+                  helperText={formik.touched.department && Boolean(formik.errors.department) ? formik.errors.department : ''}
+                  {...params}
+                />
+              )}
             />
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
-            <Text title='Position' mb='6px' />
+            <Typography mb='6px'>Position <AsteriskComponent>*</AsteriskComponent></Typography>
             <Autocomplete
               id='position'
               freeSolo
@@ -565,7 +575,14 @@ function EmployeeInformationForm({ refProp, nextPage, setValues, infoValues, set
                   )}
                 </Box>
               )}
-              renderInput={(params) => <TextField name='position' {...params} />}
+              renderInput={(params) => (
+                <TextField
+                  name='position'
+                  error={formik.touched.position && Boolean(formik.errors.position)}
+                  helperText={formik.touched.position && Boolean(formik.errors.position) ? formik.errors.position : ''}
+                  {...params}
+                />
+              )}
             />
           </Grid>
         </Grid>

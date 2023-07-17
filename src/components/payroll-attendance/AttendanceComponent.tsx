@@ -5,6 +5,16 @@ import { styled } from '@mui/material/styles';
 import { useRouter } from 'next/router';
 import AttendanceTable from './AttendanceTable';
 import CustomModal from '@/components/_shared/common/CustomModal';
+import { getCompanyData } from '@/utils/helper';
+import { useAppDispatch } from '@/hooks/index';
+import { postPayrollRequested } from '@/store/reducers/slice/payroll/payrollSlice';
+import { useFormik } from 'formik';
+import dayjs from 'dayjs';
+import * as Yup from 'yup';
+
+const validationPostPayrolls = Yup.object({
+  name: Yup.string().required('This field is required')
+});
 
 const ButtonWrapper = styled(Box)(({
   display: 'flex',
@@ -23,6 +33,11 @@ interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
   value: number
+}
+
+interface InitialValuesType {
+  name: string;
+  date: [];
 }
 
 function TabPanel(props: TabPanelProps) {
@@ -57,6 +72,18 @@ function AttendanceComponent() {
   const router = useRouter();
   const [value, setValue] = useState(0);
   const [open, setOpen] = useState(false);
+  const companyData = getCompanyData();
+  const dispatch = useAppDispatch();
+  const formik = useFormik({
+    initialValues: {
+      name: '',
+      date: []
+    } as InitialValuesType,
+    validationSchema: validationPostPayrolls,
+    onSubmit: (values) => {
+      handleConfirm(values);
+    }
+  });
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -66,8 +93,19 @@ function AttendanceComponent() {
     setOpen(false);
   };
 
-  const handleConfirm = () => {
-    router.push('/payroll-disbursement/attendance/generate');
+  const handleConfirm = async (values) => {
+    await dispatch({
+      type: postPayrollRequested.toString(),
+      payload: {
+        isAttendance: true,
+        data: {
+          companyID: companyData?.id,
+          name: values.name,
+          start: dayjs(values.date[0]).toISOString(),
+          end: dayjs(values.date[1]).toISOString()
+        }
+      }
+    });
   };
 
   return (
@@ -97,7 +135,7 @@ function AttendanceComponent() {
               <Tab sx={{ textTransform: 'none' }} label='Draft' {...a11yProps(0)} />
               <Tab sx={{ textTransform: 'none' }} label='Confirmed' {...a11yProps(1)} />
               <Tab sx={{ textTransform: 'none' }} label='Completed' {...a11yProps(2)} />
-              <Tab sx={{ textTransform: 'none' }} label='Archived' {...a11yProps(3)} />
+              <Tab sx={{ textTransform: 'none' }} label='Archive' {...a11yProps(3)} />
             </Tabs>
           </Box>
           <TabPanel value={value} index={0}>
@@ -134,17 +172,22 @@ function AttendanceComponent() {
         handleClose={handleClose}
         title='Create New Payroll'
         width='543px'
-        handleConfirm={handleConfirm}
+        handleConfirm={formik.handleSubmit}
         submitText='Submit'
       >
         <Grid container mt='1rem' mb='1rem'>
           <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
             <Input
-              name='nameEvent'
+              name='name'
               withAsterisk
               customLabel='Name'
               placeholder='Input Name'
               size='small'
+              value={formik.values.name}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.name && Boolean(formik.errors.name)}
+              helperText={formik.touched.name && formik.errors.name}
             />
           </Grid>
         </Grid>
@@ -154,9 +197,7 @@ function AttendanceComponent() {
               withAsterisk
               customLabelStart='Start Date'
               customLabelEnd='End Date'
-              // value={formik.values.startDate as unknown as Date}
-              onChange={(date: unknown) => console.log(date)}
-              // error={formik.touched.startDate && formik.errors.startDate ? String(formik.errors.startDate) : ''}
+              onChange={(date) => formik.setFieldValue('date', date)}
             />
           </Grid>
         </Grid>

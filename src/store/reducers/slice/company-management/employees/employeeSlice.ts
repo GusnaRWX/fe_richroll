@@ -7,7 +7,7 @@ interface EventType {
   title: string,
   name: string,
   start: Date,
-  end:Date,
+  end: Date,
   isBreak?: boolean,
   isDuration?: boolean,
   color?: string,
@@ -35,7 +35,8 @@ interface EmployeeState {
     name: string;
     netHour: number;
     workScheduleId: string | number;
-  }
+  },
+  employeeCnbDetail: object
 }
 
 const initialState: EmployeeState = {
@@ -56,7 +57,8 @@ const initialState: EmployeeState = {
     grossHour: 0,
     netHour: 0,
     workScheduleId: ''
-  }
+  },
+  employeeCnbDetail: {}
 };
 
 export const employeeSlice = createSlice({
@@ -252,6 +254,7 @@ export const employeeSlice = createSlice({
     },
     postWorkScheduleSuccess: (state) => {
       state.isLoading = false;
+      state.employeeID = '';
     },
     postWorkScheduleFailed: (state) => {
       state.isLoading = false;
@@ -267,6 +270,7 @@ export const employeeSlice = createSlice({
       state.workScheduleDetail.name = action?.payload?.name;
       state.grossHour = action?.payload?.grossHour;
       state.netHour = action?.payload?.netHour;
+      state.workScheduleId = action?.payload?.id;
       const tempData: Array<EventType> = [];
       action?.payload?.events.map((item) => {
         tempData.push({
@@ -286,6 +290,7 @@ export const employeeSlice = createSlice({
         });
       });
       state.workScheduleDetail.events = tempData;
+      state.events = tempData;
     },
     getViewWorkScheduleFailed: (state) => {
       state.isLoading = false;
@@ -299,10 +304,33 @@ export const employeeSlice = createSlice({
     postTerminateEmployeeFailed: (state) => {
       state.isLoading = false;
     },
+    patchWorkScheduleRequested: state => {
+      state.isLoading = true;
+    },
+    patchWorkScheduleSuccess: state => {
+      state.isLoading = false;
+    },
+    patchWorkScheduleFailed: state => {
+      state.isLoading = false;
+    },
     clearWorkScheduleState: (state) => {
       state.events = [];
       state.grossHour = 0;
       state.netHour = 0;
+    },
+    clearGrossNet: (state) => {
+      state.grossHour = 0;
+      state.netHour = 0;
+    },
+    getEmployeeCnbDetailRequested: state => {
+      state.isLoading = true;
+    },
+    getEmployeeCnbDetailSuccess: (state, action) => {
+      state.isLoading = false;
+      state.employeeCnbDetail = action.payload;
+    },
+    getEmployeeCnbDetailFailed: state => {
+      state.isLoading = false;
     }
   },
   extraReducers: {
@@ -370,7 +398,14 @@ export const {
   postTerminateEmployeeFailed,
   postTerminateEmployeeRequested,
   postTerminateEmployeeSuccess,
-  clearWorkScheduleState
+  clearWorkScheduleState,
+  patchWorkScheduleRequested,
+  patchWorkScheduleSuccess,
+  patchWorkScheduleFailed,
+  getEmployeeCnbDetailRequested,
+  getEmployeeCnbDetailSuccess,
+  getEmployeeCnbDetailFailed,
+  clearGrossNet
 } = employeeSlice.actions;
 
 export default employeeSlice.reducer;
