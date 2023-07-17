@@ -13,7 +13,6 @@ export const validationSchemeItpDta = Yup.object({
 
 export const validationSchemeItpRates = Yup.object({
   deductableCondition: Yup.string().required('This Field is Required'),
-  amount: Yup.string().required('This Field is Required'),
   factorUnitCondition: Yup.array().of(Yup.object({
     condition: Yup.string().required(),
     factorUnitName: Yup.string().required(),
@@ -23,4 +22,9 @@ export const validationSchemeItpRates = Yup.object({
       subAmount: Yup.string(),
     }))
   })),
+});
+
+export const validationSchemeItpRatesManual = Yup.object({
+  deductableCondition: Yup.string().required('This Field is Required'),
+  amount: Yup.string().required('This Field is Required'),
 });

@@ -91,9 +91,14 @@ function ItpCreateNewComponentComponent() {
         factorUnitName : '',
         subCondition : [
           {
-            condition: 'string',
-            subName: 'string',
-            subAmount: 'string',
+            condition: '',
+            subName: '',
+            subAmount: '',
+          },
+          {
+            condition: '',
+            subName: '',
+            subAmount: '',
           }
         ]
       }
@@ -103,6 +108,8 @@ function ItpCreateNewComponentComponent() {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const btnRefSubmit = useRef<HTMLButtonElement>(null);
 
   const handleConfirm = () => {
     const inputData = new FormData();
@@ -126,7 +133,9 @@ function ItpCreateNewComponentComponent() {
     inputData.append('notes', ItpDta.notes);
 
     if(IsInBasicDetailValid === true && IsInDtaValid === true && IsInRatesValid === true) {
-      console.log('Basic Detail :' , ItpBasicDetail, 'Designed Transfer Account :' , ItpDta, 'Rates :' , ItpRates);
+      console.log('Basic Detail :' , ItpBasicDetail);
+      console.log('Designed Transfer Account :' , ItpDta);
+      console.log('Rates :' , ItpRates);
     }else{
       console.log('data belum diisi');
     }
@@ -182,6 +191,7 @@ function ItpCreateNewComponentComponent() {
                   onClick={() => {
                     setIsExit(false);
                     setOpen(true);
+                    btnRefSubmit.current?.click();
                   }}
                 >{t(`button.mark_complete`)}</MuiButton>
               </ButtonWrapper>
@@ -265,6 +275,7 @@ function ItpCreateNewComponentComponent() {
             setValues={setItpRates}
             infoValues={ItpRates}
             setIsInRatesValid={setIsInRatesValid}
+            btnRefSubmit={btnRefSubmit}
           />}
         </Box>
       </ContentWrapper>
