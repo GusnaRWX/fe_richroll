@@ -54,7 +54,7 @@
           "in_progress": "Sedang Berlangsung",
           "completed": "Selesai"
         },
-        "tab_cols_item": {
+        "table_cols_item": {
           "name": "Nama",
           "date_range": "Julat Tarikh",
           "created_on": "Dicipta pada",
@@ -85,7 +85,7 @@
           "completed": "Selesai",
           "archive": "Arkib"
         },
-        "tab_cols_item": {
+        "table_cols_item": {
           "name": "Nama",
           "date_range": "Julat Tarikh",
           "report_type": "Jenis laporan",
@@ -111,7 +111,7 @@
         "title": "Hasilkan Laporan Gaji Kasar",
         "sub_title": "Gaji",
         "table": {
-          "tab_cols_item": {
+          "table_cols_item": {
             "employee_name": "Nama Pekerja",
             "attendance": "Kehadiran",
             "absent": "tidak hadir",
@@ -132,7 +132,7 @@
               "total_gross_payroll": "Jumlah Gaji Kasar"
             },
             "table": {
-              "tab_cols_item": {
+              "table_cols_item": {
                 "fullname": "Nama penuh",
                 "base_compensation": "Pampasan Asas",
                 "Supplementary_compensation": "Pampasan Tambahan",
@@ -150,7 +150,7 @@
               "total_gross_payroll": "Jumlah Gaji Kasar"
             },
             "table": {
-              "tab_cols_item": {
+              "table_cols_item": {
                 "fullname": "Nama penuh",
                 "base_compensation": "Pampasan Asas",
                 "Supplementary_compensation": "Pampasan Tambahan",
@@ -211,7 +211,7 @@
           "completed": "Selesai",
           "archive": "Arkib"
         },
-        "tab_cols_item": {
+        "table_cols_item": {
           "name": "Nama",
           "date_range": "Julat Tarikh",
           "report_type": "Jenis laporan",
@@ -230,7 +230,7 @@
           "completed": "Selesai",
           "archive": "Arkib"
         },
-        "tab_cols_item": {
+        "table_cols_item": {
           "name": "Nama",
           "date_range": "Julat Tarikh",
           "report_type": "Jenis laporan",

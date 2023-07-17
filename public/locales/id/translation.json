@@ -54,7 +54,7 @@
           "in_progress": "Sedang berlangsung",
           "completed": "Lengkap"
         },
-        "tab_cols_item": {
+        "table_cols_item": {
           "name": "Nama",
           "date_range": "Rentang Tanggal",
           "created_on": "Dibuat pada",
@@ -85,7 +85,7 @@
           "completed": "Lengkap",
           "archive": "Arsip"
         },
-        "tab_cols_item": {
+        "table_cols_item": {
           "name": "Nama",
           "date_range": "Rentang Tanggal",
           "report_type": "Tipe laporan",
@@ -111,7 +111,7 @@
         "title": "Menghasilkan Laporan Penggajian Kotor",
         "sub_title": "Daftar gaji",
         "table": {
-          "tab_cols_item": {
+          "table_cols_item": {
             "employee_name": "nama karyawan",
             "attendance": "Kehadiran",
             "absent": "Absen",
@@ -132,7 +132,7 @@
               "total_gross_payroll": "Total Gaji Kotor"
             },
             "table": {
-              "tab_cols_item": {
+              "table_cols_item": {
                 "fullname": "Nama lengkap",
                 "base_compensation": "Kompensasi Dasar",
                 "Supplementary_compensation": "Kompensasi Tambahan",
@@ -150,7 +150,7 @@
               "total_gross_payroll": "Total Gaji Kotor"
             },
             "table": {
-              "tab_cols_item": {
+              "table_cols_item": {
                 "fullname": "Nama lengkap",
                 "base_compensation": "Kompensasi Dasar",
                 "Supplementary_compensation": "Kompensasi Tambahan",
@@ -211,7 +211,7 @@
           "completed": "Lengkap",
           "archive": "Arsip"
         },
-        "tab_cols_item": {
+        "table_cols_item": {
           "name": "Nama",
           "date_range": "Rentang Tanggal",
           "report_type": "Tipe laporan",
@@ -230,7 +230,7 @@
           "completed": "Lengkap",
           "archive": "Arsip"
         },
-        "tab_cols_item": {
+        "table_cols_item": {
           "name": "Nama",
           "date_range": "Rentang Tanggal",
           "report_type": "Tipe laporan",

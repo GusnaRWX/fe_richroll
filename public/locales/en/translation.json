@@ -54,7 +54,7 @@
           "in_progress" : "In Progress",
           "completed" : "Completed"
         },
-        "tab_cols_item" : {
+        "table_cols_item" : {
           "name" : "Name",
           "date_range" : "Date Range",
           "created_on" : "Created On",
@@ -85,7 +85,7 @@
           "completed" : "Completed",
           "archive" : "Archive"
         },
-        "tab_cols_item" : {
+        "table_cols_item" : {
           "name" : "Name",
           "date_range" : "Date Range",
           "report_type" : "Report Type",
@@ -111,7 +111,7 @@
         "title" : "Generate Gross Payroll Report",
         "sub_title" : "Payroll",
         "table" : {
-          "tab_cols_item" : {
+          "table_cols_item" : {
             "employee_name" : "Employee Name",
             "attendance" : "Attendance",
             "absent" : "Absent",
@@ -132,7 +132,7 @@
               "total_gross_payroll" : "Total Gross Payroll"
             },
             "table" : {
-              "tab_cols_item" : {
+              "table_cols_item" : {
                 "fullname" : "Full Name",
                 "base_compensation" : "Base Compensation",
                 "Supplementary_compensation" : "Supplementary Compensation",
@@ -150,7 +150,7 @@
               "total_gross_payroll" : "Total Gross Payroll"
             },
             "table" : {
-              "tab_cols_item" : {
+              "table_cols_item" : {
                 "fullname" : "Full Name",
                 "base_compensation" : "Base Compensation",
                 "Supplementary_compensation" : "Supplementary Compensation",
@@ -211,7 +211,7 @@
           "completed" : "Completed",
           "archive" : "Archive"
         },
-        "tab_cols_item" : {
+        "table_cols_item" : {
           "name" : "Name",
           "date_range" : "Date Range",
           "report_type" : "Report Type",
@@ -230,7 +230,7 @@
           "completed" : "Completed",
           "archive" : "Archive"
         },
-        "tab_cols_item" : {
+        "table_cols_item" : {
           "name" : "Name",
           "date_range" : "Date Range",
           "report_type" : "Report Type",

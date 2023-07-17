@@ -54,7 +54,7 @@
           "in_progress": "进行中",
           "completed": "完全的"
         },
-        "tab_cols_item": {
+        "table_cols_item": {
           "name": "姓名",
           "date_range": "日期范围",
           "created_on": "创建于",
@@ -85,7 +85,7 @@
           "completed": "完全的",
           "archive": "档案"
         },
-        "tab_cols_item": {
+        "table_cols_item": {
           "name": "姓名",
           "date_range": "日期范围",
           "report_type": "报告类型",
@@ -111,7 +111,7 @@
         "title": "生成工资总额报告",
         "sub_title": "工资单",
         "table": {
-          "tab_cols_item": {
+          "table_cols_item": {
             "employee_name": "员工姓名",
             "attendance": "出席率",
             "absent": "缺席的",
@@ -132,7 +132,7 @@
               "total_gross_payroll": "工资总额"
             },
             "table": {
-              "tab_cols_item": {
+              "table_cols_item": {
                 "fullname": "全名",
                 "base_compensation": "基本补偿",
                 "Supplementary_compensation": "补充补偿",
@@ -150,7 +150,7 @@
               "total_gross_payroll": "工资总额"
             },
             "table": {
-              "tab_cols_item": {
+              "table_cols_item": {
                 "fullname": "全名",
                 "base_compensation": "基本补偿",
                 "Supplementary_compensation": "补充补偿",
@@ -211,7 +211,7 @@
           "completed": "完全的",
           "archive": "档案"
         },
-        "tab_cols_item": {
+        "table_cols_item": {
           "name": "姓名",
           "date_range": "日期范围",
           "report_type": "报告类型",
@@ -230,7 +230,7 @@
           "completed": "完全的",
           "archive": "档案"
         },
-        "tab_cols_item": {
+        "table_cols_item": {
           "name": "姓名",
           "date_range": "日期范围",
           "report_type": "报告类型",
