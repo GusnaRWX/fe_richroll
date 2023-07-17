@@ -55,7 +55,7 @@ export declare namespace Payroll {
     direction?: boolean;
     search?: string;
     countryCode?: string;
-    payrollID?: string|number;
+    payrollID?: string | number;
   }
 
   interface HocComponent {
@@ -78,7 +78,71 @@ export declare namespace Payroll {
     hocComponent: HocComponent[] | [],
     overtimeComponent: OvertimeComponent
   }
+  interface GrossCalculationTerm {
+    id: string;
+    name: string;
+  }
 
+  interface GrossCalculationBase {
+    id: string;
+    name: string;
+    amount: number;
+    isTaxable: boolean;
+    term: GrossCalculationTerm;
+  }
+
+  interface GrossCalculationOvertime {
+    id: string;
+    rate: string;
+    duration: number;
+    amount: number;
+  }
+
+  interface GrossCalculationSupplementary {
+    id: string;
+    name: string;
+    amount: number;
+    isTaxable: boolean;
+    term: GrossCalculationTerm;
+  }
+
+  interface GrossCalculationAdHoc {
+    id: string;
+    name: string;
+    amount: number;
+  }
+
+  interface GrossCalculation {
+    base: GrossCalculationBase;
+    overtime: GrossCalculationOvertime;
+    supplementary: GrossCalculationSupplementary;
+    adHoc: GrossCalculationAdHoc;
+  }
+
+  interface Employee {
+    id: string;
+    name: string;
+    picture: string;
+    grossCalculation: GrossCalculation;
+  }
+
+  interface Gross {
+    id: string;
+    totalBaseCompensation: number;
+    totalSupplementaryCompensation: number;
+    totalAddHokCompensation: number;
+    totalGrossCompensation: number;
+    employee: Employee;
+  }
+
+  interface DataGrossEmployeeDetail {
+    id: string;
+    totalBaseCompensation: number;
+    totalSupplementaryCompensation: number;
+    totalAddHokCompensation: number;
+    totalGrossCompensation: number;
+    gross: Gross[];
+  }
   interface ParamsDetailAttendance {
     id: string | number;
     attendanceID: string | number;

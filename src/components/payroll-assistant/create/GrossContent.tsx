@@ -14,6 +14,10 @@ import styled from '@emotion/styled';
 import { compareCheck, ifThenElse } from '@/utils/helper';
 import { visuallyHidden } from '@mui/utils';
 import GrossRow from './GrossRow';
+import { useRouter } from 'next/router';
+import { getPayrollGrossesRequested } from '@/store/reducers/slice/payroll/payrollSlice';
+import { useAppDispatch, useAppSelectors } from '@/hooks/index';
+import { numberFormat } from '@/utils/format';
 
 const ContentWrapper = styled(Card)(({
   padding: '1rem',
@@ -79,12 +83,14 @@ const data = {
 
 function GrossContent(att) {
   const { isPreview } = att;
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const dataGross = useAppSelectors(state => state.payroll.grossesEmployeeDetail);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(1);
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
   const [hydrated, setHaydrated] = useState(false);
-
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
@@ -104,6 +110,15 @@ function GrossContent(att) {
     setHaydrated(true);
   }, []);
 
+  useEffect(() => {
+    if (router.isReady) {
+      dispatch({
+        type: getPayrollGrossesRequested.toString(),
+        payload: router.query.id
+      });
+    }
+  }, [router.query]);
+
   if (!hydrated) {
     return null;
   }
@@ -116,25 +131,25 @@ function GrossContent(att) {
               <Grid container spacing={2}>
                 <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
                   <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>Total Base Compensation</Typography>
-                  <Typography component='div' variant='text-sm' fontWeight='500' color='#1F2937'>Rp 10.000.000</Typography>
+                  <Typography component='div' variant='text-sm' fontWeight='500' color='#1F2937'>Rp {numberFormat(dataGross?.totalBaseCompensation)}</Typography>
                 </Grid>
                 <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
                   <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>Total Supplementary Compensation</Typography>
-                  <Typography component='div' variant='text-sm' fontWeight='500' color='#1F2937'>Rp 5.000.000</Typography>
+                  <Typography component='div' variant='text-sm' fontWeight='500' color='#1F2937'>Rp {numberFormat(dataGross?.totalSupplementaryCompensation)}</Typography>
                 </Grid>
                 <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
                   <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>Total Ad Hoc Compensation</Typography>
-                  <Typography component='div' variant='text-sm' fontWeight='500' color='#1F2937'>Rp 2.000.000</Typography>
+                  <Typography component='div' variant='text-sm' fontWeight='500' color='#1F2937'>Rp {numberFormat(dataGross?.totalAddHokCompensation)}</Typography>
                 </Grid>
                 <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
                   <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>Total Gross Payroll</Typography>
-                  <Typography component='div' variant='text-sm' fontWeight='500' color='#1F2937'>Rp 17.000.000</Typography>
+                  <Typography component='div' variant='text-sm' fontWeight='500' color='#1F2937'>Rp {numberFormat(dataGross?.totalGrossCompensation)}</Typography>
                 </Grid>
               </Grid>
             </ContentWrapper>
 
             <Table
-              count={data?.itemTotals}
+              count={dataGross?.gross?.length}
               rowsPerPageOptions={[5, 10, 15]}
               rowsPerPage={rowsPerPage}
               page={page}
@@ -165,13 +180,13 @@ function GrossContent(att) {
               bodyChildren={
                 <>
                   {
-                    ifThenElse(typeof data?.items !== 'undefined', (
-                      ifThenElse(data?.items?.length === 0, (
+                    ifThenElse(typeof dataGross?.gross !== 'undefined', (
+                      ifThenElse(dataGross?.gross?.length === 0, (
                         <TableRow>
                           <TableCell colSpan={12} align='center'><Typography>Data not found</Typography></TableCell>
                         </TableRow>
                       ), (
-                        data?.items?.map((item, index) => (
+                        dataGross?.gross?.map((item, index) => (
                           <GrossRow key={index} isPreview={isPreview} item={item} />
                         ))
                       ))
