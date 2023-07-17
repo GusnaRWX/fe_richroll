@@ -35,5 +35,210 @@
     "employment": "Pekerjaan",
     "reports": "Laporan",
     "article_management": "Manajemen Artikel"
+  },
+
+  "button": {
+    "create_new_payroll": "Buat Daftar Gaji Baru",
+    "generate_attendance_report": "Membuat Laporan Kehadiran",
+    "generate_gross_payroll": "Hasilkan Gross Payroll",
+    "add_ad_hoc": "Tambahkan Ad Hoc",
+    "calculate": "Menghitung"
+  },
+
+  "payroll_and_disbursement": {
+    "payroll_assistant": {
+      "title": "Operasi Penggajian",
+      "sub_title": "Asisten penggajian",
+      "table": {
+        "tab_panel": {
+          "in_progress": "Sedang berlangsung",
+          "completed": "Lengkap"
+        },
+        "tab_cols_item": {
+          "name": "Nama",
+          "date_range": "Rentang Tanggal",
+          "created_on": "Dibuat pada",
+          "last_updated": "Terakhir Diperbarui"
+        }
+      },
+      "popup": {
+        "create": {
+          "title": "Buat Daftar Gaji Baru",
+          "name_input_label": "Nama",
+          "name_input_placeholder": "Nama Masukan",
+          "start_date": "Mulai tanggal",
+          "end_date": "Tanggal Berakhir"
+        },
+        "delete": {
+          "title": "Hapus Operasi Penggajian dari Asisten Penggajian?",
+          "desc": "Anda akan menghapus laporan penggajian ini. "
+        }
+      }
+    },
+    "attendance_summary": {
+      "title": "Operasi Penggajian",
+      "sub_title": "Ringkasan Kehadiran",
+      "table": {
+        "tab_panel": {
+          "draft": "Draf",
+          "confirmed": "Dikonfirmasi",
+          "completed": "Lengkap",
+          "archive": "Arsip"
+        },
+        "tab_cols_item": {
+          "name": "Nama",
+          "date_range": "Rentang Tanggal",
+          "report_type": "Tipe laporan",
+          "created_on": "Dibuat pada",
+          "last_updated": "Terakhir Diperbarui",
+          "attachment": "Lampiran"
+        }
+      },
+      "popup": {
+        "create": {
+          "title": "Buat Daftar Gaji Baru",
+          "name_input_label": "Nama",
+          "name_input_placeholder": "Nama Masukan",
+          "start_date": "Mulai tanggal",
+          "end_date": "Tanggal Berakhir"
+        },
+        "delete": {
+          "title": "Hapus Kehadiran dari Operasi Penggajian?",
+          "desc": "Anda akan menghapus laporan penggajian ini. "
+        }
+      },
+      "generate_gross_payroll": {
+        "title": "Menghasilkan Laporan Penggajian Kotor",
+        "sub_title": "Daftar gaji",
+        "table": {
+          "tab_cols_item": {
+            "employee_name": "nama karyawan",
+            "attendance": "Kehadiran",
+            "absent": "Absen",
+            "paid_leave": "Cuti berbayar",
+            "unpaid_leave": "Cuti tidak dibayar",
+            "overtime_hours": "Jam lembur",
+            "total_hours": "Jumlah jam",
+            "average_hours": "Rata-rata Jam kerja/hari"
+          }
+        },
+        "detail": {
+          "operational_department": {
+            "title": "Departemen Operasional",
+            "card_items": {
+              "total_base_compensation": "Total Kompensasi Dasar",
+              "total_supplementary_compensation": "Total Kompensasi Tambahan",
+              "total_ad_hoc_compensation": "Total Kompensasi Ad Hoc",
+              "total_gross_payroll": "Total Gaji Kotor"
+            },
+            "table": {
+              "tab_cols_item": {
+                "fullname": "Nama lengkap",
+                "base_compensation": "Kompensasi Dasar",
+                "Supplementary_compensation": "Kompensasi Tambahan",
+                "ad_hoc_compensation": "Kompensasi Ad Hoc",
+                "gross_compensation": "Kompensasi Kotor"
+              }
+            }
+          },
+          "delivery_department": {
+            "title": "Departemen Pengiriman",
+            "card_items": {
+              "total_base_compensation": "Total Kompensasi Dasar",
+              "total_supplementary_compensation": "Total Kompensasi Tambahan",
+              "total_ad_hoc_compensation": "Total Kompensasi Ad Hoc",
+              "total_gross_payroll": "Total Gaji Kotor"
+            },
+            "table": {
+              "tab_cols_item": {
+                "fullname": "Nama lengkap",
+                "base_compensation": "Kompensasi Dasar",
+                "Supplementary_compensation": "Kompensasi Tambahan",
+                "ad_hoc_compensation": "Kompensasi Ad Hoc",
+                "gross_compensation": "Kompensasi Kotor"
+              }
+            }
+          },
+          "gross_calculating_payroll_form": {
+            "section_title": "Menghitung Penggajian Kotor",
+            "base": {
+              "section_title": "Basis",
+              "compensation_component": "Komponen Kompensasi",
+              "amount": "Jumlah",
+              "amount_placeholder": "Jumlah Masukan",
+              "tax_status": "Status Pajak",
+              "tax_status_option": {
+                "taxable": "Kena Pajak",
+                "non_taxable": "Tidak Kena Pajak"
+              }
+            },
+            "overtime_hours": {
+              "section_title": "Jam lembur",
+              "overtime_hours": "Jam lembur",
+              "overtime_hours_placeholder": "Masukkan jam lembur",
+              "rate": "Kecepatan",
+              "rate_placeholder": "Tingkat masukan"
+            },
+            "supplementary": {
+              "section_title": "Tambahan",
+              "compensation_component": "Komponen Kompensasi",
+              "amount": "Jumlah",
+              "amount_placeholder": "Jumlah Masukan",
+              "tax_status": "Status Pajak",
+              "tax_status_option": {
+                "taxable": "Kena Pajak",
+                "non_taxable": "Tidak Kena Pajak"
+              }
+            },
+            "ad_hoc": {
+              "section_title": "AD hoc",
+              "ad_hoc_component": "Komponen Ad-Hoc",
+              "ad_hoc_component_placeholder": "Masukkan Nama Hoc",
+              "amount": "Jumlah",
+              "amount_placeholder": "Jumlah Masukan"
+            }
+          }
+        }
+      }
+    },
+    "payroll_report": {
+      "title": "Operasi Penggajian",
+      "sub_title": "Laporan Penggajian",
+      "table": {
+        "tab_panel": {
+          "draft": "Draf",
+          "confirmed": "Dikonfirmasi",
+          "completed": "Lengkap",
+          "archive": "Arsip"
+        },
+        "tab_cols_item": {
+          "name": "Nama",
+          "date_range": "Rentang Tanggal",
+          "report_type": "Tipe laporan",
+          "created_on": "Dibuat pada",
+          "last_updated": "Terakhir Diperbarui",
+          "attachment": "Lampiran"
+        }
+      }
+    },
+    "disbursement": {
+      "title": "Operasi Penggajian",
+      "sub_title": "Pembayaran",
+      "table": {
+        "tab_panel": {
+          "draft": "Draf",
+          "completed": "Lengkap",
+          "archive": "Arsip"
+        },
+        "tab_cols_item": {
+          "name": "Nama",
+          "date_range": "Rentang Tanggal",
+          "report_type": "Tipe laporan",
+          "created_on": "Dibuat pada",
+          "last_updated": "Terakhir Diperbarui",
+          "attachment": "Lampiran"
+        }
+      }
+    }
   }
 }
