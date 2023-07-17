@@ -77,6 +77,11 @@ function ItpAddNewProfileComponent() {
             conditionAction : '',
             conditionStatus : '',
             multiplier : '',
+          },
+          {
+            conditionAction : '',
+            conditionStatus : '',
+            multiplier : '',
           }
         ]
       }

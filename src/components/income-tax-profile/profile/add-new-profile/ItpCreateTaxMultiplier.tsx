@@ -85,7 +85,7 @@ export default function ItpCreateTaxMultiplier({nextStep, setValue, multiplierVa
                 render={(arrayHelper) => {
                   return(
                     <div>
-                      {formik?.values?.component?.map((componentItem, i) => (
+                      {formik?.values?.component?.map((_, i) => (
                         <Box style={{padding:'16px', border:'1px solid #E5E7EB', borderRadius:'4px'}} key={i}>
                           <Box sx={{display:'flex', justifyContent:'space-between'}}>
                             <Typography

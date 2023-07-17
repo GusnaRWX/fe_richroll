@@ -12,7 +12,7 @@ import {
   Grid,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import React, { useState, Dispatch, SetStateAction, RefObject, forwardRef } from 'react';
+import React, { useState, Dispatch, SetStateAction, RefObject } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useFormik } from 'formik';
@@ -36,7 +36,7 @@ interface DtaProp {
   refProp: RefObject<HTMLButtonElement>
 }
 
-function ItpCreateDesignedTransferAccount({nextStep, setValue, dtaValue, refProp}: DtaProp) {
+export default function ItpCreateDesignedTransferAccount({nextStep, setValue, dtaValue, refProp}: DtaProp) {
   const [account, setAccount] = useState('central');
   const {t} = useTranslation();
   const t_key = 'income_tax_profile.profile.detail.designated_transfer_account';
@@ -384,5 +384,3 @@ function ItpCreateDesignedTransferAccount({nextStep, setValue, dtaValue, refProp
     </>
   );
 }
-
-export default forwardRef(ItpCreateDesignedTransferAccount);
