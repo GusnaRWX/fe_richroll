@@ -53,7 +53,29 @@ function CreateNewComponent() {
 
   const handleConfirm = () => {
     // router.push('/income-tax-profile/deductable-component');
-    console.log('test');
+    let payload = {};
+    if (ratesValue.employerMatch && ratesValue.employer && ratesValue.employee) {
+      payload= {
+        employee: ratesValue.employeeData,
+        employer: ratesValue.employeeData,
+      };
+    } else if (ratesValue.employee && ratesValue.employer && !ratesValue.employerMatch) {
+      payload = {
+        employee: ratesValue.employeeData,
+        employer: ratesValue.employerData,
+      };
+    } else if (ratesValue.employee) {
+      payload = {
+        employee: ratesValue.employeeData,
+      };
+    } else if (ratesValue.employer) {
+      payload = {
+        employer: ratesValue.employerData,
+      };
+    }
+    console.log('basicDetail: ', basicDetailValue);
+    console.log('dta: ', dtaValue);
+    console.log('rates: ', payload);
   };
 
   const steps = [
@@ -61,6 +83,48 @@ function CreateNewComponent() {
     t(`${t_key}.wizard_option.designed_transfer_account`),
     t(`${t_key}.wizard_option.rate`),
   ];
+
+  const [basicDetailValue, setBasicDetailValue] = useState({
+    satutoryName: '',
+    country: '',
+    province: '',
+    city: '',
+    subDistrict: '',
+    citation: '',
+    internalNotes: '',
+    externalNotes: '',
+  });
+
+  const [dtaValue, setDtaValue] = useState({
+    bank: '',
+    holder: '',
+    no: '',
+    bankCode: '',
+    branchCode: '',
+    branchName: '',
+    swiftCode: '',
+    notes: '',
+  });
+
+  const [ratesValue, setRatesValue] = useState({
+    employee: true,
+    employer: false,
+    employerMatch: true,
+    employeeData: {
+      start: 0,
+      end: 0,
+      rate: '',
+      fixed: 0,
+      amountCap: 0,
+    },
+    employerData: {
+      start: 0,
+      end: 0,
+      rate: '',
+      fixed: 0,
+      amountCap: 0,
+    },
+  });
 
   return (
     <>
@@ -154,9 +218,9 @@ function CreateNewComponent() {
           </Stepper>
         </Box>
         <Box sx={{mt:'16px'}}>
-          {value == 0 && <CreateBasicDetailComponent nextPage={setValue} />}
-          {value == 1 && <CreateDesignedTransferAccount nextPage={setValue} />}
-          {value == 2 && <CreateRates nextPage={setValue} />}
+          {value == 0 && <CreateBasicDetailComponent nextPage={setValue} basicValue={basicDetailValue} setValue={setBasicDetailValue} />}
+          {value == 1 && <CreateDesignedTransferAccount nextPage={setValue} dtaValue={dtaValue} setValue={setDtaValue} />}
+          {value == 2 && <CreateRates nextPage={setValue} ratesValue={ratesValue} setValue={setRatesValue} />}
         </Box>
       </ContentWrapper>
 

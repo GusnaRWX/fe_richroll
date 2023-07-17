@@ -7,11 +7,24 @@ import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-interface PropsInterface {
-  nextPage: Dispatch<SetStateAction<number>>
+interface BasicValue {
+  satutoryName : string;
+  country : string;
+  province : string;
+  city : string;
+  subDistrict : string;
+  citation : string;
+  internalNotes : string;
+  externalNotes : string;
 }
 
-export default function CreateBasicDetailComponent({nextPage}: PropsInterface) {
+interface PropsInterface {
+  nextPage: Dispatch<SetStateAction<number>>;
+  basicValue: BasicValue;
+  setValue: Dispatch<SetStateAction<BasicValue>>;
+}
+
+export default function CreateBasicDetailComponent({nextPage, basicValue, setValue}: PropsInterface) {
   // Translation Key
   const {t} = useTranslation();
   const t_key = 'satutory_benefit.component.form_&_detail.create_basic_detail';
@@ -35,18 +48,18 @@ export default function CreateBasicDetailComponent({nextPage}: PropsInterface) {
 
   const formik = useFormik({
     initialValues: {
-      satutoryName: '',
-      country: '',
-      province: '',
-      city: '',
-      subDistrict: '',
-      citation: '',
-      internalNotes: '',
-      externalNotes: '',
+      satutoryName: basicValue.satutoryName,
+      country: basicValue.country,
+      province: basicValue.province,
+      city: basicValue.city,
+      subDistrict: basicValue.subDistrict,
+      citation: basicValue.citation,
+      internalNotes: basicValue.internalNotes,
+      externalNotes: basicValue.externalNotes,
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      console.log(values);
+      setValue(values);
       nextPage(1);
     }
   });
@@ -64,7 +77,7 @@ export default function CreateBasicDetailComponent({nextPage}: PropsInterface) {
             onChange={(e) => formik.setFieldValue('satutoryName', e.target.value)}
           />
           {formik.touched.satutoryName && formik.errors.satutoryName ? (
-            <Typography sx={{color: '#DC2626',}}>{formik.errors.satutoryName}</Typography>
+            <Typography sx={{color: '#DC2626',}}>{formik.errors.satutoryName as React.ReactNode}</Typography>
           ): null}
         </Grid>
       </Grid>
@@ -82,7 +95,7 @@ export default function CreateBasicDetailComponent({nextPage}: PropsInterface) {
             onChange={(e) => formik.setFieldValue('country', e.target.value)}
           />
           {formik.touched.country && formik.errors.country ? (
-            <Typography sx={{color: '#DC2626'}}>{formik.errors.country}</Typography>
+            <Typography sx={{color: '#DC2626'}}>{formik.errors.country as React.ReactNode}</Typography>
           ): null}
         </Grid>
         <Grid item xs={6} md={6} lg={6} xl={6}>

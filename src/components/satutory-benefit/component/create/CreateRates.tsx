@@ -41,32 +41,54 @@ const rates = [
   },
 ];
 
-interface PropsInterface {
-  nextPage: Dispatch<SetStateAction<number>>
+interface RatesValue {
+  employee: boolean,
+  employer: boolean,
+  employerMatch: boolean,
+  employeeData: {
+    start: number,
+    end: number,
+    rate: string,
+    fixed: number,
+    amountCap: number,
+  },
+  employerData: {
+    start: number,
+    end: number,
+    rate: string,
+    fixed: number,
+    amountCap: number,
+  },
 }
 
-export default function CreateRates({nextPage}: PropsInterface) {
+interface PropsInterface {
+  nextPage: Dispatch<SetStateAction<number>>;
+  ratesValue: RatesValue;
+  setValue: Dispatch<SetStateAction<RatesValue>>;
+}
+
+export default function CreateRates({ratesValue, setValue, nextPage}: PropsInterface) {
   // Translation Key
   const {t} = useTranslation();
   const t_key = 'satutory_benefit.component.form_&_detail.rates';
 
   const initialValues = {
-    employee: true,
-    employer: false,
-    employerMatch: true,
+    employee: ratesValue.employee,
+    employer: ratesValue.employer,
+    employerMatch: ratesValue.employerMatch,
     employeeData: {
-      start: 0,
-      end: 0,
-      rate: '',
-      fixed: 0,
-      amountCap: 0,
+      start: ratesValue.employeeData.start,
+      end: ratesValue.employeeData.end,
+      rate: ratesValue.employeeData.rate,
+      fixed: ratesValue.employeeData.fixed,
+      amountCap: ratesValue.employeeData.amountCap,
     },
     employerData: {
-      start: 0,
-      end: 0,
-      rate: '',
-      fixed: 0,
-      amountCap: 0,
+      start: ratesValue.employerData.start,
+      end: ratesValue.employerData.end,
+      rate: ratesValue.employerData.rate,
+      fixed: ratesValue.employerData.fixed,
+      amountCap: ratesValue.employerData.amountCap,
     },
   };
 
@@ -87,28 +109,8 @@ export default function CreateRates({nextPage}: PropsInterface) {
     })
   });
 
-  const handleSubmit = (values) => {
-    let payload = {};
-    if (values.employerMatch && values.employer && values.employee) {
-      payload= {
-        employee: values.employeeData,
-        employer: values.employeeData,
-      };
-    } else if (values.employee && values.employer && !values.employerMatch) {
-      payload = {
-        employee: values.employeeData,
-        employer: values.employerData,
-      };
-    } else if (values.employee) {
-      payload = {
-        employee: values.employeeData,
-      };
-    } else if (values.employer) {
-      payload = {
-        employer: values.employerData,
-      };
-    }
-    console.log('payload: ', payload);
+  const handleSubmit = (values: RatesValue) => {
+    setValue(values);
   };
 
   const formik = useFormik({
@@ -335,11 +337,7 @@ export default function CreateRates({nextPage}: PropsInterface) {
                       customLabel={t(`${t_key}.amount_cap`)}
                       placeholder='Rp 0'
                       size='small'
-                      value={
-                        formik.values.employerMatch
-                          ? formik.values.employeeData.amountCap
-                          : formik.values.employerData.amountCap
-                      }
+                      value={formik.values.employeeData.amountCap}
                       disabled={formik.values.employerMatch}
                       onChange={(e) =>
                         formik.setFieldValue(

@@ -16,11 +16,24 @@ import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-interface PropsInterface {
-  nextPage: Dispatch<SetStateAction<number>>
+interface DtaValue {
+  bank: string
+  holder: string
+  no: string
+  bankCode: string
+  branchCode: string
+  branchName: string
+  swiftCode: string
+  notes: string
 }
 
-export default function CreateDesignedTransferAccount({nextPage}: PropsInterface) {
+interface PropsInterface {
+  nextPage: Dispatch<SetStateAction<number>>;
+  dtaValue: DtaValue;
+  setValue: Dispatch<SetStateAction<DtaValue>>;
+}
+
+export default function CreateDesignedTransferAccount({nextPage, dtaValue, setValue}: PropsInterface) {
   // Translation Key
   const {t} = useTranslation();
   const t_key = 'satutory_benefit.component.form_&_detail.create_designed_transfer_account';
@@ -58,18 +71,18 @@ export default function CreateDesignedTransferAccount({nextPage}: PropsInterface
 
   const formik = useFormik({
     initialValues: {
-      bank: '',
-      holder: '',
-      no: '',
-      bankCode: '',
-      branchCode: '',
-      branchName: '',
-      swiftCode: '',
-      notes: '',
+      bank: dtaValue.bank,
+      holder: dtaValue.holder,
+      no: dtaValue.no,
+      bankCode: dtaValue.bankCode,
+      branchCode: dtaValue.branchCode,
+      branchName: dtaValue.branchName,
+      swiftCode: dtaValue.swiftCode,
+      notes: dtaValue.notes,
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      console.log(values);
+      setValue(values);
       nextPage(2);
     },
   });
