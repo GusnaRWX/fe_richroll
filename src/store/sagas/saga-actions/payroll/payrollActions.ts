@@ -33,3 +33,7 @@ export const getSelectedEmployee = (payload: Payroll.ParamsSelectedEmployee) => 
   const { page, itemPerPage, sort, direction, search, countryCode, payrollID } = payload;
   return get(`payrolls/${payrollID}/attendances?page=${page}&itemPerPage=${itemPerPage}&sort=${sort}&direction=${direction}&search=${search}&countryCode=${countryCode}`);
 };
+
+export const getDetailAttendance = (payload: Payroll.ParamsDetailAttendance) => {
+  return get(`payrolls/${payload?.id}/attendances/${payload?.attendanceID}/employees/${payload?.employeeID}`);
+};
