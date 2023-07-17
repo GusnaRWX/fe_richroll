@@ -85,14 +85,17 @@ function CustomModal({
           withFooter && (
             <ModalFooter>
               <MuiButton variant='outlined' size='small' onClick={handleClose}>{t('button.cancel')}</MuiButton>
-              {submitText !== 'Suspend' && submitText !== 'Delete' &&
-            <MuiButton variant='contained' disabled={ConfirmationDisable} onClick={handleConfirm} size='small' color='primary'>{submitText || t('button.confirm')}</MuiButton>
+              {submitText !== 'Suspend' && submitText !== 'Delete' && submitText !== 'Reactivate' &&
+                <MuiButton variant='contained' disabled={ConfirmationDisable} onClick={handleConfirm} size='small' color='primary'>{submitText || t('button.confirm')}</MuiButton>
               }
               {submitText === 'Suspend' &&
-            <MuiButton variant='contained' disabled={ConfirmationDisable} onClick={handleConfirm} size='small' sx={{ background: '#FFEDD5', color: '#EA580C' }}>{t('button.suspend')}</MuiButton>
+                <MuiButton variant='contained' disabled={ConfirmationDisable} onClick={handleConfirm} size='small' sx={{ background: '#FFEDD5', color: '#EA580C' }}>{t('button.suspend')}</MuiButton>
               }
               {submitText === 'Delete' &&
-            <MuiButton variant='contained' disabled={ConfirmationDisable} onClick={handleConfirm} size='small' sx={{ background: '#FECACA', color: '#DC2626' }}>{deleteText || t('button.delete')}</MuiButton>
+                <MuiButton variant='contained' disabled={ConfirmationDisable} onClick={handleConfirm} size='small' sx={{ background: '#FECACA', color: '#DC2626' }}>{deleteText || t('button.delete')}</MuiButton>
+              }
+              {submitText === 'Reactivate' &&
+                <MuiButton variant='contained' disabled={ConfirmationDisable} onClick={handleConfirm} size='small' sx={{ background: '#DCFCE7', color: '#16A34A' }}>Reactivate</MuiButton>
               }
             </ModalFooter>
           )
