@@ -13,13 +13,14 @@ import {
 import { styled } from '@mui/material/styles';
 import React, { useState, SetStateAction, Dispatch } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 
 interface PropsInterface {
   nextPage: Dispatch<SetStateAction<number>>
-  formik
 }
 
-export default function CreateDesignedTransferAccount({nextPage, formik}: PropsInterface) {
+export default function CreateDesignedTransferAccount({nextPage}: PropsInterface) {
   // Translation Key
   const {t} = useTranslation();
   const t_key = 'satutory_benefit.component.form_&_detail.create_designed_transfer_account';
@@ -43,6 +44,35 @@ export default function CreateDesignedTransferAccount({nextPage, formik}: PropsI
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAccount(e.target.value);
   };
+
+  const validationSchema = Yup.object({
+    bank: Yup.string().required('This Field is Required'),
+    holder: Yup.string().required('This Field is Required'),
+    no: Yup.string().required('This Field is Required'),
+    bankCode: Yup.string(),
+    branchCode: Yup.string(),
+    branchName: Yup.string(),
+    swiftCode: Yup.string(),
+    notes: Yup.string(),
+  });
+
+  const formik = useFormik({
+    initialValues: {
+      bank: '',
+      holder: '',
+      no: '',
+      bankCode: '',
+      branchCode: '',
+      branchName: '',
+      swiftCode: '',
+      notes: '',
+    },
+    validationSchema: validationSchema,
+    onSubmit: (values) => {
+      console.log(values);
+      nextPage(2);
+    },
+  });
 
   React.useEffect(() => {
     if (account !== 'central') {
@@ -128,8 +158,8 @@ export default function CreateDesignedTransferAccount({nextPage, formik}: PropsI
                 }
                 : null
             }
-            value={formik.values.dta.bank}
-            onChange={(e) => formik.setFieldValue('dta.bank', e.target.value)}
+            value={formik.values.bank}
+            onChange={(e) => formik.setFieldValue('bank', e.target.value)}
           >
             <MenuItem value='1'>1</MenuItem>
             <MenuItem value='2'>2</MenuItem>
@@ -156,8 +186,8 @@ export default function CreateDesignedTransferAccount({nextPage, formik}: PropsI
                 }
                 : null
             }
-            value={formik.values.dta.holder}
-            onChange={(e) => formik.setFieldValue('dta.holder', e.target.value)}
+            value={formik.values.holder}
+            onChange={(e) => formik.setFieldValue('holder', e.target.value)}
           />
         </Box>
       </Box>
@@ -182,8 +212,8 @@ export default function CreateDesignedTransferAccount({nextPage, formik}: PropsI
                 }
                 : null
             }
-            value={formik.values.dta.no}
-            onChange={(e) => formik.setFieldValue('dta.no', e.target.value)}
+            value={formik.values.no}
+            onChange={(e) => formik.setFieldValue('no', e.target.value)}
           />
         </Box>
 
@@ -236,9 +266,9 @@ export default function CreateDesignedTransferAccount({nextPage, formik}: PropsI
                   }
                   : null
               }
-              value={formik.values.dta.branchCode}
+              value={formik.values.branchCode}
               onChange={(e) =>
-                formik.setFieldValue('dta.branchCode', e.target.value)
+                formik.setFieldValue('branchCode', e.target.value)
               }
             />
           </Box>
@@ -290,8 +320,8 @@ export default function CreateDesignedTransferAccount({nextPage, formik}: PropsI
                 }
                 : null
             }
-            value={formik.values.dta.swiftCode}
-            onChange={(e) => formik.setFieldValue('dta.swiftCode', e.target.value)}
+            value={formik.values.swiftCode}
+            onChange={(e) => formik.setFieldValue('swiftCode', e.target.value)}
           />
         </Box>
       </Box>
@@ -311,8 +341,8 @@ export default function CreateDesignedTransferAccount({nextPage, formik}: PropsI
             color: '#6B7280',
             borderColor: '#E5E7EB',
           }}
-          value={formik.values.dta.notes}
-          onChange={(e) => formik.setFieldValue('dta.notes', e.target.value)}
+          value={formik.values.notes}
+          onChange={(e) => formik.setFieldValue('notes', e.target.value)}
         />
         <FormHelperText
           sx={{ fontWeight: 500, color: '#6B7280', fontSize: '14px' }}
@@ -334,16 +364,7 @@ export default function CreateDesignedTransferAccount({nextPage, formik}: PropsI
           size='small'
           label={t('button.next')}
           color='primary'
-          onClick={() => {
-            // formik.submitForm();
-            formik.validateForm().then((res) => {
-              if ('dta' in res) {
-                console.log('gagal');
-              } else {
-                nextPage(2);
-              }
-            });
-          }}
+          onClick={() => formik.submitForm()}
         />
       </Box>
     </>

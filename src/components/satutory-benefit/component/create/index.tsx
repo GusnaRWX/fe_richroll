@@ -15,8 +15,6 @@ import { ifThenElse } from '@/utils/helper';
 import { useTranslation } from 'react-i18next';
 import { IconButton } from '@/components/_shared/form';
 import { ArrowBack } from '@mui/icons-material';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
 
 // Import Create Component :
 import CreateBasicDetailComponent from './CreateBasicDetail';
@@ -49,126 +47,13 @@ function CreateNewComponent() {
   const [open, setOpen] = useState(false);
   const [isExit, setIsExit] = useState(true);
 
-  const validationSchema = Yup.object({
-    basicDetail: Yup.object({
-      satutoryName: Yup.string().required('This field is Required!'),
-      country: Yup.string().required('This field is Required!'),
-      province: Yup.string(),
-      city: Yup.string(),
-      subDistrict: Yup.string(),
-      citation: Yup.string(),
-      internalNotes: Yup.string(),
-      externalNotes: Yup.string(),
-    }),
-    dta: Yup.object({
-      bank: Yup.string().required('This Field is Required'),
-      holder: Yup.string().required('This Field is Required'),
-      no: Yup.string().required('This Field is Required'),
-      bankCode: Yup.string(),
-      branchCode: Yup.string(),
-      branchName: Yup.string(),
-      swiftCode: Yup.string(),
-      notes: Yup.string(),
-    }),
-    rates: Yup.object({
-      employeeData: Yup.object({
-        start: Yup.string().required('This Field is Required'),
-        end: Yup.string().required('This Field is Required'),
-        rate: Yup.string().required('This Field is Required'),
-        fixed: Yup.string().required('This Field is Required'),
-        amountCap: Yup.string().required('This Field is Required'),
-      }),
-      employerData: Yup.object({
-        start: Yup.string().required('This Field is Required'),
-        end: Yup.string().required('This Field is Required'),
-        rate: Yup.string().required('This Field is Required'),
-        fixed: Yup.string().required('This Field is Required'),
-        amountCap: Yup.string().required('This Field is Required'),
-      })
-    })
-  });
-
-  const formik = useFormik({
-    initialValues: {
-      basicDetail: {
-        satutoryName: '',
-        country: '',
-        province: '',
-        city: '',
-        subDistrict: '',
-        citation: '',
-        internalNotes: '',
-        externalNotes: '',
-      },
-      dta: {
-        bank: '',
-        holder: '',
-        no: '',
-        bankCode: '',
-        branchCode: '',
-        branchName: '',
-        swiftCode: '',
-        notes: '',
-      },
-      rates: {
-        employee: true,
-        employer: false,
-        employerMatch: true,
-        employeeData: {
-          start: 0,
-          end: 0,
-          rate: '',
-          fixed: 0,
-          amountCap: 0,
-        },
-        employerData: {
-          start: 0,
-          end: 0,
-          rate: '',
-          fixed: 0,
-          amountCap: 0,
-        },
-      }
-    },
-    onSubmit: (value) => console.log(value),
-    validationSchema: validationSchema
-  });
-
   const handleClose = () => {
     setOpen(false);
   };
 
   const handleConfirm = () => {
     // router.push('/income-tax-profile/deductable-component');
-    formik.validateForm().then((res) => {
-      if ('rates' in res) {
-        console.log(res);
-        console.log(formik.values.rates);
-      } else {
-        let payload = {};
-        if (formik.values.rates.employerMatch && formik.values.rates.employer && formik.values.rates.employee) {
-          payload= {
-            employee: formik.values.rates.employeeData,
-            employer: formik.values.rates.employeeData,
-          };
-        } else if (formik.values.rates.employee && formik.values.rates.employer) {
-          payload = {
-            employee: formik.values.rates.employeeData,
-            employer: formik.values.rates.employerData,
-          };
-        } else if (formik.values.rates.employee) {
-          payload = {
-            employee: formik.values.rates.employeeData,
-          };
-        } else if (formik.values.rates.employer) {
-        // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-          payload = {
-            employer: formik.values.rates.employerData,
-          };
-        }
-        console.log(payload);
-      }
-    });
+    console.log('test');
   };
 
   const steps = [
@@ -269,9 +154,9 @@ function CreateNewComponent() {
           </Stepper>
         </Box>
         <Box sx={{mt:'16px'}}>
-          {value == 0 && <CreateBasicDetailComponent nextPage={setValue} formik={formik} />}
-          {value == 1 && <CreateDesignedTransferAccount nextPage={setValue} formik={formik} />}
-          {value == 2 && <CreateRates nextPage={setValue} formik={formik} />}
+          {value == 0 && <CreateBasicDetailComponent nextPage={setValue} />}
+          {value == 1 && <CreateDesignedTransferAccount nextPage={setValue} />}
+          {value == 2 && <CreateRates nextPage={setValue} />}
         </Box>
       </ContentWrapper>
 
