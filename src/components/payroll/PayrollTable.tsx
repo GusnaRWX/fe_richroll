@@ -98,7 +98,7 @@ function PayrollTable({
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(event);
-    setPage(0);
+    setPage(1);
   };
 
   const handleSearch = (e) => {

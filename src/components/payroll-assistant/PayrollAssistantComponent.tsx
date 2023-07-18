@@ -136,7 +136,7 @@ function PayrollAssistantComponent() {
         title={t(`${t_popupKey}.create.title`)}
         width='543px'
         handleConfirm={handleConfirm}
-        submitText={t(`button.submit`)}
+        submitText='Submit'
       >
         <Grid container mt='1rem' mb='1rem'>
           <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>

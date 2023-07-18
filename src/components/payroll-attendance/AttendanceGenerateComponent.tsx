@@ -161,7 +161,7 @@ function AttendanceGenerateComponent() {
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(event);
-    setPage(0);
+    setPage(1);
   };
 
   // function for open modal calendar
