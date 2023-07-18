@@ -5,7 +5,8 @@ import {
   TableRow,
   Box,
   TableSortLabel,
-  Button as MuiButton
+  Button as MuiButton,
+  Checkbox
 } from '@mui/material';
 import { Input, DateRangePicker } from '../_shared/form';
 import { Search } from '@mui/icons-material';
@@ -58,6 +59,11 @@ interface EmployeeTableProps {
 
 type Order = 'asc' | 'desc'
 
+interface CheckedTableProps {
+  id: string;
+  checked: boolean;
+}
+
 function AttendanceTable({
   tabValue
 }: EmployeeTableProps) {
@@ -75,6 +81,7 @@ function AttendanceTable({
   const router = useRouter();
   const { t } = useTranslation();
   const tPath = 'payroll_and_disbursement.attendance_summary.';
+  const [selectedTemp, setSelectedTemp] = useState<CheckedTableProps[]>([]);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -95,6 +102,44 @@ function AttendanceTable({
     const isAsc = compareCheck(sort === headId, direction === 'asc');
     setDirection(ifThenElse(isAsc, 'desc', 'asc'));
     setSort(headId);
+  };
+
+  const onSelected = (id, e) => {
+    if (e.target.checked) {
+      const temp = [...selectedTemp, { id: id, checked: true }];
+      setSelectedTemp(temp);
+    }else{
+      const temp = selectedTemp.filter(v => v['id'] !== id);
+      setSelectedTemp(temp);
+    }
+  };
+
+  const checkVal = (id) => {
+    return selectedTemp.some(v => v['id'] === id);
+  };
+
+  const onAll = (e) => {
+    if (e.target.checked) {
+      const temp = data?.items?.map((v) => {
+        return { id: v.id, checked: true };
+      });
+      setSelectedTemp(temp);
+    } else {
+      setSelectedTemp([]);
+    }
+  };
+
+  const checkAll = () => {
+    return selectedTemp.length === rowsPerPage;
+  };
+
+  const handlePostGrosses = () => {
+    dispatch({
+      type: postPayrollGrossesRequested.toString(),
+      payload: {
+        payroll_id: selectedTemp.map(item => item?.id)
+      }
+    });
   };
 
   useEffect(() => {
@@ -157,6 +202,13 @@ function AttendanceTable({
         headChildren={
           <TableRow>
             {
+              tabValue === 0 && (
+                <TableCell>
+                  <Checkbox onChange={(e) => onAll(e)} checked={checkAll()}/>
+                </TableCell>
+              )
+            }
+            {
               headerItems.map((item) => (
                 <TableCell key={item.id} sortDirection={ifThenElse(sort === item.id, direction, false)}>
                   <TableSortLabel
@@ -190,6 +242,13 @@ function AttendanceTable({
                 ), (
                   data?.items?.map((item, index) => (
                     <TableRow key={index}>
+                      {
+                        tabValue === 0 && (
+                          <TableCell>
+                            <Checkbox onChange={(e) => onSelected(item?.id, e)} checked={checkVal(item?.id)}/>
+                          </TableCell>
+                        )
+                      }
                       <TableCell>{item.name}</TableCell>
                       <TableCell>{dayjs(item.start).format('DD/MM/YYYY')} - {dayjs(item.end).format('DD/MM/YYYY')}</TableCell>
                       <TableCell><TypeComponent>Attendance Report</TypeComponent></TableCell>
@@ -211,6 +270,7 @@ function AttendanceTable({
                           {tabValue === 0 && (
                             <>
                               <IconButton
+                                disabled={!!selectedTemp.length}
                                 parentColor='#E9EFFF'
                                 // onClick={() => { router.push({pathname: '/payroll-disbursement/payroll/generate-gross/employee', query: { id: item.id }}); }}
                                 onClick={() => {
@@ -226,6 +286,7 @@ function AttendanceTable({
                                 }
                               />
                               <IconButton
+                                disabled={!!selectedTemp.length}
                                 parentColor='#FEE2E2'
                                 onClick={() => setDeleteConfirmation(true)}
                                 icons={
@@ -296,6 +357,20 @@ function AttendanceTable({
           </>
         }
       />
+      {tabValue === 0 &&
+          <Grid container spacing={2} mt='1rem'>
+            <Grid item xs={9} sm={9} md={9} lg={9} xl={9}></Grid>
+            <Grid item xs={3} sm={3} md={3} lg={3} xl={3} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <MuiButton
+                disabled={!selectedTemp.length}
+                variant='contained'
+                size='small'
+                color='primary'
+                onClick={handlePostGrosses}
+              >{t('button.generate_gross_payroll')}</MuiButton>
+            </Grid>
+          </Grid>
+      }
       <ConfirmationModal
         open={deleteConfirmation}
         handleClose={() => setDeleteConfirmation(false)}

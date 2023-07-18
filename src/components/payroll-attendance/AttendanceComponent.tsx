@@ -6,8 +6,8 @@ import { styled } from '@mui/material/styles';
 import AttendanceTable from './AttendanceTable';
 import CustomModal from '@/components/_shared/common/CustomModal';
 import { getCompanyData } from '@/utils/helper';
-import { useAppDispatch, useAppSelectors } from '@/hooks/index';
-import { postPayrollRequested, postPayrollGrossesRequested } from '@/store/reducers/slice/payroll/payrollSlice';
+import { useAppDispatch } from '@/hooks/index';
+import { postPayrollRequested } from '@/store/reducers/slice/payroll/payrollSlice';
 import { useFormik } from 'formik';
 import dayjs from 'dayjs';
 import * as Yup from 'yup';
@@ -75,7 +75,6 @@ function AttendanceComponent() {
   const [open, setOpen] = useState(false);
   const companyData = getCompanyData();
   const dispatch = useAppDispatch();
-  const payrollId = useAppSelectors(state => state.payroll);
   const formik = useFormik({
     initialValues: {
       name: '',
@@ -110,15 +109,6 @@ function AttendanceComponent() {
           start: dayjs(values.date[0]).toISOString(),
           end: dayjs(values.date[1]).toISOString()
         }
-      }
-    });
-  };
-
-  const handlePostGrosses = () => {
-    dispatch({
-      type: postPayrollGrossesRequested.toString(),
-      payload: {
-        payroll_id: payrollId?.data?.items?.map(item => item?.id)
       }
     });
   };
@@ -166,20 +156,6 @@ function AttendanceComponent() {
             <AttendanceTable tabValue={value}/>
           </TabPanel>
         </Box>
-
-        {value === 0 &&
-          <Grid container spacing={2}>
-            <Grid item xs={9} sm={9} md={9} lg={9} xl={9}></Grid>
-            <Grid item xs={3} sm={3} md={3} lg={3} xl={3} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <MuiButton
-                variant='contained'
-                size='small'
-                color='primary'
-                onClick={handlePostGrosses}
-              >{t('button.generate_gross_payroll')}</MuiButton>
-            </Grid>
-          </Grid>
-        }
       </ContentWrapper>
 
       <CustomModal
