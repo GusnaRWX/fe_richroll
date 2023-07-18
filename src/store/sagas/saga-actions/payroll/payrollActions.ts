@@ -53,3 +53,7 @@ export const getPayrollGrosses = (payload: string) => {
 export const getDetailAttendance = (payload: Payroll.ParamsDetailAttendance) => {
   return get(`payrolls/${payload?.id}/attendances/${payload?.attendanceID}/employees/${payload?.employeeID}`);
 };
+
+export const putPayrollGrossesFinal = (payload) => {
+  return put(`payrolls/${payload.id}/grosses/${payload.grossId}/final`, {});
+};
