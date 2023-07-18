@@ -182,25 +182,47 @@ function GenerateGrossEmployee() {
   };
 
   const onSelectedAll = (items, e) => {
-    const pageItems = items?.map(item => ({
-      id: item.id, name: item.employee.name, attendance: item.attendance, absent: item.absent,
-      paidLeave: item.paidLeave,
-      unpaidLeave: item.unpaidLeave,
-      overtime: item.overtime,
-      totalHours: item.totalHours,
-      averageHours: item.averageHours,
-    }));
+    const pageItemIds = items?.map(item => item.id);
 
     if (e.target.checked) {
-      setSelectedTemp(prevSelectedTemp => [...prevSelectedTemp, ...pageItems]);
+      setSelectedTemp(prevSelectedTemp => {
+        const updatedSelectedTemp = [...prevSelectedTemp];
+
+        pageItemIds.forEach(itemId => {
+          if (!updatedSelectedTemp.some(item => item.id === itemId)) {
+            const pageItem = items.find(item => item.id === itemId);
+            if (pageItem) {
+              updatedSelectedTemp.push({
+                id: pageItem.id,
+                name: pageItem.employee.name,
+                attendance: pageItem.attendance,
+                absent: pageItem.absent,
+                paidLeave: pageItem.paidLeave,
+                unpaidLeave: pageItem.unpaidLeave,
+                overtime: pageItem.overtime,
+                totalHours: pageItem.totalHours,
+                averageHours: pageItem.averageHours,
+              });
+            }
+          }
+        });
+
+        return updatedSelectedTemp;
+      });
     } else {
-      setSelectedTemp(prevSelectedTemp => prevSelectedTemp.filter(selectedItem => !pageItems?.some(item => item?.id === selectedItem['id'])));
+      setSelectedTemp(prevSelectedTemp =>
+        prevSelectedTemp.filter(selectedItem => !pageItemIds.includes(selectedItem.id))
+      );
     }
   };
 
+  console.log(selectedTemp);
+
   const checkValAll = (items) => {
-    const checkedPerPage = selectedTemp?.filter(selectedItem => items?.some(item => item?.id === selectedItem['id'])).length;
-    const lengthPerPage = rowsPerPage;
+    const checkedPerPage = selectedTemp?.filter(selectedItem =>
+      items?.some(item => item.id === selectedItem.id)
+    ).length;
+    const lengthPerPage = items?.length;
 
     return checkedPerPage === lengthPerPage;
   };
