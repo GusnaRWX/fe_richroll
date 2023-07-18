@@ -22,6 +22,7 @@ import DetailModal from './modal';
 import DetailCnb from './detail';
 import ConfirmationModal from '../_shared/common/ConfirmationModal';
 import EmptyState from '../_shared/common/EmptyState';
+import { useTranslation } from 'react-i18next';
 
 const ButtonWrapper = styled.div`
  display: flex;
@@ -32,12 +33,11 @@ const ButtonWrapper = styled.div`
 `;
 
 const headerItems = [
-  { id: 'name', label: 'C&B Profile Name' },
-  { id: 'base', label: 'Base Compensation' },
-  { id: 'supplementaries', label: 'Supplementary Compensation' },
-  { id: 'createdAt', label: 'Date Created' },
-  { id: 'updatedAt', label: 'Last Updated' },
-  { id: 'action', label: '' },
+  { id: 'name', label: 'C&B Profile Name', translation: 'cnb_profile_name' },
+  { id: 'base', label: 'Base Compensation', translation: 'base_compensation' },
+  { id: 'supplementaries', label: 'Supplementary Compensation', translation: 'supplementary_compensation' },
+  { id: 'createdAt', label: 'Date Created', translation: 'date_created' },
+  { id: 'updatedAt', label: 'Last Updated', translation: 'last_update' },
 ];
 
 type Order = 'asc' | 'desc'
@@ -56,6 +56,7 @@ function EnhancedTable() {
   const companyData = getCompanyData();
   const [detailOpen, setDetailOpen] = useState({ id: 0, open: false });
   const [deleteConfirmation, setDeleteConfirmation] = useState({ id: 0, open: false });
+  const { t } = useTranslation();
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
@@ -159,7 +160,7 @@ function EnhancedTable() {
                     direction={sort === item.id ? direction : 'asc'}
                     onClick={(e) => handleRequestSort(e, item.id)}
                   >
-                    {item.label}
+                    {t(`compensation_and_benefits.table.table_cols_item.${item.translation}`)}
                     {sort === item.id ? (
                       <Box component='span' sx={visuallyHidden}>
                         {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
@@ -169,6 +170,7 @@ function EnhancedTable() {
                 </TableCell>
               ))
             }
+            <TableCell />
           </TableRow>
         }
         bodyChildren={
@@ -233,8 +235,8 @@ function EnhancedTable() {
             <ConfirmationModal
               open={deleteConfirmation.open}
               handleClose={handleDeleteClose}
-              title='Are you sure you want to delete this record?'
-              content='Any unsaved changes will be discarded. This cannot be undone'
+              title={t('compensation_and_benefits.popup.delete.title')}
+              content={t('compensation_and_benefits.popup.delete.desc')}
               withCallback
               noChange={true}
               callback={() => deleteCnb(deleteConfirmation.id)}
@@ -242,7 +244,7 @@ function EnhancedTable() {
             <DetailModal
               open={detailOpen.open}
               handleClose={() => setDetailOpen({ id: 0, open: false })}
-              title='C&B Profile Detail'
+              title={t('compensation_and_benefits.popup.detail.title')}
               content={
                 <DetailCnb id={detailOpen.id} open={detailOpen.open} />
               }

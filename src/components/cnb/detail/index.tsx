@@ -7,6 +7,7 @@ import { numberFormat } from '@/utils/format';
 import { useRouter } from 'next/router';
 import dayjs from 'dayjs';
 import { Text } from '@/components/_shared/common';
+import { useTranslation } from 'react-i18next';
 
 export interface DetailCNBProps {
   id: unknown,
@@ -20,6 +21,8 @@ const DetailCnb = ({ id, open }: DetailCNBProps) => {
   const detailLoading = useAppSelectors(
     (state) => state.compensation?.detailLoading
   );
+  const { t } = useTranslation();
+  const tPath = 'compensation_and_benefits.popup.detail.';
   const TitleData = styled(Typography)({
     fontSize: '14px',
     fontWeight: '600',
@@ -78,7 +81,7 @@ const DetailCnb = ({ id, open }: DetailCNBProps) => {
             alignItems='center'
           >
             <Box display='flex' flexDirection='column' gap='6px'>
-              <TitleData>C&B Profile Name</TitleData>
+              <TitleData>{t(`${tPath}cnb_profile_name`)}</TitleData>
               <ItemData>{detail?.name}</ItemData>
             </Box>
             <Button
@@ -92,7 +95,7 @@ const DetailCnb = ({ id, open }: DetailCNBProps) => {
               }
             >
               <Typography fontSize={14} color='white'>
-                Edit
+                {t('button.edit')}
               </Typography>
             </Button>
           </Grid>
@@ -105,11 +108,11 @@ const DetailCnb = ({ id, open }: DetailCNBProps) => {
             alignItems='flex-start'
           >
             <Grid item xs={6} display='flex' flexDirection='column' gap='6px'>
-              <TitleData>Date Created</TitleData>
+              <TitleData>{t('compensation_and_benefits.popup.detail.date_created')}</TitleData>
               <ItemData>{dayjs(detail?.createdAt).isValid() ? dayjs(detail?.createdAt).format('DD/MM/YY hh:mm') : '-'}</ItemData>
             </Grid>
             <Grid item xs={6} display='flex' flexDirection='column' gap='6px'>
-              <TitleData>Last Updated</TitleData>
+              <TitleData>{t('compensation_and_benefits.popup.detail.last_update')}</TitleData>
               <ItemData>{dayjs(detail?.updatedAt).isValid() ? dayjs(detail?.updatedAt).format('DD/MM/YY') : '-'}</ItemData>
             </Grid>
           </Grid>
@@ -124,7 +127,7 @@ const DetailCnb = ({ id, open }: DetailCNBProps) => {
           >
             <Grid item>
               <Typography fontWeight={700} color='#223567'>
-                Base
+                {t(`${tPath}base_section.title`)}
               </Typography>
             </Grid>
             <Grid
@@ -134,12 +137,14 @@ const DetailCnb = ({ id, open }: DetailCNBProps) => {
               alignItems='flex-start'
             >
               <Grid item xs={6} display='flex' flexDirection='column' gap='6px'>
-                <TitleData>Compensation Component</TitleData>
+                <TitleData>{t(`${tPath}base_section.compensation_component`)}</TitleData>
                 <ItemData>{baseComponent ? baseComponent?.component?.name : '-'}</ItemData>
               </Grid>
               <Grid item xs={6} display='flex' flexDirection='column' gap='6px'>
-                <TitleData>Tax Status</TitleData>
-                <TaxData>{baseComponent ? (baseComponent?.isTaxable ? 'Taxable' : 'NTaxable') : '-'}</TaxData>
+                <TitleData>{t(`${tPath}base_section.tax_status`)}</TitleData>
+                <TaxData>
+                  {baseComponent ? (baseComponent?.isTaxable ? t(`${tPath}base_section.tax_status_option.taxable`) : t(`${tPath}base_section.tax_status_option_nontaxable`)) : '-'}
+                </TaxData>
               </Grid>
             </Grid>
             <Grid display='flex' flexDirection='column' gap='6px'>
@@ -165,7 +170,7 @@ const DetailCnb = ({ id, open }: DetailCNBProps) => {
               gap='16px'
             >
               <Grid item>
-                <Text title='Supplementary' fontWeight={700} color='#223567' />
+                <Text title={t(`${tPath}supplementary_section.title`)} fontWeight={700} color='#223567' />
               </Grid>
               <Grid item width='100%'>
                 <Grid
@@ -181,7 +186,7 @@ const DetailCnb = ({ id, open }: DetailCNBProps) => {
                     flexDirection='column'
                     gap='6px'
                   >
-                    <TitleData>Compensation Component {index + 1}</TitleData>
+                    <TitleData>{t(`${tPath}supplementary_section.compensation_component`)} {index + 1}</TitleData>
                     <ItemData>{supplement?.component?.name}</ItemData>
                   </Grid>
                   <Grid
@@ -191,9 +196,9 @@ const DetailCnb = ({ id, open }: DetailCNBProps) => {
                     flexDirection='column'
                     gap='6px'
                   >
-                    <TitleData>Tax Status</TitleData>
+                    <TitleData>{t(`${tPath}supplementary_section.tax_status`)}</TitleData>
                     <TaxData>
-                      {supplement?.isTaxable ? 'Taxable' : 'NTaxable'}
+                      {supplement?.isTaxable ? t(`${tPath}supplementary_section.tax_status_option.taxable`) : t(`${tPath}supplementary_section.tax_status_option.nontaxable`)}
                     </TaxData>
                   </Grid>
                 </Grid>

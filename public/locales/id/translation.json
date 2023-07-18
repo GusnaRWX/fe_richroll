@@ -114,8 +114,8 @@
         "desc": "Setiap perubahan yang belum disimpan akan dibuang. "
       },
       "detail": {
-        "title": "C",
-        "cnb_profile_name": "C",
+        "title": "Detil Profil C&B",
+        "cnb_profile_name": "Nama Profil C&B",
         "date_created": "Tanggal Diciptakan",
         "last_update": "Pembaharuan Terakhir",
         "base_section": {
