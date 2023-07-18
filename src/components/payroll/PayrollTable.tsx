@@ -69,7 +69,7 @@ type Order = 'asc' | 'desc'
 function PayrollTable({
   tabValue
 }: EmployeeTableProps) {
-  const { payroll, global } = useAppSelectors(state => state);
+  const { payroll } = useAppSelectors(state => state);
 
   const Tabs = {
     0: 'DRAFT',
@@ -122,7 +122,7 @@ function PayrollTable({
         sort: sort,
         direction: direction,
         search: search,
-        countryCode: global?.language,
+        countryCode: '',
         companyID: companyData?.id,
         workflow: 'NET_PAYROLL',
         status: Tabs[tabValue]
