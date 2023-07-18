@@ -190,11 +190,12 @@ function AttendanceTable({
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(event);
-    // setPage(0);
+    setPage(1);
   };
 
   const handleSearch = (e) => {
     if (e.key === 'Enter') {
+      setPage(1);
       setSearch(e.target.value);
     }
   };

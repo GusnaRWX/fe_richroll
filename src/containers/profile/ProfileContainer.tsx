@@ -11,7 +11,7 @@ interface ProfileContainerProps {
 const ProfileContainer = ({ roles }: ProfileContainerProps) => {
   return (
     <Layout>
-      {roles === 'HR Admin' && <ProfileComponent />}
+      {(roles === 'HR Admin' || roles === 'Super Admin') && <ProfileComponent />}
       {roles === 'Employee' && <EmployeeProfileComponent />}
     </Layout>
   );

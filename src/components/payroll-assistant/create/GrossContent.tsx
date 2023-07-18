@@ -36,51 +36,51 @@ const headerItems = [
 
 type Order = 'asc' | 'desc'
 
-const data = {
-  items: [
-    {
-      id: 1,
-      name: 'Budi Irawan',
-      attendance: 'Rp 5.000.000,00',
-      absent: 'Rp 2.500.000,00',
-      paidLeave: 'Rp 2.000.000,00',
-      unpaidLeave: 'Rp 9.500.000,00',
-    },
-    {
-      id: 2,
-      name: 'Budi Irawan',
-      attendance: 'Rp 5.000.000,00',
-      absent: 'Rp 2.500.000,00',
-      paidLeave: 'Rp 2.000.000,00',
-      unpaidLeave: 'Rp 9.500.000,00',
-    },
-    {
-      id: 3,
-      name: 'Budi Irawan',
-      attendance: 'Rp 5.000.000,00',
-      absent: 'Rp 2.500.000,00',
-      paidLeave: 'Rp 2.000.000,00',
-      unpaidLeave: 'Rp 9.500.000,00',
-    },
-    {
-      id: 4,
-      name: 'Budi Irawan',
-      attendance: 'Rp 5.000.000,00',
-      absent: 'Rp 2.500.000,00',
-      paidLeave: 'Rp 2.000.000,00',
-      unpaidLeave: 'Rp 9.500.000,00',
-    },
-    {
-      id: 5,
-      name: 'Budi Irawan',
-      attendance: 'Rp 5.000.000,00',
-      absent: 'Rp 2.500.000,00',
-      paidLeave: 'Rp 2.000.000,00',
-      unpaidLeave: 'Rp 9.500.000,00',
-    },
-  ],
-  itemTotals: 5
-};
+// const data = {
+//   items: [
+//     {
+//       id: 1,
+//       name: 'Budi Irawan',
+//       attendance: 'Rp 5.000.000,00',
+//       absent: 'Rp 2.500.000,00',
+//       paidLeave: 'Rp 2.000.000,00',
+//       unpaidLeave: 'Rp 9.500.000,00',
+//     },
+//     {
+//       id: 2,
+//       name: 'Budi Irawan',
+//       attendance: 'Rp 5.000.000,00',
+//       absent: 'Rp 2.500.000,00',
+//       paidLeave: 'Rp 2.000.000,00',
+//       unpaidLeave: 'Rp 9.500.000,00',
+//     },
+//     {
+//       id: 3,
+//       name: 'Budi Irawan',
+//       attendance: 'Rp 5.000.000,00',
+//       absent: 'Rp 2.500.000,00',
+//       paidLeave: 'Rp 2.000.000,00',
+//       unpaidLeave: 'Rp 9.500.000,00',
+//     },
+//     {
+//       id: 4,
+//       name: 'Budi Irawan',
+//       attendance: 'Rp 5.000.000,00',
+//       absent: 'Rp 2.500.000,00',
+//       paidLeave: 'Rp 2.000.000,00',
+//       unpaidLeave: 'Rp 9.500.000,00',
+//     },
+//     {
+//       id: 5,
+//       name: 'Budi Irawan',
+//       attendance: 'Rp 5.000.000,00',
+//       absent: 'Rp 2.500.000,00',
+//       paidLeave: 'Rp 2.000.000,00',
+//       unpaidLeave: 'Rp 9.500.000,00',
+//     },
+//   ],
+//   itemTotals: 5
+// };
 
 function GrossContent(att) {
   const { isPreview } = att;
@@ -101,7 +101,7 @@ function GrossContent(att) {
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(event);
-    // setPage(0);
+    setPage(1);
   };
 
   const handleRequestSort = (event: React.MouseEvent<unknown>, headId: string) => {
@@ -218,7 +218,7 @@ function GrossContent(att) {
         </Box>
       </ContentWrapper>
 
-      <ContentWrapper>
+      {/* <ContentWrapper>
         <Box sx={{ width: '100%' }}>
           <SimpleAccordion title={t(`${tPath}delivery_department.title`)}>
             <ContentWrapper>
@@ -308,7 +308,7 @@ function GrossContent(att) {
             />
           </SimpleAccordion>
         </Box>
-      </ContentWrapper>
+      </ContentWrapper> */}
     </>
   );
 }
