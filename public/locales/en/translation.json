@@ -46,7 +46,9 @@
     "save_approve" : "Save and Approve",
     "save_exit" : "Save and Exit",
     "confirm" : "Confirm",
+    "submit" : "Submit",
     "cancel" : "Cancel",
+    "close" : "Close",
     "delete" : "Delete",
     "edit" :"Edit",
     "activate" : "Activate",
@@ -54,15 +56,92 @@
     "suspend" : "Suspend",
     "archive" : "Archived",
     "duplicate" : "Duplicate",
+    "component" : "Component",
+    "deductable": "Deductable",
     "mark_complete" : "Mark All and Complete",
     "add_new_profile" : "Add New Profile",
     "add_component" : "Add Component",
     "add_new_component" : "Add New Component",
-    "component" : "Component",
-    "deductable": "Deductable"
+    "add_profile" : "Add Profile",
+    "add_supplementary_compensation" : "Add Supplementary Compensation"
+   },
+
+  "compensation_and_benefits" : {
+    "title" : "Compensation & Benefits",
+    "table" : {
+      "table_cols_item" : {
+        "cnb_profile_name" : "C&B Profile Name",
+        "base_compensation" : "Base Compensation",
+        "supplementary_compensation" : "Supplementary Compensation",
+        "date_created" : "Date Created",
+        "last_update" : "Last Update"
+      }
+    },
+    "form" : {
+      "create_title" : "Create New C&B Profile",
+      "update_title" : "Update Profile",
+      "profile_name" : "Profile Name",
+      "profile_name_placeholder" : "Input Profile Name",
+      "compensation_sub_title" : "Compensation",
+      "base_section" : {
+        "title" : "Base",
+        "compensation_component" : "Compensation Component",
+        "compensation_component_placeholder" : "Select base compensation component",
+        "tax_status" : "Tax Status",
+        "tax_status_option" : {
+          "taxable" : "Taxable",
+          "nontaxable" : "Non-Taxable"
+        }
+      },
+      "overtime_section" : {
+        "title" : "Overtime",
+        "rate" : "Rate"
+      },
+      "supplementary_section" : {
+        "title" : "Supplementary",
+        "compensation_component" : "Compensation Component",
+        "tax_status" : "Tax Status",
+        "tax_status_option" : {
+          "taxable" : "Taxable",
+          "nontaxable" : "Non-Taxable"
+        },
+        "amount" : "Amount"
+      }
+    },
+    "popup" : {
+      "delete" : {
+        "title" : "Are you sure you want to delete this record?",
+        "desc" : "Any unsaved changes will be discarded. This cannot be undone"
+      },
+      "detail" : {
+        "title" : "C&B Profile Detail",
+        "cnb_profile_name" :"C&B Profile Name",
+        "date_created" :"Date Created",
+        "last_update" :"Last Update",
+        "base_section" : {
+          "title" : "Base",
+          "compensation_component" : "Compensation Component",
+          "compensation_component_placeholder" : "Select base compensation component",
+          "tax_status" : "Tax Status",
+          "tax_status_option" : {
+            "taxable" : "Taxable",
+            "nontaxable" : "NTaxable"
+          },
+          "amount_per_month" : "Amount  per  Monthly"
+        },
+        "supplementary_section" : {
+          "title" : "Supplementary",
+          "compensation_component" : "Compensation Component",
+          "tax_status" : "Tax Status",
+          "tax_status_option" : {
+            "taxable" : "Taxable",
+            "nontaxable" : "NTaxable"
+          },
+          "amount_month" : "Amount Monthly"
+        }
+      }
+    }
   },
-
-
 
   "income_tax_profile": {
     "deductable_component": {
@@ -301,8 +380,6 @@
       }
     }
   },
-
-
 
   "satutory_benefit" : {
     "component" : {

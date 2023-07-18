@@ -39,6 +39,7 @@
     "income_tax_profile_deductable_component": "Komponen yang Dapat Dikurangi",
     "income_tax_profile_profile": "Profil"
   },
+
   "button": {
     "next": "Berikutnya",
     "back": "Kembali",
@@ -46,7 +47,9 @@
     "save_approve": "Simpan dan Setujui",
     "save_exit": "Simpan dan keluar",
     "confirm": "Mengonfirmasi",
+    "submit": "Kirim",
     "cancel": "Membatalkan",
+    "close": "Menutup",
     "delete": "Menghapus",
     "edit": "Sunting",
     "activate": "Mengaktifkan",
@@ -54,13 +57,92 @@
     "suspend": "Menskors",
     "archive": "Diarsipkan",
     "duplicate": "Duplikat",
+    "component": "Komponen",
+    "deductable": "Dapat dikurangkan",
     "mark_complete": "Tandai Semua dan Selesai",
     "add_new_profile": "Tambahkan Profil Baru",
     "add_component": "Tambahkan Komponen",
     "add_new_component": "Tambahkan Komponen Baru",
-    "component": "Komponen",
-    "deductable": "Dapat dikurangkan"
+    "add_profile": "Tambahkan Profil",
+    "add_supplementary_compensation": "Tambahkan Kompensasi Tambahan"
   },
+  "compensation_and_benefits": {
+    "title": "Kompensasi",
+    "table": {
+      "table_cols_item": {
+        "cnb_profile_name": "C",
+        "base_compensation": "Kompensasi Dasar",
+        "supplementary_compensation": "Kompensasi Tambahan",
+        "date_created": "Tanggal Diciptakan",
+        "last_update": "Pembaharuan Terakhir"
+      }
+    },
+    "form": {
+      "create_title": "Buat C Baru",
+      "update_title": "Memperbaharui profil",
+      "profile_name": "Nama profil",
+      "profile_name_placeholder": "Masukkan Nama Profil",
+      "compensation_sub_title": "Kompensasi",
+      "base_section": {
+        "title": "Basis",
+        "compensation_component": "Komponen Kompensasi",
+        "compensation_component_placeholder": "Pilih komponen kompensasi dasar",
+        "tax_status": "Status Pajak",
+        "tax_status_option": {
+          "taxable": "Kena Pajak",
+          "nontaxable": "Tidak Kena Pajak"
+        }
+      },
+      "overtime_section": {
+        "title": "Lembur",
+        "rate": "Kecepatan"
+      },
+      "supplementary_section": {
+        "title": "Tambahan",
+        "compensation_component": "Komponen Kompensasi",
+        "tax_status": "Status Pajak",
+        "tax_status_option": {
+          "taxable": "Kena Pajak",
+          "nontaxable": "Tidak Kena Pajak"
+        },
+        "amount": "Jumlah"
+      }
+    },
+    "popup": {
+      "delete": {
+        "title": "Apakah Anda yakin ingin menghapus catatan ini?",
+        "desc": "Setiap perubahan yang belum disimpan akan dibuang. "
+      },
+      "detail": {
+        "title": "C",
+        "cnb_profile_name": "C",
+        "date_created": "Tanggal Diciptakan",
+        "last_update": "Pembaharuan Terakhir",
+        "base_section": {
+          "title": "Basis",
+          "compensation_component": "Komponen Kompensasi",
+          "compensation_component_placeholder": "Pilih komponen kompensasi dasar",
+          "tax_status": "Status Pajak",
+          "tax_status_option": {
+            "taxable": "Kena Pajak",
+            "nontaxable": "NTaxable"
+          },
+          "amount_per_month": "Jumlah per Bulan"
+        },
+        "supplementary_section": {
+          "title": "Tambahan",
+          "compensation_component": "Komponen Kompensasi",
+          "tax_status": "Status Pajak",
+          "tax_status_option": {
+            "taxable": "Kena Pajak",
+            "nontaxable": "NTaxable"
+          },
+          "amount_month": "Jumlah Bulanan"
+        }
+      }
+    }
+  },
+
   "income_tax_profile": {
     "deductable_component": {
       "title": "Dasbor Komponen yang Dapat Dikurangi",
