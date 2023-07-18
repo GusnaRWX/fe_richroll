@@ -113,6 +113,18 @@
         "title": "您确定要删除此记录吗？",
         "desc": "任何未保存的更改都将被丢弃。"
       },
+      "create_cancel": {
+        "title": "您确定要删除此记录吗？",
+        "desc": "任何未保存的更改都将被丢弃。"
+      },
+      "update_cancel": {
+        "title": "您确定要离开吗？",
+        "desc": "任何未保存的更改都将被丢弃"
+      },
+      "update_save": {
+        "title": "保存更改",
+        "desc": "您确定要使用此数据更新个人资料吗？"
+      },
       "detail": {
         "title": "C",
         "cnb_profile_name": "C",
@@ -127,7 +139,8 @@
             "taxable": "应纳税",
             "nontaxable": "N应税"
           },
-          "amount_per_month": "每月金额"
+          "amount_per": "每份金额",
+          "rate_per": "每人费率 "
         },
         "supplementary_section": {
           "title": "补充",

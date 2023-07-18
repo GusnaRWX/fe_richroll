@@ -113,6 +113,18 @@
         "title": "Adakah anda pasti mahu memadamkan rekod ini?",
         "desc": "Sebarang perubahan yang tidak disimpan akan dibuang. "
       },
+      "create_cancel": {
+        "title": "Adakah anda pasti mahu memadamkan rekod ini?",
+        "desc": "Sebarang perubahan yang tidak disimpan akan dibuang. "
+      },
+      "update_cancel": {
+        "title": "Adakah anda pasti mahu pergi?",
+        "desc": "Sebarang perubahan yang tidak disimpan akan dibuang"
+      },
+      "update_save": {
+        "title": "Simpan Perubahan",
+        "desc": "Adakah anda pasti mahu mengemas kini profil dengan data ini? "
+      },
       "detail": {
         "title": "C",
         "cnb_profile_name": "C",
@@ -127,7 +139,8 @@
             "taxable": "Bercukai",
             "nontaxable": "Tidak boleh cukai"
           },
-          "amount_per_month": "Amaun setiap Bulanan"
+          "amount_per": "Jumlah setiap",
+          "rate_per": "Kadar setiap"
         },
         "supplementary_section": {
           "title": "Tambahan",

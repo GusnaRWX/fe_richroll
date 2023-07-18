@@ -113,6 +113,18 @@
         "title": "Apakah Anda yakin ingin menghapus catatan ini?",
         "desc": "Setiap perubahan yang belum disimpan akan dibuang. "
       },
+      "create_cancel": {
+        "title": "Apakah Anda yakin ingin menghapus rekaman ini?",
+        "desc": "Setiap perubahan yang belum disimpan akan dibuang. "
+      },
+      "update_cancel": {
+        "title": "Apakah Anda yakin ingin pergi?",
+        "desc": "Setiap perubahan yang belum disimpan akan dibuang"
+      },
+      "update_save": {
+        "title": "Simpan perubahan",
+        "desc": "Yakin ingin memperbarui profil dengan data ini? "
+      },
       "detail": {
         "title": "Detil Profil C&B",
         "cnb_profile_name": "Nama Profil C&B",
@@ -127,7 +139,8 @@
             "taxable": "Kena Pajak",
             "nontaxable": "NTaxable"
           },
-          "amount_per_month": "Jumlah per Bulan"
+          "amount_per": "Jumlah per",
+          "rate_per": "Tingkat per "
         },
         "supplementary_section": {
           "title": "Tambahan",
