@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { Typography, Card, Grid, Box, Button as MuiButton, Tab, Tabs } from '@mui/material';
 import { DateRangePicker, Input } from '@/components/_shared/form';
 import { styled } from '@mui/material/styles';
-// import { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import AttendanceTable from './AttendanceTable';
 import CustomModal from '@/components/_shared/common/CustomModal';
 import { getCompanyData } from '@/utils/helper';
-import { useAppDispatch, useAppSelectors } from '@/hooks/index';
-import { postPayrollGrossesRequested, postPayrollRequested } from '@/store/reducers/slice/payroll/payrollSlice';
+import { useAppDispatch } from '@/hooks/index';
+import { postPayrollRequested } from '@/store/reducers/slice/payroll/payrollSlice';
 import { useFormik } from 'formik';
 import dayjs from 'dayjs';
 import * as Yup from 'yup';
@@ -69,13 +69,11 @@ function a11yProps(index: number) {
 }
 
 function AttendanceComponent() {
-  // const router = useRouter();
+  const router = useRouter();
   const [value, setValue] = useState(0);
   const [open, setOpen] = useState(false);
   const companyData = getCompanyData();
   const dispatch = useAppDispatch();
-  const payrollId = useAppSelectors(state => state.payroll);
-  console.log(payrollId, 'henceut');
   const formik = useFormik({
     initialValues: {
       name: '',
@@ -106,15 +104,6 @@ function AttendanceComponent() {
           start: dayjs(values.date[0]).toISOString(),
           end: dayjs(values.date[1]).toISOString()
         }
-      }
-    });
-  };
-
-  const handlePostGrosses = () => {
-    dispatch({
-      type: postPayrollGrossesRequested.toString(),
-      payload: {
-        payroll_id: payrollId?.data?.items?.map(item => item?.id)
       }
     });
   };
@@ -150,16 +139,16 @@ function AttendanceComponent() {
             </Tabs>
           </Box>
           <TabPanel value={value} index={0}>
-            <AttendanceTable tabValue={value} />
+            <AttendanceTable tabValue={value}/>
           </TabPanel>
           <TabPanel value={value} index={1}>
-            <AttendanceTable tabValue={value} />
+            <AttendanceTable tabValue={value}/>
           </TabPanel>
           <TabPanel value={value} index={2}>
-            <AttendanceTable tabValue={value} />
+            <AttendanceTable tabValue={value}/>
           </TabPanel>
           <TabPanel value={value} index={3}>
-            <AttendanceTable tabValue={value} />
+            <AttendanceTable tabValue={value}/>
           </TabPanel>
         </Box>
 
@@ -171,7 +160,7 @@ function AttendanceComponent() {
                 variant='contained'
                 size='small'
                 color='primary'
-                onClick={handlePostGrosses}
+                onClick={() => { router.push('/payroll-disbursement/payroll/generate-gross/employee'); }}
               >Generate Gross Payroll</MuiButton>
             </Grid>
           </Grid>

@@ -12,7 +12,6 @@ import { visuallyHidden } from '@mui/utils';
 import { useRouter } from 'next/router';
 import { ConfirmationModal } from '@/components/_shared/common';
 import EmptyState from '@/components/_shared/common/EmptyState';
-import { useTranslation } from 'react-i18next';
 
 // Import Icon React Icon
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -27,11 +26,11 @@ const ButtonWrapper = styled.div`
 `;
 
 const headerItems = [
-  { id: 'company_name', label: 'Company Name' },
+  { id: 'name', label: 'Company Name' },
   { id: 'country', label: 'Country' },
-  { id: 'contributors', label: 'Contributor(s)' },
-  { id: 'rate_type', label: 'Rate Type' },
-  { id: 'created_on', label: 'Created On' },
+  { id: 'contributor', label: 'Contributor(s)' },
+  { id: 'type', label: 'Rate Type' },
+  { id: 'created', label: 'Created On' },
   { id: 'last_update', label: 'last Updated' },
   { id: 'action', label: '' },
 ];
@@ -39,12 +38,6 @@ const headerItems = [
 type Order = 'asc' | 'desc';
 
 function SutatoryBenefitComponentTable() {
-  // Translate Key
-  const {t} = useTranslation();
-  const t_tableKey = 'satutory_benefit.component.table';
-  const t_modalKey = 'satutory_benefit.component.modal';
-
-
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
   const [direction, setDirection] = useState<Order>('desc');
@@ -154,7 +147,7 @@ function SutatoryBenefitComponentTable() {
                   direction={sort === item.id ? direction : 'asc'}
                   onClick={(e) => handleRequestSort(e, item.id)}
                 >
-                  {t(t_tableKey + '.' + item.id)}
+                  {item.label}
                   {sort === item.id ? (
                     <Box component='span' sx={visuallyHidden}>
                       {direction === 'asc'
@@ -212,8 +205,8 @@ function SutatoryBenefitComponentTable() {
             <ConfirmationModal
               open={DeleteConfirmation}
               handleClose={() => setDeleteConfirmation(false)}
-              title={t(`${t_modalKey}.delete.title`)}
-              content={t(`${t_modalKey}.delete.text`)}
+              title='Delete Data Entry'
+              content='You are about to delete this statutory benefit component. This action cannot be undone.'
               withCallback
               noChange={true}
               callback={() => setDeleteConfirmation(false)}
