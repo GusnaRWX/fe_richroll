@@ -11,6 +11,7 @@ import { postPayrollRequested } from '@/store/reducers/slice/payroll/payrollSlic
 import { useFormik } from 'formik';
 import dayjs from 'dayjs';
 import * as Yup from 'yup';
+import { useTranslation } from 'react-i18next';
 
 const validationPostPayrolls = Yup.object({
   name: Yup.string().required('This field is required')
@@ -85,6 +86,10 @@ function AttendanceComponent() {
     }
   });
 
+
+  const { t } = useTranslation();
+  const tPath = 'payroll_and_disbursement.attendance_summary.';
+
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
@@ -112,8 +117,8 @@ function AttendanceComponent() {
     <>
       <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
         <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
-          <Typography variant='h5' color='primary.main'>Payroll Operation</Typography>
-          <Typography variant='text-base' color='#4B5563'>Attendance Summary</Typography>
+          <Typography variant='h5' color='primary.main'>{t(`${tPath}title`)}</Typography>
+          <Typography variant='text-base' color='#4B5563'>{t(`${tPath}sub_title`)}</Typography>
         </Grid>
         <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
           <ButtonWrapper>
@@ -123,7 +128,7 @@ function AttendanceComponent() {
               color='primary'
               sx={{ color: 'white' }}
               onClick={() => { setOpen(true); }}
-            >Generate Attendance Report</MuiButton>
+            >{t('button.generate_attendance_report')}</MuiButton>
           </ButtonWrapper>
         </Grid>
       </Grid>
@@ -132,10 +137,10 @@ function AttendanceComponent() {
         <Box sx={{ width: '100%' }}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <Tabs value={value} onChange={handleChange} aria-label='basic tabs'>
-              <Tab sx={{ textTransform: 'none' }} label='Draft' {...a11yProps(0)} />
-              <Tab sx={{ textTransform: 'none' }} label='Confirmed' {...a11yProps(1)} />
-              <Tab sx={{ textTransform: 'none' }} label='Completed' {...a11yProps(2)} />
-              <Tab sx={{ textTransform: 'none' }} label='Archive' {...a11yProps(3)} />
+              <Tab sx={{ textTransform: 'none' }} label={t(`${tPath}table.tab_panel.draft`)} {...a11yProps(0)} />
+              <Tab sx={{ textTransform: 'none' }} label={t(`${tPath}table.tab_panel.confirmed`)} {...a11yProps(1)} />
+              <Tab sx={{ textTransform: 'none' }} label={t(`${tPath}table.tab_panel.completed`)} {...a11yProps(2)} />
+              <Tab sx={{ textTransform: 'none' }} label={t(`${tPath}table.tab_panel.archive`)} {...a11yProps(3)} />
             </Tabs>
           </Box>
           <TabPanel value={value} index={0}>
@@ -161,7 +166,7 @@ function AttendanceComponent() {
                 size='small'
                 color='primary'
                 onClick={() => { router.push('/payroll-disbursement/payroll/generate-gross/employee'); }}
-              >Generate Gross Payroll</MuiButton>
+              >{t('button.generate_gross_payroll')}</MuiButton>
             </Grid>
           </Grid>
         }
@@ -170,7 +175,7 @@ function AttendanceComponent() {
       <CustomModal
         open={open}
         handleClose={handleClose}
-        title='Create New Payroll'
+        title={t(`${tPath}popup.create.title`)}
         width='543px'
         handleConfirm={formik.handleSubmit}
         submitText='Submit'
@@ -180,8 +185,8 @@ function AttendanceComponent() {
             <Input
               name='name'
               withAsterisk
-              customLabel='Name'
-              placeholder='Input Name'
+              customLabel={t(`${tPath}popup.create.name_input_label`)}
+              placeholder={t(`${tPath}popup.create.name_input_placeholder`)}
               size='small'
               value={formik.values.name}
               onChange={formik.handleChange}
@@ -195,8 +200,8 @@ function AttendanceComponent() {
           <Grid item xs={12}>
             <DateRangePicker
               withAsterisk
-              customLabelStart='Start Date'
-              customLabelEnd='End Date'
+              customLabelStart={t(`${tPath}popup.create.start_date`)}
+              customLabelEnd={t(`${tPath}popup.create.end_date`)}
               onChange={(date) => formik.setFieldValue('date', date)}
             />
           </Grid>

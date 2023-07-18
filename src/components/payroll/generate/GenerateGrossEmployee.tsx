@@ -22,6 +22,7 @@ import { visuallyHidden } from '@mui/utils';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { getGenerateGrossPayrollRequested } from '@/store/reducers/slice/payroll/payrollSlice';
 import EmptyState from '@/components/_shared/common/EmptyState';
+import { useTranslation } from 'react-i18next';
 
 const ButtonWrapper = styled(Box)(({
   display: 'flex',
@@ -62,15 +63,15 @@ const ContentWrapper = styled(Card)(({
 }));
 
 const headerItems = [
-  { id: 'action', label: '' },
-  { id: 'user.name', label: 'Employee Name' },
-  { id: 'attendance', label: 'Attendance' },
-  { id: 'absent', label: 'Absent' },
-  { id: 'paidLeave', label: 'Paid Leave' },
-  { id: 'unpaidLeave', label: 'Unpaid Leave' },
-  { id: 'overtime', label: 'Overtime Hours' },
-  { id: 'total', label: 'Total Hours' },
-  { id: 'average', label: 'Average hours work/day' },
+  { id: 'action', label: '', translation: '' },
+  { id: 'user.name', label: 'Employee Name', translation: 'employee_name' },
+  { id: 'attendance', label: 'Attendance', translation: 'attendance' },
+  { id: 'absent', label: 'Absent', translation: 'absent' },
+  { id: 'paidLeave', label: 'Paid Leave', translation: 'paid_leave' },
+  { id: 'unpaidLeave', label: 'Unpaid Leave', translation: 'unpaid_leave' },
+  { id: 'overtime', label: 'Overtime Hours', translation: 'overtime_hours' },
+  { id: 'total', label: 'Total Hours', translation: 'total_hours' },
+  { id: 'average', label: 'Average hours work/day', translation: 'average_hours' },
 ];
 
 type Order = 'asc' | 'desc'
@@ -147,6 +148,8 @@ function GenerateGrossEmployee() {
   const [hydrated, setHaydrated] = useState(false);
   const [selectedTemp, setSelectedTemp] = useState<any>([]);
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
+  const tPath = 'payroll_and_disbursement.attendance_summary.generate_gross_payroll.';
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -241,7 +244,7 @@ function GenerateGrossEmployee() {
               onClick={() => { router.push('/payroll-disbursement/attendance'); }}
             />
             <Box>
-              <Typography variant='h6' color='#4B5563'><b>Generate Gross Payroll Report</b></Typography>
+              <Typography variant='h6' color='#4B5563'><b>{t(`${tPath}title`)}</b></Typography>
               <Typography variant='text-base' color='#4B5563'><b>Payroll 280123 — </b>1/03/2023 - 14/03/2023</Typography>
             </Box>
           </BackWrapper>
@@ -272,7 +275,7 @@ function GenerateGrossEmployee() {
                           direction={sort === item.id ? direction : 'asc'}
                           onClick={(e) => handleRequestSort(e, item.id)}
                         >
-                          {item.label}
+                          {t(`${tPath}table.table_cols_item.${item.translation}`)}
                           {sort === item.id ? (
                             <Box component='span' sx={visuallyHidden}>
                               {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
@@ -345,14 +348,14 @@ function GenerateGrossEmployee() {
                   size='small'
                   color='primary'
                   onClick={() => { router.push('/payroll-disbursement/attendance'); }}
-                >Cancel</MuiButton>
+                >{t('button.cancel')}</MuiButton>
                 <MuiButton
                   variant='contained'
                   size='small'
                   color='primary'
                   onClick={() => { router.push('/payroll-disbursement/payroll/generate-gross/detail'); }}
                   sx={{ color: 'white' }}
-                >Confirm</MuiButton>
+                >{t('button.confirm')}</MuiButton>
               </ButtonWrapper>
             </Grid>
           </Grid>

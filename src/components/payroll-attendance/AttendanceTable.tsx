@@ -24,6 +24,7 @@ import EmptyState from '../_shared/common/EmptyState';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { getPayrollRequested } from '@/store/reducers/slice/payroll/payrollSlice';
 import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
 
 const ButtonWrapper = styled.div`
  display: flex;
@@ -42,13 +43,12 @@ const TypeComponent = styled.div`
 `;
 
 const headerItems = [
-  { id: 'user.name', label: 'Name' },
-  { id: 'dateRange', label: 'Date Range' },
-  { id: 'type', label: 'Report Type' },
-  { id: 'user.createdAt', label: 'Created on' },
-  { id: 'user.lastUpdated', label: 'Last Updated' },
-  { id: 'attachment', label: 'Attachment' },
-  { id: 'action', label: '' },
+  { id: 'user.name', label: 'Name', translation: 'name' },
+  { id: 'dateRange', label: 'Date Range', translation: 'date_range' },
+  { id: 'type', label: 'Report Type', translation: 'report_type' },
+  { id: 'user.createdAt', label: 'Created on', translation: 'created_on' },
+  { id: 'user.lastUpdated', label: 'Last Updated', translation: 'last_updated' },
+  { id: 'attachment', label: 'Attachment', translation: 'attachment' },
 ];
 
 interface EmployeeTableProps {
@@ -72,6 +72,8 @@ function AttendanceTable({
   const companyData = getCompanyData();
   const { responser } = useAppSelectors((state) => state);
   const router = useRouter();
+  const { t } = useTranslation();
+  const tPath = 'payroll_and_disbursement.attendance_summary.';
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -161,7 +163,7 @@ function AttendanceTable({
                     direction={sort === item.id ? direction : 'asc'}
                     onClick={(e) => handleRequestSort(e, item.id)}
                   >
-                    {item.label}
+                    {t(`${tPath}table.table_cols_item.${item.translation}`)}
                     {sort === item.id ? (
                       <Box component='span' sx={visuallyHidden}>
                         {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
@@ -171,6 +173,7 @@ function AttendanceTable({
                 </TableCell>
               ))
             }
+            <TableCell />
           </TableRow>
         }
         bodyChildren={
@@ -287,8 +290,8 @@ function AttendanceTable({
       <ConfirmationModal
         open={deleteConfirmation}
         handleClose={() => setDeleteConfirmation(false)}
-        title='Delete Attendance from Payroll Operation?'
-        content='You are about to delete this attendance report. This action cannot be undone.'
+        title={t(`${tPath}popup.delete.title`)}
+        content={t(`${tPath}popup.delete.desc`)}
         withCallback
         noChange={true}
         callback={() => setDeleteConfirmation(false)}

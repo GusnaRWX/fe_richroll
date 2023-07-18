@@ -59,7 +59,12 @@
     "add_component": "Tambahkan Komponen",
     "add_new_component": "Tambahkan Komponen Baru",
     "component": "Komponen",
-    "deductable": "Dapat dikurangkan"
+    "deductable": "Dapat dikurangkan",
+    "create_new_payroll": "Buat Daftar Gaji Baru",
+    "generate_attendance_report": "Membuat Laporan Kehadiran",
+    "generate_gross_payroll": "Hasilkan Gross Payroll",
+    "add_ad_hoc": "Tambahkan Ad Hoc",
+    "calculate": "Menghitung"
   },
   "income_tax_profile": {
     "deductable_component": {
