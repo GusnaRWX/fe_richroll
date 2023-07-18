@@ -1011,8 +1011,8 @@ export default function UpdateCNBComponent() {
             <ConfirmationModal
               open={openMsg}
               handleClose={() => setOpenMsg(false)}
-              title='Save Changes'
-              content='Are you sure you want to update profile with this data? Any unsaved changes made to data will be discarded'
+              title={t('compensation_and_benefits.popup.update_save.title')}
+              content={t('compensation_and_benefits.popup.update_save.desc')}
               withCallback
               noChange={true}
               callback={() => UpdateCnbProfile(formik.values)}
@@ -1023,8 +1023,8 @@ export default function UpdateCNBComponent() {
       <ConfirmationModal
         open={leave}
         handleClose={handleClose}
-        title='Are you sure you want to leave?'
-        content='Any unsaved changes will be discarded'
+        title={t('compensation_and_benefits.popup.update_cancel.title')}
+        content={t('compensation_and_benefits.popup.update_cancel.desc')}
         withCallback
         callback={() => {
           router.push('/compensation-benefits');

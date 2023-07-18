@@ -1014,8 +1014,8 @@ export default function CreateCNBComponent() {
       <ConfirmationModal
         open={leave}
         handleClose={handleClose}
-        title={t('compensation_and_benefits.popup.delete.title')}
-        content={t('compensation_and_benefits.popup.delete.desc')}
+        title={t('compensation_and_benefits.popup.create_cancel.title')}
+        content={t('compensation_and_benefits.popup.create_cancel.desc')}
         withCallback
         callback={() => {
           router.push('/compensation-benefits');
