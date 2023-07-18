@@ -14,6 +14,7 @@ import { visuallyHidden } from '@mui/utils';
 import { useRouter } from 'next/router';
 import { ConfirmationModal, CustomModal } from '@/components/_shared/common';
 import EmptyState from '@/components/_shared/common/EmptyState';
+import { useTranslation } from 'react-i18next';
 
 // Import Icon React Icon
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -34,19 +35,17 @@ const headerItems = [
   { id: 'name', label: 'Profile Name' },
   { id: 'country', label: 'Country' },
   { id: 'province', label: 'Province' },
-  { id: 'eperiod', label: 'Effective Period' },
-  { id: 'created', label: 'Created On' },
+  { id: 'effective_period', label: 'Effective Period' },
+  { id: 'created_on', label: 'Created On' },
   { id: 'last_update', label: 'last Updated' },
-  { id: 'action', label: '' },
 ];
 
 const DraftHeaderItems = [
   { id: 'name', label: 'Name' },
   { id: 'country', label: 'Country' },
-  { id: 'eperiod', label: 'Effective Period' },
-  { id: 'created', label: 'Created On' },
+  { id: 'effective_period', label: 'Effective Period' },
+  { id: 'created_on', label: 'Created On' },
   { id: 'last_update', label: 'last Updated' },
-  { id: 'action', label: '' },
 ];
 
 interface SutatoryBenefitProfileTableProps {
@@ -79,6 +78,11 @@ function SutatoryBenefitProfileTable({
   const [activateConfirmation, setActivateConfirmation] = useState(false);
   const [archiveConfirmation, setArchiveConfirmation] = useState(false);
   const [hydrated, setHaydrated] = useState(false);
+  const {t} = useTranslation();
+  const router = useRouter();
+  function DetailActionHandler () {
+    router.push('/satutory-benefit/profile/detail');
+  }
 
   const data = {
     items: [
@@ -139,6 +143,7 @@ function SutatoryBenefitProfileTable({
     setPage(0);
   };
 
+
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
     headId: string
@@ -154,11 +159,6 @@ function SutatoryBenefitProfileTable({
 
   if (!hydrated) {
     return null;
-  }
-
-  const router = useRouter();
-  function DetailActionHandler() {
-    router.push('/satutory-benefit/profile/detail');
   }
 
   return (
@@ -183,7 +183,7 @@ function SutatoryBenefitProfileTable({
                     direction={sort === item.id ? direction : 'asc'}
                     onClick={(e) => handleRequestSort(e, item.id)}
                   >
-                    {item.label}
+                    {t(`satutory_benefit.profile.table.${item.id}`)}
                     {sort === item.id ? (
                       <Box component='span' sx={visuallyHidden}>
                         {direction === 'asc'
@@ -194,6 +194,7 @@ function SutatoryBenefitProfileTable({
                   </TableSortLabel>
                 </TableCell>
               ))}
+              <TableCell />
             </TableRow>
             : <TableRow>
               {headerItems.map((item) => (
@@ -206,7 +207,7 @@ function SutatoryBenefitProfileTable({
                     direction={sort === item.id ? direction : 'asc'}
                     onClick={(e) => handleRequestSort(e, item.id)}
                   >
-                    {item.label}
+                    {t(`satutory_benefit.profile.table.${item.id}`)}
                     {sort === item.id ? (
                       <Box component='span' sx={visuallyHidden}>
                         {direction === 'asc'
@@ -217,6 +218,7 @@ function SutatoryBenefitProfileTable({
                   </TableSortLabel>
                 </TableCell>
               ))}
+              <TableCell />
             </TableRow>
         }
         bodyChildren={
@@ -256,7 +258,7 @@ function SutatoryBenefitProfileTable({
                             color='green'
                             sx={{ bgcolor: '#DCFCE7', color: '#16A34A' }}
                             startIcon={<HiUpload />}
-                            label='Activate'
+                            label={t('button.activate')}
                             onClick={() => setActivateConfirmation(true)}
                           />
                         )}
@@ -291,7 +293,7 @@ function SutatoryBenefitProfileTable({
                             color='orange'
                             sx={{ bgcolor: '#FFEDD5', color: '#F97316' }}
                             startIcon={<HiOutlineArchive />}
-                            label='Archive'
+                            label={t('button.archive')}
                             onClick={() => setArchiveConfirmation(true)}
                           />
                         )}
@@ -314,8 +316,8 @@ function SutatoryBenefitProfileTable({
         type='delete'
         open={DeleteConfirmation}
         handleClose={() => setDeleteConfirmation(false)}
-        title='Delete Data Entry'
-        content='You are about to delete this attendance data entry. This action cannot be undone.'
+        title={t('satutory_benefit.profile.modal.delete.title')}
+        content={t('satutory_benefit.profile.modal.delete.text')}
         withCallback
         noChange={true}
         callback={() => setDeleteConfirmation(false)}
@@ -323,8 +325,8 @@ function SutatoryBenefitProfileTable({
       <ConfirmationModal
         open={DuplicateConfirmation}
         handleClose={() => setDuplicateConfirmation(false)}
-        title='Confirmation'
-        content='Are you sure you want to duplicate this profile ?'
+        title={t('satutory_benefit.profile.modal.duplicate.title')}
+        content={t('satutory_benefit.profile.modal.duplicate.text')}
         withCallback
         noChange={true}
         callback={() => setDuplicateConfirmation(false)}
@@ -333,19 +335,19 @@ function SutatoryBenefitProfileTable({
         open={activateConfirmation}
         handleClose={() => setActivateConfirmation(false)}
         handleConfirm={() => setActivateConfirmation(false)}
-        title='Publication Date'
+        title={t('satutory_benefit.profile.modal.activate.title')}
         width='40%'
       >
         <Grid container p={2} spacing={2}>
           <Grid item xs={12} md={12} lg={12} xl={12}>
-            <Typography>Do you want to Activate the tax profile?</Typography>
+            <Typography>{t('satutory_benefit.profile.modal.activate.text')}</Typography>
           </Grid>
           <Grid item container spacing={2}>
             <Grid item xs={12} md={6} lg={6} xl={6}>
-              <DatePicker customLabel='Effective Date' />
+              <DatePicker customLabel={t('satutory_benefit.profile.modal.activate.effective_date')} />
             </Grid>
             <Grid item xs={12} md={6} lg={6} xl={6}>
-              <DatePicker customLabel='Expiration Date' />
+              <DatePicker customLabel={t('satutory_benefit.profile.modal.activate.expiration_date')} />
             </Grid>
           </Grid>
         </Grid>
@@ -354,12 +356,12 @@ function SutatoryBenefitProfileTable({
         open={archiveConfirmation}
         handleClose={() => setArchiveConfirmation(false)}
         handleConfirm={() => setArchiveConfirmation(false)}
-        title='Archivation Date'
+        title={t('satutory_benefit.profile.modal.archive.title')}
         width='40%'
       >
         <Grid>
-          <DatePicker customLabel='Input Effective Archivation Date' withAsterisk />
-          <CheckBox customLabel='Replace with New Profile' />
+          <DatePicker customLabel={t('satutory_benefit.profile.modal.archive.input_date')} withAsterisk />
+          <CheckBox customLabel={t('satutory_benefit.profile.modal.archive.replace')} />
         </Grid>
       </CustomModal>
     </>

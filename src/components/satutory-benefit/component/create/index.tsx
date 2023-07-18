@@ -1,152 +1,252 @@
-/* eslint-disable @typescript-eslint/indent */
 import React, { useState } from 'react';
-import { IconButton } from '@/components/_shared/form';
+import {
+  Typography,
+  Card,
+  Grid,
+  Box,
+  Stepper,
+  Step,
+  StepLabel,
+  Button as MuiButton } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { Typography, Box, Paper, Tabs, Tab } from '@mui/material';
-import { ArrowBack } from '@mui/icons-material';
 import { useRouter } from 'next/router';
+import CustomModal from '@/components/_shared/common/CustomModal';
+import { ifThenElse } from '@/utils/helper';
+import { useTranslation } from 'react-i18next';
+import { IconButton } from '@/components/_shared/form';
+import { ArrowBack } from '@mui/icons-material';
 
-// Import Create Component
+// Import Create Component :
 import CreateBasicDetailComponent from './CreateBasicDetail';
 import CreateDesignedTransferAccount from './CreateDesignedTransferAccount';
 import CreateRates from './CreateRates';
 
-export default function CreateNewComponent() {
+const ButtonWrapper = styled(Box)(({
+  display: 'flex',
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'flex-end',
+  gap: '1rem',
+  marginTop: '.1rem'
+}));
+
+const ContentWrapper = styled(Card)(({
+  padding: '1rem',
+  borderRadius: '0px',
+  marginBottom: '1rem'
+}));
+
+function CreateNewComponent() {
+  // Translation key :
+  const {t} = useTranslation();
+  const t_buttonKey = 'satutory_benefit.component.button';
+  const t_key = 'satutory_benefit.component.form_&_detail';
+
   const router = useRouter();
-
-  const Header = styled('div')({
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: '32px',
-  });
-
-  const HeaderPageTitle = styled('div')({
-    display: 'flex',
-    gap: '16px',
-    alignItems: 'center',
-  });
-
-  // const BpIcon = styled('span')(({ theme }) => ({
-  //   borderRadius: '50%',
-  //   width: 16,
-  //   height: 16,
-  //   boxShadow:
-  //     theme.palette.mode === 'dark'
-  //       ? '0 0 0 1px rgb(16 22 26 / 40%)'
-  //       : 'inset 0 0 0 1px rgba(16,22,26,.2), inset 0 -1px 0 rgba(16,22,26,.1)',
-  //   backgroundColor: theme.palette.mode === 'dark' ? '#394b59' : '#f5f8fa',
-  //   backgroundImage:
-  //     theme.palette.mode === 'dark'
-  //       ? 'linear-gradient(180deg,hsla(0,0%,100%,.05),hsla(0,0%,100%,0))'
-  //       : 'linear-gradient(180deg,hsla(0,0%,100%,.8),hsla(0,0%,100%,0))',
-  //   '.Mui-focusVisible &': {
-  //     outline: '2px auto rgba(19,124,189,.6)',
-  //     outlineOffset: 2,
-  //   },
-  //   'input:hover ~ &': {
-  //     backgroundColor: theme.palette.mode === 'dark' ? '#30404d' : '#ebf1f5',
-  //   },
-  //   'input:disabled ~ &': {
-  //     boxShadow: 'none',
-  //     background:
-  //       theme.palette.mode === 'dark'
-  //         ? 'rgba(57,75,89,.5)'
-  //         : 'rgba(206,217,224,.5)',
-  //   },
-  // }));
-
-  // const BpCheckedIcon = styled(BpIcon)({
-  //   backgroundColor: '#137cbd',
-  //   backgroundImage:
-  //     'linear-gradient(180deg,hsla(0,0%,100%,.1),hsla(0,0%,100%,0))',
-  //   '&:before': {
-  //     display: 'block',
-  //     width: 16,
-  //     height: 16,
-  //     backgroundImage: 'radial-gradient(#fff,#fff 28%,transparent 32%)',
-  //     content: '',
-  //   },
-  //   'input:hover ~ &': {
-  //     backgroundColor: '#106ba3',
-  //   },
-  // });
-
   const [value, setValue] = useState(0);
+  const [open, setOpen] = useState(false);
+  const [isExit, setIsExit] = useState(true);
 
-  interface TabPanelProps {
-    children?: React.ReactNode;
-    index: number;
-    value: number;
-  }
-
-  function TabPanel(props: TabPanelProps) {
-    const { children, value, index, ...other } = props;
-
-    return (
-      <div
-        role='tabpanel'
-        hidden={value !== index}
-        id={`simple-tabpanel-${index}`}
-        {...other}
-      >
-        {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
-      </div>
-    );
-  }
-
-  function a11yProps(index: number) {
-    return {
-      id: `simple-tab-${index}`,
-      'aria-controls': `simple-tabpanel-${index}`,
-    };
-  }
-
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
+  const handleClose = () => {
+    setOpen(false);
   };
+
+  const handleConfirm = () => {
+    // router.push('/income-tax-profile/deductable-component');
+    let payload = {};
+    if (ratesValue.employerMatch && ratesValue.employer && ratesValue.employee) {
+      payload= {
+        employee: ratesValue.employeeData,
+        employer: ratesValue.employeeData,
+      };
+    } else if (ratesValue.employee && ratesValue.employer && !ratesValue.employerMatch) {
+      payload = {
+        employee: ratesValue.employeeData,
+        employer: ratesValue.employerData,
+      };
+    } else if (ratesValue.employee) {
+      payload = {
+        employee: ratesValue.employeeData,
+      };
+    } else if (ratesValue.employer) {
+      payload = {
+        employer: ratesValue.employerData,
+      };
+    }
+    console.log('basicDetail: ', basicDetailValue);
+    console.log('dta: ', dtaValue);
+    console.log('rates: ', payload);
+  };
+
+  const steps = [
+    t(`${t_key}.wizard_option.basic_detail`),
+    t(`${t_key}.wizard_option.designed_transfer_account`),
+    t(`${t_key}.wizard_option.rate`),
+  ];
+
+  const [basicDetailValue, setBasicDetailValue] = useState({
+    satutoryName: '',
+    country: '',
+    province: '',
+    city: '',
+    subDistrict: '',
+    citation: '',
+    internalNotes: '',
+    externalNotes: '',
+  });
+
+  const [dtaValue, setDtaValue] = useState({
+    bank: '',
+    holder: '',
+    no: '',
+    bankCode: '',
+    branchCode: '',
+    branchName: '',
+    swiftCode: '',
+    notes: '',
+  });
+
+  const [ratesValue, setRatesValue] = useState({
+    employee: true,
+    employer: false,
+    employerMatch: true,
+    employeeData: {
+      start: 0,
+      end: 0,
+      rate: '',
+      fixed: 0,
+      amountCap: 0,
+    },
+    employerData: {
+      start: 0,
+      end: 0,
+      rate: '',
+      fixed: 0,
+      amountCap: 0,
+    },
+  });
 
   return (
     <>
-      <Header>
-        <HeaderPageTitle>
-          <IconButton
-            parentColor='primary.500'
-            icons={<ArrowBack sx={{ color: '#FFFFFF' }} />}
-            onClick={() => {
-              router.push('/satutory-benefit/component');
-            }}
-          />
-          <Typography
-            style={{
-              color: '#223567',
-              fontSize: '20px',
-              fontWeight: '700',
-              width: '250px',
-            }}
-          >
-            Add New Component
-          </Typography>
-        </HeaderPageTitle>
-      </Header>
-      <Paper sx={{ width: '100%', p: '21px 32px' }}>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <Tabs value={value} onChange={handleChange} aria-label='basic tabs'>
-            <Tab label='Basic Detail' {...a11yProps(0)} />
-            <Tab label='Designated Transfer Account' {...a11yProps(1)} />
-            <Tab label='Rates' {...a11yProps(2)} />
-          </Tabs>
+      <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
+        <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+          <Box sx={{display:'flex', alignItems : 'center',gap:'16px'}}>
+            <IconButton
+              parentColor='primary.500'
+              icons={<ArrowBack sx={{ color: '#FFFFFF' }} />}
+              onClick={() => {
+                router.push('/satutory-benefit/component');
+              }}
+            />
+            <Typography variant='h6' color='#4B5563'><b>{t(`${t_key}.dashboard_title`)}</b></Typography>
+          </Box>
+        </Grid>
+        <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+          <ButtonWrapper>
+            {value === 2 ?
+              <>
+                <MuiButton
+                  variant='outlined'
+                  size='small'
+                  color='primary'
+                  onClick={() => {
+                    setIsExit(true);
+                    setOpen(true);
+                  }}
+                >{t(`button.cancel`)}</MuiButton>
+                <MuiButton
+                  variant='contained'
+                  size='small'
+                  color='primary'
+                  onClick={() => {
+                    setIsExit(false);
+                    setOpen(true);
+                  }}
+                >{t(`button.save`)}</MuiButton>
+              </>
+              : <></>}
+          </ButtonWrapper>
+        </Grid>
+      </Grid>
+
+      <ContentWrapper>
+        <Box sx={{ width: '100%' }}>
+          <Stepper activeStep={value} alternativeLabel sx={{ marginTop: '45px' }}>
+            {steps.map((label) => (
+              <Step key={label} sx={{
+                '> .MuiStepConnector-root': {
+                  left: 'calc(-50% + 10px)',
+                  right: 'calc(50% + 10px)',
+                  '> .MuiStepConnector-line': {
+                    borderTopWidth: '2px',
+                    marginTop: '-20px !important'
+                  }
+                },
+                '> .Mui-active > .MuiStepConnector-line, > .Mui-completed > .MuiStepConnector-line': {
+                  borderColor: '#1C2C56'
+                },
+                '> .Mui-disabled > .MuiStepConnector-line': {
+                  borderColor: '#D1D5DB'
+                },
+              }}>
+                <StepLabel
+                  sx={{
+                    '& .Mui-completed, & .Mui-disabled': {
+                      color: '#D1D5DB !important',
+                    },
+                    '& .MuiStepLabel-alternativeLabel': {
+                      fontWeight: '400 !important',
+                      marginTop: '-20px !important'
+                    },
+                  }}
+                  StepIconComponent={({ active, completed }) => {
+                    return ifThenElse(
+                      active,
+                      <Box sx={{ width: '12px', height: '12px', border: '2px solid #1C2C56', borderRadius: '12px', background: '#FFF', top: '6px', position: 'relative' }}></Box>,
+                      ifThenElse(
+                        completed,
+                        <Box sx={{ width: '12px', height: '12px', borderRadius: '12px', background: '#1C2C56', top: '6px', position: 'relative' }}></Box>,
+                        <Box sx={{ width: '12px', height: '12px', borderRadius: '12px', background: '#D1D5DB', top: '6px', position: 'relative' }}></Box>
+                      )
+                    );
+                  }}
+                >
+                  {label}
+                </StepLabel>
+              </Step>
+            ))}
+          </Stepper>
         </Box>
-        <TabPanel value={value} index={0}>
-          <CreateBasicDetailComponent setValue={setValue} />
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          <CreateDesignedTransferAccount setValue={setValue} />
-        </TabPanel>
-        <TabPanel value={value} index={2}>
-          <CreateRates />
-        </TabPanel>
-      </Paper>
+        <Box sx={{mt:'16px'}}>
+          {value == 0 && <CreateBasicDetailComponent nextPage={setValue} basicValue={basicDetailValue} setValue={setBasicDetailValue} />}
+          {value == 1 && <CreateDesignedTransferAccount nextPage={setValue} dtaValue={dtaValue} setValue={setDtaValue} />}
+          {value == 2 && <CreateRates nextPage={setValue} ratesValue={ratesValue} setValue={setRatesValue} />}
+        </Box>
+      </ContentWrapper>
+
+
+
+      <CustomModal
+        open={open}
+        handleClose={handleClose}
+        title={ifThenElse(isExit, t(`${t_buttonKey}.cancel`), t(`${t_buttonKey}.save`))}
+        width='543px'
+        handleConfirm={handleConfirm}
+      >
+        <Grid container mt='1rem' mb='1rem'>
+          <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+            {
+              ifThenElse(
+                isExit,
+                <Typography variant='text-base' color='#4B5563'>You will stop the process, and saved in Payroll Assistant.<br/>Are you sure to stop the process?</Typography>,
+                <Typography variant='text-base' color='#4B5563'>All disbursement will marked paid and complete the Payroll Assistant process</Typography>
+              )
+            }
+          </Grid>
+        </Grid>
+      </CustomModal>
     </>
   );
 }
+
+export default CreateNewComponent;

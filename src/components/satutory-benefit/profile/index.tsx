@@ -17,6 +17,7 @@ import { useRouter } from 'next/router';
 import BasicDatePicker from '@/components/_shared/form/DatePicker';
 import styled from '@emotion/styled';
 import SutatoryBenefitProfileTable from './SatutoryBenefitProfileTable';
+import { useTranslation } from 'react-i18next';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -49,6 +50,7 @@ function a11yProps(index: number) {
 const SatutoryBenefitProfile = () => {
   const router = useRouter();
   const [value, setValue] = useState(0);
+  const {t} = useTranslation();
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
@@ -71,7 +73,7 @@ const SatutoryBenefitProfile = () => {
     <>
       <TitleWrapper>
         <Typography variant='h5'>
-          Statutory Benefits Profile Dashboard
+          {t('satutory_benefit.profile.title')}
         </Typography>
         <div>
           <Button
@@ -79,7 +81,7 @@ const SatutoryBenefitProfile = () => {
               router.push('/satutory-benefit/profile/add-new-profile')
             }
             startIcon={<AddIcon />}
-            label='Add New Profile'
+            label={t('button.add_new_profile')}
           />
         </div>
       </TitleWrapper>
@@ -93,9 +95,9 @@ const SatutoryBenefitProfile = () => {
             }}
           >
             <Tabs value={value} onChange={handleChange} aria-label='basic tabs'>
-              <Tab label='Draft' {...a11yProps(0)} />
-              <Tab label='Active' {...a11yProps(1)} />
-              <Tab label='Archived' {...a11yProps(2)} />
+              <Tab label={t('satutory_benefit.profile.table.table_tabs.draft')} {...a11yProps(0)} />
+              <Tab label={t('satutory_benefit.profile.table.table_tabs.active')} {...a11yProps(1)} />
+              <Tab label={t('satutory_benefit.profile.table.table_tabs.archived')} {...a11yProps(2)} />
             </Tabs>
           </Box>
         </Box>
