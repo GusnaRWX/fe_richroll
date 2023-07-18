@@ -20,6 +20,7 @@ import { useFormik } from 'formik';
 import { Payroll } from '@/types/payroll';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { getListBaseCompensationRequested, getListTerminReqeusted, getListSuppCompensationRequested } from '@/store/reducers/slice/options/optionSlice';
+import { numberFormat } from '@/utils/format';
 
 const ButtonWrapper = styled.div`
  display: flex;
@@ -39,6 +40,7 @@ const NameWrapper = styled.div`
 
 function GrossRow(att) {
   const { item, isPreview } = att;
+  console.log(item, 'item');
   const [open, setOpen] = useState(false);
   const dispatch = useAppDispatch();
   const { option } = useAppSelectors(state => state);
@@ -101,19 +103,19 @@ function GrossRow(att) {
         <TableCell>
           <NameWrapper>
             <Avatar
-              src={ImageType.AVATAR_PLACEHOLDER}
-              alt={item.name}
+              src={item.employee.picture !== '' ? item.employee.picture: ImageType.AVATAR_PLACEHOLDER }
+              alt={item.employee.name}
               sx={{
                 width: 24, height: 24
               }}
             />
-            &nbsp;{item.name}
+            &nbsp;{item.employee.name}
           </NameWrapper>
         </TableCell>
-        <TableCell>{item.attendance}</TableCell>
-        <TableCell>{item.absent}</TableCell>
-        <TableCell>{item.paidLeave}</TableCell>
-        <TableCell>{item.unpaidLeave}</TableCell>
+        <TableCell>Rp {numberFormat(item.totalBaseCompensation)}</TableCell>
+        <TableCell>Rp {numberFormat(item.totalSupplementaryCompensation)}</TableCell>
+        <TableCell>Rp {numberFormat(item.totalAddHokCompensation)}</TableCell>
+        <TableCell>Rp {numberFormat(item.totalGrossCompensation)}</TableCell>
         <TableCell>
           <ButtonWrapper>
             <IconButton
