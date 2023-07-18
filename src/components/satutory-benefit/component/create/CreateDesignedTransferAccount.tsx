@@ -1,4 +1,4 @@
-import { Input, Button} from '@/components/_shared/form';
+import { Input, Button } from '@/components/_shared/form';
 import { InfoOutlined } from '@mui/icons-material';
 import {
   Box,
@@ -9,35 +9,19 @@ import {
   Typography,
   RadioGroup,
   FormControlLabel,
+  Grid,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import React, { useState, SetStateAction, Dispatch } from 'react';
-import { useTranslation } from 'react-i18next';
+import React, { Dispatch, SetStateAction, useState } from 'react';
+
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-interface DtaValue {
-  bank: string
-  holder: string
-  no: string
-  bankCode: string
-  branchCode: string
-  branchName: string
-  swiftCode: string
-  notes: string
+interface CreateDesignedTransferAccountProps {
+  setValue: Dispatch<SetStateAction<number>>
 }
 
-interface PropsInterface {
-  nextPage: Dispatch<SetStateAction<number>>;
-  dtaValue: DtaValue;
-  setValue: Dispatch<SetStateAction<DtaValue>>;
-}
-
-export default function CreateDesignedTransferAccount({nextPage, dtaValue, setValue}: PropsInterface) {
-  // Translation Key
-  const {t} = useTranslation();
-  const t_key = 'satutory_benefit.component.form_&_detail.create_designed_transfer_account';
-
+export default function CreateDesignedTransferAccount({ setValue }: CreateDesignedTransferAccountProps) {
   const [account, setAccount] = useState('central');
 
   const AsteriskComponent = styled('span')(({ theme }) => ({
@@ -54,10 +38,6 @@ export default function CreateDesignedTransferAccount({nextPage, dtaValue, setVa
     marginTop: '32px',
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setAccount(e.target.value);
-  };
-
   const validationSchema = Yup.object({
     bank: Yup.string().required('This Field is Required'),
     holder: Yup.string().required('This Field is Required'),
@@ -71,21 +51,25 @@ export default function CreateDesignedTransferAccount({nextPage, dtaValue, setVa
 
   const formik = useFormik({
     initialValues: {
-      bank: dtaValue.bank,
-      holder: dtaValue.holder,
-      no: dtaValue.no,
-      bankCode: dtaValue.bankCode,
-      branchCode: dtaValue.branchCode,
-      branchName: dtaValue.branchName,
-      swiftCode: dtaValue.swiftCode,
-      notes: dtaValue.notes,
+      bank: '',
+      holder: '',
+      no: '',
+      bankCode: '',
+      branchCode: '',
+      branchName: '',
+      swiftCode: '',
+      notes: '',
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      setValue(values);
-      nextPage(2);
+      console.log(values);
+      setValue(2);
     },
   });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAccount(e.target.value);
+  };
 
   React.useEffect(() => {
     if (account !== 'central') {
@@ -94,11 +78,11 @@ export default function CreateDesignedTransferAccount({nextPage, dtaValue, setVa
   }, [account]);
 
   return (
-    <>
+    <Box component='div' sx={{ marginTop: '17px' }}>
       <Typography
         style={{ color: '#223567', fontWeight: 700, fontSize: '16px' }}
       >
-        {t(`${t_key}.form_title`)}
+        Bank Information
       </Typography>
       <Box
         component='div'
@@ -109,17 +93,17 @@ export default function CreateDesignedTransferAccount({nextPage, dtaValue, setVa
             <FormControlLabel
               value='central'
               control={<Radio />}
-              label={t(`${t_key}.type_option.central_account`)}
+              label='Central Account'
             />
             <FormControlLabel
               value='individual'
               control={<Radio />}
-              label={t(`${t_key}.type_option.individual_account`)}
+              label='Individual Account'
             />
             <FormControlLabel
               value='company'
               control={<Radio />}
-              label={t(`${t_key}.type_option.company_account_only`)}
+              label='Company Account Only'
             />
           </RadioGroup>
         </Box>
@@ -145,7 +129,8 @@ export default function CreateDesignedTransferAccount({nextPage, dtaValue, setVa
             color: '#223567',
           }}
         >
-          {t(`${t_key}.message`)}
+          The Designated Transfer Account is added manually to each employee’s
+          profile
         </Typography>
       </Box>
 
@@ -155,7 +140,7 @@ export default function CreateDesignedTransferAccount({nextPage, dtaValue, setVa
             component='div'
             sx={{ color: '#374151', fontWeight: 400 }}
           >
-            {t(`${t_key}.bank`)} <AsteriskComponent>*</AsteriskComponent>
+            Bank <AsteriskComponent>*</AsteriskComponent>
           </Typography>
 
           <Select
@@ -184,12 +169,12 @@ export default function CreateDesignedTransferAccount({nextPage, dtaValue, setVa
             component='div'
             sx={{ color: '#374151', fontWeight: 400 }}
           >
-            {t(`${t_key}.bank_account_holders_name`)} &nbsp;
+            Bank Account Holder`s Name &nbsp;
             <AsteriskComponent>*</AsteriskComponent>
           </Typography>
           <Input
             size='small'
-            placeholder={t(`${t_key}.bank_account_holders_name_placeholder`)}
+            placeholder='Input Bank Account Holders Name'
             disabled={account !== 'central'}
             sx={
               account !== 'central'
@@ -211,11 +196,11 @@ export default function CreateDesignedTransferAccount({nextPage, dtaValue, setVa
             component='div'
             sx={{ color: '#374151', fontWeight: 400 }}
           >
-            {t(`${t_key}.bank_account_no`)} <AsteriskComponent>*</AsteriskComponent>
+            Bank Account No <AsteriskComponent>*</AsteriskComponent>
           </Typography>
           <Input
             size='small'
-            placeholder={t(`${t_key}.bank_account_no_placeholder`)}
+            placeholder='Input Bank Account No.'
             disabled={account !== 'central'}
             sx={
               account !== 'central'
@@ -243,11 +228,11 @@ export default function CreateDesignedTransferAccount({nextPage, dtaValue, setVa
               component='div'
               sx={{ color: '#374151', fontWeight: 400 }}
             >
-              {t(`${t_key}.bank_code`)}
+              Bank Code
             </Typography>
             <Input
               size='small'
-              placeholder={t(`${t_key}.bank_code_placeholder`)}
+              placeholder='Input Bank Code'
               disabled={account !== 'central'}
               sx={
                 account !== 'central'
@@ -265,11 +250,11 @@ export default function CreateDesignedTransferAccount({nextPage, dtaValue, setVa
               component='div'
               sx={{ color: '#374151', fontWeight: 400 }}
             >
-              {t(`${t_key}.branch_code`)}
+              Branch Code
             </Typography>
             <Input
               size='small'
-              placeholder={t(`${t_key}.branch_code_placeholder`)}
+              placeholder='Input Branch Code'
               disabled={account !== 'central'}
               sx={
                 account !== 'central'
@@ -294,12 +279,12 @@ export default function CreateDesignedTransferAccount({nextPage, dtaValue, setVa
             component='div'
             sx={{ color: '#374151', fontWeight: 400 }}
           >
-            {t(`${t_key}.branch_name`)}
+            Branch Name
           </Typography>
 
           <Input
             size='small'
-            placeholder={t(`${t_key}.branch_name_placeholder`)}
+            placeholder='Input Branch Name'
             disabled={account !== 'central'}
             sx={
               account !== 'central'
@@ -318,12 +303,12 @@ export default function CreateDesignedTransferAccount({nextPage, dtaValue, setVa
             component='div'
             sx={{ color: '#374151', fontWeight: 400 }}
           >
-            {t(`${t_key}.swift_code`)}
+            Swift Code
           </Typography>
 
           <Input
             size='small'
-            placeholder={t(`${t_key}.swift_code_placeholder`)}
+            placeholder='Input Swift Code'
             disabled={account !== 'central'}
             sx={
               account !== 'central'
@@ -344,11 +329,11 @@ export default function CreateDesignedTransferAccount({nextPage, dtaValue, setVa
           component='div'
           sx={{ marginBottom: '7px', color: '#374151', fontWeight: 700 }}
         >
-          {t(`${t_key}.notes`)}
+          Notes
         </Typography>
         <Input
           size='small'
-          placeholder={t(`${t_key}.notes_placeholder`)}
+          placeholder='Input Notes'
           required
           sx={{
             color: '#6B7280',
@@ -360,26 +345,19 @@ export default function CreateDesignedTransferAccount({nextPage, dtaValue, setVa
         <FormHelperText
           sx={{ fontWeight: 500, color: '#6B7280', fontSize: '14px' }}
         >
-          {t(`${t_key}.max_char_info`)}
+          Max.100 Character
         </FormHelperText>
+        <Grid item xs={12} md={12} lg={12} xl={12}>
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <Button
+              color='primary'
+              label='Next'
+              sx={{ width: '63px' }}
+              onClick={() => formik.submitForm()}
+            />
+          </Box>
+        </Grid>
       </Box>
-      <Box sx={{display:'flex', gap:'12px', justifyContent:'end', mt:'30px'}}>
-        <Button
-          fullWidth={false}
-          size='small'
-          label={t('button.back')}
-          variant='outlined'
-          color='primary'
-          onClick={() => nextPage(0)}
-        />
-        <Button
-          fullWidth={false}
-          size='small'
-          label={t('button.next')}
-          color='primary'
-          onClick={() => formik.submitForm()}
-        />
-      </Box>
-    </>
+    </Box>
   );
 }

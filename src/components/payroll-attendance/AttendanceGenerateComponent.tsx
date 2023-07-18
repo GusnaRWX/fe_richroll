@@ -24,7 +24,7 @@ import { compareCheck, ifThenElse } from '@/utils/helper';
 import { visuallyHidden } from '@mui/utils';
 import EmptyState from '../_shared/common/EmptyState';
 import { useAppSelectors, useAppDispatch } from '@/hooks/index';
-import { getSelectedEmployeeRequested, getDetailAttendanceRequested } from '@/store/reducers/slice/payroll/payrollSlice';
+import { getSelectedEmployeeRequested } from '@/store/reducers/slice/payroll/payrollSlice';
 
 const ButtonWrapper = styled(Box)(({
   display: 'flex',
@@ -69,6 +69,67 @@ const headerItems = [
 ];
 
 type Order = 'asc' | 'desc'
+
+// const data = {
+//   items: [
+//     {
+//       id: 1,
+//       name: 'Budi Irawan',
+//       attendance: '30 Days',
+//       absent: '2 Days',
+//       paidLeave: '3 Days',
+//       unpaidLeave: '4 Days',
+//       overtime: '8 Days',
+//       totalHours: '175 Days',
+//       averageHours: '30 Days',
+//     },
+//     {
+//       id: 2,
+//       name: 'Budi Irawan',
+//       attendance: '30 Days',
+//       absent: '2 Days',
+//       paidLeave: '3 Days',
+//       unpaidLeave: '4 Days',
+//       overtime: '8 Days',
+//       totalHours: '175 Days',
+//       averageHours: '30 Days',
+//     },
+//     {
+//       id: 3,
+//       name: 'Budi Irawan',
+//       attendance: '30 Days',
+//       absent: '2 Days',
+//       paidLeave: '3 Days',
+//       unpaidLeave: '4 Days',
+//       overtime: '8 Days',
+//       totalHours: '175 Days',
+//       averageHours: '30 Days',
+//     },
+//     {
+//       id: 4,
+//       name: 'Budi Irawan',
+//       attendance: '30 Days',
+//       absent: '2 Days',
+//       paidLeave: '3 Days',
+//       unpaidLeave: '4 Days',
+//       overtime: '8 Days',
+//       totalHours: '175 Days',
+//       averageHours: '30 Days',
+//     },
+//     {
+//       id: 5,
+//       name: 'Budi Irawan',
+//       attendance: '30 Days',
+//       absent: '2 Days',
+//       paidLeave: '3 Days',
+//       unpaidLeave: '4 Days',
+//       overtime: '8 Days',
+//       totalHours: '175 Days',
+//       averageHours: '30 Days',
+//     },
+//   ],
+//   itemTotals: 5
+// };
 
 interface SelectedProp {
   id: string;
@@ -134,24 +195,6 @@ function AttendanceGenerateComponent() {
 
   const handleClose = () => {
     setOpen(false);
-  };
-
-  // function for open modal calendar
-  const handleOpenCalendar = async (itemId, employeeId) => {
-    await dispatch({
-      type: getDetailAttendanceRequested.toString(),
-      payload: {
-        id: payrollId,
-        attendanceID: itemId,
-        employeeID: employeeId
-      }
-    });
-    setOpenCal(true);
-  };
-
-  // function for close modal calendar
-  const handleCloseCalendar = () => {
-    setOpenCal(false);
   };
 
   useEffect(() => {
@@ -303,7 +346,7 @@ function AttendanceGenerateComponent() {
                             <ButtonWrapper>
                               <IconButton
                                 parentColor='#E9EFFF'
-                                onClick={() => { handleOpenCalendar(item?.id, item?.employee?.id); }}
+                                onClick={() => { setOpenCal(true); }}
                                 icons={
                                   <FiCalendar fontSize={20} color='#223567' />
                                 }
@@ -340,8 +383,8 @@ function AttendanceGenerateComponent() {
 
       <AttendanceCalendarModal
         open={openCal}
-        handleClose={() => handleCloseCalendar()}
-        handleConfirm={() => handleCloseCalendar()}
+        handleClose={() => setOpenCal(false)}
+        handleConfirm={() => setOpenCal(false)}
       />
       <ListEmployeeModal
         open={open}

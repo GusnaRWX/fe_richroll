@@ -39,6 +39,7 @@
     "income_tax_profile_deductable_component" : "Deductable Component",
     "income_tax_profile_profile" : "Profile"
   },
+
   "button" : {
     "next" : "Next",
     "back" : "Back",
@@ -59,7 +60,12 @@
     "add_component" : "Add Component",
     "add_new_component" : "Add New Component",
     "component" : "Component",
-    "deductable": "Deductable"
+    "deductable": "Deductable",
+    "create_new_payroll" : "Create New Payroll",
+    "generate_attendance_report" : "Generate Attendance Report",
+    "generate_gross_payroll" : "Generate Gross Payroll",
+    "add_ad_hoc" : "Add Ad Hoc",
+    "calculate" : "Calculate"
   },
 
 
@@ -459,6 +465,204 @@
           "text" : "Do you want to Activate the tax profile?",
           "effective_date" :"Effective Date",
           "expiration_date" :"Expiration Date"
+        }
+      }
+    }
+  },
+
+
+  "payroll_and_disbursement" : {
+    "payroll_assistant" : {
+      "title" : "Payroll Operation",
+      "sub_title" : "Payroll Assistant",
+      "table" : {
+        "tab_panel" : {
+          "in_progress" : "In Progress",
+          "completed" : "Completed"
+        },
+        "table_cols_item" : {
+          "name" : "Name",
+          "date_range" : "Date Range",
+          "created_on" : "Created On",
+          "last_updated" : "Last Updated"
+        }
+      },
+      "popup" : {
+        "create" : {
+          "title" : "Create New Payroll",
+          "name_input_label" : "Name",
+          "name_input_placeholder" : "Input Name",
+          "start_date" : "Start Date",
+          "end_date" : "End Date"
+        },
+        "delete" : {
+          "title" : "Delete Payroll Operation from Payroll Assistant?",
+          "desc" : "You are about to delete this payroll report. This action cannot be undone."
+        }
+      }
+    },
+    "attendance_summary" : {
+      "title" : "Payroll Operation",
+      "sub_title" : "Attendance Summary",
+      "table" : {
+        "tab_panel" : {
+          "draft" : "Draft",
+          "confirmed" : "Confirmed",
+          "completed" : "Completed",
+          "archive" : "Archive"
+        },
+        "table_cols_item" : {
+          "name" : "Name",
+          "date_range" : "Date Range",
+          "report_type" : "Report Type",
+          "created_on" : "Created On",
+          "last_updated" : "Last Updated",
+          "attachment" : "Attachment"
+        }
+      },
+      "popup" : {
+        "create" : {
+          "title" : "Create New Payroll",
+          "name_input_label" : "Name",
+          "name_input_placeholder" : "Input Name",
+          "start_date" : "Start Date",
+          "end_date" : "End Date"
+        },
+        "delete" : {
+          "title" : "Delete Attendance from Payroll Operation?",
+          "desc" : "You are about to delete this payroll report. This action cannot be undone."
+        }
+      },
+      "generate_gross_payroll" : {
+        "title" : "Generate Gross Payroll Report",
+        "sub_title" : "Payroll",
+        "table" : {
+          "table_cols_item" : {
+            "employee_name" : "Employee Name",
+            "attendance" : "Attendance",
+            "absent" : "Absent",
+            "paid_leave" : "Paid Leave",
+            "unpaid_leave" : "Unpaid Leave",
+            "overtime_hours" : "Overtime Hours",
+            "total_hours" : "Total Hours",
+            "average_hours" : "Average Hours work/day"
+          }
+        },
+        "detail" : {
+          "operational_department" : {
+            "title" : "Operational Department",
+            "card_items" : {
+              "total_base_compensation" : "Total Base Compensation",
+              "total_supplementary_compensation" : "Total Supplementary Compensation",
+              "total_ad_hoc_compensation" : "Total Ad Hoc Compensation",
+              "total_gross_payroll" : "Total Gross Payroll"
+            },
+            "table" : {
+              "table_cols_item" : {
+                "fullname" : "Full Name",
+                "base_compensation" : "Base Compensation",
+                "Supplementary_compensation" : "Supplementary Compensation",
+                "ad_hoc_compensation" : "Ad Hoc Compensation",
+                "gross_compensation" : "Gross Compensation"
+              }
+            }
+          },
+          "delivery_department" : {
+            "title" : "Delivery Department",
+            "card_items" : {
+              "total_base_compensation" : "Total Base Compensation",
+              "total_supplementary_compensation" : "Total Supplementary Compensation",
+              "total_ad_hoc_compensation" : "Total Ad Hoc Compensation",
+              "total_gross_payroll" : "Total Gross Payroll"
+            },
+            "table" : {
+              "table_cols_item" : {
+                "fullname" : "Full Name",
+                "base_compensation" : "Base Compensation",
+                "Supplementary_compensation" : "Supplementary Compensation",
+                "ad_hoc_compensation" : "Ad Hoc Compensation",
+                "gross_compensation" : "Gross Compensation"
+              }
+            }
+          },
+          "gross_calculating_payroll_form" : {
+            "section_title" : "Gross Calculating Payroll",
+            "base" : {
+              "section_title" : "Base",
+              "compensation_component" : "Compensation Component",
+              "amount" : "Amount",
+              "amount_placeholder" : "Input Amount",
+              "tax_status" : "Tax Status",
+              "tax_status_option" : {
+                "taxable": "Taxable",
+                "non_taxable" : "Non-Taxable"
+              }
+            },
+            "overtime_hours" : {
+              "section_title" : "Overtime Hours",
+              "overtime_hours" : "Overtime Hours",
+              "overtime_hours_placeholder" : "Input overtime hours",
+              "rate" : "Rate",
+              "rate_placeholder" : "Input rate"
+            },
+            "supplementary" : {
+              "section_title" : "Supplementary",
+              "compensation_component" :"Compensation Component",
+              "amount" :"Amount",
+              "amount_placeholder" :"Input Amount",
+              "tax_status" : "Tax Status",
+              "tax_status_option" : {
+                "taxable": "Taxable",
+                "non_taxable" : "Non-Taxable"
+              }
+            },
+            "ad_hoc" : {
+              "section_title" : "Ad Hoc",
+              "ad_hoc_component" : "Ad-Hoc Component",
+              "ad_hoc_component_placeholder" : "Input Hoc Name",
+              "amount" :"Amount",
+              "amount_placeholder" :"Input Amount"
+            }
+          }
+        }
+      }
+    },
+    "payroll_report" : {
+      "title" : "Payroll Operation",
+      "sub_title" : "Payroll Reports",
+      "table" : {
+        "tab_panel" : {
+          "draft" : "Draft",
+          "confirmed" : "Confirmed",
+          "completed" : "Completed",
+          "archive" : "Archive"
+        },
+        "table_cols_item" : {
+          "name" : "Name",
+          "date_range" : "Date Range",
+          "report_type" : "Report Type",
+          "created_on" : "Created On",
+          "last_updated" : "Last Updated",
+          "attachment" : "Attachment"
+        }
+      }
+    },
+    "disbursement" : {
+      "title" : "Payroll Operation",
+      "sub_title" : "Disbursement",
+      "table" : {
+        "tab_panel" : {
+          "draft" : "Draft",
+          "completed" : "Completed",
+          "archive" : "Archive"
+        },
+        "table_cols_item" : {
+          "name" : "Name",
+          "date_range" : "Date Range",
+          "report_type" : "Report Type",
+          "created_on" : "Created On",
+          "last_updated" : "Last Updated",
+          "attachment" : "Attachment"
         }
       }
     }

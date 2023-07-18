@@ -15,12 +15,13 @@ import PayrollAssistantRow from './PayrollAssistantRow';
 import EmptyState from '../_shared/common/EmptyState';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { getPayrollRequested } from '@/store/reducers/slice/payroll/payrollSlice';
+import { useTranslation } from 'react-i18next';
 
 const headerItems = [
-  { id: 'user.name', label: 'Name' },
-  { id: 'dateRange', label: 'Date Range' },
-  { id: 'user.createdAt', label: 'Created on' },
-  { id: 'user.lastUpdated', label: 'Last Updated' },
+  { id: 'user.name', label: 'name' },
+  { id: 'dateRange', label: 'date_range' },
+  { id: 'user.createdAt', label: 'created_on' },
+  { id: 'user.lastUpdated', label: 'last_updated' },
   { id: 'action', label: '' },
 ];
 
@@ -43,6 +44,8 @@ function PayrollAssistantTable({
   const companyData = getCompanyData();
   const [hydrated, setHaydrated] = useState(false);
   const { responser } = useAppSelectors((state) => state);
+  const {t} = useTranslation();
+  const t_colsItemKey = 'payroll_and_disbursement.payroll_assistant.table.table_cols_item';
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -124,7 +127,7 @@ function PayrollAssistantTable({
                     direction={sort === item.id ? direction : 'asc'}
                     onClick={(e) => handleRequestSort(e, item.id)}
                   >
-                    {item.label}
+                    {item.label === '' ? '' : t(`${t_colsItemKey}.${item.label}`)}
                     {sort === item.id ? (
                       <Box component='span' sx={visuallyHidden}>
                         {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}

@@ -44,8 +44,7 @@ pipeline {
                             pwd
                             ls -lah *
                             cp $DIRSECRET/.env-kayaroll-fe $DIRPROJECT/.env
-                            docker-compose -f $DIRSECRET/sonar-kayaroll-fe.yml up > sonarlogs.txt 2>&1
-                            cat sonarlogs.txt                    
+                            docker-compose -f $DIRSECRET/sonar-kayaroll-fe.yml up
                         """
                             // def commitMessage = sh(script: 'git log --format=%B -n 1 ${env.GIT_COMMIT}', returnStdout: true).trim()
                         dir("$DIRPROJECT") {
@@ -118,13 +117,7 @@ pipeline {
                 expression { env.NOTIF.toBoolean() == true }
             }
             steps {
-                sh """
-                    ANALYSIS_MESSAGE=\$(grep "EXECUTION" sonarlogs.txt | tail -n 1);
-                    curl --location "$NOTIF_URL" \
-                    --header 'Content-Type: application/x-www-form-urlencoded' \
-                    --data-urlencode "name=$NOTIF_GROUP" \
-                    --data-urlencode "message=Update From $JOB_NAME \n $RELEASE_NOTES \n \$ANALYSIS_MESSAGE"
-                """
+                Notify("Update From $JOB_NAME \n $RELEASE_NOTES")
             }
         }
     }

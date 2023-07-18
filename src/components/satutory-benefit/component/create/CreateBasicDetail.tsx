@@ -1,34 +1,14 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React, {SetStateAction, Dispatch} from 'react';
-import { Grid, Typography } from '@mui/material';
-import {  Input, Select, Textarea, Button } from '@/components/_shared/form';
-import { useTranslation } from 'react-i18next';
+import React, { Dispatch, SetStateAction } from 'react';
+import { Grid, Box, Typography } from '@mui/material';
+import { Button, Input, Select, Textarea } from '@/components/_shared/form';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-interface BasicValue {
-  satutoryName : string;
-  country : string;
-  province : string;
-  city : string;
-  subDistrict : string;
-  citation : string;
-  internalNotes : string;
-  externalNotes : string;
+interface CreateBasicDetailComponentProps {
+  setValue: Dispatch<SetStateAction<number>>
 }
 
-interface PropsInterface {
-  nextPage: Dispatch<SetStateAction<number>>;
-  basicValue: BasicValue;
-  setValue: Dispatch<SetStateAction<BasicValue>>;
-}
-
-export default function CreateBasicDetailComponent({nextPage, basicValue, setValue}: PropsInterface) {
-  // Translation Key
-  const {t} = useTranslation();
-  const t_key = 'satutory_benefit.component.form_&_detail.create_basic_detail';
-
+export default function CreateBasicDetailComponent({setValue}: CreateBasicDetailComponentProps) {
   const Dummyoption = [
     { value: '1', label: 'Dummy 1' },
     { value: '2', label: 'Dummy 2' },
@@ -36,8 +16,8 @@ export default function CreateBasicDetailComponent({nextPage, basicValue, setVal
   ];
 
   const validationSchema = Yup.object({
-    satutoryName: Yup.string().required('This field is Required!'),
-    country: Yup.string().required('This field is Required!'),
+    componentName: Yup.string().required(),
+    country: Yup.string().required(),
     province: Yup.string(),
     city: Yup.string(),
     subDistrict: Yup.string(),
@@ -48,45 +28,40 @@ export default function CreateBasicDetailComponent({nextPage, basicValue, setVal
 
   const formik = useFormik({
     initialValues: {
-      satutoryName: basicValue.satutoryName,
-      country: basicValue.country,
-      province: basicValue.province,
-      city: basicValue.city,
-      subDistrict: basicValue.subDistrict,
-      citation: basicValue.citation,
-      internalNotes: basicValue.internalNotes,
-      externalNotes: basicValue.externalNotes,
+      componentName: '',
+      country: '',
+      province: '',
+      city: '',
+      subDistrict: '',
+      citation: '',
+      internalNotes: '',
+      externalNotes: '',
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      setValue(values);
-      nextPage(1);
+      console.log(values);
+      setValue(1);
     }
   });
 
   return (
     <>
-      <Grid container spacing={2}>
-        <Grid item xs={12} md={12} lg={6} xl={6}>
+      <Grid container spacing={2} rowSpacing={4}>
+        <Grid item xs={6} md={6} lg={6} xl={6}>
           <Input
-            placeholder={t(`${t_key}.name_placeholder`)}
-            customLabel={t(`${t_key}.name`)}
+            placeholder='Input Statutory Benefits Name'
+            customLabel='Component Name'
             withAsterisk
             size='small'
-            value={formik.values.satutoryName}
-            onChange={(e) => formik.setFieldValue('satutoryName', e.target.value)}
+            value={formik.values.componentName}
+            onChange={(e) => formik.setFieldValue('componentName', e.target.value)}
           />
-          {formik.touched.satutoryName && formik.errors.satutoryName ? (
-            <Typography sx={{color: '#DC2626',}}>{formik.errors.satutoryName as React.ReactNode}</Typography>
-          ): null}
         </Grid>
-      </Grid>
-
-      <Grid container spacing={2} style={{marginTop: '12px'}}>
+        <Grid item xs={6} md={6} lg={6} xl={6}></Grid>
         <Grid item xs={6} md={6} lg={6} xl={6}>
           <Select
             placeholder='Select Country'
-            customLabel={t(`${t_key}.country`)}
+            customLabel='Country'
             withAsterisk
             size='small'
             fullWidth
@@ -94,14 +69,11 @@ export default function CreateBasicDetailComponent({nextPage, basicValue, setVal
             value={formik.values.country}
             onChange={(e) => formik.setFieldValue('country', e.target.value)}
           />
-          {formik.touched.country && formik.errors.country ? (
-            <Typography sx={{color: '#DC2626'}}>{formik.errors.country as React.ReactNode}</Typography>
-          ): null}
         </Grid>
         <Grid item xs={6} md={6} lg={6} xl={6}>
           <Select
             placeholder='Select Province'
-            customLabel={t(`${t_key}.province`)}
+            customLabel='Province'
             size='small'
             fullWidth
             options={Dummyoption}
@@ -109,13 +81,10 @@ export default function CreateBasicDetailComponent({nextPage, basicValue, setVal
             onChange={(e) => formik.setFieldValue('province', e.target.value)}
           />
         </Grid>
-      </Grid>
-
-      <Grid container spacing={2} style={{marginTop: '12px'}}>
         <Grid item xs={6} md={6} lg={6} xl={6}>
           <Select
             placeholder='Select City'
-            customLabel={t(`${t_key}.city`)}
+            customLabel='City'
             size='small'
             fullWidth
             options={Dummyoption}
@@ -126,7 +95,7 @@ export default function CreateBasicDetailComponent({nextPage, basicValue, setVal
         <Grid item xs={6} md={6} lg={6} xl={6}>
           <Select
             placeholder='Select Country'
-            customLabel={t(`${t_key}.sub_district`)}
+            customLabel='Sub-District'
             size='small'
             fullWidth
             options={Dummyoption}
@@ -134,12 +103,9 @@ export default function CreateBasicDetailComponent({nextPage, basicValue, setVal
             onChange={(e) => formik.setFieldValue('subDistrict', e.target.value)}
           />
         </Grid>
-      </Grid>
-
-      <Grid container spacing={2} style={{marginTop: '12px'}}>
-        <Grid item xs={12} md={12} lg={12} xl={12}>
+        <Grid item xs={6} md={6} lg={6} xl={6}>
           <Textarea
-            customLabel={t(`${t_key}.citation`)}
+            customLabel='Citation'
             minRows={4}
             style={{ resize: 'vertical' }}
             value={formik.values.citation}
@@ -152,15 +118,13 @@ export default function CreateBasicDetailComponent({nextPage, basicValue, setVal
               color: '#6B7280',
             }}
           >
-            {t(`${t_key}.max_char_info`)}
+            Max. 120 Character
           </Typography>
         </Grid>
-      </Grid>
-
-      <Grid container spacing={2} style={{marginTop: '12px'}}>
-        <Grid item xs={12} md={12} lg={12} xl={12}>
+        <Grid item xs={6} md={6} lg={6} xl={6}></Grid>
+        <Grid item xs={6} md={6} lg={6} xl={6}>
           <Textarea
-            customLabel={t(`${t_key}.internal_notes`)}
+            customLabel='Internal Notes'
             minRows={4}
             style={{ resize: 'vertical' }}
             value={formik.values.internalNotes}
@@ -173,15 +137,12 @@ export default function CreateBasicDetailComponent({nextPage, basicValue, setVal
               color: '#6B7280',
             }}
           >
-            {t(`${t_key}.max_char_info`)}
+            Max. 120 Character
           </Typography>
         </Grid>
-      </Grid>
-
-      <Grid container spacing={2} style={{marginTop: '12px'}}>
-        <Grid item xs={12} md={12} lg={12} xl={12}>
+        <Grid item xs={6} md={6} lg={6} xl={6}>
           <Textarea
-            customLabel={t(`${t_key}.external_notes`)}
+            customLabel='External Notes'
             minRows={4}
             style={{ resize: 'vertical' }}
             value={formik.values.externalNotes}
@@ -194,22 +155,18 @@ export default function CreateBasicDetailComponent({nextPage, basicValue, setVal
               color: '#6B7280',
             }}
           >
-            {t(`${t_key}.max_char_info`)}
+            Max. 120 Character
           </Typography>
         </Grid>
-
-        <Grid
-          container
-          spacing={2}
-          sx={{ justifyContent: 'flex-end', mt: '30px' }}
-        >
-          <Button
-            fullWidth={false}
-            size='small'
-            label={t('button.next')}
-            color='primary'
-            onClick={() => formik.submitForm()}
-          />
+        <Grid item xs={12} md={12} lg={12} xl={12}>
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <Button
+              color='primary'
+              label='Next'
+              sx={{ width: '63px' }}
+              onClick={() => formik.submitForm()}
+            />
+          </Box>
         </Grid>
       </Grid>
     </>

@@ -2,7 +2,6 @@ import React from 'react';
 import { Modal, Box, IconButton, Typography, Button as MuiButton } from '@mui/material';
 import { Close } from '@mui/icons-material';
 import styled from '@emotion/styled';
-import { useTranslation } from 'react-i18next';
 
 const modalStyle = {
   position: 'absolute',
@@ -65,7 +64,6 @@ function CustomModal({
   keepMounted,
   deleteText,
   withFooter = true }: CustomModalProps) {
-  const {t} = useTranslation();
   return (
     <Modal
       open={open}
@@ -84,18 +82,15 @@ function CustomModal({
         {
           withFooter && (
             <ModalFooter>
-              <MuiButton variant='outlined' size='small' onClick={handleClose}>{t('button.cancel')}</MuiButton>
+              <MuiButton variant='outlined' size='small' onClick={handleClose}>Cancel</MuiButton>
               {submitText !== 'Suspend' && submitText !== 'Delete' && submitText !== 'Reactivate' &&
-                <MuiButton variant='contained' disabled={ConfirmationDisable} onClick={handleConfirm} size='small' color='primary'>{submitText || t('button.confirm')}</MuiButton>
+                <MuiButton variant='contained' disabled={ConfirmationDisable} onClick={handleConfirm} size='small' color='primary'>{submitText || 'Confirm'}</MuiButton>
               }
               {submitText === 'Suspend' &&
-                <MuiButton variant='contained' disabled={ConfirmationDisable} onClick={handleConfirm} size='small' sx={{ background: '#FFEDD5', color: '#EA580C' }}>{t('button.suspend')}</MuiButton>
+                <MuiButton variant='contained' disabled={ConfirmationDisable} onClick={handleConfirm} size='small' sx={{ background: '#FFEDD5', color: '#EA580C' }}>Suspend</MuiButton>
               }
               {submitText === 'Delete' &&
-                <MuiButton variant='contained' disabled={ConfirmationDisable} onClick={handleConfirm} size='small' sx={{ background: '#FECACA', color: '#DC2626' }}>{deleteText || t('button.delete')}</MuiButton>
-              }
-              {submitText === 'Reactivate' &&
-                <MuiButton variant='contained' disabled={ConfirmationDisable} onClick={handleConfirm} size='small' sx={{ background: '#DCFCE7', color: '#16A34A' }}>Reactivate</MuiButton>
+                <MuiButton variant='contained' disabled={ConfirmationDisable} onClick={handleConfirm} size='small' sx={{ background: '#FECACA', color: '#DC2626' }}>{deleteText || 'Delete'}</MuiButton>
               }
               {submitText === 'Reactivate' &&
                 <MuiButton variant='contained' disabled={ConfirmationDisable} onClick={handleConfirm} size='small' sx={{ background: '#DCFCE7', color: '#16A34A' }}>Reactivate</MuiButton>

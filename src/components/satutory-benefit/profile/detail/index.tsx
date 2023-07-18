@@ -6,7 +6,6 @@ import { ArrowBack } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import { CustomModal } from '@/components/_shared/common';
 import { ConfirmationModal } from '@/components/_shared/common';
-import { useTranslation } from 'react-i18next';
 
 // Icon Import
 import { HiPencilAlt } from 'react-icons/hi';
@@ -17,8 +16,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 export default function SatutoryBenefitProfileDetail() {
   const router = useRouter();
-  const {t} = useTranslation();
-  const tPath = 'satutory_benefit.profile.form_&_detail.';
 
   const [duplicateConfirmation, setDuplicateConfirmation] = useState(false);
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
@@ -72,7 +69,7 @@ export default function SatutoryBenefitProfileDetail() {
                 width: '250px',
               }}
             >
-              {t('satutory_benefit.profile.detail_title')}
+              Statutory Benefit Profile
             </Typography>
             <Typography
               style={{
@@ -92,7 +89,7 @@ export default function SatutoryBenefitProfileDetail() {
             color='red'
             sx={{ bgcolor: '#FECACA', color: '#DC2626', width: 'fit-content' }}
             startIcon={<DeleteIcon />}
-            label={t('button.delete')}
+            label='Delete'
             onClick={() => setDeleteConfirmation(true)}
           />
           <Button
@@ -105,28 +102,28 @@ export default function SatutoryBenefitProfileDetail() {
               boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.05)',
             }}
             startIcon={<FiCopy />}
-            label={t('button.duplicate')}
+            label='Duplicate'
             onClick={() => setDuplicateConfirmation(true)}
           />
           <Button
             color='orange'
             sx={{ bgcolor: '#FFEDD5', color: '#F97316', width: 'fit-content' }}
             startIcon={<HiOutlineArchive />}
-            label={t('button.archive')}
+            label='Archive'
             onClick={() => setArchiveConfirmation(true)}
           />
           <Button
             color='green'
             sx={{ bgcolor: '#8DD0B8', color: '#fff', width: 'fit-content' }}
             startIcon={<HiPencilAlt />}
-            label={t('button.edit')}
+            label='Edit'
             onClick={EditActionHandler}
           />
           <Button
             color='lightBlue'
             sx={{ bgcolor: '#223567', color: '#fff', width: 'fit-content' }}
             startIcon={<HiUpload />}
-            label={t('button.activate')}
+            label='Activate'
             onClick={() => setActivateConfirmation(true)}
           />
         </NextBtnWrapper>
@@ -140,7 +137,7 @@ export default function SatutoryBenefitProfileDetail() {
               color='#9CA3AF'
               mb='8px'
             >
-              {t('satutory_benefit.profile.table.profile_name')}
+              Profile Name
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -153,7 +150,7 @@ export default function SatutoryBenefitProfileDetail() {
               color='#9CA3AF'
               mb='8px'
             >
-              {t(`${tPath}country`)}
+              Country
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -166,7 +163,7 @@ export default function SatutoryBenefitProfileDetail() {
               color='#9CA3AF'
               mb='8px'
             >
-              {t(`${tPath}province`)}
+              Province
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -179,7 +176,7 @@ export default function SatutoryBenefitProfileDetail() {
               color='#9CA3AF'
               mb='8px'
             >
-              {t(`${tPath}city`)}
+              City
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -192,7 +189,7 @@ export default function SatutoryBenefitProfileDetail() {
               color='#9CA3AF'
               mb='8px'
             >
-              {t(`${tPath}sub_district`)}
+              Sub-Distric
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -205,7 +202,7 @@ export default function SatutoryBenefitProfileDetail() {
               color='#9CA3AF'
               mb='8px'
             >
-              {t(`${tPath}component.effective_period`)}
+              Effective Periode
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -218,7 +215,7 @@ export default function SatutoryBenefitProfileDetail() {
               color='#9CA3AF'
               mb='8px'
             >
-              {t(`${tPath}citation`)}
+              Citatation
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -232,7 +229,7 @@ export default function SatutoryBenefitProfileDetail() {
               color='#9CA3AF'
               mb='8px'
             >
-              {t(`${tPath}external_notes`)}
+              External Notes
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -245,7 +242,7 @@ export default function SatutoryBenefitProfileDetail() {
               color='#9CA3AF'
               mb='8px'
             >
-              {t(`${tPath}internal_notes`)}
+              Internal Notes
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -273,7 +270,7 @@ export default function SatutoryBenefitProfileDetail() {
               color='#9CA3AF'
               mb='8px'
             >
-              {t(`${tPath}component.contributor`)}
+              Contributor
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -286,7 +283,7 @@ export default function SatutoryBenefitProfileDetail() {
               color='#9CA3AF'
               mb='8px'
             >
-              {t(`${tPath}component.rate_type`)}
+              Rate Types
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -299,7 +296,7 @@ export default function SatutoryBenefitProfileDetail() {
               color='#9CA3AF'
               mb='8px'
             >
-              {t(`${tPath}component.flat_rate`)}
+              Flat Rate{' '}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -312,7 +309,7 @@ export default function SatutoryBenefitProfileDetail() {
               color='#9CA3AF'
               mb='8px'
             >
-              {t(`${tPath}component.amount_cap`)}
+              Amount Cap
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -325,7 +322,7 @@ export default function SatutoryBenefitProfileDetail() {
               color='#9CA3AF'
               mb='8px'
             >
-              {t(`${tPath}component.effective_period`)}
+              Effective Periode
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -338,8 +335,8 @@ export default function SatutoryBenefitProfileDetail() {
         type='delete'
         open={deleteConfirmation}
         handleClose={() => setDeleteConfirmation(false)}
-        title={t('satutory_benefit.profile.modal.delete.title')}
-        content={t('satutory_benefit.profile.modal.delete.text')}
+        title='Delete Data Entry'
+        content='You are about to delete this attendance data entry. This action cannot be undone.'
         withCallback
         noChange={true}
         callback={() => setDeleteConfirmation(false)}
@@ -347,8 +344,8 @@ export default function SatutoryBenefitProfileDetail() {
       <ConfirmationModal
         open={duplicateConfirmation}
         handleClose={() => setDuplicateConfirmation(false)}
-        title={t('satutory_benefit.profile.modal.duplicate.title')}
-        content={t('satutory_benefit.profile.modal.duplicate.text')}
+        title='Confirmation'
+        content='Are you sure you want to duplicate this profile ?'
         withCallback
         noChange={true}
         callback={() => setDuplicateConfirmation(false)}
@@ -357,31 +354,31 @@ export default function SatutoryBenefitProfileDetail() {
         open={archiveConfirmation}
         handleClose={() => setArchiveConfirmation(false)}
         handleConfirm={() => setArchiveConfirmation(false)}
-        title={t('satutory_benefit.profile.modal.archive.title')}
+        title='Archivation Date'
         width='40%'
       >
         <Grid>
-          <DatePicker customLabel={t('satutory_benefit.profile.modal.archive.input_date')} withAsterisk />
-          <CheckBox customLabel={t('satutory_benefit.profile.modal.archive.replace')} />
+          <DatePicker customLabel='Input Effective Archivation Date' withAsterisk />
+          <CheckBox customLabel='Replace with New Profile' />
         </Grid>
       </CustomModal>
       <CustomModal
         open={activateConfirmation}
         handleClose={() => setActivateConfirmation(false)}
         handleConfirm={() => setActivateConfirmation(false)}
-        title={t('satutory_benefit.profile.modal.activate.title')}
+        title='Publication Date'
         width='40%'
       >
         <Grid container p={2} spacing={2}>
           <Grid item xs={12} md={12} lg={12} xl={12}>
-            <Typography>{t('satutory_benefit.profile.modal.activate.text')}</Typography>
+            <Typography>Do you want to Activate the tax profile?</Typography>
           </Grid>
           <Grid item container spacing={2}>
             <Grid item xs={12} md={6} lg={6} xl={6}>
-              <DatePicker customLabel={t('satutory_benefit.profile.modal.activate.effective_date')} />
+              <DatePicker customLabel='Effective Date' />
             </Grid>
             <Grid item xs={12} md={6} lg={6} xl={6}>
-              <DatePicker customLabel={t('satutory_benefit.profile.modal.activate.expiration_date')} />
+              <DatePicker customLabel='Expiration Date' />
             </Grid>
           </Grid>
         </Grid>

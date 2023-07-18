@@ -76,7 +76,7 @@ const RadioGroup = ({
   ...props
 }: RadioGroupProps & {
   options: RadioOption[],
-  label?: string,
+  label: string,
   error?: string,
   withAsterisk?: boolean;
 }) => {
