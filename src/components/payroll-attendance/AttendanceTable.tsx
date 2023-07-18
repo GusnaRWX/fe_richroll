@@ -22,9 +22,10 @@ import { useRouter } from 'next/router';
 import { ConfirmationModal } from '@/components/_shared/common';
 import EmptyState from '../_shared/common/EmptyState';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
-import { getPayrollRequested } from '@/store/reducers/slice/payroll/payrollSlice';
+import { getPayrollRequested, postPayrollGrossesRequested } from '@/store/reducers/slice/payroll/payrollSlice';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
+// import { useAppDispatch } from '@/hooks/index';
 
 const ButtonWrapper = styled.div`
  display: flex;
@@ -108,7 +109,7 @@ function AttendanceTable({
         countryCode: 'ID',
         companyID: companyData?.id,
         workflow: 'ATTENDANCE',
-        status: ifThenElse(tabValue === 0, 'DRAFT', ifThenElse(tabValue === 1, 'CONFIRMED', ifThenElse(tabValue === 2,  'COMPLETED', 'ARCHIVE')))
+        status: ifThenElse(tabValue === 0, 'DRAFT', ifThenElse(tabValue === 1, 'CONFIRMED', ifThenElse(tabValue === 2, 'COMPLETED', 'ARCHIVE')))
       }
     });
   }, [rowsPerPage, page, search, sort, direction, responser.code, tabValue]);
@@ -211,7 +212,15 @@ function AttendanceTable({
                             <>
                               <IconButton
                                 parentColor='#E9EFFF'
-                                onClick={() => { router.push({pathname: '/payroll-disbursement/payroll/generate-gross/employee', query: { id: item.id }}); }}
+                                // onClick={() => { router.push({pathname: '/payroll-disbursement/payroll/generate-gross/employee', query: { id: item.id }}); }}
+                                onClick={() => {
+                                  dispatch({
+                                    type: postPayrollGrossesRequested.toString(),
+                                    payload: {
+                                      payroll_id: [String(item.id)]
+                                    }
+                                  });
+                                }}
                                 icons={
                                   <TbFileImport fontSize={20} color='#223567' />
                                 }
