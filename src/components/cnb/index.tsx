@@ -27,7 +27,7 @@ const CNBComponent = () => {
           <Button
             onClick={() => router.push('/compensation-benefits/create')}
             startIcon={<AddIcon />}
-            label='Add Profile'
+            label={t('button.add_profile')}
           />
         </div>
       </TitleWrapper>
