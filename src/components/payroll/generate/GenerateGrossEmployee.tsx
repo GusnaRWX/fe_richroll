@@ -20,9 +20,10 @@ import { ArrowBack } from '@mui/icons-material';
 import { compareCheck, ifThenElse } from '@/utils/helper';
 import { visuallyHidden } from '@mui/utils';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
-import { getGenerateGrossPayrollRequested } from '@/store/reducers/slice/payroll/payrollSlice';
+// import { getGenerateGrossPayrollRequested } from '@/store/reducers/slice/payroll/payrollSlice';
 import EmptyState from '@/components/_shared/common/EmptyState';
 import { useTranslation } from 'react-i18next';
+import { getGenerateGrossesEmployeeRequested, putGenerateGrossesEmployeeRequested } from '@/store/reducers/slice/payroll/payrollSlice';
 
 const ButtonWrapper = styled(Box)(({
   display: 'flex',
@@ -76,7 +77,6 @@ const headerItems = [
 
 type Order = 'asc' | 'desc'
 
-// const data = {
 //   items: [
 //     {
 //       id: 1,
@@ -163,7 +163,7 @@ function GenerateGrossEmployee() {
   const onSelected = (item, e) => {
     if (e.target.checked) {
       const temp = [...selectedTemp, {
-        id: item.id, name: item.name, attendance: item.attendance, absent: '2 Days',
+        id: item.id, name: item.name, attendance: item.attendance, absent: item.absent,
         paidLeave: item.paidLeave,
         unpaidLeave: item.unpaidLeave,
         overtime: item.overtime,
@@ -183,7 +183,7 @@ function GenerateGrossEmployee() {
 
   const onSelectedAll = (items, e) => {
     const pageItems = items?.map(item => ({
-      id: item.id, name: item.name, attendance: item.attendance, absent: '2 Days',
+      id: item.id, name: item.employee.name, attendance: item.attendance, absent: item.absent,
       paidLeave: item.paidLeave,
       unpaidLeave: item.unpaidLeave,
       overtime: item.overtime,
@@ -211,22 +211,37 @@ function GenerateGrossEmployee() {
     setSort(headId);
   };
 
+
+  const handlePutGenerate = () => {
+    dispatch({
+      type: putGenerateGrossesEmployeeRequested.toString(),
+      payload: {
+        id: router.query.id,
+        body: { employee_id: selectedTemp?.map(item => item.id) }
+      }
+    });
+  };
+
   useEffect(() => {
     setHaydrated(true);
   }, []);
 
   useEffect(() => {
-    dispatch({
-      type: getGenerateGrossPayrollRequested.toString(),
-      payload: {
-        page: 1,
-        itemPerPage: rowsPerPage,
-        sort: sort,
-        direction: direction,
-        countryCode: global?.language
-      }
-    });
-  }, [rowsPerPage, sort, direction, global?.language]);
+    if (router.isReady) {
+      dispatch({
+        type: getGenerateGrossesEmployeeRequested.toString(),
+        payload: {
+          page: 1,
+          itemPerPage: rowsPerPage,
+          sort: sort,
+          direction: direction,
+          countryCode: global?.language,
+          id: router.query.id
+        }
+      });
+    }
+
+  }, [rowsPerPage, sort, direction, global?.language, router.query]);
 
   if (!hydrated) {
     return null;
@@ -254,7 +269,7 @@ function GenerateGrossEmployee() {
       <ContentWrapper>
         <Box sx={{ width: '100%' }}>
           <Table
-            count={payroll?.generateGrossPayroll?.itemTotals}
+            count={payroll?.grossesEmployee?.itemTotals}
             rowsPerPageOptions={[5, 10, 15]}
             rowsPerPage={rowsPerPage}
             page={page}
@@ -266,7 +281,7 @@ function GenerateGrossEmployee() {
                   headerItems.map((item) => (
                     item.id === 'action' ? (
                       <TableCell key={item.id}>
-                        <Checkbox onChange={(e) => onSelectedAll(payroll?.generateGrossPayroll?.items?.slice(0, rowsPerPage), e)} checked={checkValAll(payroll?.generateGrossPayroll?.items?.slice(0, rowsPerPage))} />
+                        <Checkbox onChange={(e) => onSelectedAll(payroll?.grossesEmployee?.items?.slice(0, rowsPerPage), e)} checked={checkValAll(payroll?.grossesEmployee?.items?.slice(0, rowsPerPage))} />
                       </TableCell>
                     ) : (
                       <TableCell key={item.id} sortDirection={ifThenElse(sort === item.id, direction, false)}>
@@ -291,15 +306,15 @@ function GenerateGrossEmployee() {
             bodyChildren={
               <>
                 {
-                  ifThenElse(typeof payroll?.generateGrossPayroll?.items !== 'undefined', (
-                    ifThenElse(payroll?.generateGrossPayroll?.items?.length === 0, (
+                  ifThenElse(typeof payroll?.grossesEmployee?.items !== 'undefined', (
+                    ifThenElse(payroll?.grossesEmployee?.items?.length === 0, (
                       <TableRow>
                         <TableCell colSpan={12} align='center'>
                           <EmptyState />
                         </TableCell>
                       </TableRow>
                     ), (
-                      payroll?.generateGrossPayroll?.items?.map((item, index) => (
+                      payroll?.grossesEmployee?.items?.map((item, index) => (
                         <TableRow key={index}>
                           <TableCell>
                             <CheckboxWrapper>
@@ -309,13 +324,13 @@ function GenerateGrossEmployee() {
                           <TableCell>
                             <NameWrapper>
                               <Avatar
-                                src={ImageType.AVATAR_PLACEHOLDER}
-                                alt={item.name}
+                                src={item.employee.picture ? item.employee.picture : ImageType.AVATAR_PLACEHOLDER}
+                                alt={item.employee.name}
                                 sx={{
                                   width: 24, height: 24
                                 }}
                               />
-                              &nbsp;{item.name}
+                              &nbsp;{item.employee.name}
                             </NameWrapper>
                           </TableCell>
                           <TableCell>{item.attendance}</TableCell>
@@ -324,7 +339,7 @@ function GenerateGrossEmployee() {
                           <TableCell>{item.unpaidLeave}</TableCell>
                           <TableCell>{item.overtime}</TableCell>
                           <TableCell>{item.totalHours}</TableCell>
-                          <TableCell>{item.averageHours}</TableCell>
+                          <TableCell>{isNaN(item.averageHours) ? 0 : item.averageHours}</TableCell>
                         </TableRow>
                       ))
                     ))
@@ -353,7 +368,8 @@ function GenerateGrossEmployee() {
                   variant='contained'
                   size='small'
                   color='primary'
-                  onClick={() => { router.push('/payroll-disbursement/payroll/generate-gross/detail'); }}
+                  // onClick={() => { router.push('/payroll-disbursement/payroll/generate-gross/detail'); }}
+                  onClick={handlePutGenerate}
                   sx={{ color: 'white' }}
                 >{t('button.confirm')}</MuiButton>
               </ButtonWrapper>

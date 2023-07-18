@@ -24,7 +24,7 @@ import { compareCheck, ifThenElse } from '@/utils/helper';
 import { visuallyHidden } from '@mui/utils';
 import EmptyState from '../_shared/common/EmptyState';
 import { useAppSelectors, useAppDispatch } from '@/hooks/index';
-import { getSelectedEmployeeRequested } from '@/store/reducers/slice/payroll/payrollSlice';
+import { getSelectedEmployeeRequested, getDetailAttendanceRequested } from '@/store/reducers/slice/payroll/payrollSlice';
 
 const ButtonWrapper = styled(Box)(({
   display: 'flex',
@@ -162,6 +162,24 @@ function AttendanceGenerateComponent() {
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(event);
     setPage(0);
+  };
+
+  // function for open modal calendar
+  const handleOpenCalendar = async (itemId, employeeId) => {
+    await dispatch({
+      type: getDetailAttendanceRequested.toString(),
+      payload: {
+        id: payrollId,
+        attendanceID: itemId,
+        employeeID: employeeId
+      }
+    });
+    setOpenCal(true);
+  };
+
+  // function for close modal calendar
+  const handleCloseCalendar = () => {
+    setOpenCal(false);
   };
 
   const handleSearch = (e) => {
@@ -346,7 +364,7 @@ function AttendanceGenerateComponent() {
                             <ButtonWrapper>
                               <IconButton
                                 parentColor='#E9EFFF'
-                                onClick={() => { setOpenCal(true); }}
+                                onClick={() => { handleOpenCalendar(item?.id, item?.employee?.id); }}
                                 icons={
                                   <FiCalendar fontSize={20} color='#223567' />
                                 }
@@ -383,8 +401,8 @@ function AttendanceGenerateComponent() {
 
       <AttendanceCalendarModal
         open={openCal}
-        handleClose={() => setOpenCal(false)}
-        handleConfirm={() => setOpenCal(false)}
+        handleClose={() => handleCloseCalendar()}
+        handleConfirm={() => handleCloseCalendar()}
       />
       <ListEmployeeModal
         open={open}

@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { Typography, Card, Grid, Box, Button as MuiButton, Tab, Tabs } from '@mui/material';
 import { DateRangePicker, Input } from '@/components/_shared/form';
 import { styled } from '@mui/material/styles';
-import { useRouter } from 'next/router';
+// import { useRouter } from 'next/router';
 import AttendanceTable from './AttendanceTable';
 import CustomModal from '@/components/_shared/common/CustomModal';
 import { getCompanyData } from '@/utils/helper';
-import { useAppDispatch } from '@/hooks/index';
-import { postPayrollRequested } from '@/store/reducers/slice/payroll/payrollSlice';
+import { useAppDispatch, useAppSelectors } from '@/hooks/index';
+import { postPayrollRequested, postPayrollGrossesRequested } from '@/store/reducers/slice/payroll/payrollSlice';
 import { useFormik } from 'formik';
 import dayjs from 'dayjs';
 import * as Yup from 'yup';
@@ -70,11 +70,12 @@ function a11yProps(index: number) {
 }
 
 function AttendanceComponent() {
-  const router = useRouter();
+  // const router = useRouter();
   const [value, setValue] = useState(0);
   const [open, setOpen] = useState(false);
   const companyData = getCompanyData();
   const dispatch = useAppDispatch();
+  const payrollId = useAppSelectors(state => state.payroll);
   const formik = useFormik({
     initialValues: {
       name: '',
@@ -109,6 +110,15 @@ function AttendanceComponent() {
           start: dayjs(values.date[0]).toISOString(),
           end: dayjs(values.date[1]).toISOString()
         }
+      }
+    });
+  };
+
+  const handlePostGrosses = () => {
+    dispatch({
+      type: postPayrollGrossesRequested.toString(),
+      payload: {
+        payroll_id: payrollId?.data?.items?.map(item => item?.id)
       }
     });
   };
@@ -165,7 +175,7 @@ function AttendanceComponent() {
                 variant='contained'
                 size='small'
                 color='primary'
-                onClick={() => { router.push('/payroll-disbursement/payroll/generate-gross/employee'); }}
+                onClick={handlePostGrosses}
               >{t('button.generate_gross_payroll')}</MuiButton>
             </Grid>
           </Grid>
