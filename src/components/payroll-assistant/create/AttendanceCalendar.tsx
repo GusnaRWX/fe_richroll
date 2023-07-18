@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Modal, Grid, Box, Typography, Button as MuiButton } from '@mui/material';
 import { Scheduler } from '@aldabil/react-scheduler';
 import { ConfirmationModal } from '@/components/_shared/common';
+import { useAppSelectors } from '@/hooks/index';
+import type { SchedulerRef } from '@aldabil/react-scheduler/types';
 
 const modalStyle = {
   position: 'absolute',
@@ -24,13 +26,30 @@ interface AttendanceCalendarProps {
 
 function AttendanceCalendar({open, handleClose, handleConfirm}: AttendanceCalendarProps) {
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
+
+  const { attendanceDetail } = useAppSelectors((state) => state.payroll);
+  const calendarRef = useRef<SchedulerRef>(null);
+  useEffect(() => {
+    calendarRef?.current?.scheduler?.confirmEvent(attendanceDetail?.events, 'create');
+  }, [attendanceDetail?.events]);
+
+  const handleDelete = () => {
+    const eventLength = calendarRef?.current?.scheduler?.events?.length;
+    calendarRef?.current?.scheduler?.events?.splice(0, eventLength);
+  };
+
+  const onClose = () => {
+    handleDelete();
+    handleClose();
+  };
   return (
     <>
       <Modal
         open={open}
-        onClose={handleClose}
+        onClose={onClose}
         keepMounted
         disableAutoFocus
+        // onClose={onClose}
       >
         <Box sx={modalStyle} width='1300px'>
           <Grid container spacing={2} mb='1.5rem'>
@@ -45,7 +64,7 @@ function AttendanceCalendar({open, handleClose, handleConfirm}: AttendanceCalend
                 size='small'
                 color='primary'
                 sx={{ mr: '1rem' }}
-                onClick={handleClose}
+                onClick={onClose}
               >Cancel</MuiButton>
               <MuiButton
                 variant='contained'
@@ -61,6 +80,7 @@ function AttendanceCalendar({open, handleClose, handleConfirm}: AttendanceCalend
               <Scheduler
                 events={[]}
                 // ref={calendarRef}
+                ref={calendarRef}
                 disableViewNavigator={true}
                 view='month'
                 day={null}
@@ -89,49 +109,49 @@ function AttendanceCalendar({open, handleClose, handleConfirm}: AttendanceCalend
                 Full Name
               </Typography>
               <Typography component='div' variant='text-base' fontWeight={400} color='#4B5563' mb='1.5rem'>
-                Budi Irawan
+                {attendanceDetail?.employee?.name}
               </Typography>
               <Typography component='div' variant='text-base' fontWeight={500} color='#9CA3AF' mb='.5rem'>
                 Attendance
               </Typography>
               <Typography component='div' variant='text-base' fontWeight={400} color='#4B5563' mb='1.5rem'>
-                30 Days
+                {attendanceDetail?.attendance} Days
               </Typography>
               <Typography component='div' variant='text-base' fontWeight={500} color='#9CA3AF' mb='.5rem'>
                 Absent
               </Typography>
               <Typography component='div' variant='text-base' fontWeight={400} color='#4B5563' mb='1.5rem'>
-                2 Days
+                {attendanceDetail?.absent} Days
               </Typography>
               <Typography component='div' variant='text-base' fontWeight={500} color='#9CA3AF' mb='.5rem'>
                 Paid Leave
               </Typography>
               <Typography component='div' variant='text-base' fontWeight={400} color='#4B5563' mb='1.5rem'>
-                3 Days
+                {attendanceDetail?.paidLeave} Days
               </Typography>
               <Typography component='div' variant='text-base' fontWeight={500} color='#9CA3AF' mb='.5rem'>
                 Unpaid Leave
               </Typography>
               <Typography component='div' variant='text-base' fontWeight={400} color='#4B5563' mb='1.5rem'>
-                4 Days
+                {attendanceDetail?.unpaidLeave} Days
               </Typography>
               <Typography component='div' variant='text-base' fontWeight={500} color='#9CA3AF' mb='.5rem'>
                 Gross Hours
               </Typography>
               <Typography component='div' variant='text-base' fontWeight={400} color='#4B5563' mb='1.5rem'>
-                8 Days
+                0 Days
               </Typography>
               <Typography component='div' variant='text-base' fontWeight={500} color='#9CA3AF' mb='.5rem'>
                 Total Hours (Nett)
               </Typography>
               <Typography component='div' variant='text-base' fontWeight={400} color='#4B5563' mb='1.5rem'>
-                175 Days
+                {attendanceDetail?.totalHours} Days
               </Typography>
               <Typography component='div' variant='text-base' fontWeight={500} color='#9CA3AF' mb='.5rem'>
                 Average Hours Work/Day
               </Typography>
               <Typography component='div' variant='text-base' fontWeight={400} color='#4B5563' mb='1.5rem'>
-                30 Days
+                {attendanceDetail?.averageHours} Days
               </Typography>
             </Grid>
           </Grid>
