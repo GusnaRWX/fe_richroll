@@ -12,7 +12,8 @@ import {
   putGenerateGrosses,
   getPayrollGrosses,
   getDetailAttendance,
-  putPayrollGrossesFinal
+  putPayrollGrossesFinal,
+  putPayrollGrossesId
 } from '../saga-actions/payroll/payrollActions';
 import { call, put, takeEvery, delay } from 'redux-saga/effects';
 import {
@@ -54,7 +55,10 @@ import {
   getDetailAttendanceSuccess,
   putPayrollsGrossesFinalRequested,
   putPayrollGrossesFinalSuccess,
-  putPayrollGrossesFinalFailed
+  putPayrollGrossesFinalFailed,
+  putPayrollGrossesIdRequested,
+  putPayrollGrossesIdSuccess,
+  putPayrollGrossesIdFailed
 } from '@/store/reducers/slice/payroll/payrollSlice';
 import { setResponserMessage } from '@/store/reducers/slice/responserSlice';
 import { Services } from '@/types/axios';
@@ -365,13 +369,56 @@ function* fetchPutPayrollGrossesFinal(action: AnyAction) {
     const res: AxiosResponse = yield call(putPayrollGrossesFinal, action?.payload);
 
     if (res.data.code === 201 || res.data.code === 200) {
-      console.log('here');
       yield put({ type: putPayrollGrossesFinalSuccess.toString() });
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: res.data.code,
+          message: 'Successfully Saved',
+          footerMessage: 'Payroll has been created'
+        }
+      });
+      yield Router.push({ pathname: '/payroll-disbursement/payroll' });
     }
   } catch (err) {
     if (err instanceof AxiosError) {
       const errorMessage = err?.response?.data as Services.ErrorResponse;
       yield put({ type: putPayrollGrossesFinalFailed.toString() });
+      yield delay(2000, true);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message
+        }
+      });
+    }
+  }
+}
+
+function* fetchPutPayrollGrossesId(action: AnyAction) {
+  try {
+    const res: AxiosResponse = yield call(putPayrollGrossesId, action?.payload);
+
+    if (res.data.code === 201 || res.data.code === 200) {
+      yield put({ type: putPayrollGrossesIdSuccess.toString() });
+      yield put({
+        type: getPayrollGrossesRequested.toString(),
+        payload: res.data.data
+      });
+      yield delay(2000, true);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: res.data.code,
+          message: res?.data?.message
+        }
+      });
+    }
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      yield put({ type: putPayrollGrossesIdFailed.toString() });
       yield delay(2000, true);
       yield put({
         type: setResponserMessage.toString(),
@@ -439,6 +486,7 @@ function* payrollSaga() {
   yield takeEvery(getPayrollGrossesRequested.toString(), fetchGetPayrollEmployee);
   yield takeEvery(getDetailAttendanceRequested.toString(), fetchGetDetailAttendance);
   yield takeEvery(putPayrollsGrossesFinalRequested.toString(), fetchPutPayrollGrossesFinal);
+  yield takeEvery(putPayrollGrossesIdRequested.toString(), fetchPutPayrollGrossesId);
 }
 
 export default payrollSaga;

@@ -21,6 +21,9 @@ import { Payroll } from '@/types/payroll';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { getListBaseCompensationRequested, getListTerminReqeusted, getListSuppCompensationRequested } from '@/store/reducers/slice/options/optionSlice';
 import { numberFormat } from '@/utils/format';
+import { putPayrollGrossesIdRequested } from '@/store/reducers/slice/payroll/payrollSlice';
+import * as Yup from 'yup';
+import { useRouter } from 'next/router';
 
 const ButtonWrapper = styled.div`
  display: flex;
@@ -38,33 +41,66 @@ const NameWrapper = styled.div`
  margin: 0;
 `;
 
+const validationSchema = Yup.object().shape({
+  hocComponent: Yup.array().of(
+    Yup.object().shape({
+      id: Yup.string().nullable(),
+      componentName: Yup.string().nullable(),
+      amount: Yup.number().when('componentName', (value, schema) =>
+        value && value.length > 0
+          ? schema.required('Amount is required')
+          : schema
+      ),
+    })
+  ),
+});
+
 function GrossRow(att) {
   const { item, isPreview } = att;
   console.log(item, 'item');
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const dispatch = useAppDispatch();
   const { option } = useAppSelectors(state => state);
   const formik = useFormik({
     initialValues: {
-      baseCompensationComponentId: '',
-      amountBase: '',
-      periodBase: '',
-      taxStatusBase: 'non-taxable',
+      // baseCompensationComponentId: '4',
+      // amountBase: '',
+      // periodBase: '',
+      // taxStatusBase: 'non-taxable',
 
 
       // hoc
       hocComponent: [],
-      overtimeComponent: { overtime: '', rate: '' }
+      // overtimeComponent: { overtime: '', rate: '' }
     } as Payroll.GrossRowForm,
+    validationSchema: validationSchema,
     onSubmit: (_val) => {
-      console.log('kanjut', _val);
+      const payload = {
+        grossesId: item?.id,
+        id: router.query.id,
+        body: {
+          ad_hoc: _val?.hocComponent?.map(val => {
+            return {
+              id: val?.id || '',
+              name: val.componentName,
+              amount: +val.amount
+            };
+          })
+        }
+
+      };
+      dispatch({
+        type: putPayrollGrossesIdRequested.toString(),
+        payload: payload
+      });
     },
   });
 
   const handleAddHoc = () => {
     formik.setValues({
       ...formik.values,
-      hocComponent: [...formik.values.hocComponent, { componentName: '', amount: '' }]
+      hocComponent: [...formik.values.hocComponent, { componentName: '', amount: '', id: '' }]
     });
   };
 
@@ -94,8 +130,26 @@ function GrossRow(att) {
   useEffect(() => {
     dispatch({ type: getListBaseCompensationRequested.toString() });
     dispatch({ type: getListSuppCompensationRequested.toString() });
+    dispatch({ type: getListTerminReqeusted.toString(), payload: item?.employee?.grossCalculation?.base?.term?.id });
   }, []);
 
+  useEffect(() => {
+    if (item?.employee?.grossCalculation?.adHoc?.length > 0) {
+      item?.employee?.grossCalculation?.adHoc?.map((val, index) => {
+        formik.setFieldValue(`hocComponent[${index}].componentName`, val?.name);
+        formik.setFieldValue(`hocComponent[${index}].amount`, val?.amount);
+        formik.setFieldValue(`hocComponent[${index}].id`, val?.id);
+      });
+    }
+  }, [item?.employee?.grossCalculation?.adHoc]);
+
+  const baseName = item?.employee?.grossCalculation?.base?.name;
+  const basePeriod = item?.employee?.grossCalculation?.base?.term?.id;
+  const baseTaxStatus = item?.employee?.grossCalculation?.base?.isTaxable === true ? 'true' : 'false';
+
+  const suppName = item?.employee?.grossCalculation?.supplementary?.name;
+  const suppPeriod = item?.employee?.grossCalculation?.supplementary?.term?.id;
+  const suppTaxStatus = item?.employee?.grossCalculation?.supplementary?.isTaxable === true ? 'true' : 'false';
 
   return (
     <React.Fragment>
@@ -103,7 +157,7 @@ function GrossRow(att) {
         <TableCell>
           <NameWrapper>
             <Avatar
-              src={item.employee.picture !== '' ? item.employee.picture: ImageType.AVATAR_PLACEHOLDER }
+              src={item.employee.picture !== '' ? item.employee.picture : ImageType.AVATAR_PLACEHOLDER}
               alt={item.employee.name}
               sx={{
                 width: 24, height: 24
@@ -213,7 +267,7 @@ function GrossRow(att) {
                     variant='outlined'
                     size='small'
                     customLabel='Compensation Component'
-                    value={formik.values.baseCompensationComponentId}
+                    value={option?.listBaseCompensation.find(item => item.label === baseName)?.value}
                     options={option?.listBaseCompensation}
                     name='baseCompensationComponentId'
                     onChange={(e) => {
@@ -221,6 +275,7 @@ function GrossRow(att) {
                       dispatch({ type: getListTerminReqeusted.toString(), payload: e.target.value });
                     }}
                     onBlur={formik.handleBlur}
+                    disabled
                   />
                 </Grid>
                 <Grid item>
@@ -232,7 +287,7 @@ function GrossRow(att) {
                     type='text'
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    value={formik.values.amountBase}
+                    value={numberFormat(+item?.employee?.grossCalculation?.base?.amount)}
                     customLabel='Amount'
                     InputProps={{
                       startAdornment: ('Rp'),
@@ -243,6 +298,7 @@ function GrossRow(att) {
                         }
                       }
                     }}
+                    disabled
                   />
                 </Grid>
                 <Grid item>
@@ -251,11 +307,12 @@ function GrossRow(att) {
                     variant='outlined'
                     size='small'
                     customLabel='&nbsp;'
-                    value={formik.values.periodBase}
+                    value={option?.listTermin?.find(item => item?.value === basePeriod)?.value}
                     options={option?.listTermin}
                     name='periodBase'
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
+                    disabled
                   />
                 </Grid>
                 <Grid item>
@@ -266,19 +323,20 @@ function GrossRow(att) {
                       { label: 'Taxable', value: 'true' },
                       { label: 'Non-Taxable', value: 'false' },
                     ]}
-                    value={formik.values.taxStatusBase}
+                    value={baseTaxStatus}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     row
+                    disabled
                   />
                 </Grid>
               </Grid>
 
-              <Typography component='div' variant='text-base' fontWeight='bold' color='primary.main' sx={{ mt: '2rem', mb: '1rem' }}>Overtime Hours</Typography>
+              {/* <Typography component='div' variant='text-base' fontWeight='bold' color='primary.main' sx={{ mt: '2rem', mb: '1rem' }}>Overtime Hours</Typography> */}
               {/* {formik.values.overtimeComponent?.length > 0 && (
                 formik.values.overtimeComponent.map((_, index) => ( */}
-              <Grid container spacing={2} sx={{ mb: '1rem' }} >
-                {/* <Grid item xs={3.5} sm={3.5} md={3.5} lg={3.5} xl={3.5}>
+              {/* <Grid container spacing={2} sx={{ mb: '1rem' }} > */}
+              {/* <Grid item xs={3.5} sm={3.5} md={3.5} lg={3.5} xl={3.5}>
                   <Select
                     fullWidth
                     variant='outlined'
@@ -293,7 +351,7 @@ function GrossRow(att) {
                     ]}
                   />
                 </Grid> */}
-                {/* <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
+              {/* <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
                       <Input
                         name='amount'
                         size='small'
@@ -312,7 +370,7 @@ function GrossRow(att) {
                         }}
                       />
                     </Grid> */}
-                <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
+              {/* <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
                   <Input
                     name='amount'
                     size='small'
@@ -321,7 +379,7 @@ function GrossRow(att) {
                     type='text'
                     customLabel='Overtime Hours'
                     disabled
-                    value={formik.values.overtimeComponent.overtime}
+                    value={item?.employee?.grossCalculation?.overtime?.amount === 'NaN' ? 0 : item?.employee?.grossCalculation?.overtime?.amount}
                     InputProps={{
                       endAdornment: ('Hours'),
                       sx: {
@@ -331,14 +389,14 @@ function GrossRow(att) {
                       }
                     }}
                   />
-                </Grid>
-                <Grid item xs={2.5} sm={2.5} md={2.5} lg={2.5} xl={2.5}>
+                </Grid> */}
+              {/* <Grid item xs={2.5} sm={2.5} md={2.5} lg={2.5} xl={2.5}>
                   <Input
                     name='amount'
                     size='small'
                     placeholder='Input rate'
                     onKeyDown={(e) => console.log(e)}
-                    value={formik.values.overtimeComponent.rate}
+                    value={+item?.employee?.grossCalculation?.overtime?.rate}
                     disabled
                     type='text'
                     customLabel='Rate'
@@ -352,8 +410,8 @@ function GrossRow(att) {
                       }
                     }}
                   />
-                </Grid>
-                {/* <Grid item xs={1} sm={1} md={1} lg={1} xl={1} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'end' }}>
+                </Grid> */}
+              {/* <Grid item xs={1} sm={1} md={1} lg={1} xl={1} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'end' }}>
                       <IconButton
                         parentColor='#FEE2E2'
                         onClick={() => { handleRemoveOvertime(index); }}
@@ -362,7 +420,7 @@ function GrossRow(att) {
                         }
                       />
                     </Grid> */}
-              </Grid>
+              {/* </Grid> */}
               {/* ))
               )} */}
 
@@ -383,8 +441,9 @@ function GrossRow(att) {
                     variant='outlined'
                     size='small'
                     customLabel='Compensation Component 1'
-                    value={''}
+                    value={option?.listSuppCompensation?.find(item => item.label === suppName)?.value}
                     options={option?.listSuppCompensation}
+                    disabled
                   />
                 </Grid>
                 <Grid item xs={3}>
@@ -404,6 +463,8 @@ function GrossRow(att) {
                         }
                       }
                     }}
+                    disabled
+                    value={numberFormat(+item?.employee?.grossCalculation?.supplementary?.amount)}
                   />
                 </Grid>
                 <Grid item xs={1.5}>
@@ -412,13 +473,9 @@ function GrossRow(att) {
                     variant='outlined'
                     size='small'
                     customLabel='&nbsp;'
-                    value={'active'}
-                    options={[
-                      { value: '', label: 'All Status' },
-                      { value: 'active', label: 'Active' },
-                      { value: 'inactive', label: 'Inactive' },
-                      { value: 'draft', label: 'Draft' },
-                    ]}
+                    value={option?.listTermin?.find(item => item?.value === suppPeriod)?.value}
+                    options={option?.listTermin}
+                    disabled
                   />
                 </Grid>
                 <Grid item xs={3}>
@@ -426,9 +483,11 @@ function GrossRow(att) {
                     label='Tax Status'
                     name='taxStatus'
                     options={[
-                      { label: 'Taxable', value: '1' },
-                      { label: 'Non-Taxable', value: '2' },
+                      { label: 'Taxable', value: 'true' },
+                      { label: 'Non-Taxable', value: 'false' },
                     ]}
+                    disabled
+                    value={suppTaxStatus}
                     row
                   />
                 </Grid>
@@ -443,7 +502,7 @@ function GrossRow(att) {
                 </Grid> */}
               </Grid>
 
-              <Grid container spacing={2} sx={{ mb: '1rem' }}>
+              {/* <Grid container spacing={2} sx={{ mb: '1rem' }}>
                 <Grid item xs={3.5} sm={3.5} md={3.5} lg={3.5} xl={3.5}>
                   <Select
                     fullWidth
@@ -470,7 +529,7 @@ function GrossRow(att) {
                     row
                   />
                 </Grid>
-                {/* <Grid item xs={1} sm={1} md={1} lg={1} xl={1} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'end' }}>
+                <Grid item xs={1} sm={1} md={1} lg={1} xl={1} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'end' }}>
                   <IconButton
                     parentColor='#FEE2E2'
                     onClick={() => { console.log(); }}
@@ -478,8 +537,8 @@ function GrossRow(att) {
                       <BsTrashFill fontSize={20} color='#B91C1C' />
                     }
                   />
-                </Grid> */}
-              </Grid>
+                </Grid>
+              </Grid> */}
 
               {/* <MuiButton
                 variant='contained'
@@ -491,7 +550,7 @@ function GrossRow(att) {
               ><Add fontSize='small' />&nbsp; Add Supplementaryc Compensation</MuiButton> */}
 
               <Typography component='div' variant='text-base' fontWeight='bold' color='primary.main' sx={{ mt: '2rem', mb: '1rem' }}>Ad Hoc</Typography>
-              {formik.values.hocComponent.length > 0 && (
+              {formik.values.hocComponent.length > 0 ? (
                 formik.values.hocComponent.map((hoc: Payroll.HocComponent, index) => (
                   <Grid key={index} container flexDirection='row' gap={3} alignItems='end' mb='1rem'>
                     <Grid item md={4}>
@@ -503,6 +562,7 @@ function GrossRow(att) {
                         size='small'
                         fullWidth
                         placeholder='Input Hoc Name'
+                        value={formik.values.hocComponent[index].componentName}
                       />
                     </Grid>
                     <Grid item md={4}>
@@ -519,6 +579,10 @@ function GrossRow(att) {
                           startAdornment: 'Rp.',
                           endAdornment: 'IDR'
                         }}
+                        type='number'
+                        value={formik.values.hocComponent[index].amount}
+                        error={formik?.touched?.hocComponent?.[index]?.amount && Boolean((formik.errors?.hocComponent?.[index] as any)?.amount)}
+                        helperText={formik?.touched?.hocComponent?.[index]?.amount && (formik.errors.hocComponent?.[index] as any)?.amount}
                       />
                     </Grid>
                     <Grid item md={3}>
@@ -532,7 +596,7 @@ function GrossRow(att) {
                     </Grid>
                   </Grid>
                 ))
-              )}
+              ) : null}
               <Box sx={{ display: 'block', mb: '10px' }}>
                 <MuiButton
                   variant='contained'
