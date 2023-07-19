@@ -24,7 +24,7 @@ import { compareCheck, ifThenElse } from '@/utils/helper';
 import { visuallyHidden } from '@mui/utils';
 import EmptyState from '../_shared/common/EmptyState';
 import { useAppSelectors, useAppDispatch } from '@/hooks/index';
-import { getSelectedEmployeeRequested, getDetailAttendanceRequested } from '@/store/reducers/slice/payroll/payrollSlice';
+import { getSelectedEmployeeRequested, getDetailAttendanceRequested, putPayrollWorkflowRequested } from '@/store/reducers/slice/payroll/payrollSlice';
 
 const ButtonWrapper = styled(Box)(({
   display: 'flex',
@@ -157,8 +157,6 @@ function AttendanceGenerateComponent() {
     setPage(newPage);
   };
 
-  console.log(payrollId);
-
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(event);
     setPage(1);
@@ -194,6 +192,20 @@ function AttendanceGenerateComponent() {
     const isAsc = compareCheck(sort === headId, direction === 'asc');
     setDirection(ifThenElse(isAsc, 'desc', 'asc'));
     setSort(headId);
+  };
+
+  const handleSave = () => {
+    dispatch({
+      type: putPayrollWorkflowRequested.toString(),
+      payload: {
+        id: payrollId,
+        data: {
+          workflow: 0,
+          status: 1
+        }
+      }
+    });
+    router.push('/payroll-disbursement/attendance');
   };
 
   useEffect(() => {
@@ -252,9 +264,9 @@ function AttendanceGenerateComponent() {
               variant='contained'
               size='small'
               color='primary'
-              onClick={() => { router.push('/payroll-disbursement/attendance'); }}
+              onClick={() => { handleSave(); }}
               sx={{ color: 'white' }}
-            >Save</MuiButton>
+            >Confirm</MuiButton>
           </ButtonWrapper>
         </Grid>
       </Grid>

@@ -8,13 +8,14 @@ import {
   Button as MuiButton,
   Checkbox
 } from '@mui/material';
-import { Input, DateRangePicker } from '../_shared/form';
+import { Input } from '../_shared/form';
 import { Search } from '@mui/icons-material';
 import Table from '../_shared/form/Table';
 import { compareCheck, ifThenElse, getCompanyData } from '@/utils/helper';
 import { visuallyHidden } from '@mui/utils';
 import { IconButton } from '@/components/_shared/form';
 import { BsTrashFill, BsFillEyeFill } from 'react-icons/bs';
+import { HiPencilAlt } from 'react-icons/hi';
 import { FiDownload } from 'react-icons/fi';
 import { TbFileImport } from 'react-icons/tb';
 import { HiOutlineInboxIn } from 'react-icons/hi';
@@ -183,14 +184,6 @@ function AttendanceTable({
             }}
           />
         </Grid>
-        <Grid item xs={6}>
-          <DateRangePicker
-            withAsterisk
-            // value={formik.values.startDate as unknown as Date}
-            onChange={(date: unknown) => console.log(date)}
-          // error={formik.touched.startDate && formik.errors.startDate ? String(formik.errors.startDate) : ''}
-          />
-        </Grid>
       </Grid>
       <Table
         count={data?.itemTotals}
@@ -202,7 +195,7 @@ function AttendanceTable({
         headChildren={
           <TableRow>
             {
-              tabValue === 0 && (
+              tabValue === 1 && (
                 <TableCell>
                   <Checkbox onChange={(e) => onAll(e)} checked={checkAll()}/>
                 </TableCell>
@@ -243,7 +236,7 @@ function AttendanceTable({
                   data?.items?.map((item, index) => (
                     <TableRow key={index}>
                       {
-                        tabValue === 0 && (
+                        tabValue === 1 && (
                           <TableCell>
                             <Checkbox onChange={(e) => onSelected(item?.id, e)} checked={checkVal(item?.id)}/>
                           </TableCell>
@@ -272,17 +265,10 @@ function AttendanceTable({
                               <IconButton
                                 disabled={!!selectedTemp.length}
                                 parentColor='#E9EFFF'
-                                // onClick={() => { router.push({pathname: '/payroll-disbursement/payroll/generate-gross/employee', query: { id: item.id }}); }}
-                                onClick={() => {
-                                  dispatch({
-                                    type: postPayrollGrossesRequested.toString(),
-                                    payload: {
-                                      payroll_id: [String(item.id)]
-                                    }
-                                  });
-                                }}
+                                onClick={() => { router.push({ pathname: '/payroll-disbursement/attendance/generate', query: { id: item?.id }}); }}
                                 icons={
-                                  <TbFileImport fontSize={20} color='#223567' />
+                                  <HiPencilAlt fontSize={20} color='#223567' />
+                                  // <TbFileImport fontSize={20} color='#223567' />
                                 }
                               />
                               <IconButton
@@ -299,9 +285,16 @@ function AttendanceTable({
                             <>
                               <IconButton
                                 parentColor='#E9EFFF'
-                                onClick={() => { router.push('/payroll-disbursement/attendance/generate'); }}
+                                onClick={() => {
+                                  dispatch({
+                                    type: postPayrollGrossesRequested.toString(),
+                                    payload: {
+                                      payroll_id: [String(item.id)]
+                                    }
+                                  });
+                                }}
                                 icons={
-                                  <BsFillEyeFill fontSize={20} color='#223567' />
+                                  <TbFileImport fontSize={20} color='#223567' />
                                 }
                               />
                               <IconButton
@@ -319,6 +312,13 @@ function AttendanceTable({
                                 parentColor='#E9EFFF'
                                 icons={
                                   <HiOutlineInboxIn fontSize={20} color='#223567' />
+                                }
+                              />
+                              <IconButton
+                                parentColor='#E9EFFF'
+                                onClick={() => { router.push('/payroll-disbursement/attendance/generate'); }}
+                                icons={
+                                  <BsFillEyeFill fontSize={20} color='#223567' />
                                 }
                               />
                               <IconButton
@@ -357,7 +357,7 @@ function AttendanceTable({
           </>
         }
       />
-      {tabValue === 0 &&
+      {tabValue === 1 &&
           <Grid container spacing={2} mt='1rem'>
             <Grid item xs={9} sm={9} md={9} lg={9} xl={9}></Grid>
             <Grid item xs={3} sm={3} md={3} lg={3} xl={3} sx={{ display: 'flex', justifyContent: 'flex-end' }}>

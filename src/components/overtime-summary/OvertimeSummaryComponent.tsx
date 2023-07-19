@@ -293,8 +293,8 @@ function OvertimeSummaryComponent() {
     const tempData = selected.map((val) => {
       return ({
         employeeID: val['id'],
-        start: dayjs(val['startTime']).toISOString(),
-        duration: val['duration'],
+        start: dayjs(dayjs(selectDate).format('YYYY-MM-DD') + ' ' + dayjs(val['startTime']).format('HH:mm')).toISOString(),
+        duration: Number(val['duration']),
         multiplier: val['multiplier']
       });
     });

@@ -184,5 +184,10 @@ export declare namespace Payroll {
     events: Array<EventType>
   }
 
+  interface WorkflowType {
+    workflow: number;
+    status: number;
+  }
+
 }
 

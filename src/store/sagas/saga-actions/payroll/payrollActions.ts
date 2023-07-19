@@ -10,6 +10,10 @@ export const postPayroll = (payload) => {
   return post(`payrolls`, payload.data as Payroll.PostPayrollType);
 };
 
+export const putPayrollWorkflow = (payload) => {
+  return put(`payrolls/${payload.id}`, payload.data as Payroll.WorkflowType);
+};
+
 export const getGenerateGross = (payload: Payroll.GetParams) => {
   const { page, itemPerPage, sort, direction, countryCode } = payload;
   return get(`payrolls/1/grosses?page=${page}&itemPerPage=${itemPerPage}&sort=${sort}&direction=${direction}&countryCode=${countryCode}`);
