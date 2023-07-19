@@ -170,7 +170,7 @@ const LeaveEntriesTableComponent = ({
         </Grid>
       </Grid>
       <Table
-        count={leaveEntries?.leaveEntriesData?.items?.length}
+        count={leaveEntries?.leaveEntriesData?.itemTotals}
         rowsPerPageOptions={[5, 10, 15]}
         rowsPerPage={rowsPerPage}
         page={page}
