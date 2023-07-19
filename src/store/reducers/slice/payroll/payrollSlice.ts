@@ -104,6 +104,15 @@ export const payrollSlice = createSlice({
     postPayrollFailed: (state) => {
       state.isLoading = false;
     },
+    putPayrollWorkflowRequested: (state) => {
+      state.isLoading = true;
+    },
+    putPayrollWorkflowSuccess: (state) => {
+      state.isLoading = false;
+    },
+    putPayrollWorkflowFailed: (state) => {
+      state.isLoading = false;
+    },
     getGenerateGrossPayrollRequested: state => {
       state.isLoading = true;
     },
@@ -303,7 +312,10 @@ export const {
   putPayrollGrossesFinalFailed,
   putPayrollGrossesIdRequested,
   putPayrollGrossesIdSuccess,
-  putPayrollGrossesIdFailed
+  putPayrollGrossesIdFailed,
+  putPayrollWorkflowFailed,
+  putPayrollWorkflowRequested,
+  putPayrollWorkflowSuccess
 } = payrollSlice.actions;
 
 export default payrollSlice.reducer;

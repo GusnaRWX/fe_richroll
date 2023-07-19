@@ -13,7 +13,8 @@ import {
   getPayrollGrosses,
   getDetailAttendance,
   putPayrollGrossesFinal,
-  putPayrollGrossesId
+  putPayrollGrossesId,
+  putPayrollWorkflow
 } from '../saga-actions/payroll/payrollActions';
 import { call, put, takeEvery, delay } from 'redux-saga/effects';
 import {
@@ -58,7 +59,10 @@ import {
   putPayrollGrossesFinalFailed,
   putPayrollGrossesIdRequested,
   putPayrollGrossesIdSuccess,
-  putPayrollGrossesIdFailed
+  putPayrollGrossesIdFailed,
+  putPayrollWorkflowFailed,
+  putPayrollWorkflowRequested,
+  putPayrollWorkflowSuccess
 } from '@/store/reducers/slice/payroll/payrollSlice';
 import { setResponserMessage } from '@/store/reducers/slice/responserSlice';
 import { Services } from '@/types/axios';
@@ -472,6 +476,38 @@ function* fetchGetDetailAttendance(action: AnyAction) {
   }
 }
 
+function* fetchPutPayrollWorkflow(action: AnyAction) {
+  try {
+    const res: AxiosResponse = yield call(putPayrollWorkflow, action?.payload);
+    if (res.data.code === 200 || res.data.code === 201) {
+      yield put({
+        type: putPayrollWorkflowSuccess.toString()
+      });
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: res?.data?.code,
+          message: res?.data?.message
+        }
+      });
+    }
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      // yield put({ type: getPayrollGrossesFailed.toString() });
+      yield put({ type: putPayrollWorkflowFailed.toString() });
+      yield delay(2000, true);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message
+        }
+      });
+    }
+  }
+}
+
 function* payrollSaga() {
   yield takeEvery(getPayrollRequested.toString(), fetchGetPayroll);
   yield takeEvery(postPayrollRequested.toString(), fetchPostPayroll);
@@ -487,6 +523,7 @@ function* payrollSaga() {
   yield takeEvery(getDetailAttendanceRequested.toString(), fetchGetDetailAttendance);
   yield takeEvery(putPayrollsGrossesFinalRequested.toString(), fetchPutPayrollGrossesFinal);
   yield takeEvery(putPayrollGrossesIdRequested.toString(), fetchPutPayrollGrossesId);
+  yield takeEvery(putPayrollWorkflowRequested.toString(), fetchPutPayrollWorkflow);
 }
 
 export default payrollSaga;

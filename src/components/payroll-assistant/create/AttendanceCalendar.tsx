@@ -81,7 +81,6 @@ function AttendanceCalendar({open, handleClose, handleConfirm}: AttendanceCalend
                 events={[]}
                 // ref={calendarRef}
                 ref={calendarRef}
-                disableViewNavigator={true}
                 view='month'
                 day={null}
                 deletable={true}
@@ -91,13 +90,13 @@ function AttendanceCalendar({open, handleClose, handleConfirm}: AttendanceCalend
                   weekStartOn: 1,
                   startHour: 1,
                   endHour: 23,
-                  // cellRenderer: () => {
-                  //   return (
-                  //     <MuiButton onClick={() => {
-                  //       return null;
-                  //     }}/>
-                  //   );
-                  // }
+                  cellRenderer: () => {
+                    return (
+                      <MuiButton style={{ height: '150% !important' }} onClick={() => {
+                        return null;
+                      }}/>
+                    );
+                  }
                 }}
               />
             </Grid>
@@ -139,19 +138,19 @@ function AttendanceCalendar({open, handleClose, handleConfirm}: AttendanceCalend
                 Gross Hours
               </Typography>
               <Typography component='div' variant='text-base' fontWeight={400} color='#4B5563' mb='1.5rem'>
-                0 Days
+                {attendanceDetail?.totalHours} Hours
               </Typography>
               <Typography component='div' variant='text-base' fontWeight={500} color='#9CA3AF' mb='.5rem'>
                 Total Hours (Nett)
               </Typography>
               <Typography component='div' variant='text-base' fontWeight={400} color='#4B5563' mb='1.5rem'>
-                {attendanceDetail?.totalHours} Days
+                {attendanceDetail?.totalHours} Hours
               </Typography>
               <Typography component='div' variant='text-base' fontWeight={500} color='#9CA3AF' mb='.5rem'>
                 Average Hours Work/Day
               </Typography>
               <Typography component='div' variant='text-base' fontWeight={400} color='#4B5563' mb='1.5rem'>
-                {attendanceDetail?.averageHours} Days
+                {attendanceDetail?.averageHours} Hours
               </Typography>
             </Grid>
           </Grid>
