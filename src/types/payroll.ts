@@ -55,12 +55,13 @@ export declare namespace Payroll {
     direction?: boolean;
     search?: string;
     countryCode?: string;
-    payrollID?: string|number;
+    payrollID?: string | number;
   }
 
   interface HocComponent {
     componentName: string;
-    amount: string
+    amount: string;
+    id: string;
   }
 
   interface OvertimeComponent {

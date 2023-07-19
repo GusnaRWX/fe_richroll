@@ -1,4 +1,4 @@
-import { get, post, put } from '@/utils/services';
+import { get, post, put, patch } from '@/utils/services';
 import { Payroll } from '@/types/payroll';
 
 export const getPayroll = (payload: Payroll.GetParams) => {
@@ -55,5 +55,12 @@ export const getDetailAttendance = (payload: Payroll.ParamsDetailAttendance) => 
 };
 
 export const putPayrollGrossesFinal = (payload) => {
-  return put(`payrolls/${payload.id}/grosses/${payload.grossId}/final`, {});
+  // return put(`payrolls/${payload.id}/grosses/final`, {});
+  return patch(`payrolls/${payload.id}/grosses/final`, {});
+};
+
+export const putPayrollGrossesId = (payload) => {
+  const { id, grossesId, body } = payload;
+  console.log(payload);
+  return put(`payrolls/${id}/grosses/${grossesId}`, body);
 };

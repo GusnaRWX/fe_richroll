@@ -12,6 +12,8 @@ import { IconButton } from '@/components/_shared/form';
 import { ArrowBack } from '@mui/icons-material';
 import GrossContent from '@/components/payroll-assistant/create/GrossContent';
 import { useTranslation } from 'react-i18next';
+import { useAppDispatch } from '@/hooks/index';
+import { putPayrollsGrossesFinalRequested } from '@/store/reducers/slice/payroll/payrollSlice';
 
 const ButtonWrapper = styled(Box)(({
   display: 'flex',
@@ -37,8 +39,17 @@ const ContentWrapper = styled(Card)(({
 
 function GenerateGrossDetail() {
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const tPath = 'payroll_and_disbursement.attendance_summary.generate_gross_payroll.';
+
+  const handleConfirm = () => {
+    dispatch({
+      type: putPayrollsGrossesFinalRequested.toString(),
+      payload: { id: router.query.id }
+    });
+  };
+
   return (
     <>
       <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
@@ -77,7 +88,7 @@ function GenerateGrossDetail() {
                   variant='contained'
                   size='small'
                   color='primary'
-                  onClick={() => { router.push('/payroll-disbursement/payroll'); }}
+                  onClick={handleConfirm}
                   sx={{ color: 'white' }}
                 >{t('button.confirm')}</MuiButton>
               </ButtonWrapper>
