@@ -75,6 +75,7 @@ export default function ItpCreateDesignedTransferAccountComponent({ refProp, nex
         <Grid container spacing={2} sx={{mt:'20px'}}>
           <Grid item xs={12} md={12} lg={12} xl={12}>
             <RadioGroup
+              label=''
               name='bankType'
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
