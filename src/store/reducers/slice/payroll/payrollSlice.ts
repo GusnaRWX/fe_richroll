@@ -44,6 +44,7 @@ interface AccountState {
     unpaidLeave: number,
     overtime: number,
     totalHours: number,
+    netHours: number,
     averageHours: number | string,
     events: Array<EventType>
   }
@@ -75,6 +76,7 @@ const initialState: AccountState = {
     unpaidLeave: 0,
     overtime: 0,
     totalHours: 0,
+    netHours: 0,
     averageHours: 0,
     events: []
   }
@@ -220,6 +222,7 @@ export const payrollSlice = createSlice({
       state.attendanceDetail.paidLeave = action?.payload?.paidLeave;
       state.attendanceDetail.totalHours = action?.payload?.totalHours;
       state.attendanceDetail.unpaidLeave = action?.payload?.unpaidLeave;
+      state.attendanceDetail.netHours = action?.payload?.netHours;
       const tempData: Array<EventType> = [];
       action?.payload?.events.map((item) => {
         tempData.push({
