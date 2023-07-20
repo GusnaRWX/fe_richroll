@@ -39,6 +39,7 @@
     "income_tax_profile_deductable_component": "Komponen Boleh Tolak",
     "income_tax_profile_profile": "Profil"
   },
+
   "button": {
     "next": "Seterusnya",
     "back": "belakang",
@@ -46,7 +47,9 @@
     "save_approve": "Simpan dan Luluskan",
     "save_exit": "Simpan dan keluar",
     "confirm": "sahkan",
+    "submit": "Hantar",
     "cancel": "Batal",
+    "close": "tutup",
     "delete": "Padam",
     "edit": "Sunting",
     "activate": "Aktifkan",
@@ -54,18 +57,110 @@
     "suspend": "tangguh",
     "archive": "Diarkibkan",
     "duplicate": "Pendua",
+    "component": "Komponen",
+    "deductable": "Boleh ditolak",
     "mark_complete": "Tandakan Semua dan Selesai",
     "add_new_profile": "Tambah Profil Baharu",
     "add_component": "Tambah Komponen",
     "add_new_component": "Tambah Komponen Baharu",
-    "component": "Komponen",
-    "deductable": "Boleh ditolak",
+    "add_profile": "Tambah Profil",
+    "add_supplementary_compensation": "Tambah Pampasan Tambahan"
+  },
+  "compensation_and_benefits": {
+    "title": "Pampasan",
+    "table": {
+      "table_cols_item": {
+        "cnb_profile_name": "C",
+        "base_compensation": "Pampasan Asas",
+        "supplementary_compensation": "Pampasan Tambahan",
+        "date_created": "Tarikh Dibuat",
+        "last_update": "Kemaskini terakhir"
+      }
+    },
+    "form": {
+      "create_title": "Cipta Baharu C",
+      "update_title": "Kemas kini Profil",
+      "profile_name": "Nama profil",
+      "profile_name_placeholder": "Masukkan Nama Profil",
+      "compensation_sub_title": "Pampasan",
+      "base_section": {
+        "title": "Pangkalan",
+        "compensation_component": "Komponen Pampasan",
+        "compensation_component_placeholder": "Pilih komponen pampasan asas",
+        "tax_status": "Status Cukai",
+        "tax_status_option": {
+          "taxable": "Bercukai",
+          "nontaxable": "Tidak Bercukai"
+        }
+      },
+      "overtime_section": {
+        "title": "Lebih masa",
+        "rate": "Kadar"
+      },
+      "supplementary_section": {
+        "title": "Tambahan",
+        "compensation_component": "Komponen Pampasan",
+        "tax_status": "Status Cukai",
+        "tax_status_option": {
+          "taxable": "Bercukai",
+          "nontaxable": "Tidak Bercukai"
+        },
+        "amount": "Jumlah"
+      }
+    },
+    "popup": {
+      "delete": {
+        "title": "Adakah anda pasti mahu memadamkan rekod ini?",
+        "desc": "Sebarang perubahan yang tidak disimpan akan dibuang. "
+      },
+      "create_cancel": {
+        "title": "Adakah anda pasti mahu memadamkan rekod ini?",
+        "desc": "Sebarang perubahan yang tidak disimpan akan dibuang. "
+      },
+      "update_cancel": {
+        "title": "Adakah anda pasti mahu pergi?",
+        "desc": "Sebarang perubahan yang tidak disimpan akan dibuang"
+      },
+      "update_save": {
+        "title": "Simpan Perubahan",
+        "desc": "Adakah anda pasti mahu mengemas kini profil dengan data ini? "
+      },
+      "detail": {
+        "title": "C",
+        "cnb_profile_name": "C",
+        "date_created": "Tarikh Dibuat",
+        "last_update": "Kemaskini terakhir",
+        "base_section": {
+          "title": "Pangkalan",
+          "compensation_component": "Komponen Pampasan",
+          "compensation_component_placeholder": "Pilih komponen pampasan asas",
+          "tax_status": "Status Cukai",
+          "tax_status_option": {
+            "taxable": "Bercukai",
+            "nontaxable": "Tidak boleh cukai"
+          },
+          "amount_per": "Jumlah setiap",
+          "rate_per": "Kadar setiap"
+        },
+        "supplementary_section": {
+          "title": "Tambahan",
+          "compensation_component": "Komponen Pampasan",
+          "tax_status": "Status Cukai",
+          "tax_status_option": {
+            "taxable": "Bercukai",
+            "nontaxable": "Tidak boleh cukai"
+          },
+          "amount_month": "Jumlah Bulanan"
+        }
+      }
+    },
     "create_new_payroll": "Buat Gaji Baharu",
     "generate_attendance_report": "Hasilkan Laporan Kehadiran",
     "generate_gross_payroll": "Jana Gaji Kasar",
     "add_ad_hoc": "Tambah Ad Hoc",
     "calculate": "Kira"
   },
+
   "income_tax_profile": {
     "deductable_component": {
       "title": "Papan Pemuka Komponen Boleh Potong",

@@ -32,6 +32,7 @@ import ConfirmationModal from '@/components/_shared/common/ConfirmationModal';
 import { getListBaseCompensationRequested, getListSuppCompensationRequested, getListSuppTerminRequested, getListTerminReqeusted, removeListSuppTermin } from '@/store/reducers/slice/options/optionSlice';
 import { Text } from '@/components/_shared/common';
 import { resetResponserMessage } from '@/store/reducers/slice/responserSlice';
+import { useTranslation } from 'react-i18next';
 
 interface SuplementType {
   compensationComponentId: string;
@@ -92,6 +93,9 @@ export default function UpdateCNBComponent() {
   const [title, setTitle] = React.useState('');
   const [withPercentage, setWithPercentage] = React.useState(false);
   const [leave, setLeave] = React.useState(false);
+  const { t } = useTranslation();
+  const tPath = 'compensation_and_benefits.form.';
+
   const validationSchecma = Yup.object().shape({
     name: Yup.string().required('This is required'),
     compensationComponentId: Yup.string().required('This is required'),
@@ -344,14 +348,14 @@ export default function UpdateCNBComponent() {
                     width: '250px',
                   }}
                 >
-                  Update Profile <br /> <Text title={companyData?.name as string} fontWeight={400} fontSize={14} />
+                  {t(`${tPath}update_title`)} <br /> <Text title={companyData?.name as string} fontWeight={400} fontSize={14} />
                 </Typography>
               </HeaderPageTitle>
             </Header>
             <Paper sx={{ width: '100%', p: '21px 32px' }}>
               <Form style={{ marginBottom: '32px' }}>
                 <Typography>
-                  Profile Name
+                {t(`${tPath}profile_name`)}
                   <span style={{ color: 'red' }}>*</span>
                 </Typography>
                 <Grid container>
@@ -361,7 +365,7 @@ export default function UpdateCNBComponent() {
                       size='small'
                       fullWidth
                       required
-                      placeholder='Sales'
+                      placeholder={t(`${tPath}profile_name_placeholder`)}
                       error={formik.touched.name && Boolean(formik.errors.name)}
                       helperText={formik.touched.name && formik.errors.name}
                       value={formik.values.name}
@@ -383,7 +387,7 @@ export default function UpdateCNBComponent() {
                     color: '#223567',
                   }}
                 >
-                  Compensation
+                  {t(`${tPath}compensation_sub_title`)}
                 </Typography>
                 <Typography
                   style={{
@@ -393,7 +397,7 @@ export default function UpdateCNBComponent() {
                     color: '#223567',
                   }}
                 >
-                  Base
+                  {t(`${tPath}base_section.title`)}
                 </Typography>
                 <Grid>
                   <Grid container spacing={2}>
@@ -407,7 +411,7 @@ export default function UpdateCNBComponent() {
                           }
                         >
                           <Typography>
-                            Compensation Component
+                            {t(`${tPath}base_section.compensation_component`)}
                             <span style={{ color: 'red' }}>*</span>
                           </Typography>
                           <Select
@@ -431,7 +435,7 @@ export default function UpdateCNBComponent() {
                             displayEmpty
                             renderValue={(value: unknown) => {
                               if ((value as string)?.length === 0) {
-                                return <Text title='Select Compensation' color='grey.400' />;
+                                return <Text title={t(`${tPath}base_section.compensation_component_placeholder`)} color='grey.400' />;
                               }
                               const selected = listBaseCompensation.find(list => list.value === value);
                               if (selected) {
@@ -455,7 +459,7 @@ export default function UpdateCNBComponent() {
                     </Grid>
                     <Grid item xs={6} md={6} lg={6} xl={6}>
                       <Typography>
-                        Tax Status<span style={{ color: 'red' }}>*</span>
+                        {t(`${tPath}base_section.tax_status`)}<span style={{ color: 'red' }}>*</span>
                       </Typography>
                       <FormControl
                         error={
@@ -479,7 +483,7 @@ export default function UpdateCNBComponent() {
                                 checkedIcon={<BpCheckedIcon />}
                               />
                             }
-                            label='Taxable'
+                            label={t(`${tPath}base_section.tax_status_option.taxable`)}
                           />
                           <FormControlLabel
                             value='false'
@@ -489,7 +493,7 @@ export default function UpdateCNBComponent() {
                                 checkedIcon={<BpCheckedIcon />}
                               />
                             }
-                            label='Non-Taxable'
+                            label={t(`${tPath}base_section.tax_status_option.nontaxable`)}
                           />
                         </RadioGroup>
                         <FormHelperText>
@@ -598,13 +602,13 @@ export default function UpdateCNBComponent() {
                 </Grid>
                 <Grid container mt='16px'>
                   <Grid item xs={12}>
-                    <Text title='Overtime' fontWeight={700} fontSize='16px' mb='16px' color='primary.500' />
+                    <Text title={t(`${tPath}overtime_section.title`)} fontWeight={700} fontSize='16px' mb='16px' color='primary.500' />
                   </Grid>
                   <Grid item xs={3}>
                     <Input
                       withAsterisk
                       size='small'
-                      customLabel='Rate'
+                      customLabel={t(`${tPath}overtime_section.rate`)}
                       type='number'
                       name='overtime'
                       value={formik.values.overtime}
@@ -639,7 +643,7 @@ export default function UpdateCNBComponent() {
                               color: '#223567',
                             }}
                           >
-                            Supplementary
+                            {t(`${tPath}supplementary_section.title`)}
                           </Typography>
                           <Form>
                             {formik.values.supplementary.map((suplement: any, i) => (
@@ -648,7 +652,7 @@ export default function UpdateCNBComponent() {
                                   <Grid item xs={6} md={6} lg={6} xl={6}>
                                     <div style={{ marginBottom: '16px' }}>
                                       <Typography>
-                                        Compensation Component {i + 1}
+                                      {t(`${tPath}supplementary_section.compensation_component`)} {i + 1}
                                         <span style={{ color: 'red' }}>*</span>
                                       </Typography>
                                       <FormControl
@@ -696,7 +700,7 @@ export default function UpdateCNBComponent() {
                                           displayEmpty
                                           renderValue={(value: unknown) => {
                                             if ((value as string)?.length === 0) {
-                                              return <Text title='Select Compensation' color='grey.400' />;
+                                              return <Text title={t(`${tPath}base_section.compensation_component_placeholder`)} color='grey.400' />;
                                             }
                                             const selected = listSuppCompensation.find(list => list.value === value);
                                             if (selected) {
@@ -725,7 +729,7 @@ export default function UpdateCNBComponent() {
                                   </Grid>
                                   <Grid item xs={6} md={6} lg={6} xl={6}>
                                     <Typography>
-                                      Tax Status
+                                      {t(`${tPath}supplementary_section.tax_status`)}
                                       <span style={{ color: 'red' }}>*</span>
                                     </Typography>
                                     <Box
@@ -770,7 +774,7 @@ export default function UpdateCNBComponent() {
                                                 checkedIcon={<BpCheckedIcon />}
                                               />
                                             }
-                                            label='Taxable'
+                                            label={t(`${tPath}supplementary_section.tax_status_option.taxable`)}
                                           />
                                           <FormControlLabel
                                             value='false'
@@ -780,7 +784,7 @@ export default function UpdateCNBComponent() {
                                                 checkedIcon={<BpCheckedIcon />}
                                               />
                                             }
-                                            label='Non-Taxable'
+                                            label={t(`${tPath}supplementary_section.tax_status_option.nontaxable`)}
                                           />
                                         </RadioGroup>
                                         {formik.touched?.supplementary &&
@@ -800,7 +804,7 @@ export default function UpdateCNBComponent() {
                                         <Button
                                           color='red'
                                           startIcon={<DeleteIcon />}
-                                          label='Delete'
+                                          label={t('button.delete')}
                                           onClick={() => {
                                             arrayHelper.remove(i);
                                             dispatch({
@@ -973,7 +977,7 @@ export default function UpdateCNBComponent() {
                                 period: '',
                                 rateOrAmount: '',
                                 taxStatus: '',
-                                titleRate: 'Amount',
+                                titleRate: t(`${tPath}supplementary_section.amount`),
 
                               }
                             )
@@ -983,7 +987,7 @@ export default function UpdateCNBComponent() {
                           <Button
                             fullWidth={false}
                             size='small'
-                            label='Cancel'
+                            label={t('button.cancel')}
                             variant='outlined'
                             sx={{ mr: '12px' }}
                             color='primary'
@@ -992,7 +996,7 @@ export default function UpdateCNBComponent() {
                           <Button
                             fullWidth={false}
                             size='small'
-                            label='Save'
+                            label={t('button.save')}
                             color='primary'
                             type='submit'
                             disabled={detailLoading}
@@ -1007,8 +1011,8 @@ export default function UpdateCNBComponent() {
             <ConfirmationModal
               open={openMsg}
               handleClose={() => setOpenMsg(false)}
-              title='Save Changes'
-              content='Are you sure you want to update profile with this data? Any unsaved changes made to data will be discarded'
+              title={t('compensation_and_benefits.popup.update_save.title')}
+              content={t('compensation_and_benefits.popup.update_save.desc')}
               withCallback
               noChange={true}
               callback={() => UpdateCnbProfile(formik.values)}
@@ -1019,8 +1023,8 @@ export default function UpdateCNBComponent() {
       <ConfirmationModal
         open={leave}
         handleClose={handleClose}
-        title='Are you sure you want to leave?'
-        content='Any unsaved changes will be discarded'
+        title={t('compensation_and_benefits.popup.update_cancel.title')}
+        content={t('compensation_and_benefits.popup.update_cancel.desc')}
         withCallback
         callback={() => {
           router.push('/compensation-benefits');

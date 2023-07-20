@@ -47,7 +47,9 @@
     "save_approve": "保存并批准",
     "save_exit": "保存并退出",
     "confirm": "确认",
+    "submit": "提交",
     "cancel": "取消",
+    "close": "关闭",
     "delete": "删除",
     "edit": "编辑",
     "activate": "启用",
@@ -55,18 +57,110 @@
     "suspend": "暂停",
     "archive": "已存档",
     "duplicate": "复制",
+    "component": "成分",
+    "deductable": "免赔额",
     "mark_complete": "标记全部并完成",
     "add_new_profile": "添加新的个人资料",
     "add_component": "添加组件",
     "add_new_component": "添加新组件",
-    "component": "成分",
-    "deductable": "免赔额",
+    "add_profile": "添加个人资料",
+    "add_supplementary_compensation": "添加补充补偿"
+  },
+  "compensation_and_benefits": {
+    "title": "赔偿",
+    "table": {
+      "table_cols_item": {
+        "cnb_profile_name": "C",
+        "base_compensation": "基本补偿",
+        "supplementary_compensation": "补充补偿",
+        "date_created": "创建日期",
+        "last_update": "最后更新"
+      }
+    },
+    "form": {
+      "create_title": "创建新C",
+      "update_title": "更新个人信息",
+      "profile_name": "个人资料名称",
+      "profile_name_placeholder": "输入配置文件名称",
+      "compensation_sub_title": "赔偿",
+      "base_section": {
+        "title": "根据",
+        "compensation_component": "补偿元件",
+        "compensation_component_placeholder": "选择基本补偿元件",
+        "tax_status": "税务状况",
+        "tax_status_option": {
+          "taxable": "应纳税",
+          "nontaxable": "免税"
+        }
+      },
+      "overtime_section": {
+        "title": "随着时间的推移",
+        "rate": "速度"
+      },
+      "supplementary_section": {
+        "title": "补充",
+        "compensation_component": "补偿元件",
+        "tax_status": "税务状况",
+        "tax_status_option": {
+          "taxable": "应纳税",
+          "nontaxable": "免税"
+        },
+        "amount": "数量"
+      }
+    },
+    "popup": {
+      "delete": {
+        "title": "您确定要删除此记录吗？",
+        "desc": "任何未保存的更改都将被丢弃。"
+      },
+      "create_cancel": {
+        "title": "您确定要删除此记录吗？",
+        "desc": "任何未保存的更改都将被丢弃。"
+      },
+      "update_cancel": {
+        "title": "您确定要离开吗？",
+        "desc": "任何未保存的更改都将被丢弃"
+      },
+      "update_save": {
+        "title": "保存更改",
+        "desc": "您确定要使用此数据更新个人资料吗？"
+      },
+      "detail": {
+        "title": "C",
+        "cnb_profile_name": "C",
+        "date_created": "创建日期",
+        "last_update": "最后更新",
+        "base_section": {
+          "title": "根据",
+          "compensation_component": "补偿元件",
+          "compensation_component_placeholder": "选择基本补偿元件",
+          "tax_status": "税务状况",
+          "tax_status_option": {
+            "taxable": "应纳税",
+            "nontaxable": "N应税"
+          },
+          "amount_per": "每份金额",
+          "rate_per": "每人费率 "
+        },
+        "supplementary_section": {
+          "title": "补充",
+          "compensation_component": "补偿元件",
+          "tax_status": "税务状况",
+          "tax_status_option": {
+            "taxable": "应纳税",
+            "nontaxable": "N应税"
+          },
+          "amount_month": "每月金额"
+        }
+      }
+    },
     "create_new_payroll": "创建新工资单",
     "generate_attendance_report": "生成考勤报告",
     "generate_gross_payroll": "生成工资总额",
     "add_ad_hoc": "添加临时",
     "calculate": "计算"
   },
+
   "income_tax_profile": {
     "deductable_component": {
       "title": "可扣除部分仪表板",
@@ -304,6 +398,7 @@
       }
     }
   },
+
   "satutory_benefit": {
     "component": {
       "title": "法定福利组件仪表板",
