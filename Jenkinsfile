@@ -117,7 +117,19 @@ pipeline {
                 expression { env.NOTIF.toBoolean() == true }
             }
             steps {
-                Notify("Update From $JOB_NAME \n $RELEASE_NOTES")
+                sh """
+                    DATA=\$(curl -s --location \$(grep -o "http[^ ]*" sonarlogs.txt | grep api) --header 'Authorization: Basic YWRtaW46SDY2dUxjdDVRIQ==')
+                    TYPE=\$(echo \$DATA | jq --raw-output .task.type)
+                    STATUS=\$(echo \$DATA | jq --raw-output .task.status)
+                    NAME=\$(echo \$DATA | jq --raw-output .task.componentName)
+                    WARNINGS=\$(echo \$DATA | jq --raw-output .task.warningCount)
+
+                    ANALYSIS_MESSAGE="SonarQube \$TYPE *\$STATUS* \n⚠ Warnings: *\$WARNINGS* \nhttps://sonarqube.nikici.com/dashboard?\$NAME"
+                    curl --location "$NOTIF_URL" \
+                    --header 'Content-Type: application/x-www-form-urlencoded' \
+                    --data-urlencode "name=$NOTIF_GROUP" \
+                    --data-urlencode "message=Update From $JOB_NAME \n $RELEASE_NOTES \n Sonar: \$ANALYSIS_MESSAGE"
+                """
             }
         }
     }
