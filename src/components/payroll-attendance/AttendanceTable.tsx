@@ -138,7 +138,10 @@ function AttendanceTable({
     dispatch({
       type: postPayrollGrossesRequested.toString(),
       payload: {
-        payroll_id: selectedTemp.map(item => item?.id)
+        data: {
+          payroll_id: selectedTemp.map(item => item?.id)
+        },
+        isAssist: false
       }
     });
   };

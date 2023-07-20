@@ -274,7 +274,7 @@ function AttendanceGenerateComponent() {
       <ContentWrapper>
         <Box sx={{ width: '100%' }}>
           <Grid container spacing={2}>
-            <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
+            <Grid item xs={6}>
               <Input
                 name='search'
                 size='small'
@@ -287,28 +287,6 @@ function AttendanceGenerateComponent() {
                   )
                 }}
               />
-            </Grid>
-            <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
-              {/* <Select
-                fullWidth
-                variant='outlined'
-                size='small'
-                placeholder='Sort by Status'
-                value={''}
-              >
-                <MenuItem value=''>All Status</MenuItem>
-                <MenuItem value='active'>Active</MenuItem>
-                <MenuItem value='inactive'>Inactive</MenuItem>
-                <MenuItem value='draft'>Draft</MenuItem>
-              </Select> */}
-            </Grid>
-            <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
-              {/* <DateRangePicker
-                withAsterisk
-                // value={formik.values.startDate as unknown as Date}
-                onChange={(date: unknown) => console.log(date)}
-              // error={formik.touched.startDate && formik.errors.startDate ? String(formik.errors.startDate) : ''}
-              /> */}
             </Grid>
           </Grid>
           <Table

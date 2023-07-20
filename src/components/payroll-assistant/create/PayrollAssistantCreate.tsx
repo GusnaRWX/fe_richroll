@@ -15,7 +15,8 @@ import DisbursementContent from './DisbursementContent';
 import CompleteContent from './CompleteContent';
 import CustomModal from '@/components/_shared/common/CustomModal';
 import { ifThenElse } from '@/utils/helper';
-import { useAppSelectors } from '@/hooks/index';
+import { useAppSelectors, useAppDispatch } from '@/hooks/index';
+import { postPayrollGrossesRequested, putPayrollWorkflowRequested } from '@/store/reducers/slice/payroll/payrollSlice';
 
 const steps = [
   'Create Payroll',
@@ -43,6 +44,7 @@ const ContentWrapper = styled(Card)(({
 
 function PayrollAssistantCreate() {
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const payrollId = router?.query?.id;
   const { name, start, end } = useAppSelectors((state) => state.payroll);
   const [value, setValue] = useState(1);
@@ -55,6 +57,29 @@ function PayrollAssistantCreate() {
 
   const handleConfirm = () => {
     router.push('/payroll-disbursement/payroll-assistant');
+  };
+
+  const handleGenerateGross = () => {
+    dispatch({
+      type: putPayrollWorkflowRequested.toString(),
+      payload: {
+        id: payrollId,
+        data: {
+          workflow: 0,
+          status: 1
+        }
+      }
+    });
+    dispatch({
+      type: postPayrollGrossesRequested.toString(),
+      payload: {
+        data: {
+          payroll_id: [payrollId]
+        },
+        isAssist: true
+      }
+    });
+    setValue(value + 1);
   };
 
   return (
@@ -84,12 +109,26 @@ function PayrollAssistantCreate() {
               size='small'
               color='primary'
               onClick={() => {
-                if (value < 5) {
-                  setValue(value + 1);
-                }
-                if (value == 5) {
-                  setIsExit(false);
-                  setOpen(true);
+                switch (value) {
+                  case 1:
+                    handleGenerateGross();
+                    break;
+                  case 2:
+                    setValue(value + 1);
+                    break;
+                  case 3:
+                    setValue(value + 1);
+                    break;
+                  case 4:
+                    setValue(value + 1);
+                    break;
+                  case 5:
+                    setIsExit(false);
+                    setOpen(true);
+                    break;
+                
+                  default:
+                    break;
                 }
               }}
             >{ifThenElse(value == 1, 'Generate Gross Payroll Report', ifThenElse(value == 2, 'Generate Net Payroll Report', ifThenElse(value == 3, 'Generate Disbursement Receipt', ifThenElse(value == 4, 'Generate Disbursement Files', 'Mark All Paid and Complete'))))}</MuiButton>
