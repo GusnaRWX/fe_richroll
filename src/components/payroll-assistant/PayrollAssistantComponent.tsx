@@ -9,6 +9,7 @@ import { getCompanyData } from '@/utils/helper';
 import { useAppDispatch } from '@/hooks/index';
 import { postPayrollRequested } from '@/store/reducers/slice/payroll/payrollSlice';
 import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
 
 const ButtonWrapper = styled(Box)(({
   display: 'flex',
@@ -64,6 +65,10 @@ function PayrollAssistantComponent() {
   const [date, setDate] = useState<Array<Date>>([]);
   const [name, setName] = useState('');
   const [open, setOpen] = useState(false);
+  const {t} = useTranslation();
+  const t_key = 'payroll_and_disbursement.payroll_assistant';
+  const t_popupKey = 'payroll_and_disbursement.payroll_assistant.popup';
+  const t_tabPanel = 'payroll_and_disbursement.payroll_assistant.table.tab_panel';
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -93,8 +98,8 @@ function PayrollAssistantComponent() {
     <>
       <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
         <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
-          <Typography variant='h5' color='primary.main'>Payroll Operation</Typography>
-          <Typography variant='text-base' color='#4B5563'>Payroll Assistant</Typography>
+          <Typography variant='h5' color='primary.main'>{t(`${t_key}.title`)}</Typography>
+          <Typography variant='text-base' color='#4B5563'>{t(`${t_key}.sub_title`)}</Typography>
         </Grid>
         <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
           <ButtonWrapper>
@@ -104,7 +109,7 @@ function PayrollAssistantComponent() {
               color='secondary'
               sx={{ color: 'white' }}
               onClick={() => { setOpen(true); }}
-            ><Add fontSize='small' />&nbsp; Create New Payroll</MuiButton>
+            ><Add fontSize='small' />&nbsp; {t(`button.create_new_payroll`)}</MuiButton>
           </ButtonWrapper>
         </Grid>
       </Grid>
@@ -112,8 +117,8 @@ function PayrollAssistantComponent() {
         <Box sx={{ width: '100%' }}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <Tabs value={value} onChange={handleChange} aria-label='basic tabs'>
-              <Tab sx={{ textTransform: 'none' }} label='In Progress' {...a11yProps(0)} />
-              <Tab sx={{ textTransform: 'none' }} label='Completed' {...a11yProps(1)} />
+              <Tab sx={{ textTransform: 'none' }} label={t(`${t_tabPanel}.in_progress`)} {...a11yProps(0)} />
+              <Tab sx={{ textTransform: 'none' }} label={t(`${t_tabPanel}.completed`)} {...a11yProps(1)} />
             </Tabs>
           </Box>
           <TabPanel value={value} index={0}>
@@ -128,7 +133,7 @@ function PayrollAssistantComponent() {
       <CustomModal
         open={open}
         handleClose={handleClose}
-        title='Create New Payroll'
+        title={t(`${t_popupKey}.create.title`)}
         width='543px'
         handleConfirm={handleConfirm}
         submitText='Submit'
@@ -138,8 +143,8 @@ function PayrollAssistantComponent() {
             <Input
               name='nameEvent'
               withAsterisk
-              customLabel='Name'
-              placeholder='Input Name'
+              customLabel={t(`${t_popupKey}.create.name_input_label`)}
+              placeholder={t(`${t_popupKey}.create.name_input_placeholder`)}
               size='small'
               onChange={(e) => setName(e.target.value)}
             />
@@ -149,8 +154,8 @@ function PayrollAssistantComponent() {
           <Grid item xs={12}>
             <DateRangePicker
               withAsterisk
-              customLabelStart='Start Date'
-              customLabelEnd='End Date'
+              customLabelStart={t(`${t_popupKey}.create.start_date`)}
+              customLabelEnd={t(`${t_popupKey}.create.end_date`)}
               onChange={(v) => setDate(v)}
             />
           </Grid>

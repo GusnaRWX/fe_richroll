@@ -23,6 +23,7 @@ import EmptyState from '../_shared/common/EmptyState';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { getPayrollRequested } from '@/store/reducers/slice/payroll/payrollSlice';
 import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
 
 const ButtonWrapper = styled.div`
  display: flex;
@@ -41,12 +42,12 @@ const TypeComponent = styled.div`
 `;
 
 const headerItems = [
-  { id: 'user.name', label: 'Name' },
-  { id: 'dateRange', label: 'Date Range' },
-  { id: 'type', label: 'Report Type' },
-  { id: 'user.createdAt', label: 'Created on' },
-  { id: 'user.lastUpdated', label: 'Last Updated' },
-  { id: 'attachment', label: 'Attachment' },
+  { id: 'user.name', label: 'name' },
+  { id: 'dateRange', label: 'date_range' },
+  { id: 'type', label: 'report_type' },
+  { id: 'user.createdAt', label: 'created_on' },
+  { id: 'user.lastUpdated', label: 'last_updated' },
+  { id: 'attachment', label: 'attachment' },
   { id: 'action', label: '' },
 ];
 
@@ -71,6 +72,8 @@ function DisbursementTable({
   const companyData = getCompanyData();
   const { responser } = useAppSelectors((state) => state);
   const router = useRouter();
+  const {t} = useTranslation();
+  const t_colsItem = 'payroll_and_disbursement.disbursement.table.table_cols_item';
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -78,7 +81,7 @@ function DisbursementTable({
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(event);
-    setPage(0);
+    setPage(1);
   };
 
   const handleSearch = (e) => {
@@ -160,7 +163,7 @@ function DisbursementTable({
                     direction={sort === item.id ? direction : 'asc'}
                     onClick={(e) => handleRequestSort(e, item.id)}
                   >
-                    {item.label}
+                    {item.label === '' ? '' : t(`${t_colsItem}.${item.label}`)}
                     {sort === item.id ? (
                       <Box component='span' sx={visuallyHidden}>
                         {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}

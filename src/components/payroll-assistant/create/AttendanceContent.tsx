@@ -21,7 +21,7 @@ import { visuallyHidden } from '@mui/utils';
 import ListEmployeeModal from './ListEmployeeModal';
 import AttendanceCalendarModal from './AttendanceCalendar';
 import { useAppSelectors, useAppDispatch } from '@/hooks/index';
-import { getSelectedEmployeeRequested } from '@/store/reducers/slice/payroll/payrollSlice';
+import { getSelectedEmployeeRequested, getDetailAttendanceRequested } from '@/store/reducers/slice/payroll/payrollSlice';
 
 const ContentWrapper = styled(Card)(({
   padding: '1rem',
@@ -100,10 +100,28 @@ function AttendanceContent(att) {
     setSort(headId);
   };
 
+  // function for open modal calendar
+  const handleOpenCalendar = async (itemId, employeeId) => {
+    await dispatch({
+      type: getDetailAttendanceRequested.toString(),
+      payload: {
+        id: payrollID,
+        attendanceID: itemId,
+        employeeID: employeeId
+      }
+    });
+    setOpenCal(true);
+  };
+
+  // function for close modal calendar
+  const handleCloseCalendar = () => {
+    setOpenCal(false);
+  };
+
   const handleClose = () => {
     setOpen(false);
   };
-
+  
   useEffect(() => {
     dispatch({
       type: getSelectedEmployeeRequested.toString(),
@@ -216,7 +234,7 @@ function AttendanceContent(att) {
                           <ButtonWrapper>
                             <IconButton
                               parentColor='#E9EFFF'
-                              onClick={() => { setOpenCal(true); }}
+                              onClick={() => { handleOpenCalendar(item?.id, item?.employee?.id); }}
                               icons={
                                 <FiCalendar fontSize={20} color='#223567' />
                               }
@@ -249,8 +267,8 @@ function AttendanceContent(att) {
 
         <AttendanceCalendarModal
           open={openCal}
-          handleClose={() => setOpenCal(false)}
-          handleConfirm={() => setOpenCal(false)}
+          handleClose={() => handleCloseCalendar()}
+          handleConfirm={() => handleCloseCalendar()}
         />
 
         <ListEmployeeModal

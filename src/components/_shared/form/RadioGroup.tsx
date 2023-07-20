@@ -53,7 +53,7 @@ const CustomCheckedIcon = styled(CustomIcon)(({ theme }) => ({
   },
 }));
 
-function CustomRadio(props: RadioProps) {
+function CustomRadio(props: RadioProps & { disabled?: boolean }) {
   return (
     <Radio
       disableRipple
@@ -73,12 +73,14 @@ const RadioGroup = ({
   onChange,
   error,
   withAsterisk,
+  disabled = false,
   ...props
 }: RadioGroupProps & {
   options: RadioOption[],
-  label?: string,
+  label: string,
   error?: string,
   withAsterisk?: boolean;
+  disabled?: boolean;
 }) => {
 
   return (
@@ -98,7 +100,7 @@ const RadioGroup = ({
             <FormControlLabel
               key={option.value}
               value={option.value}
-              control={<CustomRadio />}
+              control={<CustomRadio disabled={disabled} />}
               label={option.label}
             />
           ))

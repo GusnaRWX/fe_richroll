@@ -11,7 +11,10 @@ import {
   getGenerateGrossEmployee,
   putGenerateGrosses,
   getPayrollGrosses,
-  getDetailAttendance
+  getDetailAttendance,
+  putPayrollGrossesFinal,
+  putPayrollGrossesId,
+  putPayrollWorkflow
 } from '../saga-actions/payroll/payrollActions';
 import { call, put, takeEvery, delay } from 'redux-saga/effects';
 import {
@@ -50,7 +53,16 @@ import {
   getPayrollGrossesFailed,
   getDetailAttendanceFailed,
   getDetailAttendanceRequested,
-  getDetailAttendanceSuccess
+  getDetailAttendanceSuccess,
+  putPayrollsGrossesFinalRequested,
+  putPayrollGrossesFinalSuccess,
+  putPayrollGrossesFinalFailed,
+  putPayrollGrossesIdRequested,
+  putPayrollGrossesIdSuccess,
+  putPayrollGrossesIdFailed,
+  putPayrollWorkflowFailed,
+  putPayrollWorkflowRequested,
+  putPayrollWorkflowSuccess
 } from '@/store/reducers/slice/payroll/payrollSlice';
 import { setResponserMessage } from '@/store/reducers/slice/responserSlice';
 import { Services } from '@/types/axios';
@@ -102,7 +114,6 @@ function* fetchPostPayroll(action: AnyAction) {
           message: res?.data?.message
         }
       });
-      // yield put({ type: getGenerateGrossPayrollRequested.toString(), payload: { id: res.data.data } });
     }
   } catch (err) {
     if (err instanceof AxiosError) {
@@ -252,7 +263,7 @@ function* fetchGetSelectedEmployee(action: AnyAction) {
 
 function* fetchPostPayrollGrosses(action: AnyAction) {
   try {
-    const res: AxiosResponse = yield call(postPayrollGrosses, action?.payload);
+    const res: AxiosResponse = yield call(postPayrollGrosses, action?.payload?.data);
     if (res.data.code === 201) {
       yield put({
         type: postPayrollGrossesSuccess.toString(),
@@ -260,7 +271,9 @@ function* fetchPostPayrollGrosses(action: AnyAction) {
           data: res?.data?.data
         }
       });
-      yield Router.push({ pathname: '/payroll-disbursement/payroll/generate-gross/employee', query: { id: res?.data?.data } });
+      if (!action?.payload?.isAssist) {
+        yield Router.push({ pathname: '/payroll-disbursement/payroll/generate-gross/employee', query: { id: res?.data?.data } });
+      }
     }
   } catch (err) {
     if (err instanceof AxiosError) {
@@ -357,6 +370,73 @@ function* fetchGetPayrollEmployee(action: AnyAction) {
   }
 }
 
+function* fetchPutPayrollGrossesFinal(action: AnyAction) {
+  try {
+    const res: AxiosResponse = yield call(putPayrollGrossesFinal, action?.payload);
+
+    if (res.data.code === 201 || res.data.code === 200) {
+      yield put({ type: putPayrollGrossesFinalSuccess.toString() });
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: res.data.code,
+          message: 'Successfully Saved',
+          footerMessage: 'Payroll has been created'
+        }
+      });
+      yield Router.push({ pathname: '/payroll-disbursement/payroll' });
+    }
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      yield put({ type: putPayrollGrossesFinalFailed.toString() });
+      yield delay(2000, true);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message
+        }
+      });
+    }
+  }
+}
+
+function* fetchPutPayrollGrossesId(action: AnyAction) {
+  try {
+    const res: AxiosResponse = yield call(putPayrollGrossesId, action?.payload);
+
+    if (res.data.code === 201 || res.data.code === 200) {
+      yield put({ type: putPayrollGrossesIdSuccess.toString() });
+      yield put({
+        type: getPayrollGrossesRequested.toString(),
+        payload: res.data.data
+      });
+      yield delay(2000, true);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: res.data.code,
+          message: res?.data?.message
+        }
+      });
+    }
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      yield put({ type: putPayrollGrossesIdFailed.toString() });
+      yield delay(2000, true);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message
+        }
+      });
+    }
+  }
+}
+
 function* fetchGetDetailAttendance(action: AnyAction) {
   try {
     const res: AxiosResponse = yield call(getDetailAttendance, action?.payload);
@@ -398,6 +478,38 @@ function* fetchGetDetailAttendance(action: AnyAction) {
   }
 }
 
+function* fetchPutPayrollWorkflow(action: AnyAction) {
+  try {
+    const res: AxiosResponse = yield call(putPayrollWorkflow, action?.payload);
+    if (res.data.code === 200 || res.data.code === 201) {
+      yield put({
+        type: putPayrollWorkflowSuccess.toString()
+      });
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: res?.data?.code,
+          message: res?.data?.message
+        }
+      });
+    }
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      // yield put({ type: getPayrollGrossesFailed.toString() });
+      yield put({ type: putPayrollWorkflowFailed.toString() });
+      yield delay(2000, true);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message
+        }
+      });
+    }
+  }
+}
+
 function* payrollSaga() {
   yield takeEvery(getPayrollRequested.toString(), fetchGetPayroll);
   yield takeEvery(postPayrollRequested.toString(), fetchPostPayroll);
@@ -411,6 +523,9 @@ function* payrollSaga() {
   yield takeEvery(putGenerateGrossesEmployeeRequested.toString(), fetchPutGenerateGrossEmployee);
   yield takeEvery(getPayrollGrossesRequested.toString(), fetchGetPayrollEmployee);
   yield takeEvery(getDetailAttendanceRequested.toString(), fetchGetDetailAttendance);
+  yield takeEvery(putPayrollsGrossesFinalRequested.toString(), fetchPutPayrollGrossesFinal);
+  yield takeEvery(putPayrollGrossesIdRequested.toString(), fetchPutPayrollGrossesId);
+  yield takeEvery(putPayrollWorkflowRequested.toString(), fetchPutPayrollWorkflow);
 }
 
 export default payrollSaga;

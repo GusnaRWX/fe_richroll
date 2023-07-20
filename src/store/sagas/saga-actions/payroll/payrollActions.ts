@@ -1,4 +1,4 @@
-import { get, put, post } from '@/utils/services';
+import { get, post, put, patch } from '@/utils/services';
 import { Payroll } from '@/types/payroll';
 
 export const getPayroll = (payload: Payroll.GetParams) => {
@@ -8,6 +8,10 @@ export const getPayroll = (payload: Payroll.GetParams) => {
 
 export const postPayroll = (payload) => {
   return post(`payrolls`, payload.data as Payroll.PostPayrollType);
+};
+
+export const putPayrollWorkflow = (payload) => {
+  return put(`payrolls/${payload.id}`, payload.data as Payroll.WorkflowType);
 };
 
 export const getGenerateGross = (payload: Payroll.GetParams) => {
@@ -52,4 +56,15 @@ export const getPayrollGrosses = (payload: string) => {
 };
 export const getDetailAttendance = (payload: Payroll.ParamsDetailAttendance) => {
   return get(`payrolls/${payload?.id}/attendances/${payload?.attendanceID}/employees/${payload?.employeeID}`);
+};
+
+export const putPayrollGrossesFinal = (payload) => {
+  // return put(`payrolls/${payload.id}/grosses/final`, {});
+  return patch(`payrolls/${payload.id}/grosses/final`, {});
+};
+
+export const putPayrollGrossesId = (payload) => {
+  const { id, grossesId, body } = payload;
+  console.log(payload);
+  return put(`payrolls/${id}/grosses/${grossesId}`, body);
 };

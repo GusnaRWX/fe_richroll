@@ -26,6 +26,7 @@ interface AttendanceCalendarProps {
 
 function AttendanceCalendar({open, handleClose, handleConfirm}: AttendanceCalendarProps) {
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
+
   const { attendanceDetail } = useAppSelectors((state) => state.payroll);
   const calendarRef = useRef<SchedulerRef>(null);
   useEffect(() => {
@@ -41,7 +42,6 @@ function AttendanceCalendar({open, handleClose, handleConfirm}: AttendanceCalend
     handleDelete();
     handleClose();
   };
-
   return (
     <>
       <Modal
@@ -49,6 +49,7 @@ function AttendanceCalendar({open, handleClose, handleConfirm}: AttendanceCalend
         onClose={onClose}
         keepMounted
         disableAutoFocus
+        // onClose={onClose}
       >
         <Box sx={modalStyle} width='1300px'>
           <Grid container spacing={2} mb='1.5rem'>
@@ -78,8 +79,8 @@ function AttendanceCalendar({open, handleClose, handleConfirm}: AttendanceCalend
             <Grid item xs={9}>
               <Scheduler
                 events={[]}
+                // ref={calendarRef}
                 ref={calendarRef}
-                disableViewNavigator={true}
                 view='month'
                 day={null}
                 deletable={true}
@@ -89,13 +90,13 @@ function AttendanceCalendar({open, handleClose, handleConfirm}: AttendanceCalend
                   weekStartOn: 1,
                   startHour: 1,
                   endHour: 23,
-                  // cellRenderer: () => {
-                  //   return (
-                  //     <MuiButton onClick={() => {
-                  //       return null;
-                  //     }}/>
-                  //   );
-                  // }
+                  cellRenderer: () => {
+                    return (
+                      <MuiButton style={{ height: '150% !important' }} onClick={() => {
+                        return null;
+                      }}/>
+                    );
+                  }
                 }}
               />
             </Grid>
@@ -137,19 +138,19 @@ function AttendanceCalendar({open, handleClose, handleConfirm}: AttendanceCalend
                 Gross Hours
               </Typography>
               <Typography component='div' variant='text-base' fontWeight={400} color='#4B5563' mb='1.5rem'>
-                0 Days
+                {attendanceDetail?.totalHours} Hours
               </Typography>
               <Typography component='div' variant='text-base' fontWeight={500} color='#9CA3AF' mb='.5rem'>
                 Total Hours (Nett)
               </Typography>
               <Typography component='div' variant='text-base' fontWeight={400} color='#4B5563' mb='1.5rem'>
-                {attendanceDetail?.totalHours} Days
+                {attendanceDetail?.totalHours} Hours
               </Typography>
               <Typography component='div' variant='text-base' fontWeight={500} color='#9CA3AF' mb='.5rem'>
                 Average Hours Work/Day
               </Typography>
               <Typography component='div' variant='text-base' fontWeight={400} color='#4B5563' mb='1.5rem'>
-                {attendanceDetail?.averageHours} Days
+                {attendanceDetail?.averageHours} Hours
               </Typography>
             </Grid>
           </Grid>

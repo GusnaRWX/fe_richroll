@@ -14,6 +14,7 @@ import styled from '@emotion/styled';
 import { compareCheck, ifThenElse } from '@/utils/helper';
 import { visuallyHidden } from '@mui/utils';
 import GrossRow from './GrossRow';
+import { useTranslation } from 'react-i18next';
 import { useRouter } from 'next/router';
 import { getPayrollGrossesRequested } from '@/store/reducers/slice/payroll/payrollSlice';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
@@ -25,61 +26,15 @@ const ContentWrapper = styled(Card)(({
 }));
 
 const headerItems = [
-  { id: 'user.name', label: 'Full Name' },
-  { id: 'attendance', label: 'Base Compensation' },
-  { id: 'absent', label: 'Supplementary Compensation' },
-  { id: 'paidLeave', label: 'Ad Hoc Compensation' },
-  { id: 'unpaidLeave', label: 'Gross Compensation' },
-  { id: 'action', label: '' },
+  { id: 'user.name', label: 'Full Name', translation: 'fullname' },
+  { id: 'attendance', label: 'Base Compensation', translation: 'base_compensation' },
+  { id: 'absent', label: 'Supplementary Compensation', translation: 'Supplementary_compensation' },
+  { id: 'paidLeave', label: 'Ad Hoc Compensation', translation: 'ad_hoc_compensation' },
+  { id: 'unpaidLeave', label: 'Gross Compensation', translation: 'gross_compensation' },
+  // { id: 'action', label: '' },
 ];
 
 type Order = 'asc' | 'desc'
-
-const data = {
-  items: [
-    {
-      id: 1,
-      name: 'Budi Irawan',
-      attendance: 'Rp 5.000.000,00',
-      absent: 'Rp 2.500.000,00',
-      paidLeave: 'Rp 2.000.000,00',
-      unpaidLeave: 'Rp 9.500.000,00',
-    },
-    {
-      id: 2,
-      name: 'Budi Irawan',
-      attendance: 'Rp 5.000.000,00',
-      absent: 'Rp 2.500.000,00',
-      paidLeave: 'Rp 2.000.000,00',
-      unpaidLeave: 'Rp 9.500.000,00',
-    },
-    {
-      id: 3,
-      name: 'Budi Irawan',
-      attendance: 'Rp 5.000.000,00',
-      absent: 'Rp 2.500.000,00',
-      paidLeave: 'Rp 2.000.000,00',
-      unpaidLeave: 'Rp 9.500.000,00',
-    },
-    {
-      id: 4,
-      name: 'Budi Irawan',
-      attendance: 'Rp 5.000.000,00',
-      absent: 'Rp 2.500.000,00',
-      paidLeave: 'Rp 2.000.000,00',
-      unpaidLeave: 'Rp 9.500.000,00',
-    },
-    {
-      id: 5,
-      name: 'Budi Irawan',
-      attendance: 'Rp 5.000.000,00',
-      absent: 'Rp 2.500.000,00',
-      paidLeave: 'Rp 2.000.000,00',
-      unpaidLeave: 'Rp 9.500.000,00',
-    },
-  ],
-  itemTotals: 5
-};
 
 function GrossContent(att) {
   const { isPreview } = att;
@@ -91,13 +46,16 @@ function GrossContent(att) {
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
   const [hydrated, setHaydrated] = useState(false);
+  const { t } = useTranslation();
+  const tPath = 'payroll_and_disbursement.attendance_summary.generate_gross_payroll.detail.';
+
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(event);
-    // setPage(0);
+    setPage(1);
   };
 
   const handleRequestSort = (event: React.MouseEvent<unknown>, headId: string) => {
@@ -122,27 +80,37 @@ function GrossContent(att) {
   if (!hydrated) {
     return null;
   }
+
+
   return (
     <>
       <ContentWrapper>
         <Box sx={{ width: '100%' }}>
-          <SimpleAccordion title='Operational Department'>
+          <SimpleAccordion title={t(`${tPath}operational_department.title`)}>
             <ContentWrapper>
               <Grid container spacing={2}>
                 <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
-                  <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>Total Base Compensation</Typography>
+                  <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>
+                    {t(`${tPath}operational_department.card_items.total_base_compensation`)}
+                  </Typography>
                   <Typography component='div' variant='text-sm' fontWeight='500' color='#1F2937'>Rp {numberFormat(dataGross?.totalBaseCompensation)}</Typography>
                 </Grid>
                 <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
-                  <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>Total Supplementary Compensation</Typography>
+                  <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>
+                    {t(`${tPath}operational_department.card_items.total_supplementary_compensation`)}
+                  </Typography>
                   <Typography component='div' variant='text-sm' fontWeight='500' color='#1F2937'>Rp {numberFormat(dataGross?.totalSupplementaryCompensation)}</Typography>
                 </Grid>
                 <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
-                  <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>Total Ad Hoc Compensation</Typography>
+                  <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>
+                    {t(`${tPath}operational_department.card_items.total_ad_hoc_compensation`)}
+                  </Typography>
                   <Typography component='div' variant='text-sm' fontWeight='500' color='#1F2937'>Rp {numberFormat(dataGross?.totalAddHokCompensation)}</Typography>
                 </Grid>
                 <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
-                  <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>Total Gross Payroll</Typography>
+                  <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>
+                    {t(`${tPath}operational_department.card_items.total_gross_payroll`)}
+                  </Typography>
                   <Typography component='div' variant='text-sm' fontWeight='500' color='#1F2937'>Rp {numberFormat(dataGross?.totalGrossCompensation)}</Typography>
                 </Grid>
               </Grid>
@@ -165,7 +133,7 @@ function GrossContent(att) {
                           direction={sort === item.id ? direction : 'asc'}
                           onClick={(e) => handleRequestSort(e, item.id)}
                         >
-                          {item.label}
+                          {t(`${tPath}operational_department.table.table_cols_item.${item.translation}`)}
                           {sort === item.id ? (
                             <Box component='span' sx={visuallyHidden}>
                               {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
@@ -175,6 +143,7 @@ function GrossContent(att) {
                       </TableCell>
                     ))
                   }
+                  <TableCell />
                 </TableRow>
               }
               bodyChildren={
@@ -203,25 +172,33 @@ function GrossContent(att) {
         </Box>
       </ContentWrapper>
 
-      <ContentWrapper>
+      {/* <ContentWrapper>
         <Box sx={{ width: '100%' }}>
-          <SimpleAccordion title='Delivery Department'>
+          <SimpleAccordion title={t(`${tPath}delivery_department.title`)}>
             <ContentWrapper>
               <Grid container spacing={2}>
                 <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
-                  <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>Total Base Compensation</Typography>
+                  <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>
+                    {t(`${tPath}delivery_department.card_items.total_base_compensation`)}
+                  </Typography>
                   <Typography component='div' variant='text-sm' fontWeight='500' color='#1F2937'>Rp 10.000.000</Typography>
                 </Grid>
                 <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
-                  <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>Total Supplementary Compensation</Typography>
+                  <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>
+                    {t(`${tPath}delivery_department.card_items.total_supplementary_compensation`)}
+                  </Typography>
                   <Typography component='div' variant='text-sm' fontWeight='500' color='#1F2937'>Rp 5.000.000</Typography>
                 </Grid>
                 <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
-                  <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>Total Ad Hoc Compensation</Typography>
+                  <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>
+                    {t(`${tPath}delivery_department.card_items.total_ad_hoc_compensation`)}
+                  </Typography>
                   <Typography component='div' variant='text-sm' fontWeight='500' color='#1F2937'>Rp 2.000.000</Typography>
                 </Grid>
                 <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
-                  <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>Total Gross Payroll</Typography>
+                  <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>
+                    {t(`${tPath}delivery_department.card_items.total_gross_payroll`)}
+                  </Typography>
                   <Typography component='div' variant='text-sm' fontWeight='500' color='#1F2937'>Rp 17.000.000</Typography>
                 </Grid>
               </Grid>
@@ -254,6 +231,7 @@ function GrossContent(att) {
                       </TableCell>
                     ))
                   }
+                  <TableCell />
                 </TableRow>
               }
               bodyChildren={
@@ -284,7 +262,7 @@ function GrossContent(att) {
             />
           </SimpleAccordion>
         </Box>
-      </ContentWrapper>
+      </ContentWrapper> */}
     </>
   );
 }

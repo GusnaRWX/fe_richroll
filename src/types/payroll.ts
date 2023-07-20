@@ -60,7 +60,8 @@ export declare namespace Payroll {
 
   interface HocComponent {
     componentName: string;
-    amount: string
+    amount: string;
+    id: string;
   }
 
   interface OvertimeComponent {
@@ -78,6 +79,7 @@ export declare namespace Payroll {
     hocComponent: HocComponent[] | [],
     overtimeComponent: OvertimeComponent
   }
+
   interface GrossCalculationTerm {
     id: string;
     name: string;
@@ -180,6 +182,11 @@ export declare namespace Payroll {
     totalHours: number,
     averageHours: number,
     events: Array<EventType>
+  }
+
+  interface WorkflowType {
+    workflow: number;
+    status: number;
   }
 
 }

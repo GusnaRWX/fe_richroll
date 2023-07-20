@@ -104,6 +104,15 @@ export const payrollSlice = createSlice({
     postPayrollFailed: (state) => {
       state.isLoading = false;
     },
+    putPayrollWorkflowRequested: (state) => {
+      state.isLoading = true;
+    },
+    putPayrollWorkflowSuccess: (state) => {
+      state.isLoading = false;
+    },
+    putPayrollWorkflowFailed: (state) => {
+      state.isLoading = false;
+    },
     getGenerateGrossPayrollRequested: state => {
       state.isLoading = true;
     },
@@ -231,6 +240,24 @@ export const payrollSlice = createSlice({
     },
     getDetailAttendanceFailed: (state) => {
       state.isLoading = false;
+    },
+    putPayrollsGrossesFinalRequested: state => {
+      state.isLoading = true;
+    },
+    putPayrollGrossesFinalSuccess: state => {
+      state.isLoading = false;
+    },
+    putPayrollGrossesFinalFailed: state => {
+      state.isLoading = false;
+    },
+    putPayrollGrossesIdRequested: state => {
+      state.isLoading = true;
+    },
+    putPayrollGrossesIdSuccess: state => {
+      state.isLoading = false;
+    },
+    putPayrollGrossesIdFailed: state => {
+      state.isLoading = false;
     }
   },
   extraReducers: {
@@ -279,7 +306,16 @@ export const {
   getPayrollGrossesFailed,
   getDetailAttendanceFailed,
   getDetailAttendanceRequested,
-  getDetailAttendanceSuccess
+  getDetailAttendanceSuccess,
+  putPayrollsGrossesFinalRequested,
+  putPayrollGrossesFinalSuccess,
+  putPayrollGrossesFinalFailed,
+  putPayrollGrossesIdRequested,
+  putPayrollGrossesIdSuccess,
+  putPayrollGrossesIdFailed,
+  putPayrollWorkflowFailed,
+  putPayrollWorkflowRequested,
+  putPayrollWorkflowSuccess
 } = payrollSlice.actions;
 
 export default payrollSlice.reducer;

@@ -24,7 +24,7 @@ import { compareCheck, ifThenElse } from '@/utils/helper';
 import { visuallyHidden } from '@mui/utils';
 import EmptyState from '../_shared/common/EmptyState';
 import { useAppSelectors, useAppDispatch } from '@/hooks/index';
-import { getSelectedEmployeeRequested, getDetailAttendanceRequested } from '@/store/reducers/slice/payroll/payrollSlice';
+import { getSelectedEmployeeRequested, getDetailAttendanceRequested, putPayrollWorkflowRequested } from '@/store/reducers/slice/payroll/payrollSlice';
 
 const ButtonWrapper = styled(Box)(({
   display: 'flex',
@@ -70,6 +70,67 @@ const headerItems = [
 
 type Order = 'asc' | 'desc'
 
+// const data = {
+//   items: [
+//     {
+//       id: 1,
+//       name: 'Budi Irawan',
+//       attendance: '30 Days',
+//       absent: '2 Days',
+//       paidLeave: '3 Days',
+//       unpaidLeave: '4 Days',
+//       overtime: '8 Days',
+//       totalHours: '175 Days',
+//       averageHours: '30 Days',
+//     },
+//     {
+//       id: 2,
+//       name: 'Budi Irawan',
+//       attendance: '30 Days',
+//       absent: '2 Days',
+//       paidLeave: '3 Days',
+//       unpaidLeave: '4 Days',
+//       overtime: '8 Days',
+//       totalHours: '175 Days',
+//       averageHours: '30 Days',
+//     },
+//     {
+//       id: 3,
+//       name: 'Budi Irawan',
+//       attendance: '30 Days',
+//       absent: '2 Days',
+//       paidLeave: '3 Days',
+//       unpaidLeave: '4 Days',
+//       overtime: '8 Days',
+//       totalHours: '175 Days',
+//       averageHours: '30 Days',
+//     },
+//     {
+//       id: 4,
+//       name: 'Budi Irawan',
+//       attendance: '30 Days',
+//       absent: '2 Days',
+//       paidLeave: '3 Days',
+//       unpaidLeave: '4 Days',
+//       overtime: '8 Days',
+//       totalHours: '175 Days',
+//       averageHours: '30 Days',
+//     },
+//     {
+//       id: 5,
+//       name: 'Budi Irawan',
+//       attendance: '30 Days',
+//       absent: '2 Days',
+//       paidLeave: '3 Days',
+//       unpaidLeave: '4 Days',
+//       overtime: '8 Days',
+//       totalHours: '175 Days',
+//       averageHours: '30 Days',
+//     },
+//   ],
+//   itemTotals: 5
+// };
+
 interface SelectedProp {
   id: string;
   name: string;
@@ -96,11 +157,27 @@ function AttendanceGenerateComponent() {
     setPage(newPage);
   };
 
-  console.log(payrollId);
-
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(event);
-    setPage(0);
+    setPage(1);
+  };
+
+  // function for open modal calendar
+  const handleOpenCalendar = async (itemId, employeeId) => {
+    await dispatch({
+      type: getDetailAttendanceRequested.toString(),
+      payload: {
+        id: payrollId,
+        attendanceID: itemId,
+        employeeID: employeeId
+      }
+    });
+    setOpenCal(true);
+  };
+
+  // function for close modal calendar
+  const handleCloseCalendar = () => {
+    setOpenCal(false);
   };
 
   const handleSearch = (e) => {
@@ -115,6 +192,20 @@ function AttendanceGenerateComponent() {
     const isAsc = compareCheck(sort === headId, direction === 'asc');
     setDirection(ifThenElse(isAsc, 'desc', 'asc'));
     setSort(headId);
+  };
+
+  const handleSave = () => {
+    dispatch({
+      type: putPayrollWorkflowRequested.toString(),
+      payload: {
+        id: payrollId,
+        data: {
+          workflow: 0,
+          status: 1
+        }
+      }
+    });
+    router.push('/payroll-disbursement/attendance');
   };
 
   useEffect(() => {
@@ -134,24 +225,6 @@ function AttendanceGenerateComponent() {
 
   const handleClose = () => {
     setOpen(false);
-  };
-
-  // function for open modal calendar
-  const handleOpenCalendar = async (itemId, employeeId) => {
-    await dispatch({
-      type: getDetailAttendanceRequested.toString(),
-      payload: {
-        id: payrollId,
-        attendanceID: itemId,
-        employeeID: employeeId
-      }
-    });
-    setOpenCal(true);
-  };
-
-  // function for close modal calendar
-  const handleCloseCalendar = () => {
-    setOpenCal(false);
   };
 
   useEffect(() => {
@@ -191,9 +264,9 @@ function AttendanceGenerateComponent() {
               variant='contained'
               size='small'
               color='primary'
-              onClick={() => { router.push('/payroll-disbursement/attendance'); }}
+              onClick={() => { handleSave(); }}
               sx={{ color: 'white' }}
-            >Save</MuiButton>
+            >Confirm</MuiButton>
           </ButtonWrapper>
         </Grid>
       </Grid>
@@ -201,7 +274,7 @@ function AttendanceGenerateComponent() {
       <ContentWrapper>
         <Box sx={{ width: '100%' }}>
           <Grid container spacing={2}>
-            <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
+            <Grid item xs={6}>
               <Input
                 name='search'
                 size='small'
@@ -214,28 +287,6 @@ function AttendanceGenerateComponent() {
                   )
                 }}
               />
-            </Grid>
-            <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
-              {/* <Select
-                fullWidth
-                variant='outlined'
-                size='small'
-                placeholder='Sort by Status'
-                value={''}
-              >
-                <MenuItem value=''>All Status</MenuItem>
-                <MenuItem value='active'>Active</MenuItem>
-                <MenuItem value='inactive'>Inactive</MenuItem>
-                <MenuItem value='draft'>Draft</MenuItem>
-              </Select> */}
-            </Grid>
-            <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
-              {/* <DateRangePicker
-                withAsterisk
-                // value={formik.values.startDate as unknown as Date}
-                onChange={(date: unknown) => console.log(date)}
-              // error={formik.touched.startDate && formik.errors.startDate ? String(formik.errors.startDate) : ''}
-              /> */}
             </Grid>
           </Grid>
           <Table

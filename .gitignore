@@ -10,8 +10,6 @@
 
 
 .vscode
-.eslintrc.json
-.gitignore
 
 # next.js
 /.next/
@@ -51,3 +49,4 @@ next-env.d.ts
 
 .idea/
 
+.eslintrc.json
