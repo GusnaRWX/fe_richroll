@@ -4,6 +4,7 @@ import {
   TableRow,
   Box,
   TableSortLabel,
+  Typography,
 } from '@mui/material';
 import Table from '@/components/_shared/form/Table';
 import { IconButton } from '@/components/_shared/form';
@@ -11,7 +12,6 @@ import styled from '@emotion/styled';
 import { visuallyHidden } from '@mui/utils';
 import { useRouter } from 'next/router';
 import { ConfirmationModal } from '@/components/_shared/common';
-import EmptyState from '@/components/_shared/common/EmptyState';
 import { useTranslation } from 'react-i18next';
 
 // Import Icon React Icon
@@ -29,27 +29,26 @@ const ButtonWrapper = styled.div`
 const headerItems = [
   { id: 'company_name', label: 'Company Name' },
   { id: 'country', label: 'Country' },
-  { id: 'contributors', label: 'Contributor(s)' },
-  { id: 'rate_type', label: 'Rate Type' },
-  { id: 'created_on', label: 'Created On' },
+  { id: 'component_condition', label: 'Component Condition' },
   { id: 'last_update', label: 'last Updated' },
-  { id: 'action', label: '' },
 ];
+
+interface ItpDeductableComponentTableProps {
+  tabValue: number;
+}
 
 type Order = 'asc' | 'desc';
 
-function SutatoryBenefitComponentTable() {
-  // Translate Key
-  const {t} = useTranslation();
-  const t_tableKey = 'satutory_benefit.component.table';
-  const t_modalKey = 'satutory_benefit.component.modal';
-
-
+function ItpDeductableComponentTable({
+  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+  tabValue,
+}: ItpDeductableComponentTableProps) {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
   const [DeleteConfirmation, setDeleteConfirmation] = useState(false);
+  const {t} = useTranslation();
   const [hydrated, setHaydrated] = useState(false);
 
   const data = {
@@ -57,45 +56,35 @@ function SutatoryBenefitComponentTable() {
       {
         id: 1,
         companyName: 'PT. Cari Jodoh Sejahterah',
-        country: 'Indonesian',
-        contributors: 'Employee',
-        type: 'Fixed rate',
+        condition: 'Manual',
         created: '20/20/2020',
         last_update: '20/20/2020',
       },
       {
         id: 1,
         companyName: 'PT. Cari Jodoh Sejahterah',
-        country: 'Indonesian',
-        contributors: 'Employee',
-        type: 'Fixed rate',
+        condition: 'Marital Status',
         created: '20/20/2020',
         last_update: '20/20/2020',
       },
       {
         id: 1,
         companyName: 'PT. Cari Jodoh Sejahterah',
-        country: 'Indonesian',
-        contributors: 'Employee',
-        type: 'Fixed rate',
+        condition: 'Marital Status',
         created: '20/20/2020',
         last_update: '20/20/2020',
       },
       {
         id: 1,
         companyName: 'PT. Cari Jodoh Sejahterah',
-        country: 'Indonesian',
-        contributors: 'Employee',
-        type: 'Fixed rate',
+        condition: 'Manual',
         created: '20/20/2020',
         last_update: '20/20/2020',
       },
       {
         id: 1,
         companyName: 'PT. Cari Jodoh Sejahterah',
-        country: 'Indonesian',
-        contributors: 'Employee',
-        type: 'Fixed rate',
+        condition: 'Number Dependants',
         created: '20/20/2020',
         last_update: '20/20/2020',
       },
@@ -120,17 +109,17 @@ function SutatoryBenefitComponentTable() {
     setSort(headId);
   };
 
+  const router = useRouter();
+  function DetailActionHandler() {
+    router.push('/income-tax-profile/deductable-component/detail');
+  }
+
   useEffect(() => {
     setHaydrated(true);
   }, []);
 
   if (!hydrated) {
     return null;
-  }
-
-  const router = useRouter();
-  function DetailActionHandler() {
-    router.push('/satutory-benefit/component/detail');
   }
 
   return (
@@ -154,7 +143,7 @@ function SutatoryBenefitComponentTable() {
                   direction={sort === item.id ? direction : 'asc'}
                   onClick={(e) => handleRequestSort(e, item.id)}
                 >
-                  {t(t_tableKey + '.' + item.id)}
+                  {t('income_tax_profile.deductable_component.table.'+item.id)}
                   {sort === item.id ? (
                     <Box component='span' sx={visuallyHidden}>
                       {direction === 'asc'
@@ -165,6 +154,7 @@ function SutatoryBenefitComponentTable() {
                 </TableSortLabel>
               </TableCell>
             ))}
+            <TableCell />
           </TableRow>
         }
         bodyChildren={
@@ -173,16 +163,14 @@ function SutatoryBenefitComponentTable() {
               data?.items.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={12} align='center'>
-                    <EmptyState />
+                    <Typography>Data not found</Typography>
                   </TableCell>
                 </TableRow>
               ) : (
                 data?.items.map((item, index) => (
                   <TableRow key={index}>
                     <TableCell>{item.companyName}</TableCell>
-                    <TableCell>{item.country}</TableCell>
-                    <TableCell>{item.contributors}</TableCell>
-                    <TableCell>{item.type}</TableCell>
+                    <TableCell>{item.condition}</TableCell>
                     <TableCell>{item.created}</TableCell>
                     <TableCell>{item.last_update}</TableCell>
                     <TableCell>
@@ -195,7 +183,7 @@ function SutatoryBenefitComponentTable() {
                         <IconButton
                           parentColor='red.100'
                           icons={<DeleteIcon sx={{ color: '#EF4444' }} />}
-                          onClick={() => setDeleteConfirmation(true)}
+                          onClick={()=>setDeleteConfirmation(true)}
                         />
                       </ButtonWrapper>
                     </TableCell>
@@ -205,15 +193,15 @@ function SutatoryBenefitComponentTable() {
             ) : (
               <TableRow>
                 <TableCell colSpan={12} align='center'>
-                  <EmptyState />
+                  <Typography>Data not found</Typography>
                 </TableCell>
               </TableRow>
             )}
             <ConfirmationModal
               open={DeleteConfirmation}
               handleClose={() => setDeleteConfirmation(false)}
-              title={t(`${t_modalKey}.delete.title`)}
-              content={t(`${t_modalKey}.delete.text`)}
+              title={t('income_tax_profile.deductable_component.table.delete_modal.title')}
+              content={t('income_tax_profile.deductable_component.table.delete_modal.text')}
               withCallback
               noChange={true}
               callback={() => setDeleteConfirmation(false)}
@@ -226,4 +214,4 @@ function SutatoryBenefitComponentTable() {
   );
 }
 
-export default SutatoryBenefitComponentTable;
+export default ItpDeductableComponentTable;

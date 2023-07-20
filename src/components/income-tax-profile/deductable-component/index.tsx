@@ -4,8 +4,6 @@ import {
   Typography,
   Paper,
   Grid,
-  Select,
-  MenuItem,
 } from '@mui/material';
 import { Button, Input } from '@/components/_shared/form';
 import AddIcon from '@mui/icons-material/Add';
@@ -13,16 +11,12 @@ import { Search } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import BasicDatePicker from '@/components/_shared/form/DatePicker';
 import styled from '@emotion/styled';
-import SutatoryBenefitTable from './SatutoryBenefitComponentTable';
+import ItpDeductableComponentTable from './ItpDeductableComponentTable';
 import { useTranslation } from 'react-i18next';
 
-
-const SatutoryBenefitComponent = () => {
-  // Translate Key
-  const {t} = useTranslation();
-  const t_key = 'satutory_benefit.component';
-
+const ItpDeductableComponentComponent = () => {
   const router = useRouter();
+  const {t} = useTranslation();
   const TitleWrapper = styled.div`
     display: flex;
     flex-direction: row;
@@ -41,14 +35,14 @@ const SatutoryBenefitComponent = () => {
   return (
     <>
       <TitleWrapper>
-        <Typography variant='h5'>{t(`${t_key}.title`)}</Typography>
+        <Typography variant='h5'>{t('income_tax_profile.deductable_component.title')}</Typography>
         <div>
           <Button
             onClick={() =>
-              router.push('/satutory-benefit/component/add-new-component')
+              router.push('/income-tax-profile/deductable-component/add-new-component')
             }
             startIcon={<AddIcon />}
-            label={t(`button.add_new_component`)}
+            label={t('button.add_new_component')}
           />
         </div>
       </TitleWrapper>
@@ -72,22 +66,6 @@ const SatutoryBenefitComponent = () => {
             />
           </Grid>
           <Grid item xs={2.5} sm={2.5} md={2.5} lg={2.5} xl={2.5}>
-            <Select
-              fullWidth
-              variant='outlined'
-              size='small'
-              placeholder='Sort by Status'
-            >
-              <MenuItem value='annual/paid leave'>Annual/Paid Leave</MenuItem>
-              <MenuItem value='child care leave'>Child Care Leave</MenuItem>
-              <MenuItem value='no pay leave'>No Pay Leave</MenuItem>
-              <MenuItem value='maternirty leave'>Maternity Leave</MenuItem>
-              <MenuItem value='paternity leave'>Paternity Leave</MenuItem>
-              <MenuItem value='shared parental leave'>
-                Shared Parental Leave
-              </MenuItem>
-              <MenuItem value='sick leave'>Sick Leave</MenuItem>
-            </Select>
           </Grid>
           <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
             <Grid
@@ -106,10 +84,10 @@ const SatutoryBenefitComponent = () => {
             </Grid>
           </Grid>
         </Grid>
-        <SutatoryBenefitTable />
+        <ItpDeductableComponentTable tabValue={0} />
       </Paper>
     </>
   );
 };
 
-export default SatutoryBenefitComponent;
+export default ItpDeductableComponentComponent;

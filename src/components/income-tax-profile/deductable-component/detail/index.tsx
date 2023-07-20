@@ -12,9 +12,10 @@ import { HiPencilAlt } from 'react-icons/hi';
 import { FiCopy } from 'react-icons/fi';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-export default function SatutoryBenefitComponentDetail() {
+export default function ItpDeductableComponentDetailComponent() {
   const router = useRouter();
   const {t} = useTranslation();
+  const tPath = 'income_tax_profile.deductable_component.add_new_component.form.';
   const [DeleteConfirmation, setDeleteConfirmation] = useState(false);
   const [DuplicateConfirmation, setDuplicateConfirmation] = useState(false);
 
@@ -41,7 +42,7 @@ export default function SatutoryBenefitComponentDetail() {
   });
 
   function EditActionHandler() {
-    router.push('/satutory-benefit/component/edit');
+    router.push('/income-tax-profile/deductable-component/edit');
   }
 
   return (
@@ -52,7 +53,7 @@ export default function SatutoryBenefitComponentDetail() {
             parentColor='primary.500'
             icons={<ArrowBack sx={{ color: '#FFFFFF' }} />}
             onClick={() => {
-              router.push('/satutory-benefit/component');
+              router.push('/income-tax-profile/deductable-component');
             }}
           />
           <div>
@@ -64,7 +65,7 @@ export default function SatutoryBenefitComponentDetail() {
                 width: '350px',
               }}
             >
-              {t('satutory_benefit.component.detail_title')}
+              {t('income_tax_profile.deductable_component.detail_title')}
             </Typography>
             <Typography
               style={{
@@ -120,7 +121,7 @@ export default function SatutoryBenefitComponentDetail() {
                 fontWeight: '700',
               }}
             >
-              {t('satutory_benefit.component.form_&_detail.create_basic_detail.detail_title')}
+              {t(`${tPath}wizard_option.basic_detail`)}
             </Typography>
           </Grid>
           <Grid item xs={2.5} md={2.5} lg={2.5} xl={2.5}>
@@ -130,7 +131,7 @@ export default function SatutoryBenefitComponentDetail() {
               color='#9CA3AF'
               mb='8px'
             >
-              {t('satutory_benefit.component.form_&_detail.create_basic_detail.component_name')}
+              {t(`${tPath}create_basic_detail.name`)}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -143,7 +144,7 @@ export default function SatutoryBenefitComponentDetail() {
               color='#9CA3AF'
               mb='8px'
             >
-              {t('satutory_benefit.component.form_&_detail.create_basic_detail.country')}
+              {t(`${tPath}create_basic_detail.country`)}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -156,7 +157,7 @@ export default function SatutoryBenefitComponentDetail() {
               color='#9CA3AF'
               mb='8px'
             >
-              {t('satutory_benefit.component.form_&_detail.create_basic_detail.province')}
+              {t(`${tPath}create_basic_detail.province`)}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -169,7 +170,7 @@ export default function SatutoryBenefitComponentDetail() {
               color='#9CA3AF'
               mb='8px'
             >
-              {t('satutory_benefit.component.form_&_detail.create_basic_detail.city')}
+              {t(`${tPath}create_basic_detail.city`)}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -182,7 +183,7 @@ export default function SatutoryBenefitComponentDetail() {
               color='#9CA3AF'
               mb='8px'
             >
-              {t('satutory_benefit.component.form_&_detail.create_basic_detail.sub_district')}
+              {t(`${tPath}create_basic_detail.sub_district`)}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -195,7 +196,7 @@ export default function SatutoryBenefitComponentDetail() {
               color='#9CA3AF'
               mb='8px'
             >
-              {t('satutory_benefit.component.form_&_detail.create_basic_detail.citation')}
+              {t(`${tPath}create_basic_detail.citation`)}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -208,7 +209,7 @@ export default function SatutoryBenefitComponentDetail() {
               color='#9CA3AF'
               mb='8px'
             >
-              {t('satutory_benefit.component.form_&_detail.create_basic_detail.internal_notes')}
+              {t(`${tPath}create_basic_detail.internal_notes`)}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -221,7 +222,7 @@ export default function SatutoryBenefitComponentDetail() {
               color='#9CA3AF'
               mb='8px'
             >
-              {t('satutory_benefit.component.form_&_detail.create_basic_detail.external_notes')}
+              {t(`${tPath}create_basic_detail.external_notes`)}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -238,7 +239,7 @@ export default function SatutoryBenefitComponentDetail() {
                 fontWeight: '700',
               }}
             >
-              {t('satutory_benefit.component.form_&_detail.create_designed_transfer_account.transfer_info')}
+              {t(`${tPath}wizard_option.transfer_account`)}
             </Typography>
           </Grid>
           <Grid item xs={3} md={3} lg={3} xl={3}>
@@ -248,7 +249,7 @@ export default function SatutoryBenefitComponentDetail() {
               color='#9CA3AF'
               mb='8px'
             >
-              {t('satutory_benefit.component.form_&_detail.create_designed_transfer_account.bank')}
+              {t(`${tPath}create_dta.bank`)}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -261,7 +262,7 @@ export default function SatutoryBenefitComponentDetail() {
               color='#9CA3AF'
               mb='8px'
             >
-              {t('satutory_benefit.component.form_&_detail.create_designed_transfer_account.bank_account_holders_name')}
+              {t(`${tPath}create_dta.bank_account_holders_name`)}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -274,7 +275,7 @@ export default function SatutoryBenefitComponentDetail() {
               color='#9CA3AF'
               mb='8px'
             >
-              {t('satutory_benefit.component.form_&_detail.create_designed_transfer_account.bank_account_no')}
+              {t(`${tPath}create_dta.bank_account_no`)}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -287,7 +288,7 @@ export default function SatutoryBenefitComponentDetail() {
               color='#9CA3AF'
               mb='8px'
             >
-              {t('satutory_benefit.component.form_&_detail.create_designed_transfer_account.bank_code')}
+              {t(`${tPath}create_dta.bank_code`)}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -300,7 +301,7 @@ export default function SatutoryBenefitComponentDetail() {
               color='#9CA3AF'
               mb='8px'
             >
-              {t('satutory_benefit.component.form_&_detail.create_designed_transfer_account.branch_code')}
+              {t(`${tPath}create_dta.branch_code`)}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -313,7 +314,7 @@ export default function SatutoryBenefitComponentDetail() {
               color='#9CA3AF'
               mb='8px'
             >
-              {t('satutory_benefit.component.form_&_detail.create_designed_transfer_account.branch_name')}
+              {t(`${tPath}create_dta.branch_name`)}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -326,7 +327,7 @@ export default function SatutoryBenefitComponentDetail() {
               color='#9CA3AF'
               mb='8px'
             >
-              {t('satutory_benefit.component.form_&_detail.create_designed_transfer_account.swift_code')}
+              {t(`${tPath}create_dta.swift_code`)}
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -343,43 +344,30 @@ export default function SatutoryBenefitComponentDetail() {
                 fontWeight: '700',
               }}
             >
-              Employee
+              Marital Status
             </Typography>
           </Grid>
-          <Grid item xs={12} md={12} lg={12} xl={12}>
+          <Grid item xs={6} md={6} lg={6} xl={6}>
             <Typography
               component='div'
               variant='text-sm'
               color='#9CA3AF'
               mb='8px'
             >
-              {t('satutory_benefit.component.form_&_detail.rates.rate_type')}
+              {t(`${tPath}rates.fu_condition`)} - 1
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
             </Typography>
           </Grid>
-          <Grid item xs={3} md={3} lg={3} xl={3}>
+          <Grid item xs={6} md={6} lg={6} xl={6}>
             <Typography
               component='div'
               variant='text-sm'
               color='#9CA3AF'
               mb='8px'
             >
-              {t('satutory_benefit.component.form_&_detail.rates.flat_rate')}
-            </Typography>
-            <Typography component='div' variant='text-sm' color='#4B5563'>
-              -
-            </Typography>
-          </Grid>
-          <Grid item xs={3} md={3} lg={3} xl={3}>
-            <Typography
-              component='div'
-              variant='text-sm'
-              color='#9CA3AF'
-              mb='8px'
-            >
-              {t('satutory_benefit.component.form_&_detail.rates.amount_cap')}
+              Amounnt
             </Typography>
             <Typography component='div' variant='text-sm' color='#4B5563'>
               -
@@ -391,8 +379,8 @@ export default function SatutoryBenefitComponentDetail() {
         type='delete'
         open={DeleteConfirmation}
         handleClose={() => setDeleteConfirmation(false)}
-        title={t('satutory_benefit.component.modal.delete.title')}
-        content={t('satutory_benefit.component.modal.delete.text')}
+        title={t('income_tax_profile.deductable_component.modal.delete.title')}
+        content={t('income_tax_profile.deductable_component.modal.delete.text')}
         withCallback
         noChange={true}
         callback={() => setDeleteConfirmation(false)}
@@ -400,8 +388,8 @@ export default function SatutoryBenefitComponentDetail() {
       <ConfirmationModal
         open={DuplicateConfirmation}
         handleClose={() => setDuplicateConfirmation(false)}
-        title={t('satutory_benefit.component.modal.duplicate.title')}
-        content={t('satutory_benefit.component.modal.duplicate.text')}
+        title={t('income_tax_profile.deductable_component.modal.duplicate.title')}
+        content={t('income_tax_profile.deductable_component.modal.duplicate.text')}
         withCallback
         noChange={true}
         callback={() => setDuplicateConfirmation(false)}

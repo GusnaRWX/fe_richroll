@@ -7,8 +7,6 @@ import {
   Tab,
   Box,
   Grid,
-  Select,
-  MenuItem,
 } from '@mui/material';
 import { Button, Input } from '@/components/_shared/form';
 import AddIcon from '@mui/icons-material/Add';
@@ -16,7 +14,7 @@ import { Search } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import BasicDatePicker from '@/components/_shared/form/DatePicker';
 import styled from '@emotion/styled';
-import SutatoryBenefitProfileTable from './SatutoryBenefitProfileTable';
+import ItpProfileTable from './ItpProfileComponent';
 import { useTranslation } from 'react-i18next';
 
 interface TabPanelProps {
@@ -47,7 +45,7 @@ function a11yProps(index: number) {
   };
 }
 
-const SatutoryBenefitProfile = () => {
+const ItpProfileComponent = () => {
   const router = useRouter();
   const [value, setValue] = useState(0);
   const {t} = useTranslation();
@@ -73,12 +71,12 @@ const SatutoryBenefitProfile = () => {
     <>
       <TitleWrapper>
         <Typography variant='h5'>
-          {t('satutory_benefit.profile.title')}
+          {t('income_tax_profile.profile.title')}
         </Typography>
         <div>
           <Button
             onClick={() =>
-              router.push('/satutory-benefit/profile/add-new-profile')
+              router.push('/income-tax-profile/profile/add-new-profile')
             }
             startIcon={<AddIcon />}
             label={t('button.add_new_profile')}
@@ -95,9 +93,9 @@ const SatutoryBenefitProfile = () => {
             }}
           >
             <Tabs value={value} onChange={handleChange} aria-label='basic tabs'>
-              <Tab label={t('satutory_benefit.profile.table.table_tabs.draft')} {...a11yProps(0)} />
-              <Tab label={t('satutory_benefit.profile.table.table_tabs.active')} {...a11yProps(1)} />
-              <Tab label={t('satutory_benefit.profile.table.table_tabs.archived')} {...a11yProps(2)} />
+              <Tab label={t('income_tax_profile.profile.tab.draft')} {...a11yProps(0)} />
+              <Tab label={t('income_tax_profile.profile.tab.active')} {...a11yProps(1)} />
+              <Tab label={t('income_tax_profile.profile.tab.archive')} {...a11yProps(2)} />
             </Tabs>
           </Box>
         </Box>
@@ -120,22 +118,6 @@ const SatutoryBenefitProfile = () => {
             />
           </Grid>
           <Grid item xs={2.5} sm={2.5} md={2.5} lg={2.5} xl={2.5}>
-            <Select
-              fullWidth
-              variant='outlined'
-              size='small'
-              placeholder='Sort by Status'
-            >
-              <MenuItem value='annual/paid leave'>Annual/Paid Leave</MenuItem>
-              <MenuItem value='child care leave'>Child Care Leave</MenuItem>
-              <MenuItem value='no pay leave'>No Pay Leave</MenuItem>
-              <MenuItem value='maternirty leave'>Maternity Leave</MenuItem>
-              <MenuItem value='paternity leave'>Paternity Leave</MenuItem>
-              <MenuItem value='shared parental leave'>
-                Shared Parental Leave
-              </MenuItem>
-              <MenuItem value='sick leave'>Sick Leave</MenuItem>
-            </Select>
           </Grid>
           <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
             <Grid
@@ -149,31 +131,30 @@ const SatutoryBenefitProfile = () => {
                 -
               </Grid>
               <Grid item xs={5.5} sm={5.5} md={5.5} lg={5.5} xl={5.5}>
-                <BasicDatePicker sx={{ height: '15px' }} />{' '}
+                <BasicDatePicker sx={{ height: '15px' }} />
               </Grid>
             </Grid>
           </Grid>
         </Grid>
         <TabPanel value={value} index={0}>
-          <SutatoryBenefitProfileTable
+          <ItpProfileTable
             tabValue={value}
             DeleteAction
             DetailAction
             ActivateAction
             CopyAction
             Draft
-
           />
         </TabPanel>
         <TabPanel value={value} index={1}>
-          <SutatoryBenefitProfileTable tabValue={value} ArchivedAction />
+          <ItpProfileTable tabValue={value} ArchivedAction />
         </TabPanel>
         <TabPanel value={value} index={2}>
-          <SutatoryBenefitProfileTable tabValue={value} DeleteAction />
+          <ItpProfileTable tabValue={value} DeleteAction />
         </TabPanel>
       </Paper>
     </>
   );
 };
 
-export default SatutoryBenefitProfile;
+export default ItpProfileComponent;

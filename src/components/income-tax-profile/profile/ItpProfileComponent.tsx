@@ -5,7 +5,7 @@ import {
   Box,
   TableSortLabel,
   Typography,
-  Grid,
+  Grid
 } from '@mui/material';
 import Table from '@/components/_shared/form/Table';
 import { IconButton, Button, DatePicker, CheckBox } from '@/components/_shared/form';
@@ -13,8 +13,6 @@ import styled from '@emotion/styled';
 import { visuallyHidden } from '@mui/utils';
 import { useRouter } from 'next/router';
 import { ConfirmationModal, CustomModal } from '@/components/_shared/common';
-import EmptyState from '@/components/_shared/common/EmptyState';
-import { useTranslation } from 'react-i18next';
 
 // Import Icon React Icon
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -22,6 +20,7 @@ import { HiPencilAlt } from 'react-icons/hi';
 import { FiCopy } from 'react-icons/fi';
 import { HiUpload } from 'react-icons/hi';
 import { HiOutlineArchive } from 'react-icons/hi';
+import { useTranslation } from 'react-i18next';
 
 const ButtonWrapper = styled.div`
   display: flex;
@@ -32,7 +31,7 @@ const ButtonWrapper = styled.div`
 `;
 
 const headerItems = [
-  { id: 'name', label: 'Profile Name' },
+  { id: 'profile_name', label: 'Profile Name' },
   { id: 'country', label: 'Country' },
   { id: 'province', label: 'Province' },
   { id: 'effective_period', label: 'Effective Period' },
@@ -48,7 +47,7 @@ const DraftHeaderItems = [
   { id: 'last_update', label: 'last Updated' },
 ];
 
-interface SutatoryBenefitProfileTableProps {
+interface ItpProfileTableProps {
   tabValue: number;
   DeleteAction?: boolean;
   DetailAction?: boolean;
@@ -60,7 +59,7 @@ interface SutatoryBenefitProfileTableProps {
 
 type Order = 'asc' | 'desc';
 
-function SutatoryBenefitProfileTable({
+function ItpProfileTable({
   // tabValue,
   DeleteAction,
   DetailAction,
@@ -68,7 +67,7 @@ function SutatoryBenefitProfileTable({
   ActivateAction,
   ArchivedAction,
   Draft,
-}: SutatoryBenefitProfileTableProps) {
+}: ItpProfileTableProps) {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
   const [direction, setDirection] = useState<Order>('desc');
@@ -79,9 +78,10 @@ function SutatoryBenefitProfileTable({
   const [archiveConfirmation, setArchiveConfirmation] = useState(false);
   const [hydrated, setHaydrated] = useState(false);
   const {t} = useTranslation();
+
   const router = useRouter();
   function DetailActionHandler () {
-    router.push('/satutory-benefit/profile/detail');
+    router.push('/income-tax-profile/profile/detail');
   }
 
   const data = {
@@ -143,7 +143,6 @@ function SutatoryBenefitProfileTable({
     setPage(0);
   };
 
-
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
     headId: string
@@ -183,7 +182,7 @@ function SutatoryBenefitProfileTable({
                     direction={sort === item.id ? direction : 'asc'}
                     onClick={(e) => handleRequestSort(e, item.id)}
                   >
-                    {t(`satutory_benefit.profile.table.${item.id}`)}
+                    {t('income_tax_profile.profile.draft_table.' + item.id)}
                     {sort === item.id ? (
                       <Box component='span' sx={visuallyHidden}>
                         {direction === 'asc'
@@ -207,7 +206,7 @@ function SutatoryBenefitProfileTable({
                     direction={sort === item.id ? direction : 'asc'}
                     onClick={(e) => handleRequestSort(e, item.id)}
                   >
-                    {t(`satutory_benefit.profile.table.${item.id}`)}
+                    {t('income_tax_profile.profile.active_table.' + item.id)}
                     {sort === item.id ? (
                       <Box component='span' sx={visuallyHidden}>
                         {direction === 'asc'
@@ -227,7 +226,7 @@ function SutatoryBenefitProfileTable({
               data?.items.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={12} align='center'>
-                    <EmptyState />
+                    <Typography>Data not found</Typography>
                   </TableCell>
                 </TableRow>
               ) : (
@@ -305,7 +304,7 @@ function SutatoryBenefitProfileTable({
             ) : (
               <TableRow>
                 <TableCell colSpan={12} align='center'>
-                  <EmptyState />
+                  <Typography>Data not found</Typography>
                 </TableCell>
               </TableRow>
             )}
@@ -316,8 +315,8 @@ function SutatoryBenefitProfileTable({
         type='delete'
         open={DeleteConfirmation}
         handleClose={() => setDeleteConfirmation(false)}
-        title={t('satutory_benefit.profile.modal.delete.title')}
-        content={t('satutory_benefit.profile.modal.delete.text')}
+        title={t('income_tax_profile.profile.modal.delete.title')}
+        content={t('income_tax_profile.profile.modal.delete.description')}
         withCallback
         noChange={true}
         callback={() => setDeleteConfirmation(false)}
@@ -325,8 +324,8 @@ function SutatoryBenefitProfileTable({
       <ConfirmationModal
         open={DuplicateConfirmation}
         handleClose={() => setDuplicateConfirmation(false)}
-        title={t('satutory_benefit.profile.modal.duplicate.title')}
-        content={t('satutory_benefit.profile.modal.duplicate.text')}
+        title={t('income_tax_profile.profile.modal.duplicate.title')}
+        content={t('income_tax_profile.profile.modal.duplicate.description')}
         withCallback
         noChange={true}
         callback={() => setDuplicateConfirmation(false)}
@@ -335,19 +334,19 @@ function SutatoryBenefitProfileTable({
         open={activateConfirmation}
         handleClose={() => setActivateConfirmation(false)}
         handleConfirm={() => setActivateConfirmation(false)}
-        title={t('satutory_benefit.profile.modal.activate.title')}
+        title={t('income_tax_profile.profile.modal.activate.title')}
         width='40%'
       >
         <Grid container p={2} spacing={2}>
           <Grid item xs={12} md={12} lg={12} xl={12}>
-            <Typography>{t('satutory_benefit.profile.modal.activate.text')}</Typography>
+            <Typography>{t('income_tax_profile.profile.modal.activate.description')}</Typography>
           </Grid>
           <Grid item container spacing={2}>
             <Grid item xs={12} md={6} lg={6} xl={6}>
-              <DatePicker customLabel={t('satutory_benefit.profile.modal.activate.effective_date')} />
+              <DatePicker customLabel={t('income_tax_profile.profile.modal.activate.effective_date')} />
             </Grid>
             <Grid item xs={12} md={6} lg={6} xl={6}>
-              <DatePicker customLabel={t('satutory_benefit.profile.modal.activate.expiration_date')} />
+              <DatePicker customLabel={t('income_tax_profile.profile.modal.activate.expiration_date')} />
             </Grid>
           </Grid>
         </Grid>
@@ -356,16 +355,16 @@ function SutatoryBenefitProfileTable({
         open={archiveConfirmation}
         handleClose={() => setArchiveConfirmation(false)}
         handleConfirm={() => setArchiveConfirmation(false)}
-        title={t('satutory_benefit.profile.modal.archive.title')}
+        title={t('income_tax_profile.profile.modal.archive.title')}
         width='40%'
       >
         <Grid>
-          <DatePicker customLabel={t('satutory_benefit.profile.modal.archive.input_date')} withAsterisk />
-          <CheckBox customLabel={t('satutory_benefit.profile.modal.archive.replace')} />
+          <DatePicker customLabel={t('income_tax_profile.profile.modal.archive.description')} withAsterisk />
+          <CheckBox customLabel={t('income_tax_profile.profile.modal.archive.checkbox')} />
         </Grid>
       </CustomModal>
     </>
   );
 }
 
-export default SutatoryBenefitProfileTable;
+export default ItpProfileTable;
