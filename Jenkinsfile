@@ -118,7 +118,7 @@ pipeline {
             }
             steps {
                 sh """
-                    DATA=\$(curl -s --location \$(grep -o "http[^ ]*" sonarlogs.txt | grep api) --header 'Authorization: Basic YWRtaW46SDY2dUxjdDVRIQ==')
+                    DATA=\$(curl -s --location \$(grep -o "http[^ ]*" sonarlogs.txt | grep api) --header 'Authorization: Basic bm90aWY6QE4wdDFm')
                     TYPE=\$(echo \$DATA | jq --raw-output .task.type)
                     STATUS=\$(echo \$DATA | jq --raw-output .task.status)
                     NAME=\$(echo \$DATA | jq --raw-output .task.componentName)
