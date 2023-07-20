@@ -165,6 +165,7 @@ export const payrollSlice = createSlice({
     },
     postPayrollGrossesRequested: state => {
       state.isLoading = true;
+      state.grossesId = '';
     },
     postPayrollGrossesSuccess: (state, action) => {
       state.isLoading = false;
@@ -172,6 +173,7 @@ export const payrollSlice = createSlice({
     },
     postPayrollGrossesFailed: state => {
       state.isLoading = false;
+      state.grossesId = '';
     },
     getGenerateGrossesEmployeeRequested: state => {
       state.isLoading = true;

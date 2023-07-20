@@ -16,7 +16,7 @@ import CompleteContent from './CompleteContent';
 import CustomModal from '@/components/_shared/common/CustomModal';
 import { ifThenElse } from '@/utils/helper';
 import { useAppSelectors, useAppDispatch } from '@/hooks/index';
-import { postPayrollGrossesRequested, putPayrollWorkflowRequested } from '@/store/reducers/slice/payroll/payrollSlice';
+import { postPayrollGrossesRequested, putPayrollWorkflowRequested, putPayrollsGrossesFinalRequested } from '@/store/reducers/slice/payroll/payrollSlice';
 
 const steps = [
   'Create Payroll',
@@ -46,7 +46,7 @@ function PayrollAssistantCreate() {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const payrollId = router?.query?.id;
-  const { name, start, end } = useAppSelectors((state) => state.payroll);
+  const { name, start, end, grossesId } = useAppSelectors((state) => state.payroll);
   const [value, setValue] = useState(1);
   const [open, setOpen] = useState(false);
   const [isExit, setIsExit] = useState(true);
@@ -75,6 +75,29 @@ function PayrollAssistantCreate() {
       payload: {
         data: {
           payroll_id: [payrollId]
+        },
+        isAssist: true
+      }
+    });
+    setValue(value + 1);
+  };
+
+  const handleGenerateNet = () => {
+    dispatch({
+      type: putPayrollWorkflowRequested.toString(),
+      payload: {
+        id: grossesId,
+        data: {
+          workflow: 0,
+          status: 1
+        }
+      }
+    });
+    dispatch({
+      type: putPayrollsGrossesFinalRequested.toString(),
+      payload: {
+        data: {
+          id: grossesId
         },
         isAssist: true
       }
@@ -114,7 +137,7 @@ function PayrollAssistantCreate() {
                     handleGenerateGross();
                     break;
                   case 2:
-                    setValue(value + 1);
+                    handleGenerateNet();
                     break;
                   case 3:
                     setValue(value + 1);

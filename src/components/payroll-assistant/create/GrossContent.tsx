@@ -41,6 +41,7 @@ function GrossContent(att) {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const dataGross = useAppSelectors(state => state.payroll.grossesEmployeeDetail);
+  const { grossesId } = useAppSelectors((state) => state.payroll);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(1);
   const [direction, setDirection] = useState<Order>('desc');
@@ -69,13 +70,13 @@ function GrossContent(att) {
   }, []);
 
   useEffect(() => {
-    if (router.isReady) {
+    if (router.isReady && grossesId !== '') {
       dispatch({
         type: getPayrollGrossesRequested.toString(),
-        payload: router.query.id
+        payload: grossesId
       });
     }
-  }, [router.query]);
+  }, [router.query, grossesId]);
 
   if (!hydrated) {
     return null;

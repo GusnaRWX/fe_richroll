@@ -46,7 +46,12 @@ function GenerateGrossDetail() {
   const handleConfirm = () => {
     dispatch({
       type: putPayrollsGrossesFinalRequested.toString(),
-      payload: { id: router.query.id }
+      payload: {
+        data: {
+          id: router.query.id
+        },
+        isAssist: false
+      }
     });
   };
 

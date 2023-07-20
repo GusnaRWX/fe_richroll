@@ -372,7 +372,7 @@ function* fetchGetPayrollEmployee(action: AnyAction) {
 
 function* fetchPutPayrollGrossesFinal(action: AnyAction) {
   try {
-    const res: AxiosResponse = yield call(putPayrollGrossesFinal, action?.payload);
+    const res: AxiosResponse = yield call(putPayrollGrossesFinal, action?.payload?.data);
 
     if (res.data.code === 201 || res.data.code === 200) {
       yield put({ type: putPayrollGrossesFinalSuccess.toString() });
@@ -384,7 +384,9 @@ function* fetchPutPayrollGrossesFinal(action: AnyAction) {
           footerMessage: 'Payroll has been created'
         }
       });
-      yield Router.push({ pathname: '/payroll-disbursement/payroll' });
+      if (!action?.payload?.isAssist) {
+        yield Router.push({ pathname: '/payroll-disbursement/payroll' });
+      }
     }
   } catch (err) {
     if (err instanceof AxiosError) {
