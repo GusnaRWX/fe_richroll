@@ -459,7 +459,8 @@ function* fetchGetDetailAttendance(action: AnyAction) {
           overtime: res?.data?.data?.overtime,
           totalHours: res?.data?.data?.totalHours,
           averageHours: res?.data?.data?.averageHours,
-          events: res?.data?.data?.entries
+          events: res?.data?.data?.entries,
+          netHours: res?.data?.data?.netHours
         }
       });
     }
