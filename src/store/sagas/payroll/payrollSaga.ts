@@ -263,7 +263,7 @@ function* fetchGetSelectedEmployee(action: AnyAction) {
 
 function* fetchPostPayrollGrosses(action: AnyAction) {
   try {
-    const res: AxiosResponse = yield call(postPayrollGrosses, action?.payload);
+    const res: AxiosResponse = yield call(postPayrollGrosses, action?.payload?.data);
     if (res.data.code === 201) {
       yield put({
         type: postPayrollGrossesSuccess.toString(),
@@ -271,7 +271,9 @@ function* fetchPostPayrollGrosses(action: AnyAction) {
           data: res?.data?.data
         }
       });
-      yield Router.push({ pathname: '/payroll-disbursement/payroll/generate-gross/employee', query: { id: res?.data?.data } });
+      if (!action?.payload?.isAssist) {
+        yield Router.push({ pathname: '/payroll-disbursement/payroll/generate-gross/employee', query: { id: res?.data?.data } });
+      }
     }
   } catch (err) {
     if (err instanceof AxiosError) {
