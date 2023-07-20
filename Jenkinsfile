@@ -119,12 +119,27 @@ pipeline {
             steps {
                 sh """
                     DATA=\$(curl -s --location \$(grep -o "http[^ ]*" sonarlogs.txt | grep api) --header 'Authorization: Basic bm90aWY6QE4wdDFm')
-                    TYPE=\$(echo \$DATA | jq --raw-output .task.type)
-                    STATUS=\$(echo \$DATA | jq --raw-output .task.status)
                     NAME=\$(echo \$DATA | jq --raw-output .task.componentName)
-                    WARNINGS=\$(echo \$DATA | jq --raw-output .task.warningCount)
-
-                    ANALYSIS_MESSAGE="SonarQube \$TYPE *\$STATUS* \n⚠ Warnings: *\$WARNINGS* \nhttps://sonarqube.nikici.com/dashboard?\$NAME"
+                    ISSUES=\$(curl -s --location "https://sonarqube.nikici.com/api/issues/search?componentKeys=\$NAME&s=FILE_LINE&resolved=false&ps=100&facets=owaspTop10%2CsansTop25%2Cseverities%2CsonarsourceSecurity%2Ctypes&additionalFields=_all&timeZone=Asia%2FBangkok" --header 'Authorization: Basic bm90aWY6QE4wdDFm')
+                    
+                    FACETS=\$(echo \$ISSUES | jq --raw-output .facets)
+                    
+                    SEVERITIES=\$(echo \$FACETS | jq --raw-output '.[] | select(.property=="severities") | .values[]')
+                    TYPES=\$(echo \$FACETS | jq --raw-output '.[] | select(.property=="types") | .values[]')
+                    
+                    BUG=\$(echo \$TYPES | jq --raw-output 'select(.val=="BUG") | .count')
+                    CODE_SMELL=\$(echo \$TYPES | jq --raw-output 'select(.val=="CODE_SMELL") | .count')
+                    VULN=\$(echo \$TYPES | jq --raw-output 'select(.val=="VULNERABILITY") | .count')
+                    
+                    MAJOR=\$(echo \$SEVERITIES | jq --raw-output 'select(.val=="MAJOR") | .count')
+                    MINOR=\$(echo \$SEVERITIES | jq --raw-output 'select(.val=="MINOR") | .count')
+                    CRITICAL=\$(echo \$SEVERITIES | jq --raw-output 'select(.val=="CRITICAL") | .count')
+                    BLOCKER=\$(echo \$SEVERITIES | jq --raw-output 'select(.val=="BLOCKER") | .count')
+                    INFO=\$(echo \$SEVERITIES | jq --raw-output 'select(.val=="INFO") | .count')
+                    
+                    SECURITY_HOTSPOT=\$(curl -s --location "https://sonarqube.nikici.com/api/hotspots/search?projectKey=\$NAME&p=1&ps=500&status=TO_REVIEW&onlyMine=false&sinceLeakPeriod=false" --header 'Authorization: Basic bm90aWY6QE4wdDFm'| jq --raw-output .paging.total)
+                    
+                    ANALYSIS_MESSAGE="SonarQube Report \$NAME:\n🔐 Security Hotspot : *\$SECURITY_HOTSPOT* \nType : \n🐞 Bug : *\$BUG* \n🔓 Vulnerability : *\$VULN* \n☢ Code Smell : *\$CODE_SMELL* \nSeverity : \n🔁 Blocker : *\$BLOCKER* \n⏫ Critical : *\$CRITICAL* \n🔼 Major : *\$MAJOR* \n🔽 Minor : *\$MINOR* \n🔂 Info : *\$INFO* \nhttps://sonarqube.nikici.com/dashboard?id=\$NAME"
                     curl --location "$NOTIF_URL" \
                     --header 'Content-Type: application/x-www-form-urlencoded' \
                     --data-urlencode "name=$NOTIF_GROUP" \
