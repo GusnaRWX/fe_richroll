@@ -23,7 +23,7 @@ import { getListBaseCompensationRequested, getListTerminReqeusted, getListSuppCo
 import { numberFormat } from '@/utils/format';
 import { putPayrollGrossesIdRequested } from '@/store/reducers/slice/payroll/payrollSlice';
 import * as Yup from 'yup';
-import { useRouter } from 'next/router';
+// import { useRouter } from 'next/router';
 
 const ButtonWrapper = styled.div`
  display: flex;
@@ -58,10 +58,11 @@ const validationSchema = Yup.object().shape({
 function GrossRow(att) {
   const { item, isPreview } = att;
   console.log(item, 'item');
-  const router = useRouter();
+  // const router = useRouter();
   const [open, setOpen] = useState(false);
   const dispatch = useAppDispatch();
   const { option } = useAppSelectors(state => state);
+  const { grossesId } = useAppSelectors((state) => state.payroll);
   const formik = useFormik({
     initialValues: {
       // baseCompensationComponentId: '4',
@@ -78,7 +79,7 @@ function GrossRow(att) {
     onSubmit: (_val) => {
       const payload = {
         grossesId: item?.id,
-        id: router.query.id,
+        id: grossesId,
         body: {
           ad_hoc: _val?.hocComponent?.map(val => {
             return {

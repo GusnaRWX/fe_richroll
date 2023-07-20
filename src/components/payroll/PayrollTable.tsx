@@ -69,7 +69,7 @@ type Order = 'asc' | 'desc'
 function PayrollTable({
   tabValue
 }: EmployeeTableProps) {
-  const { payroll } = useAppSelectors(state => state);
+  const { data } = useAppSelectors(state => state.payroll);
 
   const Tabs = {
     0: 'DRAFT',
@@ -124,7 +124,7 @@ function PayrollTable({
         search: search,
         countryCode: '',
         companyID: companyData?.id,
-        workflow: 'NET_PAYROLL',
+        workflow: 'GROSS_PAYROLL',
         status: Tabs[tabValue]
       }
     });
@@ -164,7 +164,7 @@ function PayrollTable({
         </Grid> */}
       </Grid>
       <Table
-        count={payroll?.data?.length}
+        count={data?.itemTotals}
         rowsPerPageOptions={[5, 10, 15]}
         rowsPerPage={rowsPerPage}
         page={page}
@@ -195,19 +195,19 @@ function PayrollTable({
         bodyChildren={
           <>
             {
-              ifThenElse(typeof payroll?.items !== 'undefined', (
-                ifThenElse(payroll?.items?.length === 0, (
+              ifThenElse(typeof data?.items !== 'undefined', (
+                ifThenElse(data?.items?.length === 0, (
                   <TableRow>
                     <TableCell colSpan={12} align='center'>
                       <EmptyState />
                     </TableCell>
                   </TableRow>
                 ), (
-                  payroll?.items?.map((item, index) => (
+                  data?.items?.map((item, index) => (
                     <TableRow key={index}>
                       <TableCell>{item.name}</TableCell>
                       <TableCell>{dayjs(item.start).format('DD/MM/YYYY')} - {dayjs(item.end).format('DD/MM/YYYY')}</TableCell>
-                      <TableCell>{ifThenElse(item.workflow === 0, <GrossComponent>Gross Payroll Report</GrossComponent>, <NetComponent>Net Payroll Report</NetComponent>)}</TableCell>
+                      <TableCell>{ifThenElse(item.workflow === 1, <GrossComponent>Gross Payroll Report</GrossComponent>, <NetComponent>Net Payroll Report</NetComponent>)}</TableCell>
                       <TableCell>{dayjs(item.createdAt).format('DD/MM/YYYY')}</TableCell>
                       <TableCell>{dayjs(item.updatedAt).format('DD/MM/YYYY')}</TableCell>
                       <TableCell>
