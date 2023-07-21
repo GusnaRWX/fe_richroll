@@ -651,7 +651,7 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
         onClose={handleCancelCrop}
         image={images}
         setCropValue={handleSaveCropImage}
-        ratio={1 / 1}
+        ratio={1}
       />
       <Modal
         open={openCamera}

@@ -186,7 +186,7 @@ export default function CreateCNBComponent() {
 
   function CreateNewCnbProfile(value: BaseType) {
     let supplement = true;
-    value.supplementary.map((item: SuplementType) => {
+    value.supplementary.forEach((item: SuplementType) => {
       if (value.supplementary.length === 0) {
         supplement = true;
         return false;

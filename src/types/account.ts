@@ -34,6 +34,10 @@ export declare namespace Account {
     terminateStart: string | null,
   }
 
+  interface UserInfoType {
+    picture: string,
+  }
+
   interface AccountType {
     createdAt: DayJS,
     deletedAt: DayJS,
@@ -46,7 +50,7 @@ export declare namespace Account {
     roles: Array<RolesType>,
     suspensionEnd: DayJS,
     suspensionStart: DayJS,
-    userInformation: object | null
+    userInformation: UserInfoType | null
   }
 
   interface PatcSuspension {

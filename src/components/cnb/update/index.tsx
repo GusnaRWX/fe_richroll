@@ -209,7 +209,7 @@ export default function UpdateCNBComponent() {
   function UpdateCnbProfile(value: BaseType) {
     let supplement = true;
     console.log(value, 'adas');
-    value.supplementary.map((item: SuplementType) => {
+    value.supplementary.forEach((item: SuplementType) => {
       if (value.supplementary.length === 0) {
         supplement = true;
         return false;

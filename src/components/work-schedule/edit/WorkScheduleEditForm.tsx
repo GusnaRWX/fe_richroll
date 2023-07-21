@@ -122,25 +122,21 @@ function WorkScheduleEditForm({setData}: WorkScheduleFormProps) {
         formik.setFieldValue('day', temp);
         return setDayTemp(temp);
       }
-        break;
       case '1': {
         const temp: Array<number> = [0, 1, 2, 3, 4];
         formik.setFieldValue('day', temp);
         return setDayTemp(temp);
       }
-        break;
       case '2': {
         const temp: Array<number> = [5, 6,];
         formik.setFieldValue('day', temp);
         return setDayTemp(temp);
       }
-        break;
       case '3': {
         const temp: Array<number> = [];
         formik.setFieldValue('day', temp);
         return setDayTemp(temp);
       }
-        break;
       default: {
         return setDayTemp([]);
       }

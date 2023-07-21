@@ -41,11 +41,11 @@ const SidebarItem = ({
       {checkRoles?.map((role, index) => role && (
         <ListItemButton
           key={index}
-          onClick={hasChild ? () => handleOpen() : () => push(path)}
+          onClick={ifThenElse(hasChild, () => handleOpen(), () => push(path))}
           selected={pathname === path}
           sx={{
-            backgroundColor: pathname === path ? '#E9EFFF !important' : '',
-            borderRight: pathname === path ? '4px solid #223567 !important': '',
+            backgroundColor: ifThenElse(pathname === path, '#E9EFFF !important', ''),
+            borderRight: ifThenElse(pathname === path, '4px solid #223567 !important', ''),
             '&:hover': {
               backgroundColor: '#E9EFFF',
               color: '#223567 !important'
@@ -59,9 +59,9 @@ const SidebarItem = ({
             primary={t('sidebar.' + renderTitle?.prefix)}
             sx={{
               fontSize: '14px',
-              color: pathname === path ? '#223567 !important' : 'grey.400',
+              color: ifThenElse(pathname === path, '#223567 !important', 'grey.400'),
               '& > span': {
-                fontWeight: pathname === path ? 'bold' : ''
+                fontWeight: ifThenElse(pathname === path, 'bold', '')
               }
             }}
           />
@@ -95,8 +95,8 @@ const SidebarItem = ({
                       key={key}
                       selected={pathname === childMenu.path}
                       sx={{
-                        backgroundColor: pathname === childMenu.path ? '#E9EFFF !important' : '',
-                        borderRight: pathname === childMenu.path ? '4px solid #223567 !important': '',
+                        backgroundColor: ifThenElse(pathname === childMenu.path, '#E9EFFF !important', ''),
+                        borderRight: ifThenElse(pathname === childMenu.path, '4px solid #223567 !important', ''),
                         pl: 6,
                         ':hover': {
                           backgroundColor: '#E9EFFF'
@@ -107,9 +107,9 @@ const SidebarItem = ({
                         primary={t('sidebar.' + childMenu.prefix)}
                         sx={{
                           fontSize: '14px',
-                          color: pathname === childMenu.path ? '#223567 !important' : 'grey.400',
+                          color: ifThenElse(pathname === childMenu.path, '#223567 !important', 'grey.400'),
                           '& > span': {
-                            fontWeight: pathname === childMenu.path ? 'bold' : ''
+                            fontWeight: ifThenElse(pathname === childMenu.path, 'bold', '')
                           }
                         }} />
                     </ListItemButton>
