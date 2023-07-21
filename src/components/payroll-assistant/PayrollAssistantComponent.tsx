@@ -92,6 +92,7 @@ function PayrollAssistantComponent() {
         isAttendance: false
       }
     });
+    setOpen(false);
   };
 
   return (
