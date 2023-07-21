@@ -65,7 +65,7 @@ function GenerateGrossDetail() {
               icons={
                 <ArrowBack sx={{ color: '#FFFFFF' }} />
               }
-              onClick={() => { router.push('/payroll-disbursement/attendance'); }}
+              onClick={() => { router.push('/payroll-disbursement/payroll'); }}
             />
             <Box>
               <Typography variant='h6' color='#4B5563'><b>{t(`${tPath}title`)}</b></Typography>

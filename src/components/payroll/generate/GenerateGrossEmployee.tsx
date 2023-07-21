@@ -163,7 +163,7 @@ function GenerateGrossEmployee() {
   const onSelected = (item, e) => {
     if (e.target.checked) {
       const temp = [...selectedTemp, {
-        id: item.id, name: item.name, attendance: item.attendance, absent: item.absent,
+        id: item.id, name: item.employee.name, user_id: item.employee.id, attendance: item.attendance, absent: item.absent,
         paidLeave: item.paidLeave,
         unpaidLeave: item.unpaidLeave,
         overtime: item.overtime,
@@ -194,6 +194,7 @@ function GenerateGrossEmployee() {
             if (pageItem) {
               updatedSelectedTemp.push({
                 id: pageItem.id,
+                user_id: pageItem.employee.id,
                 name: pageItem.employee.name,
                 attendance: pageItem.attendance,
                 absent: pageItem.absent,
@@ -239,7 +240,7 @@ function GenerateGrossEmployee() {
       type: putGenerateGrossesEmployeeRequested.toString(),
       payload: {
         id: router.query.id,
-        body: { employee_id: selectedTemp?.map(item => item.id) }
+        body: { employee_id: selectedTemp?.map(item => item.user_id) }
       }
     });
   };
