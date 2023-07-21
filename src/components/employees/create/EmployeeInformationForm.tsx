@@ -615,7 +615,7 @@ function EmployeeInformationForm({ refProp, nextPage, nextPermPage, setValues, i
         onClose={handleCancelCrop}
         image={images}
         setCropValue={handleSaveCropImage}
-        ratio={1/1}
+        ratio={1}
       />
       <Modal
         open={openCamera}
