@@ -18,9 +18,6 @@ import store from '@/store/index';
 import { getLeaveEntriesRequested, deleteLeaveEntriesRequested } from '@/store/reducers/slice/attendance-leave/leaveEntriesSlice';
 import { useAppSelectors } from '@/hooks/index';
 import { AttendanceLeave } from '@/types/attendanceLeave';
-// import utc from 'dayjs/plugin/utc';
-
-// dayjs.extend(utc);
 
 const NameWrapper = styled.div`
    display: flex;

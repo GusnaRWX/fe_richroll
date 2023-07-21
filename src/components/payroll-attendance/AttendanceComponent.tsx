@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Typography, Card, Grid, Box, Button as MuiButton, Tab, Tabs } from '@mui/material';
 import { DateRangePicker, Input } from '@/components/_shared/form';
 import { styled } from '@mui/material/styles';
-// import { useRouter } from 'next/router';
 import AttendanceTable from './AttendanceTable';
 import CustomModal from '@/components/_shared/common/CustomModal';
 import { getCompanyData } from '@/utils/helper';
@@ -70,7 +69,6 @@ function a11yProps(index: number) {
 }
 
 function AttendanceComponent() {
-  // const router = useRouter();
   const [value, setValue] = useState(0);
   const [open, setOpen] = useState(false);
   const companyData = getCompanyData();
@@ -111,6 +109,7 @@ function AttendanceComponent() {
         }
       }
     });
+    setOpen(false);
   };
 
   return (
