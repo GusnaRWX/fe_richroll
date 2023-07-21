@@ -59,7 +59,6 @@ export const getDetailAttendance = (payload: Payroll.ParamsDetailAttendance) => 
 };
 
 export const putPayrollGrossesFinal = (payload) => {
-  // return put(`payrolls/${payload.id}/grosses/final`, {});
   return patch(`payrolls/${payload.id}/grosses/final`, {});
 };
 

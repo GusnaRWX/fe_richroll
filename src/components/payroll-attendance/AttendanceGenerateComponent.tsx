@@ -13,9 +13,8 @@ import {
 import { styled } from '@mui/material/styles';
 import { useRouter } from 'next/router';
 import { Input, IconButton } from '@/components/_shared/form';
-import { Add } from '@mui/icons-material';
+import { Add, Search, ArrowBack } from '@mui/icons-material';
 import Table from '@/components/_shared/form/Table';
-import { Search, ArrowBack } from '@mui/icons-material';
 import { FiCalendar } from 'react-icons/fi';
 import ListEmployeeModal from '../payroll-assistant/create/ListEmployeeModal';
 //import AddEmployeesModal from '../payroll-assistant/create/AttendanceModal';
@@ -70,67 +69,6 @@ const headerItems = [
 
 type Order = 'asc' | 'desc'
 
-// const data = {
-//   items: [
-//     {
-//       id: 1,
-//       name: 'Budi Irawan',
-//       attendance: '30 Days',
-//       absent: '2 Days',
-//       paidLeave: '3 Days',
-//       unpaidLeave: '4 Days',
-//       overtime: '8 Days',
-//       totalHours: '175 Days',
-//       averageHours: '30 Days',
-//     },
-//     {
-//       id: 2,
-//       name: 'Budi Irawan',
-//       attendance: '30 Days',
-//       absent: '2 Days',
-//       paidLeave: '3 Days',
-//       unpaidLeave: '4 Days',
-//       overtime: '8 Days',
-//       totalHours: '175 Days',
-//       averageHours: '30 Days',
-//     },
-//     {
-//       id: 3,
-//       name: 'Budi Irawan',
-//       attendance: '30 Days',
-//       absent: '2 Days',
-//       paidLeave: '3 Days',
-//       unpaidLeave: '4 Days',
-//       overtime: '8 Days',
-//       totalHours: '175 Days',
-//       averageHours: '30 Days',
-//     },
-//     {
-//       id: 4,
-//       name: 'Budi Irawan',
-//       attendance: '30 Days',
-//       absent: '2 Days',
-//       paidLeave: '3 Days',
-//       unpaidLeave: '4 Days',
-//       overtime: '8 Days',
-//       totalHours: '175 Days',
-//       averageHours: '30 Days',
-//     },
-//     {
-//       id: 5,
-//       name: 'Budi Irawan',
-//       attendance: '30 Days',
-//       absent: '2 Days',
-//       paidLeave: '3 Days',
-//       unpaidLeave: '4 Days',
-//       overtime: '8 Days',
-//       totalHours: '175 Days',
-//       averageHours: '30 Days',
-//     },
-//   ],
-//   itemTotals: 5
-// };
-
 interface SelectedProp {
   id: string;
   name: string;
@@ -183,8 +121,6 @@ function AttendanceGenerateComponent() {
   const handleSearch = (e) => {
     if (e.key === 'Enter') {
       setSearch(e.target.value);
-      console.log(e.target.value);
-
     }
   };
 
