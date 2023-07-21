@@ -25,6 +25,7 @@ import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { getPayrollRequested } from '@/store/reducers/slice/payroll/payrollSlice';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
+import { HiPencilAlt } from 'react-icons/hi';
 
 const ButtonWrapper = styled.div`
  display: flex;
@@ -227,9 +228,9 @@ function PayrollTable({
                             <>
                               <IconButton
                                 parentColor='#E9EFFF'
-                                onClick={() => { item.reportType === 'gross' ? router.push('/payroll-disbursement/payroll/gross-detail') : router.push('/payroll-disbursement/payroll/net-detail'); }}
+                                onClick={() => { item.workflow === 1 ? router.push({ pathname: '/payroll-disbursement/payroll/generate-gross/detail', query: { id: item?.id } }) : router.push('/payroll-disbursement/payroll/net-detail'); }}
                                 icons={
-                                  <TbFileImport fontSize={20} color='#223567' />
+                                  <HiPencilAlt fontSize={20} color='#223567' />
                                 }
                               />
                               <IconButton
@@ -245,15 +246,17 @@ function PayrollTable({
                             <>
                               <IconButton
                                 parentColor='#E9EFFF'
-                                onClick={() => { item.reportType === 'gross' ? router.push('/payroll-disbursement/payroll/gross-detail') : router.push('/payroll-disbursement/payroll/net-detail'); }}
+                                onClick={() => { item.workflow === 1 ? router.push('/payroll-disbursement/payroll/gross-detail') : router.push('/payroll-disbursement/payroll/net-detail'); }}
                                 icons={
-                                  <BsFillEyeFill fontSize={20} color='#223567' />
+                                  <TbFileImport fontSize={20} color='#223567' />
+                                  //<BsFillEyeFill fontSize={20} color='#223567' />
                                 }
                               />
                               <IconButton
                                 parentColor='#FEE2E2'
                                 onClick={() => setDeleteConfirmation(true)}
                                 icons={
+
                                   <BsTrashFill fontSize={20} color='#EF4444' />
                                 }
                               />
