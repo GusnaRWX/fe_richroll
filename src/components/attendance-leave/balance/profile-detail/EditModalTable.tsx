@@ -26,7 +26,7 @@ const headerItems = [
 
 type Order = 'asc' | 'desc';
 
-function EditModalTable({ submitRef }) {
+function EditModalTable({ submitRef,tabValue }) {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(1);
   const [direction, setDirection] = useState<Order>('desc');
