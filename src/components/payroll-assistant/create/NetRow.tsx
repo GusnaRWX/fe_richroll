@@ -1,25 +1,25 @@
 import React, { useState } from 'react';
 import {
-  Box,
   Grid,
   Collapse,
   TableCell,
   TableRow,
   Avatar,
-  Button as MuiButton,
   Typography
 } from '@mui/material';
-import { Input, IconButton, Select, CheckBox } from '@/components/_shared/form';
-import { Add } from '@mui/icons-material';
-import { BsTrashFill } from 'react-icons/bs';
+import { Input, IconButton } from '@/components/_shared/form';
+// import { Add } from '@mui/icons-material';
+// import { BsTrashFill } from 'react-icons/bs';
 import { Image as ImageType } from '@/utils/assetsConstant';
 import { HiChevronDown, HiChevronUp } from 'react-icons/hi';
 import styled from '@emotion/styled';
-import { Payroll } from '@/types/payroll';
+import { ifThenElse } from '@/utils/helper';
+import { numberFormat } from '@/utils/format';
+//import { Payroll } from '@/types/payroll';
 
-const AsteriskComponent = styled.span`
-  color: #DC2626;
-`;
+// const AsteriskComponent = styled.span`
+//   color: #DC2626;
+// `;
 
 const ButtonWrapper = styled.div`
  display: flex;
@@ -38,16 +38,16 @@ const NameWrapper = styled.div`
 `;
 
 function NetRow(att) {
-  const { item } = att;
+  const { item, isPreview } = att;
   const [open, setOpen] = useState(false);
 
-  const [nonTaxable, setNonTaxable] = useState<Payroll.AddNonTaxable[] | []>([]);
+  // const [nonTaxable, setNonTaxable] = useState<Payroll.AddNonTaxable[] | []>([]);
 
-  const handleAddNonTaxable = () => {
-    setNonTaxable((prev) => [...prev, { componentId: '', amount: '' }]);
-  };
+  // const handleAddNonTaxable = () => {
+  //   setNonTaxable((prev) => [...prev, { componentId: '', amount: '' }]);
+  // };
 
-  console.log(nonTaxable);
+  // console.log(nonTaxable);
 
   return (
     <React.Fragment>
@@ -55,21 +55,21 @@ function NetRow(att) {
         <TableCell>
           <NameWrapper>
             <Avatar
-              src={ImageType.AVATAR_PLACEHOLDER}
-              alt={item.name}
+              src={item.employee.picture !== '' ? item?.employee.picture : ImageType.AVATAR_PLACEHOLDER}
+              alt={item.employee.name}
               sx={{
                 width: 24, height: 24
               }}
             />
-            &nbsp;{item.name}
+            &nbsp;{item.employee.name}
           </NameWrapper>
         </TableCell>
-        <TableCell>{item.attendance}</TableCell>
-        <TableCell>{item.absent}</TableCell>
-        <TableCell>{item.paidLeave}</TableCell>
-        <TableCell>{item.unpaidLeave}</TableCell>
-        <TableCell>{item.nonTax}</TableCell>
-        <TableCell>{item.netSalary}</TableCell>
+        <TableCell>Rp. {numberFormat(item.gross)}</TableCell>
+        <TableCell>Rp. {numberFormat(item.statutory)}</TableCell>
+        <TableCell>Rp. {numberFormat(item.tax)}</TableCell>
+        <TableCell>Rp. {numberFormat(item.grossAfterTax)}</TableCell>
+        <TableCell>Rp. {numberFormat(item.nonTaxableDeducation)}</TableCell>
+        <TableCell>Rp. {numberFormat(item.net)}</TableCell>
         <TableCell>
           <ButtonWrapper>
             <IconButton
@@ -83,96 +83,128 @@ function NetRow(att) {
           </ButtonWrapper>
         </TableCell>
       </TableRow>
-      <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={8}>
-          <Collapse in={open} timeout='auto' sx={{ mt: '1rem', mb: '1rem' }} unmountOnExit>
-            <Typography component='div' variant='text-sm' fontWeight='bold' color='#4B5563'>Net Calculation Payroll</Typography>
+      {
+        ifThenElse(isPreview,
+          (
+            <TableRow>
+              <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={8}>
+                <Collapse in={open} timeout='auto' sx={{ mt: '1rem', mb: '1rem' }} unmountOnExit>
+                  <Typography component='div' variant='text-sm' fontWeight='bold' color='#4B5563'>Net Calculation Payroll</Typography>
+                  <Typography component='div' variant='text-base' fontWeight='bold' color='primary.main' sx={{ mt: '2rem', mb: '1rem' }}>Gross Payroll</Typography>
 
-            <Typography component='div' variant='text-base' fontWeight='bold' color='primary.main' sx={{ mt: '2rem', mb: '1rem' }}>Gross Payroll</Typography>
-            <Grid container spacing={2} sx={{ mb: '1rem' }}>
-              <Grid item xs={3}>
-                <Input
-                  name='amount'
-                  size='small'
-                  value='5.000.000'
-                  onKeyDown={(e) => console.log(e)}
-                  type='text'
-                  customLabel='Base Compensation'
-                  disabled
-                  InputProps={{
-                    startAdornment: ('Rp'),
-                    endAdornment: ('IDR'),
-                    sx: {
-                      '> input': {
-                        padding: '8.5px 8px'
-                      }
-                    }
-                  }}
-                />
-              </Grid>
-              <Grid item xs={3}>
-                <Input
-                  name='amount'
-                  size='small'
-                  value='2.500.000'
-                  onKeyDown={(e) => console.log(e)}
-                  type='text'
-                  customLabel='Supplementary Compensation'
-                  disabled
-                  InputProps={{
-                    startAdornment: ('Rp'),
-                    endAdornment: ('IDR'),
-                    sx: {
-                      '> input': {
-                        padding: '8.5px 8px'
-                      }
-                    }
-                  }}
-                />
-              </Grid>
-              <Grid item xs={3}>
-                <Input
-                  name='amount'
-                  size='small'
-                  value='2.000.000'
-                  onKeyDown={(e) => console.log(e)}
-                  type='text'
-                  customLabel='Ad Hoc'
-                  disabled
-                  InputProps={{
-                    startAdornment: ('Rp'),
-                    endAdornment: ('IDR'),
-                    sx: {
-                      '> input': {
-                        padding: '8.5px 8px'
-                      }
-                    }
-                  }}
-                />
-              </Grid>
-              <Grid item xs={3}>
-                <Input
-                  name='amount'
-                  size='small'
-                  value='9.500.000'
-                  onKeyDown={(e) => console.log(e)}
-                  type='text'
-                  customLabel='Gross Payroll'
-                  disabled
-                  InputProps={{
-                    startAdornment: ('Rp'),
-                    endAdornment: ('IDR'),
-                    sx: {
-                      '> input': {
-                        padding: '8.5px 8px'
-                      }
-                    }
-                  }}
-                />
-              </Grid>
-            </Grid>
+                  <Grid container spacing={2} sx={{ mb: '1rem' }}>
+                    <Grid item xs={3}>
+                      <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>Base Compensation</Typography>
+                      <Typography component='div' variant='text-sm' fontWeight='500' color='#1F2937'>Rp {numberFormat(item?.summary?.base)}</Typography>
+                    </Grid>
+                    <Grid item xs={3}>
+                      <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>Supplementary Compensation</Typography>
+                      <Typography component='div' variant='text-sm' fontWeight='500' color='#1F2937'>Rp {numberFormat(item?.summary?.supplementary)}</Typography>
+                    </Grid>
+                    <Grid item xs={3}>
+                      <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>Add Hoc</Typography>
+                      <Typography component='div' variant='text-sm' fontWeight='500' color='#1F2937'>Rp {numberFormat(item?.summary?.hoc)}</Typography>
+                    </Grid>
+                    <Grid item xs={3}>
+                      <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>Gross Payroll</Typography>
+                      <Typography component='div' variant='text-sm' fontWeight='500' color='#1F2937'>Rp {numberFormat(item?.summary?.gross)}</Typography>
+                    </Grid>
+                  </Grid>
+                </Collapse>
+              </TableCell>
+            </TableRow>
+          ),
+          (
+            <TableRow>
+              <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={8}>
+                <Collapse in={open} timeout='auto' sx={{ mt: '1rem', mb: '1rem' }} unmountOnExit>
+                  <Typography component='div' variant='text-sm' fontWeight='bold' color='#4B5563'>Net Calculation Payroll</Typography>
 
-            <Grid container spacing={2}>
+                  <Typography component='div' variant='text-base' fontWeight='bold' color='primary.main' sx={{ mt: '2rem', mb: '1rem' }}>Gross Payroll</Typography>
+                  <Grid container spacing={2} sx={{ mb: '1rem' }}>
+                    <Grid item xs={3}>
+                      <Input
+                        name='amount'
+                        size='small'
+                        value={item?.summary?.base}
+                        onKeyDown={(e) => console.log(e)}
+                        type='text'
+                        customLabel='Base Compensation'
+                        disabled
+                        InputProps={{
+                          startAdornment: ('Rp'),
+                          endAdornment: ('IDR'),
+                          sx: {
+                            '> input': {
+                              padding: '8.5px 8px'
+                            }
+                          }
+                        }}
+                      />
+                    </Grid>
+                    <Grid item xs={3}>
+                      <Input
+                        name='amount'
+                        size='small'
+                        value={item?.summary?.supplementary}
+                        onKeyDown={(e) => console.log(e)}
+                        type='text'
+                        customLabel='Supplementary Compensation'
+                        disabled
+                        InputProps={{
+                          startAdornment: ('Rp'),
+                          endAdornment: ('IDR'),
+                          sx: {
+                            '> input': {
+                              padding: '8.5px 8px'
+                            }
+                          }
+                        }}
+                      />
+                    </Grid>
+                    <Grid item xs={3}>
+                      <Input
+                        name='amount'
+                        size='small'
+                        value={item?.summary?.hoc}
+                        onKeyDown={(e) => console.log(e)}
+                        type='text'
+                        customLabel='Ad Hoc'
+                        disabled
+                        InputProps={{
+                          startAdornment: ('Rp'),
+                          endAdornment: ('IDR'),
+                          sx: {
+                            '> input': {
+                              padding: '8.5px 8px'
+                            }
+                          }
+                        }}
+                      />
+                    </Grid>
+                    <Grid item xs={3}>
+                      <Input
+                        name='amount'
+                        size='small'
+                        value={item?.summary?.gross}
+                        onKeyDown={(e) => console.log(e)}
+                        type='text'
+                        customLabel='Gross Payroll'
+                        disabled
+                        InputProps={{
+                          startAdornment: ('Rp'),
+                          endAdornment: ('IDR'),
+                          sx: {
+                            '> input': {
+                              padding: '8.5px 8px'
+                            }
+                          }
+                        }}
+                      />
+                    </Grid>
+                  </Grid>
+
+                  {/* <Grid container spacing={2}>
               <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
                 <Typography component='div' variant='text-base'>NPWP</Typography>
                 <CheckBox
@@ -191,9 +223,9 @@ function NetRow(att) {
                   onChange={(e) => console.log(e)}
                 />
               </Grid>
-            </Grid>
+            </Grid> */}
 
-            <Box sx={{ background: '#F9FAFB', p: '8px', mt: '2rem' }}>
+                  {/* <Box sx={{ background: '#F9FAFB', p: '8px', mt: '2rem' }}>
               <Typography component='div' variant='text-base' fontWeight='bold' color='primary.main' sx={{ mb: '1rem' }}>Statutory Benefits</Typography>
               <Grid container spacing={2} sx={{ mb: '1rem' }}>
                 <Grid item xs={3.3}>
@@ -529,9 +561,9 @@ function NetRow(att) {
                 sx={{ color: '#FFF' }}
                 onClick={() => { console.log(true); }}
               ><Add fontSize='small' />&nbsp; Add Satutory Benefits</MuiButton>
-            </Box>
+            </Box> */}
 
-            <Box sx={{ background: '#F9FAFB', p: '8px', mt: '2rem' }}>
+                  {/* <Box sx={{ background: '#F9FAFB', p: '8px', mt: '2rem' }}>
               <Typography component='div' variant='text-base' fontWeight='bold' color='primary.main' sx={{ mb: '1rem' }}>Taxable Income Deduction</Typography>
               <Grid container spacing={2} sx={{ mb: '1rem' }}>
                 <Grid item xs={4.4}>
@@ -697,9 +729,9 @@ function NetRow(att) {
                 sx={{ color: '#FFF' }}
                 onClick={() => { console.log(true); }}
               ><Add fontSize='small' />&nbsp; Add Taxable Deductions</MuiButton>
-            </Box>
+            </Box> */}
 
-            <Box sx={{ background: '#F9FAFB', p: '8px', mt: '2rem' }}>
+                  {/* <Box sx={{ background: '#F9FAFB', p: '8px', mt: '2rem' }}>
               <Typography component='div' variant='text-base' fontWeight='bold' color='primary.main' sx={{ mb: '1rem' }}>Income Tax</Typography>
               <Grid container spacing={2} sx={{ mb: '1rem' }}>
                 <Grid item xs={3.3}>
@@ -795,9 +827,9 @@ function NetRow(att) {
                   />
                 </Grid>
               </Grid>
-            </Box>
+            </Box> */}
 
-            <Typography
+                  {/* <Typography
               component='div'
               variant='text-base'
               fontWeight='bold'
@@ -843,11 +875,14 @@ function NetRow(att) {
               color='secondary'
               sx={{ color: '#FFF' }}
               onClick={handleAddNonTaxable}
-            ><Add fontSize='small' />&nbsp; Add Non-Taxable Adjustment</MuiButton>
+            ><Add fontSize='small' />&nbsp; Add Non-Taxable Adjustment</MuiButton> */}
 
-          </Collapse>
-        </TableCell>
-      </TableRow>
+                </Collapse>
+              </TableCell>
+            </TableRow>
+          )
+        )
+      }
     </React.Fragment>
   );
 }

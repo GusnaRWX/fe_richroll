@@ -209,6 +209,68 @@ export declare namespace Payroll {
     events: Array<EventType>
   }
 
+  interface DataNetDetail {
+    gross: number,
+    statutory: number,
+    tax: number,
+    grossAfterTax: number,
+    nonTaxableDeduction: number,
+    net: number,
+    nets: Array<DataNetRow>
+  }
+
+  interface DataNetRow {
+    gross: number,
+    statutory: number,
+    tax: number,
+    grossAfterTax: number,
+    nonTaxableDeduction: number,
+    net: number,
+    employee: {
+      id: string,
+      name: string,
+      picture: string,
+    } | null,
+    summary: {
+      base: number,
+      supplementary: number,
+      hoc: number,
+      gross: number
+    } | null,
+    isTaxPayer: boolean,
+    isStatusEmployee: boolean,
+    statutes: {
+      name: string,
+      rates: number,
+      amount: number,
+      total: number,
+      isSplit: boolean,
+      paidRates: number,
+      paidAmount: number,
+      paidTotal: number
+    } | null,
+    deductions: {
+      name: string,
+      status: string,
+      rates: number,
+      amount: number,
+      total: number,
+    } | null,
+    incomeTaxes: {
+      income: number,
+      rates: number,
+      total: number
+    } | null,
+    nonTaxes: {
+      name: string,
+      total: number
+    } | null
+  }
+
+  interface PostNetPayloadType {
+    assistantID: string | null;
+  }
+
   interface WorkflowType {
     workflow: number;
     status: number;

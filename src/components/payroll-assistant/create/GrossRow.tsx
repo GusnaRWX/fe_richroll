@@ -196,62 +196,63 @@ function GrossRow(att) {
               <Grid container spacing={2} sx={{ mb: '1rem' }}>
                 <Grid item xs={4}>
                   <Typography component='div' variant='text-base' fontWeight='400' sx={{ mb: '1rem' }}>Compensation Component</Typography>
-                  <Typography component='div' variant='text-base' fontWeight='400' sx={{ paddingLeft: '12px' }}>Salary</Typography>
+                  <Typography component='div' variant='text-base' fontWeight='400' sx={{ paddingLeft: '12px' }}>{item?.employee?.grossCalculation?.base?.name}</Typography>
                 </Grid>
               </Grid>
               <Grid container spacing={2} sx={{ mb: '1rem' }}>
                 <Grid item xs={4}>
                   <Typography component='div' variant='text-base' fontWeight='400' sx={{ mb: '1rem' }}>Amount</Typography>
-                  <Typography component='div' variant='text-base' fontWeight='400' sx={{ paddingLeft: '12px' }}>Rp. 5.000.000,00</Typography>
+                  <Typography component='div' variant='text-base' fontWeight='400' sx={{ paddingLeft: '12px' }}>Rp. {numberFormat(item?.employee?.grossCalculation?.base?.amount)}</Typography>
                 </Grid>
                 <Grid item xs={4}>
                   <Typography component='div' variant='text-base' fontWeight='400' sx={{ mb: '1rem' }}>&nbsp;</Typography>
-                  <Typography component='div' variant='text-base' fontWeight='400' sx={{ paddingLeft: '12px' }}>per Month</Typography>
+                  <Typography component='div' variant='text-base' fontWeight='400' sx={{ paddingLeft: '12px' }}>{item?.employee?.grossCalculation?.term?.name}</Typography>
                 </Grid>
               </Grid>
 
               <Typography component='div' variant='text-base' fontWeight='bold' color='primary.main' sx={{ mt: '2rem', mb: '1rem' }}>Supplementary</Typography>
               <Grid container spacing={2} sx={{ mb: '1rem' }}>
                 <Grid item xs={4}>
-                  <Typography component='div' variant='text-base' fontWeight='400' sx={{ mb: '1rem' }}>Compensation Component 1</Typography>
-                  <Typography component='div' variant='text-base' fontWeight='400' sx={{ paddingLeft: '12px' }}>Transportation Allowance</Typography>
+                  <Typography component='div' variant='text-base' fontWeight='400' sx={{ mb: '1rem' }}>Compensation Component</Typography>
+                  <Typography component='div' variant='text-base' fontWeight='400' sx={{ paddingLeft: '12px' }}>{item?.employee?.grossCalculation?.supplementary?.name}</Typography>
                 </Grid>
                 <Grid item xs={4}>
                   <Typography component='div' variant='text-base' fontWeight='400' sx={{ mb: '1rem' }}>Tax Status</Typography>
-                  <Typography variant='text-base' fontWeight='400' sx={{ marginLeft: '12px', padding: '3px 12px', background: '#E5E7EB', borderRadius: '4px' }}>Taxable</Typography>
+                  <Typography variant='text-base' fontWeight='400' sx={{ marginLeft: '12px', padding: '3px 12px', background: '#E5E7EB', borderRadius: '4px' }}>{item?.employee?.grossCalculation?.supplementary?.isTaxable === true ? 'Taxable' : 'Non Taxable'}</Typography>
                 </Grid>
               </Grid>
               <Grid container spacing={2} sx={{ mb: '1rem' }}>
                 <Grid item xs={4}>
                   <Typography component='div' variant='text-base' fontWeight='400' sx={{ mb: '1rem' }}>Amount</Typography>
-                  <Typography component='div' variant='text-base' fontWeight='400' sx={{ paddingLeft: '12px' }}>Rp. 500.000,00</Typography>
+                  <Typography component='div' variant='text-base' fontWeight='400' sx={{ paddingLeft: '12px' }}>Rp. {numberFormat(item?.employee?.grossCalculation?.supplementary?.amount)}</Typography>
                 </Grid>
                 <Grid item xs={4}>
                   <Typography component='div' variant='text-base' fontWeight='400' sx={{ mb: '1rem' }}>&nbsp;</Typography>
-                  <Typography component='div' variant='text-base' fontWeight='400' sx={{ paddingLeft: '12px' }}>per Month</Typography>
+                  <Typography component='div' variant='text-base' fontWeight='400' sx={{ paddingLeft: '12px' }}>{item?.employee?.grossCalculation?.supplementary?.term?.name}</Typography>
                 </Grid>
               </Grid>
-
-              <Grid container spacing={2} sx={{ mb: '1rem' }}>
-                <Grid item xs={4}>
-                  <Typography component='div' variant='text-base' fontWeight='400' sx={{ mb: '1rem' }}>Compensation Component 2</Typography>
-                  <Typography component='div' variant='text-base' fontWeight='400' sx={{ paddingLeft: '12px' }}>Housing Allowance</Typography>
-                </Grid>
-                <Grid item xs={4}>
-                  <Typography component='div' variant='text-base' fontWeight='400' sx={{ mb: '1rem' }}>Tax Status</Typography>
-                  <Typography variant='text-base' fontWeight='400' sx={{ marginLeft: '12px', padding: '3px 12px', background: '#E5E7EB', borderRadius: '4px' }}>Taxable</Typography>
-                </Grid>
-              </Grid>
-              <Grid container spacing={2} sx={{ mb: '1rem' }}>
-                <Grid item xs={4}>
-                  <Typography component='div' variant='text-base' fontWeight='400' sx={{ mb: '1rem' }}>Amount</Typography>
-                  <Typography component='div' variant='text-base' fontWeight='400' sx={{ paddingLeft: '12px' }}>Rp. 4.000.000,00</Typography>
-                </Grid>
-                <Grid item xs={4}>
-                  <Typography component='div' variant='text-base' fontWeight='400' sx={{ mb: '1rem' }}>&nbsp;</Typography>
-                  <Typography component='div' variant='text-base' fontWeight='400' sx={{ paddingLeft: '12px' }}>per Month</Typography>
-                </Grid>
-              </Grid>
+              {
+                ifThenElse(item?.employee?.grossCalculation?.adHoc?.length > 0,
+                  <>
+                    <Typography component='div' variant='text-base' fontWeight='bold' color='primary.main' sx={{ mt: '2rem', mb: '1rem' }}>Add Hoc</Typography>
+                    {
+                      item?.employee?.grossCalculation?.adHoc?.map((el, index) => (
+                        <Grid container spacing={2} sx={{ mb: '1rem' }} key={index}>
+                          <Grid item xs={4}>
+                            <Typography component='div' variant='text-base' fontWeight='400' sx={{ mb: '1rem' }}>Name</Typography>
+                            <Typography component='div' variant='text-base' fontWeight='400' sx={{ paddingLeft: '12px' }}>{el.name}</Typography>
+                          </Grid>
+                          <Grid item xs={4}>
+                            <Typography component='div' variant='text-base' fontWeight='400' sx={{ mb: '1rem' }}>Amount</Typography>
+                            <Typography component='div' variant='text-base' fontWeight='400' sx={{ paddingLeft: '12px' }}>Rp. {numberFormat(el.amount)}</Typography>
+                          </Grid>
+                        </Grid>
+                      ))
+                    }
+                  </>,
+                  null
+                )
+              }
             </Collapse>
           </TableCell>
         </TableRow>,

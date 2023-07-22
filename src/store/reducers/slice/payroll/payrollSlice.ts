@@ -31,6 +31,7 @@ interface AccountState {
   grossesId: string | number;
   grossesEmployee: [],
   grossesEmployeeDetail: Payroll.DataGrossEmployeeDetail | unknown,
+  netDetail: Payroll.DataNetDetail | unknown,
   attendanceDetail: {
     id: string | number,
     employee: {
@@ -64,6 +65,7 @@ const initialState: AccountState = {
   grossesId: '',
   grossesEmployee: [],
   grossesEmployeeDetail: {},
+  netDetail: {},
   attendanceDetail: {
     id: '',
     employee: {
@@ -296,6 +298,34 @@ export const payrollSlice = createSlice({
     },
     getPayrollDisbursementIdFailed: state => {
       state.isLoading = false;
+    },
+    getNetPayrollRequested: state => {
+      state.isLoading = true;
+    },
+    getNetPayrollSuccess: (state,action) => {
+      state.isLoading = false;
+      state.netDetail = action?.payload?.data;
+    },
+    getNetPayrollFailed: state => {
+      state.isLoading = false;
+    },
+    postNetPayrollRequested: (state) => {
+      state.isLoading = true;
+    },
+    postNetPayrollSuccess: (state) => {
+      state.isLoading = false;
+    },
+    postNetPayrollFailed: (state) => {
+      state.isLoading = false;
+    },
+    patchNetPayrollFinalRequested: (state) => {
+      state.isLoading = true;
+    },
+    patchNetPayrollFinalSuccess: (state) => {
+      state.isLoading = false;
+    },
+    patchNetPayrollFinalFailed: (state) => {
+      state.isLoading = false;
     }
   },
   extraReducers: {
@@ -362,7 +392,16 @@ export const {
   postPayrollDisbursementIdFailed,
   getPayrollDisbursementIdRequested,
   getPayrollDisbursementIdSuccess,
-  getPayrollDisbursementIdFailed
+  getPayrollDisbursementIdFailed,
+  getNetPayrollFailed,
+  getNetPayrollRequested,
+  getNetPayrollSuccess,
+  postNetPayrollFailed,
+  postNetPayrollRequested,
+  postNetPayrollSuccess,
+  patchNetPayrollFinalFailed,
+  patchNetPayrollFinalRequested,
+  patchNetPayrollFinalSuccess
 } = payrollSlice.actions;
 
 export default payrollSlice.reducer;

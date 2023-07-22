@@ -228,7 +228,7 @@ function PayrollTable({
                             <>
                               <IconButton
                                 parentColor='#E9EFFF'
-                                onClick={() => { item.workflow === 1 ? router.push({ pathname: '/payroll-disbursement/payroll/generate-gross/detail', query: { id: item?.id } }) : router.push('/payroll-disbursement/payroll/net-detail'); }}
+                                onClick={() => { item.workflow === 1 ? router.push({ pathname: '/payroll-disbursement/payroll/generate-gross/detail', query: { id: item?.id } }) : router.push({pathname: '/payroll-disbursement/payroll/generate-net', query: { id: item?.id }}); }}
                                 icons={
                                   <HiPencilAlt fontSize={20} color='#223567' />
                                 }
@@ -246,7 +246,7 @@ function PayrollTable({
                             <>
                               <IconButton
                                 parentColor='#E9EFFF'
-                                onClick={() => { item.workflow === 1 ? router.push('/payroll-disbursement/payroll/gross-detail') : router.push('/payroll-disbursement/payroll/net-detail'); }}
+                                onClick={() => { item.workflow === 1 ? router.push({pathname: '/payroll-disbursement/payroll/gross-detail', query: { id: item?.id }}) : router.push({pathname:'/payroll-disbursement/payroll/net-detail', query: { id: item?.id }}); }}
                                 icons={
                                   <TbFileImport fontSize={20} color='#223567' />
                                   //<BsFillEyeFill fontSize={20} color='#223567' />

@@ -3,7 +3,7 @@ import { Payroll } from '@/types/payroll';
 
 export const getPayroll = (payload: Payroll.GetParams) => {
   const { page, itemPerPage, sort, direction, search, countryCode, companyID, workflow, status } = payload;
-  const workflowArr = workflow === 'payroll' ? '&workflow=GROSS_PAYROLL&workflow=NET_PAYROLL' : `&workflow=${workflow}`; 
+  const workflowArr = workflow === 'payroll' ? '&workflow=GROSS_PAYROLL&workflow=NET_PAYROLL' : `&workflow=${workflow}`;
   return get(`payrolls?page=${page}&itemPerPage=${itemPerPage}&sort=${sort}&direction=${direction}&search=${search}&countryCode=${countryCode}&companyID=${companyID}${workflowArr}&status=${status}`);
 };
 
@@ -79,4 +79,16 @@ export const postPayrollDisbursementId = (payload) => {
 
 export const getPayrollDisbursementId = (payload) => {
   return get(`payrolls/${payload.id}/disbursements`);
+};
+
+export const getNetPayroll = (payload: string) => {
+  return get(`payrolls/${payload}/nets`);
+};
+
+export const postNetPayroll = (payload) => {
+  return post(`payrolls/${payload?.id}/nets`, payload?.data as Payroll.PostNetPayloadType);
+};
+
+export  const patchNetPayrollFinal = (payload) => {
+  return patch(`payrolls/${payload.id}/nets/final`, {});
 };

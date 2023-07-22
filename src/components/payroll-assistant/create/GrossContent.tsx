@@ -70,10 +70,10 @@ function GrossContent(att) {
   }, []);
 
   useEffect(() => {
-    if (router.isReady && grossesId !== '') {
+    if (router.isReady) {
       dispatch({
         type: getPayrollGrossesRequested.toString(),
-        payload: grossesId
+        payload: isPreview ? router?.query?.id : grossesId
       });
     }
   }, [router.query, grossesId]);
