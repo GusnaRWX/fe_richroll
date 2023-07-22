@@ -47,7 +47,8 @@ interface AccountState {
     netHours: number,
     averageHours: number | string,
     events: Array<EventType>
-  }
+  },
+  disbursementData: Payroll.DisbursementData | unknown
 }
 
 const initialState: AccountState = {
@@ -79,7 +80,8 @@ const initialState: AccountState = {
     netHours: 0,
     averageHours: 0,
     events: []
-  }
+  },
+  disbursementData: {}
 };
 
 export const payrollSlice = createSlice({
@@ -275,6 +277,25 @@ export const payrollSlice = createSlice({
     },
     putPayrollGrossesIdFailed: state => {
       state.isLoading = false;
+    },
+    postPayrollDisbursementIdRequested: state => {
+      state.isLoading = true;
+    },
+    postPayrollDisbursementIdSuccess: state => {
+      state.isLoading = false;
+    },
+    postPayrollDisbursementIdFailed: state => {
+      state.isLoading = false;
+    },
+    getPayrollDisbursementIdRequested: state => {
+      state.isLoading = true;
+    },
+    getPayrollDisbursementIdSuccess: (state, action) => {
+      state.isLoading = false;
+      state.disbursementData = action.payload.data;
+    },
+    getPayrollDisbursementIdFailed: state => {
+      state.isLoading = false;
     }
   },
   extraReducers: {
@@ -335,7 +356,13 @@ export const {
   putPayrollGrossesIdFailed,
   putPayrollWorkflowFailed,
   putPayrollWorkflowRequested,
-  putPayrollWorkflowSuccess
+  putPayrollWorkflowSuccess,
+  postPayrollDisbursementIdRequested,
+  postPayrollDisbursementIdSuccess,
+  postPayrollDisbursementIdFailed,
+  getPayrollDisbursementIdRequested,
+  getPayrollDisbursementIdSuccess,
+  getPayrollDisbursementIdFailed
 } = payrollSlice.actions;
 
 export default payrollSlice.reducer;

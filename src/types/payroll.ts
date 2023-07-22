@@ -214,5 +214,38 @@ export declare namespace Payroll {
     status: number;
   }
 
+  interface DisbursementsData {
+    net: number,
+    taxIncome: number,
+    statutory: number,
+    contribution: number,
+    disbursement: number,
+    employee: {
+      id: string,
+      name: string,
+      picture: string
+    }
+  }
+
+  interface Disbursements {
+    attachment: {
+      filename: string;
+      link: string;
+      size: string
+    };
+    receiptFile: string;
+    isPaid: boolean;
+    items: Array<DisbursementData>
+  }
+
+  interface DisbursementData {
+    net: number;
+    taxIncome: number;
+    statutory: number;
+    contribution: number;
+    disbursement: number;
+    disbursements: Array<Disbursements>
+  }
+
 }
 
