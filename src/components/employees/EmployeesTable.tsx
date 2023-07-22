@@ -75,7 +75,6 @@ function EmployeesTable({
   };
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(event);
-    // setPage(0);
   };
   const handleSearch = (e) => {
     if (e.key === 'Enter') {
@@ -183,8 +182,8 @@ function EmployeesTable({
                     </TableCell>
                   </TableRow>
                 ), (
-                  data?.items?.map((item, index) => (
-                    <TableRow key={index}>
+                  data?.items?.map((item) => (
+                    <TableRow key={item.id}>
                       <TableCell>{item.id}</TableCell>
                       <TableCell>
                         <NameWrapper>

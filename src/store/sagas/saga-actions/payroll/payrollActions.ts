@@ -72,3 +72,11 @@ export const putPayrollGrossesId = (payload) => {
   const { id, grossesId, body } = payload;
   return put(`payrolls/${id}/grosses/${grossesId}`, body);
 };
+
+export const postPayrollDisbursementId = (payload) => {
+  return post(`payrolls/${payload.id}/disbursements`, payload.body);
+};
+
+export const getPayrollDisbursementId = (payload) => {
+  return get(`payrolls/${payload.id}/disbursements`);
+};

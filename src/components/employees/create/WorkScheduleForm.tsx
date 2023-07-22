@@ -1,14 +1,14 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Input, Select, RadioGroup, IconButton, Button } from '@/components/_shared/form';
 import { Button as MuiButton, Grid, InputAdornment, Typography, Stack, FormGroup, FormControlLabel, Checkbox } from '@mui/material';
-import { Add } from '@mui/icons-material';
+import { Add, Cancel } from '@mui/icons-material';
 import { Scheduler } from '@aldabil/react-scheduler';
 import CustomModal from '@/components/_shared/common/CustomModal';
 import { styled } from '@mui/material/styles';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
-import type {ProcessedEvent, SchedulerRef } from '@aldabil/react-scheduler/types';
+import type { ProcessedEvent, SchedulerRef } from '@aldabil/react-scheduler/types';
 import { FieldArray, Formik, Form as FormikForm } from 'formik';
 import { Employees } from '@/types/employees';
 import { validationSchemaWorkScheduler } from './validate';
@@ -17,7 +17,6 @@ import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { Alert } from '@/components/_shared/common';
 import { compareCheck, ifThenElse } from '@/utils/helper';
 import { getDetailWorkScheduleRequested, postSimulationEventRequested, postCalculateEventRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
-import { Cancel } from '@mui/icons-material';
 import { AiOutlineSwapRight } from 'react-icons/ai';
 import { BsTrashFill } from 'react-icons/bs';
 import { workSchedule } from '@/types/workSchedule';
@@ -97,7 +96,7 @@ function WorkScheduleForm({ setData, prevPage }: WorkScheduleFormProps) {
 
   const handleConfirmOpen = (formik) => {
     console.log(formik);
-    if (formik.values.workScheduleID !== 0 ) {
+    if (formik.values.workScheduleID !== 0) {
       setConfirmation(true);
     } else {
       handleFormOpen();
@@ -222,7 +221,8 @@ function WorkScheduleForm({ setData, prevPage }: WorkScheduleFormProps) {
         }
         return true;
       }), ...employee?.events as ProcessedEvent[]];
-      dispatch({ type: postCalculateEventRequested.toString(),
+      dispatch({
+        type: postCalculateEventRequested.toString(),
         payload: {
           items: newData
         }
@@ -559,7 +559,7 @@ function WorkScheduleForm({ setData, prevPage }: WorkScheduleFormProps) {
                             size='small'
                             name='flexiWorkHour'
                             value={formik.values.flexiWorkHour}
-                            onChange={(e) => { formik.setFieldValue('flexiWorkHour', e.target.value);}}
+                            onChange={(e) => { formik.setFieldValue('flexiWorkHour', e.target.value); }}
                             onBlur={formik.handleBlur}
                             InputProps={{
                               endAdornment: (
@@ -647,7 +647,7 @@ function WorkScheduleForm({ setData, prevPage }: WorkScheduleFormProps) {
                                               parentColor='red.100'
                                               onClick={() => { data.remove(index); }}
                                               icons={
-                                                <BsTrashFill fontSize={20} color='#EF4444'/>
+                                                <BsTrashFill fontSize={20} color='#EF4444' />
                                               }
                                             />
                                           </Grid>
