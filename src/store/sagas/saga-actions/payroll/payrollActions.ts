@@ -3,7 +3,13 @@ import { Payroll } from '@/types/payroll';
 
 export const getPayroll = (payload: Payroll.GetParams) => {
   const { page, itemPerPage, sort, direction, search, countryCode, companyID, workflow, status } = payload;
-  return get(`payrolls?page=${page}&itemPerPage=${itemPerPage}&sort=${sort}&direction=${direction}&search=${search}&countryCode=${countryCode}&companyID=${companyID}&workflow=${workflow}&status=${status}`);
+  const workflowArr = workflow === 'payroll' ? '&workflow=GROSS_PAYROLL&workflow=NET_PAYROLL' : `&workflow=${workflow}`; 
+  return get(`payrolls?page=${page}&itemPerPage=${itemPerPage}&sort=${sort}&direction=${direction}&search=${search}&countryCode=${countryCode}&companyID=${companyID}${workflowArr}&status=${status}`);
+};
+
+export const getPayrollCompleted = (payload: Payroll.GetParamsCompleted) => {
+  const { page, itemPerPage, sort, direction, search, companyID } = payload;
+  return get(`payrolls/assistants?page=${page}&itemPerPage=${itemPerPage}&sort=${sort}&direction=${direction}&search=${search}&companyID=${companyID}`);
 };
 
 export const postPayroll = (payload) => {
@@ -64,6 +70,5 @@ export const putPayrollGrossesFinal = (payload) => {
 
 export const putPayrollGrossesId = (payload) => {
   const { id, grossesId, body } = payload;
-  console.log(payload);
   return put(`payrolls/${id}/grosses/${grossesId}`, body);
 };

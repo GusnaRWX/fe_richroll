@@ -46,8 +46,8 @@ const ContentWrapper = styled(Card)(({
 function PayrollAssistantCreate() {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const payrollId = router?.query?.id;
-  const { name, start, end, grossesId } = useAppSelectors((state) => state.payroll);
+  const assistantID = router?.query?.id;
+  const { name, start, end, grossesId, id } = useAppSelectors((state) => state.payroll);
   const [value, setValue] = useState(1);
   const [open, setOpen] = useState(false);
   const [isExit, setIsExit] = useState(true);
@@ -64,7 +64,7 @@ function PayrollAssistantCreate() {
     dispatch({
       type: putPayrollWorkflowRequested.toString(),
       payload: {
-        id: payrollId,
+        id: id,
         data: {
           workflow: 0,
           status: 1
@@ -75,9 +75,10 @@ function PayrollAssistantCreate() {
       type: postPayrollGrossesRequested.toString(),
       payload: {
         data: {
-          payrollID: [payrollId]
+          payrollID: [id],
+          assistantID: assistantID
         },
-        // isAssist: true
+        isAssist: true
       }
     });
     setValue(value + 1);
@@ -165,8 +166,8 @@ function PayrollAssistantCreate() {
           <Stepper activeStep={value} steps={steps} />
         </Box>
       </ContentWrapper>
-
-      {value == 1 && <AttendanceContent payrollID={payrollId} />}
+      
+      {value == 1 && <AttendanceContent />}
       {value == 2 && <GrossContent isPreview={false} />}
       {value == 3 && <NetContent />}
       {value == 4 && <DisbursementContent />}

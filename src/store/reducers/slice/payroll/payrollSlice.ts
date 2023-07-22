@@ -20,7 +20,7 @@ interface EventType {
 
 interface AccountState {
   isLoading: boolean;
-  data: Array<Payroll.PayrollType>;
+  data: Array<Payroll.PayrollType> | Array<Payroll.PayrollCompletedType>;
   generateGrossPayroll: []
   id: string | number;
   name: string;
@@ -96,15 +96,27 @@ export const payrollSlice = createSlice({
     getPayrollFailed: (state) => {
       state.isLoading = false;
     },
+    getPayrollCompletedRequested: (state) => {
+      state.isLoading = true;
+    },
+    getPayrollCompletedSuccess: (state, action) => {
+      state.isLoading = false;
+      state.data = action?.payload.data;
+    },
+    getPayrollCompletedFailed: (state) => {
+      state.isLoading = false;
+    },
     postPayrollRequested: (state) => {
       state.isLoading = true;
+      state.id = '';
     },
     postPayrollSuccess: (state, action) => {
       state.isLoading = false;
-      state.id = action?.payload;
+      state.id = action?.payload?.id;
     },
     postPayrollFailed: (state) => {
       state.isLoading = false;
+      state.id = '';
     },
     putPayrollWorkflowRequested: (state) => {
       state.isLoading = true;
@@ -279,6 +291,9 @@ export const {
   getPayrollRequested,
   getPayrollSuccess,
   getPayrollFailed,
+  getPayrollCompletedRequested,
+  getPayrollCompletedSuccess,
+  getPayrollCompletedFailed,
   postPayrollRequested,
   postPayrollSuccess,
   postPayrollFailed,

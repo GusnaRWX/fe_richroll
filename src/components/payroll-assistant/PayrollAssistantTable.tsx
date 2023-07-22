@@ -14,7 +14,7 @@ import { visuallyHidden } from '@mui/utils';
 import PayrollAssistantRow from './PayrollAssistantRow';
 import EmptyState from '../_shared/common/EmptyState';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
-import { getPayrollRequested } from '@/store/reducers/slice/payroll/payrollSlice';
+import { getPayrollRequested, getPayrollCompletedRequested } from '@/store/reducers/slice/payroll/payrollSlice';
 import { useTranslation } from 'react-i18next';
 
 const headerItems = [
@@ -35,7 +35,7 @@ function PayrollAssistantTable({
   tabValue
 }: EmployeeTableProps) {
   const dispatch = useAppDispatch();
-  const data = useAppSelectors(state => state.payroll.data);
+  const { data } = useAppSelectors(state => state.payroll);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
@@ -69,20 +69,34 @@ function PayrollAssistantTable({
   };
 
   useEffect(() => {
-    dispatch({
-      type: getPayrollRequested.toString(),
-      payload: {
-        page: page,
-        itemPerPage: rowsPerPage,
-        sort: sort,
-        direction: direction.toUpperCase(),
-        search: search,
-        countryCode: 'ID',
-        companyID: companyData?.id,
-        workflow: ifThenElse(tabValue === 0, 'ATTENDANCE', 'PAYROLL_COMPLETE'),
-        status: ifThenElse(tabValue === 0, 'DRAFT', 'COMPLETED')
-      }
-    });
+    if (tabValue === 0) {
+      dispatch({
+        type: getPayrollRequested.toString(),
+        payload: {
+          page: page,
+          itemPerPage: rowsPerPage,
+          sort: sort,
+          direction: direction.toUpperCase(),
+          search: search,
+          countryCode: 'ID',
+          companyID: companyData?.id,
+          workflow: 'ATTENDANCE',
+          status: 'DRAFT'
+        }
+      });
+    } else {
+      dispatch({
+        type: getPayrollCompletedRequested.toString(),
+        payload: {
+          page: page,
+          itemPerPage: rowsPerPage,
+          sort: sort,
+          direction: direction.toUpperCase(),
+          search: search,
+          companyID: companyData?.id,
+        }
+      });
+    }
   }, [rowsPerPage, page, search, sort, direction, responser.code, tabValue]);
 
   useEffect(() => {

@@ -15,6 +15,15 @@ export declare namespace Payroll {
     status: string;
   }
 
+  interface GetParamsCompleted {
+    page: number;
+    itemPerPage: number;
+    sort?: string;
+    direction?: boolean;
+    search?: string;
+    companyID: string;
+  }
+
   interface AttachmentType {
     id: string,
     filename: string,
@@ -33,11 +42,27 @@ export declare namespace Payroll {
     updatedAt: DayJS,
   }
 
+  interface PayrollCompletedType {
+    id: string,
+    name: string,
+    start: DayJS,
+    end: DayJS,
+    workflow: number,
+    attachment: AttachmentType | null,
+    attendance: PayrollType | null,
+    gross: PayrollType | null,
+    net: PayrollType | null,
+    disbursement: PayrollType | null,
+    createdAt: DayJS,
+    updatedAt: DayJS,
+  }
+
   interface PostPayrollType {
     companyID: string;
     name: string;
     start: string;
     end: string;
+    workflow: number;
   }
 
   interface AddNonTaxable {

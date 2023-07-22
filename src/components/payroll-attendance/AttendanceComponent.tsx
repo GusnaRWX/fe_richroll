@@ -106,7 +106,7 @@ function AttendanceComponent() {
           name: values.name,
           start: dayjs(values.date[0]).toISOString(),
           end: dayjs(values.date[1]).toISOString(),
-          workflow: 0
+          workflow: 0,
         }
       }
     });
