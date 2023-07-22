@@ -20,6 +20,7 @@ import { visuallyHidden } from '@mui/utils';
 import CompleteRow from './CompleteRow';
 import { FiFile, FiDownload } from 'react-icons/fi';
 import { HiFolderOpen } from 'react-icons/hi';
+import EmptyState from '@/components/_shared/common/EmptyState';
 
 const ButtonWrapper = styled(Box)(({
   display: 'flex',
@@ -160,7 +161,6 @@ function CompleteContent() {
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(event);
-    // setPage(0);
   };
 
   const handleRequestSort = (event: React.MouseEvent<unknown>, headId: string) => {
@@ -275,16 +275,20 @@ function CompleteContent() {
                     ifThenElse(typeof data?.items !== 'undefined', (
                       ifThenElse(data?.items?.length === 0, (
                         <TableRow>
-                          <TableCell colSpan={12} align='center'><Typography>Data not found</Typography></TableCell>
+                          <TableCell colSpan={12} align='center'>
+                            <EmptyState />
+                          </TableCell>
                         </TableRow>
                       ), (
-                        data?.items?.map((item, index) => (
-                          <CompleteRow key={index} item={item} />
+                        data?.items?.map((item) => (
+                          <CompleteRow key={item.id} item={item} />
                         ))
                       ))
                     ), (
                       <TableRow>
-                        <TableCell colSpan={12} align='center'><Typography>Data not found</Typography></TableCell>
+                        <TableCell colSpan={12} align='center'>
+                          <EmptyState />
+                        </TableCell>
                       </TableRow>
                     ))
                   }
@@ -366,16 +370,20 @@ function CompleteContent() {
                     ifThenElse(typeof data?.items !== 'undefined', (
                       ifThenElse(data?.items?.length === 0, (
                         <TableRow>
-                          <TableCell colSpan={12} align='center'><Typography>Data not found</Typography></TableCell>
+                          <TableCell colSpan={12} align='center'>
+                            <EmptyState />
+                          </TableCell>
                         </TableRow>
                       ), (
-                        data?.items?.map((item, index) => (
-                          <CompleteRow key={index} item={item} />
+                        data?.items?.map((item) => (
+                          <CompleteRow key={item.id} item={item} />
                         ))
                       ))
                     ), (
                       <TableRow>
-                        <TableCell colSpan={12} align='center'><Typography>Data not found</Typography></TableCell>
+                        <TableCell colSpan={12} align='center'>
+                          <EmptyState />
+                        </TableCell>
                       </TableRow>
                     ))
                   }
@@ -457,16 +465,20 @@ function CompleteContent() {
                     ifThenElse(typeof data?.items !== 'undefined', (
                       ifThenElse(data?.items?.length === 0, (
                         <TableRow>
-                          <TableCell colSpan={12} align='center'><Typography>Data not found</Typography></TableCell>
+                          <TableCell colSpan={12} align='center'>
+                            <EmptyState />
+                          </TableCell>
                         </TableRow>
                       ), (
-                        data?.items?.map((item, index) => (
-                          <CompleteRow key={index} item={item} />
+                        data?.items?.map((item) => (
+                          <CompleteRow key={item.id} item={item} />
                         ))
                       ))
                     ), (
                       <TableRow>
-                        <TableCell colSpan={12} align='center'><Typography>Data not found</Typography></TableCell>
+                        <TableCell colSpan={12} align='center'>
+                          <EmptyState />
+                        </TableCell>
                       </TableRow>
                     ))
                   }
