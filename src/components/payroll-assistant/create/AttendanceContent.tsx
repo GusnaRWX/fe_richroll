@@ -64,10 +64,9 @@ interface SelectedProp {
   picture?: string;
 }
 
-function AttendanceContent(att) {
-  const { payrollID } = att;
+function AttendanceContent() {
   const dispatch = useAppDispatch();
-  const { selectedEmployee } = useAppSelectors((state) => state.payroll);
+  const { selectedEmployee, id } = useAppSelectors((state) => state.payroll);
   const { responser } = useAppSelectors((state) => state);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(1);
@@ -105,7 +104,7 @@ function AttendanceContent(att) {
     await dispatch({
       type: getDetailAttendanceRequested.toString(),
       payload: {
-        id: payrollID,
+        id: id,
         attendanceID: itemId,
         employeeID: employeeId
       }
@@ -132,7 +131,7 @@ function AttendanceContent(att) {
         direction: direction.toUpperCase(),
         search: search,
         countryCode: '',
-        payrollID: payrollID
+        payrollID: id
       }
     });
   }, [rowsPerPage, page, search, sort, direction, responser.code]);

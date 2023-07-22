@@ -87,7 +87,8 @@ function PayrollAssistantComponent() {
           companyID: companyData?.id,
           name: name,
           start: dayjs(start).toISOString(),
-          end: dayjs(end).toISOString()
+          end: dayjs(end).toISOString(),
+          workflow: 4,
         },
         isAttendance: false
       }

@@ -16,7 +16,6 @@ import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { getEmployeeRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
 import { getCompanyData, compareCheck, ifThenElse } from '@/utils/helper';
 import { visuallyHidden } from '@mui/utils';
-import { useRouter } from 'next/router';
 import { postSelectedEmployeeRequested } from '@/store/reducers/slice/payroll/payrollSlice';
 
 const ButtonWrapper = styled.div`
@@ -64,8 +63,8 @@ function ListEmployeeModal({
   setSelected
 }: AttendanceModalProp) {
   const dispatch = useAppDispatch();
-  const router = useRouter();
   const data = useAppSelectors(state => state.employee.data);
+  const { id } = useAppSelectors(state => state.payroll);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(1);
   const [direction, setDirection] = useState<Order>('desc');
@@ -111,7 +110,7 @@ function ListEmployeeModal({
     dispatch({
       type: postSelectedEmployeeRequested.toString(),
       payload: {
-        id: router?.query?.id,
+        id: id,
         selectEmployee: {
           employees: tempPayload
         }

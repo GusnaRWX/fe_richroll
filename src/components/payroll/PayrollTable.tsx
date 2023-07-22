@@ -125,7 +125,7 @@ function PayrollTable({
         search: search,
         countryCode: '',
         companyID: companyData?.id,
-        workflow: 'GROSS_PAYROLL',
+        workflow: 'payroll',
         status: Tabs[tabValue]
       }
     });

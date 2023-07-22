@@ -1,6 +1,7 @@
 import { AnyAction } from '@reduxjs/toolkit';
 import {
   getPayroll,
+  getPayrollCompleted,
   postPayroll,
   getGenerateGross,
   postPayrollAttendance,
@@ -21,6 +22,9 @@ import {
   getPayrollRequested,
   getPayrollSuccess,
   getPayrollFailed,
+  getPayrollCompletedRequested,
+  getPayrollCompletedSuccess,
+  getPayrollCompletedFailed,
   postPayrollRequested,
   postPayrollSuccess,
   postPayrollFailed,
@@ -97,15 +101,42 @@ function* fetchGetPayroll(action: AnyAction) {
   }
 }
 
+function* fetchGetPayrollCompleted(action: AnyAction) {
+  try {
+    const res: AxiosResponse = yield call(getPayrollCompleted, action?.payload);
+    if (res.data.code === 200) {
+      yield put({
+        type: getPayrollCompletedSuccess.toString(),
+        payload: {
+          data: res?.data?.data
+        }
+      });
+    }
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      yield put({ type: getPayrollCompletedFailed.toString() });
+      yield delay(2000, true);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message,
+        }
+      });
+    }
+  }
+}
+
 function* fetchPostPayroll(action: AnyAction) {
   try {
     const res: AxiosResponse = yield call(postPayroll, action?.payload);
     if (res.data.code === 200 || res.data.code === 201) {
       yield put({ type: postPayrollSuccess.toString(), payload: res.data.data });
       if (action?.payload?.isAttendance === true) {
-        Router.push({ pathname: '/payroll-disbursement/attendance/generate', query: { id: res.data.data?.id } });
+        Router.push({ pathname: '/payroll-disbursement/attendance/generate', query: { id: res.data.data.id } });
       } else {
-        Router.push({ pathname: '/payroll-disbursement/payroll-assistant/create', query: { id: res.data.data?.id } });
+        Router.push({ pathname: '/payroll-disbursement/payroll-assistant/create', query: { id: res.data.data.assistantID } });
       }
       yield put({
         type: setResponserMessage.toString(),
@@ -525,6 +556,7 @@ function* fetchPutPayrollWorkflow(action: AnyAction) {
 
 function* payrollSaga() {
   yield takeEvery(getPayrollRequested.toString(), fetchGetPayroll);
+  yield takeEvery(getPayrollCompletedRequested.toString(), fetchGetPayrollCompleted);
   yield takeEvery(postPayrollRequested.toString(), fetchPostPayroll);
   yield takeEvery(getGenerateGrossPayrollRequested.toString(), fetchGetGenerateGross);
   yield takeEvery(postPayrollAttendanceRequested.toString(), fetchPostPayrollAttendance);

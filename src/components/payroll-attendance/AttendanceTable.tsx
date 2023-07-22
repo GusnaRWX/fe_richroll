@@ -139,7 +139,7 @@ function AttendanceTable({
         data: {
           payrollID: selectedTemp.map(item => item?.id)
         },
-        // isAssist: false
+        isAssist: false
       }
     });
   };
