@@ -81,7 +81,7 @@ function GrossRow(att) {
         grossesId: item?.id,
         id: grossesId,
         body: {
-          ad_hoc: _val?.hocComponent?.map(val => {
+          adHoc: _val?.hocComponent?.map(val => {
             return {
               id: val?.id || '',
               name: val.componentName,
