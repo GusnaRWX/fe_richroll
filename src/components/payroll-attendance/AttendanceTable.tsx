@@ -15,10 +15,9 @@ import { compareCheck, ifThenElse, getCompanyData } from '@/utils/helper';
 import { visuallyHidden } from '@mui/utils';
 import { IconButton } from '@/components/_shared/form';
 import { BsTrashFill, BsFillEyeFill } from 'react-icons/bs';
-import { HiPencilAlt } from 'react-icons/hi';
+import { HiPencilAlt, HiOutlineInboxIn } from 'react-icons/hi';
 import { FiDownload } from 'react-icons/fi';
 import { TbFileImport } from 'react-icons/tb';
-import { HiOutlineInboxIn } from 'react-icons/hi';
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
 import { ConfirmationModal } from '@/components/_shared/common';
@@ -27,7 +26,6 @@ import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { getPayrollRequested, postPayrollGrossesRequested } from '@/store/reducers/slice/payroll/payrollSlice';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
-// import { useAppDispatch } from '@/hooks/index';
 
 const ButtonWrapper = styled.div`
  display: flex;
@@ -109,7 +107,7 @@ function AttendanceTable({
     if (e.target.checked) {
       const temp = [...selectedTemp, { id: id, checked: true }];
       setSelectedTemp(temp);
-    }else{
+    } else {
       const temp = selectedTemp.filter(v => v['id'] !== id);
       setSelectedTemp(temp);
     }
@@ -200,7 +198,7 @@ function AttendanceTable({
             {
               tabValue === 1 && (
                 <TableCell>
-                  <Checkbox onChange={(e) => onAll(e)} checked={checkAll()}/>
+                  <Checkbox onChange={(e) => onAll(e)} checked={checkAll()} />
                 </TableCell>
               )
             }
@@ -236,12 +234,12 @@ function AttendanceTable({
                     </TableCell>
                   </TableRow>
                 ), (
-                  data?.items?.map((item, index) => (
-                    <TableRow key={index}>
+                  data?.items?.map((item) => (
+                    <TableRow key={item.id}>
                       {
                         tabValue === 1 && (
                           <TableCell>
-                            <Checkbox onChange={(e) => onSelected(item?.id, e)} checked={checkVal(item?.id)}/>
+                            <Checkbox onChange={(e) => onSelected(item?.id, e)} checked={checkVal(item?.id)} />
                           </TableCell>
                         )
                       }
@@ -268,7 +266,7 @@ function AttendanceTable({
                               <IconButton
                                 disabled={!!selectedTemp.length}
                                 parentColor='#E9EFFF'
-                                onClick={() => { router.push({ pathname: '/payroll-disbursement/attendance/generate', query: { id: item?.id }}); }}
+                                onClick={() => { router.push({ pathname: '/payroll-disbursement/attendance/generate', query: { id: item?.id } }); }}
                                 icons={
                                   <HiPencilAlt fontSize={20} color='#223567' />
                                   // <TbFileImport fontSize={20} color='#223567' />
@@ -361,18 +359,18 @@ function AttendanceTable({
         }
       />
       {tabValue === 1 &&
-          <Grid container spacing={2} mt='1rem'>
-            <Grid item xs={9} sm={9} md={9} lg={9} xl={9}></Grid>
-            <Grid item xs={3} sm={3} md={3} lg={3} xl={3} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <MuiButton
-                disabled={!selectedTemp.length}
-                variant='contained'
-                size='small'
-                color='primary'
-                onClick={handlePostGrosses}
-              >{t('button.generate_gross_payroll')}</MuiButton>
-            </Grid>
+        <Grid container spacing={2} mt='1rem'>
+          <Grid item xs={9} sm={9} md={9} lg={9} xl={9}></Grid>
+          <Grid item xs={3} sm={3} md={3} lg={3} xl={3} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <MuiButton
+              disabled={!selectedTemp.length}
+              variant='contained'
+              size='small'
+              color='primary'
+              onClick={handlePostGrosses}
+            >{t('button.generate_gross_payroll')}</MuiButton>
           </Grid>
+        </Grid>
       }
       <ConfirmationModal
         open={deleteConfirmation}

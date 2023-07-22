@@ -96,8 +96,8 @@ function AttendanceComponent() {
     setOpen(false);
   };
 
-  const handleConfirm = async (values) => {
-    await dispatch({
+  const handleConfirm =  (values) => {
+    dispatch({
       type: postPayrollRequested.toString(),
       payload: {
         isAttendance: true,
