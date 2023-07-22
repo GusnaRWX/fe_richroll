@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   TableCell,
   TableRow,
@@ -8,6 +8,7 @@ import { IconButton } from '@/components/_shared/form';
 import { Image as ImageType } from '@/utils/assetsConstant';
 import styled from '@emotion/styled';
 import { BsFillEyeFill } from 'react-icons/bs';
+import DisbursementEmployeeDetail from './DisbursementEmployeeDetail';
 
 const ButtonWrapper = styled.div`
  display: flex;
@@ -25,8 +26,14 @@ const NameWrapper = styled.div`
  margin: 0;
 `;
 
-function CompleteRow (att) {
+function CompleteRow(att) {
   const { item } = att;
+  const [openDetail, setOpenDetail] = useState(false);
+
+  const handleClose = () => setOpenDetail(false);
+
+
+  const handleOpen = () => setOpenDetail(true);
 
   return (
     <React.Fragment>
@@ -53,12 +60,20 @@ function CompleteRow (att) {
             <IconButton
               parentColor='#E9EFFF'
               icons={
-                <BsFillEyeFill fontSize={20} color='#223567'/>
+                <BsFillEyeFill
+                  fontSize={20}
+                  color='#223567'
+                  onClick={handleOpen}
+                />
               }
             />
           </ButtonWrapper>
         </TableCell>
       </TableRow>
+      <DisbursementEmployeeDetail
+        open={openDetail}
+        handleClose={handleClose}
+      />
     </React.Fragment>
   );
 }
