@@ -384,6 +384,16 @@ function* fetchPutPayrollGrossesFinal(action: AnyAction) {
           footerMessage: 'Payroll has been created'
         }
       });
+      yield put({
+        type: putPayrollWorkflowRequested.toString(),
+        payload: {
+          id: action?.payload?.data?.id,
+          data: {
+            workflow: 1,
+            status: 1
+          }
+        }
+      });
       if (!action?.payload?.isAssist) {
         yield Router.push({ pathname: '/payroll-disbursement/payroll' });
       }
