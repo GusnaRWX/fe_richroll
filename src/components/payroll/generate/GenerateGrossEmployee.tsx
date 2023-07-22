@@ -240,7 +240,7 @@ function GenerateGrossEmployee() {
       type: putGenerateGrossesEmployeeRequested.toString(),
       payload: {
         id: router.query.id,
-        body: { employee_id: selectedTemp?.map(item => item.user_id) }
+        body: { employeeID: selectedTemp?.map(item => item.user_id) }
       }
     });
   };

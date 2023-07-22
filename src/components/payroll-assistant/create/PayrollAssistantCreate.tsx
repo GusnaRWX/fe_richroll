@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { 
+import {
   Typography,
   Card,
   Grid,
   Box,
-  Button as MuiButton } from '@mui/material';
+  Button as MuiButton
+} from '@mui/material';
 import { Stepper } from '@/components/_shared/form';
 import { styled } from '@mui/material/styles';
 import { useRouter } from 'next/router';
@@ -74,9 +75,9 @@ function PayrollAssistantCreate() {
       type: postPayrollGrossesRequested.toString(),
       payload: {
         data: {
-          payroll_id: [payrollId]
+          payrollID: [payrollId]
         },
-        isAssist: true
+        // isAssist: true
       }
     });
     setValue(value + 1);
@@ -149,7 +150,7 @@ function PayrollAssistantCreate() {
                     setIsExit(false);
                     setOpen(true);
                     break;
-                
+
                   default:
                     break;
                 }
@@ -164,7 +165,7 @@ function PayrollAssistantCreate() {
           <Stepper activeStep={value} steps={steps} />
         </Box>
       </ContentWrapper>
-      
+
       {value == 1 && <AttendanceContent payrollID={payrollId} />}
       {value == 2 && <GrossContent isPreview={false} />}
       {value == 3 && <NetContent />}
@@ -183,7 +184,7 @@ function PayrollAssistantCreate() {
             {
               ifThenElse(
                 isExit,
-                <Typography variant='text-base' color='#4B5563'>You will stop the process, and saved in Payroll Assistant.<br/>Are you sure to stop the process?</Typography>,
+                <Typography variant='text-base' color='#4B5563'>You will stop the process, and saved in Payroll Assistant.<br />Are you sure to stop the process?</Typography>,
                 <Typography variant='text-base' color='#4B5563'>All disbursement will marked paid and complete the Payroll Assistant process</Typography>
               )
             }

@@ -96,7 +96,7 @@ function AttendanceComponent() {
     setOpen(false);
   };
 
-  const handleConfirm =  (values) => {
+  const handleConfirm = (values) => {
     dispatch({
       type: postPayrollRequested.toString(),
       payload: {
@@ -105,7 +105,8 @@ function AttendanceComponent() {
           companyID: companyData?.id,
           name: values.name,
           start: dayjs(values.date[0]).toISOString(),
-          end: dayjs(values.date[1]).toISOString()
+          end: dayjs(values.date[1]).toISOString(),
+          workflow: 0
         }
       }
     });
@@ -143,16 +144,16 @@ function AttendanceComponent() {
             </Tabs>
           </Box>
           <TabPanel value={value} index={0}>
-            <AttendanceTable tabValue={value}/>
+            <AttendanceTable tabValue={value} />
           </TabPanel>
           <TabPanel value={value} index={1}>
-            <AttendanceTable tabValue={value}/>
+            <AttendanceTable tabValue={value} />
           </TabPanel>
           <TabPanel value={value} index={2}>
-            <AttendanceTable tabValue={value}/>
+            <AttendanceTable tabValue={value} />
           </TabPanel>
           <TabPanel value={value} index={3}>
-            <AttendanceTable tabValue={value}/>
+            <AttendanceTable tabValue={value} />
           </TabPanel>
         </Box>
       </ContentWrapper>

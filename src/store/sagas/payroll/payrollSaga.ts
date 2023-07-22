@@ -103,9 +103,9 @@ function* fetchPostPayroll(action: AnyAction) {
     if (res.data.code === 200 || res.data.code === 201) {
       yield put({ type: postPayrollSuccess.toString(), payload: res.data.data });
       if (action?.payload?.isAttendance === true) {
-        Router.push({ pathname: '/payroll-disbursement/attendance/generate', query: { id: res.data.data } });
+        Router.push({ pathname: '/payroll-disbursement/attendance/generate', query: { id: res.data.data?.id } });
       } else {
-        Router.push({ pathname: '/payroll-disbursement/payroll-assistant/create', query: { id: res.data.data } });
+        Router.push({ pathname: '/payroll-disbursement/payroll-assistant/create', query: { id: res.data.data?.id } });
       }
       yield put({
         type: setResponserMessage.toString(),
@@ -268,11 +268,11 @@ function* fetchPostPayrollGrosses(action: AnyAction) {
       yield put({
         type: postPayrollGrossesSuccess.toString(),
         payload: {
-          data: res?.data?.data
+          data: res?.data?.data?.id
         }
       });
       if (!action?.payload?.isAssist) {
-        yield Router.push({ pathname: '/payroll-disbursement/payroll/generate-gross/employee', query: { id: res?.data?.data } });
+        yield Router.push({ pathname: '/payroll-disbursement/payroll/generate-gross/employee', query: { id: res?.data?.data?.id } });
       }
     }
   } catch (err) {
@@ -322,7 +322,7 @@ function* fetchPutGenerateGrossEmployee(action: AnyAction) {
 
     if (res.data.code === 201 || res.data.code === 200) {
       yield put({ type: putGenerateGrossesEmployeeSuccess.toString() });
-      yield Router.push({ pathname: '/payroll-disbursement/payroll/generate-gross/detail', query: { id: res.data.data } });
+      yield Router.push({ pathname: '/payroll-disbursement/payroll/generate-gross/detail', query: { id: res.data.data?.id } });
     }
   } catch (err) {
     if (err instanceof AxiosError) {
@@ -422,7 +422,7 @@ function* fetchPutPayrollGrossesId(action: AnyAction) {
       yield put({ type: putPayrollGrossesIdSuccess.toString() });
       yield put({
         type: getPayrollGrossesRequested.toString(),
-        payload: res.data.data
+        payload: res.data.data?.id
       });
       yield delay(2000, true);
       yield put({
