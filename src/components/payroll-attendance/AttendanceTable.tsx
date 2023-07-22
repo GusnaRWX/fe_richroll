@@ -290,7 +290,10 @@ function AttendanceTable({
                                   dispatch({
                                     type: postPayrollGrossesRequested.toString(),
                                     payload: {
-                                      payroll_id: [String(item.id)]
+                                      data: {
+                                        payrollID: [String(item.id)]
+                                      },
+                                      isAssist: false
                                     }
                                   });
                                 }}

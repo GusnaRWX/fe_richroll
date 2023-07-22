@@ -9,7 +9,8 @@ import { styled } from '@mui/material/styles';
 import { useRouter } from 'next/router';
 import { IconButton } from '@/components/_shared/form';
 import { ArrowBack } from '@mui/icons-material';
-import DisbursementContent from '@/components/payroll-assistant/create/DisbursementContent';
+//import DisbursementContent from '@/components/payroll-assistant/create/DisbursementContent';
+import NetContent from '@/components/payroll-assistant/create/NetContent';
 
 const ButtonWrapper = styled(Box)(({
   display: 'flex',
@@ -60,8 +61,8 @@ function NetDetail() {
           </ButtonWrapper>
         </Grid>
       </Grid>
-
-      <DisbursementContent />
+      <NetContent isPreview={true}/>
+      {/* <DisbursementContent /> */}
     </>
   );
 }
