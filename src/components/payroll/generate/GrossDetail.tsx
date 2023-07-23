@@ -31,7 +31,7 @@ const BackWrapper = styled(Box)(({
   marginTop: '.1rem'
 }));
 
-function GenerateGrossComponent() {
+function GrossDetail() {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const handleGenerateNet = () => {
@@ -80,4 +80,4 @@ function GenerateGrossComponent() {
   );
 }
 
-export default GenerateGrossComponent;
+export default GrossDetail;

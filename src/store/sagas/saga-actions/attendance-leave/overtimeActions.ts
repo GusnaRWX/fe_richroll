@@ -12,7 +12,7 @@ export const postOvertime = (payload: AttendanceLeave.PostOvertime) => {
 };
 
 export const putOvertime = (payload) => {
-  return put(`overtimes/${payload.id}`, payload.data as AttendanceLeave.putOvertime);
+  return put(`overtimes/${payload.id}`, payload.data as AttendanceLeave.PutOvertime);
 };
 
 export const deleteOvertime = (id: string) => {

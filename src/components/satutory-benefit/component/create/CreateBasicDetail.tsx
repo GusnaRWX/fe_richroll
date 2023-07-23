@@ -10,7 +10,7 @@ interface PropsInterface {
   formik
 }
 
-export default function CreateBasicDetailComponent({nextPage, formik}: PropsInterface) {
+export default function CreateBasicDetail({nextPage, formik}: PropsInterface) {
   // Translation Key
   const {t} = useTranslation();
   const t_key = 'satutory_benefit.component.form_&_detail.create_basic_detail';

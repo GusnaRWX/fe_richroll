@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/indent */
 import React, { useState } from 'react';
-import { Button, Form, IconButton } from '@/components/_shared/form';
+import { Button, Form, IconButton, Input } from '@/components/_shared/form';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { styled } from '@mui/material/styles';
@@ -22,7 +22,6 @@ import {
 import { ArrowBack } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import { postNewCnbProfileRequested } from '@/store/reducers/slice/cnb/compensationSlice';
-import { Input } from '@/components/_shared/form';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import {
   getCompanyData,

@@ -38,7 +38,7 @@ const headerItems = [
 
 type Order = 'asc' | 'desc';
 
-function SutatoryBenefitComponentTable() {
+function SatutoryBenefitComponentTable() {
   // Translate Key
   const {t} = useTranslation();
   const t_tableKey = 'satutory_benefit.component.table';
@@ -226,4 +226,4 @@ function SutatoryBenefitComponentTable() {
   );
 }
 
-export default SutatoryBenefitComponentTable;
+export default SatutoryBenefitComponentTable;
