@@ -4,15 +4,12 @@ import { styled } from '@mui/material/styles';
 import { Typography, Box, Paper, Grid } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import { useRouter } from 'next/router';
-import { CustomModal } from '@/components/_shared/common';
-import { ConfirmationModal } from '@/components/_shared/common';
+import { CustomModal, ConfirmationModal } from '@/components/_shared/common';
 import { useTranslation } from 'react-i18next';
 
 // Icon Import
-import { HiPencilAlt } from 'react-icons/hi';
+import { HiPencilAlt, HiUpload, HiOutlineArchive } from 'react-icons/hi';
 import { FiCopy } from 'react-icons/fi';
-import { HiUpload } from 'react-icons/hi';
-import { HiOutlineArchive } from 'react-icons/hi';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 export default function SatutoryBenefitProfileDetail() {

@@ -11,6 +11,7 @@ import {
 import Table from '@/components/_shared/form/Table';
 import styled from '@emotion/styled';
 import { visuallyHidden } from '@mui/utils';
+import { ifThenElse, compareCheck } from '@/utils/helper';
 
 const NameWrapper = styled.div`
   display: flex;
@@ -86,8 +87,8 @@ function LeaveBalanceHistoryTable({ tabValue }: LeaveBalanceHistoryTableProps) {
     event: React.MouseEvent<unknown>,
     headId: string
   ) => {
-    const isAsc = sort === headId && direction === 'asc';
-    setDirection(isAsc ? 'desc' : 'asc');
+    const isAsc = compareCheck(sort === headId, direction === 'asc');
+    setDirection(ifThenElse(isAsc, 'desc', 'asc'));
     setSort(headId);
   };
 
@@ -113,21 +114,19 @@ function LeaveBalanceHistoryTable({ tabValue }: LeaveBalanceHistoryTableProps) {
             {headerItems.map((item) => (
               <TableCell
                 key={item.id}
-                sortDirection={sort === item.id ? direction : false}
+                sortDirection={ifThenElse(sort === item.id, direction, false)}
               >
                 <TableSortLabel
                   active={sort === item.id}
-                  direction={sort === item.id ? direction : 'asc'}
+                  direction={ifThenElse(sort === item.id, direction, 'asc')}
                   onClick={(e) => handleRequestSort(e, item.id)}
                 >
                   {item.label}
-                  {sort === item.id ? (
+                  {ifThenElse(sort === item.id, (
                     <Box component='span' sx={visuallyHidden}>
-                      {direction === 'asc'
-                        ? 'sorted descending'
-                        : 'sorted ascending'}
+                      {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
                     </Box>
-                  ) : null}
+                  ), null)}
                 </TableSortLabel>
               </TableCell>
             ))}
@@ -135,30 +134,22 @@ function LeaveBalanceHistoryTable({ tabValue }: LeaveBalanceHistoryTableProps) {
         }
         bodyChildren={
           <>
-            {typeof data?.items !== 'undefined' ? (
-              data?.items.length === 0 ? (
+            {ifThenElse(typeof data?.items !== 'undefined', (
+              ifThenElse(data?.items.length === 0, (
                 <TableRow>
                   <TableCell colSpan={12} align='center'>
                     <Typography>Data not found</Typography>
                   </TableCell>
                 </TableRow>
-              ) : (
+              ), (
                 data?.items.map((item, index) => (
                   <TableRow key={index}>
                     <TableCell>{item.no}</TableCell>
                     <TableCell>
                       <NameWrapper>
                         <Avatar
-                          src={
-                            item.employeeImage !== null
-                              ? item.employeeImage
-                              : item.employeeName
-                          }
-                          alt={
-                            item.employeeImage !== null
-                              ? item.employeeImage
-                              : item.employeeName
-                          }
+                          src={ifThenElse(item.employeeImage !== null, item.employeeImage, item.employeeName)}
+                          alt={ifThenElse(item.employeeImage !== null, item.employeeImage, item.employeeName)}
                           sx={{
                             width: 24,
                             height: 24,
@@ -172,14 +163,14 @@ function LeaveBalanceHistoryTable({ tabValue }: LeaveBalanceHistoryTableProps) {
                     <TableCell>{item.change}</TableCell>
                   </TableRow>
                 ))
-              )
-            ) : (
+              ))
+            ), (
               <TableRow>
                 <TableCell colSpan={12} align='center'>
                   <Typography>Data not found</Typography>
                 </TableCell>
               </TableRow>
-            )}
+            ))}
           </>
         }
       />

@@ -18,7 +18,7 @@ import { deleteCompensationRequested, getTableRequested } from '@/store/reducers
 import { compareCheck, ifThenElse, getCompanyData } from '@/utils/helper';
 import dayjs from 'dayjs';
 import { visuallyHidden } from '@mui/utils';
-import DetailModal from './modal';
+import DetailModal from './DetailModal';
 import DetailCnb from './detail';
 import ConfirmationModal from '../_shared/common/ConfirmationModal';
 import EmptyState from '../_shared/common/EmptyState';
@@ -70,7 +70,7 @@ function EnhancedTable() {
     }
   };
   const handleRequestSort = (event: React.MouseEvent<unknown>, headId: string) => {
-    if (headId !== 'base' && headId !== 'supplementaries') {
+    if (compareCheck(headId !== 'base', headId !== 'supplementaries')) {
       const isAsc = compareCheck(sort === headId, direction === 'asc');
       setDirection(ifThenElse(isAsc, 'desc', 'asc'));
       setSort(headId);
@@ -157,15 +157,15 @@ function EnhancedTable() {
                 <TableCell key={item.id} sortDirection={ifThenElse(sort === item.id, direction, false)}>
                   <TableSortLabel
                     active={sort === item.id}
-                    direction={sort === item.id ? direction : 'asc'}
+                    direction={ifThenElse(sort === item.id, direction, 'asc')}
                     onClick={(e) => handleRequestSort(e, item.id)}
                   >
                     {t(`compensation_and_benefits.table.table_cols_item.${item.translation}`)}
-                    {sort === item.id ? (
+                    {ifThenElse(sort === item.id, (
                       <Box component='span' sx={visuallyHidden}>
                         {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
                       </Box>
-                    ) : null}
+                    ), null)}
                   </TableSortLabel>
                 </TableCell>
               ))
@@ -190,10 +190,11 @@ function EnhancedTable() {
                       <TableCell>{item?.base?.component.name}</TableCell>
                       <TableCell>
                         {
-                          item?.supplementaries.length === 0 ? '-' :
+                          ifThenElse(item?.supplementaries.length === 0, '-',
                             item?.supplementaries.map((supp) => (
-                              <p key={supp}>{supp?.component?.name} {item?.supplementaries.length > 1 ? ', ' : ''}</p>
+                              <p key={supp}>{supp?.component?.name} {ifThenElse(item?.supplementaries.length > 1, ', ', '')}</p>
                             ))
+                          )
                         }
                       </TableCell>
                       <TableCell>{dayjs(item.createdAt).format('YYYY-MM-DD H:m:s')}</TableCell>

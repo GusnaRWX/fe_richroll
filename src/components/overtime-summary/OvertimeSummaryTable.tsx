@@ -136,7 +136,7 @@ function OvertimeSummaryTable() {
     setSort(headId);
   };
 
-  const handleUpdate = (data: AttendanceLeave.putOvertime) => {
+  const handleUpdate = (data: AttendanceLeave.PutOvertime) => {
     setEditOpen(false);
     dispatch({
       type: putOvertimeRequested.toString(),

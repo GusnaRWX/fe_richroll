@@ -4,9 +4,8 @@ import { styled } from '@mui/material/styles';
 import { Box, Grid, Paper, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { CustomModal } from '@/components/_shared/common';
-import { HiSelector } from 'react-icons/hi';
+import { HiSelector, HiPencilAlt } from 'react-icons/hi';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { HiPencilAlt } from 'react-icons/hi';
 import { useTranslation } from 'react-i18next';
 
 const AddButton = styled(Button)({

@@ -2,8 +2,7 @@ import React from 'react';
 import { Text } from '@/components/_shared/common';
 import { Grid, Typography } from '@mui/material';
 import dayjs from 'dayjs';
-import { ifThenElse } from '@/utils/helper';
-import { getGender, getMaritalStatus, getReligion } from '@/utils/helper';
+import { getGender, getMaritalStatus, getReligion, ifThenElse } from '@/utils/helper';
 
 interface PersonalInformationDetailProps {
   data: {

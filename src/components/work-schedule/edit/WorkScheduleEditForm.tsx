@@ -66,7 +66,7 @@ interface WorkScheduleFormProps {
   setData: React.Dispatch<React.SetStateAction<workSchedule.PatchWorkSchedulePayloadType>>;
 }
 
-interface temporaryPayload {
+interface TemporaryPayload {
   name: string;
   grossHours: string | number;
   netHours: string | number;
@@ -81,7 +81,7 @@ function WorkScheduleEditForm({setData}: WorkScheduleFormProps) {
   const [openForm, setOPenForm] = useState(false);
   const [rendered, setRendered] = useState(false);
   const [tempName, setTempName] = useState('');
-  const [tempPayload, setTempPayload] = useState<temporaryPayload>({
+  const [tempPayload, setTempPayload] = useState<TemporaryPayload>({
     name: '',
     grossHours: 0,
     netHours: 0,

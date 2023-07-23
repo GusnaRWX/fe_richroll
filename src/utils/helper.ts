@@ -274,6 +274,16 @@ export const ifEmptyReplace = (condition, replace) => {
   }
 };
 
+/**
+ * Generate save random value
+ *
+ */
+export const generateRandom = () => {
+  const crypto = window.crypto || window.Crypto;
+  const array = new Uint32Array(1);
+  return crypto.getRandomValues(array)[0];
+};
+
 export const getGender = (id) => {
   switch (id) {
     case 1:

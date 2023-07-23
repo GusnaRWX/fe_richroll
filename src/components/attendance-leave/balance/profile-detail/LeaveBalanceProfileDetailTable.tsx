@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import Table from '@/components/_shared/form/Table';
 import { visuallyHidden } from '@mui/utils';
+import { ifThenElse, compareCheck } from '@/utils/helper';
 
 const headerItems = [
   { id: 'anual', label: 'Annual Leave' },
@@ -64,8 +65,8 @@ function LeaveBalanceProfileDetailTable({
     event: React.MouseEvent<unknown>,
     headId: string
   ) => {
-    const isAsc = sort === headId && direction === 'asc';
-    setDirection(isAsc ? 'desc' : 'asc');
+    const isAsc = compareCheck(sort === headId, direction === 'asc');
+    setDirection(ifThenElse(isAsc, 'desc', 'asc'));
     setSort(headId);
   };
 
@@ -91,21 +92,19 @@ function LeaveBalanceProfileDetailTable({
             {headerItems.map((item) => (
               <TableCell
                 key={item.id}
-                sortDirection={sort === item.id ? direction : false}
+                sortDirection={ifThenElse(sort === item.id, direction, false)}
               >
                 <TableSortLabel
                   active={sort === item.id}
-                  direction={sort === item.id ? direction : 'asc'}
+                  direction={ifThenElse(sort === item.id, direction, 'asc')}
                   onClick={(e) => handleRequestSort(e, item.id)}
                 >
                   {item.label}
-                  {sort === item.id ? (
+                  {ifThenElse(sort === item.id, (
                     <Box component='span' sx={visuallyHidden}>
-                      {direction === 'asc'
-                        ? 'sorted descending'
-                        : 'sorted ascending'}
+                      {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
                     </Box>
-                  ) : null}
+                  ), null)}
                 </TableSortLabel>
               </TableCell>
             ))}
@@ -113,14 +112,14 @@ function LeaveBalanceProfileDetailTable({
         }
         bodyChildren={
           <>
-            {typeof data?.items !== 'undefined' ? (
-              data?.items.length === 0 ? (
+            {ifThenElse(typeof data?.items !== 'undefined', (
+              ifThenElse(data?.items.length === 0, (
                 <TableRow>
                   <TableCell colSpan={12} align='center'>
                     <Typography>Data not found</Typography>
                   </TableCell>
                 </TableRow>
-              ) : (
+              ), (
                 data?.items.map((item, index) => (
                   <TableRow key={index}>
                     <TableCell>{item.annual}</TableCell>
@@ -131,14 +130,14 @@ function LeaveBalanceProfileDetailTable({
                     <TableCell>{item.sharedParental}</TableCell>
                   </TableRow>
                 ))
-              )
-            ) : (
+              ))
+            ), (
               <TableRow>
                 <TableCell colSpan={12} align='center'>
                   <Typography>Data not found</Typography>
                 </TableCell>
               </TableRow>
-            )}
+            ))}
           </>
         }
       />

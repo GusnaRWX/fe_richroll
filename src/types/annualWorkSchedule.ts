@@ -2,15 +2,16 @@ import dayjs from 'dayjs';
 export declare namespace AnnualWorkSchedule {
 
   type DayJS = dayjs.Dayjs | null | string;
+  type Dates = string | Date | null;
 
 
   interface InitialValues {
     name: string;
     type: string | number;
-    startDate: string | DayJS | null;
-    endDate: string | DayJS | null;
-    startHours: string | DayJS | null;
-    endHours: string | DayJS | null;
+    startDate: DayJS;
+    endDate: DayJS;
+    startHours: DayJS;
+    endHours: DayJS;
     notes: string;
   }
 
@@ -18,10 +19,10 @@ export declare namespace AnnualWorkSchedule {
     id: string | number;
     name: string;
     type: string | number;
-    startDate: string | Date | null;
-    endDate: string | Date | null;
-    startHours: string | Date | null;
-    endHours: string | Date | null;
+    startDate: Dates;
+    endDate: Dates;
+    startHours: Dates;
+    endHours: Dates;
     notes: string;
     createdAt?: string;
     updatedAt?: string;
@@ -42,10 +43,10 @@ export declare namespace AnnualWorkSchedule {
     companyID: string | number;
     name: string | number;
     eventType: number | string;
-    startDate: string | DayJS;
-    endDate: string | DayJS;
-    startHour: string | DayJS;
-    endHour: string | DayJS;
+    startDate: DayJS;
+    endDate: DayJS;
+    startHour: DayJS;
+    endHour: DayJS;
     isWithTime: boolean;
     note: string;
   }

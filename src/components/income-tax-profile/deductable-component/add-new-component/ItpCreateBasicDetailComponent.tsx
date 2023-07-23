@@ -14,7 +14,7 @@ interface ItpBasicDetailProps {
   setIsInBasicDetailValid: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export default function CreateBasicDetailComponent({ refProp, nextPage, setValues, infoValues, setIsInBasicDetailValid }: ItpBasicDetailProps) {
+export default function ItpCreateBasicDetailComponent({ refProp, nextPage, setValues, infoValues, setIsInBasicDetailValid }: ItpBasicDetailProps) {
   const {t} = useTranslation();
   const t_key = 'income_tax_profile.deductable_component.add_new_component.form.create_basic_detail';
 

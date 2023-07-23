@@ -16,10 +16,8 @@ import { ConfirmationModal, CustomModal } from '@/components/_shared/common';
 
 // Import Icon React Icon
 import DeleteIcon from '@mui/icons-material/Delete';
-import { HiPencilAlt } from 'react-icons/hi';
+import { HiPencilAlt, HiUpload, HiOutlineArchive } from 'react-icons/hi';
 import { FiCopy } from 'react-icons/fi';
-import { HiUpload } from 'react-icons/hi';
-import { HiOutlineArchive } from 'react-icons/hi';
 import { useTranslation } from 'react-i18next';
 
 const ButtonWrapper = styled.div`
@@ -59,7 +57,7 @@ interface ItpProfileTableProps {
 
 type Order = 'asc' | 'desc';
 
-function ItpProfileTable({
+function ItpProfileComponent({
   // tabValue,
   DeleteAction,
   DetailAction,
@@ -367,4 +365,4 @@ function ItpProfileTable({
   );
 }
 
-export default ItpProfileTable;
+export default ItpProfileComponent;

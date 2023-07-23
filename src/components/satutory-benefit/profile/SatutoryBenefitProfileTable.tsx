@@ -18,10 +18,8 @@ import { useTranslation } from 'react-i18next';
 
 // Import Icon React Icon
 import DeleteIcon from '@mui/icons-material/Delete';
-import { HiPencilAlt } from 'react-icons/hi';
+import { HiPencilAlt, HiUpload, HiOutlineArchive } from 'react-icons/hi';
 import { FiCopy } from 'react-icons/fi';
-import { HiUpload } from 'react-icons/hi';
-import { HiOutlineArchive } from 'react-icons/hi';
 
 const ButtonWrapper = styled.div`
   display: flex;
@@ -48,7 +46,7 @@ const DraftHeaderItems = [
   { id: 'last_update', label: 'last Updated' },
 ];
 
-interface SutatoryBenefitProfileTableProps {
+interface SatutoryBenefitProfileTableProps {
   tabValue: number;
   DeleteAction?: boolean;
   DetailAction?: boolean;
@@ -60,7 +58,7 @@ interface SutatoryBenefitProfileTableProps {
 
 type Order = 'asc' | 'desc';
 
-function SutatoryBenefitProfileTable({
+function SatutoryBenefitProfileTable({
   // tabValue,
   DeleteAction,
   DetailAction,
@@ -68,7 +66,7 @@ function SutatoryBenefitProfileTable({
   ActivateAction,
   ArchivedAction,
   Draft,
-}: SutatoryBenefitProfileTableProps) {
+}: SatutoryBenefitProfileTableProps) {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
   const [direction, setDirection] = useState<Order>('desc');
@@ -368,4 +366,4 @@ function SutatoryBenefitProfileTable({
   );
 }
 
-export default SutatoryBenefitProfileTable;
+export default SatutoryBenefitProfileTable;

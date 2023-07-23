@@ -112,6 +112,7 @@ function AccountManagementTable({
 }: EmployeeTableProps) {
   const dispatch = useAppDispatch();
   const data = useAppSelectors(state => state.account.data);
+  const { responser } = useAppSelectors((state) => state);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
@@ -248,7 +249,7 @@ function AccountManagementTable({
         searchType: searchType
       }
     });
-  }, [rowsPerPage, page, tabValue, search, searchType, sort, direction, deleteConfirmation, suspendConfirmation, reactivateConfirmation]);
+  }, [rowsPerPage, page, tabValue, search, searchType, sort, direction, responser.code]);
 
   useEffect(() => {
     setHaydrated(true);
@@ -425,33 +426,33 @@ function AccountManagementTable({
           {!selectedItem?.employee &&
             <Typography component='div' variant='text-base' fontWeight={500} sx={{ textAlign: 'center' }}>No Data Company</Typography>
           }
-          {compareCheck(!!selectedItem?.employee, !!selectedItem?.employee?.companies.length) &&
-          <>
-            <Grid spacing={2} container mt='0px' sx={{ borderBottom: 'solid 1px #E5E7EB', paddingBottom: '10px' }}>
-              <Grid item xs={4}>
-                <Typography component='div' variant='text-base' fontWeight={500}>Company Name</Typography>
-              </Grid>
-              <Grid item xs={4}>
-                <Typography component='div' variant='text-base' fontWeight={500}>Total Employee</Typography>
-              </Grid>
-              <Grid item xs={4}>
-                <Typography component='div' variant='text-base' fontWeight={500}>Created On</Typography>
-              </Grid>
-            </Grid>
-            {selectedItem?.employee?.companies?.map((itm, index) => (
-              <Grid key={index} spacing={2} container mt='0px' sx={{ borderBottom: 'solid 1px #E5E7EB', paddingBottom: '10px' }}>
+          {ifThenElse(compareCheck(!!selectedItem?.employee, !!selectedItem?.employee?.companies.length),
+            <>
+              <Grid spacing={2} container mt='0px' sx={{ borderBottom: 'solid 1px #E5E7EB', paddingBottom: '10px' }}>
                 <Grid item xs={4}>
-                  <Typography component='div' variant='text-sm' fontWeight={400}>{itm.name}</Typography>
+                  <Typography component='div' variant='text-base' fontWeight={500}>Company Name</Typography>
                 </Grid>
                 <Grid item xs={4}>
-                  <Typography component='div' variant='text-sm' fontWeight={400}>{itm.employeesTotal}</Typography>
+                  <Typography component='div' variant='text-base' fontWeight={500}>Total Employee</Typography>
                 </Grid>
                 <Grid item xs={4}>
-                  <Typography component='div' variant='text-sm' fontWeight={400}>{dayjs(itm.createdAt).format('DD/MM/YY')}</Typography>
+                  <Typography component='div' variant='text-base' fontWeight={500}>Created On</Typography>
                 </Grid>
               </Grid>
-            ))}
-          </>
+              {selectedItem?.employee?.companies?.map((itm, index) => (
+                <Grid key={index} spacing={2} container mt='0px' sx={{ borderBottom: 'solid 1px #E5E7EB', paddingBottom: '10px' }}>
+                  <Grid item xs={4}>
+                    <Typography component='div' variant='text-sm' fontWeight={400}>{itm.name}</Typography>
+                  </Grid>
+                  <Grid item xs={4}>
+                    <Typography component='div' variant='text-sm' fontWeight={400}>{itm.employeesTotal}</Typography>
+                  </Grid>
+                  <Grid item xs={4}>
+                    <Typography component='div' variant='text-sm' fontWeight={400}>{dayjs(itm.createdAt).format('DD/MM/YY')}</Typography>
+                  </Grid>
+                </Grid>
+              ))}
+            </>, null)
           }
         </TabPanel>
       </Box>
@@ -502,25 +503,25 @@ function AccountManagementTable({
         onRowsPerPagesChange={(e) => handleChangeRowsPerPage(e)}
         headChildren={
           <TableRow>
-            {tabValue === 0 && (
+            {ifThenElse(tabValue === 0, (
               <TableCell>
                 <Checkbox onChange={(e) => onAll(e)} checked={checkAll()} />
               </TableCell>
-            )}
+            ), null)}
             {
               headerItems.map((item) => (
                 <TableCell key={item.id} sortDirection={ifThenElse(sort === item.id, direction, false)}>
                   <TableSortLabel
                     active={sort === item.id}
-                    direction={sort === item.id ? direction : 'asc'}
+                    direction={ifThenElse(sort === item.id, direction, 'asc')}
                     onClick={(e) => handleRequestSort(e, item.id)}
                   >
                     {item.label}
-                    {sort === item.id ? (
+                    {ifThenElse(sort === item.id, (
                       <Box component='span' sx={visuallyHidden}>
                         {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
                       </Box>
-                    ) : null}
+                    ), null)}
                   </TableSortLabel>
                 </TableCell>
               ))
@@ -538,16 +539,16 @@ function AccountManagementTable({
                 ), (
                   data?.items?.map((item, index) => (
                     <TableRow key={index}>
-                      {tabValue === 0 && (
+                      {ifThenElse(tabValue === 0, (
                         <TableCell>
                           <Checkbox onChange={(e) => onSelected(item?.id, e)} checked={checkVal(item?.id)} />
                         </TableCell>
-                      )}
-                      <TableCell>{ifThenElse(item.employee, item.employee.code, '-')}</TableCell>
+                      ), null)}
+                      <TableCell>{ifThenElse(item?.employee, item?.employee?.code, '-')}</TableCell>
                       <TableCell>
                         <NameWrapper>
                           <Avatar
-                            src={ifEmptyReplace(item.userInformation?.picture, ImageType.AVATAR_PLACEHOLDER)}
+                            src={ifEmptyReplace(item?.userInformation?.picture, ImageType.AVATAR_PLACEHOLDER)}
                             alt={item.name}
                             sx={{
                               width: 24, height: 24
@@ -558,13 +559,13 @@ function AccountManagementTable({
                       </TableCell>
                       <TableCell>{item.email}</TableCell>
                       <TableCell>
-                        {!!item.roles.length && item.roles.map((i) => i.name)}
+                        {ifThenElse(!!item.roles.length, item.roles.map((i) => i.name), '-')}
                       </TableCell>
                       <TableCell>{ifThenElse(item.lastLoginAt, dayjs(item.lastLoginAt).format('DD/MM/YY, HH:mm'), '-')}</TableCell>
                       <TableCell>{dayjs(item.createdAt).format('DD/MM/YY')}</TableCell>
                       <TableCell>
                         <ButtonWrapper>
-                          {tabValue === 0 && (
+                          {ifThenElse(tabValue === 0, (
                             <>
                               <IconButton
                                 disabled={!!selectedTemp.length}
@@ -589,8 +590,8 @@ function AccountManagementTable({
                                 }
                               />
                             </>
-                          )}
-                          {tabValue === 1 && (
+                          ), null)}
+                          {ifThenElse(tabValue === 1, (
                             <IconButton
                               parentColor='#DCFCE7'
                               onClick={() => {
@@ -601,7 +602,7 @@ function AccountManagementTable({
                                 <RiUserReceived2Fill fontSize={20} color='#22C55E' />
                               }
                             />
-                          )}
+                          ), null)}
                         </ButtonWrapper>
                       </TableCell>
                     </TableRow>
@@ -617,7 +618,7 @@ function AccountManagementTable({
         }
       />
 
-      {!!selectedTemp.length &&
+      {ifThenElse(!!selectedTemp.length, (
         <Grid container mt='.5rem'>
           <Grid item xs={12}>
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '1rem'}}>
@@ -626,7 +627,7 @@ function AccountManagementTable({
             </Box>
           </Grid>
         </Grid>
-      }
+      ), null)}
 
       {/* delete popup */}
       <CustomModal

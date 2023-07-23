@@ -16,7 +16,7 @@ import { IconButton } from '@/components/_shared/form';
 import { BsTrashFill, BsFillEyeFill } from 'react-icons/bs';
 import { FiDownload } from 'react-icons/fi';
 import { TbFileImport } from 'react-icons/tb';
-import { HiOutlineInboxIn } from 'react-icons/hi';
+import { HiOutlineInboxIn, HiPencilAlt } from 'react-icons/hi';
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
 import { ConfirmationModal } from '@/components/_shared/common';
@@ -25,7 +25,6 @@ import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { getPayrollRequested } from '@/store/reducers/slice/payroll/payrollSlice';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
-import { HiPencilAlt } from 'react-icons/hi';
 
 const ButtonWrapper = styled.div`
  display: flex;

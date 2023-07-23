@@ -108,7 +108,7 @@ const data = {
   itemTotals: 5
 };
 
-function PayrollAssistantCreate() {
+function PayrollAssistantView() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(1);
   const [direction, setDirection] = useState<Order>('desc');
@@ -544,4 +544,4 @@ function PayrollAssistantCreate() {
   );
 }
 
-export default PayrollAssistantCreate;
+export default PayrollAssistantView;
