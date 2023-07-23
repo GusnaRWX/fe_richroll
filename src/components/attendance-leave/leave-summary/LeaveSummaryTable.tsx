@@ -123,7 +123,6 @@ function LeaveSummaryTable({
   };
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(event);
-    // setPage(0);
   };
 
   const handleRequestSort = (
@@ -177,7 +176,7 @@ function LeaveSummaryTable({
         bodyChildren={
           <>
             {ifThenElse(typeof data?.items !== 'undefined', (
-              ifThenElse(data?.items.length === 0,  (
+              ifThenElse(data?.items.length === 0, (
                 <TableRow>
                   <TableCell colSpan={12} align='center'>
                     <EmptyState />
@@ -212,7 +211,6 @@ function LeaveSummaryTable({
                     <TableCell>{item.date}</TableCell>
                     <TableCell>{item.period}</TableCell>
                     <TableCell>
-                      {/* {dayjs(item.user.createdAt).format('YYYY-MM-DD H:m:s')} */}
                       {item.Duration}
                     </TableCell>
                     <TableCell>{item.Notes}</TableCell>

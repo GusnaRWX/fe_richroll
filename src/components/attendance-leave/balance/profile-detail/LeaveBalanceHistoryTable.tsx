@@ -80,7 +80,6 @@ function LeaveBalanceHistoryTable({ tabValue }: LeaveBalanceHistoryTableProps) {
   };
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(event);
-    // setPage(0);
   };
 
   const handleRequestSort = (

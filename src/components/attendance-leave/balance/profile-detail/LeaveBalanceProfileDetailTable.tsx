@@ -58,7 +58,6 @@ function LeaveBalanceProfileDetailTable({
   };
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(event);
-    // setPage(0);
   };
 
   const handleRequestSort = (
