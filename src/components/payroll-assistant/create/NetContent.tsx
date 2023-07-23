@@ -39,11 +39,11 @@ const headerItems = [
 ];
 
 function NetContent(att) {
-  const {isPreview} = att;
+  const {isPreview, isAssist} = att;
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const { netDetail } = useAppSelectors(state => state.payroll);
+  const { netDetail, netId } = useAppSelectors(state => state.payroll);
   const [page, setPage] = useState(1);
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
@@ -65,13 +65,21 @@ function NetContent(att) {
   };
 
   useEffect(() => {
-    if (router.isReady) {
+    if (compareCheck(router.isReady, !isAssist)) {
       dispatch({
         type: getNetPayrollRequested.toString(),
         payload: router.query.id
       });
     }
-  }, [router.query]);
+    if (compareCheck(router.isReady, isAssist, netId !== '')) {
+      dispatch({
+        type: getNetPayrollRequested.toString(),
+        payload: netId
+      });
+    }
+    console.log(netId);
+    
+  }, [router.query, netId]);
 
   useEffect(() => {
     setHaydrated(true);
