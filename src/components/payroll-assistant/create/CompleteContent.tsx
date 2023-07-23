@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import { SwitchProps } from '@mui/material/Switch';
 import { styled as MuiStyled } from '@mui/material/styles';
-import { SimpleAccordion } from '@/components/_shared/common';
+import { SimpleAccordion, Text } from '@/components/_shared/common';
 import Table from '@/components/_shared/form/Table';
 import styled from '@emotion/styled';
 import { compareCheck, ifThenElse } from '@/utils/helper';
@@ -26,6 +26,8 @@ import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { getPayrollDisbursementIdRequested, postPayrollDisbursementPaidRequested } from '@/store/reducers/slice/payroll/payrollSlice';
 import { numberFormat } from '@/utils/format';
 import { Payroll } from '@/types/payroll';
+import { useFormik } from 'formik';
+import { AiOutlineFile, AiOutlineClose } from 'react-icons/ai';
 
 const ButtonWrapper = styled(Box)(({
   display: 'flex',
@@ -38,6 +40,14 @@ const ContentWrapper = styled(Card)(({
   padding: '1rem',
   marginBottom: '1rem'
 }));
+
+const HasFileCss = {
+  borderRadius: '8px',
+  gap: '8px',
+  backgroundColor: 'white',
+  padding: '8px 8px',
+  border: '1px solid'
+};
 
 const IOSSwitch = MuiStyled((props: SwitchProps) => (
   <Switch focusVisibleClassName='.Mui-focusVisible' disableRipple {...props} />
@@ -116,6 +126,15 @@ function CompleteContent() {
     setPage(newPage);
   };
 
+  const formik = useFormik({
+    initialValues: {
+      file: null
+    },
+    onSubmit: (_val) => {
+      console.log(_val);
+    }
+  });
+
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(event);
   };
@@ -193,8 +212,8 @@ function CompleteContent() {
             <SimpleAccordion
               title={<>Payment Method : {value?.method?.name} <Box component='span' sx={{ fontSize: '14px', fontWeight: '400' }}>{`(${value?.items?.length} employees)`}</Box></>}
               footer={
-                <Grid container spacing={2} mt='.1rem'>
-                  <Grid item xs={8}>
+                <Grid container spacing={2} mt='.1rem' justifyContent='space-between'>
+                  <Grid item xs={formik.values.file === null ? 8 : 6}>
                     <MuiButton
                       variant='contained'
                       color='inherit'
@@ -204,16 +223,60 @@ function CompleteContent() {
                       {value?.attachment?.filename} &nbsp;<FiFile />&nbsp; {value?.attachment?.size} &nbsp;<FiDownload />
                     </MuiButton>
                   </Grid>
-                  <Grid item xs={4}>
+                  <Grid item xs={formik.values.file === null ? 4 : 5}>
                     <ButtonWrapper>
-                      <MuiButton
-                        variant='contained'
-                        color='secondary'
-                        sx={{ color: 'white' }}
-                        onClick={() => { console.log(true); }}
-                      >
-                        <HiFolderOpen />&nbsp; Upload Receipt
-                      </MuiButton>
+                      <div>
+                        {formik.values.file === null ? (
+                          <>
+                            <input
+                              id='input-file'
+                              onChange={(e) => {
+                                formik.setFieldValue('file', e.target.files && e.target.files[0]);
+                              }}
+                              type='file'
+                              style={{ display: 'none' }}
+                              accept='application/pdf'
+                            />
+                            <label htmlFor='input-file'>
+                              <MuiButton
+                                variant='contained'
+                                color='secondary'
+                                sx={{ color: 'white' }}
+                                component='span'
+                              >
+                                <HiFolderOpen />&nbsp; Upload Receipt
+                              </MuiButton>
+                            </label>
+                          </>
+                        ) : (
+                          <Grid container sx={HasFileCss} alignItems='center'>
+                            <Grid item>
+                              <Text
+                                title={(formik.values.file && (formik.values.file as unknown as { name: string })?.name)}
+                                fontSize='12px'
+                                fontWeight={400}
+                              />
+                            </Grid>
+                            <Grid item>
+                              <AiOutlineFile fontSize='12px' />
+                            </Grid>
+                            <Grid item>
+                              <Text
+                                title={
+                                  formik.values.file
+                                    ? `${((formik.values.file as unknown as { size: number })?.size / (1024 * 1024)).toFixed(2)} MB`
+                                    : '0.00 MB'
+                                }
+                                fontSize='12px'
+                                fontWeight={400}
+                              />
+                            </Grid>
+                            <Grid item>
+                              <AiOutlineClose fontSize='12px' cursor='pointer' onClick={() => { formik.setFieldValue('file', null); }} />
+                            </Grid>
+                          </Grid>
+                        )}
+                      </div>
                       <Box sx={{ background: '#F3F4F6', borderRadius: '6px', p: '.4rem 1rem' }}>
                         <Typography variant='text-sm' fontWeight='500' color='#374151'>Status</Typography>
                         <IOSSwitch sx={{ mx: 1 }} disabled={value?.isPaid} onChange={(e) => { handleChangePaid(e, value?.id); }} checked={value?.isPaid} />
@@ -229,6 +292,7 @@ function CompleteContent() {
                 rowsPerPageOptions={[5, 10, 15]}
                 rowsPerPage={rowsPerPage}
                 page={page}
+                withPaginate={false}
                 onChangePage={handleChangePage}
                 onRowsPerPagesChange={(e) => handleChangeRowsPerPage(e)}
                 headChildren={
