@@ -17,7 +17,7 @@ import CompleteContent from './CompleteContent';
 import CustomModal from '@/components/_shared/common/CustomModal';
 import { ifThenElse } from '@/utils/helper';
 import { useAppSelectors, useAppDispatch } from '@/hooks/index';
-import { postPayrollGrossesRequested, putPayrollWorkflowRequested, putPayrollsGrossesFinalRequested } from '@/store/reducers/slice/payroll/payrollSlice';
+import { postPayrollGrossesRequested, putPayrollWorkflowRequested, generateNetAssistRequested, generateDisbursementAssistRequested } from '@/store/reducers/slice/payroll/payrollSlice';
 
 const steps = [
   'Create Payroll',
@@ -47,7 +47,7 @@ function PayrollAssistantCreate() {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const assistantID = router?.query?.id;
-  const { name, start, end, grossesId, id } = useAppSelectors((state) => state.payroll);
+  const { name, start, end, grossesId, netId, id } = useAppSelectors((state) => state.payroll);
   const [value, setValue] = useState(1);
   const [open, setOpen] = useState(false);
   const [isExit, setIsExit] = useState(true);
@@ -86,22 +86,21 @@ function PayrollAssistantCreate() {
 
   const handleGenerateNet = () => {
     dispatch({
-      type: putPayrollWorkflowRequested.toString(),
+      type: generateNetAssistRequested.toString(),
       payload: {
-        id: grossesId,
-        data: {
-          workflow: 0,
-          status: 1
-        }
+        grossesId: grossesId,
+        assistantID: router.query.id,
       }
     });
+    setValue(value + 1);
+  };
+
+  const handleGenerateDisbursement = () => {
     dispatch({
-      type: putPayrollsGrossesFinalRequested.toString(),
+      type: generateDisbursementAssistRequested.toString(),
       payload: {
-        data: {
-          id: grossesId
-        },
-        isAssist: true
+        netId: netId,
+        assistantID: router.query.id,
       }
     });
     setValue(value + 1);
@@ -121,6 +120,7 @@ function PayrollAssistantCreate() {
               size='small'
               color='primary'
               onClick={() => {
+                // setValue(value - 1);
                 if (value == 5) {
                   setIsExit(true);
                   setOpen(true);
@@ -142,7 +142,7 @@ function PayrollAssistantCreate() {
                     handleGenerateNet();
                     break;
                   case 3:
-                    setValue(value + 1);
+                    handleGenerateDisbursement();
                     break;
                   case 4:
                     setValue(value + 1);
@@ -169,7 +169,7 @@ function PayrollAssistantCreate() {
       
       {value == 1 && <AttendanceContent />}
       {value == 2 && <GrossContent isPreview={false} />}
-      {value == 3 && <NetContent />}
+      {value == 3 && <NetContent isAssist={true} />}
       {value == 4 && <DisbursementContent />}
       {value == 5 && <CompleteContent />}
 
