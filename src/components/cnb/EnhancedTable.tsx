@@ -62,7 +62,6 @@ function EnhancedTable() {
   };
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(event);
-    // setPage(0);
   };
   const handleSearch = (e) => {
     if (e.key === 'Enter') {

@@ -207,10 +207,6 @@ function WorkScheduleForm({ setData, prevPage }: WorkScheduleFormProps) {
     calendarRef?.current?.scheduler?.events?.splice(0, eventLength);
   };
 
-  // useEffect(() => {
-  //   handleDeleteEventSchedule();
-  // }, []);
-
   useEffect(() => {
     if (calendarRef?.current) {
       const mergeData = [...calendarRef?.current?.scheduler?.events as ProcessedEvent[] || [] as ProcessedEvent[]];
@@ -435,8 +431,6 @@ function WorkScheduleForm({ setData, prevPage }: WorkScheduleFormProps) {
                   width='774px'
                   submitText='Save'
                   handleConfirm={() => {
-                    // formik.submitForm();
-                    // handleFormClose();
                     handleSubmit(formik, formik.values);
                     formik.resetForm();
                     formik.setFieldValue('workScheduleID', workScheduleID);
