@@ -1,13 +1,16 @@
 import React from 'react';
 import { CustomModal, Text } from '@/components/_shared/common';
 import { Box, Grid, Button } from '@mui/material';
+import { Payroll } from '@/types/payroll';
+import { numberFormat } from '@/utils/format';
 
 interface DisbursementEmployeeDetailProps {
   open: boolean;
   handleClose: () => void;
+  selectedEmployee: Payroll.DisbursementsData
 }
 
-const DisbursementEmployeeDetail = ({ open, handleClose }: DisbursementEmployeeDetailProps) => {
+const DisbursementEmployeeDetail = ({ open, handleClose, selectedEmployee }: DisbursementEmployeeDetailProps) => {
   return (
     <CustomModal
       open={open}
@@ -27,19 +30,19 @@ const DisbursementEmployeeDetail = ({ open, handleClose }: DisbursementEmployeeD
           <div>
             <Text title='Employee Name' fontSize='14px' />
           </div>
-          <Text title='Asep Galon' fontSize='14px' color='grey.600' />
+          <Text title={selectedEmployee?.employee?.name} fontSize='14px' color='grey.600' />
         </Grid>
         <Grid item md={4}>
           <div>
             <Text title='Position &emsp; &emsp;' fontSize='14px' />
           </div>
-          <Text title='Manager Fishing' fontSize='14px' color='grey.600' />
+          <Text title='Manager' fontSize='14px' color='grey.600' />
         </Grid>
         <Grid item md={4}>
           <div>
             <Text title='Department' fontSize='14px' />
           </div>
-          <Text title='Cibaduyut' fontSize='14px' color='grey.600' />
+          <Text title='Deparmtnet' fontSize='14px' color='grey.600' />
         </Grid>
       </Grid>
       <Box mb='20px'>
@@ -53,7 +56,7 @@ const DisbursementEmployeeDetail = ({ open, handleClose }: DisbursementEmployeeD
             <div>
               <Text title='Amount' fontSize='14px' />
             </div>
-            <Text title='Rp.2000' fontSize='14px' color='grey.600' />
+            <Text title={`Rp ${numberFormat(selectedEmployee?.net)}`} fontSize='14px' color='grey.600' />
           </Grid>
           <Grid item md={4}>
             <div>
@@ -71,7 +74,7 @@ const DisbursementEmployeeDetail = ({ open, handleClose }: DisbursementEmployeeD
       </Box>
       <div>
         <Text title='Total Disbursement Amount' color='primary' fontWeight={700} fontSize='18px' />
-        <Text title='Rp.30.000.000' color='primary' fontWeight={700} fontSize='18px' />
+        <Text title={`Rp ${numberFormat(selectedEmployee?.net)}`} color='primary' fontWeight={700} fontSize='18px' />
       </div>
       <Grid container justifyContent='flex-end' alignItems='flex-end'>
         <Grid item>

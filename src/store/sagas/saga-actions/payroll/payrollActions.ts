@@ -89,6 +89,6 @@ export const postNetPayroll = (payload) => {
   return post(`payrolls/${payload?.id}/nets`, payload?.data as Payroll.PostNetPayloadType);
 };
 
-export  const patchNetPayrollFinal = (payload) => {
+export const patchNetPayrollFinal = (payload) => {
   return patch(`payrolls/${payload.id}/nets/final`, {});
 };
