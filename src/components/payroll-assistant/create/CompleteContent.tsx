@@ -113,7 +113,8 @@ const headerItems = [
 
 type Order = 'asc' | 'desc'
 
-function CompleteContent() {
+function CompleteContent(att) {
+  const {isAssist} = att;
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(1);
   const [direction, setDirection] = useState<Order>('desc');
@@ -122,6 +123,7 @@ function CompleteContent() {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const disbursementData = useAppSelectors(state => state.payroll.disbursementData as Payroll.DisbursementData);
+  const { disbursementId } = useAppSelectors(state => state.payroll);
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
@@ -145,15 +147,26 @@ function CompleteContent() {
     setSort(headId);
   };
 
-  const handleChangePaid = (e: React.ChangeEvent<HTMLInputElement>, disbursementId: string) => {
+  const handleChangePaid = (e: React.ChangeEvent<HTMLInputElement>, disbursementEmployeeId: string) => {
     const { checked } = e.target;
-    if (checked) {
+    if (compareCheck(checked, !isAssist)) {
       dispatch({
         type: postPayrollDisbursementPaidRequested.toString(),
         payload: {
           id: router.query.id,
           body: {
-            disbursementIDs: [disbursementId]
+            disbursementIDs: [disbursementEmployeeId]
+          }
+        }
+      });
+    }
+    if (compareCheck(checked, isAssist)) {
+      dispatch({
+        type: postPayrollDisbursementPaidRequested.toString(),
+        payload: {
+          id: disbursementId,
+          body: {
+            disbursementIDs: [disbursementEmployeeId]
           }
         }
       });
@@ -165,7 +178,15 @@ function CompleteContent() {
   }, []);
 
   useEffect(() => {
-    if (router.isReady) {
+    if (compareCheck(router.isReady, isAssist, disbursementId !== '')) {
+      dispatch({
+        type: getPayrollDisbursementIdRequested.toString(),
+        payload: {
+          id: disbursementId
+        }
+      });
+    }
+    if (compareCheck(router.isReady, !isAssist)) {
       dispatch({
         type: getPayrollDisbursementIdRequested.toString(),
         payload: {
@@ -173,7 +194,7 @@ function CompleteContent() {
         }
       });
     }
-  }, [router]);
+  }, [router, disbursementId]);
 
   if (!hydrated) {
     return null;

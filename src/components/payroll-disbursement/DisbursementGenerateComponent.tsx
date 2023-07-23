@@ -39,7 +39,8 @@ function DisbursementGenerateComponent() {
     dispatch({
       type: patchPayrollDisbursementFinalRequested.toString(),
       payload: {
-        id: router.query.id
+        id: router.query.id,
+        isAssist: false
       }
     });
   };
