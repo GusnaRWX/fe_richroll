@@ -10,6 +10,8 @@ import { useRouter } from 'next/router';
 import { IconButton } from '@/components/_shared/form';
 import { ArrowBack } from '@mui/icons-material';
 import CompleteContent from '@/components/payroll-assistant/create/CompleteContent';
+import { patchPayrollDisbursementFinalRequested } from '@/store/reducers/slice/payroll/payrollSlice';
+import { useAppDispatch } from '@/hooks/index';
 
 const ButtonWrapper = styled(Box)(({
   display: 'flex',
@@ -31,6 +33,16 @@ const BackWrapper = styled(Box)(({
 
 function DisbursementGenerateComponent() {
   const router = useRouter();
+  const dispatch = useAppDispatch();
+
+  const handleFinalDisbursement = () => {
+    dispatch({
+      type: patchPayrollDisbursementFinalRequested.toString(),
+      payload: {
+        id: router.query.id
+      }
+    });
+  };
   return (
     <>
       <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
@@ -61,7 +73,7 @@ function DisbursementGenerateComponent() {
               variant='contained'
               size='small'
               color='primary'
-              onClick={() => { router.push('/payroll-disbursement/disbursement'); }}
+              onClick={handleFinalDisbursement}
               sx={{ color: 'white' }}
             >Save</MuiButton>
           </ButtonWrapper>

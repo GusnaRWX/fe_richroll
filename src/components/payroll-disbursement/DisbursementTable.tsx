@@ -68,11 +68,11 @@ function DisbursementTable({
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
   const [hydrated, setHaydrated] = useState(false);
-  const [deleteConfirmation, setDeleteConfirmation] = useState({id: 0, open: false});
+  const [deleteConfirmation, setDeleteConfirmation] = useState({ id: 0, open: false });
   const companyData = getCompanyData();
   const { responser } = useAppSelectors((state) => state);
   const router = useRouter();
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const t_colsItem = 'payroll_and_disbursement.disbursement.table.table_cols_item';
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -123,7 +123,7 @@ function DisbursementTable({
         countryCode: 'ID',
         companyID: companyData?.id,
         workflow: 'DISBURSEMENT',
-        status: ifThenElse(tabValue === 0, 'DRAFT', ifThenElse(tabValue === 1,  'COMPLETED', 'ARCHIVE'))
+        status: ifThenElse(tabValue === 0, 'DRAFT', ifThenElse(tabValue === 1, 'COMPLETED', 'ARCHIVE'))
       }
     });
   }, [rowsPerPage, page, search, sort, direction, responser.code, tabValue]);
@@ -225,7 +225,7 @@ function DisbursementTable({
                             <>
                               <IconButton
                                 parentColor='#E9EFFF'
-                                onClick={() => { router.push('/payroll-disbursement/disbursement/generate'); }}
+                                onClick={() => { router.push({ pathname: '/payroll-disbursement/disbursement/generate', query: { id: item?.id } }); }}
                                 icons={
                                   <BsFillEyeFill fontSize={20} color='#223567' />
                                 }
