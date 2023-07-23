@@ -52,7 +52,8 @@ function NetDetail() {
         id: router.query.id,
         body: {
           isSeparate: isSeperate
-        }
+        },
+        isAssist: false
       }
     });
   };

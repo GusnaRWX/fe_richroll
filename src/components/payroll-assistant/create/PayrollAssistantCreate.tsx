@@ -17,7 +17,14 @@ import CompleteContent from './CompleteContent';
 import CustomModal from '@/components/_shared/common/CustomModal';
 import { ifThenElse } from '@/utils/helper';
 import { useAppSelectors, useAppDispatch } from '@/hooks/index';
-import { postPayrollGrossesRequested, putPayrollWorkflowRequested, generateNetAssistRequested, generateDisbursementAssistRequested } from '@/store/reducers/slice/payroll/payrollSlice';
+import {
+  postPayrollGrossesRequested,
+  putPayrollWorkflowRequested,
+  generateNetAssistRequested,
+  generateDisbursementAssistRequested,
+  postPayrollDisbursementIdRequested,
+  patchPayrollDisbursementFinalRequested
+} from '@/store/reducers/slice/payroll/payrollSlice';
 
 const steps = [
   'Create Payroll',
@@ -47,17 +54,28 @@ function PayrollAssistantCreate() {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const assistantID = router?.query?.id;
-  const { name, start, end, grossesId, netId, id } = useAppSelectors((state) => state.payroll);
+  const { name, start, end, grossesId, netId, disbursementId, id } = useAppSelectors((state) => state.payroll);
   const [value, setValue] = useState(1);
   const [open, setOpen] = useState(false);
   const [isExit, setIsExit] = useState(true);
+  const [isSeparate, setIsSeparate] = useState(false);
 
   const handleClose = () => {
     setOpen(false);
   };
 
   const handleConfirm = () => {
-    router.push('/payroll-disbursement/payroll-assistant');
+    if (value === 5) {
+      dispatch({
+        type: patchPayrollDisbursementFinalRequested.toString(),
+        payload: {
+          id: disbursementId,
+          isAssist: true
+        }
+      });
+    } else {
+      router.push('/payroll-disbursement/payroll-assistant');
+    }
   };
 
   const handleGenerateGross = () => {
@@ -95,12 +113,26 @@ function PayrollAssistantCreate() {
     setValue(value + 1);
   };
 
-  const handleGenerateDisbursement = () => {
+  const handleGenerateDisbReceipt = () => {
     dispatch({
       type: generateDisbursementAssistRequested.toString(),
       payload: {
-        netId: netId,
-        assistantID: router.query.id,
+        netId: netId
+      }
+    });
+    setValue(value + 1);
+  };
+
+  const handleGenerateDisbFiles = () => {
+    dispatch({
+      type: postPayrollDisbursementIdRequested.toString(),
+      payload: {
+        id: netId,
+        body: {
+          assistantID: router.query.id,
+          isSeparate: isSeparate
+        },
+        isAssist: true
       }
     });
     setValue(value + 1);
@@ -142,10 +174,10 @@ function PayrollAssistantCreate() {
                     handleGenerateNet();
                     break;
                   case 3:
-                    handleGenerateDisbursement();
+                    handleGenerateDisbReceipt();
                     break;
                   case 4:
-                    setValue(value + 1);
+                    handleGenerateDisbFiles();
                     break;
                   case 5:
                     setIsExit(false);
@@ -170,8 +202,8 @@ function PayrollAssistantCreate() {
       {value == 1 && <AttendanceContent />}
       {value == 2 && <GrossContent isPreview={false} />}
       {value == 3 && <NetContent isAssist={true} />}
-      {value == 4 && <DisbursementContent />}
-      {value == 5 && <CompleteContent />}
+      {value == 4 && <DisbursementContent isAssist={true} handleChecked={setIsSeparate} />}
+      {value == 5 && <CompleteContent isAssist={true} />}
 
       <CustomModal
         open={open}

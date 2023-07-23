@@ -286,12 +286,15 @@ export const payrollSlice = createSlice({
     },
     postPayrollDisbursementIdRequested: state => {
       state.isLoading = true;
+      state.disbursementId = '';
     },
-    postPayrollDisbursementIdSuccess: state => {
+    postPayrollDisbursementIdSuccess: (state, action) => {
       state.isLoading = false;
+      state.disbursementId = action.payload.data;
     },
     postPayrollDisbursementIdFailed: state => {
       state.isLoading = false;
+      state.disbursementId = '';
     },
     getPayrollDisbursementIdRequested: state => {
       state.isLoading = true;

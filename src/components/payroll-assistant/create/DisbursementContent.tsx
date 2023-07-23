@@ -9,12 +9,17 @@ import {
   Typography
 } from '@mui/material';
 import { SimpleAccordion } from '@/components/_shared/common';
+import { CheckBox } from '@/components/_shared/form';
 import Table from '@/components/_shared/form/Table';
 import styled from '@emotion/styled';
 import { compareCheck, ifThenElse } from '@/utils/helper';
 import { visuallyHidden } from '@mui/utils';
-import DisbursementRow from './DisbursementRow';
-import { CheckBox } from '@/components/_shared/form';
+// import DisbursementRow from './DisbursementRow';
+import NetRow from './NetRow';
+import { numberFormat } from '@/utils/format';
+import { useRouter } from 'next/router';
+import { useAppDispatch, useAppSelectors } from '@/hooks/index';
+import { getNetPayrollRequested } from '@/store/reducers/slice/payroll/payrollSlice';
 
 const ContentWrapper = styled(Card)(({
   padding: '1rem',
@@ -34,63 +39,67 @@ const headerItems = [
 
 type Order = 'asc' | 'desc'
 
-const data = {
-  items: [
-    {
-      id: 1,
-      name: 'Budi Irawan',
-      attendance: 'Rp 9.500.000,00',
-      absent: 'Rp 524.000,00',
-      paidLeave: 'Rp 237.000,00',
-      unpaidLeave: 'Rp 9.886.000,00',
-      nonTax: 'Rp 50.000,00',
-      netSalary: 'Rp 9.936.000,00',
-    },
-    {
-      id: 2,
-      name: 'Budi Irawan',
-      attendance: 'Rp 9.500.000,00',
-      absent: 'Rp 524.000,00',
-      paidLeave: 'Rp 237.000,00',
-      unpaidLeave: 'Rp 9.886.000,00',
-      nonTax: 'Rp 50.000,00',
-      netSalary: 'Rp 9.936.000,00',
-    },
-    {
-      id: 3,
-      name: 'Budi Irawan',
-      attendance: 'Rp 9.500.000,00',
-      absent: 'Rp 524.000,00',
-      paidLeave: 'Rp 237.000,00',
-      unpaidLeave: 'Rp 9.886.000,00',
-      nonTax: 'Rp 50.000,00',
-      netSalary: 'Rp 9.936.000,00',
-    },
-    {
-      id: 4,
-      name: 'Budi Irawan',
-      attendance: 'Rp 9.500.000,00',
-      absent: 'Rp 524.000,00',
-      paidLeave: 'Rp 237.000,00',
-      unpaidLeave: 'Rp 9.886.000,00',
-      nonTax: 'Rp 50.000,00',
-      netSalary: 'Rp 9.936.000,00',
-    },
-    {
-      id: 5,
-      name: 'Budi Irawan',
-      attendance: 'Rp 9.500.000,00',
-      absent: 'Rp 524.000,00',
-      paidLeave: 'Rp 237.000,00',
-      unpaidLeave: 'Rp 9.886.000,00',
-      nonTax: 'Rp 50.000,00',
-      netSalary: 'Rp 9.936.000,00',
-    },
-  ],
-  itemTotals: 5
-};
+// const data = {
+//   items: [
+//     {
+//       id: 1,
+//       name: 'Budi Irawan',
+//       attendance: 'Rp 9.500.000,00',
+//       absent: 'Rp 524.000,00',
+//       paidLeave: 'Rp 237.000,00',
+//       unpaidLeave: 'Rp 9.886.000,00',
+//       nonTax: 'Rp 50.000,00',
+//       netSalary: 'Rp 9.936.000,00',
+//     },
+//     {
+//       id: 2,
+//       name: 'Budi Irawan',
+//       attendance: 'Rp 9.500.000,00',
+//       absent: 'Rp 524.000,00',
+//       paidLeave: 'Rp 237.000,00',
+//       unpaidLeave: 'Rp 9.886.000,00',
+//       nonTax: 'Rp 50.000,00',
+//       netSalary: 'Rp 9.936.000,00',
+//     },
+//     {
+//       id: 3,
+//       name: 'Budi Irawan',
+//       attendance: 'Rp 9.500.000,00',
+//       absent: 'Rp 524.000,00',
+//       paidLeave: 'Rp 237.000,00',
+//       unpaidLeave: 'Rp 9.886.000,00',
+//       nonTax: 'Rp 50.000,00',
+//       netSalary: 'Rp 9.936.000,00',
+//     },
+//     {
+//       id: 4,
+//       name: 'Budi Irawan',
+//       attendance: 'Rp 9.500.000,00',
+//       absent: 'Rp 524.000,00',
+//       paidLeave: 'Rp 237.000,00',
+//       unpaidLeave: 'Rp 9.886.000,00',
+//       nonTax: 'Rp 50.000,00',
+//       netSalary: 'Rp 9.936.000,00',
+//     },
+//     {
+//       id: 5,
+//       name: 'Budi Irawan',
+//       attendance: 'Rp 9.500.000,00',
+//       absent: 'Rp 524.000,00',
+//       paidLeave: 'Rp 237.000,00',
+//       unpaidLeave: 'Rp 9.886.000,00',
+//       nonTax: 'Rp 50.000,00',
+//       netSalary: 'Rp 9.936.000,00',
+//     },
+//   ],
+//   itemTotals: 5
+// };
 
-function DisbursementContent() {
+function DisbursementContent(att) {
+  const {isPreview, handleChecked} = att;
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const { netDetail, netId } = useAppSelectors(state => state.payroll);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(1);
   const [direction, setDirection] = useState<Order>('desc');
@@ -113,6 +122,16 @@ function DisbursementContent() {
   };
 
   useEffect(() => {
+    if (compareCheck(router.isReady, netId !== '')) {
+      dispatch({
+        type: getNetPayrollRequested.toString(),
+        payload: netId
+      });
+    }
+    
+  }, [router.query, netId]);
+  
+  useEffect(() => {
     setHaydrated(true);
   }, []);
 
@@ -126,49 +145,44 @@ function DisbursementContent() {
         <Grid item xs={4} sx={{ display: 'flex', justifyContent: 'end', alignItems: 'center' }}>
           <CheckBox
             customLabel='Separate Non-Taxable Transaction'
-            name='isStatus'
-            checked={true}
-            onChange={(e) => console.log(e)}
+            onChange={(e) => { handleChecked(e.target.checked); }}
           />
         </Grid>
       </Grid>
       <ContentWrapper>
         <Box sx={{ width: '100%' }}>
-          <SimpleAccordion
-            title='Operational Department'
-            header={
-              <ContentWrapper sx={{ mt: '1rem' }}>
-                <Grid container spacing={2}>
-                  <Grid item xs={2}>
-                    <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>Total Gross Payroll</Typography>
-                    <Typography component='div' variant='text-sm' fontWeight='500' color='#1F2937'>Rp 17.000.000</Typography>
-                  </Grid>
-                  <Grid item xs={2}>
-                    <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>Total Statutory Benefit(s)</Typography>
-                    <Typography component='div' variant='text-sm' fontWeight='500' color='#1F2937'>Rp 1.048.000</Typography>
-                  </Grid>
-                  <Grid item xs={2}>
-                    <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>Total Income Tax</Typography>
-                    <Typography component='div' variant='text-sm' fontWeight='500' color='#1F2937'>Rp 474.280</Typography>
-                  </Grid>
-                  <Grid item xs={2}>
-                    <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>Total Gross After Tax</Typography>
-                    <Typography component='div' variant='text-sm' fontWeight='500' color='#1F2937'>Rp 19.773.000</Typography>
-                  </Grid>
-                  <Grid item xs={2}>
-                    <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>Total Non-Taxable Adjustment(s)</Typography>
-                    <Typography component='div' variant='text-sm' fontWeight='500' color='#1F2937'>Rp 50.000</Typography>
-                  </Grid>
-                  <Grid item xs={2}>
-                    <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>Total Net Payroll</Typography>
-                    <Typography component='div' variant='text-sm' fontWeight='500' color='#1F2937'>Rp 19.823.000</Typography>
-                  </Grid>
+          <SimpleAccordion title='Operational Department'>
+            <ContentWrapper>
+              <Grid container spacing={2}>
+                <Grid item xs={2}>
+                  <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>Total Gross Payroll</Typography>
+                  <Typography component='div' variant='text-sm' fontWeight='500' color='#1F2937'>Rp. {numberFormat(netDetail?.gross)}</Typography>
                 </Grid>
-              </ContentWrapper>
-            }
-          >
+                <Grid item xs={2}>
+                  <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>Total Satutory Benefits</Typography>
+                  <Typography component='div' variant='text-sm' fontWeight='500' color='#1F2937'>Rp {numberFormat(netDetail?.statutory)}</Typography>
+                </Grid>
+                <Grid item xs={2}>
+                  <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>Total Tax</Typography>
+                  <Typography component='div' variant='text-sm' fontWeight='500' color='#1F2937'>Rp {numberFormat(netDetail?.tax)}</Typography>
+                </Grid>
+                <Grid item xs={2}>
+                  <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>Total Gross After Tax</Typography>
+                  <Typography component='div' variant='text-sm' fontWeight='500' color='#1F2937'>Rp {numberFormat(netDetail?.grossAfterTax)}</Typography>
+                </Grid>
+                <Grid item xs={2}>
+                  <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>Total Non-Taxable Deduction</Typography>
+                  <Typography component='div' variant='text-sm' fontWeight='500' color='#1F2937'>Rp {numberFormat(netDetail?.nonTaxableDeducation)}</Typography>
+                </Grid>
+                <Grid item xs={2}>
+                  <Typography component='div' variant='text-sm' fontWeight='500' color='#6B7280' sx={{ mb: '1rem' }}>Total Net Payroll</Typography>
+                  <Typography component='div' variant='text-sm' fontWeight='500' color='#1F2937'>Rp {numberFormat(netDetail?.net)}</Typography>
+                </Grid>
+              </Grid>
+            </ContentWrapper>
+
             <Table
-              count={data?.itemTotals}
+              count={netDetail?.net?.length}
               rowsPerPageOptions={[5, 10, 15]}
               rowsPerPage={rowsPerPage}
               page={page}
@@ -199,14 +213,14 @@ function DisbursementContent() {
               bodyChildren={
                 <>
                   {
-                    ifThenElse(typeof data?.items !== 'undefined', (
-                      ifThenElse(data?.items?.length === 0, (
+                    ifThenElse(typeof netDetail?.nets !== 'undefined', (
+                      ifThenElse(netDetail?.nets?.length === 0, (
                         <TableRow>
                           <TableCell colSpan={12} align='center'><Typography>Data not found</Typography></TableCell>
                         </TableRow>
                       ), (
-                        data?.items?.map((item, index) => (
-                          <DisbursementRow key={index} item={item} />
+                        netDetail?.nets?.map((item, index) => (
+                          <NetRow key={index} item={item} isPreview={isPreview}/>
                         ))
                       ))
                     ), (
@@ -222,7 +236,7 @@ function DisbursementContent() {
         </Box>
       </ContentWrapper>
 
-      <ContentWrapper>
+      {/* <ContentWrapper>
         <Box sx={{ width: '100%' }}>
           <SimpleAccordion
             title='Delivery Department'
@@ -310,7 +324,7 @@ function DisbursementContent() {
             />
           </SimpleAccordion>
         </Box>
-      </ContentWrapper>
+      </ContentWrapper> */}
     </>
   );
 }
