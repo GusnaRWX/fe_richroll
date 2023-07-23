@@ -1,4 +1,4 @@
-import { get, post, put, patch } from '@/utils/services';
+import { get, post, put, patch, del } from '@/utils/services';
 import { Payroll } from '@/types/payroll';
 
 export const getPayroll = (payload: Payroll.GetParams) => {
@@ -14,6 +14,10 @@ export const getPayrollCompleted = (payload: Payroll.GetParamsCompleted) => {
 
 export const postPayroll = (payload) => {
   return post(`payrolls`, payload.data as Payroll.PostPayrollType);
+};
+
+export const deletePayroll = (payload) => {
+  return del(`payrolls/${payload}`);
 };
 
 export const putPayrollWorkflow = (payload) => {

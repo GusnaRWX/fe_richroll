@@ -21,6 +21,7 @@ import {
   getNetPayroll,
   postNetPayroll,
   patchNetPayrollFinal,
+  deletePayroll
 } from '../saga-actions/payroll/payrollActions';
 import { call, put, takeEvery, delay } from 'redux-saga/effects';
 import {
@@ -86,7 +87,10 @@ import {
   postNetPayrollSuccess,
   patchNetPayrollFinalFailed,
   patchNetPayrollFinalRequested,
-  patchNetPayrollFinalSuccess
+  patchNetPayrollFinalSuccess,
+  deletePayrollFailed,
+  deletePayrollRequested,
+  deletePayrollSuccess
 } from '@/store/reducers/slice/payroll/payrollSlice';
 import { setResponserMessage } from '@/store/reducers/slice/responserSlice';
 import { Services } from '@/types/axios';
@@ -170,6 +174,35 @@ function* fetchPostPayroll(action: AnyAction) {
     if (err instanceof AxiosError) {
       const errorMessage = err?.response?.data as Services.ErrorResponse;
       yield put({ type: postPayrollFailed.toString() });
+      yield delay(2000, true);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message
+        }
+      });
+    }
+  }
+}
+
+function* fetchDeletePayroll(action: AnyAction) {
+  try {
+    const res: AxiosResponse = yield call(deletePayroll, action?.payload);
+    if (res.data.code === 200 || res.data.code === 201) {
+      yield put({ type: deletePayrollSuccess.toString() });
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: res?.data?.code,
+          message: res?.data?.message
+        }
+      });
+    }
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      yield put({ type: deletePayrollFailed.toString() });
       yield delay(2000, true);
       yield put({
         type: setResponserMessage.toString(),
@@ -750,6 +783,7 @@ function* payrollSaga() {
   yield takeEvery(getNetPayrollRequested.toString(), fetchGetNetPayroll);
   yield takeEvery(postNetPayrollRequested.toString(), fetchPostNetPayroll);
   yield takeEvery(patchNetPayrollFinalRequested.toString(), fetchPatchNetPayrollFinal);
+  yield takeEvery(deletePayrollRequested.toString(), fetchDeletePayroll);
 }
 
 export default payrollSaga;

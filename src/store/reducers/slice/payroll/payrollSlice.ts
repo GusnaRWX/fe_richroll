@@ -326,6 +326,15 @@ export const payrollSlice = createSlice({
     },
     patchNetPayrollFinalFailed: (state) => {
       state.isLoading = false;
+    },
+    deletePayrollRequested: (state) => {
+      state.isLoading = true;
+    },
+    deletePayrollSuccess: (state) => {
+      state.isLoading = false;
+    },
+    deletePayrollFailed: (state) => {
+      state.isLoading = false;
     }
   },
   extraReducers: {
@@ -401,7 +410,10 @@ export const {
   postNetPayrollSuccess,
   patchNetPayrollFinalFailed,
   patchNetPayrollFinalRequested,
-  patchNetPayrollFinalSuccess
+  patchNetPayrollFinalSuccess,
+  deletePayrollFailed,
+  deletePayrollRequested,
+  deletePayrollSuccess
 } = payrollSlice.actions;
 
 export default payrollSlice.reducer;

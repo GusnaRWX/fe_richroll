@@ -22,7 +22,7 @@ import { useRouter } from 'next/router';
 import { ConfirmationModal } from '@/components/_shared/common';
 import EmptyState from '../_shared/common/EmptyState';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
-import { getPayrollRequested } from '@/store/reducers/slice/payroll/payrollSlice';
+import { getPayrollRequested, deletePayrollRequested } from '@/store/reducers/slice/payroll/payrollSlice';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
@@ -84,7 +84,7 @@ function PayrollTable({
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
   const [hydrated, setHaydrated] = useState(false);
-  const [deleteConfirmation, setDeleteConfirmation] = useState(false);
+  const [deleteConfirmation, setDeleteConfirmation] = useState({id: 0, open: false});
   const companyData = getCompanyData();
   const { responser } = useAppSelectors((state) => state);
   const router = useRouter();
@@ -111,6 +111,21 @@ function PayrollTable({
     const isAsc = compareCheck(sort === headId, direction === 'asc');
     setDirection(ifThenElse(isAsc, 'desc', 'asc'));
     setSort(headId);
+  };
+
+  const deletePayroll = (Id: string | number) => {
+    dispatch({
+      type: deletePayrollRequested.toString(),
+      payload: Id
+    });
+  };
+
+  const handleDeleteOpen = (id) => {
+    setDeleteConfirmation({ id: id, open: true });
+  };
+
+  const handleDeleteClose = () => {
+    setDeleteConfirmation({ id: 0, open: false });
   };
 
   useEffect(() => {
@@ -234,7 +249,7 @@ function PayrollTable({
                               />
                               <IconButton
                                 parentColor='#FEE2E2'
-                                onClick={() => setDeleteConfirmation(true)}
+                                onClick={() => handleDeleteOpen(item?.id)}
                                 icons={
                                   <BsTrashFill fontSize={20} color='#EF4444' />
                                 }
@@ -253,7 +268,7 @@ function PayrollTable({
                               />
                               <IconButton
                                 parentColor='#FEE2E2'
-                                onClick={() => setDeleteConfirmation(true)}
+                                onClick={() => console.log('here')}
                                 icons={
 
                                   <BsTrashFill fontSize={20} color='#EF4444' />
@@ -271,7 +286,7 @@ function PayrollTable({
                               />
                               <IconButton
                                 parentColor='#FEE2E2'
-                                onClick={() => setDeleteConfirmation(true)}
+                                onClick={() => handleDeleteOpen(item?.id)}
                                 icons={
                                   <BsTrashFill fontSize={20} color='#EF4444' />
                                 }
@@ -306,13 +321,13 @@ function PayrollTable({
         }
       />
       <ConfirmationModal
-        open={deleteConfirmation}
-        handleClose={() => setDeleteConfirmation(false)}
+        open={deleteConfirmation?.open}
+        handleClose={handleDeleteClose}
         title='Delete Payroll from Payroll Operation?'
         content='You are about to delete this payroll report. This action cannot be undone.'
         withCallback
         noChange={true}
-        callback={() => setDeleteConfirmation(false)}
+        callback={() => deletePayroll(deleteConfirmation?.id)}
       />
     </>
   );
