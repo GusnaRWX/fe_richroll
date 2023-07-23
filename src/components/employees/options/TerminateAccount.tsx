@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { Typography } from '@mui/material';
 import { Card, Text, CustomModal } from '@/components/_shared/common';
 import { Textarea, Button } from '@/components/_shared/form';
 import { BsTrashFill } from 'react-icons/bs';
-import { Alert, Box } from '@mui/material';
+import { Alert, Box, Typography } from '@mui/material';
 import { useAppDispatch } from '@/hooks/index';
 import { postTerminateEmployeeRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
 import InfoRoundedIcon from '@mui/icons-material/InfoRounded';

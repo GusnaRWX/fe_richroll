@@ -44,8 +44,8 @@ const headerItems = [
   { id: 'date', label: 'Date' },
   { id: 'id', label: 'Employee ID' },
   { id: 'name', label: 'Employee Name' },
-  { id: 'clockIn', label: 'Clock In' },
-  { id: 'clockOut', label: 'Clock Out' },
+  { id: 'clockIn', label: 'Check In' },
+  { id: 'clockOut', label: 'Check Out' },
   { id: 'count', label: 'Count' },
   { id: 'action', label: '' },
 ];

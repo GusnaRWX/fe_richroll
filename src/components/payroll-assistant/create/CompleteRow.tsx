@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   TableCell,
   TableRow,
@@ -8,6 +8,9 @@ import { IconButton } from '@/components/_shared/form';
 import { Image as ImageType } from '@/utils/assetsConstant';
 import styled from '@emotion/styled';
 import { BsFillEyeFill } from 'react-icons/bs';
+import DisbursementEmployeeDetail from './DisbursementEmployeeDetail';
+import { numberFormat } from '@/utils/format';
+import { Payroll } from '@/types/payroll';
 
 const ButtonWrapper = styled.div`
  display: flex;
@@ -25,8 +28,21 @@ const NameWrapper = styled.div`
  margin: 0;
 `;
 
-function CompleteRow (att) {
+function CompleteRow(att) {
   const { item } = att;
+  const [selectedEmployee, setSelectedEmployee] = useState<Payroll.DisbursementsData | object>({});
+  const [openDetail, setOpenDetail] = useState(false);
+
+  const handleClose = () => {
+    setOpenDetail(false);
+    setSelectedEmployee({});
+  };
+
+
+  const handleOpen = (item) => {
+    setOpenDetail(true);
+    setSelectedEmployee(item);
+  };
 
   return (
     <React.Fragment>
@@ -34,31 +50,40 @@ function CompleteRow (att) {
         <TableCell>
           <NameWrapper>
             <Avatar
-              src={ImageType.AVATAR_PLACEHOLDER}
+              src={item?.employee?.picture === null ? ImageType.AVATAR_PLACEHOLDER : item?.employee?.picture}
               alt={item.name}
               sx={{
                 width: 24, height: 24
               }}
             />
-            &nbsp;{item.name}
+            &nbsp;{item?.employee?.name}
           </NameWrapper>
         </TableCell>
-        <TableCell>{item.attendance}</TableCell>
-        <TableCell>{item.absent}</TableCell>
-        <TableCell>{item.paidLeave}</TableCell>
-        <TableCell>{item.unpaidLeave}</TableCell>
-        <TableCell>{item.nonTax}</TableCell>
+        <TableCell>Rp {numberFormat(item?.net)}</TableCell>
+        <TableCell>Rp {numberFormat(item?.taxIncome)}</TableCell>
+        <TableCell>Rp {numberFormat(item?.statutory)}</TableCell>
+        <TableCell>Rp {numberFormat(item?.contribution)}</TableCell>
+        <TableCell>Rp {numberFormat(item?.disbursement)}</TableCell>
         <TableCell>
           <ButtonWrapper>
             <IconButton
               parentColor='#E9EFFF'
               icons={
-                <BsFillEyeFill fontSize={20} color='#223567'/>
+                <BsFillEyeFill
+                  fontSize={20}
+                  color='#223567'
+                  onClick={() => { handleOpen(item); }}
+                />
               }
             />
           </ButtonWrapper>
         </TableCell>
       </TableRow>
+      <DisbursementEmployeeDetail
+        open={openDetail}
+        handleClose={handleClose}
+        selectedEmployee={selectedEmployee as Payroll.DisbursementsData}
+      />
     </React.Fragment>
   );
 }

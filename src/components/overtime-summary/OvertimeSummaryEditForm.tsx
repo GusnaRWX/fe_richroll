@@ -35,7 +35,7 @@ const NameWrapper = styled.div`
 interface EditProps {
   editOpen: boolean;
   handleEditClose: () => void;
-  callback: (_data: AttendanceLeave.putOvertime) => void;
+  callback: (_data: AttendanceLeave.PutOvertime) => void;
   item: AttendanceLeave.OvertimeType | undefined;
 }
 
@@ -47,7 +47,7 @@ function OvertimeSummaryEditForm({editOpen, handleEditClose, callback, item}: Ed
       start: '',
       duration: '',
       multiplier: ''
-    } as AttendanceLeave.putOvertime,
+    } as AttendanceLeave.PutOvertime,
     onSubmit: (values) => {
       callback(values);
     }
@@ -89,7 +89,7 @@ function OvertimeSummaryEditForm({editOpen, handleEditClose, callback, item}: Ed
         />
         <NameWrapper>
           <Typography fontSize='18px'>{item?.employee?.name}</Typography>
-          <Typography fontSize='14px'>{item?.employee?.department || '-'}</Typography>
+          <Typography fontSize='14px'>{item?.employee?.department === null ? '-' : item?.employee?.department?.name}</Typography>
         </NameWrapper>
       </AvatarWrapper>
       <Grid container mb='1rem' spacing={2}>

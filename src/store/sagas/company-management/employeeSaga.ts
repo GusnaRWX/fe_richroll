@@ -214,16 +214,16 @@ function* fetchPostEmergency(action: AnyAction) {
     const payload = {
       employeeID: action?.payload?.employeeID,
       primary: {
-        name: action?.payload?.data?.fullNamePrimary,
+        name: String(action?.payload?.data?.fullNamePrimary),
         relationship: +action?.payload?.data.relationPrimary,
-        phoneNumberPrefix: action?.payload.data.phoneNumberPrefixPrimary,
-        phoneNumber: action?.payload.data.phoneNumberPrimary
+        phoneNumberPrefix: String(action?.payload.data.phoneNumberPrefixPrimary),
+        phoneNumber: String(action?.payload.data.phoneNumberPrimary)
       },
       secondary: {
-        name: action?.payload?.data?.fullNameSecondary,
+        name: String(action?.payload?.data?.fullNameSecondary),
         relationship: +action?.payload?.data.relationSecondary,
-        phoneNumberPrefix: action?.payload.data.phoneNumberPrefixSecondary,
-        phoneNumber: action?.payload.data.phoneNumberSecondary
+        phoneNumberPrefix: String(action?.payload.data.phoneNumberPrefixSecondary),
+        phoneNumber: String(action?.payload.data.phoneNumberSecondary)
       }
     };
     let emergencyPayload = {};
@@ -609,7 +609,7 @@ function* fetchPatchEmergencyContact(action: AnyAction) {
         phoneNumber: action?.payload?.emergencyContactPatch?.emergency?.phoneNumberPrimary
       },
       secondary: {
-        id: action?.payload?.emergencyContactPatch?.emergency?.secondaryId,
+        // id: action?.payload?.emergencyContactPatch?.emergency?.secondaryId ?? '',
         name: action?.payload?.emergencyContactPatch?.emergency?.fullNameSecondary,
         relationship: +action?.payload?.emergencyContactPatch?.emergency?.relationSecondary,
         phoneNumberPrefix: action?.payload?.emergencyContactPatch?.emergency?.phoneNumberPrefixSecondary,
@@ -629,7 +629,12 @@ function* fetchPatchEmergencyContact(action: AnyAction) {
         ...emergencyPayload,
         employeeID: payload.employeeID,
         primary: payload.primary,
-        secondary: payload.secondary
+        secondary: {
+          ...payload.secondary,
+          ...(action?.payload?.emergencyContactPatch?.emergency?.secondaryId
+            ? { id: action?.payload?.emergencyContactPatch?.emergency?.secondaryId }
+            : {}),
+        }
       };
     }
 

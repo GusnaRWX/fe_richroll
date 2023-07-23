@@ -18,10 +18,11 @@ import { deleteCompensationRequested, getTableRequested } from '@/store/reducers
 import { compareCheck, ifThenElse, getCompanyData } from '@/utils/helper';
 import dayjs from 'dayjs';
 import { visuallyHidden } from '@mui/utils';
-import DetailModal from './modal';
+import DetailModal from './DetailModal';
 import DetailCnb from './detail';
 import ConfirmationModal from '../_shared/common/ConfirmationModal';
 import EmptyState from '../_shared/common/EmptyState';
+import { useTranslation } from 'react-i18next';
 
 const ButtonWrapper = styled.div`
  display: flex;
@@ -32,12 +33,11 @@ const ButtonWrapper = styled.div`
 `;
 
 const headerItems = [
-  { id: 'name', label: 'C&B Profile Name' },
-  { id: 'base', label: 'Base Compensation' },
-  { id: 'supplementaries', label: 'Supplementary Compensation' },
-  { id: 'createdAt', label: 'Date Created' },
-  { id: 'updatedAt', label: 'Last Updated' },
-  { id: 'action', label: '' },
+  { id: 'name', label: 'C&B Profile Name', translation: 'cnb_profile_name' },
+  { id: 'base', label: 'Base Compensation', translation: 'base_compensation' },
+  { id: 'supplementaries', label: 'Supplementary Compensation', translation: 'supplementary_compensation' },
+  { id: 'createdAt', label: 'Date Created', translation: 'date_created' },
+  { id: 'updatedAt', label: 'Last Updated', translation: 'last_update' },
 ];
 
 type Order = 'asc' | 'desc'
@@ -56,6 +56,7 @@ function EnhancedTable() {
   const companyData = getCompanyData();
   const [detailOpen, setDetailOpen] = useState({ id: 0, open: false });
   const [deleteConfirmation, setDeleteConfirmation] = useState({ id: 0, open: false });
+  const { t } = useTranslation();
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
@@ -69,7 +70,7 @@ function EnhancedTable() {
     }
   };
   const handleRequestSort = (event: React.MouseEvent<unknown>, headId: string) => {
-    if (headId !== 'base' && headId !== 'supplementaries') {
+    if (compareCheck(headId !== 'base', headId !== 'supplementaries')) {
       const isAsc = compareCheck(sort === headId, direction === 'asc');
       setDirection(ifThenElse(isAsc, 'desc', 'asc'));
       setSort(headId);
@@ -156,19 +157,20 @@ function EnhancedTable() {
                 <TableCell key={item.id} sortDirection={ifThenElse(sort === item.id, direction, false)}>
                   <TableSortLabel
                     active={sort === item.id}
-                    direction={sort === item.id ? direction : 'asc'}
+                    direction={ifThenElse(sort === item.id, direction, 'asc')}
                     onClick={(e) => handleRequestSort(e, item.id)}
                   >
-                    {item.label}
-                    {sort === item.id ? (
+                    {t(`compensation_and_benefits.table.table_cols_item.${item.translation}`)}
+                    {ifThenElse(sort === item.id, (
                       <Box component='span' sx={visuallyHidden}>
                         {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
                       </Box>
-                    ) : null}
+                    ), null)}
                   </TableSortLabel>
                 </TableCell>
               ))
             }
+            <TableCell />
           </TableRow>
         }
         bodyChildren={
@@ -188,10 +190,11 @@ function EnhancedTable() {
                       <TableCell>{item?.base?.component.name}</TableCell>
                       <TableCell>
                         {
-                          item?.supplementaries.length === 0 ? '-' :
+                          ifThenElse(item?.supplementaries.length === 0, '-',
                             item?.supplementaries.map((supp) => (
-                              <p key={supp}>{supp?.component?.name} {item?.supplementaries.length > 1 ? ', ' : ''}</p>
+                              <p key={supp}>{supp?.component?.name} {ifThenElse(item?.supplementaries.length > 1, ', ', '')}</p>
                             ))
+                          )
                         }
                       </TableCell>
                       <TableCell>{dayjs(item.createdAt).format('YYYY-MM-DD H:m:s')}</TableCell>
@@ -233,8 +236,8 @@ function EnhancedTable() {
             <ConfirmationModal
               open={deleteConfirmation.open}
               handleClose={handleDeleteClose}
-              title='Are you sure you want to delete this record?'
-              content='Any unsaved changes will be discarded. This cannot be undone'
+              title={t('compensation_and_benefits.popup.delete.title')}
+              content={t('compensation_and_benefits.popup.delete.desc')}
               withCallback
               noChange={true}
               callback={() => deleteCnb(deleteConfirmation.id)}
@@ -242,7 +245,7 @@ function EnhancedTable() {
             <DetailModal
               open={detailOpen.open}
               handleClose={() => setDetailOpen({ id: 0, open: false })}
-              title='C&B Profile Detail'
+              title={t('compensation_and_benefits.popup.detail.title')}
               content={
                 <DetailCnb id={detailOpen.id} open={detailOpen.open} />
               }

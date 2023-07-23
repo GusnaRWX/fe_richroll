@@ -27,7 +27,7 @@ export const loginSlice = createSlice({
         { name: 'accessToken', value: action.payload.token },
         { name: 'refreshToken', value: action.payload.refreshToken }]);
       if (!getStorage('site')) setStorages([{ name: 'site', value: 'Indonesia' }]);
-      if (!getStorage('timezone')) setStorages([{ name: 'timezone', value: 'Asia/Indonesia' }]);
+      if (!getStorage('timezone')) setStorages([{ name: 'timezone', value: 'Asia/Jakarta' }]);
       state.isAuth = true;
       state.isLoading = false;
     },

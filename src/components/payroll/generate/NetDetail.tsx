@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Typography,
   Grid,
@@ -7,9 +7,12 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useRouter } from 'next/router';
-import { IconButton } from '@/components/_shared/form';
+import { IconButton, CheckBox } from '@/components/_shared/form';
 import { ArrowBack } from '@mui/icons-material';
-import DisbursementContent from '@/components/payroll-assistant/create/DisbursementContent';
+//import DisbursementContent from '@/components/payroll-assistant/create/DisbursementContent';
+import NetContent from '@/components/payroll-assistant/create/NetContent';
+import { useAppDispatch } from '@/hooks/index';
+import { postPayrollDisbursementIdRequested } from '@/store/reducers/slice/payroll/payrollSlice';
 
 const ButtonWrapper = styled(Box)(({
   display: 'flex',
@@ -29,8 +32,31 @@ const BackWrapper = styled(Box)(({
   marginTop: '.1rem'
 }));
 
+const SeperateWrapper = styled(Box)({
+  backgroundColor: '#FFFFFF',
+  borderRadius: '8px',
+  padding: '12px',
+  boxShadow: '0px 1px 3px 0px #0000001A',
+  marginBottom: '1rem'
+});
+
 function NetDetail() {
   const router = useRouter();
+  const dispatch = useAppDispatch();
+  const [isSeperate, setIsSeperate] = useState(false);
+
+  const handleGenerateDisbursementReciept = () => {
+    dispatch({
+      type: postPayrollDisbursementIdRequested.toString(),
+      payload: {
+        id: router.query.id,
+        body: {
+          isSeparate: isSeperate
+        }
+      }
+    });
+  };
+
   return (
     <>
       <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
@@ -41,7 +67,7 @@ function NetDetail() {
               icons={
                 <ArrowBack sx={{ color: '#FFFFFF' }} />
               }
-              onClick={() => {router.push('/payroll-disbursement/payroll');}}
+              onClick={() => { router.push('/payroll-disbursement/payroll'); }}
             />
             <Box>
               <Typography variant='h6' color='#4B5563'><b>Generate Net Payroll 280323</b></Typography>
@@ -55,13 +81,23 @@ function NetDetail() {
               variant='contained'
               size='small'
               color='primary'
-              onClick={() => {router.push('/payroll-disbursement/disbursement/generate');}}
+              onClick={handleGenerateDisbursementReciept}
             >Generate Disbursement Receipt</MuiButton>
           </ButtonWrapper>
         </Grid>
       </Grid>
-
-      <DisbursementContent />
+      <SeperateWrapper>
+        <Grid container justifyContent='flex-end'>
+          <Grid item>
+            <CheckBox
+              customLabel='Separate Non-Taxable Transaction'
+              onChange={(e) => { setIsSeperate(e.target.checked); }}
+            />
+          </Grid>
+        </Grid>
+      </SeperateWrapper>
+      <NetContent isPreview={true} />
+      {/* <DisbursementContent /> */}
     </>
   );
 }

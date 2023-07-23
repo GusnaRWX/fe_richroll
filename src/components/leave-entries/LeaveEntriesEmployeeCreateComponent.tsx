@@ -70,6 +70,7 @@ const LeaveEntriesEmployeeCreateComponent = ({
       setOpenCreateModal(false);
       setOpenModal(false);
       setSelectedEmployee(null);
+      setIsHalfDay(false);
       resetForm();
     }
   });

@@ -8,7 +8,8 @@ import {
   Button as MuiButton,
   TableCell,
   TableRow,
-  TableSortLabel
+  TableSortLabel,
+  Checkbox
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useRouter } from 'next/router';
@@ -18,6 +19,11 @@ import { Image as ImageType } from '@/utils/assetsConstant';
 import { ArrowBack } from '@mui/icons-material';
 import { compareCheck, ifThenElse } from '@/utils/helper';
 import { visuallyHidden } from '@mui/utils';
+import { useAppDispatch, useAppSelectors } from '@/hooks/index';
+// import { getGenerateGrossPayrollRequested } from '@/store/reducers/slice/payroll/payrollSlice';
+import EmptyState from '@/components/_shared/common/EmptyState';
+import { useTranslation } from 'react-i18next';
+import { getGenerateGrossesEmployeeRequested, putGenerateGrossesEmployeeRequested } from '@/store/reducers/slice/payroll/payrollSlice';
 
 const ButtonWrapper = styled(Box)(({
   display: 'flex',
@@ -27,6 +33,14 @@ const ButtonWrapper = styled(Box)(({
   gap: '1rem',
   marginTop: '.1rem'
 }));
+
+const CheckboxWrapper = styled(Box)({
+  display: 'flex',
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'flex-start',
+  gap: '.5rem'
+});
 
 const BackWrapper = styled(Box)(({
   display: 'flex',
@@ -50,87 +64,92 @@ const ContentWrapper = styled(Card)(({
 }));
 
 const headerItems = [
-  { id: 'user.name', label: 'Employee Name' },
-  { id: 'attendance', label: 'Attendance' },
-  { id: 'absent', label: 'Absent' },
-  { id: 'paidLeave', label: 'Paid Leave' },
-  { id: 'unpaidLeave', label: 'Unpaid Leave' },
-  { id: 'overtime', label: 'Overtime Hours' },
-  { id: 'total', label: 'Total Hours' },
-  { id: 'average', label: 'Average hours work/day' },
+  { id: 'action', label: '', translation: '' },
+  { id: 'user.name', label: 'Employee Name', translation: 'employee_name' },
+  { id: 'attendance', label: 'Attendance', translation: 'attendance' },
+  { id: 'absent', label: 'Absent', translation: 'absent' },
+  { id: 'paidLeave', label: 'Paid Leave', translation: 'paid_leave' },
+  { id: 'unpaidLeave', label: 'Unpaid Leave', translation: 'unpaid_leave' },
+  { id: 'overtime', label: 'Overtime Hours', translation: 'overtime_hours' },
+  { id: 'total', label: 'Total Hours', translation: 'total_hours' },
+  { id: 'average', label: 'Average hours work/day', translation: 'average_hours' },
 ];
 
 type Order = 'asc' | 'desc'
 
-const data = {
-  items: [
-    {
-      id: 1,
-      name: 'Budi Irawan',
-      attendance: '30 Days',
-      absent: '2 Days',
-      paidLeave: '3 Days',
-      unpaidLeave: '4 Days',
-      overtime: '8 Days',
-      totalHours: '175 Days',
-      averageHours: '30 Days',
-    },
-    {
-      id: 2,
-      name: 'Budi Irawan',
-      attendance: '30 Days',
-      absent: '2 Days',
-      paidLeave: '3 Days',
-      unpaidLeave: '4 Days',
-      overtime: '8 Days',
-      totalHours: '175 Days',
-      averageHours: '30 Days',
-    },
-    {
-      id: 3,
-      name: 'Budi Irawan',
-      attendance: '30 Days',
-      absent: '2 Days',
-      paidLeave: '3 Days',
-      unpaidLeave: '4 Days',
-      overtime: '8 Days',
-      totalHours: '175 Days',
-      averageHours: '30 Days',
-    },
-    {
-      id: 4,
-      name: 'Budi Irawan',
-      attendance: '30 Days',
-      absent: '2 Days',
-      paidLeave: '3 Days',
-      unpaidLeave: '4 Days',
-      overtime: '8 Days',
-      totalHours: '175 Days',
-      averageHours: '30 Days',
-    },
-    {
-      id: 5,
-      name: 'Budi Irawan',
-      attendance: '30 Days',
-      absent: '2 Days',
-      paidLeave: '3 Days',
-      unpaidLeave: '4 Days',
-      overtime: '8 Days',
-      totalHours: '175 Days',
-      averageHours: '30 Days',
-    },
-  ],
-  itemTotals: 5
-};
+//   items: [
+//     {
+//       id: 1,
+//       name: 'Budi Irawan',
+//       attendance: '30 Days',
+//       absent: '2 Days',
+//       paidLeave: '3 Days',
+//       unpaidLeave: '4 Days',
+//       overtime: '8 Days',
+//       totalHours: '175 Days',
+//       averageHours: '30 Days',
+//     },
+//     {
+//       id: 2,
+//       name: 'Budi Irawan',
+//       attendance: '30 Days',
+//       absent: '2 Days',
+//       paidLeave: '3 Days',
+//       unpaidLeave: '4 Days',
+//       overtime: '8 Days',
+//       totalHours: '175 Days',
+//       averageHours: '30 Days',
+//     },
+//     {
+//       id: 3,
+//       name: 'Budi Irawan',
+//       attendance: '30 Days',
+//       absent: '2 Days',
+//       paidLeave: '3 Days',
+//       unpaidLeave: '4 Days',
+//       overtime: '8 Days',
+//       totalHours: '175 Days',
+//       averageHours: '30 Days',
+//     },
+//     {
+//       id: 4,
+//       name: 'Budi Irawan',
+//       attendance: '30 Days',
+//       absent: '2 Days',
+//       paidLeave: '3 Days',
+//       unpaidLeave: '4 Days',
+//       overtime: '8 Days',
+//       totalHours: '175 Days',
+//       averageHours: '30 Days',
+//     },
+//     {
+//       id: 5,
+//       name: 'Budi Irawan',
+//       attendance: '30 Days',
+//       absent: '2 Days',
+//       paidLeave: '3 Days',
+//       unpaidLeave: '4 Days',
+//       overtime: '8 Days',
+//       totalHours: '175 Days',
+//       averageHours: '30 Days',
+//     },
+//   ],
+//   itemTotals: 5
+// };
 
 function GenerateGrossEmployee() {
   const router = useRouter();
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(1);
+  const { global, payroll } = useAppSelectors(state => state);
   // const [search, setSearch] = useState('');
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
   const [hydrated, setHaydrated] = useState(false);
+  const [selectedTemp, setSelectedTemp] = useState<any>([]);
+  const dispatch = useAppDispatch();
+  const { t } = useTranslation();
+  const tPath = 'payroll_and_disbursement.attendance_summary.generate_gross_payroll.';
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -141,15 +160,111 @@ function GenerateGrossEmployee() {
     // setPage(0);
   };
 
+  const onSelected = (item, e) => {
+    if (e.target.checked) {
+      const temp = [...selectedTemp, {
+        id: item.id, name: item.employee.name, user_id: item.employee.id, attendance: item.attendance, absent: item.absent,
+        paidLeave: item.paidLeave,
+        unpaidLeave: item.unpaidLeave,
+        overtime: item.overtime,
+        totalHours: item.totalHours,
+        averageHours: item.averageHours,
+      }];
+      setSelectedTemp(temp as any);
+    } else {
+      const temp = selectedTemp.filter(v => v['id'] !== item.id);
+      setSelectedTemp(temp);
+    }
+  };
+
+  const checkVal = (id) => {
+    return selectedTemp.some(v => v['id'] === id);
+  };
+
+  const onSelectedAll = (items, e) => {
+    const pageItemIds = items?.map(item => item.id);
+
+    if (e.target.checked) {
+      setSelectedTemp(prevSelectedTemp => {
+        const updatedSelectedTemp = [...prevSelectedTemp];
+
+        pageItemIds.forEach(itemId => {
+          if (!updatedSelectedTemp.some(item => item.id === itemId)) {
+            const pageItem = items.find(item => item.id === itemId);
+            if (pageItem) {
+              updatedSelectedTemp.push({
+                id: pageItem.id,
+                user_id: pageItem.employee.id,
+                name: pageItem.employee.name,
+                attendance: pageItem.attendance,
+                absent: pageItem.absent,
+                paidLeave: pageItem.paidLeave,
+                unpaidLeave: pageItem.unpaidLeave,
+                overtime: pageItem.overtime,
+                totalHours: pageItem.totalHours,
+                averageHours: pageItem.averageHours,
+              });
+            }
+          }
+        });
+
+        return updatedSelectedTemp;
+      });
+    } else {
+      setSelectedTemp(prevSelectedTemp =>
+        prevSelectedTemp.filter(selectedItem => !pageItemIds.includes(selectedItem.id))
+      );
+    }
+  };
+
+  console.log(selectedTemp);
+
+  const checkValAll = (items) => {
+    const checkedPerPage = selectedTemp?.filter(selectedItem =>
+      items?.some(item => item.id === selectedItem.id)
+    ).length;
+    const lengthPerPage = items?.length;
+
+    return checkedPerPage === lengthPerPage;
+  };
+
   const handleRequestSort = (event: React.MouseEvent<unknown>, headId: string) => {
     const isAsc = compareCheck(sort === headId, direction === 'asc');
     setDirection(ifThenElse(isAsc, 'desc', 'asc'));
     setSort(headId);
   };
 
+
+  const handlePutGenerate = () => {
+    dispatch({
+      type: putGenerateGrossesEmployeeRequested.toString(),
+      payload: {
+        id: router.query.id,
+        body: { employeeID: selectedTemp?.map(item => item.user_id) }
+      }
+    });
+  };
+
   useEffect(() => {
     setHaydrated(true);
   }, []);
+
+  useEffect(() => {
+    if (router.isReady) {
+      dispatch({
+        type: getGenerateGrossesEmployeeRequested.toString(),
+        payload: {
+          page: 1,
+          itemPerPage: rowsPerPage,
+          sort: sort,
+          direction: direction,
+          countryCode: global?.language,
+          id: router.query.id
+        }
+      });
+    }
+
+  }, [rowsPerPage, sort, direction, global?.language, router.query]);
 
   if (!hydrated) {
     return null;
@@ -167,7 +282,7 @@ function GenerateGrossEmployee() {
               onClick={() => { router.push('/payroll-disbursement/attendance'); }}
             />
             <Box>
-              <Typography variant='h6' color='#4B5563'><b>Generate Gross Payroll Report</b></Typography>
+              <Typography variant='h6' color='#4B5563'><b>{t(`${tPath}title`)}</b></Typography>
               <Typography variant='text-base' color='#4B5563'><b>Payroll 280123 — </b>1/03/2023 - 14/03/2023</Typography>
             </Box>
           </BackWrapper>
@@ -177,7 +292,7 @@ function GenerateGrossEmployee() {
       <ContentWrapper>
         <Box sx={{ width: '100%' }}>
           <Table
-            count={data?.itemTotals}
+            count={payroll?.grossesEmployee?.itemTotals}
             rowsPerPageOptions={[5, 10, 15]}
             rowsPerPage={rowsPerPage}
             page={page}
@@ -187,20 +302,26 @@ function GenerateGrossEmployee() {
               <TableRow>
                 {
                   headerItems.map((item) => (
-                    <TableCell key={item.id} sortDirection={ifThenElse(sort === item.id, direction, false)}>
-                      <TableSortLabel
-                        active={sort === item.id}
-                        direction={sort === item.id ? direction : 'asc'}
-                        onClick={(e) => handleRequestSort(e, item.id)}
-                      >
-                        {item.label}
-                        {sort === item.id ? (
-                          <Box component='span' sx={visuallyHidden}>
-                            {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
-                          </Box>
-                        ) : null}
-                      </TableSortLabel>
-                    </TableCell>
+                    item.id === 'action' ? (
+                      <TableCell key={item.id}>
+                        <Checkbox onChange={(e) => onSelectedAll(payroll?.grossesEmployee?.items?.slice(0, rowsPerPage), e)} checked={checkValAll(payroll?.grossesEmployee?.items?.slice(0, rowsPerPage))} />
+                      </TableCell>
+                    ) : (
+                      <TableCell key={item.id} sortDirection={ifThenElse(sort === item.id, direction, false)}>
+                        <TableSortLabel
+                          active={sort === item.id}
+                          direction={sort === item.id ? direction : 'asc'}
+                          onClick={(e) => handleRequestSort(e, item.id)}
+                        >
+                          {t(`${tPath}table.table_cols_item.${item.translation}`)}
+                          {sort === item.id ? (
+                            <Box component='span' sx={visuallyHidden}>
+                              {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
+                            </Box>
+                          ) : null}
+                        </TableSortLabel>
+                      </TableCell>
+                    )
                   ))
                 }
               </TableRow>
@@ -208,24 +329,31 @@ function GenerateGrossEmployee() {
             bodyChildren={
               <>
                 {
-                  ifThenElse(typeof data?.items !== 'undefined', (
-                    ifThenElse(data?.items?.length === 0, (
+                  ifThenElse(typeof payroll?.grossesEmployee?.items !== 'undefined', (
+                    ifThenElse(payroll?.grossesEmployee?.items?.length === 0, (
                       <TableRow>
-                        <TableCell colSpan={12} align='center'><Typography>Data not found</Typography></TableCell>
+                        <TableCell colSpan={12} align='center'>
+                          <EmptyState />
+                        </TableCell>
                       </TableRow>
                     ), (
-                      data?.items?.map((item, index) => (
+                      payroll?.grossesEmployee?.items?.map((item, index) => (
                         <TableRow key={index}>
+                          <TableCell>
+                            <CheckboxWrapper>
+                              <Checkbox onChange={(e) => onSelected(item, e)} checked={checkVal(item?.id)} />
+                            </CheckboxWrapper>
+                          </TableCell>
                           <TableCell>
                             <NameWrapper>
                               <Avatar
-                                src={ImageType.AVATAR_PLACEHOLDER}
-                                alt={item.name}
+                                src={item.employee.picture ? item.employee.picture : ImageType.AVATAR_PLACEHOLDER}
+                                alt={item.employee.name}
                                 sx={{
                                   width: 24, height: 24
                                 }}
                               />
-                              &nbsp;{item.name}
+                              &nbsp;{item.employee.name}
                             </NameWrapper>
                           </TableCell>
                           <TableCell>{item.attendance}</TableCell>
@@ -234,13 +362,15 @@ function GenerateGrossEmployee() {
                           <TableCell>{item.unpaidLeave}</TableCell>
                           <TableCell>{item.overtime}</TableCell>
                           <TableCell>{item.totalHours}</TableCell>
-                          <TableCell>{item.averageHours}</TableCell>
+                          <TableCell>{isNaN(item.averageHours) ? 0 : item.averageHours}</TableCell>
                         </TableRow>
                       ))
                     ))
                   ), (
                     <TableRow>
-                      <TableCell colSpan={12} align='center'><Typography>Data not found</Typography></TableCell>
+                      <TableCell colSpan={12} align='center'>
+                        <EmptyState />
+                      </TableCell>
                     </TableRow>
                   ))
                 }
@@ -256,14 +386,15 @@ function GenerateGrossEmployee() {
                   size='small'
                   color='primary'
                   onClick={() => { router.push('/payroll-disbursement/attendance'); }}
-                >Cancel</MuiButton>
+                >{t('button.cancel')}</MuiButton>
                 <MuiButton
                   variant='contained'
                   size='small'
                   color='primary'
-                  onClick={() => { router.push('/payroll-disbursement/payroll/generate-gross/detail'); }}
+                  // onClick={() => { router.push('/payroll-disbursement/payroll/generate-gross/detail'); }}
+                  onClick={handlePutGenerate}
                   sx={{ color: 'white' }}
-                >Confirm</MuiButton>
+                >{t('button.confirm')}</MuiButton>
               </ButtonWrapper>
             </Grid>
           </Grid>

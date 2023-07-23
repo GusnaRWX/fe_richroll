@@ -8,6 +8,7 @@ import {
 } from '@mui/material';
 import { Close } from '@mui/icons-material';
 import styled from '@emotion/styled';
+import { useTranslation } from 'react-i18next';
 
 const modalStyle = {
   position: 'absolute',
@@ -58,6 +59,8 @@ function DetailModal({
   title,
   content,
 }: ConfirmationModalProp) {
+  const { t } = useTranslation();
+
   return (
     <Modal
       open={open}
@@ -84,7 +87,7 @@ function DetailModal({
         </div>
         <ModalFooter>
           <MuiButton variant='outlined' size='small' onClick={handleClose}>
-            Close
+            {t('button.close')}
           </MuiButton>
         </ModalFooter>
       </Box>

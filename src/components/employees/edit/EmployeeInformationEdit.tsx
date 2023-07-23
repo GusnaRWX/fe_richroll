@@ -7,7 +7,8 @@ import {
   Autocomplete,
   TextField,
   Modal,
-  IconButton
+  IconButton,
+  Chip
 } from '@mui/material';
 import {
   Input,
@@ -36,7 +37,6 @@ import { AiOutlinePlus } from 'react-icons/ai';
 import { BsTrash3 } from 'react-icons/bs';
 import Webcam from 'react-webcam';
 import { CameraAlt } from '@mui/icons-material';
-import { Chip } from '@mui/material';
 import TerminateAccount from '../options/TerminateAccount';
 import { getListPositionRequested } from '@/store/reducers/slice/options/optionSlice';
 import { FiTrash2 } from 'react-icons/fi';
@@ -651,7 +651,7 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
         onClose={handleCancelCrop}
         image={images}
         setCropValue={handleSaveCropImage}
-        ratio={1 / 1}
+        ratio={1}
       />
       <Modal
         open={openCamera}

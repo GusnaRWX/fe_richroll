@@ -11,7 +11,6 @@ const LocalizationMenu = () => {
   const { i18n } = useTranslation();
   const dispatch = useAppDispatch();
   const { global } = useAppSelectors(state => state);
-  // console.log(global);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const isLanguageOpen = Boolean(anchorEl);
   const [hydrated, setHaydrated] = useState(false);

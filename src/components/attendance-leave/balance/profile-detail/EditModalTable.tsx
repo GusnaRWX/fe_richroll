@@ -14,6 +14,7 @@ import Table from '@/components/_shared/form/Table';
 import { visuallyHidden } from '@mui/utils';
 import { styled } from '@mui/material/styles';
 import { Formik, FieldArray } from 'formik';
+import { ifThenElse, compareCheck } from '@/utils/helper';
 import * as Yup from 'yup';
 
 const headerItems = [
@@ -23,13 +24,9 @@ const headerItems = [
   { id: 'current', label: '' },
 ];
 
-interface EditModalTableProps {
-  tabValue: number;
-}
-
 type Order = 'asc' | 'desc';
 
-function EditModalTable({ tabValue, submitRef }) {
+function EditModalTable({ submitRef,tabValue }) {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(1);
   const [direction, setDirection] = useState<Order>('desc');
@@ -114,8 +111,8 @@ function EditModalTable({ tabValue, submitRef }) {
     event: React.MouseEvent<unknown>,
     headId: string
   ) => {
-    const isAsc = sort === headId && direction === 'asc';
-    setDirection(isAsc ? 'desc' : 'asc');
+    const isAsc = compareCheck(sort === headId, direction === 'asc');
+    setDirection(ifThenElse(isAsc, 'desc', 'asc'));
     setSort(headId);
   };
 
@@ -173,21 +170,19 @@ function EditModalTable({ tabValue, submitRef }) {
                         {headerItems.map((item) => (
                           <TableCell
                             key={item.id}
-                            sortDirection={sort === item.id ? direction : false}
+                            sortDirection={ifThenElse(sort === item.id, direction, false)}
                           >
                             <TableSortLabel
                               active={sort === item.id}
-                              direction={sort === item.id ? direction : 'asc'}
+                              direction={ifThenElse(sort === item.id, direction, 'asc')}
                               onClick={(e) => handleRequestSort(e, item.id)}
                             >
                               {item.label}
-                              {sort === item.id ? (
+                              {ifThenElse(sort === item.id, (
                                 <Box component='span' sx={visuallyHidden}>
-                                  {direction === 'asc'
-                                    ? 'sorted descending'
-                                    : 'sorted ascending'}
+                                  {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
                                 </Box>
-                              ) : null}
+                              ), null)}
                             </TableSortLabel>
                           </TableCell>
                         ))}
@@ -195,14 +190,14 @@ function EditModalTable({ tabValue, submitRef }) {
                     }
                     bodyChildren={
                       <>
-                        {typeof data?.items !== 'undefined' ? (
-                          data?.items.length === 0 ? (
+                        {ifThenElse(typeof data?.items !== 'undefined', (
+                          ifThenElse(data?.items.length === 0, (
                             <TableRow>
                               <TableCell colSpan={12} align='center'>
                                 <Typography>Data not found</Typography>
                               </TableCell>
                             </TableRow>
-                          ) : (
+                          ), (
                             formik.values.days.map((item, index) => (
                               <TableRow key={index}>
                                 <TableCell>{item.no}</TableCell>
@@ -247,14 +242,14 @@ function EditModalTable({ tabValue, submitRef }) {
                                 </TableCell>
                               </TableRow>
                             ))
-                          )
-                        ) : (
+                          ))
+                        ), (
                           <TableRow>
                             <TableCell colSpan={12} align='center'>
                               <Typography>Data not found</Typography>
                             </TableCell>
                           </TableRow>
-                        )}
+                        ))}
                         <button
                           hidden
                           onClick={() => formik.submitForm()}

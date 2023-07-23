@@ -10,6 +10,8 @@ import { useRouter } from 'next/router';
 import { IconButton } from '@/components/_shared/form';
 import { ArrowBack } from '@mui/icons-material';
 import GrossContent from '@/components/payroll-assistant/create/GrossContent';
+import { useAppDispatch } from '@/hooks/index';
+import { postNetPayrollRequested } from '@/store/reducers/slice/payroll/payrollSlice';
 
 const ButtonWrapper = styled(Box)(({
   display: 'flex',
@@ -29,8 +31,20 @@ const BackWrapper = styled(Box)(({
   marginTop: '.1rem'
 }));
 
-function GenerateGrossComponent() {
+function GrossDetail() {
   const router = useRouter();
+  const dispatch = useAppDispatch();
+  const handleGenerateNet = () => {
+    dispatch({
+      type: postNetPayrollRequested.toString(),
+      payload: {
+        id: router.query.id,
+        data: {
+          assistantID: ''
+        }
+      }
+    });
+  };
   return (
     <>
       <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
@@ -55,7 +69,7 @@ function GenerateGrossComponent() {
               variant='contained'
               size='small'
               color='primary'
-              onClick={() => {router.push('/payroll-disbursement/payroll/generate-net');}}
+              onClick={() => {handleGenerateNet();}}
             >Generate Net Payroll Report</MuiButton>
           </ButtonWrapper>
         </Grid>
@@ -66,4 +80,4 @@ function GenerateGrossComponent() {
   );
 }
 
-export default GenerateGrossComponent;
+export default GrossDetail;

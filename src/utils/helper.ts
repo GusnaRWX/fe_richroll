@@ -274,6 +274,16 @@ export const ifEmptyReplace = (condition, replace) => {
   }
 };
 
+/**
+ * Generate save random value
+ *
+ */
+export const generateRandom = () => {
+  const crypto = window.crypto || window.Crypto;
+  const array = new Uint32Array(1);
+  return crypto.getRandomValues(array)[0];
+};
+
 export const getGender = (id) => {
   switch (id) {
     case 1:
@@ -360,25 +370,21 @@ export const getPaymentType = (id, arrData) => {
         title: 'Amount',
         withPercentage: false
       };
-      break;
     case 1:
       return {
         title: 'Rate',
         withPercentage: false
       };
-      break;
     case 2:
       return {
         title: 'Expected Amount (currency)',
         withPercentage: true
       };
-      break;
     case 3:
       return {
         title: 'Expected Rate (pcs)',
         withPercentage: true
       };
-      break;
     default:
       return {
         title: 'Amount',
@@ -398,7 +404,6 @@ export const dynamicPayloadBaseCnb = (arrData, id, value) => {
         amount: +value.rateOrAmount,
         amountType: 0,
       };
-      break;
     case 1:
       return {
         componentID: value.compensationComponentId,
@@ -407,7 +412,6 @@ export const dynamicPayloadBaseCnb = (arrData, id, value) => {
         rate: +value.rateOrAmount,
         rateType: 0,
       };
-      break;
     case 2:
       return {
         componentID: value.compensationComponentId,
@@ -418,7 +422,6 @@ export const dynamicPayloadBaseCnb = (arrData, id, value) => {
         rate: +value.percentage,
         rateType: 1,
       };
-      break;
     case 3:
       return {
         componentID: value.compensationComponentId,
@@ -429,7 +432,6 @@ export const dynamicPayloadBaseCnb = (arrData, id, value) => {
         rate: +value.percentage,
         rateType: 0,
       };
-      break;
   }
 };
 

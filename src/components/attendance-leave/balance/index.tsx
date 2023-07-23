@@ -13,7 +13,7 @@ import { Input } from '@/components/_shared/form';
 import { Search } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
-import LeaveBalanceTable from './table';
+import LeaveBalanceTable from './LeaveBalanceTable';
 
 interface TabPanelProps {
   children?: React.ReactNode;

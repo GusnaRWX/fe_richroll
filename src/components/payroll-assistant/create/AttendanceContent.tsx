@@ -18,8 +18,10 @@ import { FiCalendar } from 'react-icons/fi';
 import styled from '@emotion/styled';
 import { compareCheck, ifThenElse } from '@/utils/helper';
 import { visuallyHidden } from '@mui/utils';
-import AddEmployeesModal from './AttendanceModal';
+import ListEmployeeModal from './ListEmployeeModal';
 import AttendanceCalendarModal from './AttendanceCalendar';
+import { useAppSelectors, useAppDispatch } from '@/hooks/index';
+import { getSelectedEmployeeRequested, getDetailAttendanceRequested } from '@/store/reducers/slice/payroll/payrollSlice';
 
 const ContentWrapper = styled(Card)(({
   padding: '1rem',
@@ -56,71 +58,21 @@ const headerItems = [
 
 type Order = 'asc' | 'desc'
 
+interface SelectedProp {
+  id: string;
+  name: string;
+  picture?: string;
+}
+
 function AttendanceContent() {
-  // const data = {
-  //   items: [
-  //     {
-  //       id: 1,
-  //       name: 'Budi Irawan',
-  //       attendance: '30 Days',
-  //       absent: '2 Days',
-  //       paidLeave: '3 Days',
-  //       unpaidLeave: '4 Days',
-  //       overtime: '8 Days',
-  //       totalHours: '175 Days',
-  //       averageHours: '30 Days',
-  //     },
-  //     {
-  //       id: 2,
-  //       name: 'Budi Irawan',
-  //       attendance: '30 Days',
-  //       absent: '2 Days',
-  //       paidLeave: '3 Days',
-  //       unpaidLeave: '4 Days',
-  //       overtime: '8 Days',
-  //       totalHours: '175 Days',
-  //       averageHours: '30 Days',
-  //     },
-  //     {
-  //       id: 3,
-  //       name: 'Budi Irawan',
-  //       attendance: '30 Days',
-  //       absent: '2 Days',
-  //       paidLeave: '3 Days',
-  //       unpaidLeave: '4 Days',
-  //       overtime: '8 Days',
-  //       totalHours: '175 Days',
-  //       averageHours: '30 Days',
-  //     },
-  //     {
-  //       id: 4,
-  //       name: 'Budi Irawan',
-  //       attendance: '30 Days',
-  //       absent: '2 Days',
-  //       paidLeave: '3 Days',
-  //       unpaidLeave: '4 Days',
-  //       overtime: '8 Days',
-  //       totalHours: '175 Days',
-  //       averageHours: '30 Days',
-  //     },
-  //     {
-  //       id: 5,
-  //       name: 'Budi Irawan',
-  //       attendance: '30 Days',
-  //       absent: '2 Days',
-  //       paidLeave: '3 Days',
-  //       unpaidLeave: '4 Days',
-  //       overtime: '8 Days',
-  //       totalHours: '175 Days',
-  //       averageHours: '30 Days',
-  //     },
-  //   ],
-  //   itemTotals: 5
-  // };
+  const dispatch = useAppDispatch();
+  const { selectedEmployee, id } = useAppSelectors((state) => state.payroll);
+  const { responser } = useAppSelectors((state) => state);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(1);
-  const [selected, setSelected] = useState(Array<object>);
+  const [selected, setSelected] = useState<Array<SelectedProp>>(Array<SelectedProp>);
   const [direction, setDirection] = useState<Order>('desc');
+  const [search, setSearch] = useState('');
   const [sort, setSort] = useState('');
   const [hydrated, setHaydrated] = useState(false);
   const [open, setOpen] = useState(false);
@@ -132,14 +84,12 @@ function AttendanceContent() {
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(event);
-    // setPage(0);
+    setPage(0);
   };
 
   const handleSearch = (e) => {
     if (e.key === 'Enter') {
-      // setSearch(e.target.value);
-      console.log(e.target.value);
-
+      setSearch(e.target.value);
     }
   };
 
@@ -149,9 +99,42 @@ function AttendanceContent() {
     setSort(headId);
   };
 
+  // function for open modal calendar
+  const handleOpenCalendar = async (itemId, employeeId) => {
+    await dispatch({
+      type: getDetailAttendanceRequested.toString(),
+      payload: {
+        id: id,
+        attendanceID: itemId,
+        employeeID: employeeId
+      }
+    });
+    setOpenCal(true);
+  };
+
+  // function for close modal calendar
+  const handleCloseCalendar = () => {
+    setOpenCal(false);
+  };
+
   const handleClose = () => {
     setOpen(false);
   };
+  
+  useEffect(() => {
+    dispatch({
+      type: getSelectedEmployeeRequested.toString(),
+      payload: {
+        page: page,
+        itemPerPage: rowsPerPage,
+        sort: sort,
+        direction: direction.toUpperCase(),
+        search: search,
+        countryCode: '',
+        payrollID: id
+      }
+    });
+  }, [rowsPerPage, page, search, sort, direction, responser.code]);
 
   useEffect(() => {
     setHaydrated(true);
@@ -188,7 +171,7 @@ function AttendanceContent() {
           </Grid>
         </Grid>
         <Table
-          count={selected?.length}
+          count={selectedEmployee?.length}
           rowsPerPageOptions={[5, 10, 15]}
           rowsPerPage={rowsPerPage}
           page={page}
@@ -219,24 +202,24 @@ function AttendanceContent() {
           bodyChildren={
             <>
               {
-                ifThenElse(typeof selected !== 'undefined', (
-                  ifThenElse(selected?.length === 0, (
+                ifThenElse(typeof selectedEmployee?.items !== 'undefined', (
+                  ifThenElse(selectedEmployee?.items?.length === 0, (
                     <TableRow>
                       <TableCell colSpan={12} align='center'><Typography>Data not found</Typography></TableCell>
                     </TableRow>
                   ), (
-                    selected?.map((item, index) => (
+                    selectedEmployee?.items?.map((item, index) => (
                       <TableRow key={index}>
                         <TableCell>
                           <NameWrapper>
                             <Avatar
-                              src={item['picture']}
-                              alt={item['name']}
+                              src={item?.employee?.picture || item?.employee?.name}
+                              alt={item?.employee?.name}
                               sx={{
                                 width: 24, height: 24
                               }}
                             />
-                            &nbsp;{item['name']}
+                            &nbsp;{item?.employee?.name}
                           </NameWrapper>
                         </TableCell>
                         <TableCell>{item['attendance']}</TableCell>
@@ -250,7 +233,7 @@ function AttendanceContent() {
                           <ButtonWrapper>
                             <IconButton
                               parentColor='#E9EFFF'
-                              onClick={() => { setOpenCal(true); }}
+                              onClick={() => { handleOpenCalendar(item?.id, item?.employee?.id); }}
                               icons={
                                 <FiCalendar fontSize={20} color='#223567' />
                               }
@@ -283,11 +266,11 @@ function AttendanceContent() {
 
         <AttendanceCalendarModal
           open={openCal}
-          handleClose={() => setOpenCal(false)}
-          handleConfirm={() => setOpenCal(false)}
+          handleClose={() => handleCloseCalendar()}
+          handleConfirm={() => handleCloseCalendar()}
         />
 
-        <AddEmployeesModal
+        <ListEmployeeModal
           open={open}
           handleClose={handleClose}
           selected={selected}

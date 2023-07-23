@@ -18,9 +18,6 @@ import store from '@/store/index';
 import { getLeaveEntriesRequested, deleteLeaveEntriesRequested } from '@/store/reducers/slice/attendance-leave/leaveEntriesSlice';
 import { useAppSelectors } from '@/hooks/index';
 import { AttendanceLeave } from '@/types/attendanceLeave';
-// import utc from 'dayjs/plugin/utc';
-
-// dayjs.extend(utc);
 
 const NameWrapper = styled.div`
    display: flex;
@@ -170,7 +167,7 @@ const LeaveEntriesTableComponent = ({
         </Grid>
       </Grid>
       <Table
-        count={leaveEntries?.leaveEntriesData?.items?.length}
+        count={leaveEntries?.leaveEntriesData?.itemTotals}
         rowsPerPageOptions={[5, 10, 15]}
         rowsPerPage={rowsPerPage}
         page={page}

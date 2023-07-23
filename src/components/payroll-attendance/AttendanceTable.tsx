@@ -5,22 +5,27 @@ import {
   TableRow,
   Box,
   TableSortLabel,
-  Button as MuiButton
+  Button as MuiButton,
+  Checkbox
 } from '@mui/material';
-import { Input, DateRangePicker } from '../_shared/form';
+import { Input } from '../_shared/form';
 import { Search } from '@mui/icons-material';
 import Table from '../_shared/form/Table';
-import { compareCheck, ifThenElse } from '@/utils/helper';
+import { compareCheck, ifThenElse, getCompanyData } from '@/utils/helper';
 import { visuallyHidden } from '@mui/utils';
 import { IconButton } from '@/components/_shared/form';
 import { BsTrashFill, BsFillEyeFill } from 'react-icons/bs';
+import { HiPencilAlt, HiOutlineInboxIn } from 'react-icons/hi';
 import { FiDownload } from 'react-icons/fi';
 import { TbFileImport } from 'react-icons/tb';
-import { HiOutlineInboxIn } from 'react-icons/hi';
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
 import { ConfirmationModal } from '@/components/_shared/common';
 import EmptyState from '../_shared/common/EmptyState';
+import { useAppDispatch, useAppSelectors } from '@/hooks/index';
+import { getPayrollRequested, postPayrollGrossesRequested } from '@/store/reducers/slice/payroll/payrollSlice';
+import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
 
 const ButtonWrapper = styled.div`
  display: flex;
@@ -39,13 +44,12 @@ const TypeComponent = styled.div`
 `;
 
 const headerItems = [
-  { id: 'user.name', label: 'Name' },
-  { id: 'dateRange', label: 'Date Range' },
-  { id: 'type', label: 'Report Type' },
-  { id: 'user.createdAt', label: 'Created on' },
-  { id: 'user.lastUpdated', label: 'Last Updated' },
-  { id: 'attachment', label: 'Attachment' },
-  { id: 'action', label: '' },
+  { id: 'user.name', label: 'Name', translation: 'name' },
+  { id: 'dateRange', label: 'Date Range', translation: 'date_range' },
+  { id: 'type', label: 'Report Type', translation: 'report_type' },
+  { id: 'user.createdAt', label: 'Created on', translation: 'created_on' },
+  { id: 'user.lastUpdated', label: 'Last Updated', translation: 'last_updated' },
+  { id: 'attachment', label: 'Attachment', translation: 'attachment' },
 ];
 
 interface EmployeeTableProps {
@@ -54,62 +58,29 @@ interface EmployeeTableProps {
 
 type Order = 'asc' | 'desc'
 
+interface CheckedTableProps {
+  id: string;
+  checked: boolean;
+}
+
 function AttendanceTable({
   tabValue
 }: EmployeeTableProps) {
-  const data = {
-    items: [
-      {
-        id: 1,
-        name: 'Payroll February 2023',
-        daterange: '1/03/2023 - 31/03/2023',
-        type: 'Attendance Report',
-        createdAt: '20/03/2023',
-        lastUpdated: '20/03/2023',
-      },
-      {
-        id: 2,
-        name: 'Payroll February 2023',
-        daterange: '1/03/2023 - 31/03/2023',
-        type: 'Attendance Report',
-        createdAt: '20/03/2023',
-        lastUpdated: '20/03/2023',
-      },
-      {
-        id: 3,
-        name: 'Payroll February 2023',
-        daterange: '1/03/2023 - 31/03/2023',
-        type: 'Attendance Report',
-        createdAt: '20/03/2023',
-        lastUpdated: '20/03/2023',
-      },
-      {
-        id: 4,
-        name: 'Payroll February 2023',
-        daterange: '1/03/2023 - 31/03/2023',
-        type: 'Attendance Report',
-        createdAt: '20/03/2023',
-        lastUpdated: '20/03/2023',
-      },
-      {
-        id: 5,
-        name: 'Payroll February 2023',
-        daterange: '1/03/2023 - 31/03/2023',
-        type: 'Attendance Report',
-        createdAt: '20/03/2023',
-        lastUpdated: '20/03/2023',
-      },
-    ],
-    itemTotals: 5
-  };
+  const dispatch = useAppDispatch();
+  const data = useAppSelectors(state => state.payroll.data);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(1);
-  // const [search, setSearch] = useState('');
+  const [search, setSearch] = useState('');
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
   const [hydrated, setHaydrated] = useState(false);
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
+  const companyData = getCompanyData();
+  const { responser } = useAppSelectors((state) => state);
   const router = useRouter();
+  const { t } = useTranslation();
+  const tPath = 'payroll_and_disbursement.attendance_summary.';
+  const [selectedTemp, setSelectedTemp] = useState<CheckedTableProps[]>([]);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -117,15 +88,12 @@ function AttendanceTable({
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(event);
-    // setPage(0);
+    setPage(1);
   };
 
   const handleSearch = (e) => {
     if (e.key === 'Enter') {
-      // setSearch(e.target.value);
-      console.log(e.target.value);
-      console.log(tabValue);
-
+      setSearch(e.target.value);
     }
   };
 
@@ -134,6 +102,64 @@ function AttendanceTable({
     setDirection(ifThenElse(isAsc, 'desc', 'asc'));
     setSort(headId);
   };
+
+  const onSelected = (id, e) => {
+    if (e.target.checked) {
+      const temp = [...selectedTemp, { id: id, checked: true }];
+      setSelectedTemp(temp);
+    } else {
+      const temp = selectedTemp.filter(v => v['id'] !== id);
+      setSelectedTemp(temp);
+    }
+  };
+
+  const checkVal = (id) => {
+    return selectedTemp.some(v => v['id'] === id);
+  };
+
+  const onAll = (e) => {
+    if (e.target.checked) {
+      const temp = data?.items?.map((v) => {
+        return { id: v.id, checked: true };
+      });
+      setSelectedTemp(temp);
+    } else {
+      setSelectedTemp([]);
+    }
+  };
+
+  const checkAll = () => {
+    return selectedTemp.length === rowsPerPage;
+  };
+
+  const handlePostGrosses = () => {
+    dispatch({
+      type: postPayrollGrossesRequested.toString(),
+      payload: {
+        data: {
+          payrollID: selectedTemp.map(item => item?.id)
+        },
+        isAssist: false
+      }
+    });
+  };
+
+  useEffect(() => {
+    dispatch({
+      type: getPayrollRequested.toString(),
+      payload: {
+        page: page,
+        itemPerPage: rowsPerPage,
+        sort: sort,
+        direction: direction.toUpperCase(),
+        search: search,
+        countryCode: 'ID',
+        companyID: companyData?.id,
+        workflow: 'ATTENDANCE',
+        status: ifThenElse(tabValue === 0, 'DRAFT', ifThenElse(tabValue === 1, 'CONFIRMED', ifThenElse(tabValue === 2, 'COMPLETED', 'ARCHIVE')))
+      }
+    });
+  }, [rowsPerPage, page, search, sort, direction, responser.code, tabValue]);
 
   useEffect(() => {
     setHaydrated(true);
@@ -159,14 +185,6 @@ function AttendanceTable({
             }}
           />
         </Grid>
-        <Grid item xs={6}>
-          <DateRangePicker
-            withAsterisk
-            // value={formik.values.startDate as unknown as Date}
-            onChange={(date: unknown) => console.log(date)}
-          // error={formik.touched.startDate && formik.errors.startDate ? String(formik.errors.startDate) : ''}
-          />
-        </Grid>
       </Grid>
       <Table
         count={data?.itemTotals}
@@ -178,6 +196,13 @@ function AttendanceTable({
         headChildren={
           <TableRow>
             {
+              tabValue === 1 && (
+                <TableCell>
+                  <Checkbox onChange={(e) => onAll(e)} checked={checkAll()} />
+                </TableCell>
+              )
+            }
+            {
               headerItems.map((item) => (
                 <TableCell key={item.id} sortDirection={ifThenElse(sort === item.id, direction, false)}>
                   <TableSortLabel
@@ -185,7 +210,7 @@ function AttendanceTable({
                     direction={sort === item.id ? direction : 'asc'}
                     onClick={(e) => handleRequestSort(e, item.id)}
                   >
-                    {item.label}
+                    {t(`${tPath}table.table_cols_item.${item.translation}`)}
                     {sort === item.id ? (
                       <Box component='span' sx={visuallyHidden}>
                         {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
@@ -195,6 +220,7 @@ function AttendanceTable({
                 </TableCell>
               ))
             }
+            <TableCell />
           </TableRow>
         }
         bodyChildren={
@@ -208,13 +234,20 @@ function AttendanceTable({
                     </TableCell>
                   </TableRow>
                 ), (
-                  data?.items?.map((item, index) => (
-                    <TableRow key={index}>
+                  data?.items?.map((item) => (
+                    <TableRow key={item.id}>
+                      {
+                        tabValue === 1 && (
+                          <TableCell>
+                            <Checkbox onChange={(e) => onSelected(item?.id, e)} checked={checkVal(item?.id)} />
+                          </TableCell>
+                        )
+                      }
                       <TableCell>{item.name}</TableCell>
-                      <TableCell>{item.daterange}</TableCell>
-                      <TableCell><TypeComponent>{item.type}</TypeComponent></TableCell>
-                      <TableCell>{item.createdAt}</TableCell>
-                      <TableCell>{item.lastUpdated}</TableCell>
+                      <TableCell>{dayjs(item.start).format('DD/MM/YYYY')} - {dayjs(item.end).format('DD/MM/YYYY')}</TableCell>
+                      <TableCell><TypeComponent>Attendance Report</TypeComponent></TableCell>
+                      <TableCell>{dayjs(item.createdAt).format('DD/MM/YYYY')}</TableCell>
+                      <TableCell>{dayjs(item.updatedAt).format('DD/MM/YYYY')}</TableCell>
                       <TableCell>
                         <MuiButton
                           variant='contained'
@@ -223,7 +256,7 @@ function AttendanceTable({
                           sx={{ color: '#111827' }}
                           onClick={() => { console.log(true); }}
                         >
-                          Attendance report.pdf &nbsp;<FiDownload fontSize='small' />
+                          {item.attachment.filename} &nbsp;<FiDownload fontSize='small' />
                         </MuiButton>
                       </TableCell>
                       <TableCell>
@@ -231,13 +264,16 @@ function AttendanceTable({
                           {tabValue === 0 && (
                             <>
                               <IconButton
+                                disabled={!!selectedTemp.length}
                                 parentColor='#E9EFFF'
-                                onClick={() => { router.push('/payroll-disbursement/payroll/generate-gross/employee'); }}
+                                onClick={() => { router.push({ pathname: '/payroll-disbursement/attendance/generate', query: { id: item?.id } }); }}
                                 icons={
-                                  <TbFileImport fontSize={20} color='#223567' />
+                                  <HiPencilAlt fontSize={20} color='#223567' />
+                                  // <TbFileImport fontSize={20} color='#223567' />
                                 }
                               />
                               <IconButton
+                                disabled={!!selectedTemp.length}
                                 parentColor='#FEE2E2'
                                 onClick={() => setDeleteConfirmation(true)}
                                 icons={
@@ -250,9 +286,19 @@ function AttendanceTable({
                             <>
                               <IconButton
                                 parentColor='#E9EFFF'
-                                onClick={() => { router.push('/payroll-disbursement/attendance/generate'); }}
+                                onClick={() => {
+                                  dispatch({
+                                    type: postPayrollGrossesRequested.toString(),
+                                    payload: {
+                                      data: {
+                                        payrollID: [String(item.id)]
+                                      },
+                                      isAssist: false
+                                    }
+                                  });
+                                }}
                                 icons={
-                                  <BsFillEyeFill fontSize={20} color='#223567' />
+                                  <TbFileImport fontSize={20} color='#223567' />
                                 }
                               />
                               <IconButton
@@ -270,6 +316,13 @@ function AttendanceTable({
                                 parentColor='#E9EFFF'
                                 icons={
                                   <HiOutlineInboxIn fontSize={20} color='#223567' />
+                                }
+                              />
+                              <IconButton
+                                parentColor='#E9EFFF'
+                                onClick={() => { router.push('/payroll-disbursement/attendance/generate'); }}
+                                icons={
+                                  <BsFillEyeFill fontSize={20} color='#223567' />
                                 }
                               />
                               <IconButton
@@ -308,11 +361,25 @@ function AttendanceTable({
           </>
         }
       />
+      {tabValue === 1 &&
+        <Grid container spacing={2} mt='1rem'>
+          <Grid item xs={9} sm={9} md={9} lg={9} xl={9}></Grid>
+          <Grid item xs={3} sm={3} md={3} lg={3} xl={3} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <MuiButton
+              disabled={!selectedTemp.length}
+              variant='contained'
+              size='small'
+              color='primary'
+              onClick={handlePostGrosses}
+            >{t('button.generate_gross_payroll')}</MuiButton>
+          </Grid>
+        </Grid>
+      }
       <ConfirmationModal
         open={deleteConfirmation}
         handleClose={() => setDeleteConfirmation(false)}
-        title='Delete Attendance from Payroll Operation?'
-        content='You are about to delete this attendance report. This action cannot be undone.'
+        title={t(`${tPath}popup.delete.title`)}
+        content={t(`${tPath}popup.delete.desc`)}
         withCallback
         noChange={true}
         callback={() => setDeleteConfirmation(false)}

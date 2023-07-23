@@ -41,7 +41,7 @@ function DisbursementGenerateComponent() {
               icons={
                 <ArrowBack sx={{ color: '#FFFFFF' }} />
               }
-              onClick={() => {router.back();}}
+              onClick={() => { router.back(); }}
             />
             <Box>
               <Typography variant='h6' color='#4B5563'><b>Generate Disbursment Receipt</b></Typography>
@@ -55,13 +55,13 @@ function DisbursementGenerateComponent() {
               variant='outlined'
               size='small'
               color='primary'
-              onClick={() => {router.push('/payroll-disbursement/disbursement');}}
+              onClick={() => { router.push('/payroll-disbursement/disbursement'); }}
             >Cancel</MuiButton>
             <MuiButton
               variant='contained'
               size='small'
               color='primary'
-              onClick={() => {router.push('/payroll-disbursement/disbursement');}}
+              onClick={() => { router.push('/payroll-disbursement/disbursement'); }}
               sx={{ color: 'white' }}
             >Save</MuiButton>
           </ButtonWrapper>

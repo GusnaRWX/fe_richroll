@@ -5,7 +5,6 @@ import React, { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import { Grid, Autocomplete, createFilterOptions, TextField, Box, Chip, InputAdornment } from '@mui/material';
 import { Text } from '@/components/_shared/common';
-import { Option } from '@/types/option';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { getListBaseCompensationRequested, getListCnbRequested, getListTerminReqeusted, getListSuppCompensationRequested } from '@/store/reducers/slice/options/optionSlice';
 import { Button, Input, RadioGroup, Select } from '@/components/_shared/form';

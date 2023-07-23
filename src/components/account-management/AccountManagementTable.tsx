@@ -17,7 +17,7 @@ import {
 import { Input, DatePicker, CheckBox } from '../_shared/form';
 import { Search } from '@mui/icons-material';
 import Table from '../_shared/form/Table';
-import { compareCheck, ifThenElse } from '@/utils/helper';
+import { compareCheck, ifThenElse, ifEmptyReplace } from '@/utils/helper';
 import { Image as ImageType } from '@/utils/assetsConstant';
 import { visuallyHidden } from '@mui/utils';
 import { IconButton } from '@/components/_shared/form';
@@ -107,11 +107,12 @@ interface CheckedTableProps {
 
 type Order = 'asc' | 'desc'
 
-function AttendanceTable({
+function AccountManagementTable({
   tabValue
 }: EmployeeTableProps) {
   const dispatch = useAppDispatch();
   const data = useAppSelectors(state => state.account.data);
+  const { responser } = useAppSelectors((state) => state);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
@@ -190,11 +191,12 @@ function AttendanceTable({
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(event);
-    // setPage(0);
+    setPage(1);
   };
 
   const handleSearch = (e) => {
     if (e.key === 'Enter') {
+      setPage(1);
       setSearch(e.target.value);
     }
   };
@@ -208,7 +210,6 @@ function AttendanceTable({
   const onSelected = (id, e) => {
     if (e.target.checked) {
       const temp = [...selectedTemp, { id: id, checked: true }];
-
       setSelectedTemp(temp);
     } else {
       const temp = selectedTemp.filter(v => v['id'] !== id);
@@ -248,7 +249,7 @@ function AttendanceTable({
         searchType: searchType
       }
     });
-  }, [rowsPerPage, page, tabValue, search, searchType, sort, direction, deleteConfirmation, suspendConfirmation, reactivateConfirmation]);
+  }, [rowsPerPage, page, tabValue, search, searchType, sort, direction, responser.code]);
 
   useEffect(() => {
     setHaydrated(true);
@@ -261,7 +262,7 @@ function AttendanceTable({
           <Typography component='div' variant='text-base' fontWeight={500}>Full Name</Typography>
           <NameWrapper>
             <Avatar
-              src={selectedItem?.userInformation && selectedItem?.userInformation['picture'] || ImageType.AVATAR_PLACEHOLDER}
+              src={ifThenElse(selectedItem?.userInformation, selectedItem?.userInformation?.picture, ImageType.AVATAR_PLACEHOLDER)}
               alt={selectedItem?.name}
               sx={{
                 width: 24, height: 24
@@ -272,7 +273,7 @@ function AttendanceTable({
         </Grid>
         <Grid item xs={6}>
           <Typography component='div' variant='text-base' fontWeight={500}>Start of Suspend Period</Typography>
-          <Typography component='div' variant='text-sm' fontWeight={400}>{selectedItem?.suspensionStart && dayjs(selectedItem?.suspensionStart).format('DD/MM/YY, HH:mm') || '-'}</Typography>
+          <Typography component='div' variant='text-sm' fontWeight={400}>{ifThenElse(selectedItem?.suspensionStart, dayjs(selectedItem?.suspensionStart).format('DD/MM/YY, HH:mm'), '-')}</Typography>
         </Grid>
       </Grid>
       <Grid spacing={2} container mt='.5rem' mb='.5rem'>
@@ -282,13 +283,13 @@ function AttendanceTable({
         </Grid>
         <Grid item xs={6}>
           <Typography component='div' variant='text-base' fontWeight={500}>End of Suspend Period</Typography>
-          <Typography component='div' variant='text-sm' fontWeight={400}>{selectedItem?.suspensionEnd && dayjs(selectedItem?.suspensionEnd).format('DD/MM/YY, HH:mm') || '-'}</Typography>
+          <Typography component='div' variant='text-sm' fontWeight={400}>{ifThenElse(selectedItem?.suspensionEnd, dayjs(selectedItem?.suspensionEnd).format('DD/MM/YY, HH:mm'), '-')}</Typography>
         </Grid>
       </Grid>
       <Grid spacing={2} container mt='.5rem' mb='.5rem'>
         <Grid item xs={6}>
           <Typography component='div' variant='text-base' fontWeight={500}>User Type</Typography>
-          <Typography component='div' variant='text-sm' fontWeight={400}>{selectedItem && !!selectedItem.roles.length && selectedItem.roles.map((i) => i.name)}</Typography>
+          <Typography component='div' variant='text-sm' fontWeight={400}>{ifThenElse(selectedItem && !!selectedItem.roles.length, selectedItem?.roles.map((i) => i.name), '-')}</Typography>
         </Grid>
       </Grid>
     </>;
@@ -301,7 +302,7 @@ function AttendanceTable({
           <Typography component='div' variant='text-base' fontWeight={500}>Full Name</Typography>
           <NameWrapper>
             <Avatar
-              src={selectedItem?.userInformation && selectedItem?.userInformation['picture'] || ImageType.AVATAR_PLACEHOLDER}
+              src={ifThenElse(selectedItem?.userInformation, selectedItem?.userInformation?.picture, ImageType.AVATAR_PLACEHOLDER)}
               alt={selectedItem?.name}
               sx={{
                 width: 24, height: 24
@@ -312,7 +313,7 @@ function AttendanceTable({
         </Grid>
         <Grid item xs={6}>
           <Typography component='div' variant='text-base' fontWeight={500}>Account ID</Typography>
-          <Typography component='div' variant='text-sm' fontWeight={400}>{selectedItem?.employee && selectedItem?.employee['code'] || '-'}</Typography>
+          <Typography component='div' variant='text-sm' fontWeight={400}>{ifThenElse(selectedItem?.employee, selectedItem?.employee?.code, '-')}</Typography>
         </Grid>
       </Grid>
       <Grid spacing={2} container mt='.5rem' mb='.5rem'>
@@ -322,17 +323,17 @@ function AttendanceTable({
         </Grid>
         <Grid item xs={6}>
           <Typography component='div' variant='text-base' fontWeight={500}>Last Login</Typography>
-          <Typography component='div' variant='text-sm' fontWeight={400}>{selectedItem?.lastLoginAt && dayjs(selectedItem?.lastLoginAt).format('DD/MM/YY, HH:mm') || '-'}</Typography>
+          <Typography component='div' variant='text-sm' fontWeight={400}>{ifThenElse(selectedItem?.lastLoginAt, dayjs(selectedItem?.lastLoginAt).format('DD/MM/YY, HH:mm'), '-')}</Typography>
         </Grid>
       </Grid>
       <Grid spacing={2} container mt='.5rem' mb='.5rem'>
         <Grid item xs={6}>
           <Typography component='div' variant='text-base' fontWeight={500}>User Type</Typography>
-          <Typography component='div' variant='text-sm' fontWeight={400}>{selectedItem && !!selectedItem.roles.length && selectedItem.roles.map((i) => i.name)}</Typography>
+          <Typography component='div' variant='text-sm' fontWeight={400}>{ifThenElse(selectedItem && !!selectedItem.roles.length, selectedItem?.roles.map((i) => i.name), '-')}</Typography>
         </Grid>
         <Grid item xs={6}>
           <Typography component='div' variant='text-base' fontWeight={500}>Created On</Typography>
-          <Typography component='div' variant='text-sm' fontWeight={400}>{selectedItem && dayjs(selectedItem.createdAt).format('DD/MM/YY')}</Typography>
+          <Typography component='div' variant='text-sm' fontWeight={400}>{ifThenElse(selectedItem, dayjs(selectedItem?.createdAt).format('DD/MM/YY'), '-')}</Typography>
         </Grid>
       </Grid>
       <Grid spacing={2} container mt='.5rem'>
@@ -382,7 +383,7 @@ function AttendanceTable({
               <Typography component='div' variant='text-base' fontWeight={500}>Full Name</Typography>
               <NameWrapper>
                 <Avatar
-                  src={selectedItem?.userInformation && selectedItem?.userInformation['picture'] || ImageType.AVATAR_PLACEHOLDER}
+                  src={ifThenElse(selectedItem?.userInformation, selectedItem?.userInformation?.picture, ImageType.AVATAR_PLACEHOLDER)}
                   alt={selectedItem?.name}
                   sx={{
                     width: 24, height: 24
@@ -393,11 +394,11 @@ function AttendanceTable({
             </Grid>
             <Grid item xs={3}>
               <Typography component='div' variant='text-base' fontWeight={500}>Account ID</Typography>
-              <Typography component='div' variant='text-sm' fontWeight={400}>{selectedItem?.employee && selectedItem?.employee['code'] || '-'}</Typography>
+              <Typography component='div' variant='text-sm' fontWeight={400}>{ifThenElse(selectedItem?.employee, selectedItem?.employee?.code, '-')}</Typography>
             </Grid>
             <Grid item xs={3}>
               <Typography component='div' variant='text-base' fontWeight={500}>User Type</Typography>
-              <Typography component='div' variant='text-sm' fontWeight={400}>{selectedItem && !!selectedItem.roles.length && selectedItem.roles.map((i) => i.name)}</Typography>
+              <Typography component='div' variant='text-sm' fontWeight={400}>{ifThenElse(selectedItem && !!selectedItem.roles.length, selectedItem?.roles.map((i) => i.name), '-')}</Typography>
             </Grid>
           </Grid>
           <Grid spacing={2} container mt='.5rem' mb='1.5rem'>
@@ -407,11 +408,11 @@ function AttendanceTable({
             </Grid>
             <Grid item xs={3}>
               <Typography component='div' variant='text-base' fontWeight={500}>Last Login</Typography>
-              <Typography component='div' variant='text-sm' fontWeight={400}>{selectedItem?.lastLoginAt && dayjs(selectedItem?.lastLoginAt).format('DD/MM/YY, HH:mm') || '-'}</Typography>
+              <Typography component='div' variant='text-sm' fontWeight={400}>{ifThenElse(selectedItem?.lastLoginAt, dayjs(selectedItem?.lastLoginAt).format('DD/MM/YY, HH:mm'), '-')}</Typography>
             </Grid>
             <Grid item xs={3}>
               <Typography component='div' variant='text-base' fontWeight={500}>Created On</Typography>
-              <Typography component='div' variant='text-sm' fontWeight={400}>{selectedItem && dayjs(selectedItem.createdAt).format('DD/MM/YY')}</Typography>
+              <Typography component='div' variant='text-sm' fontWeight={400}>{ifThenElse(selectedItem, dayjs(selectedItem?.createdAt).format('DD/MM/YY'), '-')}</Typography>
             </Grid>
           </Grid>
           <Grid container mb='.5rem'>
@@ -425,33 +426,33 @@ function AttendanceTable({
           {!selectedItem?.employee &&
             <Typography component='div' variant='text-base' fontWeight={500} sx={{ textAlign: 'center' }}>No Data Company</Typography>
           }
-          {!!selectedItem?.employee && !!selectedItem?.employee?.companies.length &&
-          <>
-            <Grid spacing={2} container mt='0px' sx={{ borderBottom: 'solid 1px #E5E7EB', paddingBottom: '10px' }}>
-              <Grid item xs={4}>
-                <Typography component='div' variant='text-base' fontWeight={500}>Company Name</Typography>
-              </Grid>
-              <Grid item xs={4}>
-                <Typography component='div' variant='text-base' fontWeight={500}>Total Employee</Typography>
-              </Grid>
-              <Grid item xs={4}>
-                <Typography component='div' variant='text-base' fontWeight={500}>Created On</Typography>
-              </Grid>
-            </Grid>
-            {selectedItem?.employee?.companies?.map((itm, index) => (
-              <Grid key={index} spacing={2} container mt='0px' sx={{ borderBottom: 'solid 1px #E5E7EB', paddingBottom: '10px' }}>
+          {ifThenElse(compareCheck(!!selectedItem?.employee, !!selectedItem?.employee?.companies.length),
+            <>
+              <Grid spacing={2} container mt='0px' sx={{ borderBottom: 'solid 1px #E5E7EB', paddingBottom: '10px' }}>
                 <Grid item xs={4}>
-                  <Typography component='div' variant='text-sm' fontWeight={400}>{itm.name}</Typography>
+                  <Typography component='div' variant='text-base' fontWeight={500}>Company Name</Typography>
                 </Grid>
                 <Grid item xs={4}>
-                  <Typography component='div' variant='text-sm' fontWeight={400}>{itm.employeesTotal}</Typography>
+                  <Typography component='div' variant='text-base' fontWeight={500}>Total Employee</Typography>
                 </Grid>
                 <Grid item xs={4}>
-                  <Typography component='div' variant='text-sm' fontWeight={400}>{dayjs(itm.createdAt).format('DD/MM/YY')}</Typography>
+                  <Typography component='div' variant='text-base' fontWeight={500}>Created On</Typography>
                 </Grid>
               </Grid>
-            ))}
-          </>
+              {selectedItem?.employee?.companies?.map((itm, index) => (
+                <Grid key={index} spacing={2} container mt='0px' sx={{ borderBottom: 'solid 1px #E5E7EB', paddingBottom: '10px' }}>
+                  <Grid item xs={4}>
+                    <Typography component='div' variant='text-sm' fontWeight={400}>{itm.name}</Typography>
+                  </Grid>
+                  <Grid item xs={4}>
+                    <Typography component='div' variant='text-sm' fontWeight={400}>{itm.employeesTotal}</Typography>
+                  </Grid>
+                  <Grid item xs={4}>
+                    <Typography component='div' variant='text-sm' fontWeight={400}>{dayjs(itm.createdAt).format('DD/MM/YY')}</Typography>
+                  </Grid>
+                </Grid>
+              ))}
+            </>, null)
           }
         </TabPanel>
       </Box>
@@ -502,25 +503,25 @@ function AttendanceTable({
         onRowsPerPagesChange={(e) => handleChangeRowsPerPage(e)}
         headChildren={
           <TableRow>
-            {tabValue === 0 && (
+            {ifThenElse(tabValue === 0, (
               <TableCell>
                 <Checkbox onChange={(e) => onAll(e)} checked={checkAll()} />
               </TableCell>
-            )}
+            ), null)}
             {
               headerItems.map((item) => (
                 <TableCell key={item.id} sortDirection={ifThenElse(sort === item.id, direction, false)}>
                   <TableSortLabel
                     active={sort === item.id}
-                    direction={sort === item.id ? direction : 'asc'}
+                    direction={ifThenElse(sort === item.id, direction, 'asc')}
                     onClick={(e) => handleRequestSort(e, item.id)}
                   >
                     {item.label}
-                    {sort === item.id ? (
+                    {ifThenElse(sort === item.id, (
                       <Box component='span' sx={visuallyHidden}>
                         {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
                       </Box>
-                    ) : null}
+                    ), null)}
                   </TableSortLabel>
                 </TableCell>
               ))
@@ -538,16 +539,16 @@ function AttendanceTable({
                 ), (
                   data?.items?.map((item, index) => (
                     <TableRow key={index}>
-                      {tabValue === 0 && (
+                      {ifThenElse(tabValue === 0, (
                         <TableCell>
                           <Checkbox onChange={(e) => onSelected(item?.id, e)} checked={checkVal(item?.id)} />
                         </TableCell>
-                      )}
-                      <TableCell>{item.employee && item.employee.code || '-'}</TableCell>
+                      ), null)}
+                      <TableCell>{ifThenElse(item?.employee, item?.employee?.code, '-')}</TableCell>
                       <TableCell>
                         <NameWrapper>
                           <Avatar
-                            src={item.userInformation?.picture || ImageType.AVATAR_PLACEHOLDER}
+                            src={ifEmptyReplace(item?.userInformation?.picture, ImageType.AVATAR_PLACEHOLDER)}
                             alt={item.name}
                             sx={{
                               width: 24, height: 24
@@ -558,13 +559,13 @@ function AttendanceTable({
                       </TableCell>
                       <TableCell>{item.email}</TableCell>
                       <TableCell>
-                        {!!item.roles.length && item.roles.map((i) => i.name)}
+                        {ifThenElse(!!item.roles.length, item.roles.map((i) => i.name), '-')}
                       </TableCell>
-                      <TableCell>{item.lastLoginAt && dayjs(item.lastLoginAt).format('DD/MM/YY, HH:mm') || '-'}</TableCell>
+                      <TableCell>{ifThenElse(item.lastLoginAt, dayjs(item.lastLoginAt).format('DD/MM/YY, HH:mm'), '-')}</TableCell>
                       <TableCell>{dayjs(item.createdAt).format('DD/MM/YY')}</TableCell>
                       <TableCell>
                         <ButtonWrapper>
-                          {tabValue === 0 && (
+                          {ifThenElse(tabValue === 0, (
                             <>
                               <IconButton
                                 disabled={!!selectedTemp.length}
@@ -589,8 +590,8 @@ function AttendanceTable({
                                 }
                               />
                             </>
-                          )}
-                          {tabValue === 1 && (
+                          ), null)}
+                          {ifThenElse(tabValue === 1, (
                             <IconButton
                               parentColor='#DCFCE7'
                               onClick={() => {
@@ -601,7 +602,7 @@ function AttendanceTable({
                                 <RiUserReceived2Fill fontSize={20} color='#22C55E' />
                               }
                             />
-                          )}
+                          ), null)}
                         </ButtonWrapper>
                       </TableCell>
                     </TableRow>
@@ -617,7 +618,7 @@ function AttendanceTable({
         }
       />
 
-      {!!selectedTemp.length &&
+      {ifThenElse(!!selectedTemp.length, (
         <Grid container mt='.5rem'>
           <Grid item xs={12}>
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '1rem'}}>
@@ -626,7 +627,7 @@ function AttendanceTable({
             </Box>
           </Grid>
         </Grid>
-      }
+      ), null)}
 
       {/* delete popup */}
       <CustomModal
@@ -697,4 +698,4 @@ function AttendanceTable({
   );
 }
 
-export default AttendanceTable;
+export default AccountManagementTable;

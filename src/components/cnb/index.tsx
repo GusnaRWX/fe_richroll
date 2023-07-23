@@ -6,10 +6,12 @@ import { Button } from '../_shared/form';
 import AddIcon from '@mui/icons-material/Add';
 import { useRouter } from 'next/router';
 import { Card } from '../_shared/common';
+import { useTranslation } from 'react-i18next';
 
 
 const CNBComponent = () => {
   const router = useRouter();
+  const { t } = useTranslation();
   const TitleWrapper = styled.div`
     display: flex;
     flex-direction: row;
@@ -20,12 +22,12 @@ const CNBComponent = () => {
   return (
     <>
       <TitleWrapper>
-        <Typography variant='h5'>Compensation & Benefits</Typography>
+        <Typography variant='h5'>{t('compensation_and_benefits.title')}</Typography>
         <div>
           <Button
             onClick={() => router.push('/compensation-benefits/create')}
             startIcon={<AddIcon />}
-            label='Add Profile'
+            label={t('button.add_profile')}
           />
         </div>
       </TitleWrapper>

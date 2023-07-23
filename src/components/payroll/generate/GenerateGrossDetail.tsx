@@ -11,6 +11,9 @@ import { useRouter } from 'next/router';
 import { IconButton } from '@/components/_shared/form';
 import { ArrowBack } from '@mui/icons-material';
 import GrossContent from '@/components/payroll-assistant/create/GrossContent';
+import { useTranslation } from 'react-i18next';
+import { useAppDispatch } from '@/hooks/index';
+import { putPayrollsGrossesFinalRequested } from '@/store/reducers/slice/payroll/payrollSlice';
 
 const ButtonWrapper = styled(Box)(({
   display: 'flex',
@@ -36,6 +39,22 @@ const ContentWrapper = styled(Card)(({
 
 function GenerateGrossDetail() {
   const router = useRouter();
+  const dispatch = useAppDispatch();
+  const { t } = useTranslation();
+  const tPath = 'payroll_and_disbursement.attendance_summary.generate_gross_payroll.';
+
+  const handleConfirm = () => {
+    dispatch({
+      type: putPayrollsGrossesFinalRequested.toString(),
+      payload: {
+        data: {
+          id: router.query.id
+        },
+        isAssist: false
+      }
+    });
+  };
+
   return (
     <>
       <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
@@ -46,10 +65,10 @@ function GenerateGrossDetail() {
               icons={
                 <ArrowBack sx={{ color: '#FFFFFF' }} />
               }
-              onClick={() => {router.push('/payroll-disbursement/attendance');}}
+              onClick={() => { router.push('/payroll-disbursement/payroll'); }}
             />
             <Box>
-              <Typography variant='h6' color='#4B5563'><b>Generate Gross Payroll Report</b></Typography>
+              <Typography variant='h6' color='#4B5563'><b>{t(`${tPath}title`)}</b></Typography>
               <Typography variant='text-base' color='#4B5563'><b>Payroll 280123 — </b>1/03/2023 - 14/03/2023</Typography>
             </Box>
           </BackWrapper>
@@ -68,15 +87,15 @@ function GenerateGrossDetail() {
                   variant='outlined'
                   size='small'
                   color='primary'
-                  onClick={() => {router.push('/payroll-disbursement/attendance');}}
-                >Cancel</MuiButton>
+                  onClick={() => { router.push('/payroll-disbursement/attendance'); }}
+                >{t('button.cancel')}</MuiButton>
                 <MuiButton
                   variant='contained'
                   size='small'
                   color='primary'
-                  onClick={() => {router.push('/payroll-disbursement/payroll');}}
+                  onClick={handleConfirm}
                   sx={{ color: 'white' }}
-                >Confirm</MuiButton>
+                >{t('button.confirm')}</MuiButton>
               </ButtonWrapper>
             </Grid>
           </Grid>

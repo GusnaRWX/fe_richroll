@@ -7,20 +7,24 @@ import {
   TableSortLabel,
   Button as MuiButton
 } from '@mui/material';
-import { Input, DateRangePicker } from '../_shared/form';
+import { Input } from '../_shared/form';
 import { Search } from '@mui/icons-material';
 import Table from '../_shared/form/Table';
-import { compareCheck, ifThenElse } from '@/utils/helper';
+import { compareCheck, ifThenElse, getCompanyData } from '@/utils/helper';
 import { visuallyHidden } from '@mui/utils';
 import { IconButton } from '@/components/_shared/form';
 import { BsTrashFill, BsFillEyeFill } from 'react-icons/bs';
 import { FiDownload } from 'react-icons/fi';
 import { TbFileImport } from 'react-icons/tb';
-import { HiOutlineInboxIn } from 'react-icons/hi';
+import { HiOutlineInboxIn, HiPencilAlt } from 'react-icons/hi';
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
 import { ConfirmationModal } from '@/components/_shared/common';
 import EmptyState from '../_shared/common/EmptyState';
+import { useAppDispatch, useAppSelectors } from '@/hooks/index';
+import { getPayrollRequested } from '@/store/reducers/slice/payroll/payrollSlice';
+import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
 
 const ButtonWrapper = styled.div`
  display: flex;
@@ -47,12 +51,12 @@ const NetComponent = styled.div`
 `;
 
 const headerItems = [
-  { id: 'user.name', label: 'Name' },
-  { id: 'dateRange', label: 'Date Range' },
-  { id: 'type', label: 'Report Type' },
-  { id: 'user.createdAt', label: 'Created on' },
-  { id: 'user.lastUpdated', label: 'Last Updated' },
-  { id: 'attachment', label: 'Attachment' },
+  { id: 'user.name', label: 'name' },
+  { id: 'dateRange', label: 'date_range' },
+  { id: 'type', label: 'report_type' },
+  { id: 'user.createdAt', label: 'created_on' },
+  { id: 'user.lastUpdated', label: 'last_updated' },
+  { id: 'attachment', label: 'attachment' },
   { id: 'action', label: '' },
 ];
 
@@ -65,64 +69,28 @@ type Order = 'asc' | 'desc'
 function PayrollTable({
   tabValue
 }: EmployeeTableProps) {
-  const data = {
-    items: [
-      {
-        id: 1,
-        name: 'Payroll February 2023',
-        daterange: '1/03/2023 - 31/03/2023',
-        reportType: 'gross',
-        reportName: 'Gross Payroll Report',
-        createdAt: '20/03/2023',
-        lastUpdated: '20/03/2023',
-      },
-      {
-        id: 2,
-        name: 'Payroll February 2023',
-        daterange: '1/03/2023 - 31/03/2023',
-        reportType: 'net',
-        reportName: 'Net Payroll Report',
-        createdAt: '20/03/2023',
-        lastUpdated: '20/03/2023',
-      },
-      {
-        id: 3,
-        name: 'Payroll February 2023',
-        daterange: '1/03/2023 - 31/03/2023',
-        reportType: 'gross',
-        reportName: 'Gross Payroll Report',
-        createdAt: '20/03/2023',
-        lastUpdated: '20/03/2023',
-      },
-      {
-        id: 4,
-        name: 'Payroll February 2023',
-        daterange: '1/03/2023 - 31/03/2023',
-        reportType: 'net',
-        reportName: 'Net Payroll Report',
-        createdAt: '20/03/2023',
-        lastUpdated: '20/03/2023',
-      },
-      {
-        id: 5,
-        name: 'Payroll February 2023',
-        daterange: '1/03/2023 - 31/03/2023',
-        reportType: 'gross',
-        reportName: 'Gross Payroll Report',
-        createdAt: '20/03/2023',
-        lastUpdated: '20/03/2023',
-      },
-    ],
-    itemTotals: 5
+  const { data } = useAppSelectors(state => state.payroll);
+
+  const Tabs = {
+    0: 'DRAFT',
+    1: 'CONFIRMED',
+    2: 'COMPLETED',
+    3: 'ARCHIVE'
   };
+
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(1);
-  // const [search, setSearch] = useState('');
+  const [search, setSearch] = useState('');
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
   const [hydrated, setHaydrated] = useState(false);
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
+  const companyData = getCompanyData();
+  const { responser } = useAppSelectors((state) => state);
   const router = useRouter();
+  const dispatch = useAppDispatch();
+  const {t} = useTranslation();
+  const t_tableCols = 'payroll_and_disbursement.payroll_report.table.table_cols_item';
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -130,14 +98,12 @@ function PayrollTable({
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(event);
+    setPage(1);
   };
 
   const handleSearch = (e) => {
     if (e.key === 'Enter') {
-      // setSearch(e.target.value);
-      console.log(e.target.value);
-      console.log(tabValue);
-
+      setSearch(e.target.value);
     }
   };
 
@@ -146,6 +112,23 @@ function PayrollTable({
     setDirection(ifThenElse(isAsc, 'desc', 'asc'));
     setSort(headId);
   };
+
+  useEffect(() => {
+    dispatch({
+      type: getPayrollRequested.toString(),
+      payload: {
+        page: page,
+        itemPerPage: rowsPerPage,
+        sort: sort,
+        direction: direction,
+        search: search,
+        countryCode: '',
+        companyID: companyData?.id,
+        workflow: 'payroll',
+        status: Tabs[tabValue]
+      }
+    });
+  }, [page, rowsPerPage, sort, direction, search, responser.code, tabValue]);
 
   useEffect(() => {
     setHaydrated(true);
@@ -171,14 +154,14 @@ function PayrollTable({
             }}
           />
         </Grid>
-        <Grid item xs={6}>
+        {/* <Grid item xs={6}>
           <DateRangePicker
             withAsterisk
             // value={formik.values.startDate as unknown as Date}
             onChange={(date: unknown) => console.log(date)}
           // error={formik.touched.startDate && formik.errors.startDate ? String(formik.errors.startDate) : ''}
           />
-        </Grid>
+        </Grid> */}
       </Grid>
       <Table
         count={data?.itemTotals}
@@ -197,7 +180,7 @@ function PayrollTable({
                     direction={sort === item.id ? direction : 'asc'}
                     onClick={(e) => handleRequestSort(e, item.id)}
                   >
-                    {item.label}
+                    {item.label === '' ? '' : t(`${t_tableCols}.${item.label}`)}
                     {sort === item.id ? (
                       <Box component='span' sx={visuallyHidden}>
                         {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
@@ -223,10 +206,10 @@ function PayrollTable({
                   data?.items?.map((item, index) => (
                     <TableRow key={index}>
                       <TableCell>{item.name}</TableCell>
-                      <TableCell>{item.daterange}</TableCell>
-                      <TableCell>{ifThenElse(item.reportType === 'gross', <GrossComponent>{item.reportName}</GrossComponent>, <NetComponent>{item.reportName}</NetComponent>)}</TableCell>
-                      <TableCell>{item.createdAt}</TableCell>
-                      <TableCell>{item.lastUpdated}</TableCell>
+                      <TableCell>{dayjs(item.start).format('DD/MM/YYYY')} - {dayjs(item.end).format('DD/MM/YYYY')}</TableCell>
+                      <TableCell>{ifThenElse(item.workflow === 1, <GrossComponent>Gross Payroll Report</GrossComponent>, <NetComponent>Net Payroll Report</NetComponent>)}</TableCell>
+                      <TableCell>{dayjs(item.createdAt).format('DD/MM/YYYY')}</TableCell>
+                      <TableCell>{dayjs(item.updatedAt).format('DD/MM/YYYY')}</TableCell>
                       <TableCell>
                         <MuiButton
                           variant='contained'
@@ -235,7 +218,7 @@ function PayrollTable({
                           sx={{ color: '#111827' }}
                           onClick={() => { console.log(true); }}
                         >
-                          {ifThenElse(item.reportType === 'gross', 'Gross Payroll Report.pdf', 'Net Payroll Report.pdf')} &nbsp;<FiDownload fontSize='small' />
+                          {item.attachment.filename} &nbsp;<FiDownload fontSize='small' />
                         </MuiButton>
                       </TableCell>
                       <TableCell>
@@ -244,9 +227,9 @@ function PayrollTable({
                             <>
                               <IconButton
                                 parentColor='#E9EFFF'
-                                onClick={() => { item.reportType === 'gross' ? router.push('/payroll-disbursement/payroll/gross-detail') : router.push('/payroll-disbursement/payroll/net-detail'); }}
+                                onClick={() => { item.workflow === 1 ? router.push({ pathname: '/payroll-disbursement/payroll/generate-gross/detail', query: { id: item?.id } }) : router.push({pathname: '/payroll-disbursement/payroll/generate-net', query: { id: item?.id }}); }}
                                 icons={
-                                  <TbFileImport fontSize={20} color='#223567' />
+                                  <HiPencilAlt fontSize={20} color='#223567' />
                                 }
                               />
                               <IconButton
@@ -262,15 +245,17 @@ function PayrollTable({
                             <>
                               <IconButton
                                 parentColor='#E9EFFF'
-                                onClick={() => { item.reportType === 'gross' ? router.push('/payroll-disbursement/payroll/gross-detail') : router.push('/payroll-disbursement/payroll/net-detail'); }}
+                                onClick={() => { item.workflow === 1 ? router.push({pathname: '/payroll-disbursement/payroll/gross-detail', query: { id: item?.id }}) : router.push({pathname:'/payroll-disbursement/payroll/net-detail', query: { id: item?.id }}); }}
                                 icons={
-                                  <BsFillEyeFill fontSize={20} color='#223567' />
+                                  <TbFileImport fontSize={20} color='#223567' />
+                                  //<BsFillEyeFill fontSize={20} color='#223567' />
                                 }
                               />
                               <IconButton
                                 parentColor='#FEE2E2'
                                 onClick={() => setDeleteConfirmation(true)}
                                 icons={
+
                                   <BsTrashFill fontSize={20} color='#EF4444' />
                                 }
                               />

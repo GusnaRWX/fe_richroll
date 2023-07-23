@@ -11,6 +11,8 @@ import { useRouter } from 'next/router';
 import { IconButton } from '@/components/_shared/form';
 import { ArrowBack } from '@mui/icons-material';
 import NetContent from '@/components/payroll-assistant/create/NetContent';
+import { useAppDispatch } from '@/hooks/index';
+import { patchNetPayrollFinalRequested } from '@/store/reducers/slice/payroll/payrollSlice';
 
 const ButtonWrapper = styled(Box)(({
   display: 'flex',
@@ -36,6 +38,18 @@ const ContentWrapper = styled(Card)(({
 
 function GenerateNet() {
   const router = useRouter();
+  const dispatch = useAppDispatch();
+  const handleSave = () => {
+    dispatch({
+      type: patchNetPayrollFinalRequested.toString(),
+      payload: {
+        data: {
+          id: router.query.id
+        }
+      },
+      isAssist: false
+    });
+  };
   return (
     <>
       <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
@@ -56,7 +70,7 @@ function GenerateNet() {
         </Grid>
       </Grid>
 
-      <NetContent />
+      <NetContent isPreview={false}/>
 
       <ContentWrapper>
         <Box sx={{ width: '100%' }}>
@@ -74,9 +88,9 @@ function GenerateNet() {
                   variant='contained'
                   size='small'
                   color='primary'
-                  onClick={() => {router.push('/payroll-disbursement/payroll');}}
+                  onClick={() => {handleSave();}}
                   sx={{ color: 'white' }}
-                >Confirm</MuiButton>
+                >Save</MuiButton>
               </ButtonWrapper>
             </Grid>
           </Grid>

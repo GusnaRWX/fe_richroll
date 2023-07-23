@@ -34,6 +34,725 @@
     "payroll_setting": "Pengaturan gaji",
     "employment": "Pekerjaan",
     "reports": "Laporan",
-    "article_management": "Manajemen Artikel"
+    "article_management": "Manajemen Artikel",
+    "income_tax_profile": "Profil Pajak Penghasilan",
+    "income_tax_profile_deductable_component": "Komponen yang Dapat Dikurangi",
+    "income_tax_profile_profile": "Profil"
+  },
+
+  "button": {
+    "next": "Berikutnya",
+    "back": "Kembali",
+    "save": "Menyimpan",
+    "save_approve": "Simpan dan Setujui",
+    "save_exit": "Simpan dan keluar",
+    "confirm": "Mengonfirmasi",
+    "submit": "Kirim",
+    "cancel": "Membatalkan",
+    "close": "Menutup",
+    "delete": "Menghapus",
+    "edit": "Sunting",
+    "activate": "Mengaktifkan",
+    "reactivate": "Mengaktifkan kembali",
+    "suspend": "Menskors",
+    "archive": "Diarsipkan",
+    "duplicate": "Duplikat",
+    "component": "Komponen",
+    "deductable": "Dapat dikurangkan",
+    "mark_complete": "Tandai Semua dan Selesai",
+    "add_new_profile": "Tambahkan Profil Baru",
+    "add_component": "Tambahkan Komponen",
+    "add_new_component": "Tambahkan Komponen Baru",
+    "add_profile": "Tambahkan Profil",
+    "add_supplementary_compensation": "Tambahkan Kompensasi Tambahan"
+  },
+  "compensation_and_benefits": {
+    "title": "Kompensasi",
+    "table": {
+      "table_cols_item": {
+        "cnb_profile_name": "C",
+        "base_compensation": "Kompensasi Dasar",
+        "supplementary_compensation": "Kompensasi Tambahan",
+        "date_created": "Tanggal Diciptakan",
+        "last_update": "Pembaharuan Terakhir"
+      }
+    },
+    "form": {
+      "create_title": "Buat C Baru",
+      "update_title": "Memperbaharui profil",
+      "profile_name": "Nama profil",
+      "profile_name_placeholder": "Masukkan Nama Profil",
+      "compensation_sub_title": "Kompensasi",
+      "base_section": {
+        "title": "Basis",
+        "compensation_component": "Komponen Kompensasi",
+        "compensation_component_placeholder": "Pilih komponen kompensasi dasar",
+        "tax_status": "Status Pajak",
+        "tax_status_option": {
+          "taxable": "Kena Pajak",
+          "nontaxable": "Tidak Kena Pajak"
+        }
+      },
+      "overtime_section": {
+        "title": "Lembur",
+        "rate": "Kecepatan"
+      },
+      "supplementary_section": {
+        "title": "Tambahan",
+        "compensation_component": "Komponen Kompensasi",
+        "tax_status": "Status Pajak",
+        "tax_status_option": {
+          "taxable": "Kena Pajak",
+          "nontaxable": "Tidak Kena Pajak"
+        },
+        "amount": "Jumlah"
+      }
+    },
+    "popup": {
+      "delete": {
+        "title": "Apakah Anda yakin ingin menghapus catatan ini?",
+        "desc": "Setiap perubahan yang belum disimpan akan dibuang. "
+      },
+      "create_cancel": {
+        "title": "Apakah Anda yakin ingin menghapus rekaman ini?",
+        "desc": "Setiap perubahan yang belum disimpan akan dibuang. "
+      },
+      "update_cancel": {
+        "title": "Apakah Anda yakin ingin pergi?",
+        "desc": "Setiap perubahan yang belum disimpan akan dibuang"
+      },
+      "update_save": {
+        "title": "Simpan perubahan",
+        "desc": "Yakin ingin memperbarui profil dengan data ini? "
+      },
+      "detail": {
+        "title": "Detil Profil C&B",
+        "cnb_profile_name": "Nama Profil C&B",
+        "date_created": "Tanggal Diciptakan",
+        "last_update": "Pembaharuan Terakhir",
+        "base_section": {
+          "title": "Basis",
+          "compensation_component": "Komponen Kompensasi",
+          "compensation_component_placeholder": "Pilih komponen kompensasi dasar",
+          "tax_status": "Status Pajak",
+          "tax_status_option": {
+            "taxable": "Kena Pajak",
+            "nontaxable": "NTaxable"
+          },
+          "amount_per": "Jumlah per",
+          "rate_per": "Tingkat per "
+        },
+        "supplementary_section": {
+          "title": "Tambahan",
+          "compensation_component": "Komponen Kompensasi",
+          "tax_status": "Status Pajak",
+          "tax_status_option": {
+            "taxable": "Kena Pajak",
+            "nontaxable": "NTaxable"
+          },
+          "amount_month": "Jumlah Bulanan"
+        }
+      }
+    },
+    "create_new_payroll": "Buat Daftar Gaji Baru",
+    "generate_attendance_report": "Membuat Laporan Kehadiran",
+    "generate_gross_payroll": "Hasilkan Gross Payroll",
+    "add_ad_hoc": "Tambahkan Ad Hoc",
+    "calculate": "Menghitung"
+  },
+
+  "income_tax_profile": {
+    "deductable_component": {
+      "title": "Dasbor Komponen yang Dapat Dikurangi",
+      "detail_title": "Detail Komponen yang Dapat Dikurangi",
+      "table": {
+        "company_name": "Nama perusahaan",
+        "country": "Negara",
+        "component_condition": "Kondisi Komponen",
+        "last_update": "Pembaharuan Terakhir",
+        "delete_modal": {
+          "title": "Hapus Entri Data",
+          "text": "Anda akan menghapus komponen manfaat wajib ini. "
+        }
+      },
+      "add_new_component": {
+        "title": "Tambahkan Komponen Baru",
+        "save_modal_text": "Anda akan menghentikan proses, dan disimpan di Tambahkan Komponen Baru.<br>Apakah Anda yakin akan menghentikan prosesnya?",
+        "mark_modal_text": "Semua pencairan akan ditandai dibayar dan menyelesaikan proses Tambah Komponen Baru",
+        "form": {
+          "wizard_option": {
+            "initial": "Membuat",
+            "basic_detail": "Detil Dasar",
+            "designed_transfer_account": "Akun Transfer yang dirancang",
+            "transfer_account": "Transfer Akun",
+            "rates": "Tarif"
+          },
+          "create_basic_detail": {
+            "name": "nama komponen",
+            "name_placeholder": "Masukkan Nama Komponen",
+            "country": "Negara",
+            "province": "Propinsi",
+            "city": "Kota",
+            "sub_district": "Kecamatan",
+            "citation": "Kutipan",
+            "internal_notes": "Catatan Internal",
+            "external_notes": "Catatan Eksternal",
+            "max_char_info": "Maks. "
+          },
+          "create_dta": {
+            "title": "Informasi bank",
+            "type": "Jenis",
+            "type_option": {
+              "central_account": "Akun Tengah",
+              "individual_account": "Akun Perorangan",
+              "company_account_only": "Akun Perusahaan Saja"
+            },
+            "message": "Rekening Transfer yang Ditunjuk ditambahkan secara manual ke profil setiap karyawan",
+            "bank": "Bank",
+            "bank_account_holders_name": "Nama Pemegang Rekening Bank",
+            "bank_account_no": "Nomor Rekening Bank",
+            "bank_code": "Kode Bank",
+            "branch_code": "Kode cabang",
+            "branch_name": "Nama cabang",
+            "swift_code": "Tukar Kode",
+            "notes": "Catatan",
+            "bank_account_holders_name_placeholder": "Masukkan Nama Pemegang Rekening Bank",
+            "bank_account_no_placeholder": "Masukkan No Rekening Bank",
+            "bank_code_placeholder": "Masukkan Kode Bank",
+            "branch_code_placeholder": "Masukkan Kode Cabang",
+            "branch_name_placeholder": "Masukkan Nama Cabang",
+            "swift_code_placeholder": "Masukkan Kode Swift",
+            "notes_placeholder": "Catatan Masukan",
+            "max_char_info": "Maks. "
+          },
+          "rates": {
+            "select_type": "Pilih Jenis yang Dapat Dikurangi",
+            "dc_condition": "Kondisi Komponen yang Dapat Dikurangi",
+            "amount": "Jumlah",
+            "fu_condition": "Kondisi Satuan Faktor",
+            "sub_condition": "Sub Kondisi"
+          }
+        }
+      },
+      "modal": {
+        "delete": {
+          "title": "Hapus Entri Data",
+          "text": "Anda akan menghapus komponen manfaat wajib ini. "
+        },
+        "duplicate": {
+          "title": "Konfirmasi",
+          "text": "Apakah Anda yakin ingin menggandakan profil ini?"
+        }
+      }
+    },
+    "profile": {
+      "title": "Konfigurasi Profil Pajak",
+      "add_new_title": "Tambahkan Profil Pajak Baru",
+      "tab": {
+        "draft": "Draf",
+        "active": "Aktif",
+        "archive": "Diarsipkan"
+      },
+      "draft_table": {
+        "name": "Nama",
+        "country": "Negara",
+        "effective_period": "Periode Efektif",
+        "created_on": "Dibuat pada",
+        "last_update": "Pembaharuan Terakhir"
+      },
+      "active_table": {
+        "profile_name": "Nama profil",
+        "country": "Negara",
+        "province": "Propinsi",
+        "effective_period": "Periode Efektif",
+        "created_on": "Dibuat pada",
+        "last_update": "Pembaharuan Terakhir"
+      },
+      "archieve_table": {
+        "profile_name": "Nama profil",
+        "country": "Negara",
+        "province": "Propinsi",
+        "effective_period": "Periode Efektif",
+        "created_on": "Dibuat pada",
+        "last_update": "Pembaharuan Terakhir"
+      },
+      "detail": {
+        "main": {
+          "title": "Profil Pajak - Status"
+        },
+        "tab": {
+          "basic_detail": "Detil Dasar",
+          "deductible_component": "Komponen yang Dapat Dikurangi",
+          "income_tax_rate": "Tarif Pajak Penghasilan",
+          "income_tax_multiplier": "Pengganda Pajak Penghasilan",
+          "designated_transfer_account": "Rekening Transfer yang Ditunjuk"
+        },
+        "wizard_option": {
+          "initial": "Membuat",
+          "basic_detail": "Detil Dasar",
+          "deductable_component": "Komponen yang Dapat Dikurangi",
+          "income_tax_rates": "Tarif Pajak Penghasilan",
+          "income_tax_multiplier": "Pengganda Pajak Penghasilan",
+          "designed_transfer_account": "Akun Transfer yang dirancang"
+        },
+        "basic_detail": {
+          "tax_profile_name": "Nama Profil Pajak",
+          "tax_profile_name_placeholder": "Masukkan Nama Profil",
+          "country": "Negara",
+          "different_currency": "Mata uang yang berbeda",
+          "effective_period": "Periode Efektif",
+          "citation": "Kutipan",
+          "internal_notes": "Catatan Internal",
+          "external_notes": "Catatan Eksternal",
+          "province": "Propinsi",
+          "city": "Kota",
+          "sub_district": "Kecamatan",
+          "effective_date": "Tanggal berlaku",
+          "expiration_date": "Tanggal habis tempo",
+          "max_char_info": "Maks. "
+        },
+        "deductible_component": {
+          "martial_status": "Status pernikahan",
+          "number_of_dependence": "Jumlah Ketergantungan",
+          "factor_unit_condition": "Kondisi Satuan Faktor",
+          "amount": "Jumlah",
+          "deductible": "Dapat dikurangkan"
+        },
+        "income_tax_rate": {
+          "progressive_rate": "Tingkat Progresif",
+          "income": "Penghasilan",
+          "rate": "Kecepatan",
+          "min_income": "Penghasilan Min",
+          "amount": "Jumlah",
+          "max_income": "Penghasilan Maks",
+          "additional_fixed_amount": "Jumlah Tetap Tambahan"
+        },
+        "income_tax_multiplier": {
+          "deductible_factor": "Faktor Pengurangan",
+          "factor_unit_condition": "Kondisi Satuan Faktor",
+          "rate": "Kecepatan",
+          "additional_fixed_amount": "Jumlah Tetap Tambahan",
+          "status": "Status",
+          "condition": "Kondisi",
+          "multiplier": "Pengali",
+          "component": "Komponen"
+        },
+        "designated_transfer_account": {
+          "type": "Jenis",
+          "bank": "Bank",
+          "bank_account_holders_name": "Nama Pemegang Rekening Bank",
+          "bank_account_holders_name_placeholder": "Masukkan Nama Pemegang Rekening Bank",
+          "bank_account_no": "Nomor Rekening Bank",
+          "bank_account_no_placeholder": "Masukkan No Rekening Bank",
+          "bank_code": "Kode Bank",
+          "bank_code_placeholder": "Masukkan Kode Bank",
+          "branch_code": "Kode cabang",
+          "branch_code_placeholder": "Masukkan Kode Cabang",
+          "branch_name": "Nama cabang",
+          "branch_name_placeholder": "Masukkan Nama Cabang",
+          "swift_code": "Tukar Kode",
+          "swift_code_placeholder": "Masukkan Kode Swift",
+          "notes": "Catatan",
+          "notes_placeholder": "Catatan Masukan",
+          "bank_info": "Informasi bank",
+          "central_account": "Akun Tengah",
+          "individual_account": "Akun Perorangan",
+          "company_account": "Akun Perusahaan Saja",
+          "message": "Rekening Transfer yang Ditunjuk ditambahkan secara manual ke profil setiap karyawan",
+          "max_char_info": "Maks. "
+        }
+      },
+      "modal": {
+        "activate": {
+          "title": "Tanggal penerbitan",
+          "description": "Apakah Anda ingin Mengaktifkan profil pajak?",
+          "effective_date": "Tanggal berlaku",
+          "expiration_date": "Tanggal habis tempo"
+        },
+        "duplicate": {
+          "title": "Konfirmasi",
+          "description": "Apakah Anda ingin menggandakan profil ini?"
+        },
+        "delete": {
+          "title": "Hapus Entri Data",
+          "description": "Anda akan menghapus entri data kehadiran ini. "
+        },
+        "archive": {
+          "title": "Tanggal Pengarsipan",
+          "description": "Masukkan Tanggal Efektif Pengarsipan",
+          "checkbox": "Ganti dengan Profil Baru"
+        },
+        "mark_all": {
+          "title": "Tandai semua sudah dibayar dan Selesai",
+          "description": "Semua pencairan akan ditandai sebagai dibayar dan menyelesaikan proses Asisten Penggajian"
+        },
+        "cancel": {
+          "title": "Simpan & keluar",
+          "description": "Anda akan menghentikan prosesnya, dan disimpan di Payroll Assistant. Apakah Anda yakin akan menghentikan prosesnya?"
+        },
+        "add_deductable": {
+          "title": "Pilih Komponen yang Dapat Dikurangi Pajak",
+          "component_name": "nama komponen",
+          "component_condition": "Kondisi Komponen"
+        }
+      }
+    }
+  },
+  "satutory_benefit": {
+    "component": {
+      "title": "Dasbor Komponen Manfaat Wajib",
+      "detail_title": "Komponen Tunjangan Hukum",
+      "table": {
+        "company_name": "Nama perusahaan",
+        "country": "Negara",
+        "contributors": "Kontributor(S)",
+        "rate_type": "Jenis Tarif",
+        "created_on": "Dibuat pada",
+        "last_update": "Pembaharuan Terakhir",
+        "action": ""
+      },
+      "form_&_detail": {
+        "dashboard_title": "Tambahkan Komponen Baru",
+        "wizard_option": {
+          "basic_detail": "Detil Dasar",
+          "designed_transfer_account": "Akun Transfer yang dirancang",
+          "rate": "Kecepatan"
+        },
+        "create_basic_detail": {
+          "detail_title": "Detil Dasar",
+          "name": "Nama Satutori",
+          "name_placeholder": "Masukkan Nama Manfaat Satutori",
+          "country": "Negara",
+          "province": "Propinsi",
+          "city": "Kota",
+          "sub_district": "Kecamatan",
+          "citation": "Kutipan",
+          "internal_notes": "Catatan Internal",
+          "external_notes": "Catatan Eksternal",
+          "max_char_info": "Maks. ",
+          "component_name": "nama komponen"
+        },
+        "create_designed_transfer_account": {
+          "form_title": "Informasi bank",
+          "detail_title": "Informasi bank",
+          "type_option": {
+            "central_account": "Akun Tengah",
+            "individual_account": "Akun Perorangan",
+            "company_account_only": "Akun Perusahaan Saja"
+          },
+          "information": "Rekening Transfer yang Ditunjuk ditambahkan secara manual ke setiap profil karyawan",
+          "bank": "Bank",
+          "bank_account_holders_name": "Nama Pemegang Rekening Bank",
+          "bank_account_holders_name_placeholder": "Masukkan Nama Pemegang Rekening Bank",
+          "bank_account_no": "Nomor Rekening Bank",
+          "bank_account_no_placeholder": "Masukkan No Rekening Bank",
+          "bank_code": "Kode Bank",
+          "bank_code_placeholder": "Masukkan Kode Bank",
+          "branch_code": "Kode cabang",
+          "branch_code_placeholder": "Masukkan Kode Cabang",
+          "branch_name": "Nama cabang",
+          "branch_name_placeholder": "Masukkan Nama Cabang",
+          "swift_code": "Tukar Kode",
+          "swift_code_placeholder": "Masukkan Kode Swift",
+          "notes": "Catatan",
+          "notes_placeholder": "Catatan Masukan",
+          "bank_info": "Informasi bank",
+          "message": "Rekening Transfer yang Ditunjuk ditambahkan secara manual ke setiap profil karyawan",
+          "max_char_info": "Maks. ",
+          "transfer_info": "Informasi Transfer"
+        },
+        "rates": {
+          "contributor_option": {
+            "label": "Penyumbang",
+            "employee": "Karyawan",
+            "employer": "Pemberi pekerjaan"
+          },
+          "sub_title": "Tarif",
+          "match_rule_button": "Aturan Kecocokan Majikan",
+          "start": "Awal",
+          "end": "Akhir",
+          "additional_fixed_amount": "Jumlah Tetap Tambahan",
+          "amount_cap": "Batas Jumlah",
+          "rate_type": "Jenis Tarif",
+          "flat_rate": "Tarif Tetap"
+        },
+        "others": {
+          "search_placeholder": "Mencari"
+        }
+      },
+      "modal": {
+        "delete": {
+          "title": "Hapus Entri Data",
+          "text": "Anda akan menghapus komponen manfaat wajib ini. "
+        },
+        "duplicate": {
+          "title": "Konfirmasi",
+          "text": "Apakah Anda yakin ingin menggandakan profil ini?"
+        }
+      }
+    },
+    "profile": {
+      "title": "Dasbor Profil Manfaat Wajib",
+      "detail_title": "Profil Tunjangan Hukum",
+      "table": {
+        "table_tabs": {
+          "draft": "Draf",
+          "active": "Aktif",
+          "archived": "Diarsipkan"
+        },
+        "name": "Nama",
+        "profile_name": "Nama profil",
+        "country": "Negara",
+        "province": "Propinsi",
+        "effective_period": "Periode Efektif",
+        "created_on": "Dibuat pada",
+        "last_update": "Pembaharuan Terakhir"
+      },
+      "form_&_detail": {
+        "create_title": "Ciptakan Manfaat Kejenuhan",
+        "update_title": "Perbarui Manfaat Satutory",
+        "name": "Nama Satutori",
+        "name_placeholder": "Masukkan Nama Manfaat Satutori",
+        "country": "Negara",
+        "province": "Propinsi",
+        "city": "Kota",
+        "sub_district": "Kecamatan",
+        "effective_date": "Tanggal berlaku",
+        "expiration_date": "Tanggal habis tempo",
+        "citation": "Kutipan",
+        "internal_notes": "Catatan Internal",
+        "external_notes": "Catatan Eksternal",
+        "max_char_info": "Maks. ",
+        "component": {
+          "popup_title": "Pilih Komponen Manfaat Satutory",
+          "employee_name": "nama karyawan",
+          "effective_period": "Periode Efektif",
+          "rate_type": "Jenis Tarif",
+          "contributor": "Penyumbang",
+          "rate_types": "Jenis Tarif",
+          "flat_rate": "Tarif Tetap",
+          "amount_cap": "Batas Jumlah"
+        }
+      },
+      "modal": {
+        "delete": {
+          "title": "Hapus Entri Data",
+          "text": "Anda akan menghapus entri data kehadiran ini. "
+        },
+        "duplicate": {
+          "title": "Konfirmasi",
+          "text": "Apakah Anda yakin ingin menggandakan profil ini?"
+        },
+        "archive": {
+          "title": "Tanggal Pengarsipan",
+          "input_date": "Masukkan Tanggal Efektif Pengarsipan",
+          "replace": "Ganti dengan Profil Baru"
+        },
+        "activate": {
+          "title": "Tanggal penerbitan",
+          "text": "Apakah Anda ingin Mengaktifkan profil pajak?",
+          "effective_date": "Tanggal berlaku",
+          "expiration_date": "Tanggal habis tempo"
+        }
+      }
+    }
+  },
+
+
+  "payroll_and_disbursement": {
+    "payroll_assistant": {
+      "title": "Operasi Penggajian",
+      "sub_title": "Asisten penggajian",
+      "table": {
+        "tab_panel": {
+          "in_progress": "Sedang berlangsung",
+          "completed": "Lengkap"
+        },
+        "table_cols_item": {
+          "name": "Nama",
+          "date_range": "Rentang Tanggal",
+          "created_on": "Dibuat pada",
+          "last_updated": "Terakhir Diperbarui"
+        }
+      },
+      "popup": {
+        "create": {
+          "title": "Buat Daftar Gaji Baru",
+          "name_input_label": "Nama",
+          "name_input_placeholder": "Nama Masukan",
+          "start_date": "Mulai tanggal",
+          "end_date": "Tanggal Berakhir"
+        },
+        "delete": {
+          "title": "Hapus Operasi Penggajian dari Asisten Penggajian?",
+          "desc": "Anda akan menghapus laporan penggajian ini. "
+        }
+      }
+    },
+    "attendance_summary": {
+      "title": "Operasi Penggajian",
+      "sub_title": "Ringkasan Kehadiran",
+      "table": {
+        "tab_panel": {
+          "draft": "Draf",
+          "confirmed": "Dikonfirmasi",
+          "completed": "Lengkap",
+          "archive": "Arsip"
+        },
+        "table_cols_item": {
+          "name": "Nama",
+          "date_range": "Rentang Tanggal",
+          "report_type": "Tipe laporan",
+          "created_on": "Dibuat pada",
+          "last_updated": "Terakhir Diperbarui",
+          "attachment": "Lampiran"
+        }
+      },
+      "popup": {
+        "create": {
+          "title": "Buat Daftar Gaji Baru",
+          "name_input_label": "Nama",
+          "name_input_placeholder": "Nama Masukan",
+          "start_date": "Mulai tanggal",
+          "end_date": "Tanggal Berakhir"
+        },
+        "delete": {
+          "title": "Hapus Kehadiran dari Operasi Penggajian?",
+          "desc": "Anda akan menghapus laporan penggajian ini. "
+        }
+      },
+      "generate_gross_payroll": {
+        "title": "Menghasilkan Laporan Penggajian Kotor",
+        "sub_title": "Daftar gaji",
+        "table": {
+          "table_cols_item": {
+            "employee_name": "nama karyawan",
+            "attendance": "Kehadiran",
+            "absent": "Absen",
+            "paid_leave": "Cuti berbayar",
+            "unpaid_leave": "Cuti tidak dibayar",
+            "overtime_hours": "Jam lembur",
+            "total_hours": "Jumlah jam",
+            "average_hours": "Rata-rata Jam kerja/hari"
+          }
+        },
+        "detail": {
+          "operational_department": {
+            "title": "Departemen Operasional",
+            "card_items": {
+              "total_base_compensation": "Total Kompensasi Dasar",
+              "total_supplementary_compensation": "Total Kompensasi Tambahan",
+              "total_ad_hoc_compensation": "Total Kompensasi Ad Hoc",
+              "total_gross_payroll": "Total Gaji Kotor"
+            },
+            "table": {
+              "table_cols_item": {
+                "fullname": "Nama lengkap",
+                "base_compensation": "Kompensasi Dasar",
+                "Supplementary_compensation": "Kompensasi Tambahan",
+                "ad_hoc_compensation": "Kompensasi Ad Hoc",
+                "gross_compensation": "Kompensasi Kotor"
+              }
+            }
+          },
+          "delivery_department": {
+            "title": "Departemen Pengiriman",
+            "card_items": {
+              "total_base_compensation": "Total Kompensasi Dasar",
+              "total_supplementary_compensation": "Total Kompensasi Tambahan",
+              "total_ad_hoc_compensation": "Total Kompensasi Ad Hoc",
+              "total_gross_payroll": "Total Gaji Kotor"
+            },
+            "table": {
+              "table_cols_item": {
+                "fullname": "Nama lengkap",
+                "base_compensation": "Kompensasi Dasar",
+                "Supplementary_compensation": "Kompensasi Tambahan",
+                "ad_hoc_compensation": "Kompensasi Ad Hoc",
+                "gross_compensation": "Kompensasi Kotor"
+              }
+            }
+          },
+          "gross_calculating_payroll_form": {
+            "section_title": "Menghitung Penggajian Kotor",
+            "base": {
+              "section_title": "Basis",
+              "compensation_component": "Komponen Kompensasi",
+              "amount": "Jumlah",
+              "amount_placeholder": "Jumlah Masukan",
+              "tax_status": "Status Pajak",
+              "tax_status_option": {
+                "taxable": "Kena Pajak",
+                "non_taxable": "Tidak Kena Pajak"
+              }
+            },
+            "overtime_hours": {
+              "section_title": "Jam lembur",
+              "overtime_hours": "Jam lembur",
+              "overtime_hours_placeholder": "Masukkan jam lembur",
+              "rate": "Kecepatan",
+              "rate_placeholder": "Tingkat masukan"
+            },
+            "supplementary": {
+              "section_title": "Tambahan",
+              "compensation_component": "Komponen Kompensasi",
+              "amount": "Jumlah",
+              "amount_placeholder": "Jumlah Masukan",
+              "tax_status": "Status Pajak",
+              "tax_status_option": {
+                "taxable": "Kena Pajak",
+                "non_taxable": "Tidak Kena Pajak"
+              }
+            },
+            "ad_hoc": {
+              "section_title": "AD hoc",
+              "ad_hoc_component": "Komponen Ad-Hoc",
+              "ad_hoc_component_placeholder": "Masukkan Nama Hoc",
+              "amount": "Jumlah",
+              "amount_placeholder": "Jumlah Masukan"
+            }
+          }
+        }
+      }
+    },
+    "payroll_report": {
+      "title": "Operasi Penggajian",
+      "sub_title": "Laporan Penggajian",
+      "table": {
+        "tab_panel": {
+          "draft": "Draf",
+          "confirmed": "Dikonfirmasi",
+          "completed": "Lengkap",
+          "archive": "Arsip"
+        },
+        "table_cols_item": {
+          "name": "Nama",
+          "date_range": "Rentang Tanggal",
+          "report_type": "Tipe laporan",
+          "created_on": "Dibuat pada",
+          "last_updated": "Terakhir Diperbarui",
+          "attachment": "Lampiran"
+        }
+      }
+    },
+    "disbursement": {
+      "title": "Operasi Penggajian",
+      "sub_title": "Pembayaran",
+      "table": {
+        "tab_panel": {
+          "draft": "Draf",
+          "completed": "Lengkap",
+          "archive": "Arsip"
+        },
+        "table_cols_item": {
+          "name": "Nama",
+          "date_range": "Rentang Tanggal",
+          "report_type": "Tipe laporan",
+          "created_on": "Dibuat pada",
+          "last_updated": "Terakhir Diperbarui",
+          "attachment": "Lampiran"
+        }
+      }
+    }
   }
 }

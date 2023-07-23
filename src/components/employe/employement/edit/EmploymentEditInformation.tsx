@@ -5,7 +5,8 @@ import React, { HTMLAttributes, useCallback, useEffect, useRef, useState } from 
 import { Image as ImageType } from '@/utils/assetsConstant';
 import { styled as MuiStyled } from '@mui/material/styles';
 import {
-  convertImageParams
+  convertImageParams,
+  ifThenElse
 } from '@/utils/helper';
 import styled from '@emotion/styled';
 import { Input, Select as CustomSelect, FileUploadModal, CropperImage } from '@/components/_shared/form';
@@ -18,7 +19,6 @@ import { CameraAlt } from '@mui/icons-material';
 import { validationSchemeEmployeeInformation } from './validate';
 import { useAppSelectors } from '@/hooks/index';
 import dayjs from 'dayjs';
-import { ifThenElse } from '@/utils/helper';
 import { FiTrash2 } from 'react-icons/fi';
 
 
@@ -346,7 +346,7 @@ const EmploymentEditInformation = ({ refProp, setValues, infoValues, handleFirst
           onClose={handleCancelCrop}
           image={images}
           setCropValue={handleSaveCropImage}
-          ratio={1/1}
+          ratio={1}
         />
         <Modal
           open={openCamera}

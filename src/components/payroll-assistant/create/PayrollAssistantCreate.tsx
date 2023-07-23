@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { 
+import {
   Typography,
   Card,
   Grid,
   Box,
-  Button as MuiButton } from '@mui/material';
+  Button as MuiButton
+} from '@mui/material';
 import { Stepper } from '@/components/_shared/form';
 import { styled } from '@mui/material/styles';
 import { useRouter } from 'next/router';
@@ -15,6 +16,8 @@ import DisbursementContent from './DisbursementContent';
 import CompleteContent from './CompleteContent';
 import CustomModal from '@/components/_shared/common/CustomModal';
 import { ifThenElse } from '@/utils/helper';
+import { useAppSelectors, useAppDispatch } from '@/hooks/index';
+import { postPayrollGrossesRequested, putPayrollWorkflowRequested, putPayrollsGrossesFinalRequested } from '@/store/reducers/slice/payroll/payrollSlice';
 
 const steps = [
   'Create Payroll',
@@ -42,6 +45,9 @@ const ContentWrapper = styled(Card)(({
 
 function PayrollAssistantCreate() {
   const router = useRouter();
+  const dispatch = useAppDispatch();
+  const assistantID = router?.query?.id;
+  const { name, start, end, grossesId, id } = useAppSelectors((state) => state.payroll);
   const [value, setValue] = useState(1);
   const [open, setOpen] = useState(false);
   const [isExit, setIsExit] = useState(true);
@@ -54,12 +60,59 @@ function PayrollAssistantCreate() {
     router.push('/payroll-disbursement/payroll-assistant');
   };
 
+  const handleGenerateGross = () => {
+    dispatch({
+      type: putPayrollWorkflowRequested.toString(),
+      payload: {
+        id: id,
+        data: {
+          workflow: 0,
+          status: 1
+        }
+      }
+    });
+    dispatch({
+      type: postPayrollGrossesRequested.toString(),
+      payload: {
+        data: {
+          payrollID: [id],
+          assistantID: assistantID
+        },
+        isAssist: true
+      }
+    });
+    setValue(value + 1);
+  };
+
+  const handleGenerateNet = () => {
+    dispatch({
+      type: putPayrollWorkflowRequested.toString(),
+      payload: {
+        id: grossesId,
+        data: {
+          workflow: 0,
+          status: 1
+        }
+      }
+    });
+    dispatch({
+      type: putPayrollsGrossesFinalRequested.toString(),
+      payload: {
+        data: {
+          id: grossesId
+        },
+        isAssist: true
+      }
+    });
+    setValue(value + 1);
+  };
+
   return (
     <>
       <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
         <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
           <Typography variant='h6' color='#4B5563'><b>Payroll Assistant</b></Typography>
-          <Typography variant='text-base' color='#4B5563'><b>Payroll 280123 — </b>1/03/2023 - 14/03/2023</Typography>
+          <Typography variant='text-base' color='#4B5563'><b>{name} — </b>{start} - {end}</Typography>
         </Grid>
         <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
           <ButtonWrapper>
@@ -81,12 +134,26 @@ function PayrollAssistantCreate() {
               size='small'
               color='primary'
               onClick={() => {
-                if (value < 5) {
-                  setValue(value + 1);
-                }
-                if (value == 5) {
-                  setIsExit(false);
-                  setOpen(true);
+                switch (value) {
+                  case 1:
+                    handleGenerateGross();
+                    break;
+                  case 2:
+                    handleGenerateNet();
+                    break;
+                  case 3:
+                    setValue(value + 1);
+                    break;
+                  case 4:
+                    setValue(value + 1);
+                    break;
+                  case 5:
+                    setIsExit(false);
+                    setOpen(true);
+                    break;
+
+                  default:
+                    break;
                 }
               }}
             >{ifThenElse(value == 1, 'Generate Gross Payroll Report', ifThenElse(value == 2, 'Generate Net Payroll Report', ifThenElse(value == 3, 'Generate Disbursement Receipt', ifThenElse(value == 4, 'Generate Disbursement Files', 'Mark All Paid and Complete'))))}</MuiButton>
@@ -118,7 +185,7 @@ function PayrollAssistantCreate() {
             {
               ifThenElse(
                 isExit,
-                <Typography variant='text-base' color='#4B5563'>You will stop the process, and saved in Payroll Assistant.<br/>Are you sure to stop the process?</Typography>,
+                <Typography variant='text-base' color='#4B5563'>You will stop the process, and saved in Payroll Assistant.<br />Are you sure to stop the process?</Typography>,
                 <Typography variant='text-base' color='#4B5563'>All disbursement will marked paid and complete the Payroll Assistant process</Typography>
               )
             }
