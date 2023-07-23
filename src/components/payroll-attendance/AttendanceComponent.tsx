@@ -128,7 +128,7 @@ function AttendanceComponent() {
               color='primary'
               sx={{ color: 'white' }}
               onClick={() => { setOpen(true); }}
-            >{t('button.generate_attendance_report')}</MuiButton>
+            >{t('compensation_and_benefits.generate_attendance_report')}</MuiButton>
           </ButtonWrapper>
         </Grid>
       </Grid>
