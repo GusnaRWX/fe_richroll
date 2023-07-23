@@ -20,7 +20,7 @@ import {
   getPayrollDisbursementId,
   getNetPayroll,
   postNetPayroll,
-  patchNetPayrollFinal
+  patchNetPayrollFinal,
 } from '../saga-actions/payroll/payrollActions';
 import { call, put, takeEvery, delay } from 'redux-saga/effects';
 import {
@@ -580,6 +580,7 @@ function* fetchPostPayrollDisbursementsId(action: AnyAction) {
 
     if (res.data.code === 201) {
       yield put({ type: postPayrollDisbursementIdSuccess.toString() });
+      yield Router.push({ pathname: '/payroll-disbursement/disbursement/generate', query: { id: res?.data?.data?.id } });
     }
 
   } catch (err) {
@@ -639,7 +640,7 @@ function* fetchGetNetPayroll(action: AnyAction) {
         }
       });
     }
-  } catch(err) {
+  } catch (err) {
     if (err instanceof AxiosError) {
       const errorMessage = err?.response?.data as Services.ErrorResponse;
       yield put({ type: getNetPayrollFailed.toString() });
@@ -667,7 +668,7 @@ function* fetchPostNetPayroll(action: AnyAction) {
           message: res?.data?.message
         }
       });
-      Router.push({pathname: '/payroll-disbursement/payroll/generate-net', query: { id: res?.data?.data?.id }});
+      yield Router.push({ pathname: '/payroll-disbursement/payroll/generate-net', query: { id: res?.data?.data?.id } });
     }
   } catch (err) {
     if (err instanceof AxiosError) {

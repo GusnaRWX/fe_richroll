@@ -278,7 +278,7 @@ export declare namespace Payroll {
 
   interface DisbursementsData {
     net: number,
-    taxIncome: number,
+    incomeTax: number,
     statutory: number,
     contribution: number,
     disbursement: number,
@@ -290,6 +290,7 @@ export declare namespace Payroll {
   }
 
   interface Disbursements {
+    id: string;
     attachment: {
       filename: string;
       link: string;
@@ -297,12 +298,16 @@ export declare namespace Payroll {
     };
     receiptFile: string;
     isPaid: boolean;
-    items: Array<DisbursementData>
+    method: {
+      id: string;
+      name: string;
+    }
+    items: Array<DisbursementsData>
   }
 
   interface DisbursementData {
     net: number;
-    taxIncome: number;
+    incomeTax: number;
     statutory: number;
     contribution: number;
     disbursement: number;

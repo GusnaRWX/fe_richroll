@@ -302,7 +302,7 @@ export const payrollSlice = createSlice({
     getNetPayrollRequested: state => {
       state.isLoading = true;
     },
-    getNetPayrollSuccess: (state,action) => {
+    getNetPayrollSuccess: (state, action) => {
       state.isLoading = false;
       state.netDetail = action?.payload?.data;
     },
