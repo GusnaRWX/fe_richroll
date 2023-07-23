@@ -23,7 +23,7 @@ import { useRouter } from 'next/router';
 import { ConfirmationModal } from '@/components/_shared/common';
 import EmptyState from '../_shared/common/EmptyState';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
-import { getPayrollRequested, postPayrollGrossesRequested } from '@/store/reducers/slice/payroll/payrollSlice';
+import { getPayrollRequested, postPayrollGrossesRequested, deletePayrollRequested } from '@/store/reducers/slice/payroll/payrollSlice';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
@@ -74,7 +74,7 @@ function AttendanceTable({
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
   const [hydrated, setHaydrated] = useState(false);
-  const [deleteConfirmation, setDeleteConfirmation] = useState(false);
+  const [deleteConfirmation, setDeleteConfirmation] = useState({id: 0, open: false});
   const companyData = getCompanyData();
   const { responser } = useAppSelectors((state) => state);
   const router = useRouter();
@@ -142,6 +142,21 @@ function AttendanceTable({
         isAssist: false
       }
     });
+  };
+
+  const deletePayroll = (Id: string | number) => {
+    dispatch({
+      type: deletePayrollRequested.toString(),
+      payload: Id
+    });
+  };
+
+  const handleDeleteOpen = (id) => {
+    setDeleteConfirmation({ id: id, open: true });
+  };
+
+  const handleDeleteClose = () => {
+    setDeleteConfirmation({ id: 0, open: false });
   };
 
   useEffect(() => {
@@ -275,7 +290,7 @@ function AttendanceTable({
                               <IconButton
                                 disabled={!!selectedTemp.length}
                                 parentColor='#FEE2E2'
-                                onClick={() => setDeleteConfirmation(true)}
+                                onClick={() => handleDeleteOpen(item?.id)}
                                 icons={
                                   <BsTrashFill fontSize={20} color='#EF4444' />
                                 }
@@ -303,7 +318,7 @@ function AttendanceTable({
                               />
                               <IconButton
                                 parentColor='#FEE2E2'
-                                onClick={() => setDeleteConfirmation(true)}
+                                onClick={() => console.log('here')}
                                 icons={
                                   <BsTrashFill fontSize={20} color='#EF4444' />
                                 }
@@ -327,7 +342,7 @@ function AttendanceTable({
                               />
                               <IconButton
                                 parentColor='#FEE2E2'
-                                onClick={() => setDeleteConfirmation(true)}
+                                onClick={() => handleDeleteOpen(item?.id)}
                                 icons={
                                   <BsTrashFill fontSize={20} color='#EF4444' />
                                 }
@@ -376,13 +391,13 @@ function AttendanceTable({
         </Grid>
       }
       <ConfirmationModal
-        open={deleteConfirmation}
-        handleClose={() => setDeleteConfirmation(false)}
+        open={deleteConfirmation?.open}
+        handleClose={handleDeleteClose}
         title={t(`${tPath}popup.delete.title`)}
         content={t(`${tPath}popup.delete.desc`)}
         withCallback
         noChange={true}
-        callback={() => setDeleteConfirmation(false)}
+        callback={() => deletePayroll(deleteConfirmation?.id)}
       />
     </>
   );
