@@ -343,6 +343,24 @@ export const payrollSlice = createSlice({
     deletePayrollFailed: (state) => {
       state.isLoading = false;
     },
+    postPayrollDisbursementPaidRequested: state => {
+      state.isLoading = true;
+    },
+    postPayrollDisbursementPaidSuccess: state => {
+      state.isLoading = false;
+    },
+    postPayrollDisbursementPaidFailed: state => {
+      state.isLoading = false;
+    },
+    patchPayrollDisbursementFinalRequested: state => {
+      state.isLoading = true;
+    },
+    patchPayrollDisbursementFinalSuccess: state => {
+      state.isLoading = false;
+    },
+    patchPayrollDisbursementFinalFailed: state => {
+      state.isLoading = false;
+    },
     generateNetAssistRequested: (state) => {
       state.isLoading = true;
     },
@@ -439,6 +457,12 @@ export const {
   deletePayrollFailed,
   deletePayrollRequested,
   deletePayrollSuccess,
+  postPayrollDisbursementPaidRequested,
+  postPayrollDisbursementPaidSuccess,
+  postPayrollDisbursementPaidFailed,
+  patchPayrollDisbursementFinalRequested,
+  patchPayrollDisbursementFinalSuccess,
+  patchPayrollDisbursementFinalFailed,
   generateNetAssistRequested,
   generateNetAssistSuccess,
   generateNetAssistFailed,
