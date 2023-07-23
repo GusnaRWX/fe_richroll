@@ -318,7 +318,7 @@ function WorkScheduleCreateForm({ setData, setIsValid }: WorkScheduleFormProps) 
                   disableViewNavigator={false}
                   ref={calendarRef}
                   events={[]}
-                  navigation={false}
+                  navigation={true}
                   day={null}
                   editable={false}
                   deletable={false}

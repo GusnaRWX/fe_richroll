@@ -348,7 +348,7 @@ function WorkScheduleEditForm({setData}: WorkScheduleFormProps) {
                   disableViewNavigator={false}
                   ref={calendarRef}
                   events={[]}
-                  navigation={false}
+                  navigation={true}
                   day={null}
                   editable={false}
                   deletable={false}
