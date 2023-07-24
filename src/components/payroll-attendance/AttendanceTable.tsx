@@ -307,13 +307,13 @@ function AttendanceTable({
                                   <TbFileImport fontSize={20} color='#223567' />
                                 }
                               />
-                              <IconButton
+                              {/* <IconButton
                                 parentColor='#FEE2E2'
                                 onClick={() => console.log('here')}
                                 icons={
                                   <BsTrashFill fontSize={20} color='#EF4444' />
                                 }
-                              />
+                              /> */}
                             </>
                           )}
                           {tabValue === 2 && (
