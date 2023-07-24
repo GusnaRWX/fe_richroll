@@ -27,6 +27,7 @@ import {
 import Webcam from 'react-webcam';
 import { CameraAlt, Cancel } from '@mui/icons-material';
 import { FiTrash2 } from 'react-icons/fi';
+import { useTranslation } from 'react-i18next';
 
 
 const AsteriskComponent = MuiStyled('span')(({ theme }) => ({
@@ -125,6 +126,9 @@ function CompanyInformationForm({
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const {t} = useTranslation();
+  const t_companyInformationSection = 'company.form.company_information.company_information_section';
+  const t_companyAddressSection = 'company.form.company_information.company_address_section';
   const [modalCrop, setModalCrop] = useState(false);
   const [tempImageCrop, setTempImageCrop] = useState('');
 
@@ -187,13 +191,13 @@ function CompanyInformationForm({
       {(isError || duplicateCompany) && (
         <Alert
           severity='error'
-          content='Please fill in all the mandatory fields'
+          content={t('alert_message.please_fill_in_all_the_mandatory_fields')}
           icon={<Cancel />}
         />
       )}
-      <Typography component='h3' fontSize={18} color='primary' fontWeight={700}>Company Information</Typography>
+      <Typography component='h3' fontSize={18} color='primary' fontWeight={700}>{t(`${t_companyInformationSection}.title`)}</Typography>
       <form>
-        <Typography variant='text-sm' component='div' color='primary' sx={{ mt: '16px' }}>Company Logo</Typography>
+        <Typography variant='text-sm' component='div' color='primary' sx={{ mt: '16px' }}>{t(`${t_companyInformationSection}.company_logo`)}</Typography>
         <ImageReview
           image={ifThenElse(!tempImageCrop, ImageType.PLACEHOLDER, tempImageCrop)}
           onClick={handleOpen}
@@ -223,20 +227,20 @@ function CompanyInformationForm({
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <FormControl fullWidth error={compareCheck(formik.touched.companyType, Boolean(formik.errors.companyType))}>
-              <Typography sx={{ mb: '6px' }}>Company Type<AsteriskComponent>*</AsteriskComponent></Typography>
+              <Typography sx={{ mb: '6px' }}>{t(`${t_companyInformationSection}.company_type`)}<AsteriskComponent>*</AsteriskComponent></Typography>
               <Select
                 fullWidth
                 displayEmpty
                 variant='outlined'
                 size='small'
-                placeholder='Select Company Type'
+                placeholder={t(`${t_companyInformationSection}.compay_type_placeholder`)}
                 name='companyType'
                 value={formik.values.companyType}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 renderValue={(value: string) => {
                   if (value.length === 0) {
-                    return <Text title='Select Company Type' color='grey.400' />;
+                    return <Text title={t(`${t_companyInformationSection}.title`)} color='grey.400' />;
                   }
                   const selectedType = companyType.find(type => type?.['id'] === value);
                   if (selectedType) {
@@ -269,14 +273,14 @@ function CompanyInformationForm({
               onBlur={formik.handleBlur}
               error={compareCheck(formik.touched.companyName, Boolean(formik.errors.companyName))}
               helperText={ifThenElse(formik.touched.companyName, formik.errors.companyName, '')}
-              customLabel='Company Name'
+              customLabel={t(`${t_companyInformationSection}.company_name`)}
               withAsterisk={true}
               size='small'
               value={formik.values.companyName}
-              placeholder='Input Company Name'
+              placeholder={t(`${t_companyInformationSection}.company_name_placeholder`)}
             />
             {duplicateCompany && (
-              <p style={{ color: '#EAB308', fontSize: '14px', margin: '5px 0' }}>This company name is already exist</p>
+              <p style={{ color: '#EAB308', fontSize: '14px', margin: '5px 0' }}>{t(`${t_companyInformationSection}.name_already_used`)}</p>
             )}
           </Grid>
         </Grid>
@@ -288,29 +292,29 @@ function CompanyInformationForm({
               onBlur={formik.handleBlur}
               error={compareCheck(formik.touched.companyNPWP, Boolean(formik.errors.companyNPWP))}
               helperText={ifThenElse(formik.touched.companyNPWP, formik.errors.companyNPWP, '')}
-              customLabel='Company NPWP'
+              customLabel={t(`${t_companyInformationSection}.company_npwp`)}
               withAsterisk={false}
               size='small'
               value={formik.values.companyNPWP}
-              placeholder='Input Company NPWP'
+              placeholder={t(`${t_companyInformationSection}.company_npwp_placeholder`)}
             />
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <FormControl fullWidth error={compareCheck(formik.touched.companySector, Boolean(formik.errors.companySector))}>
-              <Typography sx={{ mb: '6px' }}>Company Sector<AsteriskComponent>*</AsteriskComponent></Typography>
+              <Typography sx={{ mb: '6px' }}>{t(`${t_companyInformationSection}.company_sector`)}<AsteriskComponent>*</AsteriskComponent></Typography>
               <Select
                 fullWidth
                 displayEmpty
                 variant='outlined'
                 size='small'
-                placeholder='Select Company Sector'
+                placeholder={t(`${t_companyInformationSection}.company_sector_placeholder`)}
                 name='companySector'
                 value={formik.values.companySector}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 renderValue={(value: string) => {
                   if (value.length === 0) {
-                    return <Text title='Select Company Sector' color='grey.400' />;
+                    return <Text title={t(`${t_companyInformationSection}.company_sector_placeholder`)} color='grey.400' />;
                   }
                   const selectedSector = companySector.find(type => type?.['id'] === value);
                   if (selectedSector) {
@@ -345,15 +349,15 @@ function CompanyInformationForm({
               onBlur={formik.handleBlur}
               error={compareCheck(formik.touched.companyEmail, Boolean(formik.errors.companyEmail))}
               helperText={ifThenElse(formik.touched.companyEmail, formik.errors.companyEmail, '')}
-              customLabel='Company Email Address'
+              customLabel={t(`${t_companyInformationSection}.company_email_address`)}
               withAsterisk={true}
               size='small'
               value={formik.values.companyEmail}
-              placeholder='Input Email Address'
+              placeholder={t(`${t_companyInformationSection}.company_email_address_placeholder`)}
             />
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6} sx={{ marginBottom: '1.5rem', marginTop: '.3rem' }}>
-            <Typography>Contact Number<AsteriskComponent>*</AsteriskComponent></Typography>
+            <Typography>{t(`${t_companyInformationSection}.contact_number`)}<AsteriskComponent>*</AsteriskComponent></Typography>
             <Grid container spacing={2}>
               <Grid item width='95px'>
                 <Select
@@ -398,7 +402,7 @@ function CompanyInformationForm({
                   withAsterisk={true}
                   size='small'
                   value={formik.values.phoneNumber}
-                  placeholder='Input Contact Number'
+                  placeholder={t(`${t_companyInformationSection}.contact_number_placeholder`)}
                 />
               </Grid>
             </Grid>
@@ -406,19 +410,19 @@ function CompanyInformationForm({
         </Grid>
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
-            <Typography component='h3' fontSize={18} color='primary' fontWeight={700}>Company Address</Typography>
+            <Typography component='h3' fontSize={18} color='primary' fontWeight={700}>{t(`${t_companyAddressSection}.title`)}</Typography>
           </Grid>
         </Grid>
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <FormControl fullWidth error={compareCheck(formik.touched.countryCompanyAddress, Boolean(formik.errors.countryCompanyAddress))}>
-              <Typography sx={{ mb: '6px' }}>Country<AsteriskComponent>*</AsteriskComponent></Typography>
+              <Typography sx={{ mb: '6px' }}>{t(`${t_companyAddressSection}.contry`)}<AsteriskComponent>*</AsteriskComponent></Typography>
               <Select
                 fullWidth
                 displayEmpty
                 variant='outlined'
                 size='small'
-                placeholder='Select Country'
+                placeholder={t(`${t_companyAddressSection}.contry_placeholder`)}
                 name='countryCompanyAddress'
                 value={formik.values.countryCompanyAddress}
                 onChange={(e) => {
@@ -433,7 +437,7 @@ function CompanyInformationForm({
                 onBlur={formik.handleBlur}
                 renderValue={(value: string) => {
                   if (value.length === 0) {
-                    return <Text title='Select Country' color='grey.400' />;
+                    return <Text title={t(`${t_companyAddressSection}.contry_placeholder`)} color='grey.400' />;
                   }
                   const selectedCountry = countries.find(type => type?.['value'] === value);
                   if (selectedCountry) {
@@ -461,13 +465,13 @@ function CompanyInformationForm({
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <FormControl fullWidth error={compareCheck(formik.touched.provinceCompanyAddress, Boolean(formik.errors.provinceCompanyAddress))}>
-              <Typography sx={{ mb: '6px' }}>Province<AsteriskComponent>*</AsteriskComponent></Typography>
+              <Typography sx={{ mb: '6px' }}>{t(`${t_companyAddressSection}.province`)}<AsteriskComponent>*</AsteriskComponent></Typography>
               <Select
                 fullWidth
                 displayEmpty
                 variant='outlined'
                 size='small'
-                placeholder='Select Province'
+                placeholder={t(`${t_companyAddressSection}.province_placeholder`)}
                 name='provinceCompanyAddress'
                 value={formik.values.provinceCompanyAddress}
                 onChange={(e) => {
@@ -483,7 +487,7 @@ function CompanyInformationForm({
                 onBlur={formik.handleBlur}
                 renderValue={(value: string) => {
                   if (value.length === 0) {
-                    return <Text title='Select Province' color='grey.400' />;
+                    return <Text title={t(`${t_companyAddressSection}.province_placeholder`)} color='grey.400' />;
                   }
                   const selectedProvince = administrativeFirst.find(type => type?.['value'] === value);
                   if (selectedProvince) {
@@ -513,13 +517,13 @@ function CompanyInformationForm({
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <FormControl fullWidth error={compareCheck(formik.touched.cityCompanyAddress, Boolean(formik.errors.cityCompanyAddress))}>
-              <Typography sx={{ mb: '6px' }}>City<AsteriskComponent>*</AsteriskComponent></Typography>
+              <Typography sx={{ mb: '6px' }}>{t(`${t_companyAddressSection}.city`)}<AsteriskComponent>*</AsteriskComponent></Typography>
               <Select
                 fullWidth
                 displayEmpty
                 variant='outlined'
                 size='small'
-                placeholder='Select City'
+                placeholder={t(`${t_companyAddressSection}.city_placeholder`)}
                 name='cityCompanyAddress'
                 value={formik.values.cityCompanyAddress}
                 onChange={(e) => {
@@ -536,7 +540,7 @@ function CompanyInformationForm({
                 onBlur={formik.handleBlur}
                 renderValue={(value: string) => {
                   if (value.length === 0) {
-                    return <Text title='Select City' color='grey.400' />;
+                    return <Text title={t(`${t_companyAddressSection}.city_placeholder`)} color='grey.400' />;
                   }
                   const selectedCity = administrativeSecond.find(type => type?.['value'] === value);
                   if (selectedCity) {
@@ -564,20 +568,20 @@ function CompanyInformationForm({
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <FormControl fullWidth error={compareCheck(formik.touched.subDistrictCompanyAddress, Boolean(formik.errors.subDistrictCompanyAddress))}>
-              <Typography sx={{ mb: '6px' }}>Sub-District<AsteriskComponent>*</AsteriskComponent></Typography>
+              <Typography sx={{ mb: '6px' }}>{t(`${t_companyAddressSection}.sub_district`)}<AsteriskComponent>*</AsteriskComponent></Typography>
               <Select
                 fullWidth
                 displayEmpty
                 variant='outlined'
                 size='small'
-                placeholder='Select Sub-District'
+                placeholder={t(`${t_companyAddressSection}.sub_district_placeholder`)}
                 name='subDistrictCompanyAddress'
                 value={formik.values.subDistrictCompanyAddress}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 renderValue={(value: string) => {
                   if (value.length === 0) {
-                    return <Text title='Select Sub-District' color='grey.400' />;
+                    return <Text title={t(`${t_companyAddressSection}.sub_district_placeholder`)} color='grey.400' />;
                   }
                   const selectedSubDistrict = administrativeThird.find(type => type?.['value'] === value);
                   if (selectedSubDistrict) {
@@ -615,8 +619,8 @@ function CompanyInformationForm({
               onBlur={formik.handleBlur}
               error={compareCheck(formik.touched.addressCompanyAddress, Boolean(formik.errors.addressCompanyAddress))}
               withAsterisk={true}
-              customLabel='Street Name, Building Name'
-              placeholder='Input Address Details'
+              customLabel={t(`${t_companyAddressSection}.street_and_buildig_name`)}
+              placeholder={t(`${t_companyAddressSection}.street_and_buildig_name_placeholder`)}
             />
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
@@ -626,17 +630,17 @@ function CompanyInformationForm({
               onBlur={formik.handleBlur}
               error={compareCheck(formik.touched.zipCodeCompanyAddress, Boolean(formik.errors.zipCodeCompanyAddress))}
               helperText={ifThenElse(formik.touched.zipCodeCompanyAddress, formik.errors.zipCodeCompanyAddress, '')}
-              customLabel='ZIP Code'
+              customLabel={t(`${t_companyAddressSection}.zip_code`)}
               withAsterisk={true}
               size='small'
               value={formik.values.zipCodeCompanyAddress}
-              placeholder='Input ZIP Code'
+              placeholder={t(`${t_companyAddressSection}.zip_code_placeholder`)}
             />
           </Grid>
         </Grid>
         <NextBtnWrapper>
-          <Button onClick={() => { router.push('/company'); }} fullWidth={false} size='small' label='Cancel' variant='outlined' sx={{ mr: '12px' }} color='primary' />
-          <Button onClick={handleNext} fullWidth={false} size='small' label='Next' color='primary' />
+          <Button onClick={() => { router.push('/company'); }} fullWidth={false} size='small' label={t('button.cancel')} variant='outlined' sx={{ mr: '12px' }} color='primary' />
+          <Button onClick={handleNext} fullWidth={false} size='small' label={t('button.next')} color='primary' />
         </NextBtnWrapper>
       </form>
       <FileUploadModal

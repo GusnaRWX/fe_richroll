@@ -93,6 +93,11 @@
     "title" : "Your Company",
     "create_title" : "Create Company Profile",
     "desc" : "Choose the company you want to manage. You can add a maximum of 5 companies",
+    "create_card" : {
+      "title" : "Create New",
+      "desc" : "You can add a maximum of",
+      "max_company_amount" : "5 companies"
+    },
     "form" : {
       "wizard_option" : {
         "company_information" : "Company Information",
@@ -106,6 +111,7 @@
           "company_type_placeholder" : "Select Company Type",
           "company_name" : "Company Name",
           "company_name_placeholder" : "Input Company Name",
+          "name_already_used" : "This company name is already exist",
           "company_npwp" : "Company NPWP",
           "company_npwp_placeholder" : "Input Company NPWP",
           "company_sector" : "Company Sector",

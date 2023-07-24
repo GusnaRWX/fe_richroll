@@ -89,6 +89,11 @@
     "title": "Syarikat awak",
     "create_title": "Buat Profil Syarikat",
     "desc": "Pilih syarikat yang anda ingin uruskan. ",
+    "create_card": {
+      "title": "Buat baru",
+      "desc": "Anda boleh menambah maksimum",
+      "max_company_amount": "5 syarikat"
+    },
     "form": {
       "wizard_option": {
         "company_information": "Maklumat Syarikat",
@@ -102,6 +107,7 @@
           "company_type_placeholder": "Pilih Jenis Syarikat",
           "company_name": "nama syarikat",
           "company_name_placeholder": "Masukkan Nama Syarikat",
+          "name_already_used": "Nama syarikat ini sudah wujud",
           "company_npwp": "NPWP Syarikat",
           "company_npwp_placeholder": "Syarikat Input NPWP",
           "company_sector": "Sektor Syarikat",

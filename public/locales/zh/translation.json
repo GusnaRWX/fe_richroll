@@ -89,6 +89,11 @@
     "title": "你的公司",
     "create_title": "创建公司简介",
     "desc": "选择您想要管理的公司。",
+    "create_card": {
+      "title": "创建新的",
+      "desc": "您最多可以添加",
+      "max_company_amount": "5家公司"
+    },
     "form": {
       "wizard_option": {
         "company_information": "公司信息",
@@ -102,6 +107,7 @@
           "company_type_placeholder": "选择公司类型",
           "company_name": "公司名称",
           "company_name_placeholder": "输入公司名称",
+          "name_already_used": "该公司名称已存在",
           "company_npwp": "公司NPWP",
           "company_npwp_placeholder": "输入公司 NPWP",
           "company_sector": "公司部门",

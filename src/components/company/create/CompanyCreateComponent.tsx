@@ -24,6 +24,7 @@ import { postCompanyProfileRequested, postCompanyPaymentsRequested } from '@/sto
 import { base64ToFile } from '@/utils/helper';
 import { useFormik } from 'formik';
 import { validationSchemeCompanyProfile, validationSchemeCompanyProfilePayment } from './validate';
+import { useTranslation } from 'react-i18next';
 
 const WrapperAuth = styled(Box)<BoxProps>(({ theme }) => ({
   background: theme.palette.secondary[100],
@@ -50,11 +51,6 @@ const WrapperNavbarContent = styled(Toolbar)(() => ({
   display: 'flex',
   justifyContent: 'space-between'
 }));
-
-const steps = [
-  'Company Information',
-  'Bank and Payroll Information'
-];
 
 const Navbar = () => {
   return (
@@ -92,6 +88,8 @@ const CompanyCreateComponent = ({ companyType, companySector, bank, paymentMetho
   const [images, setImages] = useState<string | null>(null);
   const companyID = useAppSelectors(state => state.company.companyID);
   const dispatch = useAppDispatch();
+  const {t} = useTranslation();
+  const t_steps = 'company.form.wizard_option';
 
   const formikDetail = useFormik({
     initialValues: {
@@ -239,7 +237,7 @@ const CompanyCreateComponent = ({ companyType, companySector, bank, paymentMetho
       };
     }
     console.log(companyID);
-    
+
     dispatch({
       type: postCompanyPaymentsRequested.toString(),
       payload: {
@@ -266,12 +264,12 @@ const CompanyCreateComponent = ({ companyType, companySector, bank, paymentMetho
             component='div'
             sx={{ fontWeight: 700, mb: '24px' }}
           >
-            Create Company Profile
+            {t('company.create_title')}
           </Typography>
           <WrapperCardContent>
             <Box sx={{ width: '100%' }}>
               <Box sx={{ borderBottom: 1, borderColor: 'divider', pb: '30px', mb: '10px' }}>
-                <Stepper steps={steps} activeStep={tabSelected} />
+                <Stepper steps={[t(`${t_steps}.company_information`), t(`${t_steps}.bank_and_payroll_information`)]} activeStep={tabSelected} />
               </Box>
               {tabSelected == 0 &&
                 <CompanyInformationForm

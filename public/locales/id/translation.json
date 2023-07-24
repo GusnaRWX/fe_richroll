@@ -89,6 +89,11 @@
     "title": "Perusahaan Anda",
     "create_title": "Buat Profil Perusahaan",
     "desc": "Pilih perusahaan yang ingin Anda kelola. ",
+    "create_card": {
+      "title": "Membuat baru",
+      "desc": "Anda dapat menambahkan maksimal",
+      "max_company_amount": "5 perusahaan"
+    },
     "form": {
       "wizard_option": {
         "company_information": "informasi perusahaan",
@@ -102,6 +107,7 @@
           "company_type_placeholder": "Pilih Jenis Perusahaan",
           "company_name": "Nama perusahaan",
           "company_name_placeholder": "Masukkan Nama Perusahaan",
+          "name_already_used": "Nama perusahaan ini sudah ada",
           "company_npwp": "NPWP Perusahaan",
           "company_npwp_placeholder": "Masukan NPWP Perusahaan",
           "company_sector": "Sektor Perusahaan",
