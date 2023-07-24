@@ -9,7 +9,8 @@ import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { getListBaseCompensationRequested, getListCnbRequested, getListTerminReqeusted, getListSuppCompensationRequested } from '@/store/reducers/slice/options/optionSlice';
 import { Button, Input, RadioGroup, Select } from '@/components/_shared/form';
 import { FiEdit } from 'react-icons/fi';
-import { dynamicPayloadBaseCnb, getPaymentType } from '@/utils/helper';
+import { getPaymentType } from '@/utils/helper';
+import { MdOutlineAdd } from 'react-icons/md';
 
 interface CnbFormEditProps {
   cnbValues: any,
@@ -19,7 +20,6 @@ interface CnbFormEditProps {
 }
 
 const CnbFormEdit = ({ cnbValues, refProp, setCnbValue, cnbValuesForm }: CnbFormEditProps) => {
-  console.log(cnbValuesForm, 'here');
   const option = useAppSelectors(state => state.option);
   const [title, setTitle] = useState('');
   const [editMode, setEditMode] = useState(false);
@@ -85,6 +85,33 @@ const CnbFormEdit = ({ cnbValues, refProp, setCnbValue, cnbValuesForm }: CnbForm
 
   const filter = createFilterOptions<any>();
 
+  const handleAddSupplementary = () => {
+    const _supp = {
+      compensationComponentId: '',
+      period: '',
+      rateOrAmount: '',
+      taxStatus: '',
+      id: ''
+    };
+
+    const _current = formik.values.supplementary || [];
+
+    const _updated = [..._current, _supp];
+
+    formik.setFieldValue('supplementary', _updated);
+  };
+
+  const handleDeleteSupplementary = (idx: number) => {
+    // Get the current supplementary array from formik.values
+    const currentSupplementary = formik.values.supplementary || [];
+
+    // Create a new array without the item at the specified index
+    const updatedSupplementary = currentSupplementary.filter((item, i) => i !== idx);
+
+    // Update formik's supplementary field with the new array
+    formik.setFieldValue('supplementary', updatedSupplementary);
+  };
+
   return (
     <form ref={refProp} onSubmit={formik.handleSubmit}>
       <Grid container>
@@ -93,7 +120,7 @@ const CnbFormEdit = ({ cnbValues, refProp, setCnbValue, cnbValuesForm }: CnbForm
           <Autocomplete
             id='cnbProfile'
             freeSolo
-            value={cnbValues?.template === null ? formik.values.name : formik.values.templateId}
+            value={cnbValues?.template === null ? formik.values.name : formik.values.name}
             size='small'
             filterOptions={(options: any, params) => {
               const filtered = filter(options, params);
@@ -309,7 +336,7 @@ const CnbFormEdit = ({ cnbValues, refProp, setCnbValue, cnbValuesForm }: CnbForm
               </Grid>
             </Grid>
           </Grid>
-          <Grid container mt='16px'>
+          <Grid container mt='16px' mb='16px'>
             <Grid item xs={12}>
               <Text title='Overtime' fontWeight={700} fontSize='16px' mb='10px' color='primary.500' />
             </Grid>
@@ -333,6 +360,90 @@ const CnbFormEdit = ({ cnbValues, refProp, setCnbValue, cnbValuesForm }: CnbForm
                     </InputAdornment>
                   )
                 }}
+              />
+            </Grid>
+          </Grid>
+          {(formik.values.supplementary as []).length > 0 && (
+            <Box mb='16px'>
+              <Grid container>
+                <Text title='Supplementary' fontWeight={700} fontSize='16px' color='primary.500' />
+              </Grid>
+              {(formik.values.supplementary as [])?.map((value, index) => (
+                <div key={index}>
+                  <Grid container alignItems='center' justifyContent='space-between' gap='4px'>
+                    <Grid item md={4}>
+                      <Select
+                        options={option?.listSuppCompensation}
+                        fullWidth size='small'
+                        customLabel={`Compensation Component ${index + 1}`}
+                        value={formik.values.supplementary[index]?.compensationComponentId || ''}
+                        onChange={(e) => {
+                          const selectedCompensationComponent = e.target.value;
+                          formik.setFieldValue(`supplementary.${index}.compensationComponentId`, selectedCompensationComponent);
+                        }}
+                      />
+                    </Grid>
+                    <Grid item md={4} >
+                      <RadioGroup
+                        withAsterisk
+                        label='Tax Status'
+                        name='taxStatus'
+                        options={[
+                          { label: 'Taxable', value: 'true' },
+                          { label: 'Non-Taxable', value: 'false' }
+                        ]}
+                        value={formik.values.supplementary[index]?.taxStatus}
+                        onChange={(e) => {
+                          formik.setFieldValue(`supplementary.${index}.taxStatus`, e.target.checked ? 'true' : 'false');
+                        }}
+                        row
+                      />
+                    </Grid>
+                    <Grid item md={2}>
+                      <Button
+                        label='Delete'
+                        color='error'
+                        onClick={() => { handleDeleteSupplementary(index); }}
+                      />
+                    </Grid>
+                  </Grid>
+                  <Grid container alignItems='flex-end' gap='4px'>
+                    <Grid item md={4}>
+                      <Input
+                        withAsterisk
+                        customLabel='Amount'
+                        size='small'
+                        value={formik.values.supplementary[index]?.rateOrAmount || ''}
+                        onChange={(e) => {
+                          formik.setFieldValue(`supplementary.${index}.rateOrAmount`, e.target.value);
+                        }}
+                      />
+                    </Grid>
+                    <Grid item md={4}>
+                      <Select
+                        options={option?.listTermin || []}
+                        fullWidth
+                        size='small'
+                        customLabel=''
+                        value={formik.values.supplementary[index]?.period}
+                        onChange={(e) => {
+                          formik.setFieldValue(`supplementary.${index}.period`, e.target.value);
+                        }}
+                      />
+                    </Grid>
+                  </Grid>
+                </div>
+              ))}
+            </Box>
+          )}
+          <Grid container>
+            <Grid item md={4}>
+              <Button
+                color='secondary'
+                sx={{ color: 'white' }}
+                label='Add Supplementary Compensation'
+                startIcon={<MdOutlineAdd />}
+                onClick={handleAddSupplementary}
               />
             </Grid>
           </Grid>

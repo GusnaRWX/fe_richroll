@@ -205,15 +205,14 @@ function EmployeeEditComponent() {
       return {
         compensationComponentId: val?.component?.id,
         period: val?.term?.id,
-        rateOrAmount: '',
-        taxStatus: val?.isTaxable ? 'true' : 'false',
+        rateOrAmount: val?.rate === null ? val?.amount : val?.rate,
+        taxStatus: val?.isTaxable === true ? 'true' : 'false',
         id: val?.id
       };
     }),
     overtime: employee?.employeeCnbDetail?.overtime
   });
 
-  console.log(cnbValue, 'jadah');
 
   const [valueWorkSchedule, setValueWorkSchedule] = useState<any>();
 
@@ -298,8 +297,6 @@ function EmployeeEditComponent() {
     });
   };
 
-  console.log(employee?.employeeCnbDetail?.base?.id);
-
   const handleClickUpdateCnb = () => {
     const lastPayload = {
       templateID: cnbValue?.templateId,
@@ -307,11 +304,9 @@ function EmployeeEditComponent() {
       overtime: +cnbValue?.overtime,
       base: { id: employee?.employeeCnbDetail?.base?.id, ...dynamicPayloadBaseCnb(option?.listBaseCompensation, cnbValue?.compensationComponentId, cnbValue) },
       supplementaries: cnbValue?.supplementary?.map((val) => {
-        console.log(val, 'val');
-        return dynamicPayloadBaseCnb(option?.listSuppCompensation, '5', val);
+        return { id: val?.id, ...dynamicPayloadBaseCnb(option?.listSuppCompensation, val?.compensationComponentId, val) };
       })
     };
-    console.log(lastPayload, ' here');
     dispatch({
       type: patchEmployeeCnbRequested.toString(),
       payload: {

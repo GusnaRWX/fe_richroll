@@ -1024,7 +1024,6 @@ function* getEmployeeDetailCnb(action: AnyAction) {
 
 function* fetchPatchEmployeeCnb(action: AnyAction) {
   try {
-    console.log(action, 'aksi');
     const res: AxiosResponse = yield call(patchEmployeeCnb, action?.payload);
 
     if (res.data.code === 201 || res.data.code === 200) {
