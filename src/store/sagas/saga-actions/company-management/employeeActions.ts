@@ -89,3 +89,8 @@ export const patchWorkSchedule = (payload) => {
 export const getEmployeeCnb = (payload) => {
   return get(`employees/${payload}/compensations`);
 };
+
+export const patchEmployeeCnb = (payload) => {
+  const { id, employeeCnb } = payload;
+  return patch(`employees/${id}/compensations`, employeeCnb);
+};
