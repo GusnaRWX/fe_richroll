@@ -21,6 +21,9 @@ import {
   getNetPayroll,
   postNetPayroll,
   patchNetPayrollFinal,
+  deletePayroll,
+  postPayrollDisbursementPaid,
+  patchPayrollDisbursementFinal
 } from '../saga-actions/payroll/payrollActions';
 import { call, put, takeEvery, delay } from 'redux-saga/effects';
 import {
@@ -86,7 +89,22 @@ import {
   postNetPayrollSuccess,
   patchNetPayrollFinalFailed,
   patchNetPayrollFinalRequested,
-  patchNetPayrollFinalSuccess
+  patchNetPayrollFinalSuccess,
+  deletePayrollFailed,
+  deletePayrollRequested,
+  deletePayrollSuccess,
+  postPayrollDisbursementPaidRequested,
+  postPayrollDisbursementPaidSuccess,
+  postPayrollDisbursementPaidFailed,
+  patchPayrollDisbursementFinalRequested,
+  patchPayrollDisbursementFinalSuccess,
+  patchPayrollDisbursementFinalFailed,
+  generateNetAssistRequested,
+  generateNetAssistSuccess,
+  generateNetAssistFailed,
+  generateDisbursementAssistRequested,
+  generateDisbursementAssistSuccess,
+  generateDisbursementAssistFailed,
 } from '@/store/reducers/slice/payroll/payrollSlice';
 import { setResponserMessage } from '@/store/reducers/slice/responserSlice';
 import { Services } from '@/types/axios';
@@ -170,6 +188,35 @@ function* fetchPostPayroll(action: AnyAction) {
     if (err instanceof AxiosError) {
       const errorMessage = err?.response?.data as Services.ErrorResponse;
       yield put({ type: postPayrollFailed.toString() });
+      yield delay(2000, true);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message
+        }
+      });
+    }
+  }
+}
+
+function* fetchDeletePayroll(action: AnyAction) {
+  try {
+    const res: AxiosResponse = yield call(deletePayroll, action?.payload);
+    if (res.data.code === 200 || res.data.code === 201) {
+      yield put({ type: deletePayrollSuccess.toString() });
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: res?.data?.code,
+          message: res?.data?.message
+        }
+      });
+    }
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      yield put({ type: deletePayrollFailed.toString() });
       yield delay(2000, true);
       yield put({
         type: setResponserMessage.toString(),
@@ -322,6 +369,15 @@ function* fetchPostPayrollGrosses(action: AnyAction) {
           data: res?.data?.data?.id
         }
       });
+
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: res?.data?.code,
+          message: res?.data?.message
+        }
+      });
+
       if (!action?.payload?.isAssist) {
         yield Router.push({ pathname: '/payroll-disbursement/payroll/generate-gross/employee', query: { id: res?.data?.data?.id } });
       }
@@ -373,6 +429,15 @@ function* fetchPutGenerateGrossEmployee(action: AnyAction) {
 
     if (res.data.code === 201 || res.data.code === 200) {
       yield put({ type: putGenerateGrossesEmployeeSuccess.toString() });
+
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: res?.data?.code,
+          message: res?.data?.message
+        }
+      });
+
       yield Router.push({ pathname: '/payroll-disbursement/payroll/generate-gross/detail', query: { id: res.data.data?.id } });
     }
   } catch (err) {
@@ -390,13 +455,6 @@ function* fetchPutGenerateGrossEmployee(action: AnyAction) {
     }
   }
 }
-
-// function* fetchGetPayrollEmployee(action: AnyAction) {
-//   try {
-//     const res: AxiosResponse = yield call(getPayrollGrosses, action?.payload);
-
-//     if (res.data.code === 200) {
-//       yield put({ type: getPayrollGrossesSuccess.toString(), payload: { data: res.data.data } });
 
 function* fetchGetPayrollEmployee(action: AnyAction) {
   try {
@@ -435,17 +493,17 @@ function* fetchPutPayrollGrossesFinal(action: AnyAction) {
           footerMessage: 'Payroll has been created'
         }
       });
-      yield put({
-        type: putPayrollWorkflowRequested.toString(),
-        payload: {
-          id: action?.payload?.data?.id,
-          data: {
-            workflow: 1,
-            status: 1
-          }
-        }
-      });
       if (!action?.payload?.isAssist) {
+        yield put({
+          type: putPayrollWorkflowRequested.toString(),
+          payload: {
+            id: action?.payload?.data?.id,
+            data: {
+              workflow: 1,
+              status: 1
+            }
+          }
+        });
         yield Router.push({ pathname: '/payroll-disbursement/payroll' });
       }
     }
@@ -579,14 +637,29 @@ function* fetchPostPayrollDisbursementsId(action: AnyAction) {
     const res: AxiosResponse = yield call(postPayrollDisbursementId, action?.payload);
 
     if (res.data.code === 201) {
-      yield put({ type: postPayrollDisbursementIdSuccess.toString() });
-      yield Router.push({ pathname: '/payroll-disbursement/disbursement/generate', query: { id: res?.data?.data?.id } });
+      yield put({
+        type: postPayrollDisbursementIdSuccess.toString(),
+        payload: {
+          data: res?.data?.data?.id
+        }
+      });
+
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: res?.data?.code,
+          message: res?.data?.message
+        }
+      });
+
+      if (!action?.payload?.isAssist) {
+        yield Router.push({ pathname: '/payroll-disbursement/disbursement/generate', query: { id: res?.data?.data?.id } });
+      }
     }
 
   } catch (err) {
     if (err instanceof AxiosError) {
       const errorMessage = err?.response?.data as Services.ErrorResponse;
-      // yield put({ type: getPayrollGrossesFailed.toString() });
       yield put({ type: postPayrollDisbursementIdFailed.toString() });
       yield delay(2000, true);
       yield put({
@@ -660,7 +733,12 @@ function* fetchPostNetPayroll(action: AnyAction) {
   try {
     const res: AxiosResponse = yield call(postNetPayroll, action?.payload);
     if (res.data.code === 200 || res.data.code === 201) {
-      yield put({ type: postNetPayrollSuccess.toString() });
+      yield put({
+        type: postNetPayrollSuccess.toString(),
+        payload: {
+          data: res?.data?.data?.id
+        }
+      });
       yield put({
         type: setResponserMessage.toString(),
         payload: {
@@ -668,7 +746,9 @@ function* fetchPostNetPayroll(action: AnyAction) {
           message: res?.data?.message
         }
       });
-      yield Router.push({ pathname: '/payroll-disbursement/payroll/generate-net', query: { id: res?.data?.data?.id } });
+      if (!action?.payload?.isAssist) {
+        yield Router.push({ pathname: '/payroll-disbursement/payroll/generate-net', query: { id: res?.data?.data?.id } });
+      }
     }
   } catch (err) {
     if (err instanceof AxiosError) {
@@ -698,17 +778,17 @@ function* fetchPatchNetPayrollFinal(action: AnyAction) {
           message: res?.data?.message
         }
       });
-      yield put({
-        type: putPayrollWorkflowRequested.toString(),
-        payload: {
-          id: action?.payload?.data?.id,
-          data: {
-            workflow: 2,
-            status: 1
-          }
-        }
-      });
       if (!action?.payload?.isAssist) {
+        yield put({
+          type: putPayrollWorkflowRequested.toString(),
+          payload: {
+            id: action?.payload?.data?.id,
+            data: {
+              workflow: 2,
+              status: 1
+            }
+          }
+        });
         yield Router.push({ pathname: '/payroll-disbursement/payroll' });
       }
     }
@@ -716,6 +796,169 @@ function* fetchPatchNetPayrollFinal(action: AnyAction) {
     if (err instanceof AxiosError) {
       const errorMessage = err?.response?.data as Services.ErrorResponse;
       yield put({ type: patchNetPayrollFinalFailed.toString() });
+      yield delay(2000, true);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message
+        }
+      });
+    }
+  }
+}
+
+function* fetchPostPayrollDisbursementPaid(action: AnyAction) {
+  try {
+    const res: AxiosResponse = yield call(postPayrollDisbursementPaid, action?.payload);
+
+    if (res.data.code === 200 || res.data.code === 201) {
+      yield put({ type: postPayrollDisbursementPaidSuccess.toString() });
+
+      yield put({
+        type: getPayrollDisbursementIdRequested.toString(),
+        payload: {
+          id: action?.payload?.id
+        }
+      });
+
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: res?.data?.code,
+          message: res?.data?.message
+        }
+      });
+    }
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      yield put({ type: postPayrollDisbursementPaidFailed.toString() });
+
+      yield delay(2000, true);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message
+        }
+      });
+    }
+  }
+}
+
+function* fetchPatchPayrollDisbursementFinal(action: AnyAction) {
+  try {
+    const res: AxiosResponse = yield call(patchPayrollDisbursementFinal, action?.payload);
+
+    if (res.data.code === 200 || res.data.code === 201) {
+      yield put({ type: patchPayrollDisbursementFinalSuccess.toString() });
+
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: res?.data?.code,
+          message: res?.data?.message
+        }
+      });
+
+      if (action?.payload?.isAssist) {
+        yield Router.push('/payroll-disbursement/payroll-assistant');
+      } else {
+        yield Router.push('/payroll-disbursement/disbursement');
+      }
+    }
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      yield put({ type: patchPayrollDisbursementFinalFailed.toString() });
+
+      yield delay(2000, true);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message
+        }
+      });
+    }
+  }
+}
+
+function* fetchGenerateNetAssistant(action: AnyAction) {
+  try {
+    yield put({ type: generateNetAssistSuccess.toString() });
+    yield put({
+      type: putPayrollWorkflowRequested.toString(),
+      payload: {
+        id: action?.payload?.grossesId,
+        data: {
+          workflow: 1,
+          status: 1
+        }
+      }
+    });
+    yield put({
+      type: putPayrollsGrossesFinalRequested.toString(),
+      payload: {
+        data: {
+          id: action?.payload?.grossesId
+        },
+        isAssist: true
+      }
+    });
+    yield put({
+      type: postNetPayrollRequested.toString(),
+      payload: {
+        id: action?.payload?.grossesId,
+        data: {
+          assistantID: action?.payload?.assistantID
+        },
+        isAssist: true
+      }
+    });
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      yield put({ type: generateNetAssistFailed.toString() });
+      yield delay(2000, true);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message
+        }
+      });
+    }
+  }
+}
+
+function* fetchGenerateDisbursementAssistant(action: AnyAction) {
+  try {
+    yield put({ type: generateDisbursementAssistSuccess.toString() });
+    yield put({
+      type: putPayrollWorkflowRequested.toString(),
+      payload: {
+        id: action?.payload?.netId,
+        data: {
+          workflow: 2,
+          status: 1
+        }
+      }
+    });
+    yield put({
+      type: patchNetPayrollFinalRequested.toString(),
+      payload: {
+        data: {
+          id: action?.payload?.netId
+        },
+        isAssist: true
+      }
+    });
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      yield put({ type: generateDisbursementAssistFailed.toString() });
       yield delay(2000, true);
       yield put({
         type: setResponserMessage.toString(),
@@ -750,6 +993,11 @@ function* payrollSaga() {
   yield takeEvery(getNetPayrollRequested.toString(), fetchGetNetPayroll);
   yield takeEvery(postNetPayrollRequested.toString(), fetchPostNetPayroll);
   yield takeEvery(patchNetPayrollFinalRequested.toString(), fetchPatchNetPayrollFinal);
+  yield takeEvery(deletePayrollRequested.toString(), fetchDeletePayroll);
+  yield takeEvery(postPayrollDisbursementPaidRequested.toString(), fetchPostPayrollDisbursementPaid);
+  yield takeEvery(patchPayrollDisbursementFinalRequested.toString(), fetchPatchPayrollDisbursementFinal);
+  yield takeEvery(generateNetAssistRequested.toString(), fetchGenerateNetAssistant);
+  yield takeEvery(generateDisbursementAssistRequested.toString(), fetchGenerateDisbursementAssistant);
 }
 
 export default payrollSaga;

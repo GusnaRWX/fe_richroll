@@ -21,7 +21,7 @@ import { useRouter } from 'next/router';
 import { ConfirmationModal } from '@/components/_shared/common';
 import EmptyState from '../_shared/common/EmptyState';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
-import { getPayrollRequested } from '@/store/reducers/slice/payroll/payrollSlice';
+import { getPayrollRequested, deletePayrollRequested } from '@/store/reducers/slice/payroll/payrollSlice';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
@@ -68,11 +68,11 @@ function DisbursementTable({
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
   const [hydrated, setHaydrated] = useState(false);
-  const [deleteConfirmation, setDeleteConfirmation] = useState(false);
+  const [deleteConfirmation, setDeleteConfirmation] = useState({ id: 0, open: false });
   const companyData = getCompanyData();
   const { responser } = useAppSelectors((state) => state);
   const router = useRouter();
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const t_colsItem = 'payroll_and_disbursement.disbursement.table.table_cols_item';
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -96,6 +96,21 @@ function DisbursementTable({
     setSort(headId);
   };
 
+  const deletePayroll = (Id: string | number) => {
+    dispatch({
+      type: deletePayrollRequested.toString(),
+      payload: Id
+    });
+  };
+
+  const handleDeleteOpen = (id) => {
+    setDeleteConfirmation({ id: id, open: true });
+  };
+
+  const handleDeleteClose = () => {
+    setDeleteConfirmation({ id: 0, open: false });
+  };
+
   useEffect(() => {
     dispatch({
       type: getPayrollRequested.toString(),
@@ -108,7 +123,7 @@ function DisbursementTable({
         countryCode: 'ID',
         companyID: companyData?.id,
         workflow: 'DISBURSEMENT',
-        status: ifThenElse(tabValue === 0, 'DRAFT', ifThenElse(tabValue === 1,  'COMPLETED', 'ARCHIVE'))
+        status: ifThenElse(tabValue === 0, 'DRAFT', ifThenElse(tabValue === 1, 'COMPLETED', 'ARCHIVE'))
       }
     });
   }, [rowsPerPage, page, search, sort, direction, responser.code, tabValue]);
@@ -210,14 +225,14 @@ function DisbursementTable({
                             <>
                               <IconButton
                                 parentColor='#E9EFFF'
-                                onClick={() => { router.push('/payroll-disbursement/disbursement/generate'); }}
+                                onClick={() => { router.push({ pathname: '/payroll-disbursement/disbursement/generate', query: { id: item?.id } }); }}
                                 icons={
                                   <BsFillEyeFill fontSize={20} color='#223567' />
                                 }
                               />
                               <IconButton
                                 parentColor='#FEE2E2'
-                                onClick={() => setDeleteConfirmation(true)}
+                                onClick={() => handleDeleteOpen(item?.id)}
                                 icons={
                                   <BsTrashFill fontSize={20} color='#EF4444' />
                                 }
@@ -234,7 +249,7 @@ function DisbursementTable({
                               />
                               <IconButton
                                 parentColor='#FEE2E2'
-                                onClick={() => setDeleteConfirmation(true)}
+                                onClick={() => handleDeleteOpen(item?.id)}
                                 icons={
                                   <BsTrashFill fontSize={20} color='#EF4444' />
                                 }
@@ -269,13 +284,13 @@ function DisbursementTable({
         }
       />
       <ConfirmationModal
-        open={deleteConfirmation}
-        handleClose={() => setDeleteConfirmation(false)}
+        open={deleteConfirmation?.open}
+        handleClose={handleDeleteClose}
         title='Delete Disbursement Receipt from Payroll Operation?'
         content='You are about to delete this disbursement receipt. This action cannot be undone.'
         withCallback
         noChange={true}
-        callback={() => setDeleteConfirmation(false)}
+        callback={() => deletePayroll(deleteConfirmation?.id)}
       />
     </>
   );

@@ -31,6 +31,7 @@ interface AccountState {
   grossesId: string | number;
   grossesEmployee: [],
   grossesEmployeeDetail: Payroll.DataGrossEmployeeDetail | unknown,
+  netId: string | number;
   netDetail: Payroll.DataNetDetail | unknown,
   attendanceDetail: {
     id: string | number,
@@ -49,6 +50,7 @@ interface AccountState {
     averageHours: number | string,
     events: Array<EventType>
   },
+  disbursementId: string | number;
   disbursementData: Payroll.DisbursementData | unknown
 }
 
@@ -65,6 +67,7 @@ const initialState: AccountState = {
   grossesId: '',
   grossesEmployee: [],
   grossesEmployeeDetail: {},
+  netId: '',
   netDetail: {},
   attendanceDetail: {
     id: '',
@@ -83,7 +86,8 @@ const initialState: AccountState = {
     averageHours: 0,
     events: []
   },
-  disbursementData: {}
+  disbursementData: {},
+  disbursementId: '',
 };
 
 export const payrollSlice = createSlice({
@@ -282,12 +286,15 @@ export const payrollSlice = createSlice({
     },
     postPayrollDisbursementIdRequested: state => {
       state.isLoading = true;
+      state.disbursementId = '';
     },
-    postPayrollDisbursementIdSuccess: state => {
+    postPayrollDisbursementIdSuccess: (state, action) => {
       state.isLoading = false;
+      state.disbursementId = action.payload.data;
     },
     postPayrollDisbursementIdFailed: state => {
       state.isLoading = false;
+      state.disbursementId = '';
     },
     getPayrollDisbursementIdRequested: state => {
       state.isLoading = true;
@@ -311,12 +318,15 @@ export const payrollSlice = createSlice({
     },
     postNetPayrollRequested: (state) => {
       state.isLoading = true;
+      state.netId = '';
     },
-    postNetPayrollSuccess: (state) => {
+    postNetPayrollSuccess: (state, action) => {
       state.isLoading = false;
+      state.netId = action.payload.data;
     },
     postNetPayrollFailed: (state) => {
       state.isLoading = false;
+      state.netId = '';
     },
     patchNetPayrollFinalRequested: (state) => {
       state.isLoading = true;
@@ -326,7 +336,52 @@ export const payrollSlice = createSlice({
     },
     patchNetPayrollFinalFailed: (state) => {
       state.isLoading = false;
-    }
+    },
+    deletePayrollRequested: (state) => {
+      state.isLoading = true;
+    },
+    deletePayrollSuccess: (state) => {
+      state.isLoading = false;
+    },
+    deletePayrollFailed: (state) => {
+      state.isLoading = false;
+    },
+    postPayrollDisbursementPaidRequested: state => {
+      state.isLoading = true;
+    },
+    postPayrollDisbursementPaidSuccess: state => {
+      state.isLoading = false;
+    },
+    postPayrollDisbursementPaidFailed: state => {
+      state.isLoading = false;
+    },
+    patchPayrollDisbursementFinalRequested: state => {
+      state.isLoading = true;
+    },
+    patchPayrollDisbursementFinalSuccess: state => {
+      state.isLoading = false;
+    },
+    patchPayrollDisbursementFinalFailed: state => {
+      state.isLoading = false;
+    },
+    generateNetAssistRequested: (state) => {
+      state.isLoading = true;
+    },
+    generateNetAssistSuccess: (state) => {
+      state.isLoading = false;
+    },
+    generateNetAssistFailed: (state) => {
+      state.isLoading = false;
+    },
+    generateDisbursementAssistRequested: (state) => {
+      state.isLoading = true;
+    },
+    generateDisbursementAssistSuccess: (state) => {
+      state.isLoading = false;
+    },
+    generateDisbursementAssistFailed: (state) => {
+      state.isLoading = false;
+    },
   },
   extraReducers: {
     [HYDRATE]: (state, action) => {
@@ -401,7 +456,22 @@ export const {
   postNetPayrollSuccess,
   patchNetPayrollFinalFailed,
   patchNetPayrollFinalRequested,
-  patchNetPayrollFinalSuccess
+  patchNetPayrollFinalSuccess,
+  deletePayrollFailed,
+  deletePayrollRequested,
+  deletePayrollSuccess,
+  postPayrollDisbursementPaidRequested,
+  postPayrollDisbursementPaidSuccess,
+  postPayrollDisbursementPaidFailed,
+  patchPayrollDisbursementFinalRequested,
+  patchPayrollDisbursementFinalSuccess,
+  patchPayrollDisbursementFinalFailed,
+  generateNetAssistRequested,
+  generateNetAssistSuccess,
+  generateNetAssistFailed,
+  generateDisbursementAssistRequested,
+  generateDisbursementAssistSuccess,
+  generateDisbursementAssistFailed,
 } = payrollSlice.actions;
 
 export default payrollSlice.reducer;

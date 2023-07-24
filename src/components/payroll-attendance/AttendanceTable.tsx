@@ -6,7 +6,8 @@ import {
   Box,
   TableSortLabel,
   Button as MuiButton,
-  Checkbox
+  Checkbox,
+  Chip
 } from '@mui/material';
 import { Input } from '../_shared/form';
 import { Search } from '@mui/icons-material';
@@ -15,15 +16,14 @@ import { compareCheck, ifThenElse, getCompanyData } from '@/utils/helper';
 import { visuallyHidden } from '@mui/utils';
 import { IconButton } from '@/components/_shared/form';
 import { BsTrashFill, BsFillEyeFill } from 'react-icons/bs';
-import { HiPencilAlt, HiOutlineInboxIn } from 'react-icons/hi';
-import { FiDownload } from 'react-icons/fi';
+import { HiPencilAlt, HiOutlineInboxIn, HiDownload } from 'react-icons/hi';
 import { TbFileImport } from 'react-icons/tb';
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
 import { ConfirmationModal } from '@/components/_shared/common';
 import EmptyState from '../_shared/common/EmptyState';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
-import { getPayrollRequested, postPayrollGrossesRequested } from '@/store/reducers/slice/payroll/payrollSlice';
+import { getPayrollRequested, postPayrollGrossesRequested, deletePayrollRequested } from '@/store/reducers/slice/payroll/payrollSlice';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
@@ -33,14 +33,6 @@ const ButtonWrapper = styled.div`
  align-items: center;
  justify-content: center;
  gap: .5rem;
-`;
-
-const TypeComponent = styled.div`
- background: #E0F2FE;
- border-radius: 4px;
- color: #075985;
- padding: 3px 12px;
- text-align: center;
 `;
 
 const headerItems = [
@@ -74,7 +66,7 @@ function AttendanceTable({
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
   const [hydrated, setHaydrated] = useState(false);
-  const [deleteConfirmation, setDeleteConfirmation] = useState(false);
+  const [deleteConfirmation, setDeleteConfirmation] = useState({ id: 0, open: false });
   const companyData = getCompanyData();
   const { responser } = useAppSelectors((state) => state);
   const router = useRouter();
@@ -142,6 +134,21 @@ function AttendanceTable({
         isAssist: false
       }
     });
+  };
+
+  const deletePayroll = (Id: string | number) => {
+    dispatch({
+      type: deletePayrollRequested.toString(),
+      payload: Id
+    });
+  };
+
+  const handleDeleteOpen = (id) => {
+    setDeleteConfirmation({ id: id, open: true });
+  };
+
+  const handleDeleteClose = () => {
+    setDeleteConfirmation({ id: 0, open: false });
   };
 
   useEffect(() => {
@@ -245,19 +252,18 @@ function AttendanceTable({
                       }
                       <TableCell>{item.name}</TableCell>
                       <TableCell>{dayjs(item.start).format('DD/MM/YYYY')} - {dayjs(item.end).format('DD/MM/YYYY')}</TableCell>
-                      <TableCell><TypeComponent>Attendance Report</TypeComponent></TableCell>
+                      <TableCell>
+                        <Chip label='Attendance Report' sx={{ color: '#075985', backgroundColor: '#E0F2FE', borderRadius: '6px' }} />
+                      </TableCell>
                       <TableCell>{dayjs(item.createdAt).format('DD/MM/YYYY')}</TableCell>
                       <TableCell>{dayjs(item.updatedAt).format('DD/MM/YYYY')}</TableCell>
                       <TableCell>
-                        <MuiButton
-                          variant='contained'
-                          color='inherit'
-                          size='small'
-                          sx={{ color: '#111827' }}
-                          onClick={() => { console.log(true); }}
-                        >
-                          {item.attachment.filename} &nbsp;<FiDownload fontSize='small' />
-                        </MuiButton>
+                        <Chip
+                          label={item.attachment.filename}
+                          sx={{ borderRadius: '6px' }}
+                          deleteIcon={<HiDownload size={16} color='#000' />}
+                          onDelete={() => { console.log('here'); }}
+                        />
                       </TableCell>
                       <TableCell>
                         <ButtonWrapper>
@@ -275,7 +281,7 @@ function AttendanceTable({
                               <IconButton
                                 disabled={!!selectedTemp.length}
                                 parentColor='#FEE2E2'
-                                onClick={() => setDeleteConfirmation(true)}
+                                onClick={() => handleDeleteOpen(item?.id)}
                                 icons={
                                   <BsTrashFill fontSize={20} color='#EF4444' />
                                 }
@@ -303,7 +309,7 @@ function AttendanceTable({
                               />
                               <IconButton
                                 parentColor='#FEE2E2'
-                                onClick={() => setDeleteConfirmation(true)}
+                                onClick={() => console.log('here')}
                                 icons={
                                   <BsTrashFill fontSize={20} color='#EF4444' />
                                 }
@@ -327,7 +333,7 @@ function AttendanceTable({
                               />
                               <IconButton
                                 parentColor='#FEE2E2'
-                                onClick={() => setDeleteConfirmation(true)}
+                                onClick={() => handleDeleteOpen(item?.id)}
                                 icons={
                                   <BsTrashFill fontSize={20} color='#EF4444' />
                                 }
@@ -376,13 +382,13 @@ function AttendanceTable({
         </Grid>
       }
       <ConfirmationModal
-        open={deleteConfirmation}
-        handleClose={() => setDeleteConfirmation(false)}
+        open={deleteConfirmation?.open}
+        handleClose={handleDeleteClose}
         title={t(`${tPath}popup.delete.title`)}
         content={t(`${tPath}popup.delete.desc`)}
         withCallback
         noChange={true}
-        callback={() => setDeleteConfirmation(false)}
+        callback={() => deletePayroll(deleteConfirmation?.id)}
       />
     </>
   );

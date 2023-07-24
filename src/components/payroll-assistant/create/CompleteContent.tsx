@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import { SwitchProps } from '@mui/material/Switch';
 import { styled as MuiStyled } from '@mui/material/styles';
-import { SimpleAccordion } from '@/components/_shared/common';
+import { SimpleAccordion, Text } from '@/components/_shared/common';
 import Table from '@/components/_shared/form/Table';
 import styled from '@emotion/styled';
 import { compareCheck, ifThenElse } from '@/utils/helper';
@@ -23,9 +23,11 @@ import { HiFolderOpen } from 'react-icons/hi';
 import EmptyState from '@/components/_shared/common/EmptyState';
 import { useRouter } from 'next/router';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
-import { getPayrollDisbursementIdRequested } from '@/store/reducers/slice/payroll/payrollSlice';
+import { getPayrollDisbursementIdRequested, postPayrollDisbursementPaidRequested } from '@/store/reducers/slice/payroll/payrollSlice';
 import { numberFormat } from '@/utils/format';
 import { Payroll } from '@/types/payroll';
+import { useFormik } from 'formik';
+import { AiOutlineFile, AiOutlineClose } from 'react-icons/ai';
 
 const ButtonWrapper = styled(Box)(({
   display: 'flex',
@@ -38,6 +40,14 @@ const ContentWrapper = styled(Card)(({
   padding: '1rem',
   marginBottom: '1rem'
 }));
+
+const HasFileCss = {
+  borderRadius: '8px',
+  gap: '8px',
+  backgroundColor: 'white',
+  padding: '8px 8px',
+  border: '1px solid'
+};
 
 const IOSSwitch = MuiStyled((props: SwitchProps) => (
   <Switch focusVisibleClassName='.Mui-focusVisible' disableRipple {...props} />
@@ -54,7 +64,7 @@ const IOSSwitch = MuiStyled((props: SwitchProps) => (
       transform: 'translateX(16px)',
       color: '#fff',
       '& + .MuiSwitch-track': {
-        backgroundColor: theme.palette.mode === 'dark' ? '#2ECA45' : '#65C466',
+        backgroundColor: theme.palette.mode === 'dark' ? '#2ECA45' : '#223567',
         opacity: 1,
         border: 0,
       },
@@ -103,7 +113,8 @@ const headerItems = [
 
 type Order = 'asc' | 'desc'
 
-function CompleteContent() {
+function CompleteContent(att) {
+  const {isAssist} = att;
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(1);
   const [direction, setDirection] = useState<Order>('desc');
@@ -112,9 +123,19 @@ function CompleteContent() {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const disbursementData = useAppSelectors(state => state.payroll.disbursementData as Payroll.DisbursementData);
+  const { disbursementId } = useAppSelectors(state => state.payroll);
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
+
+  const formik = useFormik({
+    initialValues: {
+      file: null
+    },
+    onSubmit: (_val) => {
+      console.log(_val);
+    }
+  });
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(event);
@@ -126,12 +147,46 @@ function CompleteContent() {
     setSort(headId);
   };
 
+  const handleChangePaid = (e: React.ChangeEvent<HTMLInputElement>, disbursementEmployeeId: string) => {
+    const { checked } = e.target;
+    if (compareCheck(checked, !isAssist)) {
+      dispatch({
+        type: postPayrollDisbursementPaidRequested.toString(),
+        payload: {
+          id: router.query.id,
+          body: {
+            disbursementIDs: [disbursementEmployeeId]
+          }
+        }
+      });
+    }
+    if (compareCheck(checked, isAssist)) {
+      dispatch({
+        type: postPayrollDisbursementPaidRequested.toString(),
+        payload: {
+          id: disbursementId,
+          body: {
+            disbursementIDs: [disbursementEmployeeId]
+          }
+        }
+      });
+    }
+  };
+
   useEffect(() => {
     setHaydrated(true);
   }, []);
 
   useEffect(() => {
-    if (router.isReady) {
+    if (compareCheck(router.isReady, isAssist, disbursementId !== '')) {
+      dispatch({
+        type: getPayrollDisbursementIdRequested.toString(),
+        payload: {
+          id: disbursementId
+        }
+      });
+    }
+    if (compareCheck(router.isReady, !isAssist)) {
       dispatch({
         type: getPayrollDisbursementIdRequested.toString(),
         payload: {
@@ -139,7 +194,7 @@ function CompleteContent() {
         }
       });
     }
-  }, [router]);
+  }, [router, disbursementId]);
 
   if (!hydrated) {
     return null;
@@ -178,8 +233,8 @@ function CompleteContent() {
             <SimpleAccordion
               title={<>Payment Method : {value?.method?.name} <Box component='span' sx={{ fontSize: '14px', fontWeight: '400' }}>{`(${value?.items?.length} employees)`}</Box></>}
               footer={
-                <Grid container spacing={2} mt='.1rem'>
-                  <Grid item xs={8}>
+                <Grid container spacing={2} mt='.1rem' justifyContent='space-between'>
+                  <Grid item xs={formik.values.file === null ? 8 : 6}>
                     <MuiButton
                       variant='contained'
                       color='inherit'
@@ -189,19 +244,63 @@ function CompleteContent() {
                       {value?.attachment?.filename} &nbsp;<FiFile />&nbsp; {value?.attachment?.size} &nbsp;<FiDownload />
                     </MuiButton>
                   </Grid>
-                  <Grid item xs={4}>
+                  <Grid item xs={formik.values.file === null ? 4 : 5}>
                     <ButtonWrapper>
-                      <MuiButton
-                        variant='contained'
-                        color='secondary'
-                        sx={{ color: 'white' }}
-                        onClick={() => { console.log(true); }}
-                      >
-                        <HiFolderOpen />&nbsp; Upload Receipt
-                      </MuiButton>
+                      <div>
+                        {formik.values.file === null ? (
+                          <>
+                            <input
+                              id='input-file'
+                              onChange={(e) => {
+                                formik.setFieldValue('file', e.target.files && e.target.files[0]);
+                              }}
+                              type='file'
+                              style={{ display: 'none' }}
+                              accept='application/pdf'
+                            />
+                            <label htmlFor='input-file'>
+                              <MuiButton
+                                variant='contained'
+                                color='secondary'
+                                sx={{ color: 'white' }}
+                                component='span'
+                              >
+                                <HiFolderOpen />&nbsp; Upload Receipt
+                              </MuiButton>
+                            </label>
+                          </>
+                        ) : (
+                          <Grid container sx={HasFileCss} alignItems='center'>
+                            <Grid item>
+                              <Text
+                                title={(formik.values.file && (formik.values.file as unknown as { name: string })?.name)}
+                                fontSize='12px'
+                                fontWeight={400}
+                              />
+                            </Grid>
+                            <Grid item>
+                              <AiOutlineFile fontSize='12px' />
+                            </Grid>
+                            <Grid item>
+                              <Text
+                                title={
+                                  formik.values.file
+                                    ? `${((formik.values.file as unknown as { size: number })?.size / (1024 * 1024)).toFixed(2)} MB`
+                                    : '0.00 MB'
+                                }
+                                fontSize='12px'
+                                fontWeight={400}
+                              />
+                            </Grid>
+                            <Grid item>
+                              <AiOutlineClose fontSize='12px' cursor='pointer' onClick={() => { formik.setFieldValue('file', null); }} />
+                            </Grid>
+                          </Grid>
+                        )}
+                      </div>
                       <Box sx={{ background: '#F3F4F6', borderRadius: '6px', p: '.4rem 1rem' }}>
                         <Typography variant='text-sm' fontWeight='500' color='#374151'>Status</Typography>
-                        <IOSSwitch sx={{ mx: 1 }} disabled={value?.isPaid} />
+                        <IOSSwitch sx={{ mx: 1 }} disabled={value?.isPaid} onChange={(e) => { handleChangePaid(e, value?.id); }} checked={value?.isPaid} />
                         <Typography variant='text-sm' fontWeight='500' color='#374151'>Unpaid</Typography>
                       </Box>
                     </ButtonWrapper>
@@ -214,6 +313,7 @@ function CompleteContent() {
                 rowsPerPageOptions={[5, 10, 15]}
                 rowsPerPage={rowsPerPage}
                 page={page}
+                withPaginate={false}
                 onChangePage={handleChangePage}
                 onRowsPerPagesChange={(e) => handleChangeRowsPerPage(e)}
                 headChildren={
@@ -268,197 +368,6 @@ function CompleteContent() {
           </Box>
         </ContentWrapper>
       ))}
-
-
-      {/* <ContentWrapper>
-        <Box sx={{ width: '100%' }}>
-          <SimpleAccordion
-            title={<>Payment Method : Cash <Box component='span' sx={{ fontSize: '14px', fontWeight: '400' }}>(3 employees)</Box></>}
-            footer={
-              <Grid container spacing={2} mt='.1rem'>
-                <Grid item xs={8}>
-                  <MuiButton
-                    variant='contained'
-                    color='inherit'
-                    sx={{ color: '#111827' }}
-                    onClick={() => { console.log(true); }}
-                  >
-                    Receipt Form_Payroll 2023.pdf &nbsp;<FiFile />&nbsp; 5MB &nbsp;<FiDownload />
-                  </MuiButton>
-                </Grid>
-                <Grid item xs={4}>
-                  <ButtonWrapper>
-                    <MuiButton
-                      variant='contained'
-                      color='secondary'
-                      sx={{ color: 'white' }}
-                      onClick={() => { console.log(true); }}
-                    >
-                      <HiFolderOpen />&nbsp; Upload Receipt
-                    </MuiButton>
-                    <Box sx={{ background: '#F3F4F6', borderRadius: '6px', p: '.4rem 1rem' }}>
-                      <Typography variant='text-sm' fontWeight='500' color='#374151'>Status</Typography>
-                      <IOSSwitch sx={{ mx: 1 }} />
-                      <Typography variant='text-sm' fontWeight='500' color='#374151'>Unpaid</Typography>
-                    </Box>
-                  </ButtonWrapper>
-                </Grid>
-              </Grid>
-            }
-          >
-            <Table
-              count={data?.itemTotals}
-              rowsPerPageOptions={[5, 10, 15]}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onChangePage={handleChangePage}
-              onRowsPerPagesChange={(e) => handleChangeRowsPerPage(e)}
-              headChildren={
-                <TableRow>
-                  {
-                    headerItems.map((item) => (
-                      <TableCell key={item.id} sortDirection={ifThenElse(sort === item.id, direction, false)}>
-                        <TableSortLabel
-                          active={sort === item.id}
-                          direction={sort === item.id ? direction : 'asc'}
-                          onClick={(e) => handleRequestSort(e, item.id)}
-                        >
-                          {item.label}
-                          {sort === item.id ? (
-                            <Box component='span' sx={visuallyHidden}>
-                              {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
-                            </Box>
-                          ) : null}
-                        </TableSortLabel>
-                      </TableCell>
-                    ))
-                  }
-                </TableRow>
-              }
-              bodyChildren={
-                <>
-                  {
-                    ifThenElse(typeof data?.items !== 'undefined', (
-                      ifThenElse(data?.items?.length === 0, (
-                        <TableRow>
-                          <TableCell colSpan={12} align='center'>
-                            <EmptyState />
-                          </TableCell>
-                        </TableRow>
-                      ), (
-                        data?.items?.map((item) => (
-                          <CompleteRow key={item.id} item={item} />
-                        ))
-                      ))
-                    ), (
-                      <TableRow>
-                        <TableCell colSpan={12} align='center'>
-                          <EmptyState />
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  }
-                </>
-              }
-            />
-          </SimpleAccordion>
-        </Box>
-      </ContentWrapper>
-
-      <ContentWrapper>
-        <Box sx={{ width: '100%' }}>
-          <SimpleAccordion
-            title={<>Payment Method : Cheque <Box component='span' sx={{ fontSize: '14px', fontWeight: '400' }}>(3 employees)</Box></>}
-            footer={
-              <Grid container spacing={2} mt='.1rem'>
-                <Grid item xs={8}>
-                  <MuiButton
-                    variant='contained'
-                    color='inherit'
-                    sx={{ color: '#111827' }}
-                    onClick={() => { console.log(true); }}
-                  >
-                    Cheque Form_Payroll 2023.pdf &nbsp;<FiFile />&nbsp; 5MB &nbsp;<FiDownload />
-                  </MuiButton>
-                </Grid>
-                <Grid item xs={4}>
-                  <ButtonWrapper>
-                    <MuiButton
-                      variant='contained'
-                      color='secondary'
-                      sx={{ color: 'white' }}
-                      onClick={() => { console.log(true); }}
-                    >
-                      <HiFolderOpen />&nbsp; Upload Receipt
-                    </MuiButton>
-                    <Box sx={{ background: '#F3F4F6', borderRadius: '6px', p: '.4rem 1rem' }}>
-                      <Typography variant='text-sm' fontWeight='500' color='#374151'>Status</Typography>
-                      <IOSSwitch sx={{ mx: 1 }} />
-                      <Typography variant='text-sm' fontWeight='500' color='#374151'>Unpaid</Typography>
-                    </Box>
-                  </ButtonWrapper>
-                </Grid>
-              </Grid>
-            }
-          >
-            <Table
-              count={data?.itemTotals}
-              rowsPerPageOptions={[5, 10, 15]}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onChangePage={handleChangePage}
-              onRowsPerPagesChange={(e) => handleChangeRowsPerPage(e)}
-              headChildren={
-                <TableRow>
-                  {
-                    headerItems.map((item) => (
-                      <TableCell key={item.id} sortDirection={ifThenElse(sort === item.id, direction, false)}>
-                        <TableSortLabel
-                          active={sort === item.id}
-                          direction={sort === item.id ? direction : 'asc'}
-                          onClick={(e) => handleRequestSort(e, item.id)}
-                        >
-                          {item.label}
-                          {sort === item.id ? (
-                            <Box component='span' sx={visuallyHidden}>
-                              {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
-                            </Box>
-                          ) : null}
-                        </TableSortLabel>
-                      </TableCell>
-                    ))
-                  }
-                </TableRow>
-              }
-              bodyChildren={
-                <>
-                  {
-                    ifThenElse(typeof data?.items !== 'undefined', (
-                      ifThenElse(data?.items?.length === 0, (
-                        <TableRow>
-                          <TableCell colSpan={12} align='center'>
-                            <EmptyState />
-                          </TableCell>
-                        </TableRow>
-                      ), (
-                        data?.items?.map((item) => (
-                          <CompleteRow key={item.id} item={item} />
-                        ))
-                      ))
-                    ), (
-                      <TableRow>
-                        <TableCell colSpan={12} align='center'>
-                          <EmptyState />
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  }
-                </>
-              }
-            />
-          </SimpleAccordion>
-        </Box>
-      </ContentWrapper> */}
     </>
   );
 }

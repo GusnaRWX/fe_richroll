@@ -36,13 +36,13 @@ const DisbursementEmployeeDetail = ({ open, handleClose, selectedEmployee }: Dis
           <div>
             <Text title='Position &emsp; &emsp;' fontSize='14px' />
           </div>
-          <Text title='Manager' fontSize='14px' color='grey.600' />
+          <Text title='-' fontSize='14px' color='grey.600' />
         </Grid>
         <Grid item md={4}>
           <div>
             <Text title='Department' fontSize='14px' />
           </div>
-          <Text title='Deparmtnet' fontSize='14px' color='grey.600' />
+          <Text title='-' fontSize='14px' color='grey.600' />
         </Grid>
       </Grid>
       <Box mb='20px'>
@@ -62,13 +62,40 @@ const DisbursementEmployeeDetail = ({ open, handleClose, selectedEmployee }: Dis
             <div>
               <Text title='Transfer Account' fontSize='14px' />
             </div>
-            <Text title='088123' fontSize='14px' color='grey.600' />
+            <Text title='-' fontSize='14px' color='grey.600' />
           </Grid>
           <Grid item md={4}>
             <div>
               <Text title='Bank Name' fontSize='14px' />
             </div>
-            <Text title='Mandiri' fontSize='14px' color='grey.600' />
+            <Text title='-' fontSize='14px' color='grey.600' />
+          </Grid>
+        </Grid>
+      </Box>
+      <Box mb='20px'>
+        <Text title='Income Tax' color='primary' fontWeight={700} fontSize='16px' />
+        <Grid
+          container
+          justifyContent='space-between'
+          alignItems='baseline'
+        >
+          <Grid item md={4}>
+            <div>
+              <Text title='Amount' fontSize='14px' />
+            </div>
+            <Text title={`Rp ${numberFormat(selectedEmployee?.incomeTax)}`} fontSize='14px' color='grey.600' />
+          </Grid>
+          <Grid item md={4}>
+            <div>
+              <Text title='Transfer Account' fontSize='14px' />
+            </div>
+            <Text title='-' fontSize='14px' color='grey.600' />
+          </Grid>
+          <Grid item md={4}>
+            <div>
+              <Text title='Bank Name' fontSize='14px' />
+            </div>
+            <Text title='-' fontSize='14px' color='grey.600' />
           </Grid>
         </Grid>
       </Box>

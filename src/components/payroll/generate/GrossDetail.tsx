@@ -41,7 +41,8 @@ function GrossDetail() {
         id: router.query.id,
         data: {
           assistantID: ''
-        }
+        },
+        isAssist: false
       }
     });
   };
