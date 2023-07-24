@@ -7,7 +7,7 @@ import {
   TableSortLabel,
   Button as MuiButton
 } from '@mui/material';
-import { Input, DateRangePicker } from '../_shared/form';
+import { Input } from '../_shared/form';
 import { Search } from '@mui/icons-material';
 import Table from '../_shared/form/Table';
 import { compareCheck, ifThenElse, getCompanyData } from '@/utils/helper';
@@ -150,14 +150,6 @@ function DisbursementTable({
                 <Search sx={{ color: '#9CA3AF' }} />
               )
             }}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <DateRangePicker
-            withAsterisk
-            // value={formik.values.startDate as unknown as Date}
-            onChange={(date: unknown) => console.log(date)}
-          // error={formik.touched.startDate && formik.errors.startDate ? String(formik.errors.startDate) : ''}
           />
         </Grid>
       </Grid>
