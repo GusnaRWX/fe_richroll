@@ -35,7 +35,7 @@ const ButtonWrapper = styled.div`
 const headerItems = [
   { id: 'name', label: 'C&B Profile Name', translation: 'cnb_profile_name' },
   { id: 'base', label: 'Base Compensation', translation: 'base_compensation' },
-  { id: 'supplementaries', label: 'Supplementary Compensation', translation: 'supplementary_compensation' },
+  { id: 'supplementary', label: 'Supplementary Compensation', translation: 'supplementary_compensation' },
   { id: 'createdAt', label: 'Date Created', translation: 'date_created' },
   { id: 'updatedAt', label: 'Last Updated', translation: 'last_update' },
 ];
@@ -69,11 +69,9 @@ function EnhancedTable() {
     }
   };
   const handleRequestSort = (event: React.MouseEvent<unknown>, headId: string) => {
-    if (compareCheck(headId !== 'base', headId !== 'supplementaries')) {
-      const isAsc = compareCheck(sort === headId, direction === 'asc');
-      setDirection(ifThenElse(isAsc, 'desc', 'asc'));
-      setSort(headId);
-    }
+    const isAsc = compareCheck(sort === headId, direction === 'asc');
+    setDirection(ifThenElse(isAsc, 'desc', 'asc'));
+    setSort(headId);
   };
 
   const deleteCnb = (Id: string | number) => {
@@ -183,8 +181,8 @@ function EnhancedTable() {
                     </TableCell>
                   </TableRow>
                 ), (
-                  data?.items?.map((item, index) => (
-                    <TableRow key={index}>
+                  data?.items?.map((item) => (
+                    <TableRow key={item?.id}>
                       <TableCell>{item?.name}</TableCell>
                       <TableCell>{item?.base?.component.name}</TableCell>
                       <TableCell>
