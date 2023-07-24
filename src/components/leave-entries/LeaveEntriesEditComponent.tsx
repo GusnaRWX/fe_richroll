@@ -150,6 +150,7 @@ const LeaveEntriesEditComponent: React.FC<LeaveEntriesEditProps> = ({
               onChange={(date: unknown) => formik.setFieldValue('leaveTo', date, true)}
               value={dayjs(formik.values.leaveTo) as unknown as Date}
               error={formik.errors.leaveTo}
+              minDate={formik.values.leaveFrom as unknown as Date}
             />
           </Grid>
         </Grid>
