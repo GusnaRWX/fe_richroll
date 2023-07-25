@@ -43,7 +43,7 @@ const LeaveEntriesEditComponent: React.FC<LeaveEntriesEditProps> = ({
       leaveType: '',
       leaveStatus: '',
       leaveFrom: null,
-      leaveTo: null,
+      // leaveTo: null,
       note: '',
       halfTo: null,
       halfFrom: null
@@ -56,16 +56,12 @@ const LeaveEntriesEditComponent: React.FC<LeaveEntriesEditProps> = ({
             ? dayjs(values.leaveFrom).toISOString()
             : dayjs(dayjs(values.leaveFrom).format('YYYY-MM-DD') + ' ' + dayjs(values.halfFrom).format('HH:mm')).toISOString(),
           end: values.halfTo === null
-            ? dayjs(values.leaveTo).toISOString()
-            : dayjs(dayjs(values.leaveTo).format('YYYY-MM-DD') + ' ' + dayjs(values.halfTo).format('HH:mm')).toISOString(),
+            ? dayjs(values.leaveFrom).toISOString()
+            : dayjs(dayjs(values.leaveFrom).format('YYYY-MM-DD') + ' ' + dayjs(values.halfTo).format('HH:mm')).toISOString(),
           note: values.note,
           leaveType: values.leaveType,
           leaveStatus: values.leaveStatus,
           isHalfday: isHalfDay
-        },
-        getEntries: {
-          page: 1,
-          itemPerPage: 5
         }
       };
       dispatch({
@@ -74,8 +70,7 @@ const LeaveEntriesEditComponent: React.FC<LeaveEntriesEditProps> = ({
           payload: {
             id: selectedItem?.id,
             data: result.put
-          },
-          getEntries: result.getEntries
+          }
         }
       });
       handleClear();
@@ -89,7 +84,6 @@ const LeaveEntriesEditComponent: React.FC<LeaveEntriesEditProps> = ({
     formik.setFieldValue('leaveType', String(selectedItem?.leaveType));
     formik.setFieldValue('leaveStatus', String(selectedItem?.leaveStatus));
     formik.setFieldValue('leaveFrom', dayjs(selectedItem?.start));
-    formik.setFieldValue('leaveTo', dayjs(selectedItem?.end));
     formik.setFieldValue('halfFrom', dayjs(selectedItem?.start));
     formik.setFieldValue('halfTo', dayjs(selectedItem?.end));
     formik.setFieldValue('note', selectedItem?.note);
@@ -136,12 +130,12 @@ const LeaveEntriesEditComponent: React.FC<LeaveEntriesEditProps> = ({
         <Grid container sx={{ padding: '0px 16px' }} justifyContent='space-between' alignItems='center'>
           <Grid item md={5.5}>
             <DatePicker
-              customLabel='Leave From'
+              customLabel='Select Date'
               onChange={(date: unknown) => formik.setFieldValue('leaveFrom', date, false)}
               value={dayjs(formik.values.leaveFrom) as unknown as Date}
             />
           </Grid>
-          <Grid item>
+          {/* <Grid item>
             <AiOutlineSwapRight style={{ marginTop: '30px' }} />
           </Grid>
           <Grid item md={5.5} sx={{ marginBottom: formik.errors.leaveTo ? '-30px' : '' }}>
@@ -152,7 +146,7 @@ const LeaveEntriesEditComponent: React.FC<LeaveEntriesEditProps> = ({
               error={formik.errors.leaveTo}
               minDate={formik.values.leaveFrom as unknown as Date}
             />
-          </Grid>
+          </Grid> */}
         </Grid>
         <Grid container sx={{ padding: '0 16px' }}>
           <Grid item>

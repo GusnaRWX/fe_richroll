@@ -46,7 +46,6 @@ function* fetchPostLeaveEntries(action: AnyAction) {
     const res: AxiosResponse = yield call(postLeaveEntries, action?.payload?.post);
     if (res.status === 201) {
       yield put({ type: postLeaveEntriesSuccess.toString() });
-      yield put({ type: getLeaveEntriesRequested.toString(), payload: action?.payload?.getEntries });
       yield put({
         type: setResponserMessage?.toString(),
         payload: {
@@ -92,7 +91,6 @@ function* fetchDeleteLeaveEntries(action: AnyAction) {
     const res: AxiosResponse = yield call(deleteLeaveEntries, action?.payload?.id);
     if (res.status === 200) {
       yield put({ type: deleteLeaveEntriesSuccess.toString() });
-      yield put({ type: getLeaveEntriesRequested.toString(), payload: action?.payload?.getEntries });
       yield put({
         type: setResponserMessage.toString(),
         payload: {
@@ -138,7 +136,6 @@ function* fetchPutLeaveEntries(action: AnyAction) {
     const res: AxiosResponse = yield call(putLeaveEntries, action?.payload?.payload);
     if (res.status === 200) {
       yield put({ type: putLeaveEntriesSuccess.toString() });
-      yield put({ type: getLeaveEntriesRequested.toString(), payload: action?.payload?.getEntries });
       yield put({
         type: setResponserMessage.toString(),
         payload: {

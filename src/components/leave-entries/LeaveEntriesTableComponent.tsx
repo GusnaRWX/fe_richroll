@@ -55,6 +55,7 @@ const LeaveEntriesTableComponent = ({
   const companyData = getCompanyData();
   const leaveEntries = useAppSelectors(state => state.leaveEntries);
   const [searchData, setSearchData] = useState('');
+  const { responser } = useAppSelectors((state) => state);
 
   const handleRequestSort = (event: React.MouseEvent<unknown>, headId: string) => {
     const isAsc = compareCheck(sort === headId, direction === 'asc');
@@ -65,8 +66,8 @@ const LeaveEntriesTableComponent = ({
   const headers = [
     { id: 'employee.code', label: 'Employee ID' },
     { id: 'employee.user.name', label: 'Employee Name' },
-    { id: 'items.start', label: 'Leave From' },
-    { id: 'items.end', label: 'Leave To' },
+    { id: 'items.start', label: 'Date' },
+    // { id: 'items.end', label: 'Leave To' },
     { id: 'items.leaveType', label: 'Leave Type' },
     { id: 'items.leaveStatus', label: 'Status' },
     { id: 'action', label: '' }
@@ -80,34 +81,12 @@ const LeaveEntriesTableComponent = ({
     setRowsPerPage(event);
   };
 
-  const loadDataLeaveEntries = () => {
-    dispatch({
-      type: getLeaveEntriesRequested.toString(),
-      payload: {
-        page: page,
-        itemPerPage: rowsPerPage,
-        sort: sort,
-        direction: direction.toUpperCase(),
-        search: searchData,
-        companyID: companyData?.id
-      }
-    });
-  };
-
   const handleDelete = () => {
     setDeleteConfirmation(false);
     dispatch({
       type: deleteLeaveEntriesRequested.toString(),
       payload: {
         id: selectedItem?.id,
-        getEntries: {
-          page: page,
-          itemPerPage: rowsPerPage,
-          sort: sort,
-          direction: direction.toUpperCase(),
-          search: searchData,
-          companyID: companyData?.id
-        }
       }
     });
   };
@@ -119,8 +98,18 @@ const LeaveEntriesTableComponent = ({
   };
 
   useEffect(() => {
-    loadDataLeaveEntries();
-  }, [rowsPerPage, page, sort, direction, searchData]);
+    dispatch({
+      type: getLeaveEntriesRequested.toString(),
+      payload: {
+        page: page,
+        itemPerPage: rowsPerPage,
+        sort: sort,
+        direction: direction.toUpperCase(),
+        search: searchData,
+        companyID: companyData?.id
+      }
+    });
+  }, [rowsPerPage, page, sort, direction, searchData, responser.code]);
 
   const renderLeaveType = (type: number) => {
     return LeaveTypeItems.find(item => +item.value === type)?.label;
@@ -222,7 +211,7 @@ const LeaveEntriesTableComponent = ({
                         </NameWrapper>
                       </TableCell>
                       <TableCell>{dayjs(value.start).format('DD/MM/YY')}</TableCell>
-                      <TableCell>{dayjs(value.end).format('DD/MM/YY')}</TableCell>
+                      {/* <TableCell>{dayjs(value.end).format('DD/MM/YY')}</TableCell> */}
                       <TableCell>{renderLeaveType(value?.leaveType)}</TableCell>
                       <TableCell>
                         <Grid container alignItems='center' justifyContent='space-between'>
