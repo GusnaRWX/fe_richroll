@@ -16,6 +16,7 @@ import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { getEmployeeRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
 import { getCompanyData, compareCheck, ifThenElse } from '@/utils/helper';
 import { visuallyHidden } from '@mui/utils';
+import { useTranslation } from 'react-i18next';
 
 const ButtonWrapper = styled.div`
  display: flex;
@@ -35,9 +36,9 @@ const NameWrapper = styled.div`
 
 const headerItemsEmployees = [
   { id: 'action', label: '' },
-  { id: 'user.name', label: 'Employee Name' },
-  { id: 'position', label: 'Position' },
-  { id: 'department', label: 'Department' },
+  { id: 'user.name', label: 'employee_name' },
+  { id: 'position', label: 'position' },
+  { id: 'department', label: 'department' },
 ];
 
 type Order = 'asc' | 'desc'
@@ -64,6 +65,9 @@ function AttendanceModal({
   const [hydrated, setHaydrated] = useState(false);
   const [selectedTemp, setSelectedTemp] = useState(selected);
   const companyData = getCompanyData();
+  const {t} = useTranslation();
+  const t_addEmployee = 'attendance_&_leave.attendance_entries.popup.add_employee';
+  const t_addEmployeeTableHeader = 'attendance_&_leave.attendance_entries.popup.add_employee.table_cols_item';
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -158,10 +162,10 @@ function AttendanceModal({
     <CustomModal
       open={open}
       handleClose={handleClose}
-      title='Select Employees'
+      title={t(`${t_addEmployee}.title`)}
       width='800px'
       handleConfirm={onConfirm}
-      submitText='Add Employee'
+      submitText={t('button.add_employee')}
       keepMounted={false}
     >
       <Grid container>
@@ -188,7 +192,7 @@ function AttendanceModal({
                           direction={sort === item.id ? direction : 'asc'}
                           onClick={(e) => handleRequestSort(e, item.id)}
                         >
-                          {item.label}
+                          {item.label === '' ? '' : t(`${t_addEmployeeTableHeader}.${item.label}`)}
                           {sort === item.id ? (
                             <Box component='span' sx={visuallyHidden}>
                               {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}

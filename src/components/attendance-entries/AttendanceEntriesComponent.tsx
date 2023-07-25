@@ -15,6 +15,7 @@ import AddEmployeesModal from '../payroll-assistant/create/AttendanceModal';
 import { useAppDispatch } from '@/hooks/index';
 import { postAttendanceRequested } from '@/store/reducers/slice/attendance-leave/attendanceEntriesSlice';
 import { CustomModal } from '@/components/_shared/common';
+import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
 
 interface DataGridCellProps {
@@ -105,6 +106,10 @@ function AttendanceEntriesComponent() {
   const [isAuto, setIsAuto] = useState(false);
   const [selected, setSelected] = useState(Array<object>);
   const [selectDate, setSelectDate] = useState(dayjs());
+  const {t} = useTranslation();
+  const t_pageKey = 'attendance_&_leave.attendance_entries';
+  const t_createPopup = 'attendance_&_leave.attendance_entries.popup.create';
+  const t_createPopupTableHeader = 'attendance_&_leave.attendance_entries.popup.create.table_cols_item';
 
   function GridActionCell({ rowNode }: DataGridCellProps) {
     const tempId = rowNode['id'];
@@ -124,7 +129,7 @@ function AttendanceEntriesComponent() {
 
   function GridNameCell({ rowNode, value }: DataGridCellProps) {
     const tempId = rowNode['id'];
-    
+
     const tempRow = selected.find((v) => v['id'] === tempId);
     return (
       <NameWrapper>
@@ -175,7 +180,7 @@ function AttendanceEntriesComponent() {
           slotProps={{
             textField: { onBlur: (a) => handleBlur(a.target.value) }
           }}
-          
+
           value={value}
           sx={{
             '& .MuiOutlinedInput-input': {
@@ -193,18 +198,18 @@ function AttendanceEntriesComponent() {
     { field: 'id',
       width: 110,
       sortable: false,
-      headerName: 'Employee ID'
+      headerName: t(`${t_createPopupTableHeader}.employee_id`)
     },
     { field: 'name',
       width: 260,
       sortable: false,
-      headerName: 'Employee Name',
+      headerName: t(`${t_createPopupTableHeader}.employee_name`),
       renderCell: (params) => <GridNameCell {...params} />
     },
     { field: 'clockIn',
       width: 165,
       sortable: false,
-      headerName: 'Check In',
+      headerName: t(`${t_createPopupTableHeader}.check_in`),
       renderCell: (params) => <GridClockCell {...params} />
     },
     { field: 'icon',
@@ -216,7 +221,7 @@ function AttendanceEntriesComponent() {
     { field: 'clockOut',
       width: 165,
       sortable: false,
-      headerName: 'Check Out',
+      headerName: t(`${t_createPopupTableHeader}.check_out`),
       renderCell: (params) => <GridClockCell {...params} />
     },
     { field: 'action',
@@ -296,8 +301,8 @@ function AttendanceEntriesComponent() {
     <>
       <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
         <Grid item xs={6}>
-          <Typography variant='h5' color='primary.main'>Attendance & Leave</Typography>
-          <Typography variant='text-base' color='#4B5563'>Attendance Entry</Typography>
+          <Typography variant='h5' color='primary.main'>{t(`${t_pageKey}.title`)}</Typography>
+          <Typography variant='text-base' color='#4B5563'>{t(`${t_pageKey}.sub_title`)}</Typography>
         </Grid>
         <Grid item xs={6}>
           <ButtonWrapper>
@@ -308,7 +313,7 @@ function AttendanceEntriesComponent() {
               startIcon={<AddIcon />}
               sx={{ color: 'white' }}
               onClick={() => { setOpen(true); }}
-            >Create Attendance Entry</MuiButton>
+            >{t('button.create_attendance_entry')}</MuiButton>
           </ButtonWrapper>
         </Grid>
       </Grid>
@@ -322,16 +327,16 @@ function AttendanceEntriesComponent() {
       <CustomModal
         open={open}
         handleClose={handleClose}
-        title='New Attendance Entry'
+        title={t(`${t_createPopup}.title`)}
         width='840px'
         handleConfirm={handleConfirm}
-        submitText='Create Entry'
+        submitText={t('button.create_entry')}
         keepMounted={false}
       >
         <Grid container mt='1rem' mb='1rem'>
           <Grid item xs={4}>
             <DatePicker
-              customLabel='Select Date'
+              customLabel={t(`${t_createPopup}.select_date_label`)}
               withAsterisk
               value={selectDate as unknown as Date}
               onChange={(date) => { handleChangeDate(date); }}
@@ -340,7 +345,7 @@ function AttendanceEntriesComponent() {
           <Grid item xs={2} sx={{ display: 'flex', alignItems: 'end' }}>
             <FormControlLabel
               sx={{ ml: '1rem', mb: '.5rem' }}
-              label='Auto'
+              label={t(`${t_createPopup}.auto`)}
               control={
                 <IOSSwitch
                   sx={{ mr: '.5rem' }}
@@ -359,7 +364,7 @@ function AttendanceEntriesComponent() {
                 startIcon={<AddIcon />}
                 sx={{ color: 'white' }}
                 onClick={() => { setOpenAddEmployee(true); }}
-              >Add Employee</MuiButton>
+              >{t('button.add_employee')}</MuiButton>
             </ButtonWrapper>
           </Grid>
         </Grid>

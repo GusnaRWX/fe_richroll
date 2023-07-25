@@ -21,6 +21,7 @@ import AttendanceEntriesEdit from './AttendanceEntriesEdit';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { getAttendanceRequested, putAttendanceRequested, deleteAttendanceRequested } from '@/store/reducers/slice/attendance-leave/attendanceEntriesSlice';
 import { AttendanceLeave } from '@/types/attendanceLeave';
+import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
 import EmptyState from '../_shared/common/EmptyState';
 
@@ -41,12 +42,12 @@ const NameWrapper = styled.div`
 `;
 
 const headerItems = [
-  { id: 'date', label: 'Date' },
-  { id: 'id', label: 'Employee ID' },
-  { id: 'name', label: 'Employee Name' },
-  { id: 'clockIn', label: 'Check In' },
-  { id: 'clockOut', label: 'Check Out' },
-  { id: 'count', label: 'Count' },
+  { id: 'date', label: 'date' },
+  { id: 'id', label: 'employee_id' },
+  { id: 'name', label: 'employee_name' },
+  { id: 'clockIn', label: 'check_in' },
+  { id: 'clockOut', label: 'check_out' },
+  { id: 'count', label: 'count' },
   { id: 'action', label: '' },
 ];
 
@@ -66,6 +67,9 @@ const AttendanceEntriesTable = () => {
   const [selectedItem, setSelectedItem] = useState<AttendanceLeave.AttendanceType | undefined>();
   const [editConfirmation, setEditConfirmation] = useState(false);
   const { responser } = useAppSelectors((state) => state);
+  const {t} = useTranslation();
+  const t_tableHeader = 'attendance_&_leave.attendance_entries.table.table_cols_item';
+  const t_deletePopup = 'attendance_&_leave.attendance_entries.popup.delete';
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -165,7 +169,7 @@ const AttendanceEntriesTable = () => {
                     direction={sort === item.id ? direction : 'asc'}
                     onClick={(e) => handleRequestSort(e, item.id)}
                   >
-                    {item.label}
+                    {item.label === '' ? '' : t(`${t_tableHeader}.${item.label}`)}
                     {sort === item.id ? (
                       <Box component='span' sx={visuallyHidden}>
                         {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
@@ -248,8 +252,8 @@ const AttendanceEntriesTable = () => {
       <ConfirmationModal
         open={deleteConfirmation}
         handleClose={() => setDeleteConfirmation(false)}
-        title='Delete Attendance Entry'
-        content='You are about to delete this attendance entry. This action cannot be undone.'
+        title={t(`${t_deletePopup}.title`)}
+        content={t(`${t_deletePopup}.desc`)}
         withCallback
         noChange={true}
         type='delete'
