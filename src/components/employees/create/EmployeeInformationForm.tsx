@@ -22,7 +22,7 @@ import { CameraAlt, Cancel } from '@mui/icons-material';
 import { Employees } from '@/types/employees';
 import { validationSchemeEmployeeInformation } from './validate';
 import { useFormik } from 'formik';
-import { convertImageParams, getCompanyData } from '@/utils/helper';
+import { convertImageParams, getCompanyData, randomInt } from '@/utils/helper';
 import { getListPositionRequested } from '@/store/reducers/slice/options/optionSlice';
 import { Option } from '@/types/option';
 import { BsTrash3 } from 'react-icons/bs';
@@ -425,7 +425,7 @@ function EmployeeInformationForm({ refProp, nextPage, nextPermPage, setValues, i
                   formik.setFieldValue('department', newValue.inputValue, false);
                   setMappedDepartment((prevDepartments) => [...prevDepartments, {
                     label: newValue.inputValue,
-                    id: String(Math.random() * Math.PI)
+                    id: String(randomInt(100, 999))
                   }]);
                 } else {
                   formik.setFieldValue('department', newValue?.label);
@@ -515,7 +515,7 @@ function EmployeeInformationForm({ refProp, nextPage, nextPermPage, setValues, i
                   formik.setFieldValue('position', newValue.inputValue, false);
                   setMappedListPosition((prev) => [...prev, {
                     label: newValue.inputValue,
-                    id: String(Math.random() * Math.PI)
+                    id: String(randomInt(100, 999))
                   }]);
                 } else {
                   formik.setFieldValue('position', newValue?.label);
