@@ -13,6 +13,7 @@ import { Text } from '@/components/_shared/common';
 import { validationSchemeLogin } from './validate';
 import { useFormik } from 'formik';
 import { Auth } from '@/types/authentication';
+import { randomCode } from '@/utils/helper';
 
 const LinkComponent = styled(Link)(({ theme }) => ({
   color: theme.palette.primary.main,
@@ -37,6 +38,7 @@ const LoginForm = ({
 }: Login.Component) => {
   const [openPassword, setOpenPassword] = useState(false);
   const { responser, login } = useAppSelectors(state => state);
+  console.log('code', randomCode(10));
 
   const formik = useFormik({
     initialValues: {

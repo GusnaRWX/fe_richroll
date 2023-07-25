@@ -9,7 +9,7 @@ import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { getListBaseCompensationRequested, getListCnbRequested, getListTerminReqeusted, getListSuppCompensationRequested } from '@/store/reducers/slice/options/optionSlice';
 import { Button, Input, RadioGroup, Select } from '@/components/_shared/form';
 import { FiEdit } from 'react-icons/fi';
-import { getPaymentType } from '@/utils/helper';
+import { getPaymentType, ifThenElse } from '@/utils/helper';
 import { MdOutlineAdd } from 'react-icons/md';
 
 interface CnbFormEditProps {
@@ -120,7 +120,7 @@ const CnbFormEdit = ({ cnbValues, refProp, setCnbValue, cnbValuesForm }: CnbForm
           <Autocomplete
             id='cnbProfile'
             freeSolo
-            value={cnbValues?.template === null ? formik.values.name : formik.values.name}
+            value={ifThenElse(cnbValues?.template === null, formik.values.name, formik.values.name)}
             size='small'
             filterOptions={(options: any, params) => {
               const filtered = filter(options, params);

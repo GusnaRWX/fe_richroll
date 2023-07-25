@@ -24,7 +24,8 @@ import { Image as ImageType } from '@/utils/assetsConstant';
 import styled from '@emotion/styled';
 import { useAppSelectors, useAppDispatch } from '@/hooks/index';
 import {
-  convertImageParams
+  convertImageParams,
+  randomInt
 } from '@/utils/helper';
 import dayjs from 'dayjs';
 import { Alert, Text } from '@/components/_shared/common';
@@ -435,7 +436,7 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
                   formik.setFieldValue('department', newValue.inputValue, false);
                   setMappedDeparment((prev) => [...prev, {
                     label: newValue.inputValue,
-                    id: String(Math.random() * Math.PI)
+                    id: String(randomInt(100, 999))
                   }]);
                 } else {
                   formik.setFieldValue('department', newValue?.label);
@@ -527,7 +528,7 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
                   formik.setFieldValue('position', newValue.inputValue, false);
                   setMappedListPosition((prev) => [...prev, {
                     label: newValue.inputValue,
-                    id: String(Math.random() * Math.PI)
+                    id: String(randomInt(100, 999))
                   }]);
                 } else {
                   formik.setFieldValue('position', newValue?.label);
