@@ -647,7 +647,7 @@
         "table_cols_item" : {
           "employee_id" : "Employee ID",
           "employee_name" :"Employee Name",
-          "leave_form" : "Leave Form",
+          "leave_form" : "Leave From",
           "leave_to" : "Leave To",
           "leave_type" : "Leave Type",
           "status" :"Status"
@@ -672,6 +672,9 @@
           "title" : "New Leave Entry",
           "leave_from_input_label" : "Leave From",
           "leave_to_input_label" :"Leave To",
+          "half_day_leave" : "Half-day Leave",
+          "from_input_label" : "From",
+          "to_input_label" :"To",
           "leave_type_input_label" :"Leave Type",
           "leave_type_input_placeholder" :"Select Leave Type",
           "status_input_label" :"Status",
@@ -683,6 +686,9 @@
           "title" : "Edit Leave Entry",
           "leave_from_input_label" : "Leave From",
           "leave_to_input_label" :"Leave To",
+          "half_day_leave" : "Half-day Leave",
+          "from_input_label" : "From",
+          "to_input_label" :"Leave To",
           "leave_type_input_label" :"Leave Type",
           "leave_type_input_placeholder" :"Select Leave Type",
           "status_input_label" :"Status",

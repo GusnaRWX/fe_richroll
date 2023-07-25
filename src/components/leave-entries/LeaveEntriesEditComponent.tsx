@@ -12,6 +12,7 @@ import { useFormik } from 'formik';
 import { useAppDispatch } from '@/hooks/index';
 import dayjs from 'dayjs';
 import { AiOutlineSwapRight } from 'react-icons/ai';
+import { useTranslation } from 'react-i18next';
 // import utc from 'dayjs/plugin/utc';
 
 // dayjs.extend(utc);
@@ -30,6 +31,8 @@ const LeaveEntriesEditComponent: React.FC<LeaveEntriesEditProps> = ({
   setSelectedItem
 }) => {
   const dispatch = useAppDispatch();
+  const {t} = useTranslation();
+  const t_leaveEntriesEdit = 'attendance_&_leave.leave_entries.popup.update';
 
   const handleClear = () => {
     setSelectedItem(null);
@@ -107,9 +110,9 @@ const LeaveEntriesEditComponent: React.FC<LeaveEntriesEditProps> = ({
     <CustomModal
       open={open}
       keepMounted={false}
-      title='Edit Leave Entry'
+      title={t(`${t_leaveEntriesEdit}.title`)}
       width='800px'
-      submitText='Save'
+      submitText={t('button.save')}
       handleClose={() => {
         formik.resetForm();
         handleClose();
@@ -136,7 +139,7 @@ const LeaveEntriesEditComponent: React.FC<LeaveEntriesEditProps> = ({
         <Grid container sx={{ padding: '0px 16px' }} justifyContent='space-between' alignItems='center'>
           <Grid item md={5.5}>
             <DatePicker
-              customLabel='Leave From'
+              customLabel={t(`${t_leaveEntriesEdit}.leave_from_input_label`)}
               onChange={(date: unknown) => formik.setFieldValue('leaveFrom', date, false)}
               value={dayjs(formik.values.leaveFrom) as unknown as Date}
             />
@@ -146,7 +149,7 @@ const LeaveEntriesEditComponent: React.FC<LeaveEntriesEditProps> = ({
           </Grid>
           <Grid item md={5.5} sx={{ marginBottom: formik.errors.leaveTo ? '-30px' : '' }}>
             <DatePicker
-              customLabel='Leave To'
+              customLabel={t(`${t_leaveEntriesEdit}.leave_to_input_label`)}
               onChange={(date: unknown) => formik.setFieldValue('leaveTo', date, true)}
               value={dayjs(formik.values.leaveTo) as unknown as Date}
               error={formik.errors.leaveTo}
@@ -155,13 +158,13 @@ const LeaveEntriesEditComponent: React.FC<LeaveEntriesEditProps> = ({
         </Grid>
         <Grid container sx={{ padding: '0 16px' }}>
           <Grid item>
-            <CheckBox customLabel='Half-day Leave' checked={isHalfDay === true ? true : false} onChange={() => setIsHalfDay((prev) => !prev)} />
+            <CheckBox customLabel={t(`${t_leaveEntriesEdit}.half_day_leave`)} checked={isHalfDay === true ? true : false} onChange={() => setIsHalfDay((prev) => !prev)} />
           </Grid>
         </Grid>
         {isHalfDay && (
           <Grid container justifyContent='space-between' alignItems='center' sx={{ padding: '0px 16px' }} mb='16px'>
             <Grid item md={5.5}>
-              <Text title='From' color='grey.700' mb='6px' />
+              <Text title={t(`${t_leaveEntriesEdit}.from_input_label`)} color='grey.700' mb='6px' />
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <TimePicker
                   ampm={false}
@@ -182,7 +185,7 @@ const LeaveEntriesEditComponent: React.FC<LeaveEntriesEditProps> = ({
               <AiOutlineSwapRight style={{ marginTop: '30px' }} />
             </Grid>
             <Grid item md={5.5}>
-              <Text title='To' color='grey.700' mb='6px' />
+              <Text title={t(`${t_leaveEntriesEdit}.to_input_label`)} color='grey.700' mb='6px' />
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <TimePicker
                   ampm={false}
@@ -204,7 +207,7 @@ const LeaveEntriesEditComponent: React.FC<LeaveEntriesEditProps> = ({
         <Grid container justifyContent='space-between' sx={{ padding: '0px 16px' }} alignItems='center'>
           <Grid item sm={5.8}>
             <Select
-              customLabel='Leave Type'
+              customLabel={t(`${t_leaveEntriesEdit}.leave_type_input_label`)}
               options={LeaveTypeItems}
               variant='outlined'
               size='small'
@@ -216,7 +219,7 @@ const LeaveEntriesEditComponent: React.FC<LeaveEntriesEditProps> = ({
               onBlur={formik.handleBlur}
               renderValue={(value: unknown) => {
                 if ((value as string)?.length === 0) {
-                  return <Text title='Select Leave Type' color='grey.400' />;
+                  return <Text title={t(`${t_leaveEntriesEdit}.leave_type_input_placeholder`)} color='grey.400' />;
                 }
                 const selected = LeaveTypeItems.find(item => item.value === value);
                 if (selected) {
@@ -228,7 +231,7 @@ const LeaveEntriesEditComponent: React.FC<LeaveEntriesEditProps> = ({
           </Grid>
           <Grid item sm={5.8}>
             <Select
-              customLabel='Status'
+              customLabel={t(`${t_leaveEntriesEdit}.status_input_label`)}
               options={LeaveTypeStatus}
               variant='outlined'
               size='small'
@@ -240,7 +243,7 @@ const LeaveEntriesEditComponent: React.FC<LeaveEntriesEditProps> = ({
               value={formik.values.leaveStatus}
               renderValue={(value: unknown) => {
                 if ((value as string)?.length === 0) {
-                  return <Text title='Select Leave Status' color='grey.400' />;
+                  return <Text title={t(`${t_leaveEntriesEdit}.status_input_placeholder`)} color='grey.400' />;
                 }
                 const selected = LeaveTypeStatus.find(item => item.value === value);
                 if (selected) {
@@ -254,8 +257,8 @@ const LeaveEntriesEditComponent: React.FC<LeaveEntriesEditProps> = ({
         <Grid container sx={{ padding: '0 16px' }} mt='16px'>
           <Grid item md={12} xs={12}>
             <Textarea
-              placeholder='Add Notes'
-              customLabel='Note'
+              placeholder={t(`${t_leaveEntriesEdit}.note_input_placeholder`)}
+              customLabel={t(`${t_leaveEntriesEdit}.note_input_label`)}
               minRows={4}
               name='note'
               onChange={formik.handleChange}

@@ -18,6 +18,7 @@ import store from '@/store/index';
 import { getLeaveEntriesRequested, deleteLeaveEntriesRequested } from '@/store/reducers/slice/attendance-leave/leaveEntriesSlice';
 import { useAppSelectors } from '@/hooks/index';
 import { AttendanceLeave } from '@/types/attendanceLeave';
+import { useTranslation } from 'react-i18next';
 
 const NameWrapper = styled.div`
    display: flex;
@@ -55,6 +56,10 @@ const LeaveEntriesTableComponent = ({
   const companyData = getCompanyData();
   const leaveEntries = useAppSelectors(state => state.leaveEntries);
   const [searchData, setSearchData] = useState('');
+  const {t} = useTranslation();
+  const t_tableHeader = 'attendance_&_leave.leave_entries.table.table_cols_item';
+  const t_tableCustomValue = 'attendance_&_leave.leave_entries.table.custom_value';
+  const t_deletePopup = 'attendance_&_leave.leave_entries.popup.delete';
 
   const handleRequestSort = (event: React.MouseEvent<unknown>, headId: string) => {
     const isAsc = compareCheck(sort === headId, direction === 'asc');
@@ -63,12 +68,12 @@ const LeaveEntriesTableComponent = ({
   };
 
   const headers = [
-    { id: 'employee.code', label: 'Employee ID' },
-    { id: 'employee.user.name', label: 'Employee Name' },
-    { id: 'items.start', label: 'Leave From' },
-    { id: 'items.end', label: 'Leave To' },
-    { id: 'items.leaveType', label: 'Leave Type' },
-    { id: 'items.leaveStatus', label: 'Status' },
+    { id: 'employee.code', label: t(`${t_tableHeader}.employee_id`) },
+    { id: 'employee.user.name', label: t(`${t_tableHeader}.employee_name`) },
+    { id: 'items.start', label: t(`${t_tableHeader}.leave_form`)},
+    { id: 'items.end', label: t(`${t_tableHeader}.leave_to`)},
+    { id: 'items.leaveType', label: t(`${t_tableHeader}.leave_type`) },
+    { id: 'items.leaveStatus', label: t(`${t_tableHeader}.status`) },
     { id: 'action', label: '' }
   ];
 
@@ -142,9 +147,9 @@ const LeaveEntriesTableComponent = ({
 
   const renderIsHalfday = (halfday: boolean) => {
     if (halfday) {
-      return <Chip label='Half-day' sx={{ color: '#9A3412', backgroundColor: '#FFEDD5' }} />;
+      return <Chip label={t(`${t_tableCustomValue}.half_day`)} sx={{ color: '#9A3412', backgroundColor: '#FFEDD5' }} />;
     } else {
-      return <Chip label='Full-day' sx={{ color: '#075985', backgroundColor: '#E0F2FE' }} />;
+      return <Chip label={t(`${t_tableCustomValue}.full_day`)} sx={{ color: '#075985', backgroundColor: '#E0F2FE' }} />;
     }
   };
 
@@ -272,8 +277,8 @@ const LeaveEntriesTableComponent = ({
       <ConfirmationModal
         open={deleteConfirmation}
         handleClose={() => setDeleteConfirmation(false)}
-        title='Delete Data Entry'
-        content='You are about to delete this leave data entry. This action cannot be undone'
+        title={t(`${t_deletePopup}.title`)}
+        content={t(`${t_deletePopup}.desc`)}
         withCallback
         noChange
         type='delete'
