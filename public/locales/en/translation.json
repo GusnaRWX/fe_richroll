@@ -741,6 +741,10 @@
           "start_time_input_label" : "Start Time",
           "duration_input_label" : "Duration",
           "multiplier_input_label" : "Multiplier"
+        },
+        "delete" : {
+          "title" : "Delete Data Entry",
+          "desc" : "You are about to delete this overtime data entry. This action cannot be undone."
         }
       }
     }

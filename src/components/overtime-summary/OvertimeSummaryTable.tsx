@@ -28,6 +28,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import dayjs from 'dayjs';
 import { AttendanceLeave } from '@/types/attendanceLeave';
 //import { AiOutlineSwapRight } from 'react-icons/ai';
+import { useTranslation } from 'react-i18next';
 
 const ButtonWrapper = styled.div`
  display: flex;
@@ -86,19 +87,22 @@ const EmptyTableWrapper = styled.div`
 // `;
 
 const headerItems = [
-  { id: 'date', label: 'Date' },
-  { id: 'id', label: 'Employee ID' },
-  { id: 'name', label: 'Employee Name' },
-  { id: 'start', label: 'Start Time' },
-  { id: 'duration', label: 'Duration' },
-  { id: 'multiplier', label: 'Multiplier' },
-  { id: 'action', label: '' }
+  { id: 'date', label: 'date' },
+  { id: 'id', label: 'employee_id' },
+  { id: 'name', label: 'employee_name' },
+  { id: 'start', label: 'start_time' },
+  { id: 'duration', label: 'duration' },
+  { id: 'multiplier', label: 'multiplier' }
+  // { id: 'action', label: '' }
 ];
 
 type Order = 'asc' | 'desc'
 
 function OvertimeSummaryTable() {
   const dispatch = useAppDispatch();
+  const {t} = useTranslation();
+  const t_tableHeader = 'attendance_&_leave.overtime_summary.table.table_cols_item';
+  const t_deletePopup = 'attendance_&_leave.overtime_summary.popup.delete';
   const { data } = useAppSelectors(state => state.overtime);
   const { responser } = useAppSelectors(state => state);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -235,7 +239,7 @@ function OvertimeSummaryTable() {
                     direction={sort === item.id ? direction : 'asc'}
                     onClick={(e) => handleRequestSort(e, item.id)}
                   >
-                    {item.label}
+                    {t(`${t_tableHeader}.${item.label}`)}
                     {sort === item.id ? (
                       <Box component='span' sx={visuallyHidden}>
                         {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
@@ -245,6 +249,7 @@ function OvertimeSummaryTable() {
                 </TableCell>
               ))
             }
+            <TableCell />
           </TableRow>
         }
         bodyChildren={
@@ -331,8 +336,8 @@ function OvertimeSummaryTable() {
       <ConfirmationModal
         open={deleteConfirmation}
         handleClose={() => setDeleteConfirmation(false)}
-        title='Delete Data Entry'
-        content='You are about to delete this overtime data entry. This action cannot be undone.'
+        title={t(`${t_deletePopup}.title`)}
+        content={t(`${t_deletePopup}.desc`)}
         withCallback
         noChange={true}
         type='delete'

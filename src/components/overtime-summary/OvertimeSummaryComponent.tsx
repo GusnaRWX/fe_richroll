@@ -27,6 +27,7 @@ import AddEmployeeModal from '@/components/payroll-assistant/create/AttendanceMo
 import dayjs from 'dayjs';
 import { useAppDispatch } from '@/hooks/index';
 import { postOvertimeRequested } from '@/store/reducers/slice/attendance-leave/overtimeSlice';
+import { useTranslation } from 'react-i18next';
 
 interface DataGridCellProps {
   rowNode: object;
@@ -115,6 +116,10 @@ function OvertimeSummaryComponent() {
   const [hydrated, setHaydrated] = useState(false);
   const [employeeOpen, setEmployeeOpen] = useState(false);
   const [selectDate, setSelectDate] = useState(dayjs());
+  const {t} = useTranslation();
+  const t_pageKey = 'attendance_&_leave.overtime_summary';
+  const t_createPopup = 'attendance_&_leave.overtime_summary.popup.create';
+  const t_createPopupTableHeader = 'attendance_&_leave.overtime_summary.popup.create.table_cols_item';
 
   function GridActionCell({ rowNode }: DataGridCellProps) {
     const tempId = rowNode['id'];
@@ -248,30 +253,30 @@ function OvertimeSummaryComponent() {
       field: 'id',
       width: 110,
       sortable: false,
-      headerName: 'Employee ID'
+      headerName: t(`${t_createPopupTableHeader}.employee_id`)
     },
     { field: 'name',
       width: 260,
       sortable: false,
-      headerName: 'Employee Name',
+      headerName: t(`${t_createPopupTableHeader}.employee_name`),
       renderCell: (params) => <GridNameCell {...params} />
     },
     { field: 'startTime',
       width: 165,
       sortable: false,
-      headerName: 'Start Time',
+      headerName: t(`${t_createPopupTableHeader}.start_time`),
       renderCell: (params) => <GridClockCell {...params} />
     },
     { field: 'duration',
       width: 165,
       sortable: false,
-      headerName: 'Duration',
+      headerName: t(`${t_createPopupTableHeader}.duration`),
       renderCell: (params) => <GridDurationCell {...params} />
     },
     { field: 'multiplier',
       width: 165,
       sortable: false,
-      headerName: 'Multiplier',
+      headerName: t(`${t_createPopupTableHeader}.multiplier`),
       renderCell: (params) => <GridMultiplierCell {...params} />
     },
     { field: 'action',
@@ -335,8 +340,8 @@ function OvertimeSummaryComponent() {
     <>
       <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
         <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
-          <Typography variant='h5' color='primary.main'>Attendance & Leave</Typography>
-          <Typography variant='text-base' color='#4B5563'>Overtime Entry</Typography>
+          <Typography variant='h5' color='primary.main'>{t(`${t_pageKey}.title`)}</Typography>
+          <Typography variant='text-base' color='#4B5563'>{t(`${t_pageKey}.sub_title`)}</Typography>
         </Grid>
         <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
           <ButtonWrapper>
@@ -347,7 +352,7 @@ function OvertimeSummaryComponent() {
               startIcon={<AddIcon />}
               sx={{ color: 'white' }}
               onClick={() => { setOpen(true); }}
-            >Create Overtime Entry</MuiButton>
+            >{t('button.create_overtime_entry')}</MuiButton>
           </ButtonWrapper>
         </Grid>
       </Grid>
@@ -361,15 +366,15 @@ function OvertimeSummaryComponent() {
       <CustomModal
         open={open}
         handleClose={handleClose}
-        title='New Overtime Entry'
+        title={t(`${t_createPopup}.title`)}
         width='970px'
         handleConfirm={handleConfirm}
-        submitText='Create Entry'
+        submitText={t('button.create_entry')}
       >
         <Grid container spacing={2} mt='.5rem' mb='.5rem'>
           <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
             <DatePicker
-              customLabel='Select Date'
+              customLabel={t(`${t_createPopup}.select_date_label`)}
               withAsterisk
               value={selectDate as unknown as Date}
               onChange={(date) => {setSelectDate(date);}}
@@ -378,7 +383,7 @@ function OvertimeSummaryComponent() {
           <Grid sx={{ display: 'flex', alignItems: 'end' }} item xs={4} sm={4} md={4} lg={4} xl={4}>
             <FormControlLabel
               sx={{ ml: '1rem', mb: '.5rem' }}
-              label='Auto'
+              label={t(`${t_createPopup}.auto`)}
               control={
                 <IOSSwitch
                   sx={{ mr: '.5rem' }}
@@ -394,7 +399,7 @@ function OvertimeSummaryComponent() {
               size='medium'
               color='primary'
               onClick={() => setEmployeeOpen(true)}
-            ><Add fontSize='small' />&nbsp; Add Employee</MuiButton>
+            ><Add fontSize='small' />&nbsp; {t('button.add_employee')}</MuiButton>
           </Grid>
         </Grid>
         <Box sx={{ width: '100%' }}>
