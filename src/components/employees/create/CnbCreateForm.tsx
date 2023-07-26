@@ -42,7 +42,7 @@ interface InitialValues {
   overtime: string;
 }
 
-interface CnbCreateForm {
+interface CnbCreateFormProps {
   nextPage: (_val: number, _data: any) => void;
   prevPage: () => void;
   setValues: React.Dispatch<React.SetStateAction<any>>
@@ -54,7 +54,7 @@ const CnbCreateForm = ({
   prevPage,
   setValues,
   cnbValues
-}: CnbCreateForm) => {
+}: CnbCreateFormProps) => {
 
   const BpIcon = styled('span')(({ theme }) => ({
     borderRadius: '50%',

@@ -6,12 +6,10 @@ import { getListDepartmentRequested, getListOptionWorkScheduleRequested } from '
 import { employeeInfoDetailRequested, personalInfoDetailRequested, emergencyContactDetailRequested, getEmployeeCnbDetailRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
 import { useRouter } from 'next/router';
 import { getCompanyData } from '@/utils/helper';
-// import { OverlayLoading } from '@/components/_shared/common';
 
 function EmployeeEditContainer() {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  // const { employee } = useAppSelectors((state) => state);
   useEffect(() => {
     if (router.query.id) {
       dispatch({
@@ -42,7 +40,6 @@ function EmployeeEditContainer() {
   }, [router.query.id]);
   return (
     <Layout>
-      {/* <OverlayLoading open={employee?.isLoading} /> */}
       <EmployeeEditComponent />
     </Layout>
   );

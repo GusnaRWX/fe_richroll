@@ -113,9 +113,6 @@ function EmployeeInformationForm({ refProp, nextPage, nextPermPage, setValues, i
     const imageSrc = webcamRef.current?.getScreenshot();
     if (imageSrc) {
       setImages(imageSrc);
-      // const nameFile = randomCode(5);
-      // const fileImage = base64ToFile(imageSrc, nameFile);
-      // formik.setFieldValue('picture', fileImage);
       setModalCrop(true);
       handleClose();
       handleCloseCamera();

@@ -3,6 +3,7 @@ import { Employees } from '@/types/employees';
 import { Box, Grid, styled } from '@mui/material';
 import { Text } from '@/components/_shared/common';
 import { numberFormat } from '@/utils/format';
+import { ifThenElse } from '@/utils/helper';
 
 const TaxData = styled(Box)({
   fontSize: '14px',
@@ -47,8 +48,17 @@ const CnbDetail = ({ data }: Employees.GetEmployeeCnbDetail) => {
               </Grid>
             </Grid>
             <Grid item md={6}>
-              <Text title={data?.base?.amount !== null ? 'Amount' : 'Rate' + 'per' + data?.base?.term ? data?.base?.term?.name : '-'} fontWeight={600} color='primary' fontSize={16} mb='.5rem' />
-              <Text title={`Rp ${numberFormat(data?.base?.amount !== null ? (data?.base?.amount !== null ? data?.base?.amount : data?.base?.rate) : 0)}`} color='grey.400' fontWeight={500} />
+              <Text 
+                title={`${ifThenElse(data?.base?.amount !== null, 'Amount', 'Rate')} per ${ifThenElse(data?.base?.term, data?.base?.term?.name, '-')}`} 
+                fontWeight={600} 
+                color='primary' 
+                fontSize={16} 
+                mb='.5rem'
+              />
+              <Text 
+                title={`Rp ${ifThenElse(data?.base?.amount !== null, ifThenElse(data?.base?.amount !== null , numberFormat(data?.base?.amount), numberFormat(data?.base?.rate)), 0)}`}
+                color='grey.400' fontWeight={500}
+              />
             </Grid>
           </Grid>
         </>
@@ -76,8 +86,11 @@ const CnbDetail = ({ data }: Employees.GetEmployeeCnbDetail) => {
             </Grid>
           </Grid>
           <Grid item md={6}>
-            <Text title={supplement?.amount !== null ? 'Amount' : 'Rate' + 'per' + supplement?.term ? supplement?.term?.name : '-'} fontWeight={600} color='primary' fontSize={16} mb='.5rem' />
-            <Text title={`Rp ${numberFormat(supplement?.amount !== null ? (supplement?.amount !== null ? supplement?.amount : supplement?.rate) : 0)}`} color='grey.400' fontWeight={500} />
+            <Text title={`${ifThenElse(supplement?.amount !== null, 'Amount', 'Rate')} per ${ifThenElse(supplement?.term, supplement?.term?.name , '-')} `}
+              fontWeight={600} color='primary' fontSize={16} mb='.5rem'
+            />
+            <Text title={`Rp ${ifThenElse(supplement?.amount !== null,
+              ifThenElse(supplement?.amount !== null, numberFormat(supplement?.amount), numberFormat(supplement?.rate)), 0)}`} color='grey.400' fontWeight={500} />
           </Grid>
         </Grid>
       ))}

@@ -85,7 +85,7 @@ function EmergencyContactDetail({ data }: EmergencyContactProps) {
               color='grey.400'
             />
             <Text
-              title={data?.secondary?.name || ''}
+              title={data?.secondary?.name ?? ''}
               fontWeight={400}
               color='grey.600'
             />
