@@ -83,15 +83,15 @@ const AttendanceEntriesTable = () => {
     });
   };
 
-  const handleUpdate = (data: AttendanceLeave.PutAttendance) => {
+  const handleUpdate = (dataUpdt: AttendanceLeave.PutAttendance) => {
     setEditConfirmation(false);
     dispatch({
       type: putAttendanceRequested.toString(),
       payload: {
         id: selectedItem?.id,
         data: {
-          clockIn: dayjs(data.clockIn).toISOString(),
-          clockOut: dayjs(data.clockOut).toISOString()
+          clockIn: dayjs(dataUpdt.clockIn).toISOString(),
+          clockOut: dayjs(dataUpdt.clockOut).toISOString()
         }
       }
     });
@@ -258,7 +258,7 @@ const AttendanceEntriesTable = () => {
       <AttendanceEntriesEdit
         open={editConfirmation}
         handleClose={() => { setEditConfirmation(false); }}
-        callback={(data) => handleUpdate(data)}
+        callback={(dataCb) => handleUpdate(dataCb)}
         item={selectedItem}
       />
     </>

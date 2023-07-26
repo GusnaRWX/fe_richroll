@@ -10,7 +10,6 @@ import {
   TableSortLabel,
   Button as MuiButton
 } from '@mui/material';
-// import { styled as muiStyled } from '@mui/material/styles';
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
 import Table from '@/components/_shared/form/Table';
@@ -122,7 +121,7 @@ function PayrollAssistantView() {
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(event);
-    // setPage(0);
+    setPage(1);
   };
 
   const handleRequestSort = (event: React.MouseEvent<unknown>, headId: string) => {
@@ -238,15 +237,15 @@ function PayrollAssistantView() {
                       <TableCell key={item.id} sortDirection={ifThenElse(sort === item.id, direction, false)}>
                         <TableSortLabel
                           active={sort === item.id}
-                          direction={sort === item.id ? direction : 'asc'}
+                          direction={ifThenElse(sort === item.id, direction, 'asc')}
                           onClick={(e) => handleRequestSort(e, item.id)}
                         >
                           {item.label}
-                          {sort === item.id ? (
+                          {ifThenElse(sort === item.id, (
                             <Box component='span' sx={visuallyHidden}>
                               {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
                             </Box>
-                          ) : null}
+                          ), null)}
                         </TableSortLabel>
                       </TableCell>
                     ))
@@ -307,7 +306,7 @@ function PayrollAssistantView() {
         </Box>
       </ContentWrapper>
 
-      <ContentWrapper>
+      {/* <ContentWrapper>
         <Box sx={{ width: '100%' }}>
           <SimpleAccordion
             title={<>Paymet Method : Cash <Box component='span' sx={{ fontSize: '14px', fontWeight: '400' }}>(3 employees)</Box></>}
@@ -539,7 +538,7 @@ function PayrollAssistantView() {
             />
           </SimpleAccordion>
         </Box>
-      </ContentWrapper>
+      </ContentWrapper> */}
     </>
   );
 }

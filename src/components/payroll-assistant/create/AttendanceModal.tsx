@@ -177,27 +177,26 @@ function AttendanceModal({
               <TableRow>
                 {
                   headerItemsEmployees.map((item) => (
-                    item.id === 'action' ? (
+                    ifThenElse(item.id === 'action', (
                       <TableCell key={item.id}>
                         <Checkbox onChange={(e) => onSelectedAll(data?.items?.slice(0, rowsPerPage), e)} checked={checkValAll(data?.items?.slice(0, rowsPerPage))} />
                       </TableCell>
-                    ) : (
+                    ), (
                       <TableCell key={item.id} sortDirection={ifThenElse(sort === item.id, direction, false)}>
                         <TableSortLabel
                           active={sort === item.id}
-                          direction={sort === item.id ? direction : 'asc'}
+                          direction={ifThenElse(sort === item.id, direction, 'asc')}
                           onClick={(e) => handleRequestSort(e, item.id)}
                         >
                           {item.label}
-                          {sort === item.id ? (
+                          {ifThenElse(sort === item.id, (
                             <Box component='span' sx={visuallyHidden}>
                               {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
                             </Box>
-                          ) : null}
+                          ), null)}
                         </TableSortLabel>
                       </TableCell>
-                    )
-
+                    ))
                   ))
                 }
                 <TableCell></TableCell>

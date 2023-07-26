@@ -13,6 +13,7 @@ import styled from '@emotion/styled';
 import { visuallyHidden } from '@mui/utils';
 import { useRouter } from 'next/router';
 import { ConfirmationModal, CustomModal } from '@/components/_shared/common';
+import { ifThenElse, compareCheck } from '@/utils/helper';
 
 // Import Icon React Icon
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -58,7 +59,6 @@ interface ItpProfileTableProps {
 type Order = 'asc' | 'desc';
 
 function ItpProfileComponent({
-  // tabValue,
   DeleteAction,
   DetailAction,
   CopyAction,
@@ -138,15 +138,15 @@ function ItpProfileComponent({
   };
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 0));
-    setPage(0);
+    setPage(1);
   };
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
     headId: string
   ) => {
-    const isAsc = sort === headId && direction === 'asc';
-    setDirection(isAsc ? 'desc' : 'asc');
+    const isAsc = compareCheck(sort === headId, direction === 'asc');
+    setDirection(ifThenElse(isAsc, 'desc', 'asc'));
     setSort(headId);
   };
 
@@ -173,21 +173,19 @@ function ItpProfileComponent({
               {DraftHeaderItems.map((item) => (
                 <TableCell
                   key={item.id}
-                  sortDirection={sort === item.id ? direction : false}
+                  sortDirection={ifThenElse(sort === item.id, direction, false)}
                 >
                   <TableSortLabel
                     active={sort === item.id}
-                    direction={sort === item.id ? direction : 'asc'}
+                    direction={ifThenElse(sort === item.id, direction, 'asc')}
                     onClick={(e) => handleRequestSort(e, item.id)}
                   >
                     {t('income_tax_profile.profile.draft_table.' + item.id)}
-                    {sort === item.id ? (
+                    {ifThenElse(sort === item.id, (
                       <Box component='span' sx={visuallyHidden}>
-                        {direction === 'asc'
-                          ? 'sorted descending'
-                          : 'sorted ascending'}
+                        {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
                       </Box>
-                    ) : null}
+                    ), null)}
                   </TableSortLabel>
                 </TableCell>
               ))}
@@ -197,21 +195,19 @@ function ItpProfileComponent({
               {headerItems.map((item) => (
                 <TableCell
                   key={item.id}
-                  sortDirection={sort === item.id ? direction : false}
+                  sortDirection={ifThenElse(sort === item.id, direction, false)}
                 >
                   <TableSortLabel
                     active={sort === item.id}
-                    direction={sort === item.id ? direction : 'asc'}
+                    direction={ifThenElse(sort === item.id, direction, 'asc')}
                     onClick={(e) => handleRequestSort(e, item.id)}
                   >
                     {t('income_tax_profile.profile.active_table.' + item.id)}
-                    {sort === item.id ? (
+                    {ifThenElse(sort === item.id, (
                       <Box component='span' sx={visuallyHidden}>
-                        {direction === 'asc'
-                          ? 'sorted descending'
-                          : 'sorted ascending'}
+                        {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
                       </Box>
-                    ) : null}
+                    ), null)}
                   </TableSortLabel>
                 </TableCell>
               ))}
@@ -220,14 +216,14 @@ function ItpProfileComponent({
         }
         bodyChildren={
           <>
-            {typeof data?.items !== 'undefined' ? (
-              data?.items.length === 0 ? (
+            {ifThenElse(typeof data?.items !== 'undefined', (
+              ifThenElse(data?.items.length === 0, (
                 <TableRow>
                   <TableCell colSpan={12} align='center'>
                     <Typography>Data not found</Typography>
                   </TableCell>
                 </TableRow>
-              ) : (
+              ), (
                 data?.items.map((item, index) => (
                   <TableRow key={index}>
                     {Draft ?
@@ -298,14 +294,14 @@ function ItpProfileComponent({
                     </TableCell>
                   </TableRow>
                 ))
-              )
-            ) : (
+              ))
+            ), (
               <TableRow>
                 <TableCell colSpan={12} align='center'>
                   <Typography>Data not found</Typography>
                 </TableCell>
               </TableRow>
-            )}
+            ))}
           </>
         }
       />
