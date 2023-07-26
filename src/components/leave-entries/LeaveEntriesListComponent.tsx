@@ -46,7 +46,7 @@ const LeaveEntriesListComponent: React.FC<LeaveEntriesListComponentProps> = ({
   const companyData = getCompanyData();
   const [hydrated, setHydrated] = useState(false);
   const {t} = useTranslation();
-  const t_employeeList = 'attendance_&_leave.leave_entries.popup.create';
+  const t_LeaveEntriesList = 'attendance_&_leave.leave_entries.popup.create';
   const t_tableHeader = 'attendance_&_leave.leave_entries.popup.create.table_cols_item';
 
   const headerItemsEmployees = [
@@ -104,7 +104,7 @@ const LeaveEntriesListComponent: React.FC<LeaveEntriesListComponentProps> = ({
     <CustomModal
       handleClose={onClose}
       open={open}
-      title={t(`${t_employeeList}.title`)}
+      title={t(`${t_LeaveEntriesList}.title`)}
       width='800px'
       keepMounted={false}
       submitText={t('button.select_employee')}
