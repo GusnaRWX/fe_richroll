@@ -39,9 +39,9 @@ function CompleteRow(att) {
   };
 
 
-  const handleOpen = (item) => {
+  const handleOpen = (employeeDetail) => {
     setOpenDetail(true);
-    setSelectedEmployee(item);
+    setSelectedEmployee(employeeDetail);
   };
 
   return (
