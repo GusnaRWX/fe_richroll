@@ -152,7 +152,6 @@ function PayrollAssistantCreate() {
               size='small'
               color='primary'
               onClick={() => {
-                // setValue(value - 1);
                 if (value == 5) {
                   setIsExit(true);
                   setOpen(true);

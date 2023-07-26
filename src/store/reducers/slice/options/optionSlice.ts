@@ -132,10 +132,7 @@ export const optionSlice = createSlice({
     getBanksSuccess: (state, action) => {
       state.loading = false;
       state.banks = action?.payload?.items.map(item => {
-        return {
-          label: item.name,
-          value: item.id
-        };
+        return returnNameId(item);
       });
     },
     getBanksFailed: (state) => {

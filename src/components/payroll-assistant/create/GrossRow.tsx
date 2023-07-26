@@ -23,7 +23,6 @@ import { getListBaseCompensationRequested, getListTerminReqeusted, getListSuppCo
 import { numberFormat } from '@/utils/format';
 import { putPayrollGrossesIdRequested } from '@/store/reducers/slice/payroll/payrollSlice';
 import * as Yup from 'yup';
-// import { useRouter } from 'next/router';
 
 const ButtonWrapper = styled.div`
  display: flex;
@@ -58,22 +57,14 @@ const validationSchema = Yup.object().shape({
 function GrossRow(att) {
   const { item, isPreview } = att;
   console.log(item, 'item');
-  // const router = useRouter();
   const [open, setOpen] = useState(false);
   const dispatch = useAppDispatch();
   const { option } = useAppSelectors(state => state);
   const { grossesId } = useAppSelectors((state) => state.payroll);
   const formik = useFormik({
     initialValues: {
-      // baseCompensationComponentId: '4',
-      // amountBase: '',
-      // periodBase: '',
-      // taxStatusBase: 'non-taxable',
-
-
       // hoc
       hocComponent: [],
-      // overtimeComponent: { overtime: '', rate: '' }
     } as Payroll.GrossRowForm,
     validationSchema: validationSchema,
     onSubmit: (_val) => {
