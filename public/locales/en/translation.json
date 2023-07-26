@@ -608,6 +608,7 @@
           "employee_name" :"Employee Name",
           "leave_form" : "Leave From",
           "leave_to" : "Leave To",
+          "date" : "Date",
           "leave_type" : "Leave Type",
           "status" :"Status"
         },
@@ -631,6 +632,7 @@
           "title" : "New Leave Entry",
           "leave_from_input_label" : "Leave From",
           "leave_to_input_label" :"Leave To",
+          "select_date" :"Select Date",
           "half_day_leave" : "Half-day Leave",
           "from_input_label" : "From",
           "to_input_label" :"To",

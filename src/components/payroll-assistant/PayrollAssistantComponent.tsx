@@ -111,7 +111,7 @@ function PayrollAssistantComponent() {
               color='secondary'
               sx={{ color: 'white' }}
               onClick={() => { setOpen(true); }}
-            ><Add fontSize='small' />&nbsp; {t(`button.create_new_payroll`)}</MuiButton>
+            ><Add fontSize='small' />&nbsp; {t(`compensation_and_benefits.create_new_payroll`)}</MuiButton>
           </ButtonWrapper>
         </Grid>
       </Grid>

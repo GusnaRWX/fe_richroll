@@ -119,28 +119,19 @@ export default function CreateCNBComponent() {
     borderRadius: '50%',
     width: 16,
     height: 16,
-    boxShadow:
-      theme.palette.mode === 'dark'
-        ? '0 0 0 1px rgb(16 22 26 / 40%)'
-        : 'inset 0 0 0 1px rgba(16,22,26,.2), inset 0 -1px 0 rgba(16,22,26,.1)',
-    backgroundColor: theme.palette.mode === 'dark' ? '#394b59' : '#f5f8fa',
-    backgroundImage:
-      theme.palette.mode === 'dark'
-        ? 'linear-gradient(180deg,hsla(0,0%,100%,.05),hsla(0,0%,100%,0))'
-        : 'linear-gradient(180deg,hsla(0,0%,100%,.8),hsla(0,0%,100%,0))',
+    boxShadow: ifThenElse(theme.palette.mode === 'dark', '0 0 0 1px rgb(16 22 26 / 40%)', 'inset 0 0 0 1px rgba(16,22,26,.2), inset 0 -1px 0 rgba(16,22,26,.1)'),
+    backgroundColor: ifThenElse(theme.palette.mode === 'dark', '#394b59', '#f5f8fa'),
+    backgroundImage: ifThenElse(theme.palette.mode === 'dark', 'linear-gradient(180deg,hsla(0,0%,100%,.05),hsla(0,0%,100%,0))', 'linear-gradient(180deg,hsla(0,0%,100%,.8),hsla(0,0%,100%,0))'),
     '.Mui-focusVisible &': {
       outline: '2px auto rgba(19,124,189,.6)',
       outlineOffset: 2,
     },
     'input:hover ~ &': {
-      backgroundColor: theme.palette.mode === 'dark' ? '#30404d' : '#ebf1f5',
+      backgroundColor: ifThenElse(theme.palette.mode === 'dark', '#30404d', '#ebf1f5'),
     },
     'input:disabled ~ &': {
       boxShadow: 'none',
-      background:
-        theme.palette.mode === 'dark'
-          ? 'rgba(57,75,89,.5)'
-          : 'rgba(206,217,224,.5)',
+      background: ifThenElse(theme.palette.mode === 'dark', 'rgba(57,75,89,.5)', 'rgba(206,217,224,.5)'),
     },
   }));
 
@@ -190,27 +181,27 @@ export default function CreateCNBComponent() {
         supplement = true;
         return false;
       }
-      if (
-        item.compensationComponentId &&
-        item.period &&
-        item.rateOrAmount &&
-        item.taxStatus
-      ) {
+      if (compareCheck(
+        item.compensationComponentId,
+        !!item.period,
+        !!item.rateOrAmount,
+        !!item.taxStatus
+      )) {
         supplement = true;
       } else {
         supplement = false;
       }
     });
 
-    if (
-      value.name !== '' &&
-      value.compensationComponentId !== '' &&
-      value.period !== '' &&
-      value.rateOrAmount !== '' &&
-      value.overtime !== '' &&
-      value.taxStatus !== '' &&
+    if (compareCheck(
+      value.name !== '',
+      value.compensationComponentId !== '',
+      value.period !== '',
+      value.rateOrAmount !== '',
+      value.overtime !== '',
+      value.taxStatus !== '',
       supplement
-    ) {
+    )) {
       const tempBase = dynamicPayloadBaseCnb(
         listBaseCompensation,
         value.compensationComponentId,
@@ -332,9 +323,9 @@ export default function CreateCNBComponent() {
                         size='small'
                         placeholder={t(`${tPath}profile_name_placeholder`)}
                         error={
-                          formik.touched.name && Boolean(formik.errors.name)
+                          compareCheck(formik.touched.name, Boolean(formik.errors.name))
                         }
-                        helperText={formik.touched.name && formik.errors.name}
+                        helperText={ifThenElse(formik.touched.name, formik.errors.name, null)}
                         value={formik.values.name}
                         onChange={(e) =>
                           formik.setFieldValue(
@@ -376,10 +367,10 @@ export default function CreateCNBComponent() {
                           </Typography>
                           <FormControl
                             fullWidth
-                            error={
-                              formik.touched.compensationComponentId &&
+                            error={compareCheck(
+                              formik.touched.compensationComponentId,
                               Boolean(formik.errors.compensationComponentId)
-                            }
+                            )}
                           >
                             <Select
                               sx={{ marginTop: '.4rem' }}
@@ -410,20 +401,24 @@ export default function CreateCNBComponent() {
                               }}
                               displayEmpty
                               renderValue={(value: unknown) => {
-                                if ((value as string)?.length === 0) {
-                                  return (
+                                ifThenElse(
+                                  (value as string)?.length === 0,
+                                  (
                                     <Text
                                       title={t(`${tPath}base_section.compensation_component_placeholder`)}
                                       color='grey.400'
                                     />
-                                  );
-                                }
+                                  ),
+                                  null
+                                );
                                 const selected = listBaseCompensation?.find(
                                   (list) => list.value === value
                                 );
-                                if (selected) {
-                                  return `${selected.label}`;
-                                }
+                                ifThenElse(
+                                  !!selected,
+                                  selected.label,
+                                  null
+                                );
                                 return null;
                               }}
                             >
@@ -434,8 +429,7 @@ export default function CreateCNBComponent() {
                               ))}
                             </Select>
                             <FormHelperText>
-                              {formik.touched.compensationComponentId &&
-                                formik.errors.compensationComponentId}
+                              {ifThenElse(formik.touched.compensationComponentId, formik.errors.compensationComponentId, null)}
                             </FormHelperText>
                           </FormControl>
                         </div>
@@ -445,10 +439,7 @@ export default function CreateCNBComponent() {
                           {t(`${tPath}base_section.tax_status`)}<span style={{ color: 'red' }}>*</span>
                         </Typography>
                         <FormControl
-                          error={
-                            formik.touched.taxStatus &&
-                            Boolean(formik.errors.taxStatus)
-                          }
+                          error={compareCheck(formik.touched.taxStatus, Boolean(formik.errors.taxStatus))}
                         >
                           <RadioGroup
                             row
@@ -480,13 +471,12 @@ export default function CreateCNBComponent() {
                             />
                           </RadioGroup>
                           <FormHelperText>
-                            {formik.touched.taxStatus &&
-                              formik.errors.taxStatus}
+                            {ifThenElse(formik.touched.taxStatus, formik.errors.taxStatus, null)}
                           </FormHelperText>
                         </FormControl>
                       </Grid>
                     </Grid>
-                    {formik.values.compensationComponentId !== '' && (
+                    {ifThenElse(formik.values.compensationComponentId !== '', (
                       <Grid container>
                         <Grid container spacing={2}>
                           <Grid item xs={3} md={3} lg={3} xl={3}>
@@ -499,14 +489,8 @@ export default function CreateCNBComponent() {
                               fullWidth
                               type='number'
                               size='small'
-                              error={
-                                formik.touched.rateOrAmount &&
-                                Boolean(formik.errors.rateOrAmount)
-                              }
-                              helperText={
-                                formik.touched.rateOrAmount &&
-                                formik.errors.rateOrAmount
-                              }
+                              error={compareCheck(formik.touched.rateOrAmount, Boolean(formik.errors.rateOrAmount))}
+                              helperText={ifThenElse(formik.touched.rateOrAmount, formik.errors.rateOrAmount, null)}
                               value={formik.values.rateOrAmount}
                               onChange={(e) =>
                                 formik.setFieldValue(
@@ -528,7 +512,7 @@ export default function CreateCNBComponent() {
                               }}
                             />
                           </Grid>
-                          {withPercentage === true && (
+                          {ifThenElse(withPercentage === true, (
                             <Grid item xs={3} md={3} lg={3} xl={3}>
                               <FormControl fullWidth>
                                 <Input
@@ -549,14 +533,11 @@ export default function CreateCNBComponent() {
                                 />
                               </FormControl>
                             </Grid>
-                          )}
+                          ), null)}
                           <Grid item xs={3} md={3} lg={3} xl={3}>
                             <FormControl
                               fullWidth
-                              error={
-                                formik.touched.period &&
-                                Boolean(formik.errors.period)
-                              }
+                              error={compareCheck(formik.touched.period, Boolean(formik.errors.period))}
                             >
                               <Select
                                 sx={{ marginTop: '1.8rem' }}
@@ -574,13 +555,13 @@ export default function CreateCNBComponent() {
                                 ))}
                               </Select>
                               <FormHelperText>
-                                {formik.touched.period && formik.errors.period}
+                                {ifThenElse(formik.touched.period, formik.errors.period, null)}
                               </FormHelperText>
                             </FormControl>
                           </Grid>
                         </Grid>
                       </Grid>
-                    )}
+                    ), null)}
                     <Grid container mt='16px'>
                       <Grid item xs={12}>
                         <Text title={t(`${tPath}overtime_section.title`)} fontWeight={700} fontSize='16px' mb='16px' color='primary.500' />
@@ -617,7 +598,7 @@ export default function CreateCNBComponent() {
                   render={(arrayHelper) => {
                     return (
                       <div>
-                        {formik.values.supplementary.length > 0 && (
+                        {ifThenElse(formik.values.supplementary.length > 0, (
                           <>
                             <Typography
                               style={{
@@ -983,7 +964,7 @@ export default function CreateCNBComponent() {
                               )}
                             </Form>
                           </>
-                        )}
+                        ), null)}
                         <AddButton
                           color='secondary'
                           startIcon={<AddIcon />}

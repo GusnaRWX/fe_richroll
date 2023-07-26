@@ -174,18 +174,6 @@ export const convertImageParams = (name, value, callback?, onClose?) => {
   };
 };
 
-export const randomCode = (length: number) => {
-  let result = '';
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  const charactersLength = characters.length;
-  let counter = 0;
-  while (counter < length) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    counter += 1;
-  }
-  return result;
-};
-
 export const base64ToFile = (base64String: string | undefined, fileName: string): File | null => {
   if (!base64String) {
     return null;
@@ -255,11 +243,11 @@ export const ifThenElse = (condition, ifTrue, ifFalse) => {
 };
 
 /**
- * Handle compare up to 3 variable
+ * Handle compare up to 7 variable
  *
  */
-export const compareCheck = (firstArg, secondArg = true, thirdArg = true) => {
-  return (firstArg && secondArg && thirdArg);
+export const compareCheck = (firstArg, secondArg = true, thirdArg = true, fourthArg = true, fiveArg = true, sixArg = true, sevenArg = true) => {
+  return (firstArg && secondArg && thirdArg && fourthArg && fiveArg && sixArg && sevenArg);
 };
 
 /**
@@ -275,13 +263,29 @@ export const ifEmptyReplace = (condition, replace) => {
 };
 
 /**
- * Generate save random value
+ * Generate random integer in the range of [min, max]
  *
  */
-export const generateRandom = () => {
+export const randomInt = (min: number, max: number) => {
   const crypto = window.crypto || window.Crypto;
-  const array = new Uint32Array(1);
-  return crypto.getRandomValues(array)[0];
+  const randomFloat = function () {
+    const int = crypto.getRandomValues(new Uint32Array(1))[0];
+    return int / 2**32;
+  };
+  const range = max - min;
+  return Math.floor(randomFloat() * range + min);
+};
+
+export const randomCode = (length: number) => {
+  let result = '';
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const charactersLength = characters.length;
+  let counter = 0;
+  while (counter < length) {
+    result += characters.charAt(randomInt(0, charactersLength-1));
+    counter += 1;
+  }
+  return result;
 };
 
 export const getGender = (id) => {
@@ -409,7 +413,7 @@ export const dynamicPayloadBaseCnb = (arrData, id, value) => {
         componentID: value.compensationComponentId,
         isTaxable: value.taxStatus === 'true' ? true : false,
         termID: value.period,
-        rate: value.rateOrAmount,
+        rate: +value.rateOrAmount,
         rateType: 0,
       };
     case 2:
@@ -419,7 +423,7 @@ export const dynamicPayloadBaseCnb = (arrData, id, value) => {
         termID: value.period,
         amount: +value.rateOrAmount,
         amountType: 0,
-        rate: value.percentage,
+        rate: +value.percentage,
         rateType: 1,
       };
     case 3:
@@ -429,7 +433,7 @@ export const dynamicPayloadBaseCnb = (arrData, id, value) => {
         termID: value.period,
         amount: +value.rateOrAmount,
         amountType: 0,
-        rate: value.percentage,
+        rate: +value.percentage,
         rateType: 0,
       };
   }

@@ -12,6 +12,7 @@ import dayjs from 'dayjs';
 import { postLeaveEntriesRequested } from '@/store/reducers/slice/attendance-leave/leaveEntriesSlice';
 import { LocalizationProvider, TimePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { compareCheck, ifThenElse } from '@/utils/helper';
 import { useTranslation } from 'react-i18next';
 
 interface LeaveEntriesEmployeeCreateProps {
@@ -38,7 +39,6 @@ const LeaveEntriesEmployeeCreateComponent = ({
   const formik = useFormik({
     initialValues: {
       leaveFrom: null,
-      leaveTo: null,
       leaveType: '',
       leaveStatus: '',
       note: '',
@@ -54,16 +54,12 @@ const LeaveEntriesEmployeeCreateComponent = ({
             ? dayjs(values.leaveFrom).toISOString()
             : dayjs(dayjs(values.leaveFrom).format('YYYY-MM-DD') + ' ' + dayjs(values.halfFrom).format('HH:mm')).toISOString(),
           end: values.halfTo === null
-            ? dayjs(values.leaveTo).toISOString()
-            : dayjs(dayjs(values.leaveTo).format('YYYY-MM-DD') + ' ' + dayjs(values.halfTo).format('HH:mm')).toISOString(),
+            ? dayjs(values.leaveFrom).toISOString()
+            : dayjs(dayjs(values.leaveFrom).format('YYYY-MM-DD') + ' ' + dayjs(values.halfTo).format('HH:mm')).toISOString(),
           leaveType: values.leaveType,
           leaveStatus: values.leaveStatus,
           note: values.note,
           isHalfday: isHalfDay
-        },
-        getEntries: {
-          page: 1,
-          itemPerPage: 5
         }
       };
       dispatch({
@@ -108,15 +104,16 @@ const LeaveEntriesEmployeeCreateComponent = ({
           <Text title={selectedEmployee?.department?.name || ''} fontSize='14px' fontWeight={400} color='grey.600' />
         </Grid>
       </Grid>
-      <Grid container sx={{ padding: '0px 16px' }} justifyContent='space-between' alignItems='center'>
-        <Grid item md={5.5}>
+      <Grid container sx={{ padding: '0px 16px', height: '100px' }} justifyContent='space-between' alignItems='center'>
+        <Grid item md={6} sx={{ marginBottom: formik.errors.leaveFrom ? '-30px' : '' }}>
           <DatePicker
-            customLabel={t(`${t_leaveEntriesEmployeeCreate}.leave_from_input_label`)}
+            customLabel={t(`${t_leaveEntriesEmployeeCreate}.select_date`)}
             onChange={(date: unknown) => formik.setFieldValue('leaveFrom', date, false)}
             value={formik.values.leaveFrom as unknown as Date}
+            error={formik.errors.leaveFrom}
           />
         </Grid>
-        <Grid item>
+        {/* <Grid item>
           <AiOutlineSwapRight style={{ marginTop: '30px' }} />
         </Grid>
         <Grid item md={5.5} sx={{ marginBottom: formik.errors.leaveTo ? '-30px' : '' }}>
@@ -125,8 +122,9 @@ const LeaveEntriesEmployeeCreateComponent = ({
             onChange={(date: unknown) => formik.setFieldValue('leaveTo', date, true)}
             value={formik.values.leaveTo as unknown as Date}
             error={formik.errors.leaveTo}
+            minDate={formik.values.leaveTo as unknown as Date}
           />
-        </Grid>
+        </Grid> */}
       </Grid>
       <Grid container sx={{ padding: '0 16px' }}>
         <Grid item>
@@ -199,6 +197,8 @@ const LeaveEntriesEmployeeCreateComponent = ({
               }
               return null;
             }}
+            error={compareCheck(formik.touched.leaveType, Boolean(formik.errors.leaveType))}
+            helperText={ifThenElse(compareCheck(formik.touched.leaveType, Boolean(formik.errors.leaveType)), formik.errors.leaveType, '')}
           />
         </Grid>
         <Grid item md={5.5}>
@@ -223,6 +223,8 @@ const LeaveEntriesEmployeeCreateComponent = ({
               }
               return null;
             }}
+            error={compareCheck(formik.touched.leaveStatus, Boolean(formik.errors.leaveStatus))}
+            helperText={ifThenElse(compareCheck(formik.touched.leaveStatus, Boolean(formik.errors.leaveStatus)), formik.errors.leaveStatus, '')}
           />
         </Grid>
       </Grid>
