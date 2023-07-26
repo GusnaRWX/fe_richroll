@@ -16,7 +16,7 @@ const storedTimezone = typeof window !== 'undefined' ? getTimezone() : null;
 console.log(storedSite, storedTimezone);
 
 const initialState: GlobalState = {
-  language: storedLanguage ? storedLanguage as string : 'EN', // default
+  language: storedLanguage ? storedLanguage  : 'EN', // default
   site: storedSite ? storedSite : 'Indonesia',
   timezone: storedTimezone ? storedTimezone : 'Asia/Jakarta'
 };
