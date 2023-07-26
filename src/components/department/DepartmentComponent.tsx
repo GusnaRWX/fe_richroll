@@ -39,7 +39,7 @@ const ContentWrapper = styled(Card)(({
 
 function DepartmentComponent() {
   const dispatch = useAppDispatch();
-  const companyData = getCompanyData();  
+  const companyData = getCompanyData();
 
   const [initialValues] = useState({
     department: '',
@@ -68,7 +68,7 @@ function DepartmentComponent() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     dispatch({
       type: postDepartmentRequested.toString(),
       payload: {companyID: companyData?.id?.toString(), name: values.department, position: values.position }

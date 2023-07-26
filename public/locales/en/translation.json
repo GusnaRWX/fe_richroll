@@ -240,50 +240,9 @@
               "weekly" : "Weekly",
               "bi_weekly" : "Bi Weekly"
             }
-          }
-        }
-      },
-      "detail" : {
-        "company_information" : {
-          "company_information_section" : {
-            "title" : "Company Information",
-            "company_logo" : "Company Logo",
-            "company_type" : "Company Type",
-            "company_name" : "Company Name",
-            "company_npwp" : "Company NPWP",
-            "company_sector" : "Company Sector",
-            "company_email_address" : "Company Email Address",
-            "contact_number" : "Contact Number"
           },
-          "company_address_section" : {
-            "title" : "Company Address",
-            "contry" : "Country",
-            "province" : "Province",
-            "city" :"City",
-            "sub_district" :"Sub-District",
-            "street_and_buildig_name" : "Street Name. Building Name",
-            "zip_code" : "Zip Code"
-          }
-        },
-        "payment_information" : {
-          "bank_information_section" : {
-            "title" : "Bank Information",
-            "bank" :"Bank",
-            "bank_account_holder_name" : "Bank Account Holders Name",
-            "bank_account_no" :"Bank Account No",
-            "bank_code" :"Bank Code",
-            "branch_code" :"Branch Code",
-            "branch_name" :"Branch Name",
-            "swift_code" :"Swift Code"
-          },
-          "payroll_information_section" : {
-            "title" : "Payroll Information",
-            "schedule_type" : "Schedule Type",
-            "schedule_type_option" : {
-              "monthly" : "Monthly",
-              "weekly" : "Weekly",
-              "bi_weekly" : "Bi Weekly"
-            }
+          "payment_information_section" : {
+            "title" : "Payment Information"
           }
         }
       }
