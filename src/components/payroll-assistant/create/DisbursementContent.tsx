@@ -39,62 +39,6 @@ const headerItems = [
 
 type Order = 'asc' | 'desc'
 
-// const data = {
-//   items: [
-//     {
-//       id: 1,
-//       name: 'Budi Irawan',
-//       attendance: 'Rp 9.500.000,00',
-//       absent: 'Rp 524.000,00',
-//       paidLeave: 'Rp 237.000,00',
-//       unpaidLeave: 'Rp 9.886.000,00',
-//       nonTax: 'Rp 50.000,00',
-//       netSalary: 'Rp 9.936.000,00',
-//     },
-//     {
-//       id: 2,
-//       name: 'Budi Irawan',
-//       attendance: 'Rp 9.500.000,00',
-//       absent: 'Rp 524.000,00',
-//       paidLeave: 'Rp 237.000,00',
-//       unpaidLeave: 'Rp 9.886.000,00',
-//       nonTax: 'Rp 50.000,00',
-//       netSalary: 'Rp 9.936.000,00',
-//     },
-//     {
-//       id: 3,
-//       name: 'Budi Irawan',
-//       attendance: 'Rp 9.500.000,00',
-//       absent: 'Rp 524.000,00',
-//       paidLeave: 'Rp 237.000,00',
-//       unpaidLeave: 'Rp 9.886.000,00',
-//       nonTax: 'Rp 50.000,00',
-//       netSalary: 'Rp 9.936.000,00',
-//     },
-//     {
-//       id: 4,
-//       name: 'Budi Irawan',
-//       attendance: 'Rp 9.500.000,00',
-//       absent: 'Rp 524.000,00',
-//       paidLeave: 'Rp 237.000,00',
-//       unpaidLeave: 'Rp 9.886.000,00',
-//       nonTax: 'Rp 50.000,00',
-//       netSalary: 'Rp 9.936.000,00',
-//     },
-//     {
-//       id: 5,
-//       name: 'Budi Irawan',
-//       attendance: 'Rp 9.500.000,00',
-//       absent: 'Rp 524.000,00',
-//       paidLeave: 'Rp 237.000,00',
-//       unpaidLeave: 'Rp 9.886.000,00',
-//       nonTax: 'Rp 50.000,00',
-//       netSalary: 'Rp 9.936.000,00',
-//     },
-//   ],
-//   itemTotals: 5
-// };
-
 function DisbursementContent(att) {
   const {isPreview, handleChecked} = att;
   const router = useRouter();
@@ -112,7 +56,7 @@ function DisbursementContent(att) {
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(event);
-    // setPage(0);
+    setPage(1);
   };
 
   const handleRequestSort = (event: React.MouseEvent<unknown>, headId: string) => {

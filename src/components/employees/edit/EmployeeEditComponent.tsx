@@ -8,10 +8,9 @@ import { useRouter } from 'next/router';
 import ConfirmationModal from '@/components/_shared/common/ConfirmationModal';
 import { Employees } from '@/types/employees';
 import dayjs from 'dayjs';
-import { getCompanyData, ifThenElse } from '@/utils/helper';
+import { getCompanyData, ifThenElse, dynamicPayloadBaseCnb } from '@/utils/helper';
 import { useAppSelectors, useAppDispatch } from '@/hooks/index';
 import { patchEmergencyContactRequested, patchEmployeeInformationRequested, patchPersonalRequested, postWorkScheduleRequested, patchEmployeeCnbRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
-import { dynamicPayloadBaseCnb } from '@/utils/helper';
 
 const EmployeeInformationEdit = dynamic(() => import('./EmployeeInformationEdit'), {
   ssr: false

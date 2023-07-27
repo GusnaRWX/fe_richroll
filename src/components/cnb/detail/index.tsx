@@ -8,6 +8,7 @@ import { useRouter } from 'next/router';
 import dayjs from 'dayjs';
 import { Text } from '@/components/_shared/common';
 import { useTranslation } from 'react-i18next';
+import { ifThenElse } from '@/utils/helper';
 
 export interface DetailCNBProps {
   id: unknown,
@@ -143,7 +144,9 @@ const DetailCnb = ({ id, open }: DetailCNBProps) => {
               <Grid item xs={6} display='flex' flexDirection='column' gap='6px'>
                 <TitleData>{t(`${tPath}base_section.tax_status`)}</TitleData>
                 <TaxData>
-                  {baseComponent ? (baseComponent?.isTaxable ? t(`${tPath}base_section.tax_status_option.taxable`) : t(`${tPath}base_section.tax_status_option_nontaxable`)) : '-'}
+                  {ifThenElse(baseComponent, 
+                    ifThenElse(baseComponent?.isTaxable, t(`${tPath}base_section.tax_status_option.taxable`), t(`${tPath}base_section.tax_status_option_nontaxable`) ),
+                    '-'   )}
                 </TaxData>
               </Grid>
             </Grid>
@@ -154,7 +157,9 @@ const DetailCnb = ({ id, open }: DetailCNBProps) => {
               </TitleData>
               <ItemData>
                 Rp&nbsp;
-                {numberFormat(baseComponent?.amount !== null ? (baseComponent?.amount !== null ? baseComponent?.amount : baseComponent?.rate) : 0)}
+                {ifThenElse(baseComponent?.amount !== null,
+                  ifThenElse(baseComponent?.amount !== null, numberFormat(baseComponent?.amount), numberFormat(baseComponent?.rate)),  
+                  0)}
               </ItemData>
             </Grid>
           </Grid>
@@ -209,7 +214,9 @@ const DetailCnb = ({ id, open }: DetailCNBProps) => {
                   </TitleData>
                   <ItemData>
                     Rp&nbsp;
-                    {numberFormat(supplement?.amount !== null ? (supplement?.amount ? supplement?.amount : supplement.rate) : 0)}
+                    {ifThenElse(supplement?.amount !== null, 
+                      ifThenElse(supplement?.amount, numberFormat(supplement?.amount), numberFormat(supplement.rate))  ,
+                      0)}
                   </ItemData>
                 </Grid>
               </Grid>

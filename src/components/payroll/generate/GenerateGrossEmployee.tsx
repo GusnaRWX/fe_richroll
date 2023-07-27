@@ -77,72 +77,11 @@ const headerItems = [
 
 type Order = 'asc' | 'desc'
 
-//   items: [
-//     {
-//       id: 1,
-//       name: 'Budi Irawan',
-//       attendance: '30 Days',
-//       absent: '2 Days',
-//       paidLeave: '3 Days',
-//       unpaidLeave: '4 Days',
-//       overtime: '8 Days',
-//       totalHours: '175 Days',
-//       averageHours: '30 Days',
-//     },
-//     {
-//       id: 2,
-//       name: 'Budi Irawan',
-//       attendance: '30 Days',
-//       absent: '2 Days',
-//       paidLeave: '3 Days',
-//       unpaidLeave: '4 Days',
-//       overtime: '8 Days',
-//       totalHours: '175 Days',
-//       averageHours: '30 Days',
-//     },
-//     {
-//       id: 3,
-//       name: 'Budi Irawan',
-//       attendance: '30 Days',
-//       absent: '2 Days',
-//       paidLeave: '3 Days',
-//       unpaidLeave: '4 Days',
-//       overtime: '8 Days',
-//       totalHours: '175 Days',
-//       averageHours: '30 Days',
-//     },
-//     {
-//       id: 4,
-//       name: 'Budi Irawan',
-//       attendance: '30 Days',
-//       absent: '2 Days',
-//       paidLeave: '3 Days',
-//       unpaidLeave: '4 Days',
-//       overtime: '8 Days',
-//       totalHours: '175 Days',
-//       averageHours: '30 Days',
-//     },
-//     {
-//       id: 5,
-//       name: 'Budi Irawan',
-//       attendance: '30 Days',
-//       absent: '2 Days',
-//       paidLeave: '3 Days',
-//       unpaidLeave: '4 Days',
-//       overtime: '8 Days',
-//       totalHours: '175 Days',
-//       averageHours: '30 Days',
-//     },
-//   ],
-//   itemTotals: 5
-// };
-
 function GenerateGrossEmployee() {
   const router = useRouter();
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(1);
   const { global, payroll } = useAppSelectors(state => state);
-  // const [search, setSearch] = useState('');
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
   const [hydrated, setHaydrated] = useState(false);
@@ -157,7 +96,7 @@ function GenerateGrossEmployee() {
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(event);
-    // setPage(0);
+    setPage(1);
   };
 
   const onSelected = (item, e) => {
@@ -216,8 +155,6 @@ function GenerateGrossEmployee() {
       );
     }
   };
-
-  console.log(selectedTemp);
 
   const checkValAll = (items) => {
     const checkedPerPage = selectedTemp?.filter(selectedItem =>
@@ -310,15 +247,15 @@ function GenerateGrossEmployee() {
                       <TableCell key={item.id} sortDirection={ifThenElse(sort === item.id, direction, false)}>
                         <TableSortLabel
                           active={sort === item.id}
-                          direction={sort === item.id ? direction : 'asc'}
+                          direction={ifThenElse(sort === item.id, direction, 'asc')}
                           onClick={(e) => handleRequestSort(e, item.id)}
                         >
                           {t(`${tPath}table.table_cols_item.${item.translation}`)}
-                          {sort === item.id ? (
+                          {ifThenElse(sort === item.id, (
                             <Box component='span' sx={visuallyHidden}>
                               {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
                             </Box>
-                          ) : null}
+                          ), null)}
                         </TableSortLabel>
                       </TableCell>
                     )
@@ -347,7 +284,7 @@ function GenerateGrossEmployee() {
                           <TableCell>
                             <NameWrapper>
                               <Avatar
-                                src={item.employee.picture ? item.employee.picture : ImageType.AVATAR_PLACEHOLDER}
+                                src={ifThenElse(item.employee.picture, item.employee.picture, ImageType.AVATAR_PLACEHOLDER)}
                                 alt={item.employee.name}
                                 sx={{
                                   width: 24, height: 24
@@ -362,7 +299,7 @@ function GenerateGrossEmployee() {
                           <TableCell>{item.unpaidLeave}</TableCell>
                           <TableCell>{item.overtime}</TableCell>
                           <TableCell>{item.totalHours}</TableCell>
-                          <TableCell>{isNaN(item.averageHours) ? 0 : item.averageHours}</TableCell>
+                          <TableCell>{ifThenElse(isNaN(item.averageHours), 0, item.averageHours)}</TableCell>
                         </TableRow>
                       ))
                     ))
@@ -391,7 +328,6 @@ function GenerateGrossEmployee() {
                   variant='contained'
                   size='small'
                   color='primary'
-                  // onClick={() => { router.push('/payroll-disbursement/payroll/generate-gross/detail'); }}
                   onClick={handlePutGenerate}
                   sx={{ color: 'white' }}
                 >{t('button.confirm')}</MuiButton>

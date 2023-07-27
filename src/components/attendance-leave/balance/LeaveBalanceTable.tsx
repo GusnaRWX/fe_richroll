@@ -119,7 +119,6 @@ function LeaveBalanceTable({ tabValue }: LeaveBalanceTableProps) {
   };
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(event);
-    // setPage(0);
   };
 
   const handleRequestSort = (
@@ -187,8 +186,8 @@ function LeaveBalanceTable({ tabValue }: LeaveBalanceTableProps) {
                   </TableCell>
                 </TableRow>
               ), (
-                data?.items.map((item, index) => (
-                  <TableRow key={index}>
+                data?.items.map((item) => (
+                  <TableRow key={item.id}>
                     <TableCell>{item.id}</TableCell>
                     <TableCell>
                       <NameWrapper>
@@ -215,7 +214,6 @@ function LeaveBalanceTable({ tabValue }: LeaveBalanceTableProps) {
                     <TableCell>{item.departement}</TableCell>
                     <TableCell>{item.starting_balance}</TableCell>
                     <TableCell>
-                      {/* {dayjs(item.user.createdAt).format('YYYY-MM-DD H:m:s')} */}
                       {item.leave_used}
                     </TableCell>
                     <TableCell>{item.remaining_balance}</TableCell>

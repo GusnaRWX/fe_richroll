@@ -62,9 +62,9 @@ async function refreshAccessToken() {
 
 // Add a request interceptor to handle X-Timezone
 service.interceptors.request.use(
-  (config) => {
-    config.headers['X-Timezone'] = getTimezone();
-    return config;
+  (configReq) => {
+    configReq.headers['X-Timezone'] = getTimezone();
+    return configReq;
   },
   async (error) => {
     return Promise.reject(error);

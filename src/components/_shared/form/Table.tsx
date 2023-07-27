@@ -51,11 +51,11 @@ function Table({
     setAnchorEl(null);
   };
 
-  const handleChangeRow = (page) => {
-    setCurrentPage(page);
+  const handleChangeRow = (pageNumber) => {
+    setCurrentPage(pageNumber);
     setAnchorEl(null);
     if (onRowsPerPagesChange) {
-      onRowsPerPagesChange(page);
+      onRowsPerPagesChange(pageNumber);
     }
   };
 

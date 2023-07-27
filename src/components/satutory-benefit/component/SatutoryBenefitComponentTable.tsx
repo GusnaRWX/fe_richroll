@@ -13,6 +13,7 @@ import { useRouter } from 'next/router';
 import { ConfirmationModal } from '@/components/_shared/common';
 import EmptyState from '@/components/_shared/common/EmptyState';
 import { useTranslation } from 'react-i18next';
+import { ifThenElse, compareCheck } from '@/utils/helper';
 
 // Import Icon React Icon
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -115,8 +116,8 @@ function SatutoryBenefitComponentTable() {
     event: React.MouseEvent<unknown>,
     headId: string
   ) => {
-    const isAsc = sort === headId && direction === 'asc';
-    setDirection(isAsc ? 'desc' : 'asc');
+    const isAsc = compareCheck(sort === headId, direction === 'asc');
+    setDirection(ifThenElse(isAsc, 'desc', 'asc'));
     setSort(headId);
   };
 
@@ -147,21 +148,19 @@ function SatutoryBenefitComponentTable() {
             {headerItems.map((item) => (
               <TableCell
                 key={item.id}
-                sortDirection={sort === item.id ? direction : false}
+                sortDirection={ifThenElse(sort === item.id, direction, false)}
               >
                 <TableSortLabel
                   active={sort === item.id}
-                  direction={sort === item.id ? direction : 'asc'}
+                  direction={ifThenElse(sort === item.id, direction, 'asc')}
                   onClick={(e) => handleRequestSort(e, item.id)}
                 >
                   {t(t_tableKey + '.' + item.id)}
-                  {sort === item.id ? (
+                  {ifThenElse(sort === item.id, (
                     <Box component='span' sx={visuallyHidden}>
-                      {direction === 'asc'
-                        ? 'sorted descending'
-                        : 'sorted ascending'}
+                      {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
                     </Box>
-                  ) : null}
+                  ), null)}
                 </TableSortLabel>
               </TableCell>
             ))}
@@ -169,14 +168,14 @@ function SatutoryBenefitComponentTable() {
         }
         bodyChildren={
           <>
-            {typeof data?.items !== 'undefined' ? (
-              data?.items.length === 0 ? (
+            {ifThenElse(typeof data?.items !== 'undefined', (
+              ifThenElse(data?.items.length === 0, (
                 <TableRow>
                   <TableCell colSpan={12} align='center'>
                     <EmptyState />
                   </TableCell>
                 </TableRow>
-              ) : (
+              ), (
                 data?.items.map((item, index) => (
                   <TableRow key={index}>
                     <TableCell>{item.companyName}</TableCell>
@@ -201,14 +200,14 @@ function SatutoryBenefitComponentTable() {
                     </TableCell>
                   </TableRow>
                 ))
-              )
-            ) : (
+              ))
+            ), (
               <TableRow>
                 <TableCell colSpan={12} align='center'>
                   <EmptyState />
                 </TableCell>
               </TableRow>
-            )}
+            ))}
             <ConfirmationModal
               open={DeleteConfirmation}
               handleClose={() => setDeleteConfirmation(false)}

@@ -169,14 +169,6 @@ function PayrollTable({
             }}
           />
         </Grid>
-        {/* <Grid item xs={6}>
-          <DateRangePicker
-            withAsterisk
-            // value={formik.values.startDate as unknown as Date}
-            onChange={(date: unknown) => console.log(date)}
-          // error={formik.touched.startDate && formik.errors.startDate ? String(formik.errors.startDate) : ''}
-          />
-        </Grid> */}
       </Grid>
       <Table
         count={data?.itemTotals}
@@ -192,15 +184,15 @@ function PayrollTable({
                 <TableCell key={item.id} sortDirection={ifThenElse(sort === item.id, direction, false)}>
                   <TableSortLabel
                     active={sort === item.id}
-                    direction={sort === item.id ? direction : 'asc'}
+                    direction={ifThenElse(sort === item.id, direction, 'asc')}
                     onClick={(e) => handleRequestSort(e, item.id)}
                   >
-                    {item.label === '' ? '' : t(`${t_tableCols}.${item.label}`)}
-                    {sort === item.id ? (
+                    {ifThenElse(item.label === '', '', t(`${t_tableCols}.${item.label}`))}
+                    {ifThenElse(sort === item.id, (
                       <Box component='span' sx={visuallyHidden}>
                         {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
                       </Box>
-                    ) : null}
+                    ), null)}
                   </TableSortLabel>
                 </TableCell>
               ))
@@ -238,11 +230,14 @@ function PayrollTable({
                       </TableCell>
                       <TableCell>
                         <ButtonWrapper>
-                          {tabValue === 0 && (
+                          {ifThenElse(tabValue === 0, (
                             <>
                               <IconButton
                                 parentColor='#E9EFFF'
-                                onClick={() => { item.workflow === 1 ? router.push({ pathname: '/payroll-disbursement/payroll/generate-gross/detail', query: { id: item?.id } }) : router.push({pathname: '/payroll-disbursement/payroll/generate-net', query: { id: item?.id }}); }}
+                                onClick={() => { ifThenElse(item.workflow === 1,
+                                  router.push({ pathname: '/payroll-disbursement/payroll/generate-gross/detail', query: { id: item?.id } }),
+                                  router.push({pathname: '/payroll-disbursement/payroll/generate-net', query: { id: item?.id }})
+                                );}}
                                 icons={
                                   <HiPencilAlt fontSize={20} color='#223567' />
                                 }
@@ -255,12 +250,15 @@ function PayrollTable({
                                 }
                               />
                             </>
-                          )}
-                          {tabValue === 1 && (
+                          ), null)}
+                          {ifThenElse(tabValue === 1, (
                             <>
                               <IconButton
                                 parentColor='#E9EFFF'
-                                onClick={() => { item.workflow === 1 ? router.push({pathname: '/payroll-disbursement/payroll/gross-detail', query: { id: item?.id }}) : router.push({pathname:'/payroll-disbursement/payroll/net-detail', query: { id: item?.id }}); }}
+                                onClick={() => { ifThenElse(item.workflow === 1,
+                                  router.push({pathname: '/payroll-disbursement/payroll/gross-detail', query: { id: item?.id }}),
+                                  router.push({pathname:'/payroll-disbursement/payroll/net-detail', query: { id: item?.id }})
+                                );}}
                                 icons={
                                   <TbFileImport fontSize={20} color='#223567' />
                                   //<BsFillEyeFill fontSize={20} color='#223567' />
@@ -275,8 +273,8 @@ function PayrollTable({
                                 }
                               /> */}
                             </>
-                          )}
-                          {tabValue === 2 && (
+                          ), null)}
+                          {ifThenElse(tabValue === 2, (
                             <>
                               <IconButton
                                 parentColor='#E9EFFF'
@@ -292,18 +290,21 @@ function PayrollTable({
                                 }
                               />
                             </>
-                          )}
-                          {tabValue === 3 && (
+                          ), null)}
+                          {ifThenElse(tabValue === 3, (
                             <>
                               <IconButton
                                 parentColor='#E9EFFF'
-                                onClick={() => { item.reportType === 'gross' ? router.push('/payroll-disbursement/payroll/gross-detail') : router.push('/payroll-disbursement/payroll/net-detail'); }}
+                                onClick={() => { ifThenElse(item.reportType === 'gross',
+                                  router.push('/payroll-disbursement/payroll/gross-detail'),
+                                  router.push('/payroll-disbursement/payroll/net-detail'));
+                                }}
                                 icons={
                                   <BsFillEyeFill fontSize={20} color='#223567' />
                                 }
                               />
                             </>
-                          )}
+                          ), null)}
                         </ButtonWrapper>
                       </TableCell>
                     </TableRow>

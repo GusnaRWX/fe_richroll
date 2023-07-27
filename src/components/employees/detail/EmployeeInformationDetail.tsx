@@ -211,7 +211,7 @@ function EmployeeInformationDetail({ data }: EmployeeInformationDetailProps) {
       >
         <Box sx={detailImage}>
           <Image
-            src={picture || ''}
+            src={picture ?? ''}
             alt='detail-image'
             width={400}
             height={300}

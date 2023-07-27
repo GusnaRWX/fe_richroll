@@ -11,6 +11,7 @@ import { Button, Input, RadioGroup, Select } from '@/components/_shared/form';
 import { FiEdit } from 'react-icons/fi';
 import { getPaymentType, ifThenElse } from '@/utils/helper';
 import { MdOutlineAdd } from 'react-icons/md';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 interface CnbFormEditProps {
   cnbValues: any,
@@ -402,7 +403,8 @@ const CnbFormEdit = ({ cnbValues, refProp, setCnbValue, cnbValuesForm }: CnbForm
                     <Grid item md={2}>
                       <Button
                         label='Delete'
-                        color='error'
+                        color='red'
+                        startIcon={<DeleteIcon/>}
                         onClick={() => { handleDeleteSupplementary(index); }}
                       />
                     </Grid>

@@ -160,9 +160,9 @@ const LeaveEntriesListComponent: React.FC<LeaveEntriesListComponentProps> = ({
                         </TableCell>
                       </TableRow>
                     ), (
-                      data?.items?.map((item, index) => (
+                      data?.items?.map((item) => (
                         <TableRow
-                          key={index}
+                          key={item.id}
                           onClick={() => { handleSelectedRow(item); }}
                           sx={{
                             border: selectedEmployee?.id === item.id ? '2px solid #4F46E5' : ''
