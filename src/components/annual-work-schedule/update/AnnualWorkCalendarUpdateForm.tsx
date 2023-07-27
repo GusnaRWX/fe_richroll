@@ -11,6 +11,7 @@ import { validationUpdateAnnualWorkCalendar } from './validate';
 import { useAppSelectors, useAppDispatch } from '@/hooks/index';
 import { updateAnnualScheduleRequested } from '@/store/reducers/slice/company-management/annual-work-schedule/annualSchedule';
 import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
 
 interface AnnualWorkCalendarCreateProps {
   open: boolean;
@@ -21,6 +22,8 @@ interface AnnualWorkCalendarCreateProps {
 function AnnualWorkCalendarUpdateForm({open, handleClose, handleConfirm}: AnnualWorkCalendarCreateProps) {
   const {detailAnnual} = useAppSelectors((state) => state.annualSchedule);
   const dispatch = useAppDispatch();
+  const {t} = useTranslation();
+  const t_addCalendarItem = 'company_management.annual_work_calendar.popup.add_calendar_item';
   const formik = useFormik({
     initialValues: {
       id: '',
@@ -73,7 +76,7 @@ function AnnualWorkCalendarUpdateForm({open, handleClose, handleConfirm}: Annual
     <CustomModal
       open={open}
       handleClose={handleClose}
-      title='Update Event'
+      title={t(`${t_addCalendarItem}.update_title`)}
       width='758px'
       handleConfirm={formik.handleSubmit}
     >
@@ -82,8 +85,8 @@ function AnnualWorkCalendarUpdateForm({open, handleClose, handleConfirm}: Annual
           <Input
             name='name'
             withAsterisk
-            customLabel='Name Of Event'
-            placeholder='Input name of event'
+            customLabel={t(`${t_addCalendarItem}.name_of_event`)}
+            placeholder={t(`${t_addCalendarItem}.name_of_event_placeholder`)}
             size='small'
             value={formik.values.name}
             onChange={formik.handleChange}
@@ -94,7 +97,7 @@ function AnnualWorkCalendarUpdateForm({open, handleClose, handleConfirm}: Annual
         </Grid>
         <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
           <RadioGroup
-            label='Event Type'
+            label={t(`${t_addCalendarItem}.event_type`)}
             name='type'
             options={[
               {label: 'Public Holiday', value: '0'},
@@ -110,7 +113,7 @@ function AnnualWorkCalendarUpdateForm({open, handleClose, handleConfirm}: Annual
       <Grid container spacing={2} mb='1rem' mt='1rem'>
         <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
           <DatePicker
-            customLabel='Start Date'
+            customLabel={t(`${t_addCalendarItem}.start_date`)}
             withAsterisk
             value={formik.values.startDate as unknown as Date}
             onChange={(val) => formik.setFieldValue('startDate', val)}
@@ -119,7 +122,7 @@ function AnnualWorkCalendarUpdateForm({open, handleClose, handleConfirm}: Annual
         </Grid>
         <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
           <DatePicker
-            customLabel='End Date'
+            customLabel={t(`${t_addCalendarItem}.end_date`)}
             withAsterisk
             value={formik.values.endDate as unknown as Date}
             onChange={(val) => formik.setFieldValue('endDate', val)}
@@ -145,7 +148,7 @@ function AnnualWorkCalendarUpdateForm({open, handleClose, handleConfirm}: Annual
           </LocalizationProvider>
         </Grid>
         <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
-          <Typography fontSize='16px'>End Time</Typography>
+          <Typography fontSize='16px'>{t(`${t_addCalendarItem}.end_time`)}</Typography>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <TimePicker
               sx={{
@@ -168,7 +171,7 @@ function AnnualWorkCalendarUpdateForm({open, handleClose, handleConfirm}: Annual
             name='notes'
             maxRows={7}
             minRows={7}
-            customLabel='Notes'
+            customLabel={t(`${t_addCalendarItem}.notes`)}
             value={formik.values.notes}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}

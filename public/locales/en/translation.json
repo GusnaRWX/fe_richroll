@@ -543,9 +543,10 @@
       "upcoming_event" : "Upcoming Event",
       "popup" : {
         "add_calendar_item" : {
-          "title" : "Create New Event",
-          "name-of_event" : "Name of Event",
-          "name-of_event_placeholder" : "Input name of event",
+          "create_title" : "Create New Event",
+          "update_title" : "Update Event",
+          "name_of_event" : "Name of Event",
+          "name_of_event_placeholder" : "Input name of event",
           "event_type" : "Event type",
           "start_date" :"Start Date",
           "end_date" :"End Date",
