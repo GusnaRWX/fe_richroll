@@ -1,4 +1,4 @@
-import { get, patch, put } from '@/utils/services';
+import { get, patch, put, post } from '@/utils/services';
 import { Account } from '@/types/account';
 
 interface EmployeeDeletionPayloadType {
@@ -14,14 +14,18 @@ export const patchSuspensionAccount = (payload) => {
   return patch(`admin/users/${payload.id}/suspension`, payload.data as Account.PatcSuspension);
 };
 
-export const putDeleteAccount = (id:string) => {
+export const putDeleteAccount = (id: string) => {
   return put(`admin/users/${id}/delete`, null);
 };
 
-export const putReactivateAccount = (id:string) => {
+export const putReactivateAccount = (id: string) => {
   return put(`admin/users/${id}/reactivate`, null);
 };
 
 export const putEmployeeAccountDeletion = (payload: EmployeeDeletionPayloadType) => {
   return put('users/delete', payload);
+};
+
+export const postUserSuspend = (payload) => {
+  return post(`admin/users/suspension`, payload.body as Account.BulkPatchSuspension);
 };

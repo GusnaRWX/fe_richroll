@@ -35,6 +35,7 @@ import {
 import dayjs from 'dayjs';
 import { CustomModal, ConfirmationModal } from '@/components/_shared/common';
 import { Account } from '@/types/account';
+import BulkSuspendComponent from './BulkSuspendComponent';
 
 const ButtonWrapper = styled.div`
  display: flex;
@@ -132,6 +133,7 @@ function AccountManagementTable({
   const [endSuspend, setEndSuspend] = useState(dayjs());
   const [value, setValue] = useState(0);
   const [selectedTemp, setSelectedTemp] = useState<CheckedTableProps[]>([]);
+  const [modalBulkSuspend, setModalBulkSuspend] = useState(false);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -224,7 +226,7 @@ function AccountManagementTable({
   const onAll = (e) => {
     if (e.target.checked) {
       const temp = data?.items?.map((v) => {
-        return {id: v.id, checked: true};
+        return { id: v.id, checked: true };
       });
       setSelectedTemp(temp);
     } else {
@@ -537,8 +539,8 @@ function AccountManagementTable({
                     <TableCell colSpan={12} align='center'><Typography>Data not found</Typography></TableCell>
                   </TableRow>
                 ), (
-                  data?.items?.map((item, index) => (
-                    <TableRow key={index}>
+                  data?.items?.map((item) => (
+                    <TableRow key={item.id}>
                       {ifThenElse(tabValue === 0, (
                         <TableCell>
                           <Checkbox onChange={(e) => onSelected(item?.id, e)} checked={checkVal(item?.id)} />
@@ -621,8 +623,8 @@ function AccountManagementTable({
       {ifThenElse(!!selectedTemp.length, (
         <Grid container mt='.5rem'>
           <Grid item xs={12}>
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '1rem'}}>
-              <MuiButton variant='contained' onClick={() => console.log('clicked')} size='small' sx={{ background: '#FFEDD5', color: '#EA580C' }}>Suspend Account</MuiButton>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '1rem' }}>
+              <MuiButton variant='contained' onClick={() => { setModalBulkSuspend(true); }} size='small' sx={{ background: '#FFEDD5', color: '#EA580C' }}>Suspend Account</MuiButton>
               <MuiButton variant='contained' onClick={() => console.log('clicked')} size='small' sx={{ background: '#FECACA', color: '#DC2626' }}>Delete Account</MuiButton>
             </Box>
           </Grid>
@@ -694,6 +696,15 @@ function AccountManagementTable({
         callback={() => handleReactivateConfirm()}
         type='reactivate'
       />
+
+      {/* Bulk Modal Suspend */}
+      <BulkSuspendComponent
+        totalUser={selectedTemp}
+        open={modalBulkSuspend}
+        handleCloseModal={setModalBulkSuspend}
+        handleReset={setSelectedTemp as React.Dispatch<React.SetStateAction<[]>>}
+      />
+      {/* End fo Modal SUspend */}
     </>
   );
 }
