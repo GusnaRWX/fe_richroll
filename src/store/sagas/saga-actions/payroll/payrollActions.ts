@@ -20,6 +20,10 @@ export const deletePayroll = (payload) => {
   return del(`payrolls/${payload}`);
 };
 
+export const deletePayrollAssist = (payload) => {
+  return del(`payrolls/assistants/${payload}`);
+};
+
 export const putPayrollWorkflow = (payload) => {
   return put(`payrolls/${payload.id}`, payload.data as Payroll.WorkflowType);
 };

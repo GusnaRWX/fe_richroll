@@ -382,6 +382,15 @@ export const payrollSlice = createSlice({
     generateDisbursementAssistFailed: (state) => {
       state.isLoading = false;
     },
+    deletePayrollAssistRequested: (state) => {
+      state.isLoading = true;
+    },
+    deletePayrollAssistSuccess: (state) => {
+      state.isLoading = false;
+    },
+    deletePayrollAssistFailed: (state) => {
+      state.isLoading = false;
+    },
   },
   extraReducers: {
     [HYDRATE]: (state, action) => {
@@ -472,6 +481,9 @@ export const {
   generateDisbursementAssistRequested,
   generateDisbursementAssistSuccess,
   generateDisbursementAssistFailed,
+  deletePayrollAssistRequested,
+  deletePayrollAssistSuccess,
+  deletePayrollAssistFailed,
 } = payrollSlice.actions;
 
 export default payrollSlice.reducer;
