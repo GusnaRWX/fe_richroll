@@ -276,7 +276,9 @@
         "schedule_profile_name" : "Schedule Profile Name",
         "schedule_profile_name_placeholder" : "Input Profile Name",
         "weekly_gross_hours" : "Weekly Gross Hours",
+        "weekly_gross_hours_placeholder" : "Input Weekly Gross",
         "weekly_net_hours" : "Weekly Net Hours",
+        "weekly_net_hours_placeholder" : "input Weekly Net",
         "hours_week" : "Hours/Week",
         "today" : "Today"
       },
@@ -287,7 +289,8 @@
           "spesific_working_day_section" : {
             "title" : "Spesific Working Day",
             "works_day" : "Works Day",
-            "works_hour" : "Work Hour"
+            "works_hour" : "Work Hour",
+            "hour" : "Hours"
           },
           "break_section" : {
             "title" : "Add Break",
@@ -299,6 +302,10 @@
         "delete" : {
           "title" : "Delete Profile from Work Schedule",
           "desc" : "You are about to delete this event from the Work Schedule. This action cannot be undone."
+        },
+        "cancel" : {
+          "title" : "Are you sure you want to leave?",
+          "desc" : "Any unsaved changes will be discarded. This cannot be undone"
         }
       }
     },

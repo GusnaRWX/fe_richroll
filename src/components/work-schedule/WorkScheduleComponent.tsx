@@ -14,6 +14,7 @@ import dayjs from 'dayjs';
 import EmptyState from '../_shared/common/EmptyState';
 import { BsTrashFill } from 'react-icons/bs';
 import { ConfirmationModal } from '../_shared/common';
+import { useTranslation } from 'react-i18next';
 
 const TopWrapper = styled.div`
  display: flex;
@@ -33,12 +34,11 @@ const ButtonWrapper = styled.div`
 `;
 
 const headerItems = [
-  { id: 'name', label: 'Profile Name' },
-  { id: 'grossHours', label: 'Weekly Gross (hours)' },
-  { id: 'netHours', label: 'Weekly Net (hours)' },
-  { id: 'createdAt', label: 'Date Created' },
-  { id: 'updatedAt', label: 'Last Updated' },
-  { id: 'actions', label: '' }
+  { id: 'name', label: 'profile_name' },
+  { id: 'grossHours', label: 'weekly_gross' },
+  { id: 'netHours', label: 'weekly_net' },
+  { id: 'createdAt', label: 'date_created' },
+  { id: 'updatedAt', label: 'last_update' },
 ];
 
 type Order = 'asc' | 'desc'
@@ -54,6 +54,10 @@ function WorkScheduleComponent() {
   const [hydrated, setHaydrated] = useState(false);
   const companyData = getCompanyData();
   const dispatch = useAppDispatch();
+  const {t} = useTranslation();
+  const t_workSchedule = 'company_management.work_schedule';
+  const t_tableHeader = 'company_management.work_schedule.table.table_cols_item';
+  const t_deleteConfirmation = 'company_management.work_schedule.popup.delete';
   const data = useAppSelectors(state => state.workSchedule.data);
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -102,8 +106,8 @@ function WorkScheduleComponent() {
   return (
     <>
       <TopWrapper>
-        <Typography fontWeight='bold' variant='h5' color='primary'>Work Schedule</Typography>
-        <MuiButton variant='contained' onClick={() => { router.push('/company-management/work-schedule/create'); }} size='small'><Add />&nbsp; Add Work Schedule</MuiButton>
+        <Typography fontWeight='bold' variant='h5' color='primary'>{t(`${t_workSchedule}.title`)}</Typography>
+        <MuiButton variant='contained' onClick={() => { router.push('/company-management/work-schedule/create'); }} size='small'><Add />&nbsp; {t('button.add_work_schedule')}</MuiButton>
       </TopWrapper>
       <Card sx={{ padding: '1rem' }}>
         <Table
@@ -123,7 +127,7 @@ function WorkScheduleComponent() {
                       direction={sort === item.id ? direction : 'asc'}
                       onClick={(e) => handleRequestSort(e, item.id)}
                     >
-                      {item.label}
+                      {t(`${t_tableHeader}.${item.label}`)}
                       {sort === item.id ? (
                         <Box component='span' sx={visuallyHidden}>
                           {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
@@ -133,6 +137,7 @@ function WorkScheduleComponent() {
                   </TableCell>
                 ))
               }
+              <TableCell/>
             </TableRow>
           }
           bodyChildren={
@@ -192,8 +197,8 @@ function WorkScheduleComponent() {
       <ConfirmationModal
         open={deleteConfirmation}
         handleClose={() => setDeleteConfirmation(false)}
-        title='Delete Profile from Work Schedule'
-        content='You are about to delete this event from the Work Schedule. This action cannot be undone.'
+        title={t(`${t_deleteConfirmation}.title`)}
+        content={t(`${t_deleteConfirmation}.desc`)}
         withCallback
         type='delete'
         noChange={true}
