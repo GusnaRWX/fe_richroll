@@ -59,7 +59,7 @@ export declare namespace Account {
     isPermanent: boolean;
   }
 
-  type PatcSuspensionWithId = PatcSuspension & { id: string }; // Replace 'number' with the appropriate data type for the id.
+  type PatcSuspensionWithId = PatcSuspension & { id: string };
 
   interface BulkPatchSuspension {
     data: Array<PatcSuspensionWithId>;
