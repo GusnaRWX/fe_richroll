@@ -235,50 +235,9 @@
               "weekly": "每周",
               "bi_weekly": "双周刊"
             }
-          }
-        }
-      },
-      "detail": {
-        "company_information": {
-          "company_information_section": {
-            "title": "公司信息",
-            "company_logo": "公司标志",
-            "company_type": "公司类型",
-            "company_name": "公司名称",
-            "company_npwp": "公司NPWP",
-            "company_sector": "公司部门",
-            "company_email_address": "公司电子邮件地址",
-            "contact_number": "联系电话"
           },
-          "company_address_section": {
-            "title": "公司地址",
-            "contry": "国家",
-            "province": "省",
-            "city": "城市",
-            "sub_district": "分地区",
-            "street_and_buildig_name": "街道名称。",
-            "zip_code": "邮政编码"
-          }
-        },
-        "payment_information": {
-          "bank_information_section": {
-            "title": "银行信息",
-            "bank": "银行",
-            "bank_account_holder_name": "银行账户持有人姓名",
-            "bank_account_no": "银行帐号",
-            "bank_code": "银行代码",
-            "branch_code": "分行代码",
-            "branch_name": "分店名称",
-            "swift_code": "SWIFT代码"
-          },
-          "payroll_information_section": {
-            "title": "薪资信息",
-            "schedule_type": "时间表类型",
-            "schedule_type_option": {
-              "monthly": "每月",
-              "weekly": "每周",
-              "bi_weekly": "双周刊"
-            }
+          "payment_information_section": {
+            "title": "支付信息"
           }
         }
       }
@@ -312,7 +271,9 @@
         "schedule_profile_name": "计划配置文件名称",
         "schedule_profile_name_placeholder": "输入配置文件名称",
         "weekly_gross_hours": "每周总工时",
+        "weekly_gross_hours_placeholder": "输入每周总收入",
         "weekly_net_hours": "每周净工作时间",
+        "weekly_net_hours_placeholder": "输入周网",
         "hours_week": "小时/周",
         "today": "今天"
       },
@@ -323,7 +284,8 @@
           "spesific_working_day_section": {
             "title": "特定工作日",
             "works_day": "工作日",
-            "works_hour": "工作时间"
+            "works_hour": "工作时间",
+            "hour": "小时"
           },
           "break_section": {
             "title": "添加中断",
@@ -335,6 +297,10 @@
         "delete": {
           "title": "从工作计划中删除个人资料",
           "desc": "您即将从工作计划中删除此事件。"
+        },
+        "cancel": {
+          "title": "您确定要离开吗？",
+          "desc": "任何未保存的更改都将被丢弃。"
         }
       }
     },
@@ -572,9 +538,10 @@
       "upcoming_event": "即将发生的事件",
       "popup": {
         "add_calendar_item": {
-          "title": "创建新事件",
-          "name-of_event": "活动名称",
-          "name-of_event_placeholder": "输入事件名称",
+          "create_title": "创建新事件",
+          "update_title": "更新事件",
+          "name_of_event": "活动名称",
+          "name_of_event_placeholder": "输入事件名称",
           "event_type": "事件类型",
           "start_date": "开始日期",
           "end_date": "结束日期",
@@ -641,8 +608,9 @@
         "table_cols_item": {
           "employee_id": "员工ID",
           "employee_name": "员工姓名",
-          "leave_form": "请假表格",
+          "leave_form": "离开自",
           "leave_to": "离开至",
+          "date": "日期",
           "leave_type": "休假类型",
           "status": "地位"
         },
@@ -666,8 +634,10 @@
           "title": "新休假条目",
           "leave_from_input_label": "离开自",
           "leave_to_input_label": "离开至",
-          "from_input_label": "离开自",
-          "to_input_label": "离开至",
+          "select_date": "选择日期",
+          "half_day_leave": "半天假",
+          "from_input_label": "从",
+          "to_input_label": "到",
           "leave_type_input_label": "休假类型",
           "leave_type_input_placeholder": "选择休假类型",
           "status_input_label": "地位",
@@ -679,7 +649,8 @@
           "title": "编辑请假条目",
           "leave_from_input_label": "离开自",
           "leave_to_input_label": "离开至",
-          "from_input_label": "离开自",
+          "half_day_leave": "半天假",
+          "from_input_label": "从",
           "to_input_label": "离开至",
           "leave_type_input_label": "休假类型",
           "leave_type_input_placeholder": "选择休假类型",
@@ -733,6 +704,10 @@
           "start_time_input_label": "开始时间",
           "duration_input_label": "期间",
           "multiplier_input_label": "乘数"
+        },
+        "delete": {
+          "title": "删除数据条目",
+          "desc": "您将要删除此加班数据条目。"
         }
       }
     }
@@ -1071,7 +1046,7 @@
   "satutory_benefit": {
     "component": {
       "title": "法定福利组件仪表板",
-      "detail_title": "法定福利部分",
+      "detail_title": "法定福利成分",
       "table": {
         "company_name": "公司名称",
         "country": "国家",

@@ -235,50 +235,9 @@
               "weekly": "Setiap minggu",
               "bi_weekly": "Dua kali seminggu"
             }
-          }
-        }
-      },
-      "detail": {
-        "company_information": {
-          "company_information_section": {
-            "title": "Maklumat Syarikat",
-            "company_logo": "Logo syarikat",
-            "company_type": "Jenis syarikat",
-            "company_name": "nama syarikat",
-            "company_npwp": "NPWP Syarikat",
-            "company_sector": "Sektor Syarikat",
-            "company_email_address": "Alamat E-mel Syarikat",
-            "contact_number": "Nombor telefon"
           },
-          "company_address_section": {
-            "title": "Alamat syarikat",
-            "contry": "Negara",
-            "province": "Wilayah",
-            "city": "Bandar",
-            "sub_district": "Mukim",
-            "street_and_buildig_name": "Nama jalan. ",
-            "zip_code": "Poskod"
-          }
-        },
-        "payment_information": {
-          "bank_information_section": {
-            "title": "Maklumat bank",
-            "bank": "Bank",
-            "bank_account_holder_name": "Nama Pemegang Akaun Bank",
-            "bank_account_no": "Akaun Bank No",
-            "bank_code": "Kod bank",
-            "branch_code": "Kod Cawangan",
-            "branch_name": "Nama cawangan",
-            "swift_code": "Kod pantas"
-          },
-          "payroll_information_section": {
-            "title": "Maklumat Gaji",
-            "schedule_type": "Jenis Jadual",
-            "schedule_type_option": {
-              "monthly": "Bulanan",
-              "weekly": "Setiap minggu",
-              "bi_weekly": "Dua kali seminggu"
-            }
+          "payment_information_section": {
+            "title": "Maklumat Pembayaran"
           }
         }
       }
@@ -312,7 +271,9 @@
         "schedule_profile_name": "Jadual Nama Profil",
         "schedule_profile_name_placeholder": "Masukkan Nama Profil",
         "weekly_gross_hours": "Jam Kasar Mingguan",
+        "weekly_gross_hours_placeholder": "Input Kasar Mingguan",
         "weekly_net_hours": "Jam Bersih Mingguan",
+        "weekly_net_hours_placeholder": "input Net Mingguan",
         "hours_week": "Jam/Minggu",
         "today": "Hari ini"
       },
@@ -323,7 +284,8 @@
           "spesific_working_day_section": {
             "title": "Hari Kerja Khusus",
             "works_day": "Hari Kerja",
-            "works_hour": "Waktu Kerja"
+            "works_hour": "Waktu Kerja",
+            "hour": "Jam"
           },
           "break_section": {
             "title": "Tambah Rehat",
@@ -335,6 +297,10 @@
         "delete": {
           "title": "Padam Profil daripada Jadual Kerja",
           "desc": "Anda akan memadamkan acara ini daripada Jadual Kerja. "
+        },
+        "cancel": {
+          "title": "Adakah anda pasti mahu pergi?",
+          "desc": "Sebarang perubahan yang tidak disimpan akan dibuang. "
         }
       }
     },
@@ -572,9 +538,10 @@
       "upcoming_event": "Acara Akan Datang",
       "popup": {
         "add_calendar_item": {
-          "title": "Buat Acara Baharu",
-          "name-of_event": "Nama Acara",
-          "name-of_event_placeholder": "Masukkan nama acara",
+          "create_title": "Buat Acara Baharu",
+          "update_title": "Kemas kini Acara",
+          "name_of_event": "Nama Acara",
+          "name_of_event_placeholder": "Masukkan nama acara",
           "event_type": "Jenis acara",
           "start_date": "Tarikh mula",
           "end_date": "Tarikh tamat",
@@ -641,8 +608,9 @@
         "table_cols_item": {
           "employee_id": "ID pekerja",
           "employee_name": "Nama Pekerja",
-          "leave_form": "Borang Cuti",
+          "leave_form": "Bertolak Dari",
           "leave_to": "Tinggalkan Kepada",
+          "date": "Tarikh",
           "leave_type": "Jenis Cuti",
           "status": "Status"
         },
@@ -666,7 +634,9 @@
           "title": "Kemasukan Cuti Baru",
           "leave_from_input_label": "Bertolak Dari",
           "leave_to_input_label": "Tinggalkan Kepada",
-          "from_input_label": "Dari",
+          "select_date": "Pilih Tarikh",
+          "half_day_leave": "Cuti Separuh Hari",
+          "from_input_label": "daripada",
           "to_input_label": "Kepada",
           "leave_type_input_label": "Jenis Cuti",
           "leave_type_input_placeholder": "Pilih Jenis Cuti",
@@ -679,8 +649,9 @@
           "title": "Edit Kemasukan Cuti",
           "leave_from_input_label": "Bertolak Dari",
           "leave_to_input_label": "Tinggalkan Kepada",
-          "from_input_label": "Dari",
-          "to_input_label": "Kepada",
+          "half_day_leave": "Cuti Separuh Hari",
+          "from_input_label": "daripada",
+          "to_input_label": "Tinggalkan Kepada",
           "leave_type_input_label": "Jenis Cuti",
           "leave_type_input_placeholder": "Pilih Jenis Cuti",
           "status_input_label": "Status",
@@ -733,6 +704,10 @@
           "start_time_input_label": "Masa mula",
           "duration_input_label": "Tempoh",
           "multiplier_input_label": "Pengganda"
+        },
+        "delete": {
+          "title": "Padamkan Entri Data",
+          "desc": "Anda akan memadamkan entri data lebih masa ini. "
         }
       }
     }
@@ -998,7 +973,7 @@
           "additional_fixed_amount": "Jumlah Tetap Tambahan"
         },
         "income_tax_multiplier": {
-          "deductible_factor": "Faktor Boleh Dipotong",
+          "deductible_factor": "Faktor Boleh Tolak",
           "factor_unit_condition": "Keadaan Unit Faktor",
           "rate": "Kadar",
           "additional_fixed_amount": "Jumlah Tetap Tambahan",

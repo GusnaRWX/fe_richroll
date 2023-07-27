@@ -235,50 +235,9 @@
               "weekly": "Mingguan",
               "bi_weekly": "Dua minggu sekali"
             }
-          }
-        }
-      },
-      "detail": {
-        "company_information": {
-          "company_information_section": {
-            "title": "informasi perusahaan",
-            "company_logo": "Logo perusahaan",
-            "company_type": "Jenis perusahaan",
-            "company_name": "Nama perusahaan",
-            "company_npwp": "NPWP Perusahaan",
-            "company_sector": "Sektor Perusahaan",
-            "company_email_address": "Alamat Email Perusahaan",
-            "contact_number": "Nomor kontak"
           },
-          "company_address_section": {
-            "title": "Alamat perusahaan",
-            "contry": "Negara",
-            "province": "Propinsi",
-            "city": "Kota",
-            "sub_district": "Kecamatan",
-            "street_and_buildig_name": "Nama jalan. ",
-            "zip_code": "Kode Pos"
-          }
-        },
-        "payment_information": {
-          "bank_information_section": {
-            "title": "Informasi bank",
-            "bank": "Bank",
-            "bank_account_holder_name": "Nama Pemegang Rekening Bank",
-            "bank_account_no": "Nomor Rekening Bank",
-            "bank_code": "Kode Bank",
-            "branch_code": "Kode cabang",
-            "branch_name": "Nama cabang",
-            "swift_code": "Tukar Kode"
-          },
-          "payroll_information_section": {
-            "title": "Informasi Penggajian",
-            "schedule_type": "Jenis Jadwal",
-            "schedule_type_option": {
-              "monthly": "Bulanan",
-              "weekly": "Mingguan",
-              "bi_weekly": "Dua minggu sekali"
-            }
+          "payment_information_section": {
+            "title": "Informasi Pembayaran"
           }
         }
       }
@@ -312,7 +271,9 @@
         "schedule_profile_name": "Jadwalkan Nama Profil",
         "schedule_profile_name_placeholder": "Masukkan Nama Profil",
         "weekly_gross_hours": "Jam Kotor Mingguan",
+        "weekly_gross_hours_placeholder": "Masukkan Bruto Mingguan",
         "weekly_net_hours": "Jam Bersih Mingguan",
+        "weekly_net_hours_placeholder": "masukan Bersih Mingguan",
         "hours_week": "Jam/Minggu",
         "today": "Hari ini"
       },
@@ -323,7 +284,8 @@
           "spesific_working_day_section": {
             "title": "Hari Kerja Tertentu",
             "works_day": "Hari Kerja",
-            "works_hour": "Jam Kerja"
+            "works_hour": "Jam Kerja",
+            "hour": "Jam"
           },
           "break_section": {
             "title": "Tambah Istirahat",
@@ -335,6 +297,10 @@
         "delete": {
           "title": "Hapus Profil dari Jadwal Kerja",
           "desc": "Anda akan menghapus acara ini dari Jadwal Kerja. "
+        },
+        "cancel": {
+          "title": "Apakah Anda yakin ingin pergi?",
+          "desc": "Setiap perubahan yang belum disimpan akan dibuang. "
         }
       }
     },
@@ -572,9 +538,10 @@
       "upcoming_event": "Acara yang akan datang",
       "popup": {
         "add_calendar_item": {
-          "title": "Buat Acara Baru",
-          "name-of_event": "Nama Acara",
-          "name-of_event_placeholder": "Masukkan nama acara",
+          "create_title": "Buat Acara Baru",
+          "update_title": "Perbarui Acara",
+          "name_of_event": "Nama Acara",
+          "name_of_event_placeholder": "Masukkan nama acara",
           "event_type": "Jenis acara",
           "start_date": "Mulai tanggal",
           "end_date": "Tanggal Berakhir",
@@ -641,8 +608,9 @@
         "table_cols_item": {
           "employee_id": "identitas pegawai",
           "employee_name": "nama karyawan",
-          "leave_form": "Tinggalkan Formulir",
+          "leave_form": "Pergi dari",
           "leave_to": "Tinggalkan Untuk",
+          "date": "Tanggal",
           "leave_type": "Tipe Keluar",
           "status": "Status"
         },
@@ -666,8 +634,10 @@
           "title": "Entri Cuti Baru",
           "leave_from_input_label": "Pergi dari",
           "leave_to_input_label": "Tinggalkan Untuk",
+          "select_date": "Pilih Tanggal",
+          "half_day_leave": "Cuti Setengah Hari",
           "from_input_label": "Dari",
-          "to_input_label": "Untuk",
+          "to_input_label": "Ke",
           "leave_type_input_label": "Tipe Keluar",
           "leave_type_input_placeholder": "Pilih Jenis Cuti",
           "status_input_label": "Status",
@@ -677,10 +647,11 @@
         },
         "update": {
           "title": "Sunting Entri Keluar",
-          "leave_from_input_label": "Pergi Dari",
+          "leave_from_input_label": "Pergi dari",
           "leave_to_input_label": "Tinggalkan Untuk",
+          "half_day_leave": "Cuti Setengah Hari",
           "from_input_label": "Dari",
-          "to_input_label": "Untuk",
+          "to_input_label": "Tinggalkan Untuk",
           "leave_type_input_label": "Tipe Keluar",
           "leave_type_input_placeholder": "Pilih Jenis Cuti",
           "status_input_label": "Status",
@@ -733,6 +704,10 @@
           "start_time_input_label": "Waktu mulai",
           "duration_input_label": "Durasi",
           "multiplier_input_label": "Pengali"
+        },
+        "delete": {
+          "title": "Hapus Entri Data",
+          "desc": "Anda akan menghapus entri data lembur ini. "
         }
       }
     }
@@ -781,7 +756,7 @@
     },
     "popup": {
       "delete": {
-        "title": "Apakah Anda yakin ingin menghapus rekaman ini?",
+        "title": "Apakah Anda yakin ingin menghapus catatan ini?",
         "desc": "Setiap perubahan yang belum disimpan akan dibuang. "
       },
       "create_cancel": {
