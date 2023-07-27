@@ -4,7 +4,8 @@ import {
   patchSuspensionAccount,
   putDeleteAccount,
   putReactivateAccount,
-  putEmployeeAccountDeletion
+  putEmployeeAccountDeletion,
+  postUserSuspend
 } from '../saga-actions/account-management/accountManagementActions';
 import { call, put, takeEvery, delay } from 'redux-saga/effects';
 import {
@@ -22,7 +23,10 @@ import {
   putAccountReactiveFailed,
   putEmployeeAccountDeletionFailed,
   putEmployeeAccountDeletionRequested,
-  putEmployeeAccountDeletionSuccess
+  putEmployeeAccountDeletionSuccess,
+  postUserSuspendRequested,
+  postUserSuspendSuccess,
+  postUserSupendFailed
 } from '@/store/reducers/slice/account-management/accountManagementSlice';
 import { setResponserMessage } from '@/store/reducers/slice/responserSlice';
 import { Services } from '@/types/axios';
@@ -185,12 +189,43 @@ function* fetchPutEmployeeDeletion(action: AnyAction) {
   }
 }
 
+function* fetchPostUserSuspend(action: AnyAction) {
+  try {
+    const res: AxiosResponse = yield call(postUserSuspend, action?.payload);
+
+    if (res.data.code === 201 || res.data.code === 200) {
+      yield put({ type: postUserSuspendSuccess.toString() });
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: res?.data?.code,
+          message: res?.data?.message
+        }
+      });
+    }
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      yield put({ type: postUserSupendFailed.toString() });
+      yield delay(2000, true);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message
+        }
+      });
+    }
+  }
+}
+
 function* accountSaga() {
   yield takeEvery(getAccountRequested.toString(), fetchGetAccount);
   yield takeEvery(patchAccountSuspensionRequested.toString(), fetchPatchSuspensionAccount);
   yield takeEvery(putAccountDeleteRequested.toString(), fetchPutDeleteAccount);
   yield takeEvery(putAccountReactiveRequested.toString(), fetchPutReactivateAccount);
   yield takeEvery(putEmployeeAccountDeletionRequested.toString(), fetchPutEmployeeDeletion);
+  yield takeEvery(postUserSuspendRequested.toString(), fetchPostUserSuspend);
 }
 
 export default accountSaga;

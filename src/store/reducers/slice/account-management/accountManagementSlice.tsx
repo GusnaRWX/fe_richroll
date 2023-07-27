@@ -68,6 +68,15 @@ export const accountSlice = createSlice({
       if (action?.payload?.code === 409) {
         state.isErrorInput = true;
       }
+    },
+    postUserSuspendRequested: state => {
+      state.isLoading = true;
+    },
+    postUserSuspendSuccess: state => {
+      state.isLoading = false;
+    },
+    postUserSupendFailed: state => {
+      state.isLoading = false;
     }
     // end
   },
@@ -96,7 +105,10 @@ export const {
   putAccountReactiveFailed,
   putEmployeeAccountDeletionFailed,
   putEmployeeAccountDeletionRequested,
-  putEmployeeAccountDeletionSuccess
+  putEmployeeAccountDeletionSuccess,
+  postUserSuspendRequested,
+  postUserSuspendSuccess,
+  postUserSupendFailed
 } = accountSlice.actions;
 
 export default accountSlice.reducer;
