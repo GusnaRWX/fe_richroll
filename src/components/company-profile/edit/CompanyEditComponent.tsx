@@ -244,26 +244,32 @@ const CompanyEditComponent = ({ companyType, companySector, bank, paymentMethod,
   };
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    if (newValue === 1) {
+    ifThenElse(newValue === 1,
       formikDetail.validateForm().then((a) => {
-        if(Object.keys(a).length === 0) {
+        const ifTrueDetail = () => {
           formikDetail.submitForm();
           setIsError(false);
           setTabSelected(newValue);
-        } else {
-          setIsError(true);
-        }
-      });
-    } else {
+        };
+        ifThenElse(
+          Object.keys(a).length === 0,
+          ifTrueDetail(),
+          setIsError(true)
+        );
+      }),
       formikPayment.validateForm().then((a) => {
-        if(Object.keys(a).length === 0) {
+        const ifTruePayment = () => {
+          formikDetail.submitForm();
           setIsError(false);
           setTabSelected(newValue);
-        } else {
-          setIsError(true);
-        }
-      });
-    }
+        };
+        ifThenElse(
+          Object.keys(a).length === 0,
+          ifTruePayment(),
+          setIsError(true)
+        );
+      })
+    );
   };
 
   useEffect(() => {
@@ -391,13 +397,13 @@ const CompanyEditComponent = ({ companyType, companySector, bank, paymentMethod,
             </Tabs>
           </Box>
           <TabPanel value={tabSelected} index={0}>
-            {(isError) && (
+            {ifThenElse(isError, (
               <Alert
                 severity='error'
                 content='Please fill in all the mandatory fields'
                 icon={<Cancel />}
               />
-            )}
+            ), null)}
             <CompanyInformationForm
               companyType={companyType}
               companySector={companySector}
@@ -408,13 +414,13 @@ const CompanyEditComponent = ({ companyType, companySector, bank, paymentMethod,
             />
           </TabPanel>
           <TabPanel value={tabSelected} index={1}>
-            {(isError) && (
+            {ifThenElse(isError, (
               <Alert
                 severity='error'
                 content='Please fill in all the mandatory fields'
                 icon={<Cancel />}
               />
-            )}
+            ), null)}
             <CompanyBankForm
               formik={formikPayment}
               bank={bank}
