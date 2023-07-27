@@ -1,23 +1,24 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Modal, Grid, Box, Typography, Button as MuiButton, Select, MenuItem, IconButton } from '@mui/material';
+import { Modal, Grid, Box, Typography, Button as MuiButton, Select, MenuItem, IconButton, InputAdornment } from '@mui/material';
 import { Scheduler } from '@aldabil/react-scheduler';
 import { ConfirmationModal } from '@/components/_shared/common';
-import { useAppSelectors } from '@/hooks/index';
-import { Close, DeleteOutline } from '@mui/icons-material';
-import type { SchedulerRef, SchedulerHelpers } from '@aldabil/react-scheduler/types';
+import { useAppSelectors, useAppDispatch } from '@/hooks/index';
+import { Close } from '@mui/icons-material';
+import type { SchedulerRef, SchedulerHelpers, ProcessedEvent } from '@aldabil/react-scheduler/types';
 import { useFormik } from 'formik';
 import dayjs from 'dayjs';
 import * as Yup from 'yup';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
-import { Textarea } from '@/components/_shared/form';
+import { Textarea, Input } from '@/components/_shared/form';
+import { getPayloadAttendancePayroll } from '@/utils/helper';
+import { putPayrollAttendanceScheduleRequested } from '@/store/reducers/slice/payroll/payrollSlice';
 
 type DayJS = dayjs.Dayjs | null | string;
 
 const ValidationEditAttendanceSchedule = Yup.object({
   type: Yup.string().notRequired(),
-  time: Yup.date().required('This field is required'),
   leaveStatus: Yup.string().notRequired(),
   note: Yup.string().notRequired()
 });
@@ -38,13 +39,40 @@ interface AttendanceCalendarProps {
   open: boolean;
   handleClose: () => void;
   handleConfirm: () => void;
+  payrollID?: unknown;
+  attendanceID?: string | number;
+  employeeID?: string | number;
 }
 
 interface InitialValuesType {
-  type: string | number;
-  time: DayJS;
-  leaveStatus: string;
+  color: string;
+  end: DayJS;
+  id: string;
+  isHalfDay: boolean;
+  isOvertime: boolean;
+  leaveStatus: string | number;
+  leaveType: string | number;
+  multiplier: number;
+  name: string;
   note?: string | null;
+  start: DayJS;
+  title: string;
+  duration: number;
+  event_id: string | number;
+}
+
+interface PayloadValuesType {
+  id: string | number,
+  name: string,
+  start: DayJS
+  end: DayJS,
+  leaveType: string | number,
+  isOvertime: boolean,
+  multiplier: string | number,
+  note: string,
+  leaveStatus: string | number,
+  color: string,
+  isHalfDay: boolean
 }
 
 interface CustomEditorProps {
@@ -53,18 +81,58 @@ interface CustomEditorProps {
 
 const CustomEditor = ({ scheduler }: CustomEditorProps) => {
   const event = scheduler.edited;
+  const checkingLeaveType = () => {
+    if (event?.leaveType == 0 && event?.isOvertime == true){
+      return 9;
+    }else if (event?.leaveType == 0 && event?.name == 'Clock In') {
+      return 7;
+    }else if (event?.leaveType == 0 && event?.name == 'Clock Out') {
+      return 8;
+    }else{
+      return event?.leaveType;
+    }
+  };
   const formik = useFormik({
     initialValues: {
-      type: '',
-      time: dayjs(event?.start),
-      leaveStatus: '',
-      note: event?.note || ''
+      color: event?.color,
+      end: dayjs(event?.end),
+      id: event?.id,
+      isHalfDay: event?.isHalfDay,
+      isOvertime: event?.isOvertime,
+      leaveStatus: event?.leaveStatus,
+      leaveType: checkingLeaveType(),
+      multiplier: event?.multiplier,
+      name: event?.name,
+      note: event?.note || '',
+      start: dayjs(event?.start),
+      title: event?.title,
+      duration: dayjs(event?.end.toUTCString()).diff(event?.start.toUTCString(), 'hours') || 0,
+      event_id: event?.event_id
     } as InitialValuesType,
     validationSchema: ValidationEditAttendanceSchedule,
     onSubmit: (values) => {
       console.log(values);
+      handleSubmit(values);
     }
   });
+  console.log('here this event : ', event);
+
+  const handleSubmit = async (data: InitialValuesType) => {
+    try {
+      scheduler.loading(true);
+      const added_update_event = (
+        await new Promise((res) => {
+          setTimeout(() => {
+            res(getPayloadAttendancePayroll(data, event));
+          }, 1000);
+        })
+      ) as unknown as ProcessedEvent;
+      scheduler.onConfirm(added_update_event, 'edit');
+      scheduler.close();
+    }finally{
+      scheduler.loading(false);
+    }
+  };
 
   return (
     <div style={{ width: '600px', padding: '1rem' }}>
@@ -84,12 +152,14 @@ const CustomEditor = ({ scheduler }: CustomEditorProps) => {
           <Select
             fullWidth
             size='small'
-            value={formik.values.type}
-            onChange={(e) => {formik.setFieldValue('type', e.target.value);}}
+            disabled
+            value={formik.values.leaveType}
+            onChange={(e) => {formik.setFieldValue('leaveType', e.target.value);}}
+            sx={{ backgroundColor: '#c5c5c5' }}
           >
-            <MenuItem value={0}>Check In</MenuItem>
-            <MenuItem value={0}>Check out</MenuItem>
-            <MenuItem value={0}>Overtime</MenuItem>
+            <MenuItem value={7}>Clock In</MenuItem>
+            <MenuItem value={8}>Clock out</MenuItem>
+            <MenuItem value={9}>Overtime</MenuItem>
             <MenuItem value={1}>Annual Leave</MenuItem>
             <MenuItem value={2}>Child Care leave</MenuItem>
             <MenuItem value={3}>Maternity Leave</MenuItem>
@@ -100,7 +170,7 @@ const CustomEditor = ({ scheduler }: CustomEditorProps) => {
         </Grid>
       </Grid>
       {
-        formik.values.type !== 0 && (
+        (formik.values.leaveType !== 7 && formik.values.leaveType !== 8 && formik.values.leaveType !== 9) && (
           <>
             <Grid container mb='1rem'>
               <Grid sm={12} xs={12} md={12} lg={12} xl={12}>
@@ -111,8 +181,8 @@ const CustomEditor = ({ scheduler }: CustomEditorProps) => {
                   value={formik.values.leaveStatus}
                   onChange={(e) => {formik.setFieldValue('leaveStatus', e.target.value);}}
                 >
-                  <MenuItem value={'1'}>Paid</MenuItem>
-                  <MenuItem value={'2'}>Unpaid</MenuItem>
+                  <MenuItem value={1}>Paid</MenuItem>
+                  <MenuItem value={2}>Unpaid</MenuItem>
                 </Select>
               </Grid>
             </Grid>
@@ -133,7 +203,7 @@ const CustomEditor = ({ scheduler }: CustomEditorProps) => {
         )
       }
       {
-        formik.values.type == 0 && (
+        (formik.values.leaveType == 7 || formik.values.leaveType == 8 || formik.values.leaveType == 9) && (
           <Grid container mb='1.5rem'>
             <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
               <Typography>Time</Typography>
@@ -146,30 +216,111 @@ const CustomEditor = ({ scheduler }: CustomEditorProps) => {
                     width: '100%'
                   }}
                   ampm={false}
-                  value={formik.values.time}
-                  onChange={(val) => formik.setFieldValue('time', val)}
+                  value={formik.values.start}
+                  onChange={(val) => formik.setFieldValue('start', val)}
                 />
               </LocalizationProvider>
             </Grid>
           </Grid>
         )
       }
-
+      {
+        formik.values.leaveType === 9 && (
+          <Grid container spacing={2} mb='1rem'>
+            <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+              <Input
+                withAsterisk={false}
+                size='small'
+                type='number'
+                name='duration'
+                customLabel='Duration'
+                value={formik.values.duration}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position='end'>
+                      <Typography color='grey.500'>Hours</Typography>
+                    </InputAdornment>
+                  )
+                }}
+              />
+            </Grid>
+            <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+              <Input
+                withAsterisk={false}
+                size='small'
+                name='multiplier'
+                customLabel='Multiplier'
+                type='number'
+                value={formik.values.multiplier}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                inputProps={{
+                  step: 0.1
+                }}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position='end'>
+                      <Typography color='grey.500'>x</Typography>
+                    </InputAdornment>
+                  )
+                }}
+              />
+            </Grid>
+          </Grid>
+        )
+      }
+      {
+        formik.values.isHalfDay == true && (
+          <Grid container mb='1.5rem' spacing={2}>
+            <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+              <Typography>Start</Typography>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <TimePicker
+                  sx={{
+                    '& .MuiOutlinedInput-input': {
+                      padding: '8.5px 14px',
+                    },
+                    width: '100%'
+                  }}
+                  ampm={false}
+                  value={formik.values.start}
+                  onChange={(val) => formik.setFieldValue('start', val)}
+                />
+              </LocalizationProvider>
+            </Grid>
+            <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+              <Typography>End</Typography>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <TimePicker
+                  sx={{
+                    '& .MuiOutlinedInput-input': {
+                      padding: '8.5px 14px',
+                    },
+                    width: '100%'
+                  }}
+                  ampm={false}
+                  value={formik.values.end}
+                  onChange={(val) => formik.setFieldValue('end', val)}
+                />
+              </LocalizationProvider>
+            </Grid>
+          </Grid>
+        )
+      }
       <div
         style={{
           display: 'flex',
           flexDirection: 'row',
           alignItems: 'center',
-          justifyContent: 'space-between',
+          justifyContent: 'flex-end',
           borderTop: '1px solid #E5E7EB',
           paddingTop: '1rem'
         }}>
-        <MuiButton variant='contained' color='red' size='small'>
-          <DeleteOutline />&nbsp;Delete
-        </MuiButton>
         <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: '.5rem' }}>
-          <MuiButton variant='outlined' size='small'>Cancel</MuiButton>
-          <MuiButton variant='contained' size='small'>Confirm</MuiButton>
+          <MuiButton variant='outlined' size='small' onClick={() => scheduler.close()}>Cancel</MuiButton>
+          <MuiButton variant='contained' size='small' onClick={() => formik.handleSubmit()}>Confirm</MuiButton>
         </div>
       </div>
     </div>
@@ -178,8 +329,9 @@ const CustomEditor = ({ scheduler }: CustomEditorProps) => {
 };
 
 
-function AttendanceCalendar({open, handleClose, handleConfirm}: AttendanceCalendarProps) {
+function AttendanceCalendar({open, handleClose, handleConfirm, payrollID, attendanceID, employeeID}: AttendanceCalendarProps) {
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
+  const dispatch = useAppDispatch();
 
   const { attendanceDetail } = useAppSelectors((state) => state.payroll);
   const calendarRef = useRef<SchedulerRef>(null);
@@ -195,6 +347,37 @@ function AttendanceCalendar({open, handleClose, handleConfirm}: AttendanceCalend
   const onClose = () => {
     handleDelete();
     handleClose();
+  };
+
+  const handleSave = () => {
+    const tempData: Array<PayloadValuesType> = [];
+    calendarRef?.current?.scheduler?.events.map((item) => {
+      tempData.push({
+        color: item?.color || '',
+        end: dayjs(item.end).toISOString(),
+        id: item?.id,
+        isHalfDay: item?.isHalfDay,
+        isOvertime: item?.isOvertime,
+        leaveStatus: item?.leaveStatus,
+        leaveType: item?.leaveType,
+        multiplier: item?.multiplier,
+        name: item?.name,
+        note: item?.note || '',
+        start: dayjs(item.start).toISOString()
+      });
+    });
+    dispatch({
+      type: putPayrollAttendanceScheduleRequested.toString(),
+      payload: {
+        id: payrollID,
+        attendanceID: attendanceID,
+        employeeID: employeeID,
+        data: {
+          items: tempData
+        }
+      }
+    });
+    onClose();
   };
   return (
     <>
@@ -321,7 +504,10 @@ function AttendanceCalendar({open, handleClose, handleConfirm}: AttendanceCalend
         content='Are you sure you want to save this changes made into this attendance report? '
         withCallback
         noChange={true}
-        callback={handleConfirm}
+        callback={() => {
+          handleConfirm();
+          handleSave();
+        }}
       />
     </>
   );

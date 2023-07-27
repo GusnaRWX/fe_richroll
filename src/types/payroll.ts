@@ -314,5 +314,9 @@ export declare namespace Payroll {
     disbursements: Array<Disbursements>
   }
 
+  interface PayrollAttendanceScheduleItemsType {
+    items: Array<EventType>
+  }
+
 }
 
