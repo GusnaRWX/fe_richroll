@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 import dayjs from 'dayjs';
 import { Text } from '@/components/_shared/common';
 import { useTranslation } from 'react-i18next';
-import { ifThenElse } from '@/utils/helper';
+import { ifEmptyReplace, ifThenElse } from '@/utils/helper';
 
 export interface DetailCNBProps {
   id: unknown,
@@ -72,7 +72,7 @@ const DetailCnb = ({ id, open }: DetailCNBProps) => {
 
   return (
     <>
-      {!detailLoading ? (
+      {ifThenElse(!detailLoading, (
         <Grid container direction='column' gap={4}>
           {/* name */}
           <Grid
@@ -110,11 +110,11 @@ const DetailCnb = ({ id, open }: DetailCNBProps) => {
           >
             <Grid item xs={6} display='flex' flexDirection='column' gap='6px'>
               <TitleData>{t('compensation_and_benefits.popup.detail.date_created')}</TitleData>
-              <ItemData>{dayjs(detail?.createdAt).isValid() ? dayjs(detail?.createdAt).format('DD/MM/YY hh:mm') : '-'}</ItemData>
+              <ItemData>{ifThenElse(dayjs(detail?.createdAt).isValid(), dayjs(detail?.createdAt).format('DD/MM/YY hh:mm'), '-')}</ItemData>
             </Grid>
             <Grid item xs={6} display='flex' flexDirection='column' gap='6px'>
               <TitleData>{t('compensation_and_benefits.popup.detail.last_update')}</TitleData>
-              <ItemData>{dayjs(detail?.updatedAt).isValid() ? dayjs(detail?.updatedAt).format('DD/MM/YY') : '-'}</ItemData>
+              <ItemData>{ifThenElse(dayjs(detail?.updatedAt).isValid(), dayjs(detail?.updatedAt).format('DD/MM/YY'), '-')}</ItemData>
             </Grid>
           </Grid>
 
@@ -139,7 +139,7 @@ const DetailCnb = ({ id, open }: DetailCNBProps) => {
             >
               <Grid item xs={6} display='flex' flexDirection='column' gap='6px'>
                 <TitleData>{t(`${tPath}base_section.compensation_component`)}</TitleData>
-                <ItemData>{baseComponent ? baseComponent?.component?.name : '-'}</ItemData>
+                <ItemData>{ifThenElse(baseComponent, baseComponent?.component?.name, '-')}</ItemData>
               </Grid>
               <Grid item xs={6} display='flex' flexDirection='column' gap='6px'>
                 <TitleData>{t(`${tPath}base_section.tax_status`)}</TitleData>
@@ -152,8 +152,8 @@ const DetailCnb = ({ id, open }: DetailCNBProps) => {
             </Grid>
             <Grid display='flex' flexDirection='column' gap='6px'>
               <TitleData>
-                {baseComponent?.amount !== null ? 'Amount' : 'Rate'}&nbsp; per &nbsp;
-                {baseComponent?.term ? baseComponent?.term.name : '-'}
+                {ifThenElse(baseComponent?.amount !== null, 'Amount', 'Rate')}&nbsp; per &nbsp;
+                {ifThenElse(baseComponent?.term, baseComponent?.term.name, '-')}
               </TitleData>
               <ItemData>
                 Rp&nbsp;
@@ -203,14 +203,14 @@ const DetailCnb = ({ id, open }: DetailCNBProps) => {
                   >
                     <TitleData>{t(`${tPath}supplementary_section.tax_status`)}</TitleData>
                     <TaxData>
-                      {supplement?.isTaxable ? t(`${tPath}supplementary_section.tax_status_option.taxable`) : t(`${tPath}supplementary_section.tax_status_option.nontaxable`)}
+                      {ifThenElse(supplement?.isTaxable, t(`${tPath}supplementary_section.tax_status_option.taxable`), t(`${tPath}supplementary_section.tax_status_option.nontaxable`))}
                     </TaxData>
                   </Grid>
                 </Grid>
                 <Grid display='flex' flexDirection='column' gap='6px' >
                   <TitleData>
-                    {supplement?.amount ? 'Amount' : 'Rate'}&nbsp;
-                    {supplement?.term?.name ?? '-'}
+                    {ifThenElse(supplement?.amount, 'Amount', 'Rate')}&nbsp;
+                    {ifEmptyReplace(supplement?.term?.name, '-')}
                   </TitleData>
                   <ItemData>
                     Rp&nbsp;
@@ -223,9 +223,9 @@ const DetailCnb = ({ id, open }: DetailCNBProps) => {
             </Grid>
           ))}
         </Grid>
-      ) : (
+      ), (
         <Skeleton variant='rounded' height={100} />
-      )}
+      ))}
     </>
   );
 };

@@ -25,7 +25,7 @@ import {
   putUpdateRequested,
 } from '@/store/reducers/slice/cnb/compensationSlice';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
-import { dynamicPayloadBaseCnb, getCompanyData, getPaymentType } from '@/utils/helper';
+import { dynamicPayloadBaseCnb, getCompanyData, getPaymentType, ifThenElse, compareCheck, ifEmptyReplace } from '@/utils/helper';
 import { FieldArray, Form as FormikForm, Formik } from 'formik';
 import * as Yup from 'yup';
 import ConfirmationModal from '@/components/_shared/common/ConfirmationModal';
@@ -163,28 +163,28 @@ export default function UpdateCNBComponent() {
     borderRadius: '50%',
     width: 16,
     height: 16,
-    boxShadow:
-      theme.palette.mode === 'dark'
-        ? '0 0 0 1px rgb(16 22 26 / 40%)'
-        : 'inset 0 0 0 1px rgba(16,22,26,.2), inset 0 -1px 0 rgba(16,22,26,.1)',
-    backgroundColor: theme.palette.mode === 'dark' ? '#394b59' : '#f5f8fa',
-    backgroundImage:
-      theme.palette.mode === 'dark'
-        ? 'linear-gradient(180deg,hsla(0,0%,100%,.05),hsla(0,0%,100%,0))'
-        : 'linear-gradient(180deg,hsla(0,0%,100%,.8),hsla(0,0%,100%,0))',
+    boxShadow: ifThenElse(theme.palette.mode === 'dark',
+      '0 0 0 1px rgb(16 22 26 / 40%)',
+      'inset 0 0 0 1px rgba(16,22,26,.2), inset 0 -1px 0 rgba(16,22,26,.1)'
+    ),
+    backgroundColor: ifThenElse(theme.palette.mode === 'dark', '#394b59', '#f5f8fa'),
+    backgroundImage: ifThenElse(theme.palette.mode === 'dark',
+      'linear-gradient(180deg,hsla(0,0%,100%,.05),hsla(0,0%,100%,0))',
+      'linear-gradient(180deg,hsla(0,0%,100%,.8),hsla(0,0%,100%,0))'
+    ),
     '.Mui-focusVisible &': {
       outline: '2px auto rgba(19,124,189,.6)',
       outlineOffset: 2,
     },
     'input:hover ~ &': {
-      backgroundColor: theme.palette.mode === 'dark' ? '#30404d' : '#ebf1f5',
+      backgroundColor: ifThenElse(theme.palette.mode === 'dark', '#30404d', '#ebf1f5'),
     },
     'input:disabled ~ &': {
       boxShadow: 'none',
-      background:
-        theme.palette.mode === 'dark'
-          ? 'rgba(57,75,89,.5)'
-          : 'rgba(206,217,224,.5)',
+      background: ifThenElse(theme.palette.mode === 'dark',
+        'rgba(57,75,89,.5)',
+        'rgba(206,217,224,.5)'
+      ),
     },
   }));
 
@@ -214,26 +214,21 @@ export default function UpdateCNBComponent() {
         supplement = true;
         return false;
       }
-      if (
-        item.compensationComponentId &&
-        item.period &&
-        item.rateOrAmount &&
-        item.taxStatus
-      ) {
-        supplement = true;
-      } else {
-        supplement = false;
-      }
+      ifThenElse(compareCheck(
+        item.compensationComponentId,
+        !!item.period,
+        !!item.rateOrAmount,
+        !!item.taxStatus
+      ), supplement = true, supplement = false);
     });
 
-    if (
-      value.name !== '' &&
-      value.compensationComponentId !== '' &&
-      value.period !== '' &&
-      value.rateOrAmount !== '' &&
-      // value.taxStatus !== '' &&
+    if (compareCheck(
+      value.name !== '',
+      value.compensationComponentId !== '',
+      value.period !== '',
+      value.rateOrAmount !== '',
       supplement
-    ) {
+    )) {
       const tempBase = dynamicPayloadBaseCnb(listBaseCompensation, value.compensationComponentId, value);
 
       const tempSupplementary: any = [];
@@ -293,20 +288,20 @@ export default function UpdateCNBComponent() {
   useEffect(() => {
     if (cnbDetail) {
       setInitialValues({
-        name: cnbDetail.name || '',
-        compensationComponentId: cnbDetail.base?.component?.id || '',
-        period: cnbDetail.base?.term?.id || '',
-        taxStatus: cnbDetail.base?.isTaxable ? 'true' : 'false' || '',
-        rateOrAmount: cnbDetail.base?.amount || '',
-        overtime: cnbDetail?.overtime || '',
-        percentage: cnbDetail?.base?.rate || 0,
+        name: ifEmptyReplace(cnbDetail.name, ''),
+        compensationComponentId: ifEmptyReplace(cnbDetail.base?.component?.id, ''),
+        period: ifEmptyReplace(cnbDetail.base?.term?.id, ''),
+        taxStatus: ifThenElse(cnbDetail.base?.isTaxable, 'true', 'false'),
+        rateOrAmount: ifEmptyReplace(cnbDetail.base?.amount, ''),
+        overtime: ifEmptyReplace(cnbDetail?.overtime, ''),
+        percentage: ifEmptyReplace(cnbDetail?.base?.rate, 0),
         supplementary: cnbDetail.supplementaries?.map(val => {
           return {
-            compensationComponentId: val.component?.id || '',
-            period: val.term?.id || '',
-            rateOrAmount: getPaymentType(val.component?.id, listSuppCompensation)?.withPercentage ? val.rate : val.amount || '',
-            taxStatus: val.isTaxable || '',
-            id: val?.id || ''
+            compensationComponentId: ifEmptyReplace(val.component?.id, ''),
+            period: ifEmptyReplace(val.term?.id, ''),
+            rateOrAmount: ifThenElse(getPaymentType(val.component?.id, listSuppCompensation)?.withPercentage, val.rate, ifEmptyReplace(val.amount, '')),
+            taxStatus: ifEmptyReplace(val.isTaxable, ''),
+            id: ifEmptyReplace(val?.id, '')
           };
         }) || [],
       });
@@ -366,8 +361,8 @@ export default function UpdateCNBComponent() {
                       fullWidth
                       required
                       placeholder={t(`${tPath}profile_name_placeholder`)}
-                      error={formik.touched.name && Boolean(formik.errors.name)}
-                      helperText={formik.touched.name && formik.errors.name}
+                      error={compareCheck(formik.touched.name, Boolean(formik.errors.name))}
+                      helperText={ifThenElse(formik.touched.name, formik.errors.name, null)}
                       value={formik.values.name}
                       onChange={(e) =>
                         formik.setFieldValue(
@@ -405,10 +400,7 @@ export default function UpdateCNBComponent() {
                       <div style={{ marginBottom: '16px' }}>
                         <FormControl
                           fullWidth
-                          error={
-                            formik.touched.compensationComponentId &&
-                            Boolean(formik.errors.compensationComponentId)
-                          }
+                          error={compareCheck(formik.touched.compensationComponentId, Boolean(formik.errors.compensationComponentId))}
                         >
                           <Typography>
                             {t(`${tPath}base_section.compensation_component`)}
@@ -451,8 +443,7 @@ export default function UpdateCNBComponent() {
                             ))}
                           </Select>
                           <FormHelperText>
-                            {formik.touched.compensationComponentId &&
-                              formik.errors.compensationComponentId}
+                            {ifThenElse(formik.touched.compensationComponentId, formik.errors.compensationComponentId, null)}
                           </FormHelperText>
                         </FormControl>
                       </div>
@@ -462,10 +453,7 @@ export default function UpdateCNBComponent() {
                         {t(`${tPath}base_section.tax_status`)}<span style={{ color: 'red' }}>*</span>
                       </Typography>
                       <FormControl
-                        error={
-                          formik.touched.taxStatus &&
-                          Boolean(formik.errors.taxStatus)
-                        }
+                        error={compareCheck(formik.touched.taxStatus, Boolean(formik.errors.taxStatus))}
                       >
                         <RadioGroup
                           row
@@ -497,7 +485,7 @@ export default function UpdateCNBComponent() {
                           />
                         </RadioGroup>
                         <FormHelperText>
-                          {formik.touched.taxStatus && formik.errors.taxStatus}
+                          {ifThenElse(formik.touched.taxStatus, formik.errors.taxStatus, null)}
                         </FormHelperText>
                       </FormControl>
                     </Grid>
@@ -514,14 +502,8 @@ export default function UpdateCNBComponent() {
                           size='small'
                           fullWidth
                           type='number'
-                          error={
-                            formik.touched.rateOrAmount &&
-                            Boolean(formik.errors.rateOrAmount)
-                          }
-                          helperText={
-                            formik.touched.rateOrAmount &&
-                            formik.errors.rateOrAmount
-                          }
+                          error={compareCheck(formik.touched.rateOrAmount, Boolean(formik.errors.rateOrAmount))}
+                          helperText={ifThenElse(formik.touched.rateOrAmount, formik.errors.rateOrAmount, null)}
                           value={formik.values.rateOrAmount}
                           onChange={(e) =>
                             formik.setFieldValue('rateOrAmount', e.target.value)
@@ -562,9 +544,7 @@ export default function UpdateCNBComponent() {
                       <Grid item xs={3} md={3} lg={3} xl={3}>
                         <FormControl
                           fullWidth
-                          error={
-                            formik.touched.period && Boolean(formik.errors.period)
-                          }
+                          error={compareCheck(formik.touched.period, Boolean(formik.errors.period))}
                         >
                           <Select
                             sx={{ marginTop: '1.8rem' }}
@@ -593,7 +573,7 @@ export default function UpdateCNBComponent() {
                             ))}
                           </Select>
                           <FormHelperText>
-                            {formik.touched.period && formik.errors.period}
+                            {ifThenElse(formik.touched.period, formik.errors.period, null)}
                           </FormHelperText>
                         </FormControl>
                       </Grid>
@@ -633,7 +613,7 @@ export default function UpdateCNBComponent() {
                 render={(arrayHelper) => {
                   return (
                     <div>
-                      {formik?.values?.supplementary?.length > 0 && (
+                      {ifThenElse(formik?.values?.supplementary?.length > 0, (
                         <>
                           <Typography
                             style={{
@@ -659,14 +639,12 @@ export default function UpdateCNBComponent() {
                                         fullWidth
                                         {...(formik.touched?.supplementary &&
                                           formik.errors?.supplementary && {
-                                          error:
-                                            formik.touched?.supplementary[i]
-                                              ?.compensationComponentId &&
-                                            Boolean(
-                                              (
-                                                formik.errors?.supplementary[i] as unknown as SuplementType
-                                              )?.compensationComponentId
-                                            ),
+                                          error: compareCheck(
+                                            formik.touched?.supplementary[i]?.compensationComponentId,
+                                            Boolean((
+                                              formik.errors?.supplementary[i] as unknown as SuplementType
+                                            )?.compensationComponentId
+                                            )),
                                         })}
                                       >
                                         <Select
@@ -744,21 +722,21 @@ export default function UpdateCNBComponent() {
                                         fullWidth
                                         {...(formik.touched?.supplementary &&
                                           formik.errors?.supplementary && {
-                                          error:
-                                            formik.touched?.supplementary[i]
-                                              ?.period &&
+                                          error: compareCheck(
+                                            formik.touched?.supplementary[i]?.period,
                                             Boolean(
                                               (
                                                 formik.errors?.supplementary[
                                                 i
                                                 ] as unknown as SuplementType
                                               )?.period
-                                            ),
+                                            )
+                                          ),
                                         })}
                                       >
                                         <RadioGroup
                                           row
-                                          value={suplement?.isTaxable || formik?.values?.supplementary[i]?.taxStatus}
+                                          value={ifEmptyReplace(suplement?.isTaxable, formik?.values?.supplementary[i]?.taxStatus)}
                                           onChange={(e) =>
                                             formik.setFieldValue(
                                               `supplementary.${i}.taxStatus`,
@@ -830,29 +808,28 @@ export default function UpdateCNBComponent() {
                                       type='number'
                                       {...(formik.touched?.supplementary &&
                                         formik.errors?.supplementary && {
-                                        error:
-                                          formik.touched?.supplementary[i]
-                                            ?.rateOrAmount &&
+                                        error: compareCheck(
+                                          formik.touched?.supplementary[i]?.rateOrAmount,
                                           Boolean(
                                             (
                                               formik.errors?.supplementary[
                                               i
                                               ] as unknown as SuplementType
                                             )?.rateOrAmount
-                                          ),
+                                          )
+                                        ),
                                       })}
                                       {...(formik.touched?.supplementary &&
                                         formik.errors?.supplementary && {
-                                        helperText:
-                                          formik.touched?.supplementary[i]
-                                            ?.rateOrAmount &&
+                                        helperText: ifThenElse(
+                                          formik.touched?.supplementary[i]?.rateOrAmount,
                                           (
                                             formik.errors?.supplementary[
                                             i
                                             ] as unknown as SuplementType
-                                          )?.rateOrAmount,
+                                          )?.rateOrAmount, null)
                                       })}
-                                      value={suplement?.rateOrAmount || formik.values.supplementary[i].rateOrAmount}
+                                      value={ifEmptyReplace(suplement?.rateOrAmount, formik.values.supplementary[i].rateOrAmount)}
                                       onChange={(e) =>
                                         formik.setFieldValue(
                                           `supplementary.${i}.rateOrAmount`,
@@ -903,23 +880,23 @@ export default function UpdateCNBComponent() {
                                       fullWidth
                                       {...(formik.touched?.supplementary &&
                                         formik.errors?.supplementary && {
-                                        error:
-                                          formik.touched?.supplementary[i]
-                                            ?.period &&
+                                        error: compareCheck(
+                                          formik.touched?.supplementary[i]?.period,
                                           Boolean(
                                             (
                                               formik.errors?.supplementary[
                                               i
                                               ] as unknown as SuplementType
                                             )?.period
-                                          ),
+                                          )
+                                        ),
                                       })}
                                     >
                                       <Select
                                         sx={{ marginTop: '1.8rem' }}
                                         size='small'
                                         fullWidth
-                                        value={suplement?.term?.id || formik.values.supplementary[i]?.period}
+                                        value={ifEmptyReplace(suplement?.term?.id, formik.values.supplementary[i]?.period)}
                                         onChange={(e) =>
                                           formik.setFieldValue(
                                             `supplementary.${i}.period`,
@@ -947,13 +924,14 @@ export default function UpdateCNBComponent() {
                                       {formik.touched?.supplementary &&
                                         formik.errors?.supplementary && (
                                           <FormHelperText>
-                                            {formik.touched?.supplementary[i]
-                                              ?.period &&
+                                            {ifThenElse(
+                                              formik.touched?.supplementary[i]?.period,
                                               (
                                                 formik.errors?.supplementary[
                                                 i
                                                 ] as unknown as SuplementType
-                                              )?.period}
+                                              )?.period,
+                                              null)}
                                           </FormHelperText>
                                         )}
                                     </FormControl>
@@ -963,7 +941,7 @@ export default function UpdateCNBComponent() {
                             ))}
                           </Form>
                         </>
-                      )}
+                      ), null)}
                       <section>
                         <AddButton
                           color='secondary'

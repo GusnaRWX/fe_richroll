@@ -10,7 +10,7 @@ import { Employees } from '@/types/employees';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import dayjs from 'dayjs';
 import { postEmployeeInfoRequested, postPersonalInformationRequested, postEmergencyRequested, postCnbEmployeeRequested, postWorkScheduleRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
-import { base64ToFile, getCompanyData } from '@/utils/helper';
+import { base64ToFile, getCompanyData, ifThenElse } from '@/utils/helper';
 import { resetResponserMessage } from '@/store/reducers/slice/responserSlice';
 
 const EmployeeInformationFormClient = dynamic(() => import('./EmployeeInformationForm'), {
@@ -219,14 +219,14 @@ function EmployeeCreateComponent() {
       if (!data.isPermanent) {
         inputData.append('endDate', dayjs(data.endDate).format('YYYY-MM-DD'));
       }
-      inputData.append('isPermanent', data.isPermanent ? 'true' : 'false');
+      inputData.append('isPermanent', ifThenElse(data.isPermanent, 'true', 'false'));
       if (data.department !== '') {
         inputData.append('department', data.department);
       }
       if (data.position !== '') {
         inputData.append('position', data.position);
       }
-      inputData.append('isSelfService', data.isSelfService ? 'true' : 'false');
+      inputData.append('isSelfService', ifThenElse(data.isSelfService, 'true', 'false'));
 
       dispatch({
         type: postEmployeeInfoRequested.toString(),

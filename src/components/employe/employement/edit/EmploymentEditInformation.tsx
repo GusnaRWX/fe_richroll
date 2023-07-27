@@ -6,7 +6,8 @@ import { Image as ImageType } from '@/utils/assetsConstant';
 import { styled as MuiStyled } from '@mui/material/styles';
 import {
   convertImageParams,
-  ifThenElse
+  ifThenElse,
+  compareCheck
 } from '@/utils/helper';
 import styled from '@emotion/styled';
 import { Input, Select as CustomSelect, FileUploadModal, CropperImage } from '@/components/_shared/form';
@@ -29,8 +30,6 @@ const AsteriskComponent = MuiStyled('span')(({ theme }) => ({
 interface ImagePriviewProps extends HTMLAttributes<HTMLDivElement> {
   image?: string;
 }
-
-
 
 const modalStyleCamera = {
   position: 'absolute',
@@ -179,12 +178,15 @@ const EmploymentEditInformation = ({ refProp, setValues, infoValues, handleFirst
   return (
     <>
       {
-        Object.keys(formik.errors).length > 0 && (
-          <Alert
-            severity='error'
-            content='Please fill in all the mandatory fields'
-            icon={<CancelIcon />}
-          />
+        ifThenElse(Object.keys(formik.errors).length > 0,
+          (
+            <Alert
+              severity='error'
+              content='Please fill in all the mandatory fields'
+              icon={<CancelIcon />}
+            />
+          ),
+          null
         )
       }
       <Box
@@ -204,8 +206,8 @@ const EmploymentEditInformation = ({ refProp, setValues, infoValues, handleFirst
               color='primary.500'
             />
             <div style={{ position: 'relative' }}>
-              <ImageReview image={!tempImageCrop ? ImageType.PLACEHOLDER : tempImageCrop} onClick={handleOpen} />
-              {tempImageCrop && (
+              <ImageReview image={ifThenElse(!tempImageCrop, ImageType.PLACEHOLDER, tempImageCrop)} onClick={handleOpen} />
+              {ifThenElse(tempImageCrop, (
                 <IconButton
                   sx={{
                     position: 'absolute',
@@ -224,12 +226,12 @@ const EmploymentEditInformation = ({ refProp, setValues, infoValues, handleFirst
                 >
                   <FiTrash2 style={{ zIndex: '999', color: 'red' }} />
                 </IconButton>
-              )}
+              ), null)}
             </div>
             {
-              formik.errors.picture && (
+              ifThenElse(formik.errors.picture, (
                 <Typography component='span' fontSize='12px' color='red.500'>This field is required</Typography>
-              )
+              ), null)
             }
           </Box>
           <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
@@ -243,8 +245,8 @@ const EmploymentEditInformation = ({ refProp, setValues, infoValues, handleFirst
                 size='small'
                 value={formik.values.fullName}
                 placeholder='Input Full Name'
-                error={formik.touched.fullName && Boolean(formik.errors.fullName)}
-                helperText={formik.touched.fullName && formik.errors.fullName}
+                error={compareCheck(formik.touched.fullName, Boolean(formik.errors.fullName))}
+                helperText={ifThenElse(formik.touched.fullName, formik.errors.fullName, null)}
               />
             </Grid>
             <Grid item xs={6} md={6} lg={6} xl={6}>
@@ -294,8 +296,8 @@ const EmploymentEditInformation = ({ refProp, setValues, infoValues, handleFirst
                     onBlur={formik.handleBlur}
                     size='small'
                     value={formik.values.phoneNumber}
-                    error={formik.touched.phoneNumber && Boolean(formik.errors.phoneNumber)}
-                    helperText={formik.touched.phoneNumber && formik.errors.phoneNumber}
+                    error={compareCheck(formik.touched.phoneNumber, Boolean(formik.errors.phoneNumber))}
+                    helperText={ifThenElse(formik.touched.phoneNumber, formik.errors.phoneNumber, null)}
                   />
                 </Grid>
               </Grid>
@@ -310,8 +312,8 @@ const EmploymentEditInformation = ({ refProp, setValues, infoValues, handleFirst
                 onBlur={formik.handleBlur}
                 placeholder='Personal Email Address'
                 value={formik.values.email}
-                error={formik.touched.email && Boolean(formik.errors.email)}
-                helperText={formik.touched.email && formik.errors.email}
+                error={compareCheck(formik.touched.email, Boolean(formik.errors.email))}
+                helperText={ifThenElse(formik.touched.email, formik.errors.email, null)}
               />
             </Grid>
           </Grid>
@@ -322,7 +324,7 @@ const EmploymentEditInformation = ({ refProp, setValues, infoValues, handleFirst
             </Grid>
             <Grid item md={6}>
               <Text title='End Date' fontWeight={400} color='grey.400' fontSize='14px' />
-              <Text title={detailInformation?.endDate === null ? '-' : dayjs(detailInformation.endDate).format('DD/MM/YYYY')} fontWeight={400} color='grey.600' fontSize='14px' />
+              <Text title={ifThenElse(detailInformation?.endDate === null, '-', dayjs(detailInformation.endDate).format('DD/MM/YYYY'))} fontWeight={400} color='grey.600' fontSize='14px' />
             </Grid>
             <Grid item md={6}>
               <Text title='Department' fontWeight={400} color='grey.400' fontSize='14px' />

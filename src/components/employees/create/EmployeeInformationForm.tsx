@@ -22,7 +22,7 @@ import { CameraAlt, Cancel } from '@mui/icons-material';
 import { Employees } from '@/types/employees';
 import { validationSchemeEmployeeInformation } from './validate';
 import { useFormik } from 'formik';
-import { convertImageParams, getCompanyData, randomInt } from '@/utils/helper';
+import { convertImageParams, getCompanyData, randomInt, ifThenElse } from '@/utils/helper';
 import { getListPositionRequested } from '@/store/reducers/slice/options/optionSlice';
 import { Option } from '@/types/option';
 import { BsTrash3 } from 'react-icons/bs';
@@ -235,22 +235,22 @@ function EmployeeInformationForm({ refProp, nextPage, nextPermPage, setValues, i
   return (
     <div>
       {
-        Object.keys(formik.errors).length > 0 && (
+        ifThenElse(Object.keys(formik.errors).length > 0, (
           <Alert
             severity='error'
             content='Please fill in all the mandatory fields'
             icon={<Cancel />}
           />
-        )
+        ), null)
       }
       {
-        ![200, 201, 0].includes(responser?.code) && (
+        ifThenElse(![200, 201, 0].includes(responser?.code), (
           <Alert
             severity='error'
             content={responser?.message}
             icon={<Cancel />}
           />
-        )
+        ), null)
       }
       <Text
         component='h3'
@@ -268,8 +268,8 @@ function EmployeeInformationForm({ refProp, nextPage, nextPermPage, setValues, i
             color='primary.500'
           /> */}
           <div style={{ position: 'relative' }}>
-            <ImageReview image={!tempImageCrop ? ImageType.PLACEHOLDER : tempImageCrop} onClick={handleOpen} />
-            {tempImageCrop && (
+            <ImageReview image={ifThenElse(!tempImageCrop, ImageType.PLACEHOLDER, tempImageCrop)} onClick={handleOpen} />
+            {ifThenElse(tempImageCrop, (
               <IconButton
                 sx={{
                   position: 'absolute',
@@ -288,13 +288,13 @@ function EmployeeInformationForm({ refProp, nextPage, nextPermPage, setValues, i
               >
                 <FiTrash2 style={{ zIndex: '999', color: 'red' }} />
               </IconButton>
-            )}
+            ), null)}
           </div>
 
           {
-            formik.errors.picture && (
+            ifThenElse(formik.errors.picture, (
               <Typography component='span' fontSize='12px' color='red.500'>This field is required</Typography>
-            )
+            ), null)
           }
         </Box>
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
@@ -621,7 +621,7 @@ function EmployeeInformationForm({ refProp, nextPage, nextPermPage, setValues, i
       >
         <Box sx={modalStyleCamera}>
           {
-            isCaptureEnable && (
+            ifThenElse(isCaptureEnable, (
               <>
                 <Box sx={{
                   display: 'flex',
@@ -648,7 +648,7 @@ function EmployeeInformationForm({ refProp, nextPage, nextPermPage, setValues, i
                   </IconButton>
                 </Box>
               </>
-            )
+            ), null)
           }
         </Box>
       </Modal>
