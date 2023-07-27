@@ -72,6 +72,10 @@ export const getDetailAttendance = (payload: Payroll.ParamsDetailAttendance) => 
   return get(`payrolls/${payload?.id}/attendances/${payload?.attendanceID}/employees/${payload?.employeeID}`);
 };
 
+export const putPayrollAttendanceSchedule = (payload) => {
+  return put(`payrolls/${payload?.id}/attendances/${payload?.attendanceID}/employees/${payload?.employeeID}`, payload.data as Payroll.PayrollAttendanceScheduleItemsType);
+};
+
 export const putPayrollGrossesFinal = (payload) => {
   return patch(`payrolls/${payload.id}/grosses/final`, {});
 };

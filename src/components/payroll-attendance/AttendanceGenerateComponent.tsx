@@ -90,6 +90,8 @@ function AttendanceGenerateComponent() {
   const [hydrated, setHaydrated] = useState(false);
   const [openCal, setOpenCal] = useState(false);
   const { responser } = useAppSelectors((state) => state);
+  const [attendanceID, setAttendanceID] = useState(0);
+  const [employeeID, setEmployeeID] = useState(0);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -102,6 +104,8 @@ function AttendanceGenerateComponent() {
 
   // function for open modal calendar
   const handleOpenCalendar = async (itemId, employeeId) => {
+    setAttendanceID(itemId);
+    setEmployeeID(employeeId);
     await dispatch({
       type: getDetailAttendanceRequested.toString(),
       payload: {
@@ -115,6 +119,8 @@ function AttendanceGenerateComponent() {
 
   // function for close modal calendar
   const handleCloseCalendar = () => {
+    setAttendanceID(0);
+    setEmployeeID(0);
     setOpenCal(false);
   };
 
@@ -329,6 +335,9 @@ function AttendanceGenerateComponent() {
         open={openCal}
         handleClose={() => handleCloseCalendar()}
         handleConfirm={() => handleCloseCalendar()}
+        payrollID={payrollId}
+        attendanceID={attendanceID}
+        employeeID={employeeID}
       />
       <ListEmployeeModal
         open={open}
