@@ -151,7 +151,7 @@ const LeaveBalanceProfileDetailComponent = () => {
         Leave Balance
       </Typography>
       <Paper sx={{ p: '16px', mb: '24px' }}>
-        <LeaveBalanceProfileDetailTable tabValue={0} />
+        <LeaveBalanceProfileDetailTable />
       </Paper>
       <Typography
         style={{

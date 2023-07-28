@@ -1,7 +1,4 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
 import {
   TableCell,
   TableRow,
@@ -22,17 +19,9 @@ const headerItems = [
   { id: 'shared', label: 'Shared Parental Leave' },
 ];
 
-interface LeaveBalanceProfileDetailTableProps {
-  tabValue: number;
-}
-
 type Order = 'asc' | 'desc';
 
-function LeaveBalanceProfileDetailTable({
-  // eslint-disable-next-line no-unused-vars
-  tabValue,
-}: LeaveBalanceProfileDetailTableProps) {
-  const router = useRouter();
+function LeaveBalanceProfileDetailTable() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(1);
   const [direction, setDirection] = useState<Order>('desc');
