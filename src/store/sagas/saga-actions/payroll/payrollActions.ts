@@ -20,6 +20,10 @@ export const deletePayroll = (payload) => {
   return del(`payrolls/${payload}`);
 };
 
+export const deletePayrollAssist = (payload) => {
+  return del(`payrolls/assistants/${payload}`);
+};
+
 export const putPayrollWorkflow = (payload) => {
   return put(`payrolls/${payload.id}`, payload.data as Payroll.WorkflowType);
 };
@@ -66,6 +70,10 @@ export const getPayrollGrosses = (payload: string) => {
 };
 export const getDetailAttendance = (payload: Payroll.ParamsDetailAttendance) => {
   return get(`payrolls/${payload?.id}/attendances/${payload?.attendanceID}/employees/${payload?.employeeID}`);
+};
+
+export const putPayrollAttendanceSchedule = (payload) => {
+  return put(`payrolls/${payload?.id}/attendances/${payload?.attendanceID}/employees/${payload?.employeeID}`, payload.data as Payroll.PayrollAttendanceScheduleItemsType);
 };
 
 export const putPayrollGrossesFinal = (payload) => {

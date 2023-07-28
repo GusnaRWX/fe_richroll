@@ -8,14 +8,15 @@ import {
 } from '@mui/material';
 import { IconButton } from '@/components/_shared/form';
 import { HiChevronDown, HiChevronUp } from 'react-icons/hi';
-import { BsTrashFill, BsFillEyeFill } from 'react-icons/bs';
+import { BsTrashFill } from 'react-icons/bs';
 import { FiDownload } from 'react-icons/fi';
 import styled from '@emotion/styled';
-import { useRouter } from 'next/router';
 import { ConfirmationModal } from '@/components/_shared/common';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 import { ifEmptyReplace, ifThenElse } from '@/utils/helper';
+import { useAppDispatch } from '@/hooks/index';
+import { deletePayrollRequested, deletePayrollAssistRequested } from '@/store/reducers/slice/payroll/payrollSlice';
 
 const ButtonWrapper = styled.div`
  display: flex;
@@ -62,12 +63,38 @@ const DisbursementType = styled.div`
 `;
 
 function PayrollAssistantRow (row) {
+  const dispatch = useAppDispatch();
   const { item, tabValue } = row;
   const [open, setOpen] = useState(false);
-  const [deleteConfirmation, setDeleteConfirmation] = useState(false);
+  const [deleteConfirmation, setDeleteConfirmation] = useState({ id: 0, open: false });
   const {t} = useTranslation();
   const t_popupKey = 'payroll_and_disbursement.payroll_assistant.popup';
-  const router = useRouter();
+
+  const openInNewTab = (url) => {
+    window.open(url, '_blank', 'noreferrer');
+  };
+
+  const deletePayroll = (Id: string | number) => {
+    if (tabValue === 0) {
+      dispatch({
+        type: deletePayrollRequested.toString(),
+        payload: Id
+      });
+    } else {
+      dispatch({
+        type: deletePayrollAssistRequested.toString(),
+        payload: Id
+      });
+    }
+  };
+
+  const handleDeleteOpen = (id) => {
+    setDeleteConfirmation({ id: id, open: true });
+  };
+
+  const handleDeleteClose = () => {
+    setDeleteConfirmation({ id: 0, open: false });
+  };
 
   return (
     <React.Fragment>
@@ -81,7 +108,7 @@ function PayrollAssistantRow (row) {
             {tabValue === 0 && (
               <IconButton
                 parentColor='#FEE2E2'
-                onClick={() => setDeleteConfirmation(true)}
+                onClick={() => handleDeleteOpen(item?.id)}
                 icons={
                   <BsTrashFill fontSize={20} color='#EF4444'/>
                 }
@@ -90,15 +117,8 @@ function PayrollAssistantRow (row) {
             {tabValue === 1 && (
               <>
                 <IconButton
-                  parentColor='#E9EFFF'
-                  onClick={() => {router.push('/payroll-disbursement/payroll-assistant/view');}}
-                  icons={
-                    <BsFillEyeFill fontSize={20} color='#223567'/>
-                  }
-                />
-                <IconButton
                   parentColor='#FEE2E2'
-                  onClick={() => setDeleteConfirmation(true)}
+                  onClick={() => handleDeleteOpen(item?.id)}
                   icons={
                     <BsTrashFill fontSize={20} color='#EF4444'/>
                   }
@@ -141,9 +161,9 @@ function PayrollAssistantRow (row) {
                   color='inherit'
                   size='small'
                   sx={{ color: '#111827' }}
-                  onClick={() => { console.log(true); }}
+                  onClick={() => { openInNewTab(item?.attendance?.attachment?.link); }}
                 >
-                  Attendance Report.pdf &nbsp;<FiDownload fontSize='small' />
+                  {item?.attendance?.attachment?.filename} &nbsp;<FiDownload fontSize='small' />
                 </MuiButton>
               </Grid>
             </Grid>
@@ -169,9 +189,9 @@ function PayrollAssistantRow (row) {
                   color='inherit'
                   size='small'
                   sx={{ color: '#111827' }}
-                  onClick={() => { console.log(true); }}
+                  onClick={() => { openInNewTab(item?.gross?.attachment?.link); }}
                 >
-                  Gross Payroll Report.pdf &nbsp;<FiDownload fontSize='small' />
+                  {item?.gross?.attachment?.filename} &nbsp;<FiDownload fontSize='small' />
                 </MuiButton>
               </Grid>
             </Grid>
@@ -197,9 +217,9 @@ function PayrollAssistantRow (row) {
                   color='inherit'
                   size='small'
                   sx={{ color: '#111827' }}
-                  onClick={() => { console.log(true); }}
+                  onClick={() => { openInNewTab(item?.net?.attachment?.link); }}
                 >
-                  Net Payroll Report.pdf &nbsp;<FiDownload fontSize='small' />
+                  {item?.net?.attachment?.filename} &nbsp;<FiDownload fontSize='small' />
                 </MuiButton>
               </Grid>
             </Grid>
@@ -225,9 +245,9 @@ function PayrollAssistantRow (row) {
                   color='inherit'
                   size='small'
                   sx={{ color: '#111827' }}
-                  onClick={() => { console.log(true); }}
+                  onClick={() => { openInNewTab(item?.disbursement?.attachment?.link); }}
                 >
-                  Disbursement Receipt.pdf &nbsp;<FiDownload fontSize='small' />
+                  {item?.disbursement?.attachment?.filename} &nbsp;<FiDownload fontSize='small' />
                 </MuiButton>
               </Grid>
             </Grid>
@@ -236,13 +256,13 @@ function PayrollAssistantRow (row) {
       </TableRow>
 
       <ConfirmationModal
-        open={deleteConfirmation}
-        handleClose={() => setDeleteConfirmation(false)}
+        open={deleteConfirmation?.open}
+        handleClose={() => handleDeleteClose()}
         title={t(`${t_popupKey}.delete.title`)}
         content={t(`${t_popupKey}.delete.desc`)}
         withCallback
         noChange={true}
-        callback={() => setDeleteConfirmation(false)}
+        callback={() => deletePayroll(deleteConfirmation?.id)}
       />
     </React.Fragment>
   );

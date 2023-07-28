@@ -97,7 +97,7 @@ function PayrollAssistantTable({
         }
       });
     }
-  }, [rowsPerPage, page, search, sort, direction, responser.code, tabValue]);
+  }, [rowsPerPage, page, search, sort, direction, responser, tabValue]);
 
   useEffect(() => {
     setHaydrated(true);

@@ -6,6 +6,7 @@
  * @returns
  */
 import { getStorage } from './storage';
+import dayjs from 'dayjs';
 
 export const checkRegulerExpression = (expression: string | RegExp, value: string | number): boolean => {
   const regex = new RegExp(expression);
@@ -457,5 +458,183 @@ export const getPeriod = (period: number) => {
       return 'Saturday';
     default:
       return 'Sunday';
+  }
+};
+
+type DayJS = dayjs.Dayjs | null | string;
+
+interface InitialValuesPAType {
+  color: string;
+  end: DayJS;
+  id: string;
+  isHalfDay: boolean;
+  isOvertime: boolean;
+  leaveStatus: string | number;
+  leaveType: string | number;
+  multiplier: number;
+  name: string;
+  note?: string | null;
+  start: DayJS;
+  title: string;
+  duration: number;
+  event_id: string | number;
+}
+
+export const getPayloadAttendancePayroll = (val: InitialValuesPAType, event) => {
+  switch(val.leaveType) {
+    case 1:
+      return {
+        color: val?.color,
+        end: new Date(dayjs(event?.end).format('YYYY-MM-DD') + ' ' + dayjs(val.end).format('HH:mm')),
+        id: val?.id,
+        isHalfDay: val?.isHalfDay,
+        isOvertime: val?.isOvertime,
+        leaveStatus: val?.leaveStatus || event?.leaveStatus,
+        leaveType: val?.leaveType,
+        multiplier: val?.multiplier,
+        name: val?.name,
+        note: val?.note || '',
+        start: new Date(dayjs(event?.start).format('YYYY-MM-DD') + ' ' + dayjs(val.start).format('HH:mm')),
+        title: val?.title,
+        duration: 0,
+        event_id: val?.event_id
+      };
+    case 2:
+      return {
+        color: val?.color,
+        end: new Date(dayjs(event?.end).format('YYYY-MM-DD') + ' ' + dayjs(val.end).format('HH:mm')),
+        id: val?.id,
+        isHalfDay: val?.isHalfDay,
+        isOvertime: val?.isOvertime,
+        leaveStatus: val?.leaveStatus || event?.leaveStatus,
+        leaveType: val?.leaveType,
+        multiplier: val?.multiplier,
+        name: val?.name,
+        note: val?.note || '',
+        start: new Date(dayjs(event?.start).format('YYYY-MM-DD') + ' ' + dayjs(val.start).format('HH:mm')),
+        title: val?.title,
+        duration: 0,
+        event_id: val?.event_id
+      };
+    case 3:
+      return {
+        color: val?.color,
+        end: new Date(dayjs(event?.end).format('YYYY-MM-DD') + ' ' + dayjs(val.end).format('HH:mm')),
+        id: val?.id,
+        isHalfDay: val?.isHalfDay,
+        isOvertime: val?.isOvertime,
+        leaveStatus: val?.leaveStatus || event?.leaveStatus,
+        leaveType: val?.leaveType,
+        multiplier: val?.multiplier,
+        name: val?.name,
+        note: val?.note || '',
+        start: new Date(dayjs(event?.start).format('YYYY-MM-DD') + ' ' + dayjs(val.start).format('HH:mm')),
+        title: val?.title,
+        duration: 0,
+        event_id: val?.event_id
+      };
+    case 4:
+      return {
+        color: val?.color,
+        end: new Date(dayjs(event?.end).format('YYYY-MM-DD') + ' ' + dayjs(val.end).format('HH:mm')),
+        id: val?.id,
+        isHalfDay: val?.isHalfDay,
+        isOvertime: val?.isOvertime,
+        leaveStatus: val?.leaveStatus || event?.leaveStatus,
+        leaveType: val?.leaveType,
+        multiplier: val?.multiplier,
+        name: val?.name,
+        note: val?.note || '',
+        start: new Date(dayjs(event?.start).format('YYYY-MM-DD') + ' ' + dayjs(val.start).format('HH:mm')),
+        title: val?.title,
+        duration: 0,
+        event_id: val?.event_id
+      };
+    case 5:
+      return {
+        color: val?.color,
+        end: new Date(dayjs(event?.end).format('YYYY-MM-DD') + ' ' + dayjs(val.end).format('HH:mm')),
+        id: val?.id,
+        isHalfDay: val?.isHalfDay,
+        isOvertime: val?.isOvertime,
+        leaveStatus: val?.leaveStatus || event?.leaveStatus,
+        leaveType: val?.leaveType,
+        multiplier: val?.multiplier,
+        name: val?.name,
+        note: val?.note || '',
+        title: val?.title,
+        duration: 0,
+        event_id: val?.event_id
+      };
+    case 6:
+      return {
+        color: val?.color,
+        end: new Date(dayjs(event?.end).format('YYYY-MM-DD') + ' ' + dayjs(val.end).format('HH:mm')),
+        id: val?.id,
+        isHalfDay: val?.isHalfDay,
+        isOvertime: val?.isOvertime,
+        leaveStatus: val?.leaveStatus || event?.leaveStatus,
+        leaveType: val?.leaveType,
+        multiplier: val?.multiplier,
+        name: val?.name,
+        note: val?.note || '',
+        start: new Date(dayjs(event?.start).format('YYYY-MM-DD') + ' ' + dayjs(val.start).format('HH:mm')),
+        title: val?.title,
+        duration: 0,
+        event_id: val?.event_id
+      };
+    case 7:
+      return {
+        color: val?.color,
+        end: new Date(dayjs(event?.end).format('YYYY-MM-DD') + ' ' + dayjs(val.end).format('HH:mm')),
+        id: val?.id,
+        isHalfDay: val?.isHalfDay,
+        isOvertime: val?.isOvertime,
+        leaveStatus: val?.leaveStatus || event?.leaveStatus,
+        leaveType: 0,
+        multiplier: val?.multiplier,
+        name: val?.name,
+        note: val?.note || '',
+        start: new Date(dayjs(event?.start).format('YYYY-MM-DD') + ' ' + dayjs(val.start).format('HH:mm')),
+        title: val?.title,
+        duration: 0,
+        event_id: val?.event_id
+      };
+    case 8:
+      return {
+        color: val?.color,
+        end: new Date(dayjs(event?.end).format('YYYY-MM-DD') + ' ' + dayjs(val.end).format('HH:mm')),
+        id: val?.id,
+        isHalfDay: val?.isHalfDay,
+        isOvertime: val?.isOvertime,
+        leaveStatus: val?.leaveStatus || event?.leaveStatus,
+        leaveType: 0,
+        multiplier: val?.multiplier,
+        name: val?.name,
+        note: val?.note || '',
+        start: new Date(dayjs(event?.start).format('YYYY-MM-DD') + ' ' + dayjs(val.start).format('HH:mm')),
+        title: event?.title,
+        duration: 0,
+        event_id: event?.event_id
+      };
+    case 9:
+      return {
+        color: val?.color,
+        end: new Date(dayjs(dayjs(event.start).format('YYYY-MM-DD') + ' ' + dayjs(val?.start).format('HH:mm')).add(val?.duration, 'hours').format('YYYY-MM-DD HH:mm')),
+        id: val?.id,
+        isHalfDay: val?.isHalfDay,
+        isOvertime: val?.isOvertime,
+        leaveStatus: val?.leaveStatus || event?.leaveStatus,
+        leaveType: 0,
+        multiplier: val?.multiplier,
+        name: val?.name,
+        note: val?.note || '',
+        start: new Date(dayjs(event?.start).format('YYYY-MM-DD') + ' ' + dayjs(val.start).format('HH:mm')),
+        title: val?.title,
+        duration: val?.duration,
+        event_id: event?.event_id
+      };
+    default :
+      return null;
   }
 };

@@ -628,10 +628,8 @@ export default function CreateCNBComponent() {
                                             {...(formik.touched
                                               ?.supplementary &&
                                               formik.errors?.supplementary && {
-                                                error:
-                                                  formik.touched?.supplementary[
-                                                    i
-                                                  ]?.compensationComponentId &&
+                                                error: compareCheck(
+                                                  formik.touched?.supplementary[i]?.compensationComponentId,
                                                   Boolean(
                                                     (
                                                       formik.errors
@@ -639,7 +637,8 @@ export default function CreateCNBComponent() {
                                                         i
                                                       ] as unknown as SuplementType
                                                     )?.compensationComponentId
-                                                  ),
+                                                  )
+                                                ),
                                               })}
                                           >
                                             <Select
@@ -689,15 +688,14 @@ export default function CreateCNBComponent() {
                                             {formik.touched?.supplementary &&
                                               formik.errors?.supplementary && (
                                                 <FormHelperText>
-                                                  {formik.touched
-                                                    ?.supplementary[i]
-                                                    ?.compensationComponentId &&
+                                                  {ifThenElse(formik.touched?.supplementary[i]?.compensationComponentId,
                                                     (
                                                       formik.errors
                                                         ?.supplementary[
                                                         i
                                                       ] as unknown as SuplementType
-                                                    )?.compensationComponentId}
+                                                    )?.compensationComponentId,
+                                                  null)}
                                                 </FormHelperText>
                                               )}
                                           </FormControl>
@@ -723,10 +721,8 @@ export default function CreateCNBComponent() {
                                             {...(formik.touched
                                               ?.supplementary &&
                                               formik.errors?.supplementary && {
-                                                error:
-                                                  formik.touched?.supplementary[
-                                                    i
-                                                  ]?.period &&
+                                                error: compareCheck(
+                                                  formik.touched?.supplementary[i]?.period,
                                                   Boolean(
                                                     (
                                                       formik.errors
@@ -734,7 +730,8 @@ export default function CreateCNBComponent() {
                                                         i
                                                       ] as unknown as SuplementType
                                                     )?.period
-                                                  ),
+                                                  )
+                                                ),
                                               })}
                                           >
                                             <RadioGroup
@@ -778,15 +775,14 @@ export default function CreateCNBComponent() {
                                             {formik.touched?.supplementary &&
                                               formik.errors?.supplementary && (
                                                 <FormHelperText>
-                                                  {formik.touched
-                                                    ?.supplementary[i]
-                                                    ?.taxStatus &&
+                                                  {ifThenElse(formik.touched?.supplementary[i]?.taxStatus,
                                                     (
                                                       formik.errors
                                                         ?.supplementary[
                                                         i
                                                       ] as unknown as SuplementType
-                                                    )?.taxStatus}
+                                                    )?.taxStatus,
+                                                  null)}
                                                 </FormHelperText>
                                               )}
                                           </FormControl>
@@ -825,9 +821,8 @@ export default function CreateCNBComponent() {
                                           type='number'
                                           {...(formik.touched?.supplementary &&
                                             formik.errors?.supplementary && {
-                                              error:
-                                                formik.touched?.supplementary[i]
-                                                  ?.rateOrAmount &&
+                                              error: compareCheck(
+                                                formik.touched?.supplementary[i]?.rateOrAmount,
                                                 Boolean(
                                                   (
                                                     formik.errors
@@ -835,18 +830,19 @@ export default function CreateCNBComponent() {
                                                       i
                                                     ] as unknown as SuplementType
                                                   )?.rateOrAmount
-                                                ),
+                                                )
+                                              ),
                                             })}
                                           {...(formik.touched?.supplementary &&
                                             formik.errors?.supplementary && {
-                                              helperText:
-                                                formik.touched?.supplementary[i]
-                                                  ?.rateOrAmount &&
+                                              helperText: ifThenElse(
+                                                formik.touched?.supplementary[i]?.rateOrAmount,
                                                 (
                                                   formik.errors?.supplementary[
                                                     i
                                                   ] as unknown as SuplementType
                                                 )?.rateOrAmount,
+                                                null)
                                             })}
                                           value={
                                             formik.values.supplementary[i]
@@ -872,8 +868,8 @@ export default function CreateCNBComponent() {
                                           }}
                                         />
                                       </Grid>
-                                      {formik.values.supplementary[i]
-                                        .withPercentage === true && (
+                                      {ifThenElse(formik.values.supplementary[i]
+                                        .withPercentage === true, (
                                         <Grid item xs={3} md={3} lg={3} xl={3}>
                                           <FormControl fullWidth>
                                             <Input
@@ -899,15 +895,14 @@ export default function CreateCNBComponent() {
                                             />
                                           </FormControl>
                                         </Grid>
-                                      )}
+                                      ), null)}
                                       <Grid item xs={3} md={3} lg={3} xl={3}>
                                         <FormControl
                                           fullWidth
                                           {...(formik.touched?.supplementary &&
                                             formik.errors?.supplementary && {
-                                              error:
-                                                formik.touched?.supplementary[i]
-                                                  ?.period &&
+                                              error: compareCheck(
+                                                formik.touched?.supplementary[i]?.period,
                                                 Boolean(
                                                   (
                                                     formik.errors
@@ -915,7 +910,8 @@ export default function CreateCNBComponent() {
                                                       i
                                                     ] as unknown as SuplementType
                                                   )?.period
-                                                ),
+                                                )
+                                              ),
                                             })}
                                         >
                                           <Select
@@ -945,15 +941,16 @@ export default function CreateCNBComponent() {
                                           {formik.touched?.supplementary &&
                                             formik.errors?.supplementary && (
                                               <FormHelperText>
-                                                {formik.touched?.supplementary[
-                                                  i
-                                                ]?.period &&
+                                                {ifThenElse(
+                                                  formik.touched?.supplementary[i]?.period,
                                                   (
                                                     formik.errors
                                                       ?.supplementary[
                                                       i
                                                     ] as unknown as SuplementType
-                                                  )?.period}
+                                                  )?.period,
+                                                  null)
+                                                }
                                               </FormHelperText>
                                             )}
                                         </FormControl>

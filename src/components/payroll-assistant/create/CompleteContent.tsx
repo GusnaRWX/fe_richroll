@@ -52,7 +52,7 @@ const HasFileCss = {
 const IOSSwitch = MuiStyled((props: SwitchProps) => (
   <Switch focusVisibleClassName='.Mui-focusVisible' disableRipple {...props} />
 ))(({ theme, disabled }) => ({
-  cursor: disabled ? 'not-allowed' : 'default',
+  cursor: ifThenElse(disabled, 'not-allowed', 'default'),
   width: 42,
   height: 26,
   padding: 0,
@@ -64,7 +64,7 @@ const IOSSwitch = MuiStyled((props: SwitchProps) => (
       transform: 'translateX(16px)',
       color: '#fff',
       '& + .MuiSwitch-track': {
-        backgroundColor: theme.palette.mode === 'dark' ? '#2ECA45' : '#223567',
+        backgroundColor: ifThenElse(theme.palette.mode === 'dark', '#2ECA45', '#223567'),
         opacity: 1,
         border: 0,
       },
@@ -77,13 +77,10 @@ const IOSSwitch = MuiStyled((props: SwitchProps) => (
       border: '6px solid #fff',
     },
     '&.Mui-disabled .MuiSwitch-thumb': {
-      color:
-        theme.palette.mode === 'light'
-          ? theme.palette.grey[100]
-          : theme.palette.grey[600],
+      color: ifThenElse(theme.palette.mode === 'light', theme.palette.grey[100], theme.palette.grey[600]),
     },
     '&.Mui-disabled + .MuiSwitch-track': {
-      opacity: theme.palette.mode === 'light' ? 0.7 : 0.3,
+      opacity: ifThenElse(theme.palette.mode === 'light', 0.7, 0.3),
     },
   },
   '& .MuiSwitch-thumb': {
@@ -93,7 +90,7 @@ const IOSSwitch = MuiStyled((props: SwitchProps) => (
   },
   '& .MuiSwitch-track': {
     borderRadius: 26 / 2,
-    backgroundColor: theme.palette.mode === 'light' ? '#E9E9EA' : '#39393D',
+    backgroundColor: ifThenElse(theme.palette.mode === 'light', '#E9E9EA', '#39393D'),
     opacity: 1,
     transition: theme.transitions.create(['background-color'], {
       duration: 500,
@@ -244,10 +241,10 @@ function CompleteContent(att) {
                       {value?.attachment?.filename} &nbsp;<FiFile />&nbsp; {value?.attachment?.size} &nbsp;<FiDownload />
                     </MuiButton>
                   </Grid>
-                  <Grid item xs={formik.values.file === null ? 4 : 5}>
+                  <Grid item xs={ifThenElse(formik.values.file === null, 4, 5)}>
                     <ButtonWrapper>
                       <div>
-                        {formik.values.file === null ? (
+                        {ifThenElse(formik.values.file === null, (
                           <>
                             <input
                               id='input-file'
@@ -269,11 +266,11 @@ function CompleteContent(att) {
                               </MuiButton>
                             </label>
                           </>
-                        ) : (
+                        ), (
                           <Grid container sx={HasFileCss} alignItems='center'>
                             <Grid item>
                               <Text
-                                title={(formik.values.file && (formik.values.file as unknown as { name: string })?.name)}
+                                title={ifThenElse(formik?.values?.file, (formik?.values?.file as unknown as { name: string })?.name, '')}
                                 fontSize='12px'
                                 fontWeight={400}
                               />
@@ -283,11 +280,10 @@ function CompleteContent(att) {
                             </Grid>
                             <Grid item>
                               <Text
-                                title={
-                                  formik.values.file
-                                    ? `${((formik.values.file as unknown as { size: number })?.size / (1024 * 1024)).toFixed(2)} MB`
-                                    : '0.00 MB'
-                                }
+                                title={ifThenElse(formik.values.file,
+                                  `${((formik.values.file as unknown as { size: number })?.size / (1024 * 1024)).toFixed(2)} MB`,
+                                  '0.00 MB'
+                                )}
                                 fontSize='12px'
                                 fontWeight={400}
                               />
@@ -296,7 +292,7 @@ function CompleteContent(att) {
                               <AiOutlineClose fontSize='12px' cursor='pointer' onClick={() => { formik.setFieldValue('file', null); }} />
                             </Grid>
                           </Grid>
-                        )}
+                        ))}
                       </div>
                       <Box sx={{ background: '#F3F4F6', borderRadius: '6px', p: '.4rem 1rem' }}>
                         <Typography variant='text-sm' fontWeight='500' color='#374151'>Status</Typography>
@@ -323,15 +319,15 @@ function CompleteContent(att) {
                         <TableCell key={item.id} sortDirection={ifThenElse(sort === item.id, direction, false)}>
                           <TableSortLabel
                             active={sort === item.id}
-                            direction={sort === item.id ? direction : 'asc'}
+                            direction={ifThenElse(sort === item.id, direction, 'asc')}
                             onClick={(e) => handleRequestSort(e, item.id)}
                           >
                             {item.label}
-                            {sort === item.id ? (
+                            {ifThenElse(sort === item.id, (
                               <Box component='span' sx={visuallyHidden}>
                                 {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
                               </Box>
-                            ) : null}
+                            ), null)}
                           </TableSortLabel>
                         </TableCell>
                       ))

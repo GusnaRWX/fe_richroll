@@ -258,7 +258,7 @@ export const payrollSlice = createSlice({
           note: item?.note,
           leaveStatus: item?.leaveStatus,
           color: item?.color,
-          isHalfDay: item?.isHalfday
+          isHalfDay: item?.isHalfDay
         });
       });
       state.attendanceDetail.events = tempData;
@@ -382,6 +382,24 @@ export const payrollSlice = createSlice({
     generateDisbursementAssistFailed: (state) => {
       state.isLoading = false;
     },
+    deletePayrollAssistRequested: (state) => {
+      state.isLoading = true;
+    },
+    deletePayrollAssistSuccess: (state) => {
+      state.isLoading = false;
+    },
+    deletePayrollAssistFailed: (state) => {
+      state.isLoading = false;
+    },
+    putPayrollAttendanceScheduleRequested: (state) => {
+      state.isLoading = true;
+    },
+    putPayrollAttendanceScheduleSuccess: (state) => {
+      state.isLoading = false;
+    },
+    putPayrollAttendanceScheduleFailed: (state) => {
+      state.isLoading = false;
+    }
   },
   extraReducers: {
     [HYDRATE]: (state, action) => {
@@ -472,6 +490,12 @@ export const {
   generateDisbursementAssistRequested,
   generateDisbursementAssistSuccess,
   generateDisbursementAssistFailed,
+  deletePayrollAssistRequested,
+  deletePayrollAssistSuccess,
+  deletePayrollAssistFailed,
+  putPayrollAttendanceScheduleFailed,
+  putPayrollAttendanceScheduleRequested,
+  putPayrollAttendanceScheduleSuccess
 } = payrollSlice.actions;
 
 export default payrollSlice.reducer;
