@@ -6,11 +6,13 @@ import type { SchedulerRef } from '@aldabil/react-scheduler/types';
 import { useAppSelectors, useAppDispatch } from '@/hooks/index';
 import { useRouter } from 'next/router';
 import { getViewWorkScheduleRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
-
+import { useTranslation } from 'react-i18next';
 
 function EmployeeWorkScheduleDetail() {
   const calendarRef = useRef<SchedulerRef>(null);
   const dispatch = useAppDispatch();
+  const {t} = useTranslation();
+  const t_employeeWorkSchedule = 'company_management.employees.form_&_detail.work_schedule_section';
   const router = useRouter();
   const { employee } = useAppSelectors((state) => state);
   const { listWorkSchedule } = useAppSelectors((state) => state.option);
@@ -41,7 +43,7 @@ function EmployeeWorkScheduleDetail() {
           <Select
             name='workScheduleID'
             withAsterisk={true}
-            customLabel='Schedule Profile Name'
+            customLabel={t(`${t_employeeWorkSchedule}.schedule_profile_name`)}
             size='small'
             fullWidth
             disabled={true}
@@ -53,7 +55,7 @@ function EmployeeWorkScheduleDetail() {
           <Input
             name='weeklyGross'
             withAsterisk={false}
-            customLabel='Weekly Gross Hours'
+            customLabel={t(`${t_employeeWorkSchedule}.weekly_gross_hours`)}
             placeholder='Input Weekly Gross'
             size='small'
             disabled
@@ -62,7 +64,7 @@ function EmployeeWorkScheduleDetail() {
             InputProps={{
               endAdornment: (
                 <InputAdornment position='end'>
-                  <Typography color='grey.500'>Hours/Week</Typography>
+                  <Typography color='grey.500'>{t(`${t_employeeWorkSchedule}.hours_week`)}</Typography>
                 </InputAdornment>
               )
             }}
@@ -72,7 +74,7 @@ function EmployeeWorkScheduleDetail() {
           <Input
             name='weeklyNet'
             withAsterisk={false}
-            customLabel='Weekly Net Hours'
+            customLabel={t(`${t_employeeWorkSchedule}.weekly_net_hours`)}
             placeholder='Input Weekly Net'
             size='small'
             disabled
@@ -81,7 +83,7 @@ function EmployeeWorkScheduleDetail() {
             InputProps={{
               endAdornment: (
                 <InputAdornment position='end'>
-                  <Typography color='grey.500'>Hours/Week</Typography>
+                  <Typography color='grey.500'>{t(`${t_employeeWorkSchedule}.hours_week`)}</Typography>
                 </InputAdornment>
               )
             }}

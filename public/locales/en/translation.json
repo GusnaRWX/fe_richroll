@@ -387,8 +387,9 @@
             "title" : "Personal Information",
             "date_of_birth" : "Date of Birth",
             "gender" : "Gender",
-            "maritial_status" : "Maritial Status",
-            "maritial_status_placeholder" : "Select Maritial Status",
+            "martial_status" : "Martial Status",
+            "martial_status_placeholder" : "Select Martial Status",
+            "number_of_dependants" : "Number of Dependants",
             "number_of_children" : "Number of Children",
             "number_of_children_placeholder" : "Input Number of Children",
             "nationality" : "Nationality",
@@ -520,6 +521,9 @@
             "yes" : "Yes",
             "no" : "No"
           }
+        },
+        "open_picture" : {
+          "title" : "Profile Picture"
         },
         "add_schedule" : {
           "title" : "Work Schedule Form",

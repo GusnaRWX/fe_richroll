@@ -3,6 +3,7 @@ import { Text } from '@/components/_shared/common';
 import { Grid, Typography } from '@mui/material';
 import dayjs from 'dayjs';
 import { getGender, getMaritalStatus, getReligion, ifThenElse } from '@/utils/helper';
+import { useTranslation } from 'react-i18next';
 
 interface PersonalInformationDetailProps {
   data: {
@@ -91,6 +92,12 @@ interface PersonalInformationDetailProps {
 }
 
 const EmployeePersonalInformationDetail = ({ data }: PersonalInformationDetailProps) => {
+  const {t} = useTranslation();
+  const t_personalInformationSection = 'company_management.employees.form_&_detail.personal_information.personal_information_section';
+  const t_citizenAddressSection = 'company_management.employees.form_&_detail.personal_information.citizen_address_section';
+  const t_residentialAddressSection = 'company_management.employees.form_&_detail.personal_information.residential_addres_section';
+  const t_personalIdSection = 'company_management.employees.form_&_detail.personal_information.personal_id_section';
+  const t_bankInformationSection = 'company_management.employees.form_&_detail.personal_information.bank_information_section';
   return (
     <>
       <Grid
@@ -106,7 +113,7 @@ const EmployeePersonalInformationDetail = ({ data }: PersonalInformationDetailPr
         >
           <Text
             variant='text-lg'
-            title='Personal Informaton'
+            title={t(`${t_personalInformationSection}.title`)}
             fontWeight={700}
             color='primary.500'
           />
@@ -118,7 +125,7 @@ const EmployeePersonalInformationDetail = ({ data }: PersonalInformationDetailPr
           sm={6}
         >
           <Text
-            title='Date of Birth'
+            title={t(`${t_personalInformationSection}.date_of_birth`)}
             color='grey.400'
             fontWeight={500}
             mb={0.5}
@@ -134,7 +141,7 @@ const EmployeePersonalInformationDetail = ({ data }: PersonalInformationDetailPr
           sm={6}
         >
           <Text
-            title='Gender'
+            title={t(`${t_personalInformationSection}.gender`)}
             color='grey.400'
             fontWeight={500}
             mb={0.5}
@@ -150,7 +157,7 @@ const EmployeePersonalInformationDetail = ({ data }: PersonalInformationDetailPr
           sm={6}
         >
           <Text
-            title='Martial Status'
+            title={t(`${t_personalInformationSection}.martial_status`)}
             color='grey.400'
             fontWeight={500}
             mb={0.5}
@@ -166,7 +173,7 @@ const EmployeePersonalInformationDetail = ({ data }: PersonalInformationDetailPr
           sm={6}
         >
           <Text
-            title='Number of Dependants'
+            title={t(`${t_personalInformationSection}.number_of_dependants`)}
             color='grey.400'
             fontWeight={500}
             mb={0.5}
@@ -182,7 +189,7 @@ const EmployeePersonalInformationDetail = ({ data }: PersonalInformationDetailPr
           sm={6}
         >
           <Text
-            title='Nationality'
+            title={t(`${t_personalInformationSection}.nationality`)}
             color='grey.400'
             fontWeight={500}
             mb={0.5}
@@ -198,7 +205,7 @@ const EmployeePersonalInformationDetail = ({ data }: PersonalInformationDetailPr
           sm={6}
         >
           <Text
-            title='Religion'
+            title={t(`${t_personalInformationSection}.religion`)}
             color='grey.400'
             fontWeight={500}
             mb={0.5}
@@ -220,7 +227,7 @@ const EmployeePersonalInformationDetail = ({ data }: PersonalInformationDetailPr
           sm={12}
         >
           <Text
-            title='Citizen Address'
+            title={t(`${t_citizenAddressSection}.title`)}
             fontWeight={700}
             color='primary.500'
           />
@@ -232,7 +239,7 @@ const EmployeePersonalInformationDetail = ({ data }: PersonalInformationDetailPr
           sm={6}
         >
           <Text
-            title='Country'
+            title={t(`${t_citizenAddressSection}.contry`)}
             color='grey.400'
             fontWeight={500}
             mb={0.5}
@@ -248,7 +255,7 @@ const EmployeePersonalInformationDetail = ({ data }: PersonalInformationDetailPr
           sm={6}
         >
           <Text
-            title='Province'
+            title={t(`${t_citizenAddressSection}.province`)}
             color='grey.400'
             fontWeight={500}
             mb={0.5}
@@ -264,7 +271,7 @@ const EmployeePersonalInformationDetail = ({ data }: PersonalInformationDetailPr
           sm={6}
         >
           <Text
-            title='City'
+            title={t(`${t_citizenAddressSection}.city`)}
             color='grey.400'
             fontWeight={500}
             mb={0.5}
@@ -280,7 +287,7 @@ const EmployeePersonalInformationDetail = ({ data }: PersonalInformationDetailPr
           sm={6}
         >
           <Text
-            title='Sub-District'
+            title={t(`${t_citizenAddressSection}.sub_district`)}
             color='grey.400'
             fontWeight={500}
             mb={0.5}
@@ -296,7 +303,7 @@ const EmployeePersonalInformationDetail = ({ data }: PersonalInformationDetailPr
           sm={6}
         >
           <Text
-            title='Citizen ID Street Name, Building Name'
+            title={t(`${t_citizenAddressSection}.street_and_buildig_name`)}
             color='grey.400'
             fontWeight={500}
             mb={0.5}
@@ -312,7 +319,7 @@ const EmployeePersonalInformationDetail = ({ data }: PersonalInformationDetailPr
           sm={6}
         >
           <Text
-            title='Zip Code'
+            title={t(`${t_citizenAddressSection}.zip_code`)}
             color='grey.400'
             fontWeight={500}
             mb={0.5}
@@ -334,7 +341,7 @@ const EmployeePersonalInformationDetail = ({ data }: PersonalInformationDetailPr
           sm={12}
         >
           <Text
-            title='Residential Address'
+            title={t(`${t_residentialAddressSection}.title`)}
             fontWeight={700}
             color='primary.500'
           />
@@ -346,7 +353,7 @@ const EmployeePersonalInformationDetail = ({ data }: PersonalInformationDetailPr
           sm={6}
         >
           <Text
-            title='Country'
+            title={t(`${t_residentialAddressSection}.contry`)}
             color='grey.400'
             fontWeight={500}
             mb={0.5}
@@ -362,7 +369,7 @@ const EmployeePersonalInformationDetail = ({ data }: PersonalInformationDetailPr
           sm={6}
         >
           <Text
-            title='Province'
+            title={t(`${t_residentialAddressSection}.province`)}
             color='grey.400'
             fontWeight={500}
             mb={0.5}
@@ -378,7 +385,7 @@ const EmployeePersonalInformationDetail = ({ data }: PersonalInformationDetailPr
           sm={6}
         >
           <Text
-            title='City'
+            title={t(`${t_residentialAddressSection}.city`)}
             color='grey.400'
             fontWeight={500}
             mb={0.5}
@@ -394,7 +401,7 @@ const EmployeePersonalInformationDetail = ({ data }: PersonalInformationDetailPr
           sm={6}
         >
           <Text
-            title='Sub-District'
+            title={t(`${t_residentialAddressSection}.sub_district`)}
             color='grey.400'
             fontWeight={500}
             mb={0.5}
@@ -410,7 +417,7 @@ const EmployeePersonalInformationDetail = ({ data }: PersonalInformationDetailPr
           sm={6}
         >
           <Text
-            title='Citizen ID Street Name, Building Name'
+            title={t(`${t_residentialAddressSection}.street_and_buildig_name`)}
             color='grey.400'
             fontWeight={500}
             mb={0.5}
@@ -426,7 +433,7 @@ const EmployeePersonalInformationDetail = ({ data }: PersonalInformationDetailPr
           sm={6}
         >
           <Text
-            title='Zip Code'
+            title={t(`${t_residentialAddressSection}.zip_code`)}
             color='grey.400'
             fontWeight={500}
             mb={0.5}
@@ -448,7 +455,7 @@ const EmployeePersonalInformationDetail = ({ data }: PersonalInformationDetailPr
           sm={12}
         >
           <Text
-            title='Personal ID'
+            title={t(`${t_personalIdSection}.title`)}
             fontWeight={700}
             color='primary.500'
             variant='text-lg'
@@ -461,7 +468,7 @@ const EmployeePersonalInformationDetail = ({ data }: PersonalInformationDetailPr
           sm={6}
         >
           <Text
-            title='ID Type'
+            title={t(`${t_personalIdSection}.id_type`)}
             color='grey.400'
             fontWeight={500}
             mb={0.5}
@@ -481,7 +488,7 @@ const EmployeePersonalInformationDetail = ({ data }: PersonalInformationDetailPr
           sm={6}
         >
           <Text
-            title='ID Number'
+            title={t(`${t_personalIdSection}.id_number`)}
             color='grey.400'
             fontWeight={500}
             mb={0.5}
@@ -497,7 +504,7 @@ const EmployeePersonalInformationDetail = ({ data }: PersonalInformationDetailPr
           sm={6}
         >
           <Text
-            title='ID Expiration Date'
+            title={t(`${t_personalIdSection}.id_expiration_date`)}
             color='grey.400'
             fontWeight={500}
             mb={0.5}
@@ -519,7 +526,7 @@ const EmployeePersonalInformationDetail = ({ data }: PersonalInformationDetailPr
           sm={12}
         >
           <Text
-            title='Bank Information'
+            title={t(`${t_bankInformationSection}.title`)}
             fontWeight={700}
             color='primary.500'
             variant='text-lg'
@@ -532,7 +539,7 @@ const EmployeePersonalInformationDetail = ({ data }: PersonalInformationDetailPr
           sm={6}
         >
           <Text
-            title='Bank'
+            title={t(`${t_bankInformationSection}.bank`)}
             color='grey.400'
             fontWeight={500}
             mb={0.5}
@@ -548,7 +555,7 @@ const EmployeePersonalInformationDetail = ({ data }: PersonalInformationDetailPr
           sm={6}
         >
           <Text
-            title={`Bank Account Holder's Name`}
+            title={t(`${t_bankInformationSection}.bank_account_holder_name`)}
             color='grey.400'
             fontWeight={500}
             mb={0.5}
@@ -569,7 +576,7 @@ const EmployeePersonalInformationDetail = ({ data }: PersonalInformationDetailPr
             sm={4}
           >
             <Text
-              title='Bank Account No'
+              title={t(`${t_bankInformationSection}.bank_account_no`)}
               color='grey.400'
               fontWeight={500}
               mb={0.5}
@@ -585,7 +592,7 @@ const EmployeePersonalInformationDetail = ({ data }: PersonalInformationDetailPr
             sm={4}
           >
             <Text
-              title='Bank Code'
+              title={t(`${t_bankInformationSection}.bank_code`)}
               color='grey.400'
               fontWeight={500}
               mb={0.5}
@@ -601,7 +608,7 @@ const EmployeePersonalInformationDetail = ({ data }: PersonalInformationDetailPr
             sm={4}
           >
             <Text
-              title='Branch Code'
+              title={t(`${t_bankInformationSection}.branch_code`)}
               color='grey.400'
               fontWeight={500}
               mb={0.5}
@@ -618,7 +625,7 @@ const EmployeePersonalInformationDetail = ({ data }: PersonalInformationDetailPr
           sm={6}
         >
           <Text
-            title='Branch Name'
+            title={t(`${t_bankInformationSection}.branch_name`)}
             color='grey.400'
             fontWeight={500}
             mb={0.5}
@@ -634,7 +641,7 @@ const EmployeePersonalInformationDetail = ({ data }: PersonalInformationDetailPr
           sm={6}
         >
           <Text
-            title='Swift Code'
+            title={t(`${t_bankInformationSection}.swift_code`)}
             color='grey.400'
             fontWeight={500}
             mb={0.5}

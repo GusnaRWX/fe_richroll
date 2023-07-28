@@ -382,8 +382,9 @@
             "title": "Maklumat peribadi",
             "date_of_birth": "Tarikh lahir",
             "gender": "Jantina",
-            "maritial_status": "Status Perkahwinan",
-            "maritial_status_placeholder": "Pilih Status Perkahwinan",
+            "martial_status": "Status Bela Diri",
+            "martial_status_placeholder": "Pilih Status Martial",
+            "number_of_dependants": "Bilangan Tanggungan",
             "number_of_children": "Bilangan Anak",
             "number_of_children_placeholder": "Bilangan Input Anak",
             "nationality": "kewarganegaraan",
@@ -515,6 +516,9 @@
             "yes": "ya",
             "no": "Tidak"
           }
+        },
+        "open_picture": {
+          "title": "Gambar profil"
         },
         "add_schedule": {
           "title": "Borang Jadual Kerja",
@@ -1028,8 +1032,8 @@
           "checkbox": "Gantikan dengan Profil Baharu"
         },
         "mark_all": {
-          "title": "Tandakan semua telah dibayar dan Selesai",
-          "description": "Semua pengeluaran akan ditanda sebagai berbayar dan menyelesaikan proses Pembantu Gaji"
+          "title": "Tandakan semua berbayar dan Selesai",
+          "description": "Semua pembayaran akan ditanda sebagai berbayar dan menyelesaikan proses Pembantu Gaji"
         },
         "cancel": {
           "title": "Jimat",

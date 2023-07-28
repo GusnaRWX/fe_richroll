@@ -382,8 +382,9 @@
             "title": "个人信息",
             "date_of_birth": "出生日期",
             "gender": "性别",
-            "maritial_status": "Maritial状态",
-            "maritial_status_placeholder": "选择婚姻状况",
+            "martial_status": "军事状况",
+            "martial_status_placeholder": "选择军事状况",
+            "number_of_dependants": "家属人数",
             "number_of_children": "儿童人数",
             "number_of_children_placeholder": "输入孩子数量",
             "nationality": "国籍",
@@ -515,6 +516,9 @@
             "yes": "是的",
             "no": "不"
           }
+        },
+        "open_picture": {
+          "title": "个人资料图片"
         },
         "add_schedule": {
           "title": "工作计划表",

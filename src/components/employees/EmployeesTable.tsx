@@ -23,6 +23,7 @@ import { getCompanyData, compareCheck, ifThenElse } from '@/utils/helper';
 import dayjs from 'dayjs';
 import { visuallyHidden } from '@mui/utils';
 import EmptyState from '../_shared/common/EmptyState';
+import { useTranslation } from 'react-i18next';
 
 const ButtonWrapper = styled.div`
  display: flex;
@@ -41,14 +42,13 @@ const NameWrapper = styled.div`
 
 
 const headerItems = [
-  { id: 'id', label: 'ID' },
-  { id: 'user.name', label: 'Name' },
-  { id: 'position.name', label: 'Position' },
-  { id: 'department.name', label: 'Department' },
-  { id: 'isActive', label: 'Status' },
-  { id: 'user.createdAt', label: 'Created on' },
-  { id: 'user.lastLogin', label: 'Last Login' },
-  { id: 'action', label: '' },
+  { id: 'id', label: 'id' },
+  { id: 'user.name', label: 'name' },
+  { id: 'position.name', label: 'position' },
+  { id: 'department.name', label: 'department' },
+  { id: 'isActive', label: 'status' },
+  { id: 'user.createdAt', label: 'created_on' },
+  { id: 'user.lastLogin', label: 'last_login' },
 ];
 
 interface EmployeeTableProps {
@@ -61,6 +61,9 @@ function EmployeesTable({
   tabValue
 }: EmployeeTableProps) {
   const dispatch = useAppDispatch();
+  const {t} = useTranslation();
+  const t_tableHeader = 'company_management.employees.table.table_cols_item';
+  const t_tableCustomValue = 'company_management.employees.table.custom_value';
   const data = useAppSelectors(state => state.employee.data);
   const router = useRouter();
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -159,7 +162,7 @@ function EmployeesTable({
                     direction={sort === item.id ? direction : 'asc'}
                     onClick={(e) => handleRequestSort(e, item.id)}
                   >
-                    {item.label}
+                    {t(`${t_tableHeader}.${item.label}`)}
                     {sort === item.id ? (
                       <Box component='span' sx={visuallyHidden}>
                         {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
@@ -169,6 +172,7 @@ function EmployeesTable({
                 </TableCell>
               ))
             }
+            <TableCell/>
           </TableRow>
         }
         bodyChildren={
@@ -200,9 +204,9 @@ function EmployeesTable({
                       <TableCell>{item.position.name}</TableCell>
                       <TableCell>{item.department.name}</TableCell>
                       <TableCell>{ifThenElse(item?.isActive, (
-                        <Chip color='secondary' label='active' />
+                        <Chip color='secondary' label={t(`${t_tableCustomValue}.active`)} />
                       ), (
-                        <Chip label='Non Active' sx={{ backgroundColor: '#FEE2E2' }} />
+                        <Chip label={t(`${t_tableCustomValue}.inactive`)} sx={{ backgroundColor: '#FEE2E2' }} />
                       ))}</TableCell>
                       <TableCell>{dayjs(item.user.createdAt).format('YYYY-MM-DD H:m:s')}</TableCell>
                       <TableCell>-</TableCell>

@@ -5,7 +5,7 @@ import styled from '@emotion/styled';
 import { Text, CustomModal } from '@/components/_shared/common';
 import dayjs from 'dayjs';
 import Image from 'next/image';
-
+import { useTranslation } from 'react-i18next';
 
 
 interface ImagePriviewProps extends HTMLAttributes<HTMLDivElement> {
@@ -58,10 +58,15 @@ interface EmployeeInformationDetailProps {
 
 function EmployeeInformationDetail({ data }: EmployeeInformationDetailProps) {
   const [open, setOpen] = useState(false);
+  const {t} = useTranslation();
+  const t_employeeInformationSection = 'company_management.employees.form_&_detail.employee_information.employee_information_section';
+  const t_employeeSelfServiceSection = 'company_management.employees.form_&_detail.employee_information.employee_self_service_section';
+  const t_employeeStatusSection = 'company_management.employees.form_&_detail.employee_information.employee_status_section';
+  const t_openPicturePopup = 'company_management.employees.popup.open_picture';
   const [picture, setPicture] = useState<string | null>('');
   return (
     <>
-      <Typography component='h3' fontWeight='bold' fontSize={18} color='primary' mb='1rem'>Employee Information</Typography>
+      <Typography component='h3' fontWeight='bold' fontSize={18} color='primary' mb='1rem'>{t(`${t_employeeInformationSection}.title`)}</Typography>
       <form>
         {/* <Text
           title='Employee Photo'
@@ -81,7 +86,7 @@ function EmployeeInformationDetail({ data }: EmployeeInformationDetailProps) {
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Text
-              title='Full Name'
+              title={t(`${t_employeeInformationSection}.fullname`)}
               fontWeight={500}
               color='grey.400'
             />
@@ -93,7 +98,7 @@ function EmployeeInformationDetail({ data }: EmployeeInformationDetailProps) {
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Text
-              title='Nickname'
+              title={t(`${t_employeeInformationSection}.nickname`)}
               fontWeight={500}
               color='grey.400'
             />
@@ -105,7 +110,7 @@ function EmployeeInformationDetail({ data }: EmployeeInformationDetailProps) {
         <Grid container spacing={2}>
           <Grid item xs={6} md={6} lg={6} xl={6} sx={{ marginBottom: '1.5rem' }}>
             <Text
-              title='Contact Number'
+              title={t(`${t_employeeInformationSection}.contact_number`)}
               fontWeight={500}
               color='grey.400'
             />
@@ -115,7 +120,7 @@ function EmployeeInformationDetail({ data }: EmployeeInformationDetailProps) {
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Text
-              title='Personal Email Address'
+              title={t(`${t_employeeInformationSection}.personal_email_address`)}
               fontWeight={500}
               color='grey.400'
             />
@@ -127,7 +132,7 @@ function EmployeeInformationDetail({ data }: EmployeeInformationDetailProps) {
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Text
-              title='Start Date'
+              title={t(`${t_employeeInformationSection}.start_date`)}
               fontWeight={500}
               color='grey.400'
             />
@@ -137,7 +142,7 @@ function EmployeeInformationDetail({ data }: EmployeeInformationDetailProps) {
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Text
-              title='End Date'
+              title={t(`${t_employeeInformationSection}.end_date`)}
               fontWeight={500}
               color='grey.400'
             />
@@ -149,7 +154,7 @@ function EmployeeInformationDetail({ data }: EmployeeInformationDetailProps) {
         <Grid container spacing={2} sx={{ marginBottom: '2rem' }}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Text
-              title='Department'
+              title={t(`${t_employeeInformationSection}.department`)}
               fontWeight={500}
               color='grey.400'
             />
@@ -159,7 +164,7 @@ function EmployeeInformationDetail({ data }: EmployeeInformationDetailProps) {
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Text
-              title='Position'
+              title={t(`${t_employeeInformationSection}.position`)}
               fontWeight={500}
               color='grey.400'
             />
@@ -171,30 +176,30 @@ function EmployeeInformationDetail({ data }: EmployeeInformationDetailProps) {
         <AdditionalWrapper>
           <Text
             variant='text-lg'
-            title='Employee Self Service'
+            title={t(`${t_employeeSelfServiceSection}.title`)}
             fontWeight={700}
             color='primary.500'
           />
           {
             data?.isSelfService === false ? (
-              <Chip label='Disabled' sx={{ backgroundColor: '#E5E7EB', fontWeight: 'bold' }} />
+              <Chip label={t(`${t_employeeSelfServiceSection}.status_option.disable`)} sx={{ backgroundColor: '#E5E7EB', fontWeight: 'bold' }} />
             ) : (
-              <Chip label='Enabled' sx={{ backgroundColor: '#DCFCE7', color: '#166534', fontWeight: 'bold' }} />
+              <Chip label={t(`${t_employeeSelfServiceSection}.status_option.enable`)} sx={{ backgroundColor: '#DCFCE7', color: '#166534', fontWeight: 'bold' }} />
             )
           }
         </AdditionalWrapper>
         <AdditionalWrapper>
           <Text
             variant='text-lg'
-            title='Employee Status'
+            title={t(`${t_employeeStatusSection}.title`)}
             fontWeight={700}
             color='primary.500'
           />
           {
             data?.isActive === false ? (
-              <Chip label='Inactive' sx={{ backgroundColor: '#FEE2E2', color: '#DC2626', fontWeight: 'bold' }} />
+              <Chip label={t(`${t_employeeStatusSection}.status_option.inactive`)} sx={{ backgroundColor: '#FEE2E2', color: '#DC2626', fontWeight: 'bold' }} />
             ) : (
-              <Chip label='Active' sx={{ backgroundColor: '#DCFCE7', color: '#166534', fontWeight: 'bold' }} />
+              <Chip label={t(`${t_employeeStatusSection}.status_option.active`)} sx={{ backgroundColor: '#DCFCE7', color: '#166534', fontWeight: 'bold' }} />
             )
           }
         </AdditionalWrapper>
@@ -206,7 +211,7 @@ function EmployeeInformationDetail({ data }: EmployeeInformationDetailProps) {
           setPicture('');
         }}
         withFooter={false}
-        title='Profile Picture'
+        title={t(`${t_openPicturePopup}.title`)}
         width='500px'
       >
         <Box sx={detailImage}>
