@@ -250,6 +250,7 @@ const CompanyEditComponent = ({ companyType, companySector, bank, paymentMethod,
           formikDetail.submitForm();
           setIsError(false);
           setTabSelected(newValue);
+          return true;
         };
         ifThenElse(
           Object.keys(a).length === 0,
@@ -262,6 +263,7 @@ const CompanyEditComponent = ({ companyType, companySector, bank, paymentMethod,
           formikDetail.submitForm();
           setIsError(false);
           setTabSelected(newValue);
+          return true;
         };
         ifThenElse(
           Object.keys(a).length === 0,

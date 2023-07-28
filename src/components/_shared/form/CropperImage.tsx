@@ -90,8 +90,8 @@ function CropperImage({ open, onClose, image, setCropValue, ratio }: CropperImag
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
   const onCropComplete = useCallback(
-    (croppedArea: Area, croppedAreaPixels: Area) => {
-      setCroppedAreaPixels(croppedAreaPixels);
+    (croppedArea: Area, croppedAreaPixelsCB: Area) => {
+      setCroppedAreaPixels(croppedAreaPixelsCB);
     },
     []
   );
@@ -166,7 +166,7 @@ function CropperImage({ open, onClose, image, setCropValue, ratio }: CropperImag
                 max={3}
                 step={0.1}
                 aria-labelledby='Zoom'
-                onChange={(e, zoom) => setZoom(Number(zoom))}
+                onChange={(e, zoomData) => setZoom(Number(zoomData))}
                 sx={{ width: '50%' }}
               />
             </SliderWrapper>

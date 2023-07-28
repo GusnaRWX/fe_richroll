@@ -265,7 +265,6 @@ export default function CreateCNBComponent() {
         validationSchema={validationSchecma}
       >
         {(formik) => (
-          console.log(formik.values),
           (
             <FormikForm>
               <Header>
@@ -675,9 +674,9 @@ export default function CreateCNBComponent() {
                                               }}
                                             >
                                               {listSuppCompensation?.map(
-                                                (item, i) => (
+                                                (item, j) => (
                                                   <MenuItem
-                                                    key={i}
+                                                    key={j}
                                                     value={item.value}
                                                   >
                                                     {item.label}
