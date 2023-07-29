@@ -71,7 +71,7 @@ const ContentWrapper = styled(Card)(({
 
 function EmployeeCreateComponent() {
   const router = useRouter();
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(3);
   const [finishedStep, setFinishedStep] = useState(0);
   const [leave, setLeave] = useState(false);
   const { employeeID } = useAppSelectors(state => state.employee);

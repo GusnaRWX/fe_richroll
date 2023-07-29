@@ -98,3 +98,31 @@ export const validationSchemaWorkScheduler = Yup.object({
   fixedEndTime: Yup.string().typeError('This field is required').when('type', { is: 0, then: (schema) => schema.required('This field is required') }),
   fixedWorkDayType: Yup.string().typeError('This field is required').when('type', { is: 0, then: (schema) => schema.required('This field is required') }),
 });
+
+const baseSchema = Yup.object({
+  componentID: Yup.string().required('componentID is required'),
+  termID: Yup.string().required('termID is required'),
+  isTaxable: Yup.string().required('isTaxable is required'),
+  amount: Yup.number().required('amount is required'),
+  amountType: Yup.string(),
+  rate: Yup.number().required('rate is required'),
+  rateType: Yup.string(),
+});
+
+export const validateCnb = Yup.object({
+  templateId: Yup.string().notRequired(),
+  name: Yup.string().required(),
+  overtime: Yup.string(),
+  base: baseSchema,
+  supplementary: Yup.array().of(
+    Yup.object().shape({
+      componentID: Yup.string(),
+      termID: Yup.string(),
+      isTaxable: Yup.string(),
+      amount: Yup.number().required('amount is required'),
+      amountType: Yup.string(),
+      rate: Yup.number().required('rate is required'),
+      rateType: Yup.string(),
+    })
+  )
+});
