@@ -153,7 +153,7 @@ const DetailCnb = ({ id, open }: DetailCNBProps) => {
             <Grid display='flex' flexDirection='column' gap='6px'>
               <TitleData>
                 {ifThenElse(baseComponent?.amount !== null, 'Amount', 'Rate')}&nbsp; per &nbsp;
-                {ifThenElse(baseComponent?.term, baseComponent?.term.name, '-')}
+                {ifThenElse(baseComponent?.term, baseComponent?.term?.name, '-')}
               </TitleData>
               <ItemData>
                 Rp&nbsp;
