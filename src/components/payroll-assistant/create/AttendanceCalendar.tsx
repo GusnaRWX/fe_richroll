@@ -82,7 +82,7 @@ interface CustomEditorProps {
 const CustomEditor = ({ scheduler }: CustomEditorProps) => {
   const event = scheduler.edited;
   const checkingLeaveType = () => {
-    if (event?.leaveType == 0 && event?.isOvertime == true){
+    if (event?.leaveType == 0 && event?.isOvertime){
       return 9;
     }else if (event?.leaveType == 0 && event?.name == 'Clock In') {
       return 7;
@@ -272,7 +272,7 @@ const CustomEditor = ({ scheduler }: CustomEditorProps) => {
         )
       }
       {
-        formik.values.isHalfDay == true && (
+        !!formik.values.isHalfDay && (
           <Grid container mb='1.5rem' spacing={2}>
             <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
               <Typography>Start</Typography>

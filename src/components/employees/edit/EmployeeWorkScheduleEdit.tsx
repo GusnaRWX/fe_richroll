@@ -26,14 +26,6 @@ const AsteriskComponent = styled('span')(({ theme }) => ({
   color: theme.palette.error.main
 }));
 
-// const FlexBoxRow = styled('div')(() => ({
-//   display: 'flex',
-//   flexDirection: 'row',
-//   alignItems: 'center',
-//   justifyContent: 'flex-start',
-//   gap: '1rem'
-// }));
-
 interface WorkScheduleFormProps {
   setData: React.Dispatch<React.SetStateAction<Employees.PostWorkSchedulePayloadType>>;
 }
@@ -212,10 +204,6 @@ function EmployeeWorkScheduleEdit({ setData }: WorkScheduleFormProps) {
     const eventLength = calendarRef?.current?.scheduler?.events?.length;
     calendarRef?.current?.scheduler?.events?.splice(0, eventLength);
   };
-
-  // useEffect(() => {
-  //   handleDeleteEventSchedule();
-  // }, []);
 
   useEffect(() => {
     dispatch({

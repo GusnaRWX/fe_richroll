@@ -15,7 +15,7 @@ interface BulkSuspendComponentProps {
   totalUser: CheckedTableProps[];
   open: boolean;
   handleCloseModal: React.Dispatch<React.SetStateAction<boolean>>
-  handleReset: React.Dispatch<React.SetStateAction<[]>>
+  handleReset: React.Dispatch<React.SetStateAction<CheckedTableProps[]>>
 }
 
 

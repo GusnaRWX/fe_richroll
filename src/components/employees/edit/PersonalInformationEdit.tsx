@@ -91,10 +91,6 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
     },
     validationSchema: validationSchemePersonalInformation,
     onSubmit: (values) => {
-      // console.log(values);
-      // nextPage(2);
-      // setIsPersonalInformationValid(true);
-      // setValues({ ...formik.values, useResidentialAddress });
       handleSubmit(values);
     }
   });
@@ -122,7 +118,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
       ...formik.values,
       useResidentialAddress: useResidentialAddress
     };
-    setValues(allPersonalValues as any);
+    setValues(allPersonalValues as Employees.PersonalValues);
   }, [formik.values, useResidentialAddress]);
 
   useEffect(() => {
@@ -1152,7 +1148,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
         <Grid item>
           <Button onClick={() => {
             nextPage(0);
-            setValues({ ...formik.values as any, useResidentialAddress });
+            setValues({ ...formik.values as Employees.PersonalValues, useResidentialAddress });
           }} label='Back' variant='outlined' />
         </Grid>
         <Grid item>
