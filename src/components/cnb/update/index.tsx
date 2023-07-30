@@ -214,12 +214,16 @@ export default function UpdateCNBComponent() {
         supplement = true;
         return false;
       }
-      ifThenElse(compareCheck(
+      if (compareCheck(
         item.compensationComponentId,
         !!item.period,
         !!item.rateOrAmount,
         !!item.taxStatus
-      ), supplement = true, supplement = false);
+      )) {
+        supplement = true;
+      } else {
+        supplement = false;
+      }
     });
 
     if (compareCheck(
@@ -318,7 +322,6 @@ export default function UpdateCNBComponent() {
       <Formik
         initialValues={initialValues}
         onSubmit={() => {
-          // UpdateCnbProfile(values);
           setOpenMsg(true);
         }}
         validationSchema={validationSchecma}
@@ -436,8 +439,8 @@ export default function UpdateCNBComponent() {
                               return null;
                             }}
                           >
-                            {listBaseCompensation?.map((Option, i) => (
-                              <MenuItem key={i} value={Option.value}>
+                            {listBaseCompensation?.map((Option, k) => (
+                              <MenuItem key={k} value={Option.value}>
                                 {Option.label}
                               </MenuItem>
                             ))}
@@ -688,8 +691,8 @@ export default function UpdateCNBComponent() {
                                           }}
                                         >
                                           {listSuppCompensation?.map(
-                                            (Option, i) => (
-                                              <MenuItem key={i} value={Option.value}>
+                                            (Option, j) => (
+                                              <MenuItem key={j} value={Option.value}>
                                                 {Option.label}
                                               </MenuItem>
                                             )

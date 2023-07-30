@@ -264,7 +264,7 @@ export default function CreateCNBComponent() {
         }}
         validationSchema={validationSchecma}
       >
-        {(formik) => (
+        {(formik) =>
           (
             <FormikForm>
               <Header>
@@ -985,7 +985,7 @@ export default function CreateCNBComponent() {
               </Paper>
             </FormikForm>
           )
-        )}
+        }
       </Formik>
       <ConfirmationModal
         open={leave}

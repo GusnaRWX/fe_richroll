@@ -260,7 +260,6 @@ const CompanyEditComponent = ({ companyType, companySector, bank, paymentMethod,
       }),
       formikPayment.validateForm().then((a) => {
         const ifTruePayment = () => {
-          formikDetail.submitForm();
           setIsError(false);
           setTabSelected(newValue);
           return true;
@@ -349,7 +348,6 @@ const CompanyEditComponent = ({ companyType, companySector, bank, paymentMethod,
   useEffect(() => {
     window.onbeforeunload = function() {
       console.log('refresh');
-      // router.push('/company-management/company-profile');
       return false;
     };
 

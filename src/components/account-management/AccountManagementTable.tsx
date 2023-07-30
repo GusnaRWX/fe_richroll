@@ -702,7 +702,7 @@ function AccountManagementTable({
         totalUser={selectedTemp}
         open={modalBulkSuspend}
         handleCloseModal={setModalBulkSuspend}
-        handleReset={setSelectedTemp as React.Dispatch<React.SetStateAction<[]>>}
+        handleReset={setSelectedTemp}
       />
       {/* End fo Modal SUspend */}
     </>
