@@ -637,3 +637,16 @@ export const getPayloadAttendancePayroll = (val: InitialValuesPAType, event) => 
       return null;
   }
 };
+
+export const formatedCnb = (component) => {
+  return {
+    componentID: component?.id,
+    termID: component?.term?.id,
+    isTaxable: component?.isTaxable === true ? 'true' : 'false',
+    amount: component?.amount === null ? '0' : component?.amount,
+    amountType: component?.amountType === null ? '0' : component?.amountType,
+    rate: component?.rate === null ? '0' : component?.rate,
+    rateType: component?.rateType === null ? '0' : component?.rateType,
+    id: component?.id || '',
+  };
+};

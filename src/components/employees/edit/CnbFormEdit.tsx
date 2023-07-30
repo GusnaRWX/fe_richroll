@@ -255,7 +255,7 @@ const CnbFormEdit = ({ refProp, setValues }: CnbEditFormProps) => {
                           fullWidth
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
-                          value={formik.values.base.amount === '0' ? formik.values.base.rate : formik.values.base.amount}
+                          value={ifThenElse(formik.values.base.amount === '0', formik.values.base.rate , formik.values.base.amount)}
                           name='base.amount'
                           InputProps={{
                             endAdornment: (
@@ -327,7 +327,7 @@ const CnbFormEdit = ({ refProp, setValues }: CnbEditFormProps) => {
                           {
                             formik.values.supplementary?.map((value, index) => (
                               <>
-                                <Grid container key={index} gap={1} justifyContent='space-between' mb='16px'>
+                                <Grid container key={value.id} gap={1} justifyContent='space-between' mb='16px'>
                                   <Grid item md={6}>
                                     <Select
                                       customLabel={`Compensation Component ${index + 1}`}
@@ -433,7 +433,7 @@ const CnbFormEdit = ({ refProp, setValues }: CnbEditFormProps) => {
                       </Grid>
                       <Grid item md={6}>
                         <Text title='Tax Status' color='#9CA3AF' fontWeight={500} fontSize={14} />
-                        <Chip label={formik.values.base.isTaxable === 'true' ? 'Taxable' : 'Non-Taxable'} sx={{ backgroundColor: '#E5E7EB', borderRadius: '4px' }} />
+                        <Chip label={ifThenElse(formik.values.base.isTaxable === 'true', 'Taxable', 'Non-Taxable')} sx={{ backgroundColor: '#E5E7EB', borderRadius: '4px' }} />
                       </Grid>
                     </Grid>
                     <Grid container mb='16px'>
@@ -453,7 +453,7 @@ const CnbFormEdit = ({ refProp, setValues }: CnbEditFormProps) => {
                           {
                             formik.values.supplementary?.map((value, index) => (
                               <>
-                                <Grid container key={index}>
+                                <Grid container key={value.id}>
                                   <Grid item md={6}>
                                     <Text title={`Compensation Component ${index + 1}`} fontWeight={500} fontSize={14} color='#9CA3AF' />
                                     <Text title={match?.find(item => item.component?.id === value?.componentID)?.component?.name} />
