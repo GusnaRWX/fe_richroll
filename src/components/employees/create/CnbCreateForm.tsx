@@ -243,6 +243,7 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
                             </InputAdornment>
                           )
                         }}
+                        value={formik.values.base.amount}
                       />
                     </Grid>
                     {
@@ -306,7 +307,7 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
                         {
                           formik.values.supplementary?.map((value, index) => (
                             <>
-                              <Grid container key={index} gap={1} justifyContent='space-between' mb='16px'>
+                              <Grid container key={value.componentID} gap={1} justifyContent='space-between' mb='16px'>
                                 <Grid item md={6}>
                                   <Select 
                                     customLabel={`Compensation Component ${index + 1}`} 
@@ -408,7 +409,7 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
                   <Grid container >
                     <Grid item md={6}>
                       <Text title='Compensation Component' color='#9CA3AF' fontWeight={500} fontSize={14}/>
-                      <Text title={dataTable?.items?.find(item => item.base.component?.id === formik.values.base.componentID)?.base?.component?.name}/>
+                      <Text title={listBaseCompensation?.find(item => item.value === formik.values.base.componentID)?.label}/>
                     </Grid>
                     <Grid item md={6}>
                       <Text title='Tax Status' color='#9CA3AF' fontWeight={500} fontSize={14} />

@@ -429,7 +429,7 @@ const CnbFormEdit = ({ refProp, setValues }: CnbEditFormProps) => {
                     <Grid container >
                       <Grid item md={6}>
                         <Text title='Compensation Component' color='#9CA3AF' fontWeight={500} fontSize={14} />
-                        <Text title={dataTable?.items?.find(item => item.base.component?.id === formik.values.base.componentID)?.base?.component?.name} />
+                        <Text title={listBaseCompensation?.find(item => item.value === formik.values.base.componentID)?.label} />
                       </Grid>
                       <Grid item md={6}>
                         <Text title='Tax Status' color='#9CA3AF' fontWeight={500} fontSize={14} />
