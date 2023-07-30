@@ -100,13 +100,13 @@ export const validationSchemaWorkScheduler = Yup.object({
 });
 
 const baseSchema = Yup.object({
-  componentID: Yup.string().required('componentID is required'),
-  termID: Yup.string().required('termID is required'),
-  isTaxable: Yup.string().required('isTaxable is required'),
-  amount: Yup.number().required('amount is required'),
+  componentID: Yup.string(),
+  termID: Yup.string(),
+  isTaxable: Yup.string(),
+  amount: Yup.string(),
   amountType: Yup.string(),
-  rate: Yup.number().required('rate is required'),
-  rateType: Yup.string(),
+  rate: Yup.string().nullable().default('0'),
+  rateType: Yup.string().nullable().default('0'),
 });
 
 export const validateCnb = Yup.object({
@@ -119,10 +119,10 @@ export const validateCnb = Yup.object({
       componentID: Yup.string(),
       termID: Yup.string(),
       isTaxable: Yup.string(),
-      amount: Yup.number().required('amount is required'),
+      amount: Yup.string(),
       amountType: Yup.string(),
-      rate: Yup.number().required('rate is required'),
-      rateType: Yup.string(),
+      rate: Yup.string().nullable().default('0'),
+      rateType: Yup.string().nullable().default('0'),
     })
   )
 });

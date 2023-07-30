@@ -399,11 +399,29 @@ function* fetchPostPersonalInformation(action: AnyAction) {
  */
 function* fetchPostCnbEmployee(action: AnyAction) {
   try {
-    const payload = {
-      employeeID: action?.payload?.id,
-      data: action?.payload?.cnb
+    const formatedData = {
+      templateID: action?.payload?.cnb?.templateId,
+      name: action?.payload?.cnb?.name,
+      overtime: +action?.payload?.cnb?.overtime,
+      base: {
+        ...action?.payload?.cnb?.base,
+        rate: action?.payload?.cnb?.base?.rate === null ? 0 : +action?.payload?.cnb?.base?.rate,
+        rateType: action?.payload?.cnb?.base?.rateType === null ? 0 : +action?.payload?.cnb?.base?.rateType,
+        isTaxable: action?.payload?.cnb?.base?.isTaxable === 'true' ? true : false
+      },
+      supplementaries: action?.payload?.cnb?.supplementary?.map(val => ({
+        ...val,
+        rate: val.rate === null ? 0 : +val.rate,
+        rateType: val.rateType === null ? 0 : +val?.rateType,
+        isTaxable: val?.isTaxable === 'true' ? true : false
+      }))
     };
 
+    const payload = {
+      employeeID: action?.payload?.id,
+      data: formatedData
+    };
+    
     const res: AxiosResponse = yield call(postEmployeeCNB, payload);
 
     if (res?.data?.code === 200 || res?.data?.code === 201) {

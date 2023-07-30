@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-unused-vars */
 import React, { useState, useRef, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { IconButton, Stepper } from '@/components/_shared/form';
@@ -71,7 +73,7 @@ const ContentWrapper = styled(Card)(({
 
 function EmployeeCreateComponent() {
   const router = useRouter();
-  const [value, setValue] = useState(3);
+  const [value, setValue] = useState(0);
   const [finishedStep, setFinishedStep] = useState(0);
   const [leave, setLeave] = useState(false);
   const { employeeID } = useAppSelectors(state => state.employee);
@@ -163,7 +165,6 @@ function EmployeeCreateComponent() {
   };
 
   const handleSaveCnB = async (data) => {
-    console.log('cnb employee: ', data);
     if (finishedStep <= 4) {
       dispatch({
         type: postCnbEmployeeRequested.toString(),
@@ -342,7 +343,7 @@ function EmployeeCreateComponent() {
               nextPage={handleNext}
               prevPage={handleBack}
               setValues={setCompensationBenefitsValue}
-              cnbValues={compensationBenefitsValue}
+              // cnbValues={compensationBenefitsValue}
             />
           }
           {value == 4 &&
