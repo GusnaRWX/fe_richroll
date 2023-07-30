@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable no-unused-vars */
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { Modal, Box, IconButton, Typography } from '@mui/material';
 import { Button, Input } from '@/components/_shared/form';
 import EditModalTable from './EditModalTable';

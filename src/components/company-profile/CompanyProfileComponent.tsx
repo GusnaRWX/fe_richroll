@@ -243,13 +243,6 @@ function CompanyProfileComponent() {
                 <Typography component='h3' fontSize={18} color='primary' fontWeight={700}>Payment Information</Typography>
               </Grid>
             </Grid>
-            {/* {!data?.payroll?.monthly && !data?.payroll?.weekly && !data?.payroll?.biweekly && (
-              <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
-                <Grid item xs={12} md={12} lg={12} xl={12}>
-                  <Typography component='div' variant='text-sm' color='#4B5563'>Mont-hly</Typography>
-                </Grid>
-              </Grid>
-            )} */}
             {!companyPayments?.payrolls && (
               <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
                 <Grid item xs={12} md={12} lg={12} xl={12}>
@@ -327,66 +320,6 @@ function CompanyProfileComponent() {
                 }
               </Box>
             ))}
-            {/* {!!data?.payroll?.monthly && (
-              <>
-                <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
-                  <Grid item xs={12} md={12} lg={12} xl={12}>
-                    <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Schedule Type</Typography>
-                    <Typography variant='text-sm' color='#1F2937' sx={{ padding: '3px 12px', background: '#E5E7EB', borderRadius: '4px' }} >Monthly</Typography>
-                  </Grid>
-                </Grid>
-                <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
-                  <Grid item xs={6} md={6} lg={6} xl={6}>
-                    <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Pay Period (includes overtime)</Typography>
-                    <Typography component='div' variant='text-sm' color='#4B5563'>{data?.payroll?.monthly?.periodStart} to {data?.payroll?.monthly?.periodEnd}</Typography>
-                  </Grid>
-                  <Grid item xs={6} md={6} lg={6} xl={6}>
-                    <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Default Payment Mode</Typography>
-                    <Typography component='div' variant='text-sm' color='#4B5563'>{data?.payroll?.monthly?.method?.name}</Typography>
-                  </Grid>
-                </Grid>
-              </>
-            )} */}
-            {/* {!!data?.payroll?.weekly && (
-              <>
-                <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
-                  <Grid item xs={12} md={12} lg={12} xl={12}>
-                    <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Schedule Type</Typography>
-                    <Typography variant='text-sm' color='#1F2937' sx={{ padding: '3px 12px', background: '#E5E7EB', borderRadius: '4px' }} >Weekly</Typography>
-                  </Grid>
-                </Grid>
-                <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
-                  <Grid item xs={6} md={6} lg={6} xl={6}>
-                    <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Pay Period (includes overtime)</Typography>
-                    <Typography component='div' variant='text-sm' color='#4B5563'>{data?.payroll?.weekly?.period}</Typography>
-                  </Grid>
-                  <Grid item xs={6} md={6} lg={6} xl={6}>
-                    <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Default Payment Mode</Typography>
-                    <Typography component='div' variant='text-sm' color='#4B5563'>{data?.payroll?.weekly?.method?.name}</Typography>
-                  </Grid>
-                </Grid>
-              </>
-            )}
-            {!!data?.payroll?.biWeekly && (
-              <>
-                <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
-                  <Grid item xs={12} md={12} lg={12} xl={12}>
-                    <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Schedule Type</Typography>
-                    <Typography variant='text-sm' color='#1F2937' sx={{ padding: '3px 12px', background: '#E5E7EB', borderRadius: '4px' }} >Bi-Weekly</Typography>
-                  </Grid>
-                </Grid>
-                <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
-                  <Grid item xs={6} md={6} lg={6} xl={6}>
-                    <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Pay Period (includes overtime)</Typography>
-                    <Typography component='div' variant='text-sm' color='#4B5563'>{data?.payroll?.biWeekly?.period} on {data?.payroll?.biWeekly?.periodWeek}</Typography>
-                  </Grid>
-                  <Grid item xs={6} md={6} lg={6} xl={6}>
-                    <Typography component='div' variant='text-sm' color='#9CA3AF' mb='8px'>Default Payment Mode</Typography>
-                    <Typography component='div' variant='text-sm' color='#4B5563'>{data?.payroll?.biWeekly?.method?.name}</Typography>
-                  </Grid>
-                </Grid>
-              </>
-            )} */}
           </TabPanel>
         </Box >
       </ContentWrapper >

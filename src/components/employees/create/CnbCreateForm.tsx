@@ -268,10 +268,6 @@ const CnbCreateForm = ({
                         setCustom(false);
                         setIsEdit(false);
                         setIsView(true);
-                        // dispatch({
-                        //   type: getDetailRequested.toString(),
-                        //   Id: newValue?.value
-                        // });
                         setParentId(newValue?.value);
                         formik.setFieldValue('name', newValue?.label);
                         formik.setFieldValue('templateID', newValue?.value);
@@ -296,7 +292,7 @@ const CnbCreateForm = ({
                     filterOptions={(options, params) => {
                       const filtered = filter(options, params);
                       const { inputValue } = params;
-                      const isExisting = options?.some((option) => initialValues === option?.label);
+                      const isExisting = options?.some((optExist) => initialValues === optExist?.label);
                       if (inputValue !== '' && !isExisting) {
                         filtered.push({
                           inputValue,
@@ -321,19 +317,19 @@ const CnbCreateForm = ({
                     clearOnBlur
                     handleHomeEndKeys
                     options={option?.listCnb}
-                    getOptionLabel={(option: any) => {
-                      if (typeof option === 'string') {
-                        return option;
+                    getOptionLabel={(optLabel: any) => {
+                      if (typeof optLabel === 'string') {
+                        return optLabel;
                       }
 
-                      if (option?.inputValue) {
-                        return option.inputValue;
+                      if (optLabel?.inputValue) {
+                        return optLabel.inputValue;
                       }
 
-                      return option?.label;
+                      return optLabel?.label;
                     }}
-                    renderOption={(props, option: any) => (
-                      <li {...props}>{option.label}</li>
+                    renderOption={(props, optRender: any) => (
+                      <li {...props}>{optRender.label}</li>
                     )}
                     renderInput={(params) => <TextField
                       name='name'
@@ -634,8 +630,8 @@ const CnbCreateForm = ({
                                             );
                                           }}
                                         >
-                                          {option?.listSuppCompensation?.map((item, i) => (
-                                            <MenuItem key={i} value={item.value}>
+                                          {option?.listSuppCompensation?.map((item, j) => (
+                                            <MenuItem key={j} value={item.value}>
                                               {item.label}
                                             </MenuItem>
                                           ))}
@@ -1088,7 +1084,6 @@ const CnbCreateForm = ({
                                 marginBottom='17px'
                               />
                               {formik?.values?.supplementary?.map((suplement, i) => (
-                                console.log(suplement, 'well'),
                                 <div key={i} style={{ marginBottom: '33px' }}>
                                   <Grid container spacing={2}>
                                     <Grid item xs={6}>
@@ -1127,8 +1122,8 @@ const CnbCreateForm = ({
                                               );
                                             }}
                                           >
-                                            {option?.listSuppCompensation?.map((item, i) => (
-                                              <MenuItem key={i} value={item.value}>
+                                            {option?.listSuppCompensation?.map((item, k) => (
+                                              <MenuItem key={k} value={item.value}>
                                                 {item.label}
                                               </MenuItem>
                                             ))}

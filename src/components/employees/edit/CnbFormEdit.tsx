@@ -126,7 +126,7 @@ const CnbFormEdit = ({ cnbValues, refProp, setCnbValue, cnbValuesForm }: CnbForm
             filterOptions={(options: any, params) => {
               const filtered = filter(options, params);
               const { inputValue } = params;
-              const isExisting = options?.some((option) => inputValue === option?.label);
+              const isExisting = options?.some((optExist) => inputValue === optExist?.label);
               if (inputValue !== '' && !isExisting) {
                 filtered.push({
                   inputValue,
@@ -139,19 +139,19 @@ const CnbFormEdit = ({ cnbValues, refProp, setCnbValue, cnbValuesForm }: CnbForm
             clearOnBlur
             handleHomeEndKeys
             options={option?.listCnb}
-            getOptionLabel={(option: any) => {
-              if (typeof option === 'string') {
-                return option;
+            getOptionLabel={(optLabel: any) => {
+              if (typeof optLabel === 'string') {
+                return optLabel;
               }
 
-              if (option.inputValue) {
-                return option.inputValue;
+              if (optLabel.inputValue) {
+                return optLabel.inputValue;
               }
 
-              return option.label;
+              return optLabel.label;
             }}
-            renderOption={(props, option: any) => (
-              <li {...props} style={{ width: '100%' }}>{option.label}</li>
+            renderOption={(props, optRender: any) => (
+              <li {...props} style={{ width: '100%' }}>{optRender.label}</li>
             )}
             renderInput={(params) => (
               <TextField
