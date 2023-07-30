@@ -413,12 +413,7 @@ export default function CreateCNBComponent() {
                                 const selected = listBaseCompensation?.find(
                                   (list) => list.value === value
                                 );
-                                ifThenElse(
-                                  !!selected,
-                                  selected.label,
-                                  null
-                                );
-                                return null;
+                                return ifThenElse(!!selected, selected?.label, '');
                               }}
                             >
                               {listBaseCompensation?.map((item, i) => (
