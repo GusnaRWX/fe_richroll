@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-unused-vars */
 import React, { useState, useRef, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { IconButton, Stepper } from '@/components/_shared/form';
@@ -163,7 +165,6 @@ function EmployeeCreateComponent() {
   };
 
   const handleSaveCnB = async (data) => {
-    console.log('cnb employee: ', data);
     if (finishedStep <= 4) {
       dispatch({
         type: postCnbEmployeeRequested.toString(),
@@ -342,7 +343,7 @@ function EmployeeCreateComponent() {
               nextPage={handleNext}
               prevPage={handleBack}
               setValues={setCompensationBenefitsValue}
-              cnbValues={compensationBenefitsValue}
+              // cnbValues={compensationBenefitsValue}
             />
           }
           {value == 4 &&
