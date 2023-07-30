@@ -104,7 +104,6 @@ function EmployeeEditComponent() {
   const [hydrated, setHydrated] = useState(false);
   const [value, setValue] = useState(0);
   const [leave, setLeave] = useState(false);
-  // const option = useAppSelectors(state => state.option);
   const employeeRef = useRef<HTMLFormElement>(null);
   const emergencyRef = useRef<HTMLFormElement>(null);
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
