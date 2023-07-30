@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 import ConfirmationModal from '@/components/_shared/common/ConfirmationModal';
 import { Employees } from '@/types/employees';
 import dayjs from 'dayjs';
-import { getCompanyData, ifThenElse, dynamicPayloadBaseCnb } from '@/utils/helper';
+import { getCompanyData, ifThenElse } from '@/utils/helper';
 import { useAppSelectors, useAppDispatch } from '@/hooks/index';
 import { patchEmergencyContactRequested, patchEmployeeInformationRequested, patchPersonalRequested, postWorkScheduleRequested, patchEmployeeCnbRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
 
@@ -104,7 +104,7 @@ function EmployeeEditComponent() {
   const [hydrated, setHydrated] = useState(false);
   const [value, setValue] = useState(0);
   const [leave, setLeave] = useState(false);
-  const option = useAppSelectors(state => state.option);
+  // const option = useAppSelectors(state => state.option);
   const employeeRef = useRef<HTMLFormElement>(null);
   const emergencyRef = useRef<HTMLFormElement>(null);
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
@@ -191,27 +191,7 @@ function EmployeeEditComponent() {
     phoneNumberSecondary: dataEmergencyContact?.secondary?.phoneNumber
   });
 
-  const [cnbValue, setCnbValue] = useState<any>({
-    templateId: employee?.employeeCnbDetail?.id,
-    name: employee?.employeeCnbDetail?.name,
-    compensationComponentId: employee?.employeeCnbDetail?.base?.component?.id,
-    // idBaseCompensationComponent: employee?.employeeCnbDetail?.base?.id,
-    period: employee?.employeeCnbDetail?.base?.term?.id,
-    rateOrAmount: employee?.employeeCnbDetail?.base?.amount,
-    percentage: '',
-    taxStatus: employee?.employeeCnbDetail?.isTaxable ? 'true' : 'false',
-    supplementary: employee?.employeeCnbDetail?.supplementaries?.map(val => {
-      return {
-        compensationComponentId: val?.component?.id,
-        period: val?.term?.id,
-        rateOrAmount: val?.rate === null ? val?.amount : val?.rate,
-        taxStatus: val?.isTaxable === true ? 'true' : 'false',
-        id: val?.id
-      };
-    }),
-    overtime: employee?.employeeCnbDetail?.overtime
-  });
-
+  const [cnbValues, setCnbValues] = useState({});
 
   const [valueWorkSchedule, setValueWorkSchedule] = useState<any>();
 
@@ -297,20 +277,11 @@ function EmployeeEditComponent() {
   };
 
   const handleClickUpdateCnb = () => {
-    const lastPayload = {
-      templateID: cnbValue?.templateId,
-      name: cnbValue?.name,
-      overtime: +cnbValue?.overtime,
-      base: { id: employee?.employeeCnbDetail?.base?.id, ...dynamicPayloadBaseCnb(option?.listBaseCompensation, cnbValue?.compensationComponentId, cnbValue) },
-      supplementaries: cnbValue?.supplementary?.map((val) => {
-        return { id: val?.id, ...dynamicPayloadBaseCnb(option?.listSuppCompensation, val?.compensationComponentId, val) };
-      })
-    };
     dispatch({
       type: patchEmployeeCnbRequested.toString(),
       payload: {
         id: router.query.id,
-        employeeCnb: lastPayload
+        employeeCnb: cnbValues
       }
     });
   };
@@ -469,10 +440,8 @@ function EmployeeEditComponent() {
           </TabPanel>
           <TabPanel value={value} index={3}>
             <EmployeeCnbForm
-              cnbValues={employee?.employeeCnbDetail}
-              cnbValuesForm={cnbValue}
               refProp={cnbEditRef}
-              setCnbValue={setCnbValue}
+              setValues={setCnbValues}
             />
           </TabPanel>
           <TabPanel value={value} index={4}>

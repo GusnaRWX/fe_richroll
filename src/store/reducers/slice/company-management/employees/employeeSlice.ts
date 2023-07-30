@@ -36,7 +36,8 @@ interface EmployeeState {
     netHour: number;
     workScheduleId: string | number;
   },
-  employeeCnbDetail: object
+  employeeCnbDetail: object,
+  employeeCnbDetailUpdate: object;
 }
 
 const initialState: EmployeeState = {
@@ -58,7 +59,8 @@ const initialState: EmployeeState = {
     netHour: 0,
     workScheduleId: ''
   },
-  employeeCnbDetail: {}
+  employeeCnbDetail: {},
+  employeeCnbDetailUpdate: {}
 };
 
 export const employeeSlice = createSlice({
@@ -326,8 +328,36 @@ export const employeeSlice = createSlice({
       state.isLoading = true;
     },
     getEmployeeCnbDetailSuccess: (state, action) => {
+      const formated = {
+        templateID: action?.payload?.template?.id,
+        name: action?.payload?.template?.name,
+        overtime: action?.payload?.overtime,
+        base: {
+          componentID: action?.payload?.base?.component?.id,
+          termID: action?.payload?.base?.term?.id,
+          isTaxable: action?.payload?.base?.isTaxable === true ? 'true' : 'false',
+          amount: action?.payload?.base?.amount === null ? '0' : action?.payload?.base?.amount,
+          amountType: action?.payload?.base?.amountType === null ? '0' : action?.payload?.base?.amountType,
+          rate: action?.payload?.base?.rate === null ? '0' : action?.payload?.base?.rate,
+          rateType: action?.payload?.base?.rateType === null ? '0' : action?.payload?.base?.rateType,
+          id: action?.payload?.base?.id || ''
+        },
+        supplementary: action?.payload?.supplementaries?.map(val => {
+          return {
+            componentID: val?.component?.id,
+            termID: val?.term?.id,
+            isTaxable: val?.isTaxable === true ? 'true' : 'false',
+            amount: val?.amount === null ? '0' : val?.amount,
+            amountType: val?.amountType === null ? '0' : val?.amountType,
+            rate: val?.rate === null ? '0' : val?.rate,
+            rateType: val?.rateType === null ? '0' : val?.rateType,
+            id: val?.id || ''
+          };
+        })
+      };
       state.isLoading = false;
-      state.employeeCnbDetail = action.payload;
+      state.employeeCnbDetail = action?.payload;
+      state.employeeCnbDetailUpdate = formated;
     },
     getEmployeeCnbDetailFailed: state => {
       state.isLoading = false;
