@@ -59,14 +59,6 @@ const AttendanceAndLeaveComponent = () => {
     margin-bottom: 24px;
   `;
 
-  // eslint-disable-next-line no-unused-vars
-  const [search, setSearch] = useState('');
-  const handleSearch = (e) => {
-    if (e.key === 'Enter') {
-      setSearch(e.target.value);
-    }
-  };
-
   return (
     <>
       <TitleWrapper>
@@ -101,7 +93,7 @@ const AttendanceAndLeaveComponent = () => {
               name='search'
               size='small'
               placeholder='Search'
-              onKeyDown={(e) => handleSearch(e)}
+              // onKeyDown={(e) => handleSearch(e)}
               type='text'
               InputProps={{
                 startAdornment: <Search sx={{ color: '#9CA3AF' }} />,

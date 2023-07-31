@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable no-unused-vars */
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { Modal, Box, IconButton, Typography } from '@mui/material';
 import { Button, Input } from '@/components/_shared/form';
 import EditModalTable from './EditModalTable';
@@ -63,12 +61,6 @@ function LeaveBalanceProfileEditModal({
   const router = useRouter();
   const submitRef = useRef();
   const employeeName = router.query.name;
-  const [search, setSearch] = useState('');
-  const handleSearch = (e) => {
-    if (e.key === 'Enter') {
-      setSearch(e.target.value);
-    }
-  };
 
   return (
     <Modal
@@ -137,7 +129,7 @@ function LeaveBalanceProfileEditModal({
               name='search'
               size='small'
               placeholder='Search'
-              onKeyDown={(e) => handleSearch(e)}
+              // onKeyDown={(e) => handleSearch(e)}
               type='text'
               sx={{ width: '320px', mb: '49px' }}
               InputProps={{

@@ -143,10 +143,6 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
     const imageSrc = webcamRef.current?.getScreenshot();
     if (imageSrc) {
       setImages(imageSrc);
-      // const nameFile = randomCode(5);
-      // const fileImage = base64ToFile(imageSrc, nameFile);
-      // formik.setFieldValue('picture', fileImage);
-      // formik.setFieldValue('pictureBackend', fileImage);
       setModalCrop(true);
       handleClose();
       handleCloseCamera();
@@ -215,11 +211,6 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
   ];
 
   const handleSubmit = (_val, setErrors) => {
-    // const allInfoValues = {
-    //   ...val,
-    //   images: images
-    // };
-    // setValues(allInfoValues);
     setIsInformationValid(true);
     handleFirstInformation();
     nextPage(infoValues?.isSelfService ? 3 : 1);
@@ -231,7 +222,7 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
       ...formik.values,
       images: String(images)
     };
-    setValues(allInfoValues as any);
+    setValues(allInfoValues as Employees.InformationValues);
     console.log(formik.values);
   }, [formik.values]);
 

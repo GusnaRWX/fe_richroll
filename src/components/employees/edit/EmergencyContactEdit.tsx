@@ -39,11 +39,6 @@ function EmergencyContactEdit({ refProp, nextPage, setValues, emergencyValues, s
     },
     validationSchema: validationSchemeEmployeeEmergencyContact,
     onSubmit: (values, { setErrors }) => {
-      // const emergencyLastValue = {
-      //   ...values,
-      //   phoneNumberPrimary: String(formik.values.phoneNumberPrimary)
-      // };
-      // setValues(emergencyLastValue);
       setIsEmergencyValid(true);
       handleThirdEmergency();
       nextPage(4);

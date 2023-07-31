@@ -22,7 +22,7 @@ import { useRouter } from 'next/router';
 import { ConfirmationModal } from '@/components/_shared/common';
 import EmptyState from '../_shared/common/EmptyState';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
-import { getPayrollRequested, deletePayrollRequested } from '@/store/reducers/slice/payroll/payrollSlice';
+import { getPayrollRequested, deletePayrollRequested, putPayrollWorkflowRequested } from '@/store/reducers/slice/payroll/payrollSlice';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
@@ -85,6 +85,7 @@ function PayrollTable({
   const [sort, setSort] = useState('');
   const [hydrated, setHaydrated] = useState(false);
   const [deleteConfirmation, setDeleteConfirmation] = useState({id: 0, open: false});
+  const [archivedConfirmation, setArchivedConfirmation] = useState({ id: 0, workflow: 0, open: false });
   const companyData = getCompanyData();
   const { responser } = useAppSelectors((state) => state);
   const router = useRouter();
@@ -113,10 +114,10 @@ function PayrollTable({
     setSort(headId);
   };
 
-  const deletePayroll = (Id: string | number) => {
+  const deletePayroll = (IdDel: string | number) => {
     dispatch({
       type: deletePayrollRequested.toString(),
-      payload: Id
+      payload: IdDel
     });
   };
 
@@ -126,6 +127,27 @@ function PayrollTable({
 
   const handleDeleteClose = () => {
     setDeleteConfirmation({ id: 0, open: false });
+  };
+
+  const archivedPayroll = (IdArch: string | number, Workflow: number) => {
+    dispatch({
+      type: putPayrollWorkflowRequested.toString(),
+      payload: {
+        id: IdArch,
+        data: {
+          workflow: Workflow,
+          status: 3
+        }
+      }
+    });
+  };
+
+  const handleArchivedOpen = (id, workflow) => {
+    setArchivedConfirmation({ id: id, workflow: workflow, open: true });
+  };
+
+  const handleArchivedClose = () => {
+    setArchivedConfirmation({ id: 0, workflow: 0, open: false });
   };
 
   useEffect(() => {
@@ -278,6 +300,7 @@ function PayrollTable({
                             <>
                               <IconButton
                                 parentColor='#E9EFFF'
+                                onClick={() => handleArchivedOpen(item?.id, item?.workflow)}
                                 icons={
                                   <HiOutlineInboxIn fontSize={20} color='#223567' />
                                 }
@@ -329,6 +352,15 @@ function PayrollTable({
         withCallback
         noChange={true}
         callback={() => deletePayroll(deleteConfirmation?.id)}
+      />
+      <ConfirmationModal
+        open={archivedConfirmation?.open}
+        handleClose={handleArchivedClose}
+        title='Archive Payroll from Payroll Operation'
+        content='You are about to archive this payroll report. This action cannot be undone.'
+        withCallback
+        noChange={true}
+        callback={() => archivedPayroll(archivedConfirmation?.id, archivedConfirmation?.workflow)}
       />
     </>
   );

@@ -185,10 +185,10 @@ function AnnualWorkCalendarComponent() {
                 day={null}
                 deletable={false}
                 editable={false}
-                viewerExtraComponent={(fields, events) => {
+                viewerExtraComponent={(fields, eventsData) => {
                   return (
                     <div>
-                      <p>Notes: {events?.note}</p>
+                      <p>Notes: {eventsData?.note}</p>
                     </div>
                   );
                 }}

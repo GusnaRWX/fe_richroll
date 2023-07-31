@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { HYDRATE } from 'next-redux-wrapper';
+import { formatedCnb } from '@/utils/helper';
 
 interface EventType {
   day: number,
@@ -36,7 +37,8 @@ interface EmployeeState {
     netHour: number;
     workScheduleId: string | number;
   },
-  employeeCnbDetail: object
+  employeeCnbDetail: object,
+  employeeCnbDetailUpdate: object;
 }
 
 const initialState: EmployeeState = {
@@ -58,7 +60,8 @@ const initialState: EmployeeState = {
     netHour: 0,
     workScheduleId: ''
   },
-  employeeCnbDetail: {}
+  employeeCnbDetail: {},
+  employeeCnbDetailUpdate: {}
 };
 
 export const employeeSlice = createSlice({
@@ -326,8 +329,16 @@ export const employeeSlice = createSlice({
       state.isLoading = true;
     },
     getEmployeeCnbDetailSuccess: (state, action) => {
+      const formated = {
+        templateID: action?.payload?.template?.id,
+        name: action?.payload?.template?.name,
+        overtime: action?.payload?.overtime,
+        base: formatedCnb(action?.payload?.base),
+        supplementary: action?.payload?.supplementaries?.map(v => formatedCnb(v))
+      };
       state.isLoading = false;
-      state.employeeCnbDetail = action.payload;
+      state.employeeCnbDetail = action?.payload;
+      state.employeeCnbDetailUpdate = formated;
     },
     getEmployeeCnbDetailFailed: state => {
       state.isLoading = false;

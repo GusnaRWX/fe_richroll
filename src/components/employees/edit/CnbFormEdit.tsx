@@ -1,456 +1,488 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable react/no-children-prop */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from 'react';
-import { useFormik } from 'formik';
-import { Grid, Autocomplete, createFilterOptions, TextField, Box, Chip, InputAdornment } from '@mui/material';
-import { Text } from '@/components/_shared/common';
+import { Button, Select, RadioGroup, Input } from '@/components/_shared/form';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
-import { getListBaseCompensationRequested, getListCnbRequested, getListTerminReqeusted, getListSuppCompensationRequested } from '@/store/reducers/slice/options/optionSlice';
-import { Button, Input, RadioGroup, Select } from '@/components/_shared/form';
+import { getListBaseCompensationRequested, getListSuppCompensationRequested, getListTerminReqeusted } from '@/store/reducers/slice/options/optionSlice';
+import { useFormik } from 'formik';
+import { validateCnb } from './validate';
+import { Chip, Grid, InputAdornment } from '@mui/material';
+import { getTableRequested } from '@/store/reducers/slice/cnb/compensationSlice';
+import { getCompanyData, getPaymentType, ifThenElse } from '@/utils/helper';
+import { Text } from '@/components/_shared/common';
 import { FiEdit } from 'react-icons/fi';
-import { getPaymentType, ifThenElse } from '@/utils/helper';
-import { MdOutlineAdd } from 'react-icons/md';
-import DeleteIcon from '@mui/icons-material/Delete';
+import { numberFormat } from '@/utils/format';
+import { MdAdd } from 'react-icons/md';
+import { BsTrash3 } from 'react-icons/bs';
 
-interface CnbFormEditProps {
-  cnbValues: any,
-  cnbValuesForm: any,
-  refProp: React.Ref<HTMLFormElement>,
-  setCnbValue: React.Dispatch<React.SetStateAction<any>>
+interface Supplementary {
+  componentID: string,
+  termID: string,
+  isTaxable: string,
+  amount: string,
+  amountType: string,
+  rate: string,
+  rateType: string,
+  id?: string;
 }
 
-const CnbFormEdit = ({ cnbValues, refProp, setCnbValue, cnbValuesForm }: CnbFormEditProps) => {
-  const option = useAppSelectors(state => state.option);
-  const [title, setTitle] = useState('');
-  const [editMode, setEditMode] = useState(false);
-  const [withPercentage, setWithPercentage] = useState(false);
+interface CnbInitialValues {
+  templateId: string;
+  name: string;
+  overtime: string;
+  base: {
+    componentID: string,
+    termID: string,
+    isTaxable: string,
+    amount: string,
+    amountType: string,
+    rate: string,
+    rateType: string,
+    id?: string;
+  },
+  supplementary: Array<Supplementary>
+}
+
+interface CnbEditFormProps {
+  refProp: React.Ref<HTMLFormElement>,
+  setValues: React.Dispatch<React.SetStateAction<any>>
+}
+
+const CnbFormEdit = ({ refProp, setValues }: CnbEditFormProps) => {
   const dispatch = useAppDispatch();
-  const formik = useFormik({
-    initialValues: {
-      templateId: cnbValuesForm?.templateId,
-      name: cnbValuesForm?.name,
-      compensationComponentId: cnbValuesForm?.compensationComponentId,
-      period: cnbValuesForm?.period,
-      rateOrAmount: cnbValuesForm?.rateOrAmount,
-      percentage: cnbValuesForm?.percentage,
-      taxStatus: cnbValuesForm?.taxStatus,
-      supplementary: cnbValuesForm?.supplementary,
-      overtime: cnbValuesForm?.overtime
-    },
-    onSubmit: (_val) => {
-      console.log(_val);
-    }
-  });
+  const [isEdit, setIsEdit] = useState(false);
+  const [withPercentage, setWithPercentage] = useState(false);
+  const [title, setTitle] = useState('Amount');
 
   useEffect(() => {
-    if (cnbValuesForm) {
-      formik.setFieldValue('templateId', cnbValuesForm?.templateId);
-      formik.setFieldValue('name', cnbValuesForm?.name);
-      formik.setFieldValue('compensationComponentId', cnbValuesForm?.compensationComponentId);
-      formik.setFieldValue('period', cnbValuesForm?.period);
-      formik.setFieldValue('rateOrAmount', cnbValuesForm?.rateOrAmount);
-      formik.setFieldValue('percentage', cnbValuesForm?.percentage);
-      formik.setFieldValue('taxStatus', cnbValuesForm?.taxStatus);
-      formik.setFieldValue('supplementary', cnbValuesForm?.supplementary);
-      formik.setFieldValue('overtime', cnbValuesForm?.overtime);
-    }
-  }, [cnbValuesForm]);
-
-  useEffect(() => {
-    setCnbValue(formik.values);
-  }, [formik.values]);
-
-  useEffect(() => {
-    const fetchData = () => {
-      if (cnbValues?.base?.component?.id || formik?.values?.compensationComponentId) {
-        setTitle(getPaymentType(formik?.values?.compensationComponentId, option?.listBaseCompensation)?.title);
-        setWithPercentage(getPaymentType(formik?.values?.compensationComponentId, option?.listBaseCompensation)?.withPercentage);
-        dispatch({
-          type: getListTerminReqeusted.toString(),
-          payload: formik?.values?.compensationComponentId
-        });
-      }
-    };
     dispatch({
-      type: getListCnbRequested.toString()
-    });
-    dispatch({
-      type: getListBaseCompensationRequested.toString()
+      type: getListBaseCompensationRequested.toString(),
     });
     dispatch({
       type: getListSuppCompensationRequested.toString()
     });
-    fetchData();
+    dispatch({
+      type: getTableRequested.toString(),
+      payload: {
+        page: 1,
+        itemPerPage: 5,
+        sort: '',
+        direction: '',
+        search: '',
+        companyID: getCompanyData()?.id
+      }
+    });
   }, []);
 
-  const filter = createFilterOptions<any>();
+  const { listBaseCompensation, listSuppCompensation, listTermin } = useAppSelectors(state => state.option);
+  const {employeeCnbDetailUpdate} = useAppSelectors(state => state.employee);
+  console.log(employeeCnbDetailUpdate);
+  const { dataTable } = useAppSelectors(state => state.compensation);
+  const formik = useFormik({
+    initialValues: {
+      templateId: employeeCnbDetailUpdate?.templateID,
+      name: employeeCnbDetailUpdate?.name,
+      overtime: employeeCnbDetailUpdate?.overtime,
+      base: {
+        componentID: employeeCnbDetailUpdate?.base?.componentID,
+        termID: employeeCnbDetailUpdate?.base?.termID,
+        isTaxable: employeeCnbDetailUpdate?.base?.isTaxable,
+        amount: employeeCnbDetailUpdate?.base?.amount,
+        amountType: employeeCnbDetailUpdate?.base?.amounType,
+        rate: employeeCnbDetailUpdate?.base?.rate,
+        rateType: employeeCnbDetailUpdate?.base?.rateType,
+        id: employeeCnbDetailUpdate?.base?.id
+      },
+      supplementary: employeeCnbDetailUpdate?.supplementary
+    } as CnbInitialValues,
+    validationSchema: validateCnb,
+    onSubmit: (_val) => {
+      setValues(_val);
+    }
+  });
 
-  const handleAddSupplementary = () => {
-    const _supp = {
-      compensationComponentId: '',
-      period: '',
-      rateOrAmount: '',
-      taxStatus: '',
-      id: ''
-    };
+  useEffect(() => {
+    if(formik.values.base.componentID) {
+      dispatch({
+        type: getListTerminReqeusted.toString(),
+        payload: formik.values.base.componentID
+      });
+    }
+  }, []);
 
-    const _current = formik.values.supplementary || [];
+  useEffect(() => {
+    setValues(formik.values);
+  }, [formik.values]);
 
-    const _updated = [..._current, _supp];
+  console.log(formik.errors);
 
-    formik.setFieldValue('supplementary', _updated);
+  const handleChangeTemplate = (value) => {
+    const findCNB = dataTable?.items?.find(item => value.target.value === item.id);
+    if (findCNB) {
+      formik.setFieldValue('templateId', findCNB?.id);
+      formik.setFieldValue('name', findCNB?.name);
+      formik.setFieldValue('overtime', findCNB?.overtime);
+      formik.setFieldValue('base.componentID', findCNB?.base?.component?.id);
+      formik.setFieldValue('base.termID', findCNB?.base?.term?.id);
+      formik.setFieldValue('base.isTaxable', findCNB?.base?.isTaxable === true ? 'true' : 'false');
+      formik.setFieldValue('base.amount', findCNB?.base?.amount);
+      formik.setFieldValue('base.amountType', findCNB?.base?.amountType);
+      formik.setFieldValue('base.rate', findCNB?.base?.rate);
+      formik.setFieldValue('base.rateType', findCNB?.base?.rateType);
+      formik.setFieldValue(
+        'supplementary',
+        findCNB?.supplementaries?.map((val) => ({
+          componentID: val?.component?.id,
+          termID: val?.term?.id,
+          isTaxable: val?.isTaxable === true ? 'true' : 'false',
+          amount: val?.amount,
+          amountType: val?.amountType,
+          rate: val?.rate,
+          rateType: val?.rateType,
+        }))
+      );
+
+      dispatch({
+        type: getListTerminReqeusted.toString(),
+        payload: formik.values.base.componentID
+      });
+    }
   };
 
-  const handleDeleteSupplementary = (idx: number) => {
-    // Get the current supplementary array from formik.values
-    const currentSupplementary = formik.values.supplementary || [];
-
-    // Create a new array without the item at the specified index
-    const updatedSupplementary = currentSupplementary.filter((item, i) => i !== idx);
-
-    // Update formik's supplementary field with the new array
-    formik.setFieldValue('supplementary', updatedSupplementary);
+  const handleBaseCompensationComponent = (value) => {
+    formik.setFieldValue('base.componentID', value.target.value);
+    if (value.target.value === '3' || value.target.value === '4') {
+      setWithPercentage(getPaymentType(value.target.value, listBaseCompensation)?.withPercentage);
+      setTitle(getPaymentType(value.target.value, listBaseCompensation)?.title);
+    } else {
+      setWithPercentage(false);
+      setTitle(getPaymentType(value.target.value, listBaseCompensation)?.title);
+    }
   };
+
+  const handleRemoveOrAppend = (type: string, id?: number) => {
+    if (type === 'APPEND') {
+      formik.setValues({
+        ...formik.values,
+        supplementary: [...formik.values.supplementary, { amount: '', amountType: '', componentID: '', isTaxable: '', rate: '', rateType: '', termID: '' }]
+      });
+    } else {
+      const updated = formik.values.supplementary?.filter((_, index) => index !== id);
+      formik.setValues({
+        ...formik.values,
+        supplementary: updated
+      });
+    }
+  };
+
+  console.log(listTermin);
+
+  const match = dataTable?.items?.map(item => item.supplementaries).flat();
 
   return (
     <form ref={refProp} onSubmit={formik.handleSubmit}>
-      <Grid container>
-        <Grid item md={4}>
-          <Text title='Compensation & Benefits Profile' mb='6px' children={<span style={{ color: '#DC2626' }} >*</span>} />
-          <Autocomplete
-            id='cnbProfile'
-            freeSolo
-            value={ifThenElse(cnbValues?.template === null, formik.values.name, formik.values.name)}
-            size='small'
-            filterOptions={(options: any, params) => {
-              const filtered = filter(options, params);
-              const { inputValue } = params;
-              const isExisting = options?.some((option) => inputValue === option?.label);
-              if (inputValue !== '' && !isExisting) {
-                filtered.push({
-                  inputValue,
-                  label: 'Edit'
-                });
-              }
-              return filtered;
-            }}
-            selectOnFocus
-            clearOnBlur
-            handleHomeEndKeys
-            options={option?.listCnb}
-            getOptionLabel={(option: any) => {
-              if (typeof option === 'string') {
-                return option;
-              }
-
-              if (option.inputValue) {
-                return option.inputValue;
-              }
-
-              return option.label;
-            }}
-            renderOption={(props, option: any) => (
-              <li {...props} style={{ width: '100%' }}>{option.label}</li>
-            )}
-            renderInput={(params) => (
-              <TextField
-                name='templateId'
-                {...params}
-              />
-            )}
-          />
+      <Grid container >
+        <Grid container mb='16px'>
+          <Grid item md={6}>
+            <Select name='templateId' options={dataTable?.items?.map(val => {
+              return {
+                ...val,
+                label: val?.name,
+                value: val?.id
+              };
+            })} fullWidth size='small' variant='outlined' customLabel='Compensation and Benefit Profile' onChange={handleChangeTemplate} onBlur={formik.handleBlur} value={formik.values.templateId} />
+          </Grid>
         </Grid>
-      </Grid>
-      {!editMode && (
-        <Box sx={{
-          backgroundColor: '#F9FAFB',
-          padding: '16px 16px',
-          borderRadius: '6px',
-          marginTop: '16px'
-        }}>
-          <Grid container justifyContent='space-between'>
-            <Grid item md={6}>
-              <Text title='Base' fontWeight={700} fontSize='16px' color='primary.500' />
-            </Grid>
-            <Grid item md={1}>
-              <Button
-                label='Edit'
-                color='secondary'
-                sx={{ color: 'white' }}
-                startIcon={<FiEdit />}
-                onClick={() => setEditMode(true)}
-              />
-            </Grid>
-          </Grid>
-          <Grid container mt='16px' mb='32px'>
-            <Grid item md={6}>
-              <Text title='Compensation Component' color='grey.400' fontWeight={500} fontSize='14px' />
-              <Text title={cnbValues?.base?.component?.name} />
-            </Grid>
-            <Grid item md={6}>
-              <Text title='Tax Status' color='grey.400' fontWeight={500} fontSize='14px' />
-              <Chip label={cnbValues?.base?.isTaxable ? 'Taxable' : 'Non-Taxable'} />
-            </Grid>
-            <Grid item md={6}>
-              <Text title='Rate' color='grey.400' fontWeight={500} fontSize='14px' />
-              <Text title='Rp.5000' />
-            </Grid>
-            <Grid item md={12} mt={'16px'}>
-              <Text title='Overtime' color='grey.400' fontWeight={500} fontSize='14px' />
-              <Text title={`${cnbValues?.overtime || '0'} x`} />
-            </Grid>
-          </Grid>
-          {cnbValues?.supplementaries?.length > 0 && (
-            <Text title='Supplementary' fontWeight={700} fontSize='16px' color='primary.500' />
-          )}
-          {cnbValues?.supplementaries?.length > 0 && (
-            cnbValues?.supplementaries?.map((supplement, index) => (
-              <Grid container key={index} mb='16px'>
-                <Grid item md={6}>
-                  <Text title={`Compensation Component ${index + 1}`} color='grey.400' fontWeight={500} fontSize='14px' />
-                  <Text title={supplement?.component?.name || ''} />
-                </Grid>
-                <Grid item md={6}>
-                  <Text title='Tax Status' color='grey.400' fontWeight={500} fontSize='14px' />
-                  <Chip label={supplement?.isTaxable ? 'Taxable' : 'Non-Taxable'} />
-                </Grid>
-                <Grid item md={6}>
-                  <Text title='Rate' />
-                  <Text title={`Rp.5000 per ${supplement?.term?.name ?? ''}`} />
-                </Grid>
-              </Grid>
-            ))
-          )}
-        </Box>
-      )}
-      {editMode && (
-        <Box sx={{
-          backgroundColor: '#F9FAFB',
-          padding: '16px 16px',
-          borderRadius: '6px',
-          marginTop: '16px'
-        }}>
-          <Grid container justifyContent='space-between'>
-            <Grid item md={6}>
-              <Text title='Base' fontWeight={700} fontSize='16px' color='primary.500' />
-            </Grid>
-            <Grid item md={1}>
-              <Button
-                label='Edit'
-                color='secondary'
-                sx={{ color: 'white' }}
-                startIcon={<FiEdit />}
-                onClick={() => { setEditMode(false); }}
-              />
-            </Grid>
-          </Grid>
-          <Grid container alignItems='baseline' mt='16px' justifyContent='space-between'>
-            <Grid item md={4}>
-              <Select
-                name='compensationComponentID'
-                size='small'
-                fullWidth
-                customLabel='Compensation Component'
-                withAsterisk
-                displayEmpty
-                onBlur={formik.handleBlur}
-                onChange={(e) => {
-                  formik.setFieldValue('compensationComponentId', e.target.value);
-                }}
-                value={formik.values.compensationComponentId}
-                options={option?.listBaseCompensation}
-                renderValue={(value: unknown) => {
-                  if ((value as string)?.length === 0) {
-                    return <Text title='Select Base Compensation Component' color='grey.400' />;
-                  }
-                  const selected = option?.listBaseCompensation?.find(list => list?.value === value);
-                  if (selected) {
-                    return `${selected?.label}`;
-                  }
-                  return null;
-                }}
-              />
-            </Grid>
-            <Grid item md={6}>
-              <RadioGroup
-                withAsterisk
-                label='Tax Status'
-                name='taxStatus'
-                options={[
-                  { label: 'Taxable', value: 'true' },
-                  { label: 'Non-Taxable', value: 'false' }
-                ]}
-                value={formik.values.taxStatus}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                row
-              />
-            </Grid>
-          </Grid>
-          <Grid container mt='16px'>
-            <Grid container spacing={2} alignItems='end'>
-              <Grid item xs={3}>
-                <Input
-                  name='rateOrAmount'
-                  customLabel={title}
-                  withAsterisk
-                  size='small'
-                  fullWidth
-                  value={formik.values.rateOrAmount}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position='start'>Rp.</InputAdornment>
-                    ),
-                    endAdornment: (
-                      <InputAdornment position='end'>IDR</InputAdornment>
-                    )
-                  }}
-                />
-              </Grid>
-              {withPercentage && (
-                <Grid item xs={3}>
-                  <Input
-                    fullWidth
-                    customLabel='Rate'
-                    // variant='outlined'
-                    // value={formik.values.}
-                    size='small'
-                    type='number'
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position='end'>%</InputAdornment>
+        {formik.values.templateId !== '' && (
+          <Grid container sx={{
+            padding: '16px 16px',
+            borderRadius: '8px',
+            backgroundColor: '#F9FAFB'
+          }}>
+            <>
+              {
+                isEdit ? (
+                  <>
+                    <Grid container justifyContent='space-between'>
+                      <Grid item md={6}>
+                        <Text title='Base' fontWeight={700} fontSize='16px' color='#223567' />
+                      </Grid>
+                      <Grid item md={1}>
+                        <Button
+                          label='Edit'
+                          color='secondary'
+                          startIcon={<FiEdit size={12} color='#FFF' />}
+                          sx={{
+                            color: '#FFF'
+                          }}
+                          onClick={() => { setIsEdit(false); }}
+                        />
+                      </Grid>
+                    </Grid>
+                    <Grid container gap={8} mb='16px'>
+                      <Grid item md={6}>
+                        <Select
+                          customLabel='Compensation Component'
+                          withAsterisk name='base.componentID'
+                          onChange={handleBaseCompensationComponent}
+                          onBlur={formik.handleBlur}
+                          options={listBaseCompensation}
+                          fullWidth
+                          variant='outlined'
+                          value={formik.values.base.componentID}
+                          size='small'
+                        />
+                      </Grid>
+                      <Grid item md={4}>
+                        <RadioGroup
+                          label='Tax Status'
+                          options={[
+                            { label: 'Taxable', value: 'true' },
+                            { label: 'Non-Taxable', value: 'false' }
+                          ]}
+                          row
+                          name='base.isTaxable'
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                          value={formik.values.base.isTaxable}
+                        />
+                      </Grid>
+                    </Grid>
+                    <Grid container gap={1} alignItems='flex-end' mb='16px'>
+                      <Grid item md={3}>
+                        <Input customLabel={title}
+                          withAsterisk
+                          size='small'
+                          fullWidth
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                          value={ifThenElse(formik.values.base.amount === '0', formik.values.base.rate , formik.values.base.amount)}
+                          name='base.amount'
+                          InputProps={{
+                            endAdornment: (
+                              <InputAdornment position='end'>
+                              %
+                              </InputAdornment>
+                            )
+                          }}
+                        />
+                      </Grid>
+                      {
+                        withPercentage && (
+                          <>
+                            <Grid item md={3}>
+                              <Input
+                                customLabel='Rate'
+                                size='small'
+                                fullWidth
+                                onChange={formik.handleChange}
+                                name='base.rate'
+                                value={formik.values.base.rate}
+                                onBlur={formik.handleBlur}
+                                InputProps={{
+                                  endAdornment: (
+                                    <InputAdornment position='end'>
+                                    %
+                                    </InputAdornment>
+                                  )
+                                }} />
+                            </Grid>
+                          </>
+                        )
+                      }
+                      <Grid item md={3}>
+                        <Select fullWidth size='small' options={listTermin} name='base.termID' value={formik.values.base.termID} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                      </Grid>
+                    </Grid>
+                    <Grid container mb='16px' >
+                      <Grid item md={6}>
+                        <Input
+                          withAsterisk
+                          size='small'
+                          customLabel='Overtime'
+                          name='overtime'
+                          value={formik.values.overtime}
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                          inputProps={{
+                            step: 0.1
+                          }}
+                          InputProps={{
+                            endAdornment: (
+                              <InputAdornment position='end'>
+                                <Text color='grey.500' title='x' />
+                              </InputAdornment>
+                            )
+                          }}
+                        />
+                      </Grid>
+                    </Grid>
+                    {
+                      formik.values.supplementary.length > 0 && (
+                        <>
+                          <Grid container mb='16px'>
+                            <Grid item md={6}>
+                              <Text title='Supplementary' fontWeight={700} fontSize='16px' color='#223567' />
+                            </Grid>
+                          </Grid>
+                          {
+                            formik.values.supplementary?.map((value, index) => (
+                              <>
+                                <Grid container key={value.id} gap={1} justifyContent='space-between' mb='16px'>
+                                  <Grid item md={6}>
+                                    <Select
+                                      customLabel={`Compensation Component ${index + 1}`}
+                                      options={listSuppCompensation}
+                                      fullWidth
+                                      size='small'
+                                      variant='outlined'
+                                      value={value.componentID}
+                                      onChange={formik.handleChange}
+                                      onBlur={formik.handleBlur}
+                                      name={`supplementary[${index}].componentID`}
+                                    />
+                                  </Grid>
+                                  <Grid item md={4}>
+                                    <RadioGroup
+                                      label='Tax Status'
+                                      options={[
+                                        { label: 'Taxable', value: 'true' },
+                                        { label: 'Non-Taxable', value: 'false' }
+                                      ]}
+                                      row
+                                      name={`supplementary[${index}].isTaxable`}
+                                      onChange={formik.handleChange}
+                                      onBlur={formik.handleBlur}
+                                      value={value.isTaxable}
+                                    />
+                                  </Grid>
+                                  <Grid item md={1}>
+                                    <Button
+                                      label='Delete'
+                                      startIcon={<BsTrash3 />}
+                                      color='red'
+                                      onClick={() => { handleRemoveOrAppend('REMOVE', index); }}
+                                    />
+                                  </Grid>
+                                </Grid>
+                                <Grid container gap={1} alignItems='flex-end'>
+                                  <Grid item md={3}>
+                                    <Input
+                                      customLabel='Amount'
+                                      withAsterisk
+                                      name={`supplementary[${index}].amount`}
+                                      onChange={formik.handleChange}
+                                      onBlur={formik.handleBlur}
+                                      value={value.amount}
+                                      size='small'
+                                    />
+                                  </Grid>
+                                  <Grid item md={3}>
+                                    <Select
+                                      customLabel=''
+                                      variant='outlined'
+                                      size='small'
+                                      options={listTermin}
+                                      value={value.termID}
+                                      onChange={formik.handleChange}
+                                      onBlur={formik.handleBlur}
+                                      name={`supplementary[${index}].termID`}
+                                    />
+                                  </Grid>
+                                </Grid>
+                              </>
+                            ))
+                          }
+                          <Grid container mt='16px'>
+                            <Grid item md={3}>
+                              <Button
+                                label='Add Supplementary Compensation'
+                                startIcon={<MdAdd size={12} color='#FFF' />}
+                                color='secondary'
+                                sx={{ color: 'white' }}
+                                onClick={() => { handleRemoveOrAppend('APPEND'); }}
+                              />
+                            </Grid>
+                          </Grid>
+                        </>
                       )
-                    }}
-                  />
-                </Grid>
-              )}
-              <Grid item xs={3}>
-                <Select
-                  name='period'
-                  fullWidth
-                  customLabel=''
-                  size='small'
-                  value={formik.values.period}
-                  options={option?.listTermin || []}
-                />
-              </Grid>
-            </Grid>
+                    }
+
+                  </>
+                ) : (
+                  <>
+                    <Grid container justifyContent='space-between'>
+                      <Grid item md={6}>
+                        <Text title='Base' fontWeight={700} fontSize='16px' color='#223567' />
+                      </Grid>
+                      <Grid item md={1}>
+                        <Button
+                          label='Edit'
+                          color='secondary'
+                          startIcon={<FiEdit size={12} color='#FFF' />}
+                          sx={{
+                            color: '#FFF'
+                          }}
+                          onClick={() => { setIsEdit(true); }}
+                        />
+                      </Grid>
+                    </Grid>
+                    <Grid container >
+                      <Grid item md={6}>
+                        <Text title='Compensation Component' color='#9CA3AF' fontWeight={500} fontSize={14} />
+                        <Text title={listBaseCompensation?.find(item => item.value === formik.values.base.componentID)?.label} />
+                      </Grid>
+                      <Grid item md={6}>
+                        <Text title='Tax Status' color='#9CA3AF' fontWeight={500} fontSize={14} />
+                        <Chip label={ifThenElse(formik.values.base.isTaxable === 'true', 'Taxable', 'Non-Taxable')} sx={{ backgroundColor: '#E5E7EB', borderRadius: '4px' }} />
+                      </Grid>
+                    </Grid>
+                    <Grid container mb='16px'>
+                      <Grid item md={6}>
+                        <Text title='Rate' color='#9CA3AF' fontWeight={500} fontSize={14} />
+                        <Text title={`Rp ${ifThenElse(formik.values.base.rate === '0', numberFormat(+formik.values.base.amount), numberFormat(+formik.values.base.rate))} per ${dataTable?.items?.find(item => item?.base?.term?.id === formik.values.base.termID)?.base?.term?.name}`} />
+                      </Grid>
+                    </Grid>
+                    {
+                      formik.values.supplementary.length > 0 && (
+                        <>
+                          <Grid container justifyContent='space-between' mb='16px'>
+                            <Grid item md={6}>
+                              <Text title='Supplementary' fontWeight={700} fontSize='16px' color='#223567' />
+                            </Grid>
+                          </Grid>
+                          {
+                            formik.values.supplementary?.map((value, index) => (
+                              <>
+                                <Grid container key={value.id}>
+                                  <Grid item md={6}>
+                                    <Text title={`Compensation Component ${index + 1}`} fontWeight={500} fontSize={14} color='#9CA3AF' />
+                                    <Text title={match?.find(item => item.component?.id === value?.componentID)?.component?.name} />
+                                  </Grid>
+                                  <Grid item md={6}>
+                                    <Text title='Tax Status' color='#9CA3AF' fontWeight={500} fontSize={14} />
+                                    <Chip label={value.isTaxable === 'true' ? 'Taxable' : 'Non-Taxable'} sx={{ backgroundColor: '#E5E7EB', borderRadius: '4px' }} />
+                                  </Grid>
+                                </Grid>
+                                <Grid container>
+                                  <Grid item mb='16px'>
+                                    <Text title={`Amount per ${match?.find(item => item.term?.id === value?.termID)?.term?.name}`} color='#9CA3AF' fontWeight={500} fontSize={14} />
+                                    <Text title={`Rp ${ifThenElse(value.rate === null, numberFormat(+value.amount), numberFormat(+value.rate))} per ${match?.find(item => item.term?.id === value?.termID)?.term?.name}`} />
+                                  </Grid>
+                                </Grid>
+                              </>
+                            ))
+                          }
+                        </>
+                      )
+                    }
+                  </>
+                )
+              }
+
+            </>
           </Grid>
-          <Grid container mt='16px' mb='16px'>
-            <Grid item xs={12}>
-              <Text title='Overtime' fontWeight={700} fontSize='16px' mb='10px' color='primary.500' />
-            </Grid>
-            <Grid item xs={3}>
-              <Input
-                withAsterisk
-                size='small'
-                customLabel='Rate'
-                type='number'
-                name='overtime'
-                value={formik.values.overtime}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                inputProps={{
-                  step: 0.1
-                }}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position='end'>
-                      <Text title='x' color='grey.500' />
-                    </InputAdornment>
-                  )
-                }}
-              />
-            </Grid>
-          </Grid>
-          {(formik.values.supplementary as []).length > 0 && (
-            <Box mb='16px'>
-              <Grid container>
-                <Text title='Supplementary' fontWeight={700} fontSize='16px' color='primary.500' />
-              </Grid>
-              {(formik.values.supplementary as [])?.map((value, index) => (
-                <div key={index}>
-                  <Grid container alignItems='center' justifyContent='space-between' gap='4px'>
-                    <Grid item md={4}>
-                      <Select
-                        options={option?.listSuppCompensation}
-                        fullWidth size='small'
-                        customLabel={`Compensation Component ${index + 1}`}
-                        value={formik.values.supplementary[index]?.compensationComponentId || ''}
-                        onChange={(e) => {
-                          const selectedCompensationComponent = e.target.value;
-                          formik.setFieldValue(`supplementary.${index}.compensationComponentId`, selectedCompensationComponent);
-                        }}
-                      />
-                    </Grid>
-                    <Grid item md={4} >
-                      <RadioGroup
-                        withAsterisk
-                        label='Tax Status'
-                        name='taxStatus'
-                        options={[
-                          { label: 'Taxable', value: 'true' },
-                          { label: 'Non-Taxable', value: 'false' }
-                        ]}
-                        value={formik.values.supplementary[index]?.taxStatus}
-                        onChange={(e) => {
-                          formik.setFieldValue(`supplementary.${index}.taxStatus`, e.target.checked ? 'true' : 'false');
-                        }}
-                        row
-                      />
-                    </Grid>
-                    <Grid item md={2}>
-                      <Button
-                        label='Delete'
-                        color='red'
-                        startIcon={<DeleteIcon/>}
-                        onClick={() => { handleDeleteSupplementary(index); }}
-                      />
-                    </Grid>
-                  </Grid>
-                  <Grid container alignItems='flex-end' gap='4px'>
-                    <Grid item md={4}>
-                      <Input
-                        withAsterisk
-                        customLabel='Amount'
-                        size='small'
-                        value={formik.values.supplementary[index]?.rateOrAmount || ''}
-                        onChange={(e) => {
-                          formik.setFieldValue(`supplementary.${index}.rateOrAmount`, e.target.value);
-                        }}
-                      />
-                    </Grid>
-                    <Grid item md={4}>
-                      <Select
-                        options={option?.listTermin || []}
-                        fullWidth
-                        size='small'
-                        customLabel=''
-                        value={formik.values.supplementary[index]?.period}
-                        onChange={(e) => {
-                          formik.setFieldValue(`supplementary.${index}.period`, e.target.value);
-                        }}
-                      />
-                    </Grid>
-                  </Grid>
-                </div>
-              ))}
-            </Box>
-          )}
-          <Grid container>
-            <Grid item md={4}>
-              <Button
-                color='secondary'
-                sx={{ color: 'white' }}
-                label='Add Supplementary Compensation'
-                startIcon={<MdOutlineAdd />}
-                onClick={handleAddSupplementary}
-              />
-            </Grid>
-          </Grid>
-        </Box>
-      )}
+        )}
+      </Grid>
     </form>
   );
 };

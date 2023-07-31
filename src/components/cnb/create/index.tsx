@@ -264,8 +264,7 @@ export default function CreateCNBComponent() {
         }}
         validationSchema={validationSchecma}
       >
-        {(formik) => (
-          console.log(formik.values),
+        {(formik) =>
           (
             <FormikForm>
               <Header>
@@ -414,12 +413,7 @@ export default function CreateCNBComponent() {
                                 const selected = listBaseCompensation?.find(
                                   (list) => list.value === value
                                 );
-                                ifThenElse(
-                                  !!selected,
-                                  selected.label,
-                                  null
-                                );
-                                return null;
+                                return ifThenElse(!!selected, selected?.label, '');
                               }}
                             >
                               {listBaseCompensation?.map((item, i) => (
@@ -675,9 +669,9 @@ export default function CreateCNBComponent() {
                                               }}
                                             >
                                               {listSuppCompensation?.map(
-                                                (item, i) => (
+                                                (item, j) => (
                                                   <MenuItem
-                                                    key={i}
+                                                    key={j}
                                                     value={item.value}
                                                   >
                                                     {item.label}
@@ -986,7 +980,7 @@ export default function CreateCNBComponent() {
               </Paper>
             </FormikForm>
           )
-        )}
+        }
       </Formik>
       <ConfirmationModal
         open={leave}
