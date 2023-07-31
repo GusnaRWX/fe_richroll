@@ -461,7 +461,7 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
                         }}
                       >
                         <AiOutlinePlus />
-                        Add New {inputValue}
+                        {t('button.add_new')} {inputValue}
                       </Box>
                     ) as unknown as Element
                   });

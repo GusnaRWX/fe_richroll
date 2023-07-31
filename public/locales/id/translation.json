@@ -62,6 +62,7 @@
     "component": "Komponen",
     "deductable": "Dapat dikurangkan",
     "mark_complete": "Tandai Semua dan Selesai",
+    "add_new": "Tambah baru",
     "add_new_profile": "Tambahkan Profil Baru",
     "add_component": "Tambahkan Komponen",
     "add_new_component": "Tambahkan Komponen Baru",
@@ -345,7 +346,7 @@
             "nickname": "Nama panggilan",
             "nickname_placeholder": "Masukkan Nama Panggilan",
             "contact_number": "Nomor kontak",
-            "contact_number_placeholder": "Masukkan Nomor Kontak",
+            "contact_number_placeholder": "Masukkan Nomor yang Benar",
             "personal_email_address": "Alamat Email Pribadi",
             "personal_email_address_placeholder": "Alamat Email Pribadi",
             "start_date": "Mulai tanggal",
@@ -514,6 +515,10 @@
         }
       },
       "popup": {
+        "leave_confirmation": {
+          "title": "Apakah Anda yakin ingin pergi?",
+          "desc": "Setiap perubahan yang belum disimpan akan dibuang. "
+        },
         "confirmation_before_add_schedule": {
           "title": "Ubah Jadwal Kerja Default",
           "desc": "Apakah Anda ingin menggunakan Profil Jadwal Kerja?",
@@ -775,7 +780,7 @@
     },
     "popup": {
       "delete": {
-        "title": "Apakah Anda yakin ingin menghapus rekaman ini?",
+        "title": "Apakah Anda yakin ingin menghapus catatan ini?",
         "desc": "Setiap perubahan yang belum disimpan akan dibuang. "
       },
       "create_cancel": {

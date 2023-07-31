@@ -14,6 +14,7 @@ import dayjs from 'dayjs';
 import { postEmployeeInfoRequested, postPersonalInformationRequested, postEmergencyRequested, postCnbEmployeeRequested, postWorkScheduleRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
 import { base64ToFile, getCompanyData, ifThenElse } from '@/utils/helper';
 import { resetResponserMessage } from '@/store/reducers/slice/responserSlice';
+import { useTranslation } from 'react-i18next';
 
 const EmployeeInformationFormClient = dynamic(() => import('./EmployeeInformationForm'), {
   ssr: false
@@ -59,20 +60,16 @@ const ButtonWrapper = styled.div`
  margin-bottom: 1rem;
 `;
 
-const steps = [
-  'Employee Information',
-  'Personal Information',
-  'Emergency Contact',
-  'C&B',
-  'Work Schedule'
-];
-
 const ContentWrapper = styled(Card)(({
   padding: '2rem'
 }));
 
 function EmployeeCreateComponent() {
   const router = useRouter();
+  const {t} = useTranslation();
+  const t_createEmployee = 'company_management.employees.form_&_detail';
+  const t_tabsOption = 'company_management.employees.form_&_detail.wizard_and_tab_options';
+  const t_leaveConfirmation = 'company_management.employees.popup.leave_confirmation';
   const [value, setValue] = useState(0);
   const [finishedStep, setFinishedStep] = useState(0);
   const [leave, setLeave] = useState(false);
@@ -81,6 +78,13 @@ function EmployeeCreateComponent() {
   const employeeRef = useRef<HTMLFormElement>(null);
   const emergencyRef = useRef<HTMLFormElement>(null);
   const personalInformationRef = useRef<HTMLFormElement>(null);
+  const steps = [
+    t(`${t_tabsOption}.employee_information`),
+    t(`${t_tabsOption}.personal_information`),
+    t(`${t_tabsOption}.emergency_contact`),
+    t(`${t_tabsOption}.cnb`),
+    t(`${t_tabsOption}.work_shcedule`)
+  ];
   const [informationValue, setInformationValue] = useState<Employees.InformationValues>({
     companyID: '',
     department: '',
@@ -298,11 +302,11 @@ function EmployeeCreateComponent() {
             }
             onClick={handleCancel}
           />
-          <Typography component='h3' fontWeight='bold'>Add Employee</Typography>
+          <Typography component='h3' fontWeight='bold'>{t(`${t_createEmployee}.create_title`)}</Typography>
         </BackWrapper>
         <ButtonWrapper>
-          <MuiButton variant='outlined' size='small' onClick={() => handleCancel()}>Cancel</MuiButton>
-          <MuiButton variant='contained' onClick={handleSaveWorkSchedule} size='small' color='primary' disabled={value !== 4}>Save</MuiButton>
+          <MuiButton variant='outlined' size='small' onClick={() => handleCancel()}>{t('button.cancel')}</MuiButton>
+          <MuiButton variant='contained' onClick={handleSaveWorkSchedule} size='small' color='primary' disabled={value !== 4}>{t('button.save')}</MuiButton>
         </ButtonWrapper>
       </TopWrapper>
       <ContentWrapper>
@@ -358,8 +362,8 @@ function EmployeeCreateComponent() {
       <ConfirmationModal
         open={leave}
         handleClose={handleClose}
-        title='Are you sure you want to leave?'
-        content='Any unsaved changes will be discarded. This cannot be undone'
+        title={t(`${t_leaveConfirmation}.title`)}
+        content={t(`${t_leaveConfirmation}.desc`)}
         withCallback
         callback={() => {
           router.push('/company-management/employees');

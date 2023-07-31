@@ -62,6 +62,7 @@
     "component": "成分",
     "deductable": "免赔额",
     "mark_complete": "标记全部并完成",
+    "add_new": "添新",
     "add_new_profile": "添加新的个人资料",
     "add_component": "添加组件",
     "add_new_component": "添加新组件",
@@ -345,7 +346,7 @@
             "nickname": "昵称",
             "nickname_placeholder": "输入昵称",
             "contact_number": "联系电话",
-            "contact_number_placeholder": "输入联系电话",
+            "contact_number_placeholder": "输入正确的数字",
             "personal_email_address": "个人电子邮件地址",
             "personal_email_address_placeholder": "个人电子邮件地址",
             "start_date": "开始日期",
@@ -514,6 +515,10 @@
         }
       },
       "popup": {
+        "leave_confirmation": {
+          "title": "您确定要离开吗？",
+          "desc": "任何未保存的更改都将被丢弃。"
+        },
         "confirmation_before_add_schedule": {
           "title": "修改默认工作计划",
           "desc": "您想使用工作时间表配置文件吗？",
