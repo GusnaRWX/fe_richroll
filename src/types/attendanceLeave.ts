@@ -15,7 +15,7 @@ export declare namespace AttendanceLeave {
   interface EmployeeType {
     employeeID: string | null,
     name: string,
-    department: DepartmentType,
+    department: string | null,
     picture: string | null,
   }
 
@@ -33,7 +33,7 @@ export declare namespace AttendanceLeave {
 
   interface OvertimeType {
     id: string,
-    employee: EmployeeType | null,
+    employee: EmployeeType | null ,
     date: DayJS,
     start: DayJS,
     duration: string,
