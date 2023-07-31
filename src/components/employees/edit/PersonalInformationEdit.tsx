@@ -1156,7 +1156,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
           <Button onClick={() => {
             nextPage(0);
             setValues({ ...formik.values as Employees.PersonalValues, useResidentialAddress });
-          }} label='Back' variant='outlined' />
+          }} label={t('button.back')} variant='outlined' />
         </Grid>
         <Grid item>
           <Button type='submit' label={t('button.next')} />
