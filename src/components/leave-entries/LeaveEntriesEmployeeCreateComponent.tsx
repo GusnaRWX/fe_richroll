@@ -157,6 +157,7 @@ const LeaveEntriesEmployeeCreateComponent = ({
               <TimePicker
                 ampm={false}
                 format='HH:mm'
+                minTime={formik.values.halfFrom}
                 value={formik.values.halfTo}
                 onChange={(val) => formik.setFieldValue('halfTo', val, false)}
                 sx={{
