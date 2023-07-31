@@ -3,6 +3,7 @@ import {
   getAccount,
   patchSuspensionAccount,
   putDeleteAccount,
+  putDeleteBulkAccount,
   putReactivateAccount,
   putEmployeeAccountDeletion,
   postUserSuspend
@@ -18,6 +19,9 @@ import {
   putAccountDeleteRequested,
   putAccountDeleteSuccess,
   putAccountDeleteFailed,
+  putAccountDeleteBulkRequested,
+  putAccountDeleteBulkSuccess,
+  putAccountDeleteBulkFailed,
   putAccountReactiveRequested,
   putAccountReactiveSuccess,
   putAccountReactiveFailed,
@@ -109,6 +113,35 @@ function* fetchPutDeleteAccount(action: AnyAction) {
     if (err instanceof AxiosError) {
       const errorMessage = err?.response?.data as Services.ErrorResponse;
       yield put({ type: putAccountDeleteFailed.toString() });
+      yield delay(2000, true);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message
+        }
+      });
+    }
+  }
+}
+
+function* fetchPutDeleteBulkAccount(action: AnyAction) {
+  try {
+    const res: AxiosResponse = yield call(putDeleteBulkAccount, action?.payload);
+    if (res.data.code === 200 || res.data.code === 201) {
+      yield put({ type: putAccountDeleteBulkSuccess.toString() });
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: res?.data?.code,
+          message: res?.data?.message
+        }
+      });
+    }
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      yield put({ type: putAccountDeleteBulkFailed.toString() });
       yield delay(2000, true);
       yield put({
         type: setResponserMessage.toString(),
@@ -223,6 +256,7 @@ function* accountSaga() {
   yield takeEvery(getAccountRequested.toString(), fetchGetAccount);
   yield takeEvery(patchAccountSuspensionRequested.toString(), fetchPatchSuspensionAccount);
   yield takeEvery(putAccountDeleteRequested.toString(), fetchPutDeleteAccount);
+  yield takeEvery(putAccountDeleteBulkRequested.toString(), fetchPutDeleteBulkAccount);
   yield takeEvery(putAccountReactiveRequested.toString(), fetchPutReactivateAccount);
   yield takeEvery(putEmployeeAccountDeletionRequested.toString(), fetchPutEmployeeDeletion);
   yield takeEvery(postUserSuspendRequested.toString(), fetchPostUserSuspend);
