@@ -60,7 +60,6 @@ function OvertimeSummaryEditForm({editOpen, handleEditClose, callback, item}: Ed
     formik.setFieldValue('multiplier', item?.multiplier);
   }, [open, item]);
 
-
   useEffect(() => {
     setHaydrated(true);
   }, []);
@@ -89,7 +88,7 @@ function OvertimeSummaryEditForm({editOpen, handleEditClose, callback, item}: Ed
         />
         <NameWrapper>
           <Typography fontSize='18px'>{item?.employee?.name}</Typography>
-          <Typography fontSize='14px'>{item?.employee?.department === null ? '-' : item?.employee?.department?.name}</Typography>
+          <Typography fontSize='14px'>{item?.employee?.department === null ? '-' : item?.employee?.department}</Typography>
         </NameWrapper>
       </AvatarWrapper>
       <Grid container mb='1rem' spacing={2}>
