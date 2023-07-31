@@ -5,6 +5,10 @@ interface EmployeeDeletionPayloadType {
   password: string
 }
 
+interface BulkDeleteType {
+  id: Array<string>
+}
+
 export const getAccount = (payload: Account.AccountParams) => {
   const { page, itemPerPage, sort, direction, search, status, searchType } = payload;
   return get(`admin/users?page=${page}&itemPerPage=${itemPerPage}&sort=${sort}&direction=${direction}&search=${search}&status=${status}&searchType=${searchType}`);
@@ -16,6 +20,10 @@ export const patchSuspensionAccount = (payload) => {
 
 export const putDeleteAccount = (id: string) => {
   return put(`admin/users/${id}/delete`, null);
+};
+
+export const putDeleteBulkAccount = (payload: BulkDeleteType) => {
+  return put(`admin/users/delete`, payload);
 };
 
 export const putReactivateAccount = (id: string) => {

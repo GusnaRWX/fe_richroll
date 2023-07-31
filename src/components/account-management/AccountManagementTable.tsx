@@ -30,6 +30,7 @@ import {
   getAccountRequested,
   patchAccountSuspensionRequested,
   putAccountDeleteRequested,
+  putAccountDeleteBulkRequested,
   putAccountReactiveRequested
 } from '@/store/reducers/slice/account-management/accountManagementSlice';
 import dayjs from 'dayjs';
@@ -145,10 +146,18 @@ function AccountManagementTable({
   };
 
   const handleDeleteConfirm = () => {
-    dispatch({
-      type: putAccountDeleteRequested.toString(),
-      payload: selectedItem?.id
-    });
+    if (selectedTemp.length) {
+      const dataBulk = selectedTemp.map((val) => { return val.id; });
+      dispatch({
+        type: putAccountDeleteBulkRequested.toString(),
+        payload: {id: dataBulk}
+      });
+    } else {
+      dispatch({
+        type: putAccountDeleteRequested.toString(),
+        payload: selectedItem?.id
+      });
+    }
   };
 
   const handleSuspend = () => {
@@ -625,7 +634,7 @@ function AccountManagementTable({
           <Grid item xs={12}>
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '1rem' }}>
               <MuiButton variant='contained' onClick={() => { setModalBulkSuspend(true); }} size='small' sx={{ background: '#FFEDD5', color: '#EA580C' }}>Suspend Account</MuiButton>
-              <MuiButton variant='contained' onClick={() => console.log('clicked')} size='small' sx={{ background: '#FECACA', color: '#DC2626' }}>Delete Account</MuiButton>
+              <MuiButton variant='contained' onClick={handleDelete} size='small' sx={{ background: '#FECACA', color: '#DC2626' }}>Delete Account</MuiButton>
             </Box>
           </Grid>
         </Grid>
@@ -646,7 +655,7 @@ function AccountManagementTable({
         open={deleteConfirmation}
         handleClose={() => setDeleteConfirmation(false)}
         title='Confirm Account Deletion'
-        content='Are you sure you want to delete the selected account?'
+        content={`Are you sure you want to delete the ${ifThenElse(!!selectedTemp.length, selectedTemp.length + ' ', '')}selected account?`}
         withCallback
         noChange={true}
         callback={() => handleDeleteConfirm()}
