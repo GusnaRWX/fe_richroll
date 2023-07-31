@@ -180,7 +180,7 @@ const CnbFormEdit = ({ refProp, setValues }: CnbEditFormProps) => {
 
   return (
     <form ref={refProp} onSubmit={formik.handleSubmit}>
-      <Grid container >
+      <Grid>
         <Grid container mb='16px'>
           <Grid item md={6}>
             <Select name='templateId' options={dataTable?.items?.map(val => {
@@ -193,7 +193,7 @@ const CnbFormEdit = ({ refProp, setValues }: CnbEditFormProps) => {
           </Grid>
         </Grid>
         {formik.values.templateId !== '' && (
-          <Grid container sx={{
+          <Grid sx={{
             padding: '16px 16px',
             borderRadius: '8px',
             backgroundColor: '#F9FAFB'
@@ -317,7 +317,7 @@ const CnbFormEdit = ({ refProp, setValues }: CnbEditFormProps) => {
                       </Grid>
                     </Grid>
                     {
-                      formik.values.supplementary.length > 0 && (
+                      formik?.values?.supplementary?.length > 0 && (
                         <>
                           <Grid container mb='16px'>
                             <Grid item md={6}>
@@ -325,7 +325,7 @@ const CnbFormEdit = ({ refProp, setValues }: CnbEditFormProps) => {
                             </Grid>
                           </Grid>
                           {
-                            formik.values.supplementary?.map((value, index) => (
+                            formik?.values?.supplementary?.map((value, index) => (
                               <>
                                 <Grid container key={value.id} gap={1} justifyContent='space-between' mb='16px'>
                                   <Grid item md={6}>
@@ -393,7 +393,7 @@ const CnbFormEdit = ({ refProp, setValues }: CnbEditFormProps) => {
                             ))
                           }
                           <Grid container mt='16px'>
-                            <Grid item md={3}>
+                            <Grid item md={4}>
                               <Button
                                 label='Add Supplementary Compensation'
                                 startIcon={<MdAdd size={12} color='#FFF' />}
@@ -443,7 +443,7 @@ const CnbFormEdit = ({ refProp, setValues }: CnbEditFormProps) => {
                       </Grid>
                     </Grid>
                     {
-                      formik.values.supplementary.length > 0 && (
+                      formik?.values?.supplementary?.length > 0 && (
                         <>
                           <Grid container justifyContent='space-between' mb='16px'>
                             <Grid item md={6}>
@@ -451,7 +451,7 @@ const CnbFormEdit = ({ refProp, setValues }: CnbEditFormProps) => {
                             </Grid>
                           </Grid>
                           {
-                            formik.values.supplementary?.map((value, index) => (
+                            formik?.values?.supplementary?.map((value, index) => (
                               <>
                                 <Grid container key={value.id}>
                                   <Grid item md={6}>
