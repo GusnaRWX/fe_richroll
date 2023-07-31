@@ -67,7 +67,7 @@ const LeaveEntriesTableComponent = ({
     { id: 'employee.code', label: 'Employee ID' },
     { id: 'employee.user.name', label: 'Employee Name' },
     { id: 'items.start', label: 'Date' },
-    // { id: 'items.end', label: 'Leave To' },
+    { id: '', label: 'From' },
     { id: 'items.leaveType', label: 'Leave Type' },
     { id: 'items.leaveStatus', label: 'Status' },
     { id: 'action', label: '' }
@@ -197,6 +197,7 @@ const LeaveEntriesTableComponent = ({
                   </TableRow>
                 ), (
                   leaveEntries?.leaveEntriesData?.items?.map(value => (
+                    console.log(value),
                     <TableRow key={value.employee?.code}>
                       <TableCell>{value.employee?.code}</TableCell>
                       <TableCell>
@@ -211,7 +212,7 @@ const LeaveEntriesTableComponent = ({
                         </NameWrapper>
                       </TableCell>
                       <TableCell>{dayjs(value.start).format('DD/MM/YY')}</TableCell>
-                      {/* <TableCell>{dayjs(value.end).format('DD/MM/YY')}</TableCell> */}
+                      <TableCell>{dayjs(value.start).format('HH:mm')}</TableCell>
                       <TableCell>{renderLeaveType(value?.leaveType)}</TableCell>
                       <TableCell>
                         <Grid container alignItems='center' justifyContent='space-between'>
