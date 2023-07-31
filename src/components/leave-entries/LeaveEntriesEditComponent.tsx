@@ -182,6 +182,7 @@ const LeaveEntriesEditComponent: React.FC<LeaveEntriesEditProps> = ({
                 <TimePicker
                   ampm={false}
                   format='HH:mm'
+                  minTime={formik.values.halfFrom}
                   sx={{
                     '& .MuiOutlinedInput-input': {
                       padding: '8.5px 14px',
