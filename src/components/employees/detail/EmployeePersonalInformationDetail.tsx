@@ -157,7 +157,7 @@ const EmployeePersonalInformationDetail = ({ data }: PersonalInformationDetailPr
           sm={6}
         >
           <Text
-            title={t(`${t_personalInformationSection}.martial_status`)}
+            title={t(`${t_personalInformationSection}.marital_status`)}
             color='grey.400'
             fontWeight={500}
             mb={0.5}

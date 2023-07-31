@@ -334,6 +334,7 @@
           "personal_information": "Maklumat peribadi",
           "emergency_contact": "Talian kecemasan",
           "cnb": "C",
+          "compensation_benefit": "Pampasan",
           "work_shcedule": "Jadual kerja"
         },
         "employee_information": {
@@ -382,8 +383,8 @@
             "title": "Maklumat peribadi",
             "date_of_birth": "Tarikh lahir",
             "gender": "Jantina",
-            "martial_status": "Status Bela Diri",
-            "martial_status_placeholder": "Pilih Status Martial",
+            "marital_status": "Status perkahwinan",
+            "marital_status_placeholder": "Pilih Status Perkahwinan",
             "number_of_dependants": "Bilangan Tanggungan",
             "number_of_children": "Bilangan Anak",
             "number_of_children_placeholder": "Bilangan Input Anak",
@@ -404,6 +405,8 @@
             "sub_district_placeholder": "Pilih Daerah Kecil",
             "street_and_buildig_name": "Nama jalan. ",
             "street_and_buildig_name_placeholder": "Butiran Alamat Input",
+            "citizen_street_and_building_name": "Nama Jalan ID Warganegara. ",
+            "citizen_street_and_building_name_placeholder": "Butiran Alamat Input",
             "zip_code": "Poskod",
             "zip_code_placeholder": "Masukkan Kod Pos",
             "use_as_residential_address": "Gunakan sebagai alamat kediaman"
@@ -420,6 +423,8 @@
             "sub_district_placeholder": "Pilih Daerah Kecil",
             "street_and_buildig_name": "Nama jalan. ",
             "street_and_buildig_name_placeholder": "Butiran Alamat Input",
+            "residential_street_and_building_name": "Nama Jalan Kediaman. ",
+            "residential_street_and_building_name_placeholder": "Butiran Alamat Input",
             "zip_code": "Poskod",
             "zip_code_placeholder": "Masukkan Kod Pos",
             "use_as_residential_address": "Gunakan sebagai alamat kediaman"
@@ -534,6 +539,16 @@
             "start_time": "Masa mula",
             "end_time": "Masa tamat"
           }
+        },
+        "terminating_form": {
+          "title": "Borang Penamatan",
+          "information": {
+            "title": "Maklumat penting",
+            "desc": "Tarikh Gaji Pekerja ialah"
+          },
+          "effective_date": "Input Tarikh Penamatan Berkuatkuasa",
+          "note": "Nota",
+          "note_placeholder": "Nota Input"
         }
       }
     },
@@ -1032,8 +1047,8 @@
           "checkbox": "Gantikan dengan Profil Baharu"
         },
         "mark_all": {
-          "title": "Tandakan semua berbayar dan Selesai",
-          "description": "Semua pembayaran akan ditanda sebagai berbayar dan menyelesaikan proses Pembantu Gaji"
+          "title": "Tandakan semua telah dibayar dan Selesai",
+          "description": "Semua pengeluaran akan ditanda sebagai berbayar dan menyelesaikan proses Pembantu Gaji"
         },
         "cancel": {
           "title": "Jimat",

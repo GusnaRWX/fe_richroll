@@ -20,6 +20,7 @@ import { Employees } from '@/types/employees';
 import { validationSchemePersonalInformation } from '@/components/employees/create/validate';
 import { useFormik } from 'formik';
 import { ifThenElse, compareCheck } from '@/utils/helper';
+import { useTranslation } from 'react-i18next';
 
 interface PersonalInformationProps {
   refProp: React.Ref<HTMLFormElement>
@@ -33,6 +34,12 @@ interface PersonalInformationProps {
 
 const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, personalValues, setIsPersonalInformationValid, handleSecondPersonal }: PersonalInformationProps) => {
   const dispatch = useAppDispatch();
+  const {t} = useTranslation();
+  const t_personalInformationSection = 'company_management.employees.form_&_detail.personal_information.personal_information_section';
+  const t_citizenAddressSection = 'company_management.employees.form_&_detail.personal_information.citizen_address_section';
+  const t_residentialAddressSection = 'company_management.employees.form_&_detail.personal_information.residential_addres_section';
+  const t_personalIdSection = 'company_management.employees.form_&_detail.personal_information.personal_id_section';
+  const t_bankInformationSection = 'company_management.employees.form_&_detail.personal_information.bank_information_section';
 
   const {
     countries,
@@ -270,7 +277,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
       >
         <Text
           variant='text-lg'
-          title='Personal Information'
+          title={t(`${t_personalInformationSection}.title`)}
           fontWeight={700}
           color='primary.500'
         />
@@ -287,7 +294,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
             sm={5.8}
           >
             <DatePicker
-              customLabel='Date of Birth'
+              customLabel={t(`${t_personalInformationSection}.date_of_birth`)}
               value={formik.values.dateofBirthPersonalInformation as unknown as Date}
               onChange={(date: unknown) => formik.setFieldValue('dateofBirthPersonalInformation', date)}
               withAsterisk
@@ -300,7 +307,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
           >
             <RadioGroup
               withAsterisk
-              label='Gender'
+              label={t(`${t_personalInformationSection}.gender`)}
               name='genderPersonalInformation'
               options={[
                 { label: 'Male', value: 'male' },
@@ -334,7 +341,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               options={maritialStatus}
               name='maritialStatusPersonalInformation'
               value={String(formik.values.maritialStatusPersonalInformation)}
-              customLabel='Maritial Status'
+              customLabel={t(`${t_personalInformationSection}.marital_status`)}
               withAsterisk
               displayEmpty
               renderValue={(value: unknown) => {
@@ -371,11 +378,11 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
             /> */}
             <Input
               name='numberOfDependantsPersonalInformation'
-              placeholder='Input Number of Children'
+              placeholder={t(`${t_personalInformationSection}.number_of_children_placeholder`)}
               withAsterisk
               size='small'
               type='number'
-              customLabel='Number of Children'
+              customLabel={t(`${t_personalInformationSection}.number_of_children`)}
               value={formik.values.numberOfDependantsPersonalInformation}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -397,7 +404,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
           >
             <Select
               fullWidth
-              customLabel='Nationality'
+              customLabel={t(`${t_personalInformationSection}.nationality`)}
               withAsterisk
               variant='outlined'
               size='small'
@@ -409,7 +416,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               displayEmpty
               renderValue={(value: unknown) => {
                 if ((value as string)?.length === 0) {
-                  return <Text title='Select Nationality' color='grey.400' />;
+                  return <Text title={t(`${t_personalInformationSection}.nationality_placeholder`)} color='grey.400' />;
                 }
                 const selectedCountries = (countries as Array<{ label: string, value: string }>).find(country => country?.value === value);
                 if (selectedCountries) {
@@ -427,7 +434,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
           >
             <Select
               fullWidth
-              customLabel='Religion'
+              customLabel={t(`${t_personalInformationSection}.religion`)}
               variant='outlined'
               size='small'
               name='religionPersonalInformation'
@@ -438,7 +445,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               displayEmpty
               renderValue={(value: unknown) => {
                 if ((value as number) === 0) {
-                  return <Text title='Select Religion' color='grey.400' />;
+                  return <Text title={t(`${t_personalInformationSection}.religion_placeholder`)} color='grey.400' />;
                 }
                 const selectedReligions = religions.find(religion => religion.value === value);
                 if (selectedReligions) {
@@ -457,7 +464,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
       >
         <Text
           variant='text-base'
-          title='Citizen Address'
+          title={t(`${t_citizenAddressSection}.title`)}
           color='primary.500'
           fontWeight={700}
         />
@@ -475,7 +482,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
           >
             <Select
               fullWidth
-              customLabel='Country'
+              customLabel={t(`${t_citizenAddressSection}.contry`)}
               withAsterisk
               variant='outlined'
               size='small'
@@ -506,7 +513,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
           >
             <Select
               fullWidth
-              customLabel='Province'
+              customLabel={t(`${t_citizenAddressSection}.province`)}
               withAsterisk
               variant='outlined'
               size='small'
@@ -529,7 +536,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               displayEmpty
               renderValue={(value: unknown) => {
                 if ((value as string)?.length === 0) {
-                  return <Text title='Select Province' color='grey.400' />;
+                  return <Text title={t(`${t_citizenAddressSection}.province_placeholder`)} color='grey.400' />;
                 }
                 const selectedCountries = (administrativeFirst as Array<{ label: string, value: string }>).find(country => country.value === value);
                 if (selectedCountries) {
@@ -553,7 +560,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
           >
             <Select
               fullWidth
-              customLabel='City'
+              customLabel={t(`${t_citizenAddressSection}.city`)}
               withAsterisk
               variant='outlined'
               size='small'
@@ -577,7 +584,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               displayEmpty
               renderValue={(value: unknown) => {
                 if ((value as string)?.length === 0) {
-                  return <Text title='Select City' color='grey.400' />;
+                  return <Text title={t(`${t_citizenAddressSection}.city_placeholder`)} color='grey.400' />;
                 }
                 const selectedCountries = (administrativeSecond as Array<{ label: string, value: string }>).find(country => country.value === value);
                 if (selectedCountries) {
@@ -593,7 +600,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
           >
             <Select
               fullWidth
-              customLabel='Sub-District'
+              customLabel={t(`${t_citizenAddressSection}.sub_district`)}
               withAsterisk
               variant='outlined'
               size='small'
@@ -607,7 +614,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               displayEmpty
               renderValue={(value: unknown) => {
                 if ((value as string)?.length === 0) {
-                  return <Text title='Select Sub-District' color='grey.400' />;
+                  return <Text title={t(`${t_citizenAddressSection}.sub_district_placeholder`)} color='grey.400' />;
                 }
                 const selectedCountries = (administrativeThird as Array<{ label: string, value: string }>).find(country => country.value === value);
                 if (selectedCountries) {
@@ -638,8 +645,8 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               onBlur={formik.handleBlur}
               error={ifThenElse(compareCheck(formik.touched.addressCitizenAddress, Boolean(formik.errors.addressCitizenAddress)), formik.errors.addressCitizenAddress, '')}
               withAsterisk
-              customLabel='Citizen ID Street Name, Building Name'
-              placeholder='Input Address Details'
+              customLabel={t(`${t_citizenAddressSection}.citizen_street_and_building_name`)}
+              placeholder={t(`${t_citizenAddressSection}.citizen_street_and_building_name_placeholder`)}
             />
           </Grid>
           <Grid
@@ -648,14 +655,14 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
           >
             <Input
               withAsterisk
-              customLabel='ZIP Code'
+              customLabel={t(`${t_citizenAddressSection}.zip_code`)}
               size='small'
               name='zipCodeCitizenAddress'
               value={formik.values.zipCodeCitizenAddress}
               onChange={formik.handleChange}
               error={compareCheck(formik.touched.zipCodeCitizenAddress, Boolean(formik.errors.zipCodeCitizenAddress))}
               helperText={ifThenElse(formik.touched.zipCodeCitizenAddress, formik.errors.zipCodeCitizenAddress, '')}
-              placeholder='Input Zip Code'
+              placeholder={t(`${t_citizenAddressSection}.zip_code_placeholder`)}
             />
           </Grid>
         </Grid>
@@ -671,7 +678,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
             sm={5.8}
           >
             <CheckBox
-              customLabel='Use as residential address'
+              customLabel={t(`${t_citizenAddressSection}.use_as_residential_address`)}
               name='useResidentialCitizenAddress'
               checked={useResidentialAddress}
               onChange={() => setUseResidentialAddress((prev: boolean) => !prev)}
@@ -686,7 +693,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
       >
         <Text
           variant='text-base'
-          title='Residential Address'
+          title={t(`${t_residentialAddressSection}.title`)}
           color='primary.500'
           fontWeight={700}
           mb='16px'
@@ -705,7 +712,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
           >
             <Select
               fullWidth
-              customLabel='Country'
+              customLabel={t(`${t_residentialAddressSection}.contry`)}
               withAsterisk
               variant='outlined'
               size='small'
@@ -736,7 +743,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
           >
             <Select
               fullWidth
-              customLabel='Province'
+              customLabel={t(`${t_residentialAddressSection}.province`)}
               withAsterisk
               variant='outlined'
               size='small'
@@ -759,7 +766,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               displayEmpty
               renderValue={(value: unknown) => {
                 if ((value as string)?.length === 0) {
-                  return <Text title='Select Province' color='grey.400' />;
+                  return <Text title={t(`${t_residentialAddressSection}.province_placeholder`)} color='grey.400' />;
                 }
                 const selectedCountries = (secondAdministrativeFirst as Array<{ label: string, value: string }>).find(country => country.value === value);
                 if (selectedCountries) {
@@ -783,7 +790,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
           >
             <Select
               fullWidth
-              customLabel='City'
+              customLabel={t(`${t_residentialAddressSection}.city`)}
               withAsterisk
               variant='outlined'
               size='small'
@@ -807,7 +814,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               displayEmpty
               renderValue={(value: unknown) => {
                 if ((value as string)?.length === 0) {
-                  return <Text title='Select City' color='grey.400' />;
+                  return <Text title={t(`${t_residentialAddressSection}.city_placeholder`)} color='grey.400' />;
                 }
                 const selectedCountries = (secondAdministrativeSecond as Array<{ label: string, value: string }>).find(country => country.value === value);
                 if (selectedCountries) {
@@ -823,7 +830,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
           >
             <Select
               fullWidth
-              customLabel='Sub-District'
+              customLabel={t(`${t_residentialAddressSection}.sub_district`)}
               withAsterisk
               variant='outlined'
               size='small'
@@ -837,7 +844,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               displayEmpty
               renderValue={(value: unknown) => {
                 if ((value as string)?.length === 0) {
-                  return <Text title='Select Sub-District' color='grey.400' />;
+                  return <Text title={t(`${t_residentialAddressSection}.sub_district_placeholder`)} color='grey.400' />;
                 }
                 const selectedCountries = (secondAdministrativeThird as Array<{ label: string, value: string }>).find(country => country.value === value);
                 if (selectedCountries) {
@@ -868,8 +875,8 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               onBlur={formik.handleBlur}
               error={ifThenElse(compareCheck(formik.touched.addressResidentialAddress, Boolean(formik.errors.addressResidentialAddress)), formik.errors.addressResidentialAddress, '')}
               withAsterisk
-              customLabel='Residential Street Name, Building Name'
-              placeholder='Input Address Details'
+              customLabel={t(`${t_residentialAddressSection}.residential_street_and_building_name`)}
+              placeholder={t(`${t_residentialAddressSection}.residential_street_and_building_name_placeholder`)}
             />
           </Grid>
           <Grid
@@ -898,7 +905,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
       >
         <Text
           variant='text-lg'
-          title='Personal ID'
+          title={t(`${t_personalIdSection}.title`)}
           fontWeight={700}
           color='primary.500'
         />
@@ -916,7 +923,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
           >
             <Select
               fullWidth
-              customLabel='ID Type'
+              customLabel={t(`${t_personalIdSection}.id_type`)}
               withAsterisk
               variant='outlined'
               size='small'
@@ -930,7 +937,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               displayEmpty
               renderValue={(value: unknown) => {
                 if ((value as string)?.length === 0) {
-                  return <Text title='Select ID type' color='grey.400' />;
+                  return <Text title={t(`${t_personalIdSection}.id_type_placeholder`)} color='grey.400' />;
                 }
                 const selectedType = IDTypes.find(IDType => IDType.value === value);
                 if (selectedType) {
@@ -946,7 +953,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
           >
             <Input
               withAsterisk
-              customLabel='ID Number'
+              customLabel={t(`${t_personalIdSection}.id_number`)}
               size='small'
               name='idNumberPersonalID'
               value={formik.values.idNumberPersonalID}
@@ -954,7 +961,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               onBlur={formik.handleBlur}
               error={compareCheck(formik.touched.idNumberPersonalID, Boolean(formik.errors.idNumberPersonalID))}
               helperText={ifThenElse(formik.touched.idNumberPersonalID, formik.errors.idNumberPersonalID, '')}
-              placeholder='Input ID Number'
+              placeholder={t(`${t_personalIdSection}.id_number_placeholder`)}
               type='number'
             />
           </Grid>
@@ -971,7 +978,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
             sm={5.8}
           >
             <DatePicker
-              customLabel='ID Expiration Date'
+              customLabel={t(`${t_personalIdSection}.id_expiration_date`)}
               value={formik.values.idExpirationDatePersonalID as unknown as Date}
               onChange={(date: unknown) => formik.setFieldValue('idExpirationDatePersonalID', date)}
               withAsterisk
@@ -1002,7 +1009,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
       >
         <Text
           variant='text-lg'
-          title='Bank Information'
+          title={t(`${t_bankInformationSection}.title`)}
           fontWeight={700}
           color='primary.500'
         />
@@ -1020,7 +1027,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
           >
             <Select
               fullWidth
-              customLabel='Bank'
+              customLabel={t(`${t_bankInformationSection}.bank`)}
               variant='outlined'
               size='small'
               name='bankBankInformation'
@@ -1031,7 +1038,7 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
               displayEmpty
               renderValue={(value: unknown) => {
                 if ((value as string)?.length === 0) {
-                  return <Text title='Select Bank' color='grey.400' />;
+                  return <Text title={t(`${t_bankInformationSection}.bank_placeholder`)} color='grey.400' />;
                 }
                 const selectedBanks = (banks as Array<{ label: string, value: string }>).find(bank => bank.value === value);
                 if (selectedBanks) {
@@ -1046,13 +1053,13 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
             sm={5.8}
           >
             <Input
-              customLabel={`Bank Account Holder's Name`}
+              customLabel={t(`${t_bankInformationSection}.bank_account_holder_name`)}
               size='small'
               name='bankAccountHolderNameBankInformation'
               value={formik.values.bankAccountHolderNameBankInformation}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              placeholder={`Input Bank Account Holder's Name`}
+              placeholder={t(`${t_bankInformationSection}.bank_account_holder_name_placeholder`)}
             />
           </Grid>
         </Grid>
@@ -1068,13 +1075,13 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
             sm={5.8}
           >
             <Input
-              customLabel='Bank Account No'
+              customLabel={t(`${t_bankInformationSection}.bank_account_no`)}
               size='small'
               name='bankAccoutNoBankInformation'
               value={formik.values.bankAccoutNoBankInformation}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              placeholder='Input Bank Account No'
+              placeholder={t(`${t_bankInformationSection}.bank_account_no_placeholder`)}
             />
           </Grid>
           <Grid
@@ -1084,24 +1091,24 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
             <Grid container justifyContent='space-between'>
               <Grid item sm={5.8}>
                 <Input
-                  customLabel='Bank Code'
+                  customLabel={t(`${t_bankInformationSection}.bank_code`)}
                   size='small'
                   name='bankCodeBankInformation'
                   value={formik.values.bankCodeBankInformation}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  placeholder='Input Bank Code'
+                  placeholder={t(`${t_bankInformationSection}.bank_code_placeholder`)}
                 />
               </Grid>
               <Grid item sm={5.8}>
                 <Input
-                  customLabel='Branch Code'
+                  customLabel={t(`${t_bankInformationSection}.branch_code`)}
                   size='small'
                   name='branchCodeBankInformation'
                   value={formik.values.branchCodeBankInformation}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  placeholder='Input Branch Code'
+                  placeholder={t(`${t_bankInformationSection}.branch_code_placeholder`)}
                 />
               </Grid>
             </Grid>
@@ -1119,13 +1126,13 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
             sm={5.8}
           >
             <Input
-              customLabel='Branch Name'
+              customLabel={t(`${t_bankInformationSection}.branch_name`)}
               size='small'
               name='branchNameBankInformation'
               value={formik.values.branchNameBankInformation}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              placeholder='Input Branch Name'
+              placeholder={t(`${t_bankInformationSection}.branch_name_placeholder`)}
             />
           </Grid>
           <Grid
@@ -1133,12 +1140,12 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
             sm={5.8}
           >
             <Input
-              customLabel='Swift Code'
+              customLabel={t(`${t_bankInformationSection}.swift_code`)}
               size='small'
               name='swiftCodeBankInformation'
               value={formik.values.swiftCodeBankInformation}
               onChange={formik.handleChange}
-              placeholder='Input Swift Code'
+              placeholder={t(`${t_bankInformationSection}.title`)}
             />
           </Grid>
         </Grid>
@@ -1153,10 +1160,10 @@ const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, persona
           <Button onClick={() => {
             nextPage(0);
             setValues({ ...formik.values as any, useResidentialAddress });
-          }} label='Back' variant='outlined' />
+          }} label={t('button.back')} variant='outlined' />
         </Grid>
         <Grid item>
-          <Button type='submit' label='Next' />
+          <Button type='submit' label={t('button.next')} />
         </Grid>
       </Grid>
     </form>

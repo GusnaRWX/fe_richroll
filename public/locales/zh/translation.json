@@ -334,6 +334,7 @@
           "personal_information": "个人信息",
           "emergency_contact": "紧急联系人",
           "cnb": "C",
+          "compensation_benefit": "赔偿",
           "work_shcedule": "工作日程"
         },
         "employee_information": {
@@ -382,8 +383,8 @@
             "title": "个人信息",
             "date_of_birth": "出生日期",
             "gender": "性别",
-            "martial_status": "军事状况",
-            "martial_status_placeholder": "选择军事状况",
+            "marital_status": "婚姻状况",
+            "marital_status_placeholder": "选择婚姻状况",
             "number_of_dependants": "家属人数",
             "number_of_children": "儿童人数",
             "number_of_children_placeholder": "输入孩子数量",
@@ -404,6 +405,8 @@
             "sub_district_placeholder": "选择街道",
             "street_and_buildig_name": "街道名称。",
             "street_and_buildig_name_placeholder": "输入地址详细信息",
+            "citizen_street_and_building_name": "公民身份证街道名称。",
+            "citizen_street_and_building_name_placeholder": "输入地址详细信息",
             "zip_code": "邮政编码",
             "zip_code_placeholder": "输入邮政编码",
             "use_as_residential_address": "用作居住地址"
@@ -420,6 +423,8 @@
             "sub_district_placeholder": "选择街道",
             "street_and_buildig_name": "街道名称。",
             "street_and_buildig_name_placeholder": "输入地址详细信息",
+            "residential_street_and_building_name": "住宅街道名称。",
+            "residential_street_and_building_name_placeholder": "输入地址详细信息",
             "zip_code": "邮政编码",
             "zip_code_placeholder": "输入邮政编码",
             "use_as_residential_address": "用作居住地址"
@@ -534,6 +539,16 @@
             "start_time": "开始时间",
             "end_time": "时间结束"
           }
+        },
+        "terminating_form": {
+          "title": "终止表格",
+          "information": {
+            "title": "重要信息",
+            "desc": "员工发薪日期是"
+          },
+          "effective_date": "输入有效终止日期",
+          "note": "笔记",
+          "note_placeholder": "输入注释"
         }
       }
     },

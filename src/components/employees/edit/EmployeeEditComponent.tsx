@@ -11,6 +11,7 @@ import dayjs from 'dayjs';
 import { getCompanyData, ifThenElse, dynamicPayloadBaseCnb } from '@/utils/helper';
 import { useAppSelectors, useAppDispatch } from '@/hooks/index';
 import { patchEmergencyContactRequested, patchEmployeeInformationRequested, patchPersonalRequested, postWorkScheduleRequested, patchEmployeeCnbRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
+import { useTranslation } from 'react-i18next';
 
 const EmployeeInformationEdit = dynamic(() => import('./EmployeeInformationEdit'), {
   ssr: false
@@ -116,6 +117,10 @@ function EmployeeEditComponent() {
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   const [isPersonalInformationValid, setIsPersonalInformationValid] = useState(false);
   const router = useRouter();
+  const {t} = useTranslation();
+  const t_employeeDetail = 'company_management.employees.form_&_detail';
+  const t_tabsOption = 'company_management.employees.form_&_detail.wizard_and_tab_options';
+  const t_leaveConfirmation = 'company_management.employees.popup.leave_confirmation';
   const { employee } = useAppSelectors((state) => state);
   const dataEmployeeInformation = employee.employeeInformationDetail;
   const dataPersonalInformation = employee.personalInformationDetail;
@@ -412,29 +417,29 @@ function EmployeeEditComponent() {
             onClick={() => { router.back(); }}
           />
           <TitleWrapper>
-            <Typography component='h3' fontWeight='bold'>Employee Profile</Typography>
+            <Typography component='h3' fontWeight='bold'>{t(`${t_employeeDetail}.edit_title`)}</Typography>
             <Typography component='span' fontSize='12px' sx={{ color: '#4B5563' }}>{employee?.employeeInformationDetail?.fullName}</Typography>
           </TitleWrapper>
         </BackWrapper>
         <ButtonWrapper>
-          <MuiButton variant='outlined' size='small' onClick={() => handleOpen()}>Cancel</MuiButton>
+          <MuiButton variant='outlined' size='small' onClick={() => handleOpen()}>{t('button.cancel')}</MuiButton>
           <MuiButton variant='contained' onClick={() => {
             handleSave[value]();
             setTimeout(() => {
               router.push(`/company-management/employees/detail/${router.query.id}`);
             }, 2000);
-          }} size='small' color='primary'>Save</MuiButton>
+          }} size='small' color='primary'>{t('button.save')}</MuiButton>
         </ButtonWrapper>
       </TopWrapper>
       <ContentWrapper>
         <Box sx={{ width: '100%' }}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <Tabs value={value} onChange={handleChange} aria-label='basic tabs'>
-              <Tab sx={{ textTransform: 'none' }} label='Employee Information' {...a11yProps(0)} />
-              <Tab sx={{ textTransform: 'none' }} disabled={dataEmployeeInformation?.isSelfService === true} label='Personal Information' {...a11yProps(1)} />
-              <Tab sx={{ textTransform: 'none' }} disabled={dataEmployeeInformation?.isSelfService === true} label='Emergency Contact' {...a11yProps(2)} />
-              <Tab sx={{ textTransform: 'none' }} label='Compensations & Benefits' {...a11yProps(3)} />
-              <Tab sx={{ textTransform: 'none' }} label='Work Schedule' {...a11yProps(4)} />
+              <Tab sx={{ textTransform: 'none' }} label={t(`${t_tabsOption}.employee_information`)} {...a11yProps(0)} />
+              <Tab sx={{ textTransform: 'none' }} disabled={dataEmployeeInformation?.isSelfService === true} label={t(`${t_tabsOption}.personal_information`)} {...a11yProps(1)} />
+              <Tab sx={{ textTransform: 'none' }} disabled={dataEmployeeInformation?.isSelfService === true} label={t(`${t_tabsOption}.emergency_contact`)} {...a11yProps(2)} />
+              <Tab sx={{ textTransform: 'none' }} label={t(`${t_tabsOption}.compensation_benefit`)} {...a11yProps(3)} />
+              <Tab sx={{ textTransform: 'none' }} label={t(`${t_tabsOption}.work_shcedule`)} {...a11yProps(4)} />
             </Tabs>
           </Box>
           <TabPanel value={value} index={0}>
@@ -483,8 +488,8 @@ function EmployeeEditComponent() {
       <ConfirmationModal
         open={leave}
         handleClose={handleClose}
-        title='Are you sure you want to leave?'
-        content='Any unsaved changes will be discarded. This cannot be undone'
+        title={t(`${t_leaveConfirmation}.title`)}
+        content={t(`${t_leaveConfirmation}.desc`)}
         withCallback
         callback={() => {
           router.push('/company-management/employees');

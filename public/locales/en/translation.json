@@ -339,6 +339,7 @@
           "personal_information" : "Personal Information",
           "emergency_contact" : "Emergency Contact",
           "cnb" : "C&B",
+          "compensation_benefit" : "Compensation & Benefit",
           "work_shcedule" : "Work Schedule"
         },
         "employee_information" : {
@@ -387,8 +388,8 @@
             "title" : "Personal Information",
             "date_of_birth" : "Date of Birth",
             "gender" : "Gender",
-            "martial_status" : "Martial Status",
-            "martial_status_placeholder" : "Select Martial Status",
+            "marital_status" : "Marital Status",
+            "marital_status_placeholder" : "Select Marital Status",
             "number_of_dependants" : "Number of Dependants",
             "number_of_children" : "Number of Children",
             "number_of_children_placeholder" : "Input Number of Children",
@@ -409,6 +410,8 @@
             "sub_district_placeholder" : "Select Sub-District",
             "street_and_buildig_name" : "Street Name. Building Name",
             "street_and_buildig_name_placeholder" : "Input Address Detail",
+            "citizen_street_and_building_name" : "Citizen ID Street Name. Building Name",
+            "citizen_street_and_building_name_placeholder" : "Input Address Detail",
             "zip_code" : "Zip Code",
             "zip_code_placeholder" : "Input Zip Code",
             "use_as_residential_address" : "Use as residential address"
@@ -425,6 +428,8 @@
             "sub_district_placeholder" : "Select Sub-District",
             "street_and_buildig_name" : "Street Name. Building Name",
             "street_and_buildig_name_placeholder" : "Input Address Detail",
+            "residential_street_and_building_name" : "Residential Street Name. Building Name",
+            "residential_street_and_building_name_placeholder" : "Input Address Detail",
             "zip_code" : "Zip Code",
             "zip_code_placeholder" : "Input Zip Code",
             "use_as_residential_address" : "Use as residential address"
@@ -514,6 +519,10 @@
         }
       },
       "popup" : {
+        "leave_confirmation" : {
+          "title" : "Are you sure you want to leave?",
+          "desc" : "Any unsaved changes will be discarded. This cannot be undone"
+        },
         "confirmation_before_add_schedule" : {
           "title" : "Modify Default Work Schedule",
           "desc" : "Do you want use Work Schedule Profile?",
@@ -539,6 +548,16 @@
             "start_time" :"Start Time",
             "end_time" : "End Time"
           }
+        },
+        "terminating_form" : {
+          "title" : "Termination Form",
+          "information" : {
+            "title" : "Important Information",
+            "desc" : "Employee Payroll Date is"
+          },
+          "effective_date" : "Input Effective Termination Date",
+          "note" : "Notes",
+          "note_placeholder" : "Input Notes"
         }
       }
     },
