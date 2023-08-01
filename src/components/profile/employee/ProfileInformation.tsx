@@ -4,6 +4,8 @@ import { Grid } from '@mui/material';
 import { Input, Button, DatePicker } from '@/components/_shared/form';
 import { useAppSelectors } from '@/hooks/index';
 import { useFormik } from 'formik';
+import { ifThenElse } from '@/utils/helper';
+import dayjs from 'dayjs';
 
 const ProfileInformation = () => {
   const { profile } = useAppSelectors(state => state.me);
@@ -67,6 +69,7 @@ const ProfileInformation = () => {
               <DatePicker
                 customLabel='Date of Birth'
                 disabled
+                value={ifThenElse(dayjs(profile.dateOfBirth).isValid(), dayjs(profile.dateOfBirth), null)}
               />
             </Grid>
           </Grid>
