@@ -1,49 +1,29 @@
 import React, { useState } from 'react';
 import { Card, Text } from '@/components/_shared/common';
 import { Box, Grid, IconButton, InputAdornment } from '@mui/material';
-import { useForm } from '@/hooks/index';
 import { Button, Input } from '@/components/_shared/form';
 import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
+import { useFormik } from 'formik';
+import { validationUpdatePassword } from '../validate';
+import { ifThenElse } from '@/utils/helper';
 
 
 const ProfileUpdatePassword = () => {
-  const [initialState] = useState({
-    currentPassword: '',
-    newPassword: '',
-    repeatPassword: ''
+  const formik = useFormik({
+    initialValues: {
+      currentPassword: '',
+      newPassword: '',
+      repeatPassword: ''
+    },
+    validationSchema: validationUpdatePassword,
+    onSubmit: (_val) => {
+      console.log(_val);
+    }
   });
 
   const [currentPassword, setCurrentPassword] = useState<boolean>(false);
   const [newPassword, setNewPassword] = useState<boolean>(false);
   const [repeatPassword, setRepeatPassword] = useState<boolean>(false);
-
-
-  const validate = (fieldOfValues = values) => {
-    const temp = { ...errors };
-
-    if ('currentPassword' in fieldOfValues)
-      temp.currentPassword = fieldOfValues.currentPassword;
-
-    if ('newPassword' in fieldOfValues)
-      temp.newPassword = fieldOfValues.newPassword;
-
-    if ('repeatPassword' in fieldOfValues) {
-      const checkSamePassword = fieldOfValues.repeatPassword === values.newPassword ? '' : 'New password and Repeat password should match';
-      temp.repeatPassword = fieldOfValues.repeatPassword
-        ? checkSamePassword
-        : 'Repeat password is required';
-    }
-    setErrors({
-      ...temp
-    });
-  };
-
-  const {
-    values,
-    errors,
-    setErrors,
-    handleInputChange
-  } = useForm(initialState, true, validate);
 
   return (
     <Card
@@ -83,8 +63,9 @@ const ProfileUpdatePassword = () => {
             fullWidth
             customLabel='Current Password'
             name='currentPassword'
-            value={values.currentPassword}
-            onChange={handleInputChange}
+            value={formik.values.currentPassword}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             type={currentPassword ? 'text' : 'password'}
             InputProps={{
               endAdornment: (
@@ -110,9 +91,10 @@ const ProfileUpdatePassword = () => {
             size='small'
             fullWidth
             customLabel='New Password'
-            value={values.newPassowrd}
+            value={formik.values.newPassword}
             name='newPassword'
-            onChange={handleInputChange}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             type={newPassword ? 'text' : 'password'}
             InputProps={{
               endAdornment: (
@@ -140,8 +122,10 @@ const ProfileUpdatePassword = () => {
             customLabel='Repeat Password'
             withAsterisk
             name='repeatPassword'
-            onChange={handleInputChange}
-            error={errors.repeatPassword}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={ifThenElse(formik.errors.repeatPassword && formik.touched.repeatPassword, formik.errors.repeatPassword, '')}
+            value={formik.values.repeatPassword}
             type={repeatPassword ? 'text' : 'password'}
             InputProps={{
               endAdornment: (

@@ -1,38 +1,21 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Card, Text } from '@/components/_shared/common';
 import { Box, Grid } from '@mui/material';
 import { Input, Button } from '@/components/_shared/form';
-import { useAppSelectors, useForm } from '@/hooks/index';
+import { useAppSelectors } from '@/hooks/index';
+import { useFormik } from 'formik';
 
 const ProfileInformation = () => {
   const { profile } = useAppSelectors(state => state.me);
 
-  const [initialState] = useState({
-    fullName: ''
+  const formik = useFormik({
+    initialValues: {
+      fullName: ''
+    },
+    onSubmit: (_val) => {
+      console.log(_val);
+    }
   });
-
-  const validate = (fieldOfValues = values) => {
-    const temp = { ...errors };
-
-    if ('fullName' in fieldOfValues)
-      temp.fullName = fieldOfValues.fullName;
-
-    if (fieldOfValues === values)
-      return Object.values(temp).every(x => x === '');
-
-    setErrors({
-      ...temp
-    });
-
-  };
-
-  const {
-    values,
-    errors,
-    setErrors,
-    handleInputChange
-  } = useForm(initialState, true, validate);
-
 
   return (
     <Card sx={{
@@ -76,8 +59,9 @@ const ProfileInformation = () => {
             fullWidth
             customLabel='Full Name'
             name='fullName'
-            value={values.fullName}
-            onChange={handleInputChange}
+            value={formik.values.fullName}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
           />
         </Grid>
       </Grid>
