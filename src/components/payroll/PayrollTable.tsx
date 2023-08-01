@@ -245,7 +245,7 @@ function PayrollTable({
                           color='inherit'
                           size='small'
                           sx={{ color: '#111827' }}
-                          onClick={() => { console.log(true); }}
+                          onClick={() => { window.open(item?.attachment?.link, '_blank'); }}
                         >
                           {item.attachment.filename} &nbsp;<FiDownload fontSize='small' />
                         </MuiButton>

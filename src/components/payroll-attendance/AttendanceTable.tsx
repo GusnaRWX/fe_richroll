@@ -284,7 +284,7 @@ function AttendanceTable({
                           label={item.attachment.filename}
                           sx={{ borderRadius: '6px' }}
                           deleteIcon={<HiDownload size={16} color='#000' />}
-                          onDelete={() => { console.log('here'); }}
+                          onClick={() => { window.open(item.attachment.link, '_blank'); }}
                         />
                       </TableCell>
                       <TableCell>
