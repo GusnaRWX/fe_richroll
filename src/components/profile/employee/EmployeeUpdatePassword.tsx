@@ -3,8 +3,22 @@ import { Card, Text } from '@/components/_shared/common';
 import { Grid, InputAdornment, IconButton } from '@mui/material';
 import { Button, Input } from '@/components/_shared/form';
 import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
+import { useFormik } from 'formik';
+import { ifThenElse } from '@/utils/helper';
+import { validationUpdatePassword } from '../validate';
 
 const EmployeeUpdatePassword = () => {
+  const formik = useFormik({
+    initialValues: {
+      currentPassword: '',
+      newPassword: '',
+      repeatPassword: ''
+    },
+    validationSchema: validationUpdatePassword,
+    onSubmit: (_val) => {
+      console.log(_val);
+    }
+  });
   const [currentPassword, setCurrentPassword] = useState<boolean>(false);
   const [newPassword, setNewPassword] = useState<boolean>(false);
   const [repeatPassword, setRepeatPassword] = useState<boolean>(false);
@@ -37,6 +51,9 @@ const EmployeeUpdatePassword = () => {
                 fullWidth
                 size='small'
                 name='currentPassword'
+                value={formik.values.currentPassword}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
                 placeholder='Input Current Password'
                 type={currentPassword ? 'text' : 'password'}
                 InputProps={{
@@ -60,6 +77,9 @@ const EmployeeUpdatePassword = () => {
                 fullWidth
                 size='small'
                 name='newPassword'
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.newPassword}
                 placeholder='Input New Password'
                 type={newPassword ? 'text' : 'password'}
                 InputProps={{
@@ -82,8 +102,12 @@ const EmployeeUpdatePassword = () => {
                 customLabel='Confirmation Password'
                 fullWidth
                 size='small'
-                name='confirmationPassword'
+                name='repeatPassword'
                 placeholder='Input Confirmation Password'
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={ifThenElse(formik.errors.repeatPassword && formik.touched.repeatPassword, formik.errors.repeatPassword, '')}
+                value={formik.values.repeatPassword}
                 type={repeatPassword ? 'text' : 'password'}
                 InputProps={{
                   endAdornment: (
