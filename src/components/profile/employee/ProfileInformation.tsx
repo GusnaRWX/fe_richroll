@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, Text } from '@/components/_shared/common';
 import { Grid } from '@mui/material';
-import { Input, Button } from '@/components/_shared/form';
+import { Input, Button, DatePicker } from '@/components/_shared/form';
 import { useAppSelectors } from '@/hooks/index';
 import { useFormik } from 'formik';
 
@@ -61,6 +61,12 @@ const ProfileInformation = () => {
                 onBlur={formik.handleBlur}
                 value={formik.values.email}
               // placeholder=''
+              />
+            </Grid>
+            <Grid item>
+              <DatePicker
+                customLabel='Date of Birth'
+                disabled
               />
             </Grid>
           </Grid>

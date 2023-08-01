@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, Text } from '@/components/_shared/common';
 import { Box, Grid } from '@mui/material';
-import { Input, Button } from '@/components/_shared/form';
+import { Input, Button, DatePicker } from '@/components/_shared/form';
 import { useAppSelectors } from '@/hooks/index';
 import { useFormik } from 'formik';
 
@@ -42,6 +42,7 @@ const ProfileInformation = () => {
         justifyContent='space-between'
         alignItems='center'
         rowGap={2}
+        mb='16px'
       >
         <Grid item xs={12} sm={5.9}>
           <Input
@@ -62,6 +63,14 @@ const ProfileInformation = () => {
             value={formik.values.fullName}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
+          />
+        </Grid>
+      </Grid>
+      <Grid container>
+        <Grid item xs={12} sm={5.9}>
+          <DatePicker
+            customLabel='Date of Birth'
+            disabled
           />
         </Grid>
       </Grid>
