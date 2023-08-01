@@ -109,7 +109,7 @@ function EmergencyContactEdit({ refProp, nextPage, setValues, emergencyValues, s
             <Grid item xs={6} md={6} lg={6} xl={6}>
               <Input
                 name='fullNamePrimary'
-                customLabel={t(`${t_primarySection}.fulltime`)}
+                customLabel={t(`${t_primarySection}.fullname`)}
                 withAsterisk={true}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}

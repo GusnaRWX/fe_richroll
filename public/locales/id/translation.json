@@ -479,6 +479,7 @@
         },
         "cnb": {
           "compensation_&_benefits_profile": "Kompensasi",
+          "cnb_profile": "C",
           "compensation_&_benefits_profile_placeholder": "Pilih profil yang ada",
           "base_section": {
             "title": "Basis",
@@ -488,7 +489,10 @@
             "tax_status_option": {
               "taxable": "Kena Pajak",
               "nontaxable": "Tidak Kena Pajak"
-            }
+            },
+            "amount": "Jumlah",
+            "rate": "Kecepatan",
+            "overtime": "Lembur"
           },
           "overtime_section": {
             "title": "Lembur",
@@ -502,7 +506,8 @@
               "taxable": "Kena Pajak",
               "nontaxable": "Tidak Kena Pajak"
             },
-            "amount": "Jumlah"
+            "amount": "Jumlah",
+            "rate": "Kecepatan"
           }
         },
         "work_schedule_section": {

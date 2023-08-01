@@ -479,6 +479,7 @@
         },
         "cnb": {
           "compensation_&_benefits_profile": "赔偿",
+          "cnb_profile": "C",
           "compensation_&_benefits_profile_placeholder": "选择现有的配置文件",
           "base_section": {
             "title": "根据",
@@ -488,7 +489,10 @@
             "tax_status_option": {
               "taxable": "应纳税",
               "nontaxable": "免税"
-            }
+            },
+            "amount": "数量",
+            "rate": "速度",
+            "overtime": "随着时间的推移"
           },
           "overtime_section": {
             "title": "随着时间的推移",
@@ -502,7 +506,8 @@
               "taxable": "应纳税",
               "nontaxable": "免税"
             },
-            "amount": "数量"
+            "amount": "数量",
+            "rate": "速度"
           }
         },
         "work_schedule_section": {
@@ -1070,7 +1075,7 @@
   "satutory_benefit": {
     "component": {
       "title": "法定福利组件仪表板",
-      "detail_title": "法定福利成分",
+      "detail_title": "法定福利部分",
       "table": {
         "company_name": "公司名称",
         "country": "国家",

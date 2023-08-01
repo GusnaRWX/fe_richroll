@@ -11,7 +11,7 @@
     "attendance_&_leave": "Kehadiran",
     "attendance_&_leave_attendance_entries": "Penyertaan Kehadiran",
     "attendance_&_leave_leave_entries": "Tinggalkan Penyertaan",
-    "attendance_&_leave_leave_summary": "Ringkasan Tinggalkan",
+    "attendance_&_leave_leave_summary": "Tinggalkan Ringkasan",
     "attendance_&_leave_overtime_summary": "Ringkasan Kerja Lebih Masa",
     "attendance_&_leave_configuration": "Konfigurasi",
     "attendance_&_leave_balance": "Seimbang",
@@ -479,6 +479,7 @@
         },
         "cnb": {
           "compensation_&_benefits_profile": "Pampasan",
+          "cnb_profile": "C",
           "compensation_&_benefits_profile_placeholder": "Pilih profil sedia ada",
           "base_section": {
             "title": "Pangkalan",
@@ -488,7 +489,10 @@
             "tax_status_option": {
               "taxable": "Bercukai",
               "nontaxable": "Tidak Bercukai"
-            }
+            },
+            "amount": "Jumlah",
+            "rate": "Kadar",
+            "overtime": "Lebih masa"
           },
           "overtime_section": {
             "title": "Lebih masa",
@@ -502,7 +506,8 @@
               "taxable": "Bercukai",
               "nontaxable": "Tidak Bercukai"
             },
-            "amount": "Jumlah"
+            "amount": "Jumlah",
+            "rate": "Kadar"
           }
         },
         "work_schedule_section": {
@@ -997,7 +1002,7 @@
           "additional_fixed_amount": "Jumlah Tetap Tambahan"
         },
         "income_tax_multiplier": {
-          "deductible_factor": "Faktor Boleh Dipotong",
+          "deductible_factor": "Faktor Boleh Tolak",
           "factor_unit_condition": "Keadaan Unit Faktor",
           "rate": "Kadar",
           "additional_fixed_amount": "Jumlah Tetap Tambahan",
@@ -1090,7 +1095,7 @@
         "create_basic_detail": {
           "detail_title": "Butiran Asas",
           "name": "Nama Tepu",
-          "name_placeholder": "Input Nama Manfaat Tepu",
+          "name_placeholder": "Masukkan Nama Manfaat Tepu",
           "country": "Negara",
           "province": "Wilayah",
           "city": "Bandar",
@@ -1181,7 +1186,7 @@
         "create_title": "Cipta Manfaat Tepu",
         "update_title": "Kemas kini Faedah Tepu",
         "name": "Nama Tepu",
-        "name_placeholder": "Masukkan Nama Manfaat Tepu",
+        "name_placeholder": "Masukkan Nama Faedah Tepu",
         "country": "Negara",
         "province": "Wilayah",
         "city": "Bandar",

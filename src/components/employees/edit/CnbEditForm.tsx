@@ -64,7 +64,7 @@ function CnbEditForm() {
     <>
       <Grid container mb='2rem'>
         <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
-          <Typography mb='6px'>Compensation & Benefit Profile<AsteriskComponent>*</AsteriskComponent></Typography>
+          <Typography mb='6px'>Compensation & Benefit Profilee<AsteriskComponent>*</AsteriskComponent></Typography>
           <Autocomplete
             id='profile'
             freeSolo={true}

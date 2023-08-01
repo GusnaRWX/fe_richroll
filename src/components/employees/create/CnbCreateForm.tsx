@@ -51,11 +51,10 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
   const dispatch = useAppDispatch();
   const [isEdit, setIsEdit] =useState(false);
   const [withPercentage, setWithPercentage] = useState(false);
-  const [title, setTitle] = useState('Amount');
+  const [title, setTitle] = useState('');
   const {t} = useTranslation();
   const t_cnbForm = 'company_management.employees.form_&_detail.cnb';
   const t_cnbBaseSection = 'company_management.employees.form_&_detail.cnb.base_section';
-  const t_cnbOvertimeSection = 'company_management.employees.form_&_detail.cnb.overtime_section';
   const t_cnbSupplementarySection = 'company_management.employees.form_&_detail.cnb.supplementary_section';
 
   useEffect(() => {
@@ -235,7 +234,7 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
                   </Grid>
                   <Grid container gap={1} alignItems='flex-end' mb='16px'>
                     <Grid item md={3}>
-                      <Input customLabel={title}
+                      <Input customLabel={title=== '' ? t(`${t_cnbBaseSection}.amount`) : title}
                         withAsterisk
                         size='small'
                         fullWidth
@@ -257,7 +256,7 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
                         <>
                           <Grid item md={3}>
                             <Input
-                              customLabel={t(`${t_cnbOvertimeSection}.rate`)}
+                              customLabel={t(`${t_cnbBaseSection}.rate`)}
                               size='small'
                               fullWidth
                               onChange={formik.handleChange}
@@ -284,7 +283,7 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
                       <Input
                         withAsterisk
                         size='small'
-                        customLabel={t(`${t_cnbOvertimeSection}.title`)}
+                        customLabel={t(`${t_cnbBaseSection}.overtime`)}
                         name='overtime'
                         value={formik.values.overtime}
                         onChange={formik.handleChange}
@@ -419,12 +418,12 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
                     </Grid>
                     <Grid item md={6}>
                       <Text title={t(`${t_cnbBaseSection}.tax_status`)} color='#9CA3AF' fontWeight={500} fontSize={14} />
-                      <Chip label={formik.values.base.isTaxable === 'true' ? 'Taxable' : 'Non-Taxable'} sx={{ backgroundColor: '#E5E7EB', borderRadius: '4px'}}/>
+                      <Chip label={formik.values.base.isTaxable === 'true' ? t(`${t_cnbBaseSection}.tax_status_option.taxable`) : t(`${t_cnbSupplementarySection}.tax_status_option.nontaxable`)} sx={{ backgroundColor: '#E5E7EB', borderRadius: '4px'}}/>
                     </Grid>
                   </Grid>
                   <Grid container mb='16px'>
                     <Grid item md={6}>
-                      <Text title={t(`${t_cnbOvertimeSection}.rate`)} color='#9CA3AF' fontWeight={500} fontSize={14} />
+                      <Text title={t(`${t_cnbBaseSection}.rate`)} color='#9CA3AF' fontWeight={500} fontSize={14} />
                       <Text title={`Rp ${ifThenElse(formik.values.base.rate === null, numberFormat(+formik.values.base.amount), numberFormat(+formik.values.base.rate))} per ${dataTable?.items?.find(item => item?.base?.term?.id === formik.values.base.termID)?.base?.term?.name}`}/>
                     </Grid>
                   </Grid>
@@ -446,7 +445,7 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
                                 </Grid>
                                 <Grid item md={6}>
                                   <Text title={t(`${t_cnbSupplementarySection}.tax_status`)} color='#9CA3AF' fontWeight={500} fontSize={14} />
-                                  <Chip label={value.isTaxable === 'true' ? 'Taxable' : 'Non-Taxable'} sx={{ backgroundColor: '#E5E7EB', borderRadius: '4px' }} />
+                                  <Chip label={value.isTaxable === 'true' ? t(`${t_cnbSupplementarySection}.tax_status_option.taxable`) : t(`${t_cnbSupplementarySection}.tax_status_option.nontaxable`)} sx={{ backgroundColor: '#E5E7EB', borderRadius: '4px' }} />
                                 </Grid>
                               </Grid>
                               <Grid container>

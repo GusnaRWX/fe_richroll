@@ -484,6 +484,7 @@
         },
         "cnb" : {
           "compensation_&_benefits_profile" :"Compensation & Benefits Profile",
+          "cnb_profile" :"C&B Profile",
           "compensation_&_benefits_profile_placeholder" : "Select existing profile",
           "base_section" : {
             "title" : "Base",
@@ -493,7 +494,10 @@
             "tax_status_option" : {
               "taxable" : "Taxable",
               "nontaxable" : "Non-Taxable"
-            }
+            },
+            "amount" : "Amount",
+            "rate" : "Rate",
+            "overtime" : "Overtime"
           },
           "overtime_section" : {
             "title" : "Overtime",
@@ -507,7 +511,8 @@
               "taxable" : "Taxable",
               "nontaxable" : "Non-Taxable"
             },
-            "amount" : "Amount"
+            "amount" : "Amount",
+            "rate" : "Rate"
           }
         },
         "work_schedule_section" : {
