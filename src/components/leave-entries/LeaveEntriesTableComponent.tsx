@@ -72,7 +72,7 @@ const LeaveEntriesTableComponent = ({
     { id: 'employee.code', label: t(`${t_tableHeader}.employee_id`) },
     { id: 'employee.user.name', label: t(`${t_tableHeader}.employee_name`) },
     { id: 'items.start', label: t(`${t_tableHeader}.date`)},
-    // { id: 'items.end', label: t(`${t_tableHeader}.leave_to`)},
+    { id: '', label: t(`${t_tableHeader}.from`)},
     { id: 'items.leaveType', label: t(`${t_tableHeader}.leave_type`) },
     { id: 'items.leaveStatus', label: t(`${t_tableHeader}.status`) },
     { id: 'action', label: '' }
@@ -202,6 +202,7 @@ const LeaveEntriesTableComponent = ({
                   </TableRow>
                 ), (
                   leaveEntries?.leaveEntriesData?.items?.map(value => (
+                    console.log(value),
                     <TableRow key={value.employee?.code}>
                       <TableCell>{value.employee?.code}</TableCell>
                       <TableCell>
@@ -216,7 +217,7 @@ const LeaveEntriesTableComponent = ({
                         </NameWrapper>
                       </TableCell>
                       <TableCell>{dayjs(value.start).format('DD/MM/YY')}</TableCell>
-                      {/* <TableCell>{dayjs(value.end).format('DD/MM/YY')}</TableCell> */}
+                      <TableCell>{dayjs(value.start).format('HH:mm')}</TableCell>
                       <TableCell>{renderLeaveType(value?.leaveType)}</TableCell>
                       <TableCell>
                         <Grid container alignItems='center' justifyContent='space-between'>

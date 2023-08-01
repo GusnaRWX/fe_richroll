@@ -645,6 +645,7 @@
           "employee_name" :"Employee Name",
           "leave_form" : "Leave From",
           "leave_to" : "Leave To",
+          "From" : "From",
           "date" : "Date",
           "leave_type" : "Leave Type",
           "status" :"Status"

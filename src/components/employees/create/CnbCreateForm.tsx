@@ -165,7 +165,7 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
   const match = dataTable?.items?.map(item => item.supplementaries).flat();
 
   return (
-    <Grid container >
+    <Grid>
       <Grid container mb='16px'>
         <Grid item md={6}>
           <Select name='templateId' options={dataTable?.items?.map(val => {
@@ -178,7 +178,7 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
         </Grid>
       </Grid>
       {formik.values.templateId !== '' && (
-        <Grid container sx={{
+        <Grid sx={{
           padding: '16px 16px',
           borderRadius: '8px',
           backgroundColor: '#F9FAFB'
@@ -378,7 +378,7 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
                           ))
                         }
                         <Grid container mt='16px'>
-                          <Grid item md={3}>
+                          <Grid item md={4}>
                             <Button
                               label={t('button.add_supplementary_compensation')}
                               startIcon={<MdAdd size={12} color='#FFF'/>}
@@ -395,7 +395,7 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
                 </>
               ) : (
                 <>
-                  <Grid container justifyContent='space-between'>
+                  <Grid container justifyContent='space-between' >
                     <Grid item md={6}>
                       <Text title={t(`${t_cnbBaseSection}.title`)} fontWeight={700} fontSize='16px' color='#223567' />
                     </Grid>
@@ -411,6 +411,7 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
                       />
                     </Grid>
                   </Grid>
+
                   <Grid container >
                     <Grid item md={6}>
                       <Text title={t(`${t_cnbBaseSection}.compensation_component`)} color='#9CA3AF' fontWeight={500} fontSize={14}/>
@@ -463,7 +464,6 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
                 </>
               )
             }
-
           </>
         </Grid>
       )}

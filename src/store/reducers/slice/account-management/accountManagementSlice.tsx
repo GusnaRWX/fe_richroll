@@ -47,6 +47,15 @@ export const accountSlice = createSlice({
     putAccountDeleteFailed: (state) => {
       state.isLoading = false;
     },
+    putAccountDeleteBulkRequested: (state) => {
+      state.isLoading = true;
+    },
+    putAccountDeleteBulkSuccess: (state) => {
+      state.isLoading = false;
+    },
+    putAccountDeleteBulkFailed: (state) => {
+      state.isLoading = false;
+    },
     putAccountReactiveRequested: (state) => {
       state.isLoading = true;
     },
@@ -100,6 +109,9 @@ export const {
   putAccountDeleteRequested,
   putAccountDeleteSuccess,
   putAccountDeleteFailed,
+  putAccountDeleteBulkRequested,
+  putAccountDeleteBulkSuccess,
+  putAccountDeleteBulkFailed,
   putAccountReactiveRequested,
   putAccountReactiveSuccess,
   putAccountReactiveFailed,

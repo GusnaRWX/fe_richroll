@@ -639,6 +639,7 @@
           "employee_name": "员工姓名",
           "leave_form": "离开自",
           "leave_to": "离开至",
+          "From": "从",
           "date": "日期",
           "leave_type": "休假类型",
           "status": "地位"
@@ -1075,7 +1076,7 @@
   "satutory_benefit": {
     "component": {
       "title": "法定福利组件仪表板",
-      "detail_title": "法定福利部分",
+      "detail_title": "法定福利成分",
       "table": {
         "company_name": "公司名称",
         "country": "国家",

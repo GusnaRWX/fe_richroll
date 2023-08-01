@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { HYDRATE } from 'next-redux-wrapper';
-import { formatedCnb } from '@/utils/helper';
 
 interface EventType {
   day: number,
@@ -333,8 +332,28 @@ export const employeeSlice = createSlice({
         templateID: action?.payload?.template?.id,
         name: action?.payload?.template?.name,
         overtime: action?.payload?.overtime,
-        base: formatedCnb(action?.payload?.base),
-        supplementary: action?.payload?.supplementaries?.map(v => formatedCnb(v))
+        base: {
+          componentID: action?.payload?.base?.component?.id,
+          termID: action?.payload?.base?.term?.id,
+          isTaxable: action?.payload?.base?.isTaxable === true ? 'true' : 'false',
+          amount: action?.payload?.base?.amount === null ? '0' : action?.payload?.base?.amount,
+          amountType: action?.payload?.base?.amountType === null ? '0' : action?.payload?.base?.amountType,
+          rate: action?.payload?.base?.rate === null ? '0' : action?.payload?.base?.rate,
+          rateType: action?.payload?.base?.rateType === null ? '0' : action?.payload?.base?.rateType,
+          id: action?.payload?.base?.id || ''
+        },
+        supplementary: action?.payload?.supplementaries?.map(val => {
+          return {
+            componentID: val?.component?.id,
+            termID: val?.term?.id,
+            isTaxable: val?.isTaxable === true ? 'true' : 'false',
+            amount: val?.amount === null ? '0' : val?.amount,
+            amountType: val?.amountType === null ? '0' : val?.amountType,
+            rate: val?.rate === null ? '0' : val?.rate,
+            rateType: val?.rateType === null ? '0' : val?.rateType,
+            id: val?.id || ''
+          };
+        })
       };
       state.isLoading = false;
       state.employeeCnbDetail = action?.payload;
