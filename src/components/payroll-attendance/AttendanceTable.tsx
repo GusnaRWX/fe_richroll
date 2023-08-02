@@ -280,12 +280,21 @@ function AttendanceTable({
                       <TableCell>{dayjs(item.createdAt).format('DD/MM/YYYY')}</TableCell>
                       <TableCell>{dayjs(item.updatedAt).format('DD/MM/YYYY')}</TableCell>
                       <TableCell>
-                        <Chip
-                          label={item.attachment.filename}
-                          sx={{ borderRadius: '6px' }}
-                          deleteIcon={<HiDownload size={16} color='#000' />}
-                          onClick={() => { window.open(item.attachment.link, '_blank'); }}
-                        />
+                        {
+                          ifThenElse(item.attachment.status !== null && item.attachment.status !== true,
+                            (
+                              <>
+                                <Chip
+                                  label={item.attachment.name}
+                                  sx={{ borderRadius: '6px' }}
+                                  deleteIcon={<HiDownload size={16} color='#000' />}
+                                  onClick={() => { window.open(item.attachment.url, '_blank'); }}
+                                />
+                              </>
+                            ),
+                            'Generating'
+                          )
+                        }
                       </TableCell>
                       <TableCell>
                         <ButtonWrapper>
