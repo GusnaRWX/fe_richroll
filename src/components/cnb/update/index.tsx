@@ -296,15 +296,15 @@ export default function UpdateCNBComponent() {
         compensationComponentId: ifEmptyReplace(cnbDetail.base?.component?.id, ''),
         period: ifEmptyReplace(cnbDetail.base?.term?.id, ''),
         taxStatus: ifThenElse(cnbDetail.base?.isTaxable, 'true', 'false'),
-        rateOrAmount: ifEmptyReplace(cnbDetail.base?.amount, ''),
+        rateOrAmount: ifThenElse(cnbDetail.base?.amount, cnbDetail.base?.amount, ''),
         overtime: ifEmptyReplace(cnbDetail?.overtime, ''),
         percentage: ifEmptyReplace(cnbDetail?.base?.rate, 0),
         supplementary: cnbDetail.supplementaries?.map(val => {
           return {
             compensationComponentId: ifEmptyReplace(val.component?.id, ''),
             period: ifEmptyReplace(val.term?.id, ''),
-            rateOrAmount: ifThenElse(getPaymentType(val.component?.id, listSuppCompensation)?.withPercentage, val.rate, ifEmptyReplace(val.amount, '')),
-            taxStatus: ifEmptyReplace(val.isTaxable, ''),
+            rateOrAmount: ifThenElse(getPaymentType(val.component?.id, listSuppCompensation)?.withPercentage, val.rate, ifThenElse(val.amount, val.amount, '')),
+            taxStatus: ifThenElse(val.isTaxable, 'true', 'false'),
             id: ifEmptyReplace(val?.id, '')
           };
         }) || [],
@@ -316,6 +316,7 @@ export default function UpdateCNBComponent() {
   if (!isDataReady) {
     return <div></div>;
   }
+  
 
   return (
     <>
@@ -327,6 +328,7 @@ export default function UpdateCNBComponent() {
         validationSchema={validationSchecma}
       >
         {(formik) => (
+          console.log(formik.values),
           <FormikForm>
             <Header>
               <HeaderPageTitle>
@@ -504,6 +506,7 @@ export default function UpdateCNBComponent() {
                           sx={{ marginTop: '.4rem' }}
                           size='small'
                           fullWidth
+                          name='rateOrAmount'
                           type='number'
                           error={compareCheck(formik.touched.rateOrAmount, Boolean(formik.errors.rateOrAmount))}
                           helperText={ifThenElse(formik.touched.rateOrAmount, formik.errors.rateOrAmount, null)}
