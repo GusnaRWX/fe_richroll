@@ -223,15 +223,24 @@ function DisbursementTable({
                       <TableCell>{dayjs(item.createdAt).format('DD/MM/YYYY')}</TableCell>
                       <TableCell>{dayjs(item.updatedAt).format('DD/MM/YYYY')}</TableCell>
                       <TableCell>
-                        <MuiButton
-                          variant='contained'
-                          color='inherit'
-                          size='small'
-                          sx={{ color: '#111827' }}
-                          onClick={() => { window.open(item?.attachment?.link, '_blank'); }}
-                        >
-                          {item.attachment.filename} &nbsp;<FiDownload fontSize='small' />
-                        </MuiButton>
+                        {
+                          ifThenElse(item.attachment.status !== null && item.attachment.status !== true,
+                            (
+                              <>
+                                <MuiButton
+                                  variant='contained'
+                                  color='inherit'
+                                  size='small'
+                                  sx={{ color: '#111827' }}
+                                  onClick={() => { window.open(item?.attachment?.url, '_blank'); }}
+                                >
+                                  {item.attachment.name} &nbsp;<FiDownload fontSize='small' />
+                                </MuiButton>
+                              </>
+                            ),
+                            'Generating'
+                          )
+                        }
                       </TableCell>
                       <TableCell>
                         <ButtonWrapper>
