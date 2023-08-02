@@ -215,8 +215,8 @@ function DisbursementTable({
                     </TableCell>
                   </TableRow>
                 ), (
-                  data?.items?.map((item, index) => (
-                    <TableRow key={index}>
+                  data?.items?.map((item) => (
+                    <TableRow key={item.name}>
                       <TableCell>{item.name}</TableCell>
                       <TableCell>{dayjs(item.start).format('DD/MM/YYYY')} - {dayjs(item.end).format('DD/MM/YYYY')}</TableCell>
                       <TableCell><TypeComponent>Disbursement Receipt</TypeComponent></TableCell>
@@ -284,7 +284,7 @@ function DisbursementTable({
                             <>
                               <IconButton
                                 parentColor='#E9EFFF'
-                                onClick={() => { router.push('/payroll-disbursement/disbursement/generate'); }}
+                                onClick={() => { router.push({ pathname: '/payroll-disbursement/disbursement/generate',query: {id: item?.id} }); }}
                                 icons={
                                   <BsFillEyeFill fontSize={20} color='#223567' />
                                 }
