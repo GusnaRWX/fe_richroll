@@ -156,15 +156,24 @@ function PayrollAssistantRow (row) {
                 {dayjs(item?.attendance?.updatedAt).format('DD/MM/YYYY')}
               </Grid>
               <Grid item sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', textAlign: 'center'}} xs={2.5}>
-                <MuiButton
-                  variant='contained'
-                  color='inherit'
-                  size='small'
-                  sx={{ color: '#111827' }}
-                  onClick={() => { openInNewTab(item?.attendance?.attachment?.link); }}
-                >
-                  {item?.attendance?.attachment?.filename} &nbsp;<FiDownload fontSize='small' />
-                </MuiButton>
+                {
+                  ifThenElse(item?.attendance?.attachment?.status !== null && item?.attendance?.attachment?.status !== true,
+                    (
+                      <>
+                        <MuiButton
+                          variant='contained'
+                          color='inherit'
+                          size='small'
+                          sx={{ color: '#111827' }}
+                          onClick={() => { openInNewTab(item?.attendance?.attachment?.url); }}
+                        >
+                          {item?.attendance?.attachment?.name} &nbsp;<FiDownload fontSize='small' />
+                        </MuiButton>
+                      </>
+                    ),
+                    'Generating'
+                  )
+                }
               </Grid>
             </Grid>
             <Grid container spacing={1} sx={{ mb: '.5rem', pb: '.5rem', borderBottom: '1px solid #EFEFEF' }}>
@@ -184,15 +193,24 @@ function PayrollAssistantRow (row) {
                 {ifThenElse(item?.gross?.updatedAt, dayjs(item?.gross?.updatedAt).format('DD/MM/YYYY'), '-')}
               </Grid>
               <Grid item sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', textAlign: 'center'}} xs={2.5}>
-                <MuiButton
-                  variant='contained'
-                  color='inherit'
-                  size='small'
-                  sx={{ color: '#111827' }}
-                  onClick={() => { openInNewTab(item?.gross?.attachment?.link); }}
-                >
-                  {item?.gross?.attachment?.filename} &nbsp;<FiDownload fontSize='small' />
-                </MuiButton>
+                {
+                  ifThenElse(item?.gross?.attachment?.status !== null && item?.gross?.attachment?.status !== true,
+                    (
+                      <>
+                        <MuiButton
+                          variant='contained'
+                          color='inherit'
+                          size='small'
+                          sx={{ color: '#111827' }}
+                          onClick={() => { openInNewTab(item?.gross?.attachment?.url); }}
+                        >
+                          {item?.gross?.attachment?.name} &nbsp;<FiDownload fontSize='small' />
+                        </MuiButton>
+                      </>
+                    ),
+                    'Generating'
+                  )
+                }
               </Grid>
             </Grid>
             <Grid container spacing={1} sx={{ mb: '.5rem', pb: '.5rem', borderBottom: '1px solid #EFEFEF' }}>
@@ -212,15 +230,24 @@ function PayrollAssistantRow (row) {
                 {ifThenElse(item?.net?.updatedAt, dayjs(item?.net?.updatedAt).format('DD/MM/YYYY'), '-')}
               </Grid>
               <Grid item sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', textAlign: 'center'}} xs={2.5}>
-                <MuiButton
-                  variant='contained'
-                  color='inherit'
-                  size='small'
-                  sx={{ color: '#111827' }}
-                  onClick={() => { openInNewTab(item?.net?.attachment?.link); }}
-                >
-                  {item?.net?.attachment?.filename} &nbsp;<FiDownload fontSize='small' />
-                </MuiButton>
+                {
+                  ifThenElse(item?.net?.attachment?.status !== null && item?.net?.attachment?.status !== true,
+                    (
+                      <>
+                        <MuiButton
+                          variant='contained'
+                          color='inherit'
+                          size='small'
+                          sx={{ color: '#111827' }}
+                          onClick={() => { openInNewTab(item?.net?.attachment?.url); }}
+                        >
+                          {item?.net?.attachment?.name} &nbsp;<FiDownload fontSize='small' />
+                        </MuiButton>
+                      </>
+                    ),
+                    'Generating'
+                  )
+                }
               </Grid>
             </Grid>
             <Grid container spacing={1} sx={{ mb: '.5rem' }}>
@@ -240,15 +267,24 @@ function PayrollAssistantRow (row) {
                 {ifThenElse(item?.disbursement?.updatedAt, dayjs(item?.disbursement?.updatedAt).format('DD/MM/YYYY'), '-')}
               </Grid>
               <Grid item sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', textAlign: 'center'}} xs={2.5}>
-                <MuiButton
-                  variant='contained'
-                  color='inherit'
-                  size='small'
-                  sx={{ color: '#111827' }}
-                  onClick={() => { openInNewTab(item?.disbursement?.attachment?.link); }}
-                >
-                  {item?.disbursement?.attachment?.filename} &nbsp;<FiDownload fontSize='small' />
-                </MuiButton>
+                {
+                  ifThenElse(item?.disbursement?.attachment?.status !== null && item?.disbursement?.attachment?.status !== true,
+                    (
+                      <>
+                        <MuiButton
+                          variant='contained'
+                          color='inherit'
+                          size='small'
+                          sx={{ color: '#111827' }}
+                          onClick={() => { openInNewTab(item?.disbursement?.attachment?.url); }}
+                        >
+                          {item?.disbursement?.attachment?.name} &nbsp;<FiDownload fontSize='small' />
+                        </MuiButton>
+                      </>
+                    ),
+                    'Generating'
+                  )
+                }
               </Grid>
             </Grid>
           </Collapse>
