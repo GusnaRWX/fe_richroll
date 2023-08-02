@@ -140,7 +140,7 @@ const CardAdd = () => {
 const CompanyComponent = ({ companies }: Company.Component) => {
   const { responser } = useAppSelectors((state) => state);
   const router = useRouter();
-  const {t} = useTranslation();
+  const {t: tl} = useTranslation();
   const handleClick = (val, path) => {
     setStorages([
       { name: 'kaya_company', value: JSON.stringify({ id: val?.id, imageUrl: val?.logo || '', name: val?.name, sector: val?.sector?.name || '-' }) },
@@ -166,14 +166,14 @@ const CompanyComponent = ({ companies }: Company.Component) => {
               component='div'
               sx={{ fontWeight: 700, mb: '4px' }}
             >
-              {t('company.title')}
+              {tl('company.title')}
             </Typography>
             <Typography
               variant='text-base'
               component='div'
               sx={{ fontWeight: 400 }}
             >
-              {t('company.desc')}
+              {tl('company.desc')}
             </Typography>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: '25px', mt: '16px', flexWrap:'wrap' }}>
               {companies?.slice(0, 5)?.map((val: object, idx) => (
