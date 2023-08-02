@@ -7,6 +7,7 @@ import AddIcon from '@mui/icons-material/Add';
 import LeaveEntriesTableComponent from './LeaveEntriesTableComponent';
 import LeaveEntriesListComponent from './LeaveEntriesListComponent';
 import LeaveEntriesEmployeeCreateComponent from './LeaveEntriesEmployeeCreateComponent';
+import { useTranslation } from 'react-i18next';
 
 const ButtonWrapper = styled(Box)({
   display: 'flex',
@@ -22,18 +23,20 @@ const LeaveEntriesComponent = () => {
   const [open, setOpen] = useState(false);
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState({});
+  const {t} = useTranslation();
+  const t_pageKey = 'attendance_&_leave.leave_entries';
 
   return (
     <>
       <Grid container spacing={2} justifyContent='space-between'>
         <Grid item xs={9}>
-          <Text title='Attendance & Leave' color='primary.main' variant='h5' />
-          <Text title='Leave Entry' variant='text-base' color='#4B5563' />
+          <Text title={t(`${t_pageKey}.title`)} color='primary.main' variant='h5' />
+          <Text title={t(`${t_pageKey}.sub_title`)} variant='text-base' color='#4B5563' />
         </Grid>
         <Grid item xs={3}>
           <ButtonWrapper>
             <Button
-              label='Create Leave Entry'
+              label={t('button.create_leave_entry')}
               startIcon={<AddIcon />}
               onClick={() => {
                 setOpen(true);

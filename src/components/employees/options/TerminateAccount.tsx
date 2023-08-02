@@ -8,10 +8,14 @@ import { postTerminateEmployeeRequested } from '@/store/reducers/slice/company-m
 import InfoRoundedIcon from '@mui/icons-material/InfoRounded';
 import BasicDatePicker from '@/components/_shared/form/DatePicker';
 import { useRouter } from 'next/router';
+import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
 
 const TerminateAccount = () => {
   const dispatch = useAppDispatch();
+  const {t} = useTranslation();
+  const t_employeeTerminate = 'company_management.employees.form_&_detail.employee_information.employee_status_section.terminate_account_box';
+  const t_terminateForm = 'company_management.employees.popup.terminating_form';
   const router = useRouter();
   const [Open, setOpen] = useState(false);
   const [note, setNote] = useState('');
@@ -51,14 +55,14 @@ const TerminateAccount = () => {
     >
       <Box mb='17px'>
         <Text
-          title='Terminate Account'
+          title={t(`${t_employeeTerminate}.title`)}
           color='red.600'
           variant='text-lg'
           fontWeight={700}
           sx={{ display: 'block' }}
         />
         <Text
-          title='Permanently termination this account.'
+          title={t(`${t_employeeTerminate}.subtitle`)}
           color='grey.400'
           variant='text-base'
           fontWeight={400}
@@ -66,7 +70,7 @@ const TerminateAccount = () => {
       </Box>
       <Box mb='17px'>
         <Typography variant='text-base' fontWeight={400} color='grey.400'>
-          Once this account is terminated, all of its resources and data will be permanently deleted. Before terminating this account,<br />please make sure.
+          {t(`${t_employeeTerminate}.desc`)}
         </Typography>
       </Box>
       <Button
@@ -89,7 +93,7 @@ const TerminateAccount = () => {
         open={Open}
         handleClose={handleClose}
         handleConfirm={handleConfirmation}
-        title='Termination Form'
+        title={t(`${t_terminateForm}.title`)}
         width='563px'
         ConfirmationDisable={note === '' || date === ''}
       >
@@ -99,20 +103,20 @@ const TerminateAccount = () => {
             sx={{ fontWeight: 'bold', backgroundColor: '#E9EFFF' }}
             icon={<InfoRoundedIcon sx={{ color: '#475780' }} />}
           >
-              Important information
-            <Text sx={{fontSize:'14px', marginTop:'14px'}}>Employee Payroll Date is 19th March 2023</Text>
+            {t(`${t_terminateForm}.information.title`)}
+            <Text sx={{fontSize:'14px', marginTop:'14px'}}>{t(`${t_terminateForm}.information.desc`)} 19th March 2023</Text>
           </Alert>
           <Box>
             <BasicDatePicker
-              customLabel='Input Effective Termination Date'
+              customLabel={t(`${t_terminateForm}.effective_date`)}
               withAsterisk
               disablePast
               onChange={(e) => setDate(dayjs(e).format('DD/MM/YYYY'))}
             />
           </Box>
           <Textarea
-            customLabel='Notes'
-            placeholder='Input Notes'
+            customLabel={t(`${t_terminateForm}.note`)}
+            placeholder={t(`${t_terminateForm}.note_placeholder`)}
             withAsterisk
             minRows={3}
             style={{ resize: 'vertical'}}

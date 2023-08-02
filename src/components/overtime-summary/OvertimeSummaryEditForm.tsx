@@ -13,6 +13,7 @@ import styled from '@emotion/styled';
 import { Input } from '../_shared/form';
 import { AttendanceLeave } from '@/types/attendanceLeave';
 import { useFormik } from 'formik';
+import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
 
 const AvatarWrapper = styled.div`
@@ -41,6 +42,8 @@ interface EditProps {
 
 function OvertimeSummaryEditForm({editOpen, handleEditClose, callback, item}: EditProps) {
   const [hydrated, setHaydrated] = useState(false);
+  const {t} = useTranslation();
+  const t_editOvertimeSummary = 'attendance_&_leave.overtime_summary.popup.update';
 
   const formik = useFormik({
     initialValues: {
@@ -72,10 +75,10 @@ function OvertimeSummaryEditForm({editOpen, handleEditClose, callback, item}: Ed
     <CustomModal
       open={editOpen}
       handleClose={handleEditClose}
-      title='Edit Overtime Entry'
+      title={t(`${t_editOvertimeSummary}.title`)}
       width='650px'
       handleConfirm={formik.handleSubmit}
-      submitText='Save'
+      submitText={t('button.save')}
     >
       <AvatarWrapper>
         <Avatar
@@ -93,7 +96,7 @@ function OvertimeSummaryEditForm({editOpen, handleEditClose, callback, item}: Ed
       </AvatarWrapper>
       <Grid container mb='1rem' spacing={2}>
         <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
-          <Typography mb='7px' fontSize='16px'>Start Time</Typography>
+          <Typography mb='7px' fontSize='16px'>{t(`${t_editOvertimeSummary}.start_time_input_label`)}</Typography>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <TimePicker
               format='HH:mm'
@@ -115,7 +118,7 @@ function OvertimeSummaryEditForm({editOpen, handleEditClose, callback, item}: Ed
             size='small'
             type='number'
             name='duration'
-            customLabel='Duration'
+            customLabel={t(`${t_editOvertimeSummary}.duration_input_label`)}
             value={formik.values.duration}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
@@ -133,7 +136,7 @@ function OvertimeSummaryEditForm({editOpen, handleEditClose, callback, item}: Ed
             withAsterisk={false}
             size='small'
             name='multiplier'
-            customLabel='Multiplier'
+            customLabel={t(`${t_editOvertimeSummary}.multiplier_input_label`)}
             type='number'
             value={formik.values.multiplier}
             onChange={formik.handleChange}

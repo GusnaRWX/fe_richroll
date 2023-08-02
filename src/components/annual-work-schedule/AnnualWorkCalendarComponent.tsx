@@ -20,6 +20,7 @@ import dayjs from 'dayjs';
 import type { SchedulerRef } from '@aldabil/react-scheduler/types';
 import { OverlayLoading } from '../_shared/common';
 import { getCompanyData } from '@/utils/helper';
+import { useTranslation } from 'react-i18next';
 
 
 const ContentWrapper = styled(Card)(({
@@ -93,6 +94,9 @@ function AnnualWorkCalendarComponent() {
   const [deletedId, setDeletedId] = useState(0);
   const [page, setPage] = useState(1);
   const dispatch = useAppDispatch();
+  const {t} = useTranslation();
+  const t_annualWorkCalendar = 'company_management.annual_work_calendar';
+  const t_deleteConfirmation = 'company_management.annual_work_calendar.popup.delete';
   const { data, events, isLoading, totalPages } = useAppSelectors((state) => state.annualSchedule);
   const calendarRef = useRef<SchedulerRef>(null);
 
@@ -161,13 +165,13 @@ function AnnualWorkCalendarComponent() {
     <>
       <OverlayLoading open={isLoading}/>
       <TopWrapper>
-        <Typography fontSize='24px' color='primary' fontWeight='bold'>Annual Work Calendar</Typography>
+        <Typography fontSize='24px' color='primary' fontWeight='bold'>{t(`${t_annualWorkCalendar}.title`)}</Typography>
         <MuiButton
           variant='contained'
           size='small'
           color='primary'
           onClick={() => { setOpenCreateForm(true); }}
-        ><Add fontSize='small' />&nbsp; Add Calendar Item</MuiButton>
+        ><Add fontSize='small' />&nbsp; {t('button.add_calendar_item')}</MuiButton>
       </TopWrapper>
       <ContentWrapper>
         <Grid container spacing={2}>
@@ -208,7 +212,7 @@ function AnnualWorkCalendarComponent() {
           <Grid item xs={12} sm={12} md={4} lg={4} xl={4}>
             <Box width='100%' height='100%' sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between'  }}>
               <Box width='100%'>
-                <Typography mb='2rem' fontWeight='bold' fontSize='16px' color='gray'>Upcoming Events</Typography>
+                <Typography mb='2rem' fontWeight='bold' fontSize='16px' color='gray'>{t(`${t_annualWorkCalendar}.upcoming_event`)}</Typography>
                 {
                   data?.items?.map((item) => (
                     <>
@@ -274,8 +278,8 @@ function AnnualWorkCalendarComponent() {
       <ConfirmationModal
         open={deleteConfirmation}
         handleClose={() => setDeleteConfirmation(false)}
-        title='Delete Event from Annual Work Calendar'
-        content='You are about to delete this event from the Annual Work Calendar. This action cannot be undone.'
+        title={t(`${t_deleteConfirmation}.title`)}
+        content={t(`${t_deleteConfirmation}.desc`)}
         withCallback
         noChange={true}
         callback={() => {handleDeleteSchedule();}}

@@ -25,6 +25,7 @@ import {
   administrativeThirdLevelRequsted
 } from '@/store/reducers/slice/options/optionSlice';
 import { Cancel } from '@mui/icons-material';
+import { useTranslation } from 'react-i18next';
 
 const ButtonWrapper = styled(Box)(({
   display: 'flex',
@@ -83,6 +84,9 @@ const CompanyEditComponent = ({ companyType, companySector, bank, paymentMethod,
   const companyData = getCompanyData();
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const {t} = useTranslation();
+  const t_companyProfile = 'company_management.company_profile';
+  const t_companyProfileTabsOption = 'company_management.company_profile.tabs_option';
 
   const formikDetail = useFormik({
     initialValues: {
@@ -367,7 +371,7 @@ const CompanyEditComponent = ({ companyType, companySector, bank, paymentMethod,
     <>
       <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
         <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
-          <Typography variant='h5' color='primary.main'>Company Profile</Typography>
+          <Typography variant='h5' color='primary.main'>{t(`${t_companyProfile}.title`)}</Typography>
           <Typography variant='text-base' color='#4B5563'>{companyData?.name}</Typography>
         </Grid>
         <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
@@ -377,14 +381,14 @@ const CompanyEditComponent = ({ companyType, companySector, bank, paymentMethod,
               size='small'
               color='primary'
               onClick={() => { router.push('/company-management/company-profile'); }}
-            >Cancel</MuiButton>
+            >{t('button.cancel')}</MuiButton>
             <MuiButton
               variant='contained'
               size='small'
               color='primary'
               sx={{ color: 'white' }}
               onClick={() => { ifThenElse(tabSelected === 0, formikDetail.submitForm(), formikPayment.submitForm()); }}
-            >Save</MuiButton>
+            >{t('button.save')}</MuiButton>
           </ButtonWrapper>
         </Grid>
       </Grid>
@@ -392,8 +396,8 @@ const CompanyEditComponent = ({ companyType, companySector, bank, paymentMethod,
         <Box sx={{ width: '100%' }}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <Tabs value={tabSelected} onChange={handleChange} aria-label='basic tabs'>
-              <Tab sx={{ textTransform: 'none' }} label='Company Information' {...a11yProps(0)} />
-              <Tab sx={{ textTransform: 'none' }} label='Payment Information' {...a11yProps(1)} />
+              <Tab sx={{ textTransform: 'none' }} label={t(`${t_companyProfileTabsOption}.company_information`)} {...a11yProps(0)} />
+              <Tab sx={{ textTransform: 'none' }} label={t(`${t_companyProfileTabsOption}.payment_information`)} {...a11yProps(1)} />
             </Tabs>
           </Box>
           <TabPanel value={tabSelected} index={0}>

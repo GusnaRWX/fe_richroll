@@ -8,6 +8,7 @@ import { IconButton } from '@/components/_shared/form';
 import ConfirmationModal from '@/components/_shared/common/ConfirmationModal';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { postWorkScheduleRequested, clearState } from '@/store/reducers/slice/company-management/work-schedule/workScheduleSlice';
+import { useTranslation } from 'react-i18next';
 
 const WorkScheduleCreateForm = dynamic(() => import('./WorkScheduleCreateForm'), {
   ssr: false
@@ -86,6 +87,10 @@ function WorksScheduleCreateComponent() {
   const dispatch = useAppDispatch();
   const { workSchedule } = useAppSelectors(state => state);
   const router = useRouter();
+  const {t} = useTranslation();
+  const t_workScheduleCreate = 'company_management.work_schedule.form';
+  const t_tabsOption = 'company_management.work_schedule.form.tabs_option';
+  const t_cancelConfirmation = 'company_management.work_schedule.popup.cancel';
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
@@ -130,18 +135,18 @@ function WorksScheduleCreateComponent() {
               resetState();
             }}
           />
-          <Typography component='h3' fontWeight='bold'>Create Work Schedule Profile</Typography>
+          <Typography component='h3' fontWeight='bold'>{t(`${t_workScheduleCreate}.create_title`)}</Typography>
         </BackWrapper>
         <ButtonWrapper>
-          <MuiButton variant='outlined' size='small' onClick={() => handleOpen()}>Cancel</MuiButton>
-          <MuiButton variant='contained' onClick={handleSave} disabled={!isValid} size='small' color='primary'>Save</MuiButton>
+          <MuiButton variant='outlined' size='small' onClick={() => handleOpen()}>{t('button.cancel')}</MuiButton>
+          <MuiButton variant='contained' onClick={handleSave} disabled={!isValid} size='small' color='primary'>{t('button.save')}</MuiButton>
         </ButtonWrapper>
       </TopWrapper>
       <ContentWrapper>
         <Box sx={{ width: '100%' }}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <Tabs value={value} onChange={handleChange} aria-label='basic tabs'>
-              <Tab sx={{ textTransform: 'none' }} label='Schedule Profile' {...a11yProps(0)} />
+              <Tab sx={{ textTransform: 'none' }} label={t(`${t_tabsOption}.schedule_profile`)} {...a11yProps(0)} />
             </Tabs>
           </Box>
           <TabPanel value={value} index={0}>
@@ -152,8 +157,8 @@ function WorksScheduleCreateComponent() {
       <ConfirmationModal
         open={leave}
         handleClose={handleClose}
-        title='Are you sure you want to leave?'
-        content='Any unsaved changes will be discarded. This cannot be undone'
+        title={t(`${t_cancelConfirmation}.title`)}
+        content={t(`${t_cancelConfirmation}.desc`)}
         withCallback
         callback={resetState}
       />

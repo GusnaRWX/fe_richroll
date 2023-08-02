@@ -9,6 +9,7 @@ import { getEmployeeRequested } from '@/store/reducers/slice/company-management/
 import { useAppSelectors } from '@/hooks/index';
 import styled from '@emotion/styled';
 import EmptyState from '../_shared/common/EmptyState';
+import { useTranslation } from 'react-i18next';
 
 interface LeaveEntriesListComponentProps {
   open: boolean;
@@ -44,11 +45,14 @@ const LeaveEntriesListComponent: React.FC<LeaveEntriesListComponentProps> = ({
   const [sort, setSort] = useState('');
   const companyData = getCompanyData();
   const [hydrated, setHydrated] = useState(false);
+  const {t} = useTranslation();
+  const t_LeaveEntriesList = 'attendance_&_leave.leave_entries.popup.create';
+  const t_tableHeader = 'attendance_&_leave.leave_entries.popup.create.table_cols_item';
 
   const headerItemsEmployees = [
-    { id: 'user.name', label: 'Employee Name' },
-    { id: 'position', label: 'Position' },
-    { id: 'department', label: 'Department' }
+    { id: 'user.name', label: t(`${t_tableHeader}.employee_name`) },
+    { id: 'position', label: t(`${t_tableHeader}.position`) },
+    { id: 'department', label: t(`${t_tableHeader}.department`) }
   ];
 
   const handleRequestSort = (event: React.MouseEvent<unknown>, headId: string) => {
@@ -100,10 +104,10 @@ const LeaveEntriesListComponent: React.FC<LeaveEntriesListComponentProps> = ({
     <CustomModal
       handleClose={onClose}
       open={open}
-      title='Select Employees'
+      title={t(`${t_LeaveEntriesList}.title`)}
       width='800px'
       keepMounted={false}
-      submitText='Select Employee'
+      submitText={t('button.select_employee')}
       handleConfirm={() => {
         setOpenCreateModal(true);
         onClose();

@@ -41,6 +41,7 @@ import { CameraAlt } from '@mui/icons-material';
 import TerminateAccount from '../options/TerminateAccount';
 import { getListPositionRequested } from '@/store/reducers/slice/options/optionSlice';
 import { FiTrash2 } from 'react-icons/fi';
+import { useTranslation } from 'react-i18next';
 
 const AsteriskComponent = MuiStyled('span')(({ theme }) => ({
   color: theme.palette.error.main
@@ -121,6 +122,9 @@ interface EmployeeProps {
 function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, setIsInformationValid, handleFirstInformation }: EmployeeProps) {
   const [isCaptureEnable, setCaptureEnable] = useState<boolean>(false);
   const dispatch = useAppDispatch();
+  const {t} = useTranslation();
+  const t_employeeInformationSection = 'company_management.employees.form_&_detail.employee_information.employee_information_section';
+  const t_employeeStatusSection = 'company_management.employees.form_&_detail.employee_information.employee_status_section';
   const webcamRef = useRef<Webcam>(null);
   const [openCamera, setOpenCamera] = useState(false);
   console.log(infoValues);
@@ -265,7 +269,7 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
         variant='text-lg'
         fontWeight={700}
         color='primary.500'
-        title='Employee Information'
+        title={t(`${t_employeeInformationSection}.title`)}
         mb='16px'
       />
       <form ref={refProp} onSubmit={formik.handleSubmit}>
@@ -308,13 +312,13 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Input
               name='fullName'
-              customLabel='Full Name'
+              customLabel={t(`${t_employeeInformationSection}.fullname`)}
               withAsterisk={true}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               size='small'
               value={formik.values.fullName}
-              placeholder='Input Full Name'
+              placeholder={t(`${t_employeeInformationSection}.fullname_placeholder`)}
               error={formik.touched.fullName && Boolean(formik.errors.fullName)}
               helperText={formik.touched.fullName && formik.errors.fullName}
             />
@@ -322,19 +326,19 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Input
               name='nickname'
-              customLabel='Nickname'
+              customLabel={t(`${t_employeeInformationSection}.nickname`)}
               withAsterisk={false}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               size='small'
               value={formik.values.nickname}
-              placeholder='Input Nickname'
+              placeholder={t(`${t_employeeInformationSection}.nickname_placeholder`)}
             />
           </Grid>
         </Grid>
         <Grid container spacing={2}>
           <Grid item xs={6} md={6} lg={6} xl={6} sx={{ marginBottom: '1.5rem' }}>
-            <Typography>Contact Number<AsteriskComponent>*</AsteriskComponent></Typography>
+            <Typography>{t(`${t_employeeInformationSection}.contact_number`)}<AsteriskComponent>*</AsteriskComponent></Typography>
             <Grid container spacing={2}>
               <Grid item xs={1} sm={3} md={2} lg={2} xl={2}>
                 <CustomSelect
@@ -360,7 +364,7 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
                 <Input
                   name='phoneNumber'
                   type='number'
-                  placeholder='Input Correct Number'
+                  placeholder={t(`${t_employeeInformationSection}.contact_number_placeholder`)}
                   withAsterisk={true}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -375,12 +379,12 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Input
               name='email'
-              customLabel='Personal Email Address'
+              customLabel={t(`${t_employeeInformationSection}.personal_email_address`)}
               withAsterisk={true}
               size='small'
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              placeholder='Personal Email Address'
+              placeholder={t(`${t_employeeInformationSection}.personal_email_address_placeholder`)}
               value={formik.values.email}
               error={formik.touched.email && Boolean(formik.errors.email)}
               helperText={formik.touched.email && formik.errors.email}
@@ -390,7 +394,7 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
         <Grid container spacing={2}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <DatePicker
-              customLabel='Start Date'
+              customLabel={t(`${t_employeeInformationSection}.start_date`)}
               withAsterisk
               value={formik.values.startDate as unknown as Date}
               onChange={(date: unknown) => formik.setFieldValue('startDate', date)}
@@ -399,7 +403,7 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <DatePicker
-              customLabel='End Date'
+              customLabel={t(`${t_employeeInformationSection}.end_date`)}
               value={formik.values.endDate as unknown as Date}
               onChange={(date: unknown) => formik.setFieldValue('endDate', date)}
               disabled={formik.values.isPermanent}
@@ -407,7 +411,7 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
           </Grid>
         </Grid>
         <CheckBox
-          customLabel='Permanent'
+          customLabel={t(`${t_employeeInformationSection}.permanent`)}
           name='isPermanent'
           checked={formik.values.isPermanent}
           onChange={formik.handleChange}
@@ -415,7 +419,7 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
         />
         <Grid container spacing={2}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
-            <Typography mb='6px'>Department <AsteriskComponent>*</AsteriskComponent></Typography>
+            <Typography mb='6px'>{t(`${t_employeeInformationSection}.department`)} <AsteriskComponent>*</AsteriskComponent></Typography>
             <Autocomplete
               id='department'
               freeSolo
@@ -457,7 +461,7 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
                         }}
                       >
                         <AiOutlinePlus />
-                        Add New {inputValue}
+                        {t('button.add_new')} {inputValue}
                       </Box>
                     ) as unknown as Element
                   });
@@ -507,7 +511,7 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
             />
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
-            <Typography mb='6px'>Position <AsteriskComponent>*</AsteriskComponent></Typography>
+            <Typography mb='6px'>{t(`${t_employeeInformationSection}.position`)} <AsteriskComponent>*</AsteriskComponent></Typography>
             <Autocomplete
               id='position'
               freeSolo
@@ -597,27 +601,27 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
           <Grid item xs={12} sm={12} md={8} lg={8} xl={8}>
             <EmployeeSelfWrapper>
               <CheckBox
-                customLabel='Employee Self Service'
+                customLabel={t(`${t_employeeInformationSection}.employee_self_service_box.title`)}
                 name='isSelfService'
                 checked={formik.values.isSelfService}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
               />
-              <Typography>Activate button to send account activation link via email. Employee Self Service enables self-data filling.</Typography>
+              <Typography>{t(`${t_employeeInformationSection}.employee_self_service_box.desc`)}</Typography>
             </EmployeeSelfWrapper>
           </Grid>
           <Grid item xs={12} sm={12} md={8} lg={8} xl={8}>
             <Text
               variant='text-lg'
-              title='Employee Status'
+              title={t(`${t_employeeStatusSection}.title`)}
               fontWeight={700}
               color='primary.500'
             />
             {
               infoValues?.isActive === false ? (
-                <Chip label='Inactive' sx={{ backgroundColor: '#FEE2E2', color: '#DC2626', fontWeight: 'bold' }} />
+                <Chip label={t(`${t_employeeStatusSection}.status_option.inactive`)} sx={{ backgroundColor: '#FEE2E2', color: '#DC2626', fontWeight: 'bold' }} />
               ) : (
-                <Chip label='Active' sx={{ backgroundColor: '#DCFCE7', color: '#166534', fontWeight: 'bold' }} />
+                <Chip label={t(`${t_employeeStatusSection}.status_option.active`)} sx={{ backgroundColor: '#DCFCE7', color: '#166534', fontWeight: 'bold' }} />
               )
             }
           </Grid>
@@ -626,7 +630,7 @@ function EmployeeInformationEdit({ nextPage, refProp, setValues, infoValues, set
           <TerminateAccount />
         }
         <NextBtnWrapper>
-          <Button fullWidth={false} size='small' label='Next' color='primary' type={'submit'} />
+          <Button fullWidth={false} size='small' label={t('button.next')} color='primary' type={'submit'} />
         </NextBtnWrapper>
       </form>
       <FileUploadModal

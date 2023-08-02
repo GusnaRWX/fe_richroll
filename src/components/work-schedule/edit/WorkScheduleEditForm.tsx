@@ -19,6 +19,7 @@ import { postSimulationEventRequested, getDetailWorkScheduleRequested, postCalcu
 import { AiOutlineSwapRight } from 'react-icons/ai';
 import { useRouter } from 'next/router';
 import { OverlayLoading} from '@/components/_shared/common';
+import { useTranslation } from 'react-i18next';
 
 const AsteriskComponent = styled('span')(({ theme }) => ({
   color: theme.palette.error.main
@@ -77,6 +78,9 @@ function WorkScheduleEditForm({setData}: WorkScheduleFormProps) {
   const calendarRef = useRef<SchedulerRef>(null);
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const {t} = useTranslation();
+  const t_workScheduleEdit = 'company_management.work_schedule.form';
+  const t_workScheduleForm = 'company_management.work_schedule.popup.add_schedule';
   const { workSchedule } = useAppSelectors((state) => state);
   const [openForm, setOPenForm] = useState(false);
   const [rendered, setRendered] = useState(false);
@@ -294,22 +298,22 @@ function WorkScheduleEditForm({setData}: WorkScheduleFormProps) {
                     <Input
                       name='profileName'
                       withAsterisk={true}
-                      customLabel='Schedule Profile Name'
-                      placeholder='Input Profile Name'
+                      customLabel={t(`${t_workScheduleEdit}.schedule_profile_name`)}
+                      placeholder={t(`${t_workScheduleEdit}.schedule_profile_name_placeholder`)}
                       size='small'
                       value={tempName}
                       onChange={(e) => {handleChangeName(e);}}
                     />
                   </Grid>
                   <Grid item xs={1.5} sm={1.5} md={1.5} lg={1.5} xl={1.5} mt={'28px'}>
-                    <MuiButton onClick={() => {handleFormOpen();}} variant='contained' size='small' sx={{ height: '2.5rem' }}><Add />&nbsp; Add schedule</MuiButton>
+                    <MuiButton onClick={() => {handleFormOpen();}} variant='contained' size='small' sx={{ height: '2.5rem' }}><Add />&nbsp; {t('button.add_schedule')}</MuiButton>
                   </Grid>
                   <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
                     <Input
                       name='weeklyGross'
                       withAsterisk={false}
-                      customLabel='Weekly Gross Hours'
-                      placeholder='Input Weekly Gross'
+                      customLabel={t(`${t_workScheduleEdit}.weekly_gross_hours`)}
+                      placeholder={t(`${t_workScheduleEdit}.weekly_gross_hours_placeholder`)}
                       size='small'
                       disabled
                       type='number'
@@ -317,7 +321,7 @@ function WorkScheduleEditForm({setData}: WorkScheduleFormProps) {
                       InputProps={{
                         endAdornment: (
                           <InputAdornment position='end'>
-                            <Typography color='grey.500'>Hours/Week</Typography>
+                            <Typography color='grey.500'>{t(`${t_workScheduleEdit}.hours_week`)}</Typography>
                           </InputAdornment>
                         )
                       }}
@@ -327,8 +331,8 @@ function WorkScheduleEditForm({setData}: WorkScheduleFormProps) {
                     <Input
                       name='weeklyNet'
                       withAsterisk={false}
-                      customLabel='Weekly Net Hours'
-                      placeholder='Input Weekly Net'
+                      customLabel={t(`${t_workScheduleEdit}.weekly_net_hours`)}
+                      placeholder={t(`${t_workScheduleEdit}.weekly_net_hours_placeholder`)}
                       size='small'
                       disabled
                       value={workSchedule?.netHour}
@@ -336,7 +340,7 @@ function WorkScheduleEditForm({setData}: WorkScheduleFormProps) {
                       InputProps={{
                         endAdornment: (
                           <InputAdornment position='end'>
-                            <Typography color='grey.500'>Hours/Week</Typography>
+                            <Typography color='grey.500'>{t(`${t_workScheduleEdit}.hours_week`)}</Typography>
                           </InputAdornment>
                         )
                       }}
@@ -374,9 +378,9 @@ function WorkScheduleEditForm({setData}: WorkScheduleFormProps) {
                 <CustomModal
                   open={openForm}
                   handleClose={handleFormClose}
-                  title='Work Schedule Form'
+                  title={t(`${t_workScheduleForm}.title`)}
                   width='774px'
-                  submitText='Save'
+                  submitText={t('button.save')}
                   handleConfirm={() => {
                     handleSubmit(formik, formik.values);
                     formik.resetForm();
@@ -384,7 +388,7 @@ function WorkScheduleEditForm({setData}: WorkScheduleFormProps) {
                 >
                   <Grid container mt='1rem' mb='1rem'>
                     <Grid item sm={5.8}>
-                      <Typography mb='12px' color='primary' fontWeight='bold'>Work Hour Type</Typography>
+                      <Typography mb='12px' color='primary' fontWeight='bold'>{t(`${t_workScheduleForm}.work_hour_type`)}</Typography>
                       <RadioGroup
                         withAsterisk={false}
                         label=''
@@ -400,10 +404,10 @@ function WorkScheduleEditForm({setData}: WorkScheduleFormProps) {
                       />
                     </Grid>
                   </Grid>
-                  <Typography mb='12px' fontWeight='bold' color='primary'>Spesific Working Day&nbsp;<AsteriskComponent>*</AsteriskComponent></Typography>
+                  <Typography mb='12px' fontWeight='bold' color='primary'>{t(`${t_workScheduleForm}.spesific_working_day_section.title`)}&nbsp;<AsteriskComponent>*</AsteriskComponent></Typography>
                   <Grid container spacing={2} alignItems='end'>
                     <Grid item xs={2} sm={2} md={2} lg={2} xl={2} alignSelf='center'>
-                      <Typography>Work Days&nbsp;<AsteriskComponent>*</AsteriskComponent></Typography>
+                      <Typography>{t(`${t_workScheduleForm}.spesific_working_day_section.works_day`)}&nbsp;<AsteriskComponent>*</AsteriskComponent></Typography>
                     </Grid>
                     <Grid item xs={10} sm={10} md={10} lg={10} xl={10}>
                       <RadioGroup
@@ -449,7 +453,7 @@ function WorkScheduleEditForm({setData}: WorkScheduleFormProps) {
                     formik.values.type == '0' && (
                       <Grid container spacing={2} mb='2rem'>
                         <Grid item xs={2} sm={2} md={2} lg={2} xl={2} alignSelf='center'>
-                          <Typography>Work Hour&nbsp;<AsteriskComponent>*</AsteriskComponent></Typography>
+                          <Typography>{t(`${t_workScheduleForm}.spesific_working_day_section.works_hour`)}&nbsp;<AsteriskComponent>*</AsteriskComponent></Typography>
                         </Grid>
                         <Grid item xs={4.5} sm={4.5} md={4.5} lg={4.5} xl={4.5}>
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -493,7 +497,7 @@ function WorkScheduleEditForm({setData}: WorkScheduleFormProps) {
                     formik.values.type == '1' && (
                       <Grid container spacing={2} mb='2rem'>
                         <Grid item xs={2} sm={2} md={2} lg={2} xl={2} alignSelf='center'>
-                          <Typography>Work Hour&nbsp;<AsteriskComponent>*</AsteriskComponent></Typography>
+                          <Typography>{t(`${t_workScheduleForm}.spesific_working_day_section.works_hour`)}&nbsp;<AsteriskComponent>*</AsteriskComponent></Typography>
                         </Grid>
                         <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
                           <Input
@@ -507,7 +511,7 @@ function WorkScheduleEditForm({setData}: WorkScheduleFormProps) {
                             InputProps={{
                               endAdornment: (
                                 <InputAdornment position='end'>
-                                  <Typography color='grey.500'>Hours</Typography>
+                                  <Typography color='grey.500'>{t(`${t_workScheduleForm}.spesific_working_day_section.hour`)}</Typography>
                                 </InputAdornment>
                               )
                             }}
@@ -523,15 +527,15 @@ function WorkScheduleEditForm({setData}: WorkScheduleFormProps) {
                         render={(data) => {
                           return (
                             <>
-                              <Typography mb='12px' fontWeight='bold' color='primary'>Add Break</Typography>
+                              <Typography mb='12px' fontWeight='bold' color='primary'>{t(`${t_workScheduleForm}.break_section.title`)}</Typography>
                               {
                                 formik.values.breakItem.length > 0 && (
                                   <>
                                     <Grid container spacing={2}>
-                                      <Grid item xs={4} sm={4} md={4} lg={4} xl={4}><Typography>Break Name</Typography></Grid>
-                                      <Grid item xs={3} sm={3} md={3} lg={3} xl={3}><Typography>Start Time</Typography></Grid>
+                                      <Grid item xs={4} sm={4} md={4} lg={4} xl={4}><Typography>{t(`${t_workScheduleForm}.break_section.break_name`)}</Typography></Grid>
+                                      <Grid item xs={3} sm={3} md={3} lg={3} xl={3}><Typography>{t(`${t_workScheduleForm}.break_section.start_time`)}</Typography></Grid>
                                       <Grid item xs={.5} sm={.5} md={.5} lg={.5} xl={.5}><Typography></Typography></Grid>
-                                      <Grid item xs={3} sm={3} md={3} lg={3} xl={3}><Typography>End Time</Typography></Grid>
+                                      <Grid item xs={3} sm={3} md={3} lg={3} xl={3}><Typography>{t(`${t_workScheduleForm}.break_section.end_title`)}</Typography></Grid>
                                       <Grid item xs={1} sm={1} md={1} lg={1} xl={1}></Grid>
                                     </Grid>
                                     {
@@ -611,7 +615,7 @@ function WorkScheduleEditForm({setData}: WorkScheduleFormProps) {
                                   );
                                 }}
                               >
-                                <Add />Add Break
+                                <Add />{t('button.add_break')}
                               </MuiButton>
                             </>
                           );

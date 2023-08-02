@@ -15,7 +15,7 @@ import { Text } from '@/components/_shared/common';
 import { styled as MuiStyled } from '@mui/material/styles';
 import { useAppSelectors } from '@/hooks/index';
 import { ifThenElse, compareCheck } from '@/utils/helper';
-
+import { useTranslation } from 'react-i18next';
 
 const AsteriskComponent = MuiStyled('span')(({ theme }) => ({
   color: theme.palette.error.main
@@ -29,6 +29,9 @@ interface CompanyBankProps {
 
 function CompanyProfileBankForm({ bank, paymentMethod, formik }: CompanyBankProps) {
   const { responser } = useAppSelectors(state => state);
+  const {t} = useTranslation();
+  const t_bankInformation = 'company_management.company_profile.form.payment_information.bank_information_section';
+  const t_payrollInformation = 'company_management.company_profile.form.payment_information.payroll_information_section';
   const convertCheckbox = (name, event) => {
     return {
       target: {
@@ -53,26 +56,26 @@ function CompanyProfileBankForm({ bank, paymentMethod, formik }: CompanyBankProp
       <form>
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
-            <Typography component='h3' fontSize={18} color='primary'>Bank Information</Typography>
+            <Typography component='h3' fontSize={18} color='primary'>{t(`${t_bankInformation}.title`)}</Typography>
           </Grid>
         </Grid>
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <FormControl fullWidth error={compareCheck(formik.touched.bankBankInformation, Boolean(formik.errors.bankBankInformation))}>
-              <Typography sx={{ mb: '6px' }}>Bank<AsteriskComponent>*</AsteriskComponent></Typography>
+              <Typography sx={{ mb: '6px' }}>{t(`${t_bankInformation}.bank`)}<AsteriskComponent>*</AsteriskComponent></Typography>
               <Select
                 fullWidth
                 displayEmpty
                 variant='outlined'
                 size='small'
-                placeholder='Select Bank'
+                placeholder={t(`${t_bankInformation}.bank_placeholder`)}
                 name='bankBankInformation'
                 value={formik.values.bankBankInformation}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 renderValue={(value: string) => {
                   if (value?.length === 0) {
-                    return <Text title='Select Bank' color='grey.400' />;
+                    return <Text title={t(`${t_bankInformation}.bank_placeholder`)} color='grey.400' />;
                   }
                   const selectedBank = bank.find(type => type?.['id'] === value);
                   if (selectedBank) {
@@ -105,11 +108,11 @@ function CompanyProfileBankForm({ bank, paymentMethod, formik }: CompanyBankProp
               onBlur={formik.handleBlur}
               error={compareCheck(formik.touched.bankAccountHolderNameBankInformation, Boolean(formik.errors.bankAccountHolderNameBankInformation))}
               helperText={ifThenElse(formik.touched.bankAccountHolderNameBankInformation, formik.errors.bankAccountHolderNameBankInformation, '')}
-              customLabel='Bank Account Holder’s Name'
+              customLabel={t(`${t_bankInformation}.bank_account_holder_name`)}
               withAsterisk={true}
               size='small'
               value={formik.values.bankAccountHolderNameBankInformation}
-              placeholder='Input Bank Account Holder’s Name'
+              placeholder={t(`${t_bankInformation}.bank_account_holder_name_placeholder`)}
             />
           </Grid>
         </Grid>
@@ -121,11 +124,11 @@ function CompanyProfileBankForm({ bank, paymentMethod, formik }: CompanyBankProp
               onBlur={formik.handleBlur}
               error={compareCheck(formik.touched.bankAccoutNoBankInformation, Boolean(formik.errors.bankAccoutNoBankInformation))}
               helperText={ifThenElse(formik.touched.bankAccoutNoBankInformation, formik.errors.bankAccoutNoBankInformation, '')}
-              customLabel='Bank Account No'
+              customLabel={t(`${t_bankInformation}.bank_account_no`)}
               withAsterisk={true}
               size='small'
               value={formik.values.bankAccoutNoBankInformation}
-              placeholder='Input Bank Account No'
+              placeholder={t(`${t_bankInformation}.bank_account_no_placeholder`)}
             />
           </Grid>
           <Grid item xs={3} md={3} lg={3} xl={3}>
@@ -135,11 +138,11 @@ function CompanyProfileBankForm({ bank, paymentMethod, formik }: CompanyBankProp
               onBlur={formik.handleBlur}
               error={compareCheck(formik.touched.bankCodeBankInformation, Boolean(formik.errors.bankCodeBankInformation))}
               helperText={ifThenElse(formik.touched.bankCodeBankInformation, formik.errors.bankCodeBankInformation, '')}
-              customLabel='Bank Code'
+              customLabel={t(`${t_bankInformation}.bank_code`)}
               withAsterisk={false}
               size='small'
               value={formik.values.bankCodeBankInformation}
-              placeholder='Input Bank Code'
+              placeholder={t(`${t_bankInformation}.bank_code_placeholder`)}
             />
           </Grid>
           <Grid item xs={3} md={3} lg={3} xl={3}>
@@ -149,11 +152,11 @@ function CompanyProfileBankForm({ bank, paymentMethod, formik }: CompanyBankProp
               onBlur={formik.handleBlur}
               error={compareCheck(formik.touched.branchCodeBankInformation, Boolean(formik.errors.branchCodeBankInformation))}
               helperText={ifThenElse(formik.touched.branchCodeBankInformation, formik.errors.branchCodeBankInformation, '')}
-              customLabel='Branch Code'
+              customLabel={t(`${t_bankInformation}.branch_code`)}
               withAsterisk={false}
               size='small'
               value={formik.values.branchCodeBankInformation}
-              placeholder='Input Branch Code'
+              placeholder={t(`${t_bankInformation}.branch_code_placeholder`)}
             />
           </Grid>
         </Grid>
@@ -165,11 +168,11 @@ function CompanyProfileBankForm({ bank, paymentMethod, formik }: CompanyBankProp
               onBlur={formik.handleBlur}
               error={compareCheck(formik.touched.branchNameBankInformation, Boolean(formik.errors.branchNameBankInformation))}
               helperText={ifThenElse(formik.touched.branchNameBankInformation, formik.errors.branchNameBankInformation, '')}
-              customLabel='Branch Name'
+              customLabel={t(`${t_bankInformation}.branch_name`)}
               withAsterisk={false}
               size='small'
               value={formik.values.branchNameBankInformation}
-              placeholder='Input Branch Name'
+              placeholder={t(`${t_bankInformation}.branch_name_placeholder`)}
             />
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
@@ -179,22 +182,22 @@ function CompanyProfileBankForm({ bank, paymentMethod, formik }: CompanyBankProp
               onBlur={formik.handleBlur}
               error={compareCheck(formik.touched.swiftCodeBankInformation, Boolean(formik.errors.swiftCodeBankInformation))}
               helperText={ifThenElse(formik.touched.swiftCodeBankInformation, formik.errors.swiftCodeBankInformation, '')}
-              customLabel='Swift Code'
+              customLabel={t(`${t_bankInformation}.swift_code`)}
               withAsterisk={false}
               size='small'
               value={formik.values.swiftCodeBankInformation}
-              placeholder='Input Swift Code'
+              placeholder={t(`${t_bankInformation}.swift_code_placeholder`)}
             />
           </Grid>
         </Grid>
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
-            <Typography component='h3' fontSize={18} color='primary'>Payroll Information</Typography>
+            <Typography component='h3' fontSize={18} color='primary'>{t(`${t_payrollInformation}.title`)}</Typography>
           </Grid>
         </Grid>
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <Typography component='div' variant='text-base'>Schedule Type<AsteriskComponent>*</AsteriskComponent></Typography>
+            <Typography component='div' variant='text-base'>{t(`${t_payrollInformation}.schedule_type`)}<AsteriskComponent>*</AsteriskComponent></Typography>
             {
               compareCheck(!formik.values.isMonthly, !formik.values.isWeekly, !formik.values.isBiWeekly) && (
                 <Box>

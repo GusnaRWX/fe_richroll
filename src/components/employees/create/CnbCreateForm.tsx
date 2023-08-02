@@ -13,6 +13,7 @@ import { FiEdit } from 'react-icons/fi';
 import { numberFormat } from '@/utils/format';
 import { MdAdd } from 'react-icons/md';
 import { BsTrash3 } from 'react-icons/bs';
+import { useTranslation } from 'react-i18next';
 
 interface Supplementary {
   componentID: string,
@@ -50,7 +51,11 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
   const dispatch = useAppDispatch();
   const [isEdit, setIsEdit] =useState(false);
   const [withPercentage, setWithPercentage] = useState(false);
-  const [title, setTitle] = useState('Amount');
+  const [title, setTitle] = useState('');
+  const {t} = useTranslation();
+  const t_cnbForm = 'company_management.employees.form_&_detail.cnb';
+  const t_cnbBaseSection = 'company_management.employees.form_&_detail.cnb.base_section';
+  const t_cnbSupplementarySection = 'company_management.employees.form_&_detail.cnb.supplementary_section';
 
   useEffect(() => {
     dispatch({
@@ -154,7 +159,7 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
         ...formik.values,
         supplementary: updated
       });
-    } 
+    }
   };
 
   const match = dataTable?.items?.map(item => item.supplementaries).flat();
@@ -169,7 +174,7 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
               label: val?.name,
               value: val?.id
             };
-          })} fullWidth size='small' variant='outlined' customLabel='Compensation and Benefit Profile' onChange={handleChangeTemplate} onBlur={formik.handleBlur}/>
+          })} fullWidth size='small' variant='outlined' customLabel={t(`${t_cnbForm}.compensation_&_benefits_profile`)} onChange={handleChangeTemplate} onBlur={formik.handleBlur}/>
         </Grid>
       </Grid>
       {formik.values.templateId !== '' && (
@@ -184,11 +189,11 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
                 <>
                   <Grid container justifyContent='space-between'>
                     <Grid item md={6}>
-                      <Text title='Base' fontWeight={700} fontSize='16px' color='#223567' /> 
+                      <Text title={t(`${t_cnbBaseSection}.title`)} fontWeight={700} fontSize='16px' color='#223567' />
                     </Grid>
                     <Grid item md={1}>
                       <Button
-                        label='Edit'
+                        label={t('button.edit')}
                         color='secondary'
                         startIcon={<FiEdit size={12} color='#FFF' />}
                         sx={{
@@ -200,11 +205,11 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
                   </Grid>
                   <Grid container gap={8}  mb='16px'>
                     <Grid item md={6}>
-                      <Select 
-                        customLabel='Compensation Component' 
-                        withAsterisk name='base.componentID' 
-                        onChange={handleBaseCompensationComponent} 
-                        onBlur={formik.handleBlur} 
+                      <Select
+                        customLabel={t(`${t_cnbBaseSection}.compensation_component`)}
+                        withAsterisk name='base.componentID'
+                        onChange={handleBaseCompensationComponent}
+                        onBlur={formik.handleBlur}
                         options={listBaseCompensation}
                         fullWidth
                         variant='outlined'
@@ -214,7 +219,7 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
                     </Grid>
                     <Grid item md={4}>
                       <RadioGroup
-                        label='Tax Status'
+                        label={t(`${t_cnbBaseSection}.tax_status`)}
                         options={[
                           {label: 'Taxable', value: 'true'},
                           {label: 'Non-Taxable', value: 'false'}
@@ -229,9 +234,9 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
                   </Grid>
                   <Grid container gap={1} alignItems='flex-end' mb='16px'>
                     <Grid item md={3}>
-                      <Input customLabel={title} 
-                        withAsterisk 
-                        size='small' 
+                      <Input customLabel={title=== '' ? t(`${t_cnbBaseSection}.amount`) : title}
+                        withAsterisk
+                        size='small'
                         fullWidth
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
@@ -250,14 +255,14 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
                       withPercentage && (
                         <>
                           <Grid item md={3}>
-                            <Input 
-                              customLabel='Rate' 
+                            <Input
+                              customLabel={t(`${t_cnbBaseSection}.rate`)}
                               size='small'
-                              fullWidth 
-                              onChange={formik.handleChange} 
+                              fullWidth
+                              onChange={formik.handleChange}
                               name='base.rate'
                               value={formik.values.base.rate}
-                              onBlur={formik.handleBlur} 
+                              onBlur={formik.handleBlur}
                               InputProps={{
                                 endAdornment: (
                                   <InputAdornment position='end'>
@@ -278,7 +283,7 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
                       <Input
                         withAsterisk
                         size='small'
-                        customLabel='Overtime'
+                        customLabel={t(`${t_cnbBaseSection}.overtime`)}
                         name='overtime'
                         value={formik.values.overtime}
                         onChange={formik.handleChange}
@@ -301,7 +306,7 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
                       <>
                         <Grid container mb='16px'>
                           <Grid item md={6}>
-                            <Text title='Supplementary' fontWeight={700} fontSize='16px' color='#223567' />
+                            <Text title={t(`${t_cnbSupplementarySection}.title`)} fontWeight={700} fontSize='16px' color='#223567' />
                           </Grid>
                         </Grid>
                         {
@@ -309,11 +314,11 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
                             <>
                               <Grid container key={value.componentID} gap={1} justifyContent='space-between' mb='16px'>
                                 <Grid item md={6}>
-                                  <Select 
-                                    customLabel={`Compensation Component ${index + 1}`} 
-                                    options={listSuppCompensation} 
-                                    fullWidth 
-                                    size='small' 
+                                  <Select
+                                    customLabel={`${t(`${t_cnbSupplementarySection}.compensation_component`)} ${index + 1}`}
+                                    options={listSuppCompensation}
+                                    fullWidth
+                                    size='small'
                                     variant='outlined'
                                     value={value.componentID}
                                     onChange={formik.handleChange}
@@ -323,7 +328,7 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
                                 </Grid>
                                 <Grid item md={4}>
                                   <RadioGroup
-                                    label='Tax Status'
+                                    label={t(`${t_cnbSupplementarySection}.tax_status`)}
                                     options={[
                                       { label: 'Taxable', value: 'true' },
                                       { label: 'Non-Taxable', value: 'false' }
@@ -337,7 +342,7 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
                                 </Grid>
                                 <Grid item md={1}>
                                   <Button
-                                    label='Delete'
+                                    label={t('button.delete')}
                                     startIcon={<BsTrash3 />}
                                     color='red'
                                     onClick={() => {handleRemoveOrAppend('REMOVE', index);}}
@@ -347,7 +352,7 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
                               <Grid container gap={1} alignItems='flex-end'>
                                 <Grid item md={3}>
                                   <Input
-                                    customLabel='Amount'
+                                    customLabel={t(`${t_cnbSupplementarySection}.amount`)}
                                     withAsterisk
                                     name={`supplementary[${index}].amount`}
                                     onChange={formik.handleChange}
@@ -375,7 +380,7 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
                         <Grid container mt='16px'>
                           <Grid item md={4}>
                             <Button
-                              label='Add Supplementary Compensation'
+                              label={t('button.add_supplementary_compensation')}
                               startIcon={<MdAdd size={12} color='#FFF'/>}
                               color='secondary'
                               sx={{color: 'white'}}
@@ -386,17 +391,17 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
                       </>
                     )
                   }
-                  
+
                 </>
               ) : (
                 <>
                   <Grid container justifyContent='space-between' >
                     <Grid item md={6}>
-                      <Text title='Base' fontWeight={700} fontSize='16px' color='#223567' /> 
+                      <Text title={t(`${t_cnbBaseSection}.title`)} fontWeight={700} fontSize='16px' color='#223567' />
                     </Grid>
                     <Grid item md={1}>
                       <Button
-                        label='Edit'
+                        label={t('button.edit')}
                         color='secondary'
                         startIcon={<FiEdit size={12} color='#FFF' />}
                         sx={{
@@ -406,20 +411,20 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
                       />
                     </Grid>
                   </Grid>
-            
+
                   <Grid container >
                     <Grid item md={6}>
-                      <Text title='Compensation Component' color='#9CA3AF' fontWeight={500} fontSize={14}/>
+                      <Text title={t(`${t_cnbBaseSection}.compensation_component`)} color='#9CA3AF' fontWeight={500} fontSize={14}/>
                       <Text title={listBaseCompensation?.find(item => item.value === formik.values.base.componentID)?.label}/>
                     </Grid>
                     <Grid item md={6}>
-                      <Text title='Tax Status' color='#9CA3AF' fontWeight={500} fontSize={14} />
-                      <Chip label={formik.values.base.isTaxable === 'true' ? 'Taxable' : 'Non-Taxable'} sx={{ backgroundColor: '#E5E7EB', borderRadius: '4px'}}/>
+                      <Text title={t(`${t_cnbBaseSection}.tax_status`)} color='#9CA3AF' fontWeight={500} fontSize={14} />
+                      <Chip label={formik.values.base.isTaxable === 'true' ? t(`${t_cnbBaseSection}.tax_status_option.taxable`) : t(`${t_cnbSupplementarySection}.tax_status_option.nontaxable`)} sx={{ backgroundColor: '#E5E7EB', borderRadius: '4px'}}/>
                     </Grid>
                   </Grid>
                   <Grid container mb='16px'>
                     <Grid item md={6}>
-                      <Text title='Rate' color='#9CA3AF' fontWeight={500} fontSize={14} />
+                      <Text title={t(`${t_cnbBaseSection}.rate`)} color='#9CA3AF' fontWeight={500} fontSize={14} />
                       <Text title={`Rp ${ifThenElse(formik.values.base.rate === null, numberFormat(+formik.values.base.amount), numberFormat(+formik.values.base.rate))} per ${dataTable?.items?.find(item => item?.base?.term?.id === formik.values.base.termID)?.base?.term?.name}`}/>
                     </Grid>
                   </Grid>
@@ -428,7 +433,7 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
                       <>
                         <Grid container justifyContent='space-between' mb='16px'>
                           <Grid item md={6}>
-                            <Text title='Supplementary' fontWeight={700} fontSize='16px' color='#223567' />
+                            <Text title={t(`${t_cnbSupplementarySection}.title`)} fontWeight={700} fontSize='16px' color='#223567' />
                           </Grid>
                         </Grid>
                         {
@@ -436,17 +441,17 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
                             <>
                               <Grid container key={index}>
                                 <Grid item md={6}>
-                                  <Text title={`Compensation Component ${index + 1}`} fontWeight={500} fontSize={14} color='#9CA3AF' />
+                                  <Text title={`${t(`${t_cnbSupplementarySection}.compensation_component`)} ${index + 1}`} fontWeight={500} fontSize={14} color='#9CA3AF' />
                                   <Text title={match?.find(item => item.component?.id === value?.componentID)?.component?.name}/>
                                 </Grid>
                                 <Grid item md={6}>
-                                  <Text title='Tax Status' color='#9CA3AF' fontWeight={500} fontSize={14} />
-                                  <Chip label={value.isTaxable === 'true' ? 'Taxable' : 'Non-Taxable'} sx={{ backgroundColor: '#E5E7EB', borderRadius: '4px' }} />
+                                  <Text title={t(`${t_cnbSupplementarySection}.tax_status`)} color='#9CA3AF' fontWeight={500} fontSize={14} />
+                                  <Chip label={value.isTaxable === 'true' ? t(`${t_cnbSupplementarySection}.tax_status_option.taxable`) : t(`${t_cnbSupplementarySection}.tax_status_option.nontaxable`)} sx={{ backgroundColor: '#E5E7EB', borderRadius: '4px' }} />
                                 </Grid>
                               </Grid>
                               <Grid container>
                                 <Grid item mb='16px'>
-                                  <Text title={`Amount per ${match?.find(item => item.term?.id === value?.termID)?.term?.name}`} color='#9CA3AF' fontWeight={500} fontSize={14} />
+                                  <Text title={`${t(`${t_cnbSupplementarySection}.amount`)} per ${match?.find(item => item.term?.id === value?.termID)?.term?.name}`} color='#9CA3AF' fontWeight={500} fontSize={14} />
                                   <Text title={`Rp ${ifThenElse(value.rate === null, numberFormat(+value.amount), numberFormat(+value.rate))} per ${match?.find(item => item.term?.id === value?.termID)?.term?.name}`}/>
                                 </Grid>
                               </Grid>
@@ -455,7 +460,7 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
                         }
                       </>
                     )
-                  } 
+                  }
                 </>
               )
             }
@@ -465,14 +470,14 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
       <Grid container justifyContent='flex-end' gap={2} alignItems='center' mt='16px'>
         <Grid item md={1}>
           <Button
-            label='Back'
+            label={t('button.back')}
             variant='outlined'
             onClick={prevPage}
           />
         </Grid>
         <Grid item md={1}>
           <Button
-            label='Next'
+            label={t('button.next')}
             onClick={() => { formik.handleSubmit(); }}
             disabled={formik.values.templateId !== '' ? false : true}
           />

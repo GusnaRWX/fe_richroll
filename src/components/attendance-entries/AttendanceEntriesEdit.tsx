@@ -8,6 +8,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { Button } from '../_shared/form';
 import { useFormik } from 'formik';
 import { AttendanceLeave } from '@/types/attendanceLeave';
+import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
 
 const modalStyle = {
@@ -47,6 +48,9 @@ const AttendanceEntriesEdit: React.FC<AttendanceEntriesEditProps> = ({
   item
 }) => {
 
+  const {t} = useTranslation();
+  const t_editPopup = 'attendance_&_leave.attendance_entries.popup.edit';
+
   const formik = useFormik({
     initialValues: {
       clockIn: '',
@@ -71,7 +75,7 @@ const AttendanceEntriesEdit: React.FC<AttendanceEntriesEditProps> = ({
     >
       <Box sx={modalStyle}>
         <ModalHeader>
-          <Text title='Edit Attendance Entry' fontWeight={600} fontSize='18px' />
+          <Text title={t(`${t_editPopup}.title`)} fontWeight={600} fontSize='18px' />
           <IconButton onClick={handleClose}>
             <Close />
           </IconButton>
@@ -96,7 +100,7 @@ const AttendanceEntriesEdit: React.FC<AttendanceEntriesEditProps> = ({
             <Box sx={{ marginTop: '10px' }}>
               <Grid container justifyContent='space-between' gap={1}>
                 <Grid item md={5.5}>
-                  <Text title='From' fontWeight={400} sx={{ marginBottom: '6px' }} />
+                  <Text title={t(`${t_editPopup}.from_input_label`)} fontWeight={400} sx={{ marginBottom: '6px' }} />
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <TimePicker
                       ampm={false}
@@ -114,7 +118,7 @@ const AttendanceEntriesEdit: React.FC<AttendanceEntriesEditProps> = ({
                   </LocalizationProvider>
                 </Grid>
                 <Grid item md={5.5}>
-                  <Text title='To' fontWeight={400} sx={{ marginBottom: '6px' }} />
+                  <Text title={t(`${t_editPopup}.to_input_label`)} fontWeight={400} sx={{ marginBottom: '6px' }} />
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <TimePicker
                       ampm={false}
@@ -137,10 +141,10 @@ const AttendanceEntriesEdit: React.FC<AttendanceEntriesEditProps> = ({
           <Box sx={{ padding: '16px 0px' }}>
             <Grid container direction='row' justifyContent='flex-end' alignItems='center' gap={2}>
               <Grid item>
-                <Button label='Cancel' variant='outlined' onClick={handleClose} />
+                <Button label={t('button.cancel')} variant='outlined' onClick={handleClose} />
               </Grid>
               <Grid item>
-                <Button label='Save' type='submit' />
+                <Button label={t('button.save')} type='submit' />
               </Grid>
             </Grid>
           </Box>

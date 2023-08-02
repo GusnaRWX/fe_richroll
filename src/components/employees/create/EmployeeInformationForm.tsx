@@ -28,6 +28,7 @@ import { Option } from '@/types/option';
 import { BsTrash3 } from 'react-icons/bs';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { FiTrash2 } from 'react-icons/fi';
+import { useTranslation } from 'react-i18next';
 
 const videoConstraints = {
   width: 500,
@@ -107,6 +108,9 @@ interface EmployeeProps {
 function EmployeeInformationForm({ refProp, nextPage, nextPermPage, setValues, infoValues }: EmployeeProps) {
   const [isCaptureEnable, setCaptureEnable] = useState<boolean>(false);
   const dispatch = useAppDispatch();
+  const {t} = useTranslation();
+  const t_employeeInformationSection = 'company_management.employees.form_&_detail.employee_information.employee_information_section';
+  const t_employeeSelfService = 'company_management.employees.form_&_detail.employee_information.employee_information_section.employee_self_service_box';
   const webcamRef = useRef<Webcam>(null);
   const [openCamera, setOpenCamera] = useState(false);
   const capture = useCallback(() => {
@@ -257,7 +261,7 @@ function EmployeeInformationForm({ refProp, nextPage, nextPermPage, setValues, i
         variant='text-lg'
         fontWeight={700}
         color='primary.500'
-        title='Employee Information'
+        title={t(`${t_employeeInformationSection}.title`)}
         mb='16px'
       />
       <form ref={refProp} onSubmit={formik.handleSubmit}>
@@ -301,13 +305,13 @@ function EmployeeInformationForm({ refProp, nextPage, nextPermPage, setValues, i
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Input
               name='fullName'
-              customLabel='Full Name'
+              customLabel={t(`${t_employeeInformationSection}.fullname`)}
               withAsterisk={true}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               size='small'
               value={formik.values.fullName}
-              placeholder='Input Full Name'
+              placeholder={t(`${t_employeeInformationSection}.fullname_placeholder`)}
               error={formik.touched.fullName && Boolean(formik.errors.fullName)}
               helperText={formik.touched.fullName && formik.errors.fullName}
             />
@@ -315,13 +319,13 @@ function EmployeeInformationForm({ refProp, nextPage, nextPermPage, setValues, i
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Input
               name='nickname'
-              customLabel='Nickname'
+              customLabel={t(`${t_employeeInformationSection}.nickname`)}
               withAsterisk={false}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               size='small'
               value={formik.values.nickname}
-              placeholder='Input Nickname'
+              placeholder={t(`${t_employeeInformationSection}.nickname_placeholder`)}
               error={formik.touched.nickname && Boolean(formik.errors.nickname)}
               helperText={formik.touched.nickname && formik.errors.nickname}
             />
@@ -329,7 +333,7 @@ function EmployeeInformationForm({ refProp, nextPage, nextPermPage, setValues, i
         </Grid>
         <Grid container spacing={2}>
           <Grid item xs={6} md={6} lg={6} xl={6} sx={{ marginBottom: '1.5rem', marginTop: '.3rem' }}>
-            <Typography>Contact Number<AsteriskComponent>*</AsteriskComponent></Typography>
+            <Typography>{t(`${t_employeeInformationSection}.contact_number`)}<AsteriskComponent>*</AsteriskComponent></Typography>
             <Grid container spacing={2}>
               <Grid item xs={1} sm={3} md={2} lg={2} xl={2} spacing={2}>
                 <CustomSelect
@@ -355,7 +359,7 @@ function EmployeeInformationForm({ refProp, nextPage, nextPermPage, setValues, i
                 <Input
                   name='phoneNumber'
                   type='number'
-                  placeholder='Input Correct Number'
+                  placeholder={t(`${t_employeeInformationSection}.contact_number_placeholder`)}
                   withAsterisk={true}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -370,12 +374,12 @@ function EmployeeInformationForm({ refProp, nextPage, nextPermPage, setValues, i
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <Input
               name='email'
-              customLabel='Personal Email Address'
+              customLabel={t(`${t_employeeInformationSection}.personal_email_address`)}
               withAsterisk={true}
               size='small'
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              placeholder='Personal Email Address'
+              placeholder={t(`${t_employeeInformationSection}.personal_email_address_placeholder`)}
               value={formik.values.email}
               error={formik.touched.email && Boolean(formik.errors.email)}
               helperText={formik.touched.email && formik.errors.email}
@@ -385,7 +389,7 @@ function EmployeeInformationForm({ refProp, nextPage, nextPermPage, setValues, i
         <Grid container spacing={2}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <DatePicker
-              customLabel='Start Date'
+              customLabel={t(`${t_employeeInformationSection}.start_date`)}
               withAsterisk
               value={formik.values.startDate as unknown as Date}
               onChange={(date: unknown) => formik.setFieldValue('startDate', date)}
@@ -394,7 +398,7 @@ function EmployeeInformationForm({ refProp, nextPage, nextPermPage, setValues, i
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <DatePicker
-              customLabel='End Date'
+              customLabel={t(`${t_employeeInformationSection}.end_date`)}
               value={formik.values.endDate as unknown as Date}
               onChange={(date: unknown) => formik.setFieldValue('endDate', date)}
               disabled={formik.values.isPermanent}
@@ -402,7 +406,7 @@ function EmployeeInformationForm({ refProp, nextPage, nextPermPage, setValues, i
           </Grid>
         </Grid>
         <CheckBox
-          customLabel='Permanent'
+          customLabel={t(`${t_employeeInformationSection}.permanent`)}
           name='isPermanent'
           checked={formik.values.isPermanent}
           onChange={formik.handleChange}
@@ -410,7 +414,7 @@ function EmployeeInformationForm({ refProp, nextPage, nextPermPage, setValues, i
         />
         <Grid container spacing={2}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
-            <Typography mb='6px'>Department <AsteriskComponent>*</AsteriskComponent></Typography>
+            <Typography mb='6px'>{t(`${t_employeeInformationSection}.department`)} <AsteriskComponent>*</AsteriskComponent></Typography>
             <Autocomplete
               id='department'
               freeSolo
@@ -451,7 +455,7 @@ function EmployeeInformationForm({ refProp, nextPage, nextPermPage, setValues, i
                           gap: '5px'
                         }}>
                         <AiOutlinePlus />
-                        Add New {inputValue}
+                        {t('button.add_new')} {inputValue}
                       </Box>
                     ) as unknown as Element
                   });
@@ -587,18 +591,18 @@ function EmployeeInformationForm({ refProp, nextPage, nextPermPage, setValues, i
           <Grid item xs={12} sm={12} md={8} lg={8} xl={8}>
             <EmployeeSelfWrapper>
               <CheckBox
-                customLabel='Employee Self Service'
+                customLabel={t(`${t_employeeSelfService}.title`)}
                 name='isSelfService'
                 checked={formik.values.isSelfService}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
               />
-              <Typography>Activate button to send account activation link via email. Employee Self Service enables self-data filling.</Typography>
+              <Typography>{t(`${t_employeeSelfService}.desc`)}</Typography>
             </EmployeeSelfWrapper>
           </Grid>
         </Grid>
         <NextBtnWrapper>
-          <Button fullWidth={false} size='small' label='Next' color='primary' type={'submit'} />
+          <Button fullWidth={false} size='small' label={t('button.next')} color='primary' type={'submit'} />
         </NextBtnWrapper>
       </form>
       <FileUploadModal
