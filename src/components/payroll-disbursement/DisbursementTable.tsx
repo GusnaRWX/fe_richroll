@@ -4,8 +4,7 @@ import {
   TableCell,
   TableRow,
   Box,
-  TableSortLabel,
-  Button as MuiButton
+  TableSortLabel
 } from '@mui/material';
 import { Input } from '../_shared/form';
 import { Search } from '@mui/icons-material';
@@ -39,6 +38,25 @@ const TypeComponent = styled.div`
  color: #9A3412;
  padding: 3px 12px;
  text-align: center;
+`;
+
+const DownloadWrapper = styled.div`
+ display: flex;
+ flex-direction: row;
+ align-items: center;
+ justify-content: space-around;
+ border-radius: 6px;
+ cursor: pointer;
+ background-color: #c5c5c5;
+ padding: .5rem;
+`;
+
+const DownloadLabel = styled.div`
+ display: inline-block;
+ width: 120px;
+ overflow: hidden;
+ text-overflow: ellipsis;
+ white-space: nowrap;
 `;
 
 const headerItems = [
@@ -224,18 +242,15 @@ function DisbursementTable({
                       <TableCell>{dayjs(item.updatedAt).format('DD/MM/YYYY')}</TableCell>
                       <TableCell>
                         {
-                          ifThenElse(item.attachment.status !== null && item.attachment.status !== true,
+                          ifThenElse(item.attachment.url !== null,
                             (
                               <>
-                                <MuiButton
-                                  variant='contained'
-                                  color='inherit'
-                                  size='small'
-                                  sx={{ color: '#111827' }}
-                                  onClick={() => { window.open(item?.attachment?.url, '_blank'); }}
-                                >
-                                  {item.attachment.name} &nbsp;<FiDownload fontSize='small' />
-                                </MuiButton>
+                                <DownloadWrapper onClick={() => { window.open(item?.attachment?.url, '_blank'); }}>
+                                  <DownloadLabel>
+                                    {item.attachment.name}
+                                  </DownloadLabel>
+                                  <FiDownload fontSize='small' />
+                                </DownloadWrapper>
                               </>
                             ),
                             'Generating'

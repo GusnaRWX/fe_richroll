@@ -110,5 +110,5 @@ export const postPayrollDisbursementPaid = (payload) => {
 };
 
 export const patchPayrollDisbursementFinal = (payload) => {
-  return patch(`payrolls/${payload.id}/disbursement/final`, {});
+  return patch(`payrolls/${payload.id}/disbursements/final`, {});
 };
