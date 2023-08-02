@@ -16,7 +16,8 @@ import { compareCheck, ifThenElse, getCompanyData } from '@/utils/helper';
 import { visuallyHidden } from '@mui/utils';
 import { IconButton } from '@/components/_shared/form';
 import { BsTrashFill, BsFillEyeFill } from 'react-icons/bs';
-import { HiPencilAlt, HiOutlineInboxIn, HiDownload } from 'react-icons/hi';
+import { HiPencilAlt, HiOutlineInboxIn } from 'react-icons/hi';
+import { FiDownload } from 'react-icons/fi';
 import { TbFileImport } from 'react-icons/tb';
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
@@ -33,6 +34,25 @@ const ButtonWrapper = styled.div`
  align-items: center;
  justify-content: center;
  gap: .5rem;
+`;
+
+const DownloadWrapper = styled.div`
+ display: flex;
+ flex-direction: row;
+ align-items: center;
+ justify-content: space-around;
+ border-radius: 6px;
+ cursor: pointer;
+ background-color: #c5c5c5;
+ padding: .5rem;
+`;
+
+const DownloadLabel = styled.div`
+ display: inline-block;
+ width: 120px;
+ overflow: hidden;
+ text-overflow: ellipsis;
+ white-space: nowrap;
 `;
 
 const headerItems = [
@@ -281,15 +301,15 @@ function AttendanceTable({
                       <TableCell>{dayjs(item.updatedAt).format('DD/MM/YYYY')}</TableCell>
                       <TableCell>
                         {
-                          ifThenElse(item.attachment.status !== null && item.attachment.status !== true,
+                          ifThenElse(item.attachment.url !== null,
                             (
                               <>
-                                <Chip
-                                  label={item.attachment.name}
-                                  sx={{ borderRadius: '6px' }}
-                                  deleteIcon={<HiDownload size={16} color='#000' />}
-                                  onClick={() => { window.open(item.attachment.url, '_blank'); }}
-                                />
+                                <DownloadWrapper onClick={() => { window.open(item?.attachment?.url, '_blank'); }}>
+                                  <DownloadLabel>
+                                    {item.attachment.name}
+                                  </DownloadLabel>
+                                  <FiDownload fontSize='small' />
+                                </DownloadWrapper>
                               </>
                             ),
                             'Generating'
