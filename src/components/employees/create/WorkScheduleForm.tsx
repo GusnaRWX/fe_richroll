@@ -306,7 +306,7 @@ function WorkScheduleForm({ setData, prevPage }: WorkScheduleFormProps) {
               }
               <FormikForm>
                 <Grid container spacing={3} mb='1rem' alignItems='center'>
-                  <Grid item xs={6.5} sm={6.5} md={6.5} lg={6.5} xl={6.5}>
+                  <Grid item xs={9} sm={9} md={9} lg={5.3} xl={5.3}>
                     <Select
                       name='workScheduleID'
                       withAsterisk={true}
@@ -334,10 +334,10 @@ function WorkScheduleForm({ setData, prevPage }: WorkScheduleFormProps) {
                       options={listWorkSchedule}
                     />
                   </Grid>
-                  <Grid item xs={1.5} sm={1.5} md={1.5} lg={1.5} xl={1.5} mt={formik.errors.profileName ? '0px' : '28px'}>
+                  <Grid item xs={3} sm={3} md={3} lg={1.7} xl={1.7} mt={formik.errors.profileName ? '0px' : '28px'}>
                     <MuiButton onClick={() => { handleConfirmOpen(formik); }} variant='contained' size='small' sx={{ height: '2.5rem' }}><Add />&nbsp; {t('button.add_schedule')}</MuiButton>
                   </Grid>
-                  <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
+                  <Grid item xs={6} sm={6} md={6} lg={2.5} xl={2.5}>
                     <Input
                       name='weeklyGross'
                       withAsterisk={false}
@@ -356,7 +356,7 @@ function WorkScheduleForm({ setData, prevPage }: WorkScheduleFormProps) {
                       }}
                     />
                   </Grid>
-                  <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
+                  <Grid item xs={6} sm={6} md={6} lg={2.5} xl={2.5}>
                     <Input
                       name='weeklyNet'
                       withAsterisk={false}
