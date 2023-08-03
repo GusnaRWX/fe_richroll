@@ -399,6 +399,15 @@ export const payrollSlice = createSlice({
     },
     putPayrollAttendanceScheduleFailed: (state) => {
       state.isLoading = false;
+    },
+    postPayrollDisbursementRecieptRequested: state => {
+      state.isLoading = true;
+    },
+    postPayrollDisbursementRecieptSuccess: state => {
+      state.isLoading = false;
+    },
+    postPayrollDisbursementRecieptFailed: state => {
+      state.isLoading = false;
     }
   },
   extraReducers: {
@@ -495,7 +504,10 @@ export const {
   deletePayrollAssistFailed,
   putPayrollAttendanceScheduleFailed,
   putPayrollAttendanceScheduleRequested,
-  putPayrollAttendanceScheduleSuccess
+  putPayrollAttendanceScheduleSuccess,
+  postPayrollDisbursementRecieptRequested,
+  postPayrollDisbursementRecieptSuccess,
+  postPayrollDisbursementRecieptFailed
 } = payrollSlice.actions;
 
 export default payrollSlice.reducer;

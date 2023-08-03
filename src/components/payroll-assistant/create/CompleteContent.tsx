@@ -15,7 +15,7 @@ import { styled as MuiStyled } from '@mui/material/styles';
 import { SimpleAccordion, Text } from '@/components/_shared/common';
 import Table from '@/components/_shared/form/Table';
 import styled from '@emotion/styled';
-import { compareCheck, ifThenElse } from '@/utils/helper';
+import {  compareCheck, ifThenElse } from '@/utils/helper';
 import { visuallyHidden } from '@mui/utils';
 import CompleteRow from './CompleteRow';
 import { FiFile, FiDownload } from 'react-icons/fi';
@@ -23,10 +23,9 @@ import { HiFolderOpen } from 'react-icons/hi';
 import EmptyState from '@/components/_shared/common/EmptyState';
 import { useRouter } from 'next/router';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
-import { getPayrollDisbursementIdRequested, postPayrollDisbursementPaidRequested } from '@/store/reducers/slice/payroll/payrollSlice';
+import { getPayrollDisbursementIdRequested, postPayrollDisbursementPaidRequested, postPayrollDisbursementRecieptRequested } from '@/store/reducers/slice/payroll/payrollSlice';
 import { numberFormat } from '@/utils/format';
 import { Payroll } from '@/types/payroll';
-import { useFormik } from 'formik';
 import { AiOutlineFile, AiOutlineClose } from 'react-icons/ai';
 
 const ButtonWrapper = styled(Box)(({
@@ -110,6 +109,16 @@ const headerItems = [
 
 type Order = 'asc' | 'desc'
 
+interface RecieptFile {
+  id: string;
+  body: {
+    disbursementID: string;
+    file: unknown,
+    filename: string,
+    size: string
+  }
+}
+
 function CompleteContent(att) {
   const {isAssist} = att;
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -124,19 +133,61 @@ function CompleteContent(att) {
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
-
-  const formik = useFormik({
-    initialValues: {
-      file: null
-    },
-    onSubmit: (_val) => {
-      console.log(_val);
+  const [fileReciept, setFileReciept] = useState<RecieptFile>({
+    id: '',
+    body: {
+      disbursementID: '',
+      file: [],
+      filename: '',
+      size: ''
     }
   });
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(event);
   };
+
+  const handleRecieptFile = (e, id) => {
+    const result = {
+      id: router.query.id,
+      body: {
+        disbursementID: id,
+        file: e.target.files[0],
+        filename: e.target.files[0].name,
+        size: (e.target.files[0].size / (1024 * 1024)).toFixed(2)
+      }
+    };
+    setFileReciept(result as RecieptFile);
+
+    const newForm = new FormData();
+    newForm.append('disbursementID', id);
+    newForm.append('file', e.target.files[0] );
+    newForm.append('filename', e.target.files[0].name);
+    newForm.append('size', (e.target.files[0].size / (1024 * 1024)).toFixed(2));
+    
+
+    dispatch({
+      type: postPayrollDisbursementRecieptRequested.toString(),
+      payload: {
+        id: router.query.id,
+        body: newForm
+      }
+    });
+  };
+
+  const handleResetRecieptFile = () => {
+    setFileReciept((prev) => ({
+      ...prev,
+      body: {
+        disbursementID: '',
+        file: [],
+        filename: '',
+        size: ''
+      }
+    }));
+  };
+
+  console.log(fileReciept);
 
   const handleRequestSort = (event: React.MouseEvent<unknown>, headId: string) => {
     const isAsc = compareCheck(sort === headId, direction === 'asc');
@@ -225,13 +276,14 @@ function CompleteContent(att) {
         </Grid>
       </ContentWrapper>
       {disbursementData?.disbursements?.length > 0 && disbursementData?.disbursements?.map((value) => (
+     
         <ContentWrapper key={value.receiptFile}>
           <Box sx={{ width: '100%' }}>
             <SimpleAccordion
               title={<>Payment Method : {value?.method?.name} <Box component='span' sx={{ fontSize: '14px', fontWeight: '400' }}>{`(${value?.items?.length} employees)`}</Box></>}
               footer={
                 <Grid container spacing={2} mt='.1rem' justifyContent='space-between'>
-                  <Grid item xs={formik.values.file === null ? 8 : 6}>
+                  <Grid item xs={5} >
                     <MuiButton
                       variant='contained'
                       color='inherit'
@@ -241,16 +293,14 @@ function CompleteContent(att) {
                       {value?.attachment?.filename} &nbsp;<FiFile />&nbsp; {value?.attachment?.size} &nbsp;<FiDownload />
                     </MuiButton>
                   </Grid>
-                  <Grid item xs={ifThenElse(formik.values.file === null, 4, 5)}>
+                  <Grid item xs={5}>
                     <ButtonWrapper>
                       <div>
-                        {ifThenElse(formik.values.file === null, (
+                        {ifThenElse((fileReciept.body.file as []).length === 0, (
                           <>
                             <input
                               id='input-file'
-                              onChange={(e) => {
-                                formik.setFieldValue('file', e.target.files && e.target.files[0]);
-                              }}
+                              onChange={(e) => {handleRecieptFile(e, value.id);}}
                               type='file'
                               style={{ display: 'none' }}
                               accept='application/pdf'
@@ -270,7 +320,8 @@ function CompleteContent(att) {
                           <Grid container sx={HasFileCss} alignItems='center'>
                             <Grid item>
                               <Text
-                                title={ifThenElse(formik?.values?.file, (formik?.values?.file as unknown as { name: string })?.name, '')}
+                                // title={ifThenElse(formik?.values?.file, (formik?.values?.file as unknown as { name: string })?.name, '')}
+                                title={ifThenElse(fileReciept.body.filename, fileReciept.body.filename,'')}
                                 fontSize='12px'
                                 fontWeight={400}
                               />
@@ -280,16 +331,13 @@ function CompleteContent(att) {
                             </Grid>
                             <Grid item>
                               <Text
-                                title={ifThenElse(formik.values.file,
-                                  `${((formik.values.file as unknown as { size: number })?.size / (1024 * 1024)).toFixed(2)} MB`,
-                                  '0.00 MB'
-                                )}
+                                title={ifThenElse(fileReciept.body.size, `${fileReciept.body.size} MB`, '')}
                                 fontSize='12px'
                                 fontWeight={400}
                               />
                             </Grid>
                             <Grid item>
-                              <AiOutlineClose fontSize='12px' cursor='pointer' onClick={() => { formik.setFieldValue('file', null); }} />
+                              <AiOutlineClose fontSize='12px' cursor='pointer' onClick={() => {handleResetRecieptFile();}} />
                             </Grid>
                           </Grid>
                         ))}
