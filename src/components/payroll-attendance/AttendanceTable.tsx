@@ -301,7 +301,7 @@ function AttendanceTable({
                       <TableCell>{dayjs(item.updatedAt).format('DD/MM/YYYY')}</TableCell>
                       <TableCell>
                         {
-                          ifThenElse(item.attachment.url !== null,
+                          ifThenElse(item?.attachment?.url !== null,
                             (
                               <>
                                 <DownloadWrapper onClick={() => { window.open(item?.attachment?.url, '_blank'); }}>

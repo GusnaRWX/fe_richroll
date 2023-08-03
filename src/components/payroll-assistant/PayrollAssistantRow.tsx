@@ -62,6 +62,14 @@ const DisbursementType = styled.div`
  display: inline-block;
 `;
 
+const DownloadLabel = styled.div`
+ display: inline-block;
+ width: 120px;
+ overflow: hidden;
+ text-overflow: ellipsis;
+ white-space: nowrap;
+`;
+
 function PayrollAssistantRow (row) {
   const dispatch = useAppDispatch();
   const { item, tabValue } = row;
@@ -157,7 +165,7 @@ function PayrollAssistantRow (row) {
               </Grid>
               <Grid item sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', textAlign: 'center'}} xs={2.5}>
                 {
-                  ifThenElse(item?.attendance?.attachment?.status !== null && item?.attendance?.attachment?.status !== true,
+                  ifThenElse(item?.attendance?.attachment?.url !== null,
                     (
                       <>
                         <MuiButton
@@ -167,7 +175,7 @@ function PayrollAssistantRow (row) {
                           sx={{ color: '#111827' }}
                           onClick={() => { openInNewTab(item?.attendance?.attachment?.url); }}
                         >
-                          {item?.attendance?.attachment?.name} &nbsp;<FiDownload fontSize='small' />
+                          <DownloadLabel>{item?.attendance?.attachment?.name}</DownloadLabel> &nbsp;<FiDownload fontSize='small' />
                         </MuiButton>
                       </>
                     ),
@@ -194,7 +202,7 @@ function PayrollAssistantRow (row) {
               </Grid>
               <Grid item sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', textAlign: 'center'}} xs={2.5}>
                 {
-                  ifThenElse(item?.gross?.attachment?.status !== null && item?.gross?.attachment?.status !== true,
+                  ifThenElse(item?.gross?.attachment?.url !== null,
                     (
                       <>
                         <MuiButton
@@ -204,7 +212,7 @@ function PayrollAssistantRow (row) {
                           sx={{ color: '#111827' }}
                           onClick={() => { openInNewTab(item?.gross?.attachment?.url); }}
                         >
-                          {item?.gross?.attachment?.name} &nbsp;<FiDownload fontSize='small' />
+                          <DownloadLabel>{item?.gross?.attachment?.name}</DownloadLabel> &nbsp;<FiDownload fontSize='small' />
                         </MuiButton>
                       </>
                     ),
@@ -231,7 +239,7 @@ function PayrollAssistantRow (row) {
               </Grid>
               <Grid item sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', textAlign: 'center'}} xs={2.5}>
                 {
-                  ifThenElse(item?.net?.attachment?.status !== null && item?.net?.attachment?.status !== true,
+                  ifThenElse(item?.net?.attachment?.url !== null,
                     (
                       <>
                         <MuiButton
@@ -241,7 +249,7 @@ function PayrollAssistantRow (row) {
                           sx={{ color: '#111827' }}
                           onClick={() => { openInNewTab(item?.net?.attachment?.url); }}
                         >
-                          {item?.net?.attachment?.name} &nbsp;<FiDownload fontSize='small' />
+                          <DownloadLabel>{item?.net?.attachment?.name}</DownloadLabel> &nbsp;<FiDownload fontSize='small' />
                         </MuiButton>
                       </>
                     ),
@@ -268,7 +276,7 @@ function PayrollAssistantRow (row) {
               </Grid>
               <Grid item sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', textAlign: 'center'}} xs={2.5}>
                 {
-                  ifThenElse(item?.disbursement?.attachment?.status !== null && item?.disbursement?.attachment?.status !== true,
+                  ifThenElse(item?.disbursement?.attachment?.url !== null,
                     (
                       <>
                         <MuiButton
@@ -278,7 +286,7 @@ function PayrollAssistantRow (row) {
                           sx={{ color: '#111827' }}
                           onClick={() => { openInNewTab(item?.disbursement?.attachment?.url); }}
                         >
-                          {item?.disbursement?.attachment?.name} &nbsp;<FiDownload fontSize='small' />
+                          <DownloadLabel>{item?.disbursement?.attachment?.name}</DownloadLabel> &nbsp;<FiDownload fontSize='small' />
                         </MuiButton>
                       </>
                     ),
