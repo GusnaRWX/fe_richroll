@@ -110,16 +110,6 @@ const headerItems = [
 
 type Order = 'asc' | 'desc'
 
-interface RecieptFile {
-  id: string;
-  body: {
-    disbursementID: string;
-    file: unknown,
-    filename: string,
-    size: string
-  }
-}
-
 function CompleteContent(att) {
   const {isAssist} = att;
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -134,38 +124,16 @@ function CompleteContent(att) {
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
-  const [fileReciept, setFileReciept] = useState<RecieptFile>({
-    id: '',
-    body: {
-      disbursementID: '',
-      file: [],
-      filename: '',
-      size: ''
-    }
-  });
+  const [fileReciept, setFileReciept] = useState([]);
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(event);
   };
 
   const handleRecieptFile = (e, id) => {
-    const result = {
-      id: router.query.id,
-      body: {
-        disbursementID: id,
-        file: e.target.files[0],
-        filename: e.target.files[0].name,
-        size: (e.target.files[0].size / (1024 * 1024)).toFixed(2)
-      }
-    };
-    setFileReciept(result as RecieptFile);
-
     const newForm = new FormData();
     newForm.append('disbursementID', id);
     newForm.append('file', e.target.files[0] );
-    newForm.append('filename', e.target.files[0].name);
-    newForm.append('size', (e.target.files[0].size / (1024 * 1024)).toFixed(2));
-    
 
     dispatch({
       type: postPayrollDisbursementRecieptRequested.toString(),
@@ -249,7 +217,6 @@ function CompleteContent(att) {
     return null;
   }
 
-  console.log(fileReciept.body.filename !== '');
   return (
     <>
       <ContentWrapper sx={{ mt: '1rem' }}>
@@ -296,10 +263,10 @@ function CompleteContent(att) {
                       {value?.attachment?.filename} &nbsp;<FiFile />&nbsp; {value?.attachment?.size} &nbsp;<FiDownload />
                     </MuiButton>
                   </Grid>
-                  <Grid item xs={fileReciept.body.file !== '' ? 4 : 4.3 }>
+                  <Grid item xs={value.receipt === null ? 3.8 : 4 }>
                     <ButtonWrapper>
                       <div>
-                        {ifThenElse((fileReciept.body.file as []).length === 0, (
+                        {ifThenElse(value.receipt === null, (
                           <>
                             <input
                               id='input-file'
@@ -314,8 +281,12 @@ function CompleteContent(att) {
                                 color='secondary'
                                 sx={{ color: 'white' }}
                                 component='span'
+                                
                               >
-                                <HiFolderOpen />&nbsp; Upload Receipt
+                                {isLoading ? <CircularProgress size={10} /> : (
+                                  <HiFolderOpen /> 
+                                ) }
+                                {isLoading ? 'loading...' : ' Upload Receipt'}
                               </MuiButton>
                             </label>
                           </>
@@ -323,7 +294,7 @@ function CompleteContent(att) {
                           <Grid container sx={HasFileCss} alignItems='center'>
                             <Grid item>
                               <Text
-                                title={ifThenElse(isLoading, <CircularProgress size={10} />,fileReciept.body.filename)}
+                                title={value.receipt?.name}
                                 fontSize='12px'
                                 fontWeight={400}
                               />
@@ -336,12 +307,12 @@ function CompleteContent(att) {
                                   </Grid>
                                   <Grid item>
                                     <Text
-                                      title={ifThenElse(isLoading, ``, `${fileReciept.body.size} MB`)}
+                                      title={ifThenElse(isLoading, ``, `${value.receipt?.size && (+value.receipt?.size / (1024 * 1024)).toFixed(2) } MB`)}
                                       fontSize='12px'
                                       fontWeight={400}
                                     />
                                   </Grid>
-                                  <Grid item>
+                                  <Grid item sx={{cursor: 'disabled'}}>
                                     <AiOutlineClose fontSize='12px' cursor='pointer' onClick={() => { handleResetRecieptFile(); }} />
                                   </Grid>
                                 </>

@@ -289,6 +289,12 @@ export declare namespace Payroll {
     }
   }
 
+  interface Reciept {
+    name: string;
+    url: string;
+    size: string
+  }
+
   interface Disbursements {
     id: string;
     attachment: {
@@ -301,7 +307,8 @@ export declare namespace Payroll {
     method: {
       id: string;
       name: string;
-    }
+    },
+    receipt?: Reciept;
     items: Array<DisbursementsData>
   }
 

@@ -1051,6 +1051,14 @@ function* postPayrollDisbursementsReciept(action: AnyAction) {
     if(res.data.code === 201 || res.data.code === 200) {
       yield put({type: postPayrollDisbursementRecieptSuccess.toString()});
 
+
+      yield put({
+        type: getPayrollDisbursementIdRequested.toString(),
+        payload: {
+          id: action?.payload?.id
+        }
+      });
+
       yield put({
         type: setResponserMessage.toString(),
         payload: {
