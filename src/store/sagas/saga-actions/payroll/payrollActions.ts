@@ -112,3 +112,7 @@ export const postPayrollDisbursementPaid = (payload) => {
 export const patchPayrollDisbursementFinal = (payload) => {
   return patch(`payrolls/${payload.id}/disbursements/final`, {});
 };
+
+export const postPayrollDisbursementReciept = (payload) => {
+  return post(`payrolls/${payload.id}/disbursements/receipt`, payload.body);
+};

@@ -25,7 +25,8 @@ import {
   deletePayrollAssist,
   postPayrollDisbursementPaid,
   patchPayrollDisbursementFinal,
-  putPayrollAttendanceSchedule
+  putPayrollAttendanceSchedule,
+  postPayrollDisbursementReciept
 } from '../saga-actions/payroll/payrollActions';
 import { call, put, takeEvery, delay } from 'redux-saga/effects';
 import {
@@ -112,7 +113,10 @@ import {
   deletePayrollAssistFailed,
   putPayrollAttendanceScheduleFailed,
   putPayrollAttendanceScheduleRequested,
-  putPayrollAttendanceScheduleSuccess
+  putPayrollAttendanceScheduleSuccess,
+  postPayrollDisbursementRecieptRequested,
+  postPayrollDisbursementRecieptSuccess,
+  postPayrollDisbursementRecieptFailed
 } from '@/store/reducers/slice/payroll/payrollSlice';
 import { setResponserMessage } from '@/store/reducers/slice/responserSlice';
 import { Services } from '@/types/axios';
@@ -1040,6 +1044,38 @@ function* patchPutPayrollAttendanceSchedule(action: AnyAction){
   }
 }
 
+function* postPayrollDisbursementsReciept(action: AnyAction) {
+  try {
+    const res: AxiosResponse = yield call(postPayrollDisbursementReciept, action?.payload);
+
+    if(res.data.code === 201 || res.data.code === 200) {
+      yield put({type: postPayrollDisbursementRecieptSuccess.toString()});
+
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: res.data.code,
+          message: res.data.message
+        }
+      });
+    }
+  } catch(err) {
+    if(err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      yield put({type: postPayrollDisbursementRecieptFailed.toString()});
+
+      yield delay(1000, true);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message
+        }
+      });
+    }
+  }
+}
+
 function* payrollSaga() {
   yield takeEvery(getPayrollRequested.toString(), fetchGetPayroll);
   yield takeEvery(getPayrollCompletedRequested.toString(), fetchGetPayrollCompleted);
@@ -1069,6 +1105,7 @@ function* payrollSaga() {
   yield takeEvery(generateNetAssistRequested.toString(), fetchGenerateNetAssistant);
   yield takeEvery(generateDisbursementAssistRequested.toString(), fetchGenerateDisbursementAssistant);
   yield takeEvery(putPayrollAttendanceScheduleRequested.toString(), patchPutPayrollAttendanceSchedule);
+  yield takeEvery(postPayrollDisbursementRecieptRequested.toString(), postPayrollDisbursementsReciept);
 }
 
 export default payrollSaga;
