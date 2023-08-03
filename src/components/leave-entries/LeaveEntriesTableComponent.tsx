@@ -72,7 +72,7 @@ const LeaveEntriesTableComponent = ({
     { id: 'employee.code', label: t(`${t_tableHeader}.employee_id`) },
     { id: 'employee.user.name', label: t(`${t_tableHeader}.employee_name`) },
     { id: 'items.start', label: t(`${t_tableHeader}.date`)},
-    { id: '', label: t(`${t_tableHeader}.from`)},
+    { id: '', label: t(`${t_tableHeader}.From`)},
     { id: 'items.leaveType', label: t(`${t_tableHeader}.leave_type`) },
     { id: 'items.leaveStatus', label: t(`${t_tableHeader}.status`) },
     { id: 'action', label: '' }
