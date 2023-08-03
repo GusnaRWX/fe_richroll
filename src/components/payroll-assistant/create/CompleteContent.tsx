@@ -8,7 +8,8 @@ import {
   TableSortLabel,
   Typography,
   Button as MuiButton,
-  Switch
+  Switch,
+  CircularProgress
 } from '@mui/material';
 import { SwitchProps } from '@mui/material/Switch';
 import { styled as MuiStyled } from '@mui/material/styles';
@@ -129,7 +130,7 @@ function CompleteContent(att) {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const disbursementData = useAppSelectors(state => state.payroll.disbursementData as Payroll.DisbursementData);
-  const { disbursementId } = useAppSelectors(state => state.payroll);
+  const { disbursementId, isLoading } = useAppSelectors(state => state.payroll);
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
@@ -247,6 +248,8 @@ function CompleteContent(att) {
   if (!hydrated) {
     return null;
   }
+
+  console.log(fileReciept.body.filename !== '');
   return (
     <>
       <ContentWrapper sx={{ mt: '1rem' }}>
@@ -293,7 +296,7 @@ function CompleteContent(att) {
                       {value?.attachment?.filename} &nbsp;<FiFile />&nbsp; {value?.attachment?.size} &nbsp;<FiDownload />
                     </MuiButton>
                   </Grid>
-                  <Grid item xs={5}>
+                  <Grid item xs={fileReciept.body.file !== '' ? 4 : 4.3 }>
                     <ButtonWrapper>
                       <div>
                         {ifThenElse((fileReciept.body.file as []).length === 0, (
@@ -320,25 +323,30 @@ function CompleteContent(att) {
                           <Grid container sx={HasFileCss} alignItems='center'>
                             <Grid item>
                               <Text
-                                // title={ifThenElse(formik?.values?.file, (formik?.values?.file as unknown as { name: string })?.name, '')}
-                                title={ifThenElse(fileReciept.body.filename, fileReciept.body.filename,'')}
+                                title={ifThenElse(isLoading, <CircularProgress size={10} />,fileReciept.body.filename)}
                                 fontSize='12px'
                                 fontWeight={400}
                               />
                             </Grid>
-                            <Grid item>
-                              <AiOutlineFile fontSize='12px' />
-                            </Grid>
-                            <Grid item>
-                              <Text
-                                title={ifThenElse(fileReciept.body.size, `${fileReciept.body.size} MB`, '')}
-                                fontSize='12px'
-                                fontWeight={400}
-                              />
-                            </Grid>
-                            <Grid item>
-                              <AiOutlineClose fontSize='12px' cursor='pointer' onClick={() => {handleResetRecieptFile();}} />
-                            </Grid>
+                            {
+                              !isLoading && (
+                                <>
+                                  <Grid item>
+                                    <AiOutlineFile fontSize='12px' />
+                                  </Grid>
+                                  <Grid item>
+                                    <Text
+                                      title={ifThenElse(isLoading, ``, `${fileReciept.body.size} MB`)}
+                                      fontSize='12px'
+                                      fontWeight={400}
+                                    />
+                                  </Grid>
+                                  <Grid item>
+                                    <AiOutlineClose fontSize='12px' cursor='pointer' onClick={() => { handleResetRecieptFile(); }} />
+                                  </Grid>
+                                </>
+                              )
+                            }
                           </Grid>
                         ))}
                       </div>
