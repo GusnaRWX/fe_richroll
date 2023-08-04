@@ -306,7 +306,7 @@ function AttendanceTable({
                               <>
                                 <DownloadWrapper onClick={() => { window.open(item?.attachment?.url, '_blank'); }}>
                                   <DownloadLabel>
-                                    {item.attachment.name}
+                                    {item?.attachment?.name}
                                   </DownloadLabel>
                                   <FiDownload fontSize='small' />
                                 </DownloadWrapper>
