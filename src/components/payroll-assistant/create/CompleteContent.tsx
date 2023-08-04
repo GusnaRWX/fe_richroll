@@ -246,7 +246,7 @@ function CompleteContent(att) {
         </Grid>
       </ContentWrapper>
       {disbursementData?.disbursements?.length > 0 && disbursementData?.disbursements?.map((value) => (
-     
+
         <ContentWrapper key={value.receiptFile}>
           <Box sx={{ width: '100%' }}>
             <SimpleAccordion
@@ -254,14 +254,18 @@ function CompleteContent(att) {
               footer={
                 <Grid container spacing={2} mt='.1rem' justifyContent='space-between'>
                   <Grid item xs={5} >
-                    <MuiButton
-                      variant='contained'
-                      color='inherit'
-                      sx={{ color: '#111827' }}
-                      onClick={() => { console.log(true); }}
-                    >
-                      {value?.attachment?.filename} &nbsp;<FiFile />&nbsp; {value?.attachment?.size} &nbsp;<FiDownload />
-                    </MuiButton>
+                    {
+                      value?.attachment?.link !== null && (
+                        <MuiButton
+                          variant='contained'
+                          color='inherit'
+                          sx={{ color: '#111827' }}
+                          onClick={() => { window.open(value?.attachment?.link, '_blank'); }}
+                        >
+                          {value?.attachment?.filename} &nbsp;<FiFile /> &nbsp;<FiDownload />
+                        </MuiButton>
+                      )
+                    }
                   </Grid>
                   <Grid item xs={value.receipt === null ? 3.8 : 4 }>
                     <ButtonWrapper>
@@ -281,10 +285,10 @@ function CompleteContent(att) {
                                 color='secondary'
                                 sx={{ color: 'white' }}
                                 component='span'
-                                
+
                               >
                                 {isLoading ? <CircularProgress size={10} /> : (
-                                  <HiFolderOpen /> 
+                                  <HiFolderOpen />
                                 ) }
                                 {isLoading ? 'loading...' : ' Upload Receipt'}
                               </MuiButton>
