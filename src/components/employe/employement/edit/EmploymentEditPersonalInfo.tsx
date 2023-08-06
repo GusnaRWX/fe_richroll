@@ -192,7 +192,7 @@ const EmploymentEditPersonalInfo = ({ refProp, setValues, personalValues, handle
 
 
   const checkCountry = (value: unknown) => {
-    if ((value as string).length === 0) {
+    if ((value as string)?.length === 0) {
       return <Text title='Select Country' color='grey.400' />;
     }
     const selectedCountries = (countries as Array<{ label: string, value: string }>).find(country => country.value === value);
@@ -468,7 +468,7 @@ const EmploymentEditPersonalInfo = ({ refProp, setValues, personalValues, handle
               helperText={ifThenElse(compareCheck(formik.touched.provinceCitizenAddress, Boolean(formik.errors.provinceCitizenAddress)), formik.errors.provinceCitizenAddress, '')}
               displayEmpty
               renderValue={(value: unknown) => {
-                if ((value as string).length === 0) {
+                if ((value as string)?.length === 0) {
                   return <Text title='Select Province' color='grey.400' />;
                 }
                 const selectedCountries = (administrativeFirst as Array<{ label: string, value: string }>).find(country => country.value === value);
@@ -516,7 +516,7 @@ const EmploymentEditPersonalInfo = ({ refProp, setValues, personalValues, handle
               helperText={ifThenElse(compareCheck(formik.touched.cityCitizenAddress, Boolean(formik.errors.cityCitizenAddress)), formik.errors.cityCitizenAddress, '')}
               displayEmpty
               renderValue={(value: unknown) => {
-                if ((value as string).length === 0) {
+                if ((value as string)?.length === 0) {
                   return <Text title='Select City' color='grey.400' />;
                 }
                 const selectedCountries = (administrativeSecond as Array<{ label: string, value: string }>).find(country => country.value === value);
@@ -546,7 +546,7 @@ const EmploymentEditPersonalInfo = ({ refProp, setValues, personalValues, handle
               helperText={ifThenElse(compareCheck(formik.touched.subDistrictCitizenAddress, Boolean(formik.errors.subDistrictCitizenAddress)), formik.errors.subDistrictCitizenAddress, '')}
               displayEmpty
               renderValue={(value: unknown) => {
-                if ((value as string).length === 0) {
+                if ((value as string)?.length === 0) {
                   return <Text title='Select Sub-District' color='grey.400' />;
                 }
                 const selectedCountries = (administrativeThird as Array<{ label: string, value: string }>).find(country => country.value === value);
@@ -698,7 +698,7 @@ const EmploymentEditPersonalInfo = ({ refProp, setValues, personalValues, handle
               helperText={ifThenElse(compareCheck(formik.touched.provinceResidentialAddress, Boolean(formik.errors.provinceResidentialAddress)), formik.errors.provinceResidentialAddress, '')}
               displayEmpty
               renderValue={(value: unknown) => {
-                if ((value as string).length === 0) {
+                if ((value as string)?.length === 0) {
                   return <Text title='Select Province' color='grey.400' />;
                 }
                 const selectedCountries = (secondAdministrativeFirst as Array<{ label: string, value: string }>).find(country => country.value === value);
@@ -746,7 +746,7 @@ const EmploymentEditPersonalInfo = ({ refProp, setValues, personalValues, handle
               helperText={ifThenElse(compareCheck(formik.touched.cityResidentialAddress, Boolean(formik.errors.cityResidentialAddress)), formik.errors.cityResidentialAddress, '')}
               displayEmpty
               renderValue={(value: unknown) => {
-                if ((value as string).length === 0) {
+                if ((value as string)?.length === 0) {
                   return <Text title='Select City' color='grey.400' />;
                 }
                 const selectedCountries = (secondAdministrativeSecond as Array<{ label: string, value: string }>).find(country => country.value === value);
@@ -776,7 +776,7 @@ const EmploymentEditPersonalInfo = ({ refProp, setValues, personalValues, handle
               helperText={ifThenElse(compareCheck(formik.touched.subDistrictResidentialAddress, Boolean(formik.errors.subDistrictResidentialAddress)), formik.errors.subDistrictResidentialAddress, '')}
               displayEmpty
               renderValue={(value: unknown) => {
-                if ((value as string).length === 0) {
+                if ((value as string)?.length === 0) {
                   return <Text title='Select Sub-District' color='grey.400' />;
                 }
                 const selectedCountries = (secondAdministrativeThird as Array<{ label: string, value: string }>).find(country => country.value === value);
