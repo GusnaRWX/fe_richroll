@@ -1404,7 +1404,8 @@
           "report_type": "报告类型",
           "created_on": "创建于",
           "last_updated": "最近更新时间",
-          "attachment": "依恋"
+          "attachment": "依恋",
+          "empty": ""
         }
       }
     },
@@ -1423,7 +1424,8 @@
           "report_type": "报告类型",
           "created_on": "创建于",
           "last_updated": "最近更新时间",
-          "attachment": "依恋"
+          "attachment": "依恋",
+          "empty": ""
         }
       }
     }
