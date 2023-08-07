@@ -208,8 +208,8 @@ const AttendanceEntriesTable = () => {
                           &nbsp;{item.employee.name}
                         </NameWrapper>
                       </TableCell>
-                      <TableCell>{dayjs(item.clockIn).format('HH:mm')}</TableCell>
-                      <TableCell>{dayjs(item.clockOut).format('HH:mm')}</TableCell>
+                      <TableCell>{ifThenElse(item?.clockIn === null, '-', dayjs(item.clockIn).format('HH:mm'))}</TableCell>
+                      <TableCell>{ifThenElse(item?.clockOut === null, '-', dayjs(item.clockOut).format('HH:mm'))}</TableCell>
                       <TableCell>{item.count}</TableCell>
                       <TableCell>
                         <ButtonWrapper>
