@@ -402,7 +402,23 @@ function OvertimeSummaryComponent() {
             ><Add fontSize='small' />&nbsp; {t('button.add_employee')}</MuiButton>
           </Grid>
         </Grid>
-        <Box sx={{ width: '100%' }}>
+        <Box sx={{
+          width: '100%',
+          height: selected.length > 0 ? '400px' : '250px',
+          overflowY: 'auto',
+          '&::-webkit-scrollbar': {
+            width: '0.4em',
+          },
+          '&::-webkit-scrollbar-track': {
+            background: 'transparent',
+          },
+          '&::-webkit-scrollbar-thumb': {
+            backgroundColor: 'transparent',
+          },
+          '&::-webkit-scrollbar-thumb:hover': {
+            background: 'transparent',
+          },
+        }}>
           <DataGrid
             autoHeight
             disableColumnFilter
@@ -419,7 +435,13 @@ function OvertimeSummaryComponent() {
                 },
               },
             }}
-            pageSizeOptions={[5]}
+            sx={{
+              overflowX: 'hidden',
+              '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
+                display: 'none',
+              },
+            }}
+            pageSizeOptions={[5, 10, 25, 50, 75, 100, 500, 1000]}
           />
         </Box>
       </CustomModal>
