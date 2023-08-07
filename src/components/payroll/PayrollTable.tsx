@@ -250,8 +250,8 @@ function PayrollTable({
                     </TableCell>
                   </TableRow>
                 ), (
-                  data?.items?.map((item, index) => (
-                    <TableRow key={index}>
+                  data?.items?.map((item) => (
+                    <TableRow key={item.name}>
                       <TableCell>{item.name}</TableCell>
                       <TableCell>{dayjs(item.start).format('DD/MM/YYYY')} - {dayjs(item.end).format('DD/MM/YYYY')}</TableCell>
                       <TableCell>{ifThenElse(item.workflow === 1, <GrossComponent>Gross Payroll Report</GrossComponent>, <NetComponent>Net Payroll Report</NetComponent>)}</TableCell>
@@ -280,10 +280,11 @@ function PayrollTable({
                             <>
                               <IconButton
                                 parentColor='#E9EFFF'
-                                onClick={() => { ifThenElse(item.workflow === 1,
-                                  router.push({ pathname: '/payroll-disbursement/payroll/generate-gross/detail', query: { id: item?.id } }),
-                                  router.push({pathname: '/payroll-disbursement/payroll/generate-net', query: { id: item?.id }})
-                                );}}
+                                onClick={() => {
+                                  item.workflow === 1 ? 
+                                    router.push({ pathname: '/payroll-disbursement/payroll/generate-gross/detail', query: { id: item?.id } }) :
+                                    router.push({ pathname: '/payroll-disbursement/payroll/generate-net', query: { id: item?.id } });
+                                }}
                                 icons={
                                   <HiPencilAlt fontSize={20} color='#223567' />
                                 }
@@ -301,10 +302,15 @@ function PayrollTable({
                             <>
                               <IconButton
                                 parentColor='#E9EFFF'
-                                onClick={() => { ifThenElse(item.workflow === 1,
-                                  router.push({pathname: '/payroll-disbursement/payroll/gross-detail', query: { id: item?.id }}),
-                                  router.push({pathname:'/payroll-disbursement/payroll/net-detail', query: { id: item?.id }})
-                                );}}
+                                // onClick={() => { ifThenElse(item.workflow === 1,
+                                //   router.push({pathname: '/payroll-disbursement/payroll/gross-detail', query: { id: item?.id }}),
+                                //   router.push({pathname:'/payroll-disbursement/payroll/net-detail', query: { id: item?.id }})
+                                // );}}
+                                onClick={() => {
+                                  item.workflow === 1 ?
+                                    router.push({ pathname: '/payroll-disbursement/payroll/generate-gross/detail', query: { id: item?.id } }) :
+                                    router.push({ pathname: '/payroll-disbursement/payroll/generate-net', query: { id: item?.id } });
+                                }}
                                 icons={
                                   <TbFileImport fontSize={20} color='#223567' />
                                   //<BsFillEyeFill fontSize={20} color='#223567' />
@@ -342,9 +348,14 @@ function PayrollTable({
                             <>
                               <IconButton
                                 parentColor='#E9EFFF'
-                                onClick={() => { ifThenElse(item.reportType === 'gross',
-                                  router.push('/payroll-disbursement/payroll/gross-detail'),
-                                  router.push('/payroll-disbursement/payroll/net-detail'));
+                                // onClick={() => { ifThenElse(item.reportType === 'gross',
+                                //   router.push({ pathname: '/payroll-disbursement/payroll/gross-detail', query: {id: item?.id} }),
+                                //   router.push({ pathname: '/payroll-disbursement/payroll/net-detail' , query: {id: item.id}}));
+                                // }}
+                                onClick={() => {
+                                  item.workflow === 1 ? 
+                                    router.push({ pathname: '/payroll-disbursement/payroll/gross-detail', query: { id: item?.id } }) :
+                                    router.push({ pathname: '/payroll-disbursement/payroll/net-detail', query: { id: item.id } });
                                 }}
                                 icons={
                                   <BsFillEyeFill fontSize={20} color='#223567' />
