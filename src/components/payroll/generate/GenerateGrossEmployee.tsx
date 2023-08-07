@@ -274,8 +274,8 @@ function GenerateGrossEmployee() {
                         </TableCell>
                       </TableRow>
                     ), (
-                      payroll?.grossesEmployee?.items?.map((item, index) => (
-                        <TableRow key={index}>
+                      payroll?.grossesEmployee?.items?.map((item) => (
+                        <TableRow key={item.employee.name}>
                           <TableCell>
                             <CheckboxWrapper>
                               <Checkbox onChange={(e) => onSelected(item, e)} checked={checkVal(item?.id)} />
