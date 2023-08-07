@@ -69,13 +69,13 @@ const DownloadLabel = styled.div`
 `;
 
 const headerItems = [
-  { id: 'user.name', label: 'name' },
-  { id: 'dateRange', label: 'date_range' },
-  { id: 'type', label: 'report_type' },
-  { id: 'user.createdAt', label: 'created_on' },
-  { id: 'user.lastUpdated', label: 'last_updated' },
-  { id: 'attachment', label: 'attachment' },
-  { id: 'action', label: '' },
+  { id: 'user.name', label: 'Name', translation: 'name' },
+  { id: 'dateRange', label: 'Date Range', translation: 'date_range' },
+  { id: 'type', label: 'Report Type', translation: 'report_type' },
+  { id: 'user.createdAt', label: 'Created on', translation: 'created_on' },
+  { id: 'user.lastUpdated', label: 'Last Updated', translation: 'last_updated' },
+  { id: 'attachment', label: 'Attachment', translation: 'attachment' },
+  { id: 'action', label: '', translation: 'empty' }
 ];
 
 interface EmployeeTableProps {
@@ -227,7 +227,7 @@ function PayrollTable({
                     direction={ifThenElse(sort === item.id, direction, 'asc')}
                     onClick={(e) => handleRequestSort(e, item.id)}
                   >
-                    {ifThenElse(item.label === '', '', t(`${t_tableCols}.${item.label}`))}
+                    {t(`${t_tableCols}.${item.translation}`)}
                     {ifThenElse(sort === item.id, (
                       <Box component='span' sx={visuallyHidden}>
                         {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
@@ -281,7 +281,7 @@ function PayrollTable({
                               <IconButton
                                 parentColor='#E9EFFF'
                                 onClick={() => {
-                                  item.workflow === 1 ? 
+                                  item.workflow === 1 ?
                                     router.push({ pathname: '/payroll-disbursement/payroll/generate-gross/detail', query: { id: item?.id } }) :
                                     router.push({ pathname: '/payroll-disbursement/payroll/generate-net', query: { id: item?.id } });
                                 }}
@@ -353,7 +353,7 @@ function PayrollTable({
                                 //   router.push({ pathname: '/payroll-disbursement/payroll/net-detail' , query: {id: item.id}}));
                                 // }}
                                 onClick={() => {
-                                  item.workflow === 1 ? 
+                                  item.workflow === 1 ?
                                     router.push({ pathname: '/payroll-disbursement/payroll/gross-detail', query: { id: item?.id } }) :
                                     router.push({ pathname: '/payroll-disbursement/payroll/net-detail', query: { id: item.id } });
                                 }}

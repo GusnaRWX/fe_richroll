@@ -1415,7 +1415,8 @@
           "report_type" : "Report Type",
           "created_on" : "Created On",
           "last_updated" : "Last Updated",
-          "attachment" : "Attachment"
+          "attachment" : "Attachment",
+          "empty": ""
         }
       }
     },
@@ -1434,7 +1435,8 @@
           "report_type" : "Report Type",
           "created_on" : "Created On",
           "last_updated" : "Last Updated",
-          "attachment" : "Attachment"
+          "attachment" : "Attachment",
+          "empty": ""
         }
       }
     }

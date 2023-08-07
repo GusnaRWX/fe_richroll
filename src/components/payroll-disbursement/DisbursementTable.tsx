@@ -60,13 +60,13 @@ const DownloadLabel = styled.div`
 `;
 
 const headerItems = [
-  { id: 'user.name', label: 'name' },
-  { id: 'dateRange', label: 'date_range' },
-  { id: 'type', label: 'report_type' },
-  { id: 'user.createdAt', label: 'created_on' },
-  { id: 'user.lastUpdated', label: 'last_updated' },
-  { id: 'attachment', label: 'attachment' },
-  { id: 'action', label: '' },
+  { id: 'user.name', label: 'Name', translation: 'name' },
+  { id: 'dateRange', label: 'Date Range', translation: 'date_range' },
+  { id: 'type', label: 'Report Type', translation: 'report_type' },
+  { id: 'user.createdAt', label: 'Created on', translation: 'created_on' },
+  { id: 'user.lastUpdated', label: 'Last Updated', translation: 'last_updated' },
+  { id: 'attachment', label: 'Attachment', translation: 'attachment' },
+  { id: 'action', label: '', translation: 'empty' }
 ];
 
 interface EmployeeTableProps {
@@ -210,7 +210,7 @@ function DisbursementTable({
                     direction={sort === item.id ? direction : 'asc'}
                     onClick={(e) => handleRequestSort(e, item.id)}
                   >
-                    {item.label === '' ? '' : t(`${t_colsItem}.${item.label}`)}
+                    {t(`${t_colsItem}.${item.translation}`)}
                     {sort === item.id ? (
                       <Box component='span' sx={visuallyHidden}>
                         {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}

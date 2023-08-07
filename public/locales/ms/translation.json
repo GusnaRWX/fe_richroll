@@ -1404,7 +1404,8 @@
           "report_type": "Jenis laporan",
           "created_on": "Dicipta pada",
           "last_updated": "Kemas Kini Terakhir",
-          "attachment": "Lampiran"
+          "attachment": "Lampiran",
+          "empty": ""
         }
       }
     },
@@ -1423,7 +1424,8 @@
           "report_type": "Jenis laporan",
           "created_on": "Dicipta pada",
           "last_updated": "Kemas Kini Terakhir",
-          "attachment": "Lampiran"
+          "attachment": "Lampiran",
+          "empty": ""
         }
       }
     }
