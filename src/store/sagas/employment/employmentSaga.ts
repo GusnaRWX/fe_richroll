@@ -289,22 +289,36 @@ function* fetchPatchEmploymentEmergency(action: AnyAction) {
     const payload = {
       employeeID: action?.payload?.emergencyContactPatch?.employeeID,
       primary: {
-        id: action?.payload?.emergencyContactPatch?.emergency?.primaryId,
+        // id: action?.payload?.emergencyContactPatch?.emergency?.primaryId,
         name: action?.payload?.emergencyContactPatch?.emergency?.fullNamePrimary,
         relationship: +action?.payload?.emergencyContactPatch?.emergency?.relationPrimary,
         phoneNumberPrefix: action?.payload?.emergencyContactPatch?.emergency?.phoneNumberPrefixPrimary,
         phoneNumber: action?.payload?.emergencyContactPatch?.emergency?.phoneNumberPrimary
       },
       secondary: {
-        id: action?.payload?.emergencyContactPatch?.emergency?.secondaryId,
+        // id: action?.payload?.emergencyContactPatch?.emergency?.secondaryId,
         name: action?.payload?.emergencyContactPatch?.emergency?.fullNameSecondary,
         relationship: +action?.payload?.emergencyContactPatch?.emergency?.relationSecondary,
         phoneNumberPrefix: action?.payload?.emergencyContactPatch?.emergency?.phoneNumberPrefixSecondary,
         phoneNumber: action?.payload?.emergencyContactPatch?.emergency?.phoneNumberSecondary
       }
-
     };
-    const res: AxiosResponse = yield call(patchEmergencyContact, payload);
+
+    let emergencyPayload = {};
+    if(checkObject(payload.secondary)) {
+      emergencyPayload = {
+        ...emergencyPayload,
+        primary: payload.primary
+      };
+    } else {
+      emergencyPayload = {
+        ...emergencyPayload,
+        primary: payload.primary,
+        secondary: payload.secondary
+      };
+    }
+
+    const res: AxiosResponse = yield call(patchEmergencyContact, emergencyPayload);
     if (res.data.code) {
       yield put({ type: patchDetailEmergencyContactSuccess.toString() });
       yield put({
