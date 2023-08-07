@@ -35,7 +35,7 @@ function Table({
   onChangePage,
   rowsPerPage,
   onRowsPerPagesChange,
-  withPaginate = true
+  withPaginate = true,
 }: TableProps) {
   const [currentPage, setCurrentPage] = useState(rowsPerPageOptions[0]);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);

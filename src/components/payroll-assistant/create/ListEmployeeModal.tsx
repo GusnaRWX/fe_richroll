@@ -187,85 +187,87 @@ function ListEmployeeModal({
     >
       <Grid container>
         <Grid item xs={12}>
-          <Table
-            count={data?.itemTotals}
-            rowsPerPageOptions={[5]}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onChangePage={handleChangePage}
-            onRowsPerPagesChange={(e) => handleChangeRowsPerPage(e)}
-            headChildren={
-              <TableRow>
-                {
-                  headerItemsEmployees.map((item) => (
-                    item.id === 'action' ? (
-                      <TableCell key={item.id}>
-                        <Checkbox onChange={(e) => onSelectedAll(data?.items?.slice(0, rowsPerPage), e)} checked={checkValAll(data?.items?.slice(0, rowsPerPage))} />
-                      </TableCell>
-                    ) : (
-                      <TableCell key={item.id} sortDirection={ifThenElse(sort === item.id, direction, false)}>
-                        <TableSortLabel
-                          active={sort === item.id}
-                          direction={sort === item.id ? direction : 'asc'}
-                          onClick={(e) => handleRequestSort(e, item.id)}
-                        >
-                          {item.label}
-                          {sort === item.id ? (
-                            <Box component='span' sx={visuallyHidden}>
-                              {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
-                            </Box>
-                          ) : null}
-                        </TableSortLabel>
-                      </TableCell>
-                    )
+          <div style={{ height: '500px', overflowY: 'auto' }}>
+            <Table
+              count={data?.itemTotals}
+              rowsPerPageOptions={[5, 10, 25, 50, 75, 100, 500, 1000]}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onChangePage={handleChangePage}
+              onRowsPerPagesChange={(e) => handleChangeRowsPerPage(e)}
+              headChildren={
+                <TableRow>
+                  {
+                    headerItemsEmployees.map((item) => (
+                      item.id === 'action' ? (
+                        <TableCell key={item.id}>
+                          <Checkbox onChange={(e) => onSelectedAll(data?.items?.slice(0, rowsPerPage), e)} checked={checkValAll(data?.items?.slice(0, rowsPerPage))} />
+                        </TableCell>
+                      ) : (
+                        <TableCell key={item.id} sortDirection={ifThenElse(sort === item.id, direction, false)}>
+                          <TableSortLabel
+                            active={sort === item.id}
+                            direction={sort === item.id ? direction : 'asc'}
+                            onClick={(e) => handleRequestSort(e, item.id)}
+                          >
+                            {item.label}
+                            {sort === item.id ? (
+                              <Box component='span' sx={visuallyHidden}>
+                                {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
+                              </Box>
+                            ) : null}
+                          </TableSortLabel>
+                        </TableCell>
+                      )
 
-                  ))
-                }
-                <TableCell></TableCell>
-              </TableRow>
-            }
-            bodyChildren={
-              <>
-                {
-                  ifThenElse(typeof data?.items !== 'undefined', (
-                    ifThenElse(data?.items?.length === 0, (
+                    ))
+                  }
+                  <TableCell></TableCell>
+                </TableRow>
+              }
+              bodyChildren={
+                <>
+                  {
+                    ifThenElse(typeof data?.items !== 'undefined', (
+                      ifThenElse(data?.items?.length === 0, (
+                        <TableRow>
+                          <TableCell colSpan={12} align='center'><Typography>Data not found</Typography></TableCell>
+                        </TableRow>
+                      ), (
+                        data?.items?.map((item, index) => (
+                          <TableRow key={index}>
+                            <TableCell>
+                              <ButtonWrapper>
+                                <Checkbox onChange={(e) => onSelected(item, e)} checked={checkVal(item?.id)} />
+                              </ButtonWrapper>
+                            </TableCell>
+                            <TableCell>
+                              <NameWrapper>
+                                <Avatar
+                                  src={ifThenElse(item?.user?.userInformation !== null, item?.user?.userInformation?.picture, item?.user?.name)}
+                                  alt={ifThenElse(item?.user?.userInformation !== null, item?.user?.userInformation?.picture, item?.user?.name)}
+                                  sx={{
+                                    width: 24, height: 24
+                                  }}
+                                />
+                              &nbsp;{item?.user?.name}
+                              </NameWrapper>
+                            </TableCell>
+                            <TableCell>{item?.position?.name}</TableCell>
+                            <TableCell>{item?.department?.name}</TableCell>
+                          </TableRow>
+                        ))
+                      ))
+                    ), (
                       <TableRow>
                         <TableCell colSpan={12} align='center'><Typography>Data not found</Typography></TableCell>
                       </TableRow>
-                    ), (
-                      data?.items?.map((item, index) => (
-                        <TableRow key={index}>
-                          <TableCell>
-                            <ButtonWrapper>
-                              <Checkbox onChange={(e) => onSelected(item, e)} checked={checkVal(item?.id)} />
-                            </ButtonWrapper>
-                          </TableCell>
-                          <TableCell>
-                            <NameWrapper>
-                              <Avatar
-                                src={ifThenElse(item?.user?.userInformation !== null, item?.user?.userInformation?.picture, item?.user?.name)}
-                                alt={ifThenElse(item?.user?.userInformation !== null, item?.user?.userInformation?.picture, item?.user?.name)}
-                                sx={{
-                                  width: 24, height: 24
-                                }}
-                              />
-                              &nbsp;{item?.user?.name}
-                            </NameWrapper>
-                          </TableCell>
-                          <TableCell>{item?.position?.name}</TableCell>
-                          <TableCell>{item?.department?.name}</TableCell>
-                        </TableRow>
-                      ))
                     ))
-                  ), (
-                    <TableRow>
-                      <TableCell colSpan={12} align='center'><Typography>Data not found</Typography></TableCell>
-                    </TableRow>
-                  ))
-                }
-              </>
-            }
-          />
+                  }
+                </>
+              }
+            />
+          </div>
         </Grid>
       </Grid>
     </CustomModal>
