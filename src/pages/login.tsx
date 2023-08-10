@@ -6,7 +6,7 @@ const Login = () => {
   return (
     <>
       <MetaHead title='Kayaroll - Login' />
-      <LoginContainer />
+      <LoginContainer isAdmin={false} />
     </>
   );
 };

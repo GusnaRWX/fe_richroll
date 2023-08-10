@@ -7,9 +7,12 @@ import {
   useMediaQuery
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import Image from 'next/image';
+import { Image as ImageType } from '@/utils/assetsConstant';
 import { IconButton } from '@/components/_shared/form';
 import { BsBellFill } from 'react-icons/bs';
 import LocalizationMenu from '@/components/_shared/_core/localization/LocalizationMenu';
+import SiteMenu from '../localization/SiteMenu';
 import Profile from './Profile';
 import { Menu } from '@mui/icons-material';
 
@@ -37,30 +40,48 @@ const WrapperNavbarContentResponsive = styled(Toolbar)(() => ({
 }));
 
 const Appbar: FC<AppbarProps> = (props) => {
-  const { DrawerWidth, handleDrawerToggle } = props;
+  const { handleDrawerToggle } = props;
   const matches = useMediaQuery('(max-width:888px)');
   return (
     <AppBar
       position='fixed'
       sx={{
-        width: {
-          md: `calc(100% - ${DrawerWidth}px)`,
-        },
-        ml: {
-          sm: `${DrawerWidth}px`
-        },
+        display: 'flex',
+        flexFlow: 'row',
+        justifyContent: 'space-between',
+        width: '100%',
         background: '#FFFFFF',
         color: 'primary.main',
         boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.06), 0px 1px 3px rgba(0, 0, 0, 0.1)',
       }}
     >
+      <Toolbar sx={{
+        display: {
+          xs: 'none',
+          md: 'flex'
+        },
+        justifyContent: 'flex-start',
+        ml: '30px'
+      }}>
+        <Box onClick={handleDrawerToggle} sx={{ '&:hover': { cursor: 'pointer' } }}>
+          <Image
+            src={ImageType.KAYAROLL_LOGO}
+            width={151}
+            height={40}
+            alt='kayaroll'
+            priority
+          />
+        </Box>
+      </Toolbar>
       {
         !matches && (
           <WrapperNavbarContent>
             <Box sx={{ display: { xs: 'none', sm: 'flex' }, gap: { sm: 1 } }}>
-              <IconButton icons={<BsBellFill />} parentColor='' size='small' />
+              <SiteMenu />
               <Divider sx={{ borderWidth: '0.5px' }} />
               <LocalizationMenu />
+              <Divider sx={{ borderWidth: '0.5px' }} />
+              <IconButton icons={<BsBellFill />} parentColor='' size='small' />
               <Divider sx={{ borderWidth: '0.5px' }} />
               <Profile />
             </Box>
@@ -85,9 +106,10 @@ const Appbar: FC<AppbarProps> = (props) => {
                   xs: 1.5
                 },
               }}>
+              <SiteMenu />
+              <LocalizationMenu />
               <IconButton icons={<BsBellFill />} parentColor='' size='small' />
               {/* <Divider sx={{ borderWidth: '0.5px' }} /> */}
-              <LocalizationMenu />
               {/* <Divider sx={{ borderWidth: '0.5px' }} /> */}
               <Profile />
             </Box>

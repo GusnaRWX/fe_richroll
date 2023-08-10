@@ -9,10 +9,9 @@ import {
   Chip,
   Box,
   TableSortLabel,
-  Typography
 } from '@mui/material';
 import { Input, IconButton } from '../_shared/form';
-import { Search  } from '@mui/icons-material';
+import { Search } from '@mui/icons-material';
 import Table from '../_shared/form/Table';
 import { HiPencilAlt } from 'react-icons/hi';
 import { BsTrashFill } from 'react-icons/bs';
@@ -23,6 +22,8 @@ import { getEmployeeRequested } from '@/store/reducers/slice/company-management/
 import { getCompanyData, compareCheck, ifThenElse } from '@/utils/helper';
 import dayjs from 'dayjs';
 import { visuallyHidden } from '@mui/utils';
+import EmptyState from '../_shared/common/EmptyState';
+import { useTranslation } from 'react-i18next';
 
 const ButtonWrapper = styled.div`
  display: flex;
@@ -41,13 +42,13 @@ const NameWrapper = styled.div`
 
 
 const headerItems = [
-  { id: 'id', label: 'ID' },
-  { id: 'user.name', label: 'Name' },
-  { id: 'position.name', label: 'Position' },
-  { id: 'department.name', label: 'Department' },
-  { id: 'isActive', label: 'Status' },
-  { id: 'user.createdAt', label: 'Created on' },
-  { id: 'user.lastLogin', label: 'Last Login' },
+  { id: 'id', label: 'id' },
+  { id: 'user.name', label: 'name' },
+  { id: 'position.name', label: 'position' },
+  { id: 'department.name', label: 'department' },
+  { id: 'isActive', label: 'status' },
+  { id: 'user.createdAt', label: 'created_on' },
+  { id: 'user.lastLogin', label: 'last_login' },
 ];
 
 interface EmployeeTableProps {
@@ -60,10 +61,13 @@ function EmployeesTable({
   tabValue
 }: EmployeeTableProps) {
   const dispatch = useAppDispatch();
+  const {t} = useTranslation();
+  const t_tableHeader = 'company_management.employees.table.table_cols_item';
+  const t_tableCustomValue = 'company_management.employees.table.custom_value';
   const data = useAppSelectors(state => state.employee.data);
   const router = useRouter();
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
@@ -73,8 +77,7 @@ function EmployeesTable({
     setPage(newPage);
   };
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 0));
-    setPage(0);
+    setRowsPerPage(event);
   };
   const handleSearch = (e) => {
     if (e.key === 'Enter') {
@@ -94,7 +97,7 @@ function EmployeesTable({
     dispatch({
       type: getEmployeeRequested.toString(),
       payload: {
-        page: page + 1,
+        page: page,
         itemPerPage: rowsPerPage,
         sort: sort,
         direction: direction.toUpperCase(),
@@ -124,7 +127,7 @@ function EmployeesTable({
             type='text'
             InputProps={{
               startAdornment: (
-                <Search sx={{ color: '#9CA3AF' }}/>
+                <Search sx={{ color: '#9CA3AF' }} />
               )
             }}
           />
@@ -148,7 +151,7 @@ function EmployeesTable({
         rowsPerPage={rowsPerPage}
         page={page}
         onChangePage={handleChangePage}
-        onRowsPerPagesChange={(e) =>handleChangeRowsPerPage(e)}
+        onRowsPerPagesChange={handleChangeRowsPerPage}
         headChildren={
           <TableRow>
             {
@@ -159,16 +162,17 @@ function EmployeesTable({
                     direction={sort === item.id ? direction : 'asc'}
                     onClick={(e) => handleRequestSort(e, item.id)}
                   >
-                    {item.label}
+                    {t(`${t_tableHeader}.${item.label}`)}
                     {sort === item.id ? (
                       <Box component='span' sx={visuallyHidden}>
                         {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
                       </Box>
-                    ): null}
+                    ) : null}
                   </TableSortLabel>
                 </TableCell>
               ))
             }
+            <TableCell/>
           </TableRow>
         }
         bodyChildren={
@@ -177,30 +181,32 @@ function EmployeesTable({
               ifThenElse(typeof data?.items !== 'undefined', (
                 ifThenElse(data?.items?.length === 0, (
                   <TableRow>
-                    <TableCell colSpan={12} align='center'><Typography>Data not found</Typography></TableCell>
+                    <TableCell colSpan={12} align='center'>
+                      <EmptyState />
+                    </TableCell>
                   </TableRow>
                 ), (
-                  data?.items?.map((item, index) => (
-                    <TableRow key={index}>
+                  data?.items?.map((item) => (
+                    <TableRow key={item.id}>
                       <TableCell>{item.id}</TableCell>
                       <TableCell>
                         <NameWrapper>
                           <Avatar
-                            src={ifThenElse(item?.user?.userInformation !== null, item?.user?.userInformation?.picture, item.user.name)}
-                            alt={ifThenElse(item?.user?.userInformation !== null, item?.user?.userInformation?.picture, item.user.name)}
+                            src={ifThenElse(item?.user?.userInformation !== null, item?.user?.userInformation?.picture, item?.user?.name)}
+                            alt={ifThenElse(item?.user?.userInformation !== null, item?.user?.userInformation?.picture, item?.user?.name)}
                             sx={{
                               width: 24, height: 24
                             }}
                           />
-                    &nbsp;{item.user.name}
+                          &nbsp;{item?.user?.name}
                         </NameWrapper>
                       </TableCell>
                       <TableCell>{item.position.name}</TableCell>
                       <TableCell>{item.department.name}</TableCell>
                       <TableCell>{ifThenElse(item?.isActive, (
-                        <Chip color='secondary' label='active' />
+                        <Chip color='secondary' label={t(`${t_tableCustomValue}.active`)} />
                       ), (
-                        <Chip label='Non Active' sx={{ backgroundColor: '#FEE2E2' }}/>
+                        <Chip label={t(`${t_tableCustomValue}.inactive`)} sx={{ backgroundColor: '#FEE2E2' }} />
                       ))}</TableCell>
                       <TableCell>{dayjs(item.user.createdAt).format('YYYY-MM-DD H:m:s')}</TableCell>
                       <TableCell>-</TableCell>
@@ -210,14 +216,14 @@ function EmployeesTable({
                             parentColor='primary.50'
                             onClick={() => { router.push('/company-management/employees/detail/' + item.id); }}
                             icons={
-                              <HiPencilAlt fontSize={20} color='#223567'/>
+                              <HiPencilAlt fontSize={20} color='#223567' />
                             }
                           />
                           <IconButton
                             parentColor='grey.100'
                             disabled
                             icons={
-                              <BsTrashFill fontSize={20} color='#D1D5DB'/>
+                              <BsTrashFill fontSize={20} color='#D1D5DB' />
                             }
                           />
                         </ButtonWrapper>
@@ -227,7 +233,9 @@ function EmployeesTable({
                 ))
               ), (
                 <TableRow>
-                  <TableCell colSpan={12} align='center'><Typography>Data not found</Typography></TableCell>
+                  <TableCell colSpan={12} align='center'>
+                    <EmptyState />
+                  </TableCell>
                 </TableRow>
               ))
             }

@@ -11,9 +11,8 @@ import {
 } from '@mui/material';
 import { Input } from '@/components/_shared/form';
 import { Search } from '@mui/icons-material';
-import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
-import LeaveBalanceTable from './table';
+import LeaveBalanceTable from './LeaveBalanceTable';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -44,11 +43,7 @@ function a11yProps(index: number) {
 }
 
 const LeaveBalanceComponent = () => {
-  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-  const router = useRouter();
   const [value, setValue] = useState(0);
-  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-  const [search, setSearch] = useState('');
 
   const TitleWrapper = styled.div`
     display: flex;
@@ -56,12 +51,6 @@ const LeaveBalanceComponent = () => {
     justify-content: space-between;
     margin-bottom: 24px;
   `;
-
-  const handleSearch = (e) => {
-    if (e.key === 'Enter') {
-      setSearch(e.target.value);
-    }
-  };
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -85,7 +74,7 @@ const LeaveBalanceComponent = () => {
               name='search'
               size='small'
               placeholder='Search'
-              onKeyDown={(e) => handleSearch(e)}
+              // onKeyDown={(e) => handleSearch(e)}
               type='text'
               InputProps={{
                 startAdornment: <Search sx={{ color: '#9CA3AF' }} />,

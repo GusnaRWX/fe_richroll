@@ -27,6 +27,7 @@ import {
   putUpdateRequested,
   putUpdateSuccess,
   putUpdateFailed,
+  // resetAllState,
 } from '@/store/reducers/slice/cnb/compensationSlice';
 import { setResponserMessage } from '@/store/reducers/slice/responserSlice';
 import { Services } from '@/types/axios';
@@ -91,6 +92,7 @@ function* fetchGetCompensationComponentOption() {
 // Get Detail CnB
 function* fetchCompensationDetail(action: AnyAction) {
   try {
+    // yield put({ type: resetAllState.toString() });
     const res: AxiosResponse = yield call(getDetailCnb, action?.Id);
     if (res.status === 200) {
       yield put({
@@ -122,7 +124,7 @@ function* fetchCompensationDetail(action: AnyAction) {
 // delete compensation benefit
 function* deleteCnb(action: AnyAction) {
   try {
-    const res: AxiosResponse = yield call(deleteCnbProfile, action?.Id);
+    const res: AxiosResponse = yield call(deleteCnbProfile, action?.payload?.Id);
     if (res.status === 200) {
       yield put({
         type: deleteCompensationSuccess.toString(),
@@ -130,6 +132,23 @@ function* deleteCnb(action: AnyAction) {
           data: res.data.data,
         },
       });
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: res?.data?.code,
+          message: 'Successfully Deleted!',
+          footerMessage: 'Compensation and Benefits Profile has been deleted',
+        }
+      });
+      yield delay(2000);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: 0,
+          message: null
+        }
+      });
+      yield put({ type: getTableRequested.toString(), payload: action?.payload?.getCnb });
     }
   } catch (err) {
     if (err instanceof AxiosError) {
@@ -150,15 +169,22 @@ function* deleteCnb(action: AnyAction) {
 function* fetchPostNewCnbProfile(action: AnyAction) {
   try {
     const res: AxiosResponse = yield call(postNewCnbProfile, action?.Payload);
-    if (res.status === 200) {
+    if (res.status === 201) {
       yield put({
         type: postNewCnbProfileSuccess.toString(),
         payload: {
           data: res.data.data,
         },
       });
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: res.data.code,
+          message: 'Successfully Saved!',
+          footerMessage: 'New Compensation and Benefits Profile has been created'
+        }
+      });
       yield Router.push('/compensation-benefits');
-      yield delay(1000);
     }
   } catch (err) {
     if (err instanceof AxiosError) {
@@ -190,8 +216,16 @@ function* patchCnbProfile(action: AnyAction) {
           data: res.data.data,
         },
       });
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: res?.data?.code,
+          message: 'Successfully Saved!',
+          footerMessage: 'Compensation and Benefits Profile has been successfully updated'
+        }
+      });
       yield Router.push('/compensation-benefits');
-      yield delay(1000);
+      // yield delay(1000);
     }
   } catch (err) {
     if (err instanceof AxiosError) {

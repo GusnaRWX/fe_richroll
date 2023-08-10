@@ -7,6 +7,7 @@ import { Services } from '@/types/axios';
 import { AxiosError, AxiosResponse } from 'axios';
 import { Auth } from '@/types/authentication';
 import Router from 'next/router';
+import { getErrorMessage } from '@/utils/helper';
 
 function* fetchPostRegister(action: AnyAction) {
   try {
@@ -36,7 +37,7 @@ function* fetchPostRegister(action: AnyAction) {
         type: setResponserMessage.toString(),
         payload: {
           code: errorMessage?.code,
-          message: errorMessage?.message,
+          message: (errorMessage?.error as [])?.length > 0 ? getErrorMessage(errorMessage?.error) : errorMessage?.message,
         }
       });
     }

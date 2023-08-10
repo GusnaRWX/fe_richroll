@@ -10,6 +10,7 @@ import { Provider } from 'react-redux';
 import store from '../store';
 import { SessionProvider } from 'next-auth/react';
 import type { Session } from 'next-auth';
+import '../i18n';
 
 // Client-side cache, shared for the whole session of the user in browser.
 const clientSideEmotionCache = createEmotionCache();

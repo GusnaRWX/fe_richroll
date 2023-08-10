@@ -10,7 +10,17 @@ import {
   postEmployeeCNB,
   getEmployeeEmergencyDetail,
   patchEmployeeInformation,
-  patchEmergencyContact
+  patchEmergencyContact,
+  patchEmployeePersonal,
+  getDetailWorkSchedule,
+  postCalculateEvent,
+  postSimulationEvent,
+  postWorkSchedule,
+  getViewWorkSchedule,
+  postTerminateEmployee,
+  patchWorkSchedule,
+  getEmployeeCnb,
+  patchEmployeeCnb
 } from '../saga-actions/company-management/employeeActions';
 import { call, put, takeEvery, delay } from 'redux-saga/effects';
 import {
@@ -26,32 +36,63 @@ import {
   postPersonalInformationRequested,
   postPersonalInformationSuccess,
   postPersonalInformationFailed,
-  employeeInfoDetailFailed,
   employeeInfoDetailRequested,
   employeeInfoDetailSuccess,
-  personalInfoDetailFailed,
+  employeeInfoDetailFailed,
   personalInfoDetailRequested,
   personalInfoDetailSuccess,
-  getDetailCnbFailed,
+  personalInfoDetailFailed,
   getDetailCnbRequested,
   getDetailCnbSuccess,
-  postCnbEmplyeeRequested,
+  getDetailCnbFailed,
+  postCnbEmployeeRequested,
   postCnbEmployeeSuccess,
   postCnbEmployeeFailed,
-  emergencyContactDetailFailed,
   emergencyContactDetailRequested,
   emergencyContactDetailSuccess,
+  emergencyContactDetailFailed,
   patchEmployeeInformationRequested,
   patchEmployeeInformationSuccess,
   patchEmployeeInformationFailed,
-  patchEmergencyContactFailed,
   patchEmergencyContactRequested,
-  patchEmergencyContactSuccess
+  patchEmergencyContactSuccess,
+  patchEmergencyContactFailed,
+  patchPersonalRequested,
+  patchPersonalSuccess,
+  patchPersonalFailed,
+  postCalculateEventRequested,
+  postCalculateEventSuccess,
+  postCalculateEventFailed,
+  postSimulationEventRequested,
+  postSimulationEventSuccess,
+  postSimulationEventFailed,
+  postWorkScheduleRequested,
+  postWorkScheduleSuccess,
+  postWorkScheduleFailed,
+  getDetailWorkScheduleRequested,
+  getDetailWorkSchedulerSuccess,
+  getDetailWorkSchedulerFailed,
+  getViewWorkScheduleRequested,
+  getViewWorkScheduleSuccess,
+  getViewWorkScheduleFailed,
+  postTerminateEmployeeRequested,
+  postTerminateEmployeeSuccess,
+  postTerminateEmployeeFailed,
+  patchWorkScheduleRequested,
+  patchWorkScheduleSuccess,
+  patchWorkScheduleFailed,
+  getEmployeeCnbDetailRequested,
+  getEmployeeCnbDetailSuccess,
+  getEmployeeCnbDetailFailed,
+  patchEmployeeCnbRequested,
+  patchEmployeeCnbSuccess,
+  patchEmployeeCnbFailed
 } from '@/store/reducers/slice/company-management/employees/employeeSlice';
 import { setResponserMessage } from '@/store/reducers/slice/responserSlice';
 import { Services } from '@/types/axios';
 import { AxiosError, AxiosResponse } from 'axios';
 import dayjs from 'dayjs';
+import Router from 'next/router';
 import { getCompanyData, checkObject } from '@/utils/helper';
 
 
@@ -87,7 +128,7 @@ function* fetchPostEmployeeInfo(action: AnyAction) {
     const res: AxiosResponse = yield call(postEmployeeInfo, action?.payload?.employeeInformation);
     if (res.data.code === 201) {
       yield put({ type: postEmployeeInfoSuccess.toString(), payload: res.data.data });
-      yield delay(1000);
+      // yield delay(1000);
       yield put({
         type: setResponserMessage.toString(),
         payload: {
@@ -95,44 +136,61 @@ function* fetchPostEmployeeInfo(action: AnyAction) {
           message: res.data.message
         }
       });
-      yield delay(1000);
-      yield put({
-        type: setResponserMessage.toString(),
-        payload: {
-          code: 0,
-          message: null
-        }
-      });
-      if (action?.payload?.isPersonalInformationValid) {
-        const body = {
-          type: postPersonalInformationRequested.toString(),
-          payload: {
-            employeeID: res.data.data,
-            data: action?.payload?.personalValue
-          }
-        };
-        yield call(fetchPostPersonalInformation, body);
-      }
+      // yield delay(1000);
+      // yield put({
+      //   type: setResponserMessage.toString(),
+      //   payload: {
+      //     code: 0,
+      //     message: null
+      //   }
+      // });
+      // if (action?.payload?.isPersonalInformationValid) {
+      //   const body = {
+      //     type: postPersonalInformationRequested.toString(),
+      //     payload: {
+      //       employeeID: res.data.data,
+      //       data: action?.payload?.personalValue
+      //     }
+      //   };
+      //   yield call(fetchPostPersonalInformation, body);
+      // }
 
-      if (action?.payload?.isEmergencyValid) {
-        const body = {
-          type: postEmergencyRequested.toString(),
-          payload: {
-            employeeID: res.data.data,
-            data: action?.payload?.emergencyContactValue
-          }
-        };
-        yield call(fetchPostEmergency, body);
-      }
+      // if (action?.payload?.isEmergencyValid) {
+      //   const body = {
+      //     type: postEmergencyRequested.toString(),
+      //     payload: {
+      //       employeeID: res.data.data,
+      //       data: action?.payload?.emergencyContactValue
+      //     }
+      //   };
+      //   yield call(fetchPostEmergency, body);
+      // }
 
-      const body = {
-        type: postCnbEmplyeeRequested.toString(),
-        payload: {
-          employeeID: res?.data?.data,
-          data: action?.payload?.cnbValue
-        }
-      };
-      yield call(fetchPostCnbEmployee, body);
+      // if (action?.payload?.isCnbValid) {
+      //   const body = {
+      //     type: postCnbEmployeeRequested.toString(),
+      //     payload: {
+      //       employeeID: res?.data?.data,
+      //       data: action?.payload?.cnbValue
+      //     }
+      //   };
+      //   yield call(fetchPostCnbEmployee, body);
+      // }
+      // yield put({
+      //   type: postCnbEmployeeRequested.toString(),
+      //   payload: {
+      //     id: res?.data?.data,
+      //     cnb: action?.payload?.cnbValue
+      //   }
+      // });
+
+      // yield put({
+      //   type: postWorkScheduleRequested.toString(),
+      //   payload: {
+      //     id: res?.data?.data,
+      //     workSchedule: action?.payload?.workSchedule
+      //   }
+      // });
     }
   } catch (err) {
     if (err instanceof AxiosError) {
@@ -156,19 +214,34 @@ function* fetchPostEmergency(action: AnyAction) {
     const payload = {
       employeeID: action?.payload?.employeeID,
       primary: {
-        name: action?.payload?.data?.fullNamePrimary,
+        name: String(action?.payload?.data?.fullNamePrimary),
         relationship: +action?.payload?.data.relationPrimary,
-        phoneNumberPrefix: action?.payload.data.phoneNumberPrefixPrimary,
-        phoneNumber: action?.payload.data.phoneNumberPrimary
+        phoneNumberPrefix: String(action?.payload.data.phoneNumberPrefixPrimary),
+        phoneNumber: String(action?.payload.data.phoneNumberPrimary)
       },
       secondary: {
-        name: action?.payload?.data?.fullNameSecondary,
+        name: String(action?.payload?.data?.fullNameSecondary),
         relationship: +action?.payload?.data.relationSecondary,
-        phoneNumberPrefix: action?.payload.data.phoneNumberPrefixSecondary,
-        phoneNumber: action?.payload.data.phoneNumberSecondary
+        phoneNumberPrefix: String(action?.payload.data.phoneNumberPrefixSecondary),
+        phoneNumber: String(action?.payload.data.phoneNumberSecondary)
       }
     };
-    const res: AxiosResponse = yield call(postEmergency, payload);
+    let emergencyPayload = {};
+    if (checkObject(payload.secondary)) {
+      emergencyPayload = {
+        ...emergencyPayload,
+        employeeID: payload.employeeID,
+        primary: payload.primary
+      };
+    } else {
+      emergencyPayload = {
+        ...emergencyPayload,
+        employeeID: payload.employeeID,
+        primary: payload.primary,
+        secondary: payload.secondary
+      };
+    }
+    const res: AxiosResponse = yield call(postEmergency, emergencyPayload);
     if (res.data.code === 200 || res.data.code === 201) {
       yield put({ type: postEmergencySuccess.toString() });
       yield put({
@@ -242,7 +315,7 @@ function* fetchPostPersonalInformation(action: AnyAction) {
 
     const identity = {
       type: +action?.payload?.data.idTypePersonalID,
-      number: +action?.payload?.data.idNumberPersonalID,
+      number: String(action?.payload?.data.idNumberPersonalID),
       expiredAt: dayjs(action?.payload?.data?.idExpirationDatePersonalID).format('YYYY-MM-DD'),
       isPermanent: false
     };
@@ -254,8 +327,8 @@ function* fetchPostPersonalInformation(action: AnyAction) {
       thirdLevelCode: action?.payload?.data.subDistrictResidentialAddress,
       address: action?.payload?.data.addressResidentialAddress,
       zipCode: action?.payload?.data.zipCodeResidentialAddress,
-      isCitizen: false,
-      isResident: action?.payload?.data?.useResidentialAddress
+      isCitizen: true,
+      isResident: true
     };
 
     let payload = {};
@@ -304,7 +377,7 @@ function* fetchPostPersonalInformation(action: AnyAction) {
     }
   } catch (err) {
 
-    if (err instanceof AxiosError<Services.ValidationResponse>) {
+    if (err instanceof AxiosError) {
       console.log(err, 'error');
       const errorMessage = err?.response?.data as Services.ErrorResponse;
       yield put({ type: postPersonalInformationFailed.toString() });
@@ -326,23 +399,29 @@ function* fetchPostPersonalInformation(action: AnyAction) {
  */
 function* fetchPostCnbEmployee(action: AnyAction) {
   try {
-    const payload = {
-      employeeID: action?.payload?.employeeID,
-      compensationBenefitId: action?.payload?.data?.compensationBenefitId,
-      compensationBenefit: {
-        companyId: Number(getCompanyData()?.id),
-        name: 'PT Teknologi Cibaduyut',
-        baseCompensation: {
-          compensationComponentId: +action?.payload?.data?.baseCompensation?.compensationComponent?.id,
-          taxStatus: action?.payload?.data?.baseCompensation?.taxStatus || false,
-          amount: action?.payload?.data?.baseCompensation?.amount || 10000,
-          rate: action?.payload?.data?.baseCompensation?.rate === null ? 0 : action?.payload?.data?.baseCompensation?.rate,
-          period: action?.payload?.data?.baseCompensation?.period || 'per Hour'
-        },
-        supplementaryCompensations: ['']
-      }
+    const formatedData = {
+      templateID: action?.payload?.cnb?.templateId,
+      name: action?.payload?.cnb?.name,
+      overtime: +action?.payload?.cnb?.overtime,
+      base: {
+        ...action?.payload?.cnb?.base,
+        rate: action?.payload?.cnb?.base?.rate === null ? 0 : +action?.payload?.cnb?.base?.rate,
+        rateType: action?.payload?.cnb?.base?.rateType === null ? 0 : +action?.payload?.cnb?.base?.rateType,
+        isTaxable: action?.payload?.cnb?.base?.isTaxable === 'true' ? true : false
+      },
+      supplementaries: action?.payload?.cnb?.supplementary?.map(val => ({
+        ...val,
+        rate: val.rate === null ? 0 : +val.rate,
+        rateType: val.rateType === null ? 0 : +val?.rateType,
+        isTaxable: val?.isTaxable === 'true' ? true : false
+      }))
     };
 
+    const payload = {
+      employeeID: action?.payload?.id,
+      data: formatedData
+    };
+    
     const res: AxiosResponse = yield call(postEmployeeCNB, payload);
 
     if (res?.data?.code === 200 || res?.data?.code === 201) {
@@ -505,7 +584,8 @@ function* fetchPatchEmployeeInformation(action: AnyAction) {
         type: setResponserMessage.toString(),
         payload: {
           code: res?.data?.code,
-          message: res?.data?.message
+          message: 'Successfully Saved!',
+          footerMessage: 'Employee Profile has been updated'
         }
       });
       yield delay(1000);
@@ -537,25 +617,46 @@ function* fetchPatchEmergencyContact(action: AnyAction) {
   try {
     const payload = {
       employeeID: action?.payload?.emergencyContactPatch?.employeeID,
-      emergency: {
-        employeeID: action?.payload?.emergencyContactPatch?.employeeID,
-        primary: {
-          id: action?.payload?.emergencyContactPatch?.emergency?.primaryId,
-          name: action?.payload?.emergencyContactPatch?.emergency?.fullNamePrimary,
-          relationship: +action?.payload?.emergencyContactPatch?.emergency?.relationPrimary,
-          phoneNumberPrefix: action?.payload?.emergencyContactPatch?.emergency?.phoneNumberPrefixPrimary,
-          phoneNumber: action?.payload?.emergencyContactPatch?.emergency?.phoneNumberPrimary
-        },
-        secondary: {
-          id: action?.payload?.emergencyContactPatch?.emergency?.secondaryId,
-          name: action?.payload?.emergencyContactPatch?.emergency?.fullNameSecondary,
-          relationship: +action?.payload?.emergencyContactPatch?.emergency?.relationSecondary,
-          phoneNumberPrefix: action?.payload?.emergencyContactPatch?.emergency?.phoneNumberPrefixSecondary,
-          phoneNumber: action?.payload?.emergencyContactPatch?.emergency?.phoneNumberSecondary
-        }
+      // emergency: {
+      // employeeID: action?.payload?.emergencyContactPatch?.employeeID,
+      primary: {
+        id: action?.payload?.emergencyContactPatch?.emergency?.primaryId,
+        name: action?.payload?.emergencyContactPatch?.emergency?.fullNamePrimary,
+        relationship: +action?.payload?.emergencyContactPatch?.emergency?.relationPrimary,
+        phoneNumberPrefix: action?.payload?.emergencyContactPatch?.emergency?.phoneNumberPrefixPrimary,
+        phoneNumber: action?.payload?.emergencyContactPatch?.emergency?.phoneNumberPrimary
+      },
+      secondary: {
+        // id: action?.payload?.emergencyContactPatch?.emergency?.secondaryId ?? '',
+        name: action?.payload?.emergencyContactPatch?.emergency?.fullNameSecondary,
+        relationship: +action?.payload?.emergencyContactPatch?.emergency?.relationSecondary,
+        phoneNumberPrefix: action?.payload?.emergencyContactPatch?.emergency?.phoneNumberPrefixSecondary,
+        phoneNumber: action?.payload?.emergencyContactPatch?.emergency?.phoneNumberSecondary
       }
+      // }
     };
-    const res: AxiosResponse = yield call(patchEmergencyContact, payload);
+    let emergencyPayload = {};
+    if (checkObject(payload.secondary)) {
+      emergencyPayload = {
+        ...emergencyPayload,
+        employeeID: payload.employeeID,
+        primary: payload.primary
+      };
+    } else {
+      emergencyPayload = {
+        ...emergencyPayload,
+        employeeID: payload.employeeID,
+        primary: payload.primary,
+        secondary: {
+          ...payload.secondary,
+          ...(action?.payload?.emergencyContactPatch?.emergency?.secondaryId
+            ? { id: action?.payload?.emergencyContactPatch?.emergency?.secondaryId }
+            : {}),
+        }
+      };
+    }
+
+    const res: AxiosResponse = yield call(patchEmergencyContact, emergencyPayload);
     if (res.data.code) {
       yield put({ type: patchEmergencyContactSuccess.toString(), payload: res?.data?.data });
       yield delay(1000);
@@ -563,7 +664,8 @@ function* fetchPatchEmergencyContact(action: AnyAction) {
         type: setResponserMessage.toString(),
         payload: {
           code: res?.data?.code,
-          message: res?.data?.message
+          message: 'Successfully Saved!',
+          footerMessage: 'Employee Profile has been updated'
         }
       });
       yield delay(1000);
@@ -591,18 +693,432 @@ function* fetchPatchEmergencyContact(action: AnyAction) {
   }
 }
 
+function* fetchPatchEmployeePersonal(action: AnyAction) {
+  console.log(action);
+  try {
+    const citizen = {
+      countryID: action?.payload?.employeePersonal.personalPayload.countryCitizenAddress,
+      firstLevelCode: action?.payload?.employeePersonal.personalPayload.provinceCitizenAddress,
+      secondLevelCode: action?.payload?.employeePersonal.personalPayload.cityCitizenAddress,
+      thirdLevelCode: action?.payload?.employeePersonal.personalPayload.subDistrictCitizenAddress,
+      address: action?.payload?.employeePersonal.personalPayload.addressCitizenAddress,
+      zipCode: action?.payload?.employeePersonal.personalPayload.zipCodeCitizenAddress,
+      isCitizen: true,
+      // isResident: action?.payload?.employeePersonal ? personalPayload..useResidentialAddress,
+      isResident: action?.payload?.employeePersonal.personalPayload.useResidentialAddress
+    };
+
+    const personal = {
+      dateOfBirth: dayjs(action?.payload?.employeePersonal.personalPayload.dateofBirthPersonalInformation).format('YYYY-MM-DD'),
+      gender: action?.payload?.employeePersonal.personalPayload.genderPersonalInformation === 'male' ? 1 : 2,
+      maritalStatus: +action?.payload?.employeePersonal.personalPayload.maritialStatusPersonalInformation,
+      numberOfChildren: +action?.payload?.employeePersonal.personalPayload.numberOfDependantsPersonalInformation,
+      countryID: action?.payload?.employeePersonal.personalPayload.nationalityPersonalInformation,
+      religion: +action?.payload?.employeePersonal.personalPayload.religionPersonalInformation
+    };
+
+    const bank = {
+      bankID: action?.payload?.employeePersonal.personalPayload.bankBankInformation,
+      holder: action?.payload?.employeePersonal.personalPayload.bankAccountHolderNameBankInformation,
+      accountNumber: action?.payload?.employeePersonal.personalPayload.bankAccoutNoBankInformation,
+      bankCode: action?.payload?.employeePersonal.personalPayload.bankCodeBankInformation,
+      branchCode: action?.payload?.employeePersonal.personalPayload.branchCodeBankInformation,
+      branchName: action?.payload?.employeePersonal.personalPayload.branchNameBankInformation,
+      swiftCode: action?.payload?.employeePersonal.personalPayload.swiftCodeBankInformation
+    };
+
+    const identity = {
+      type: +action?.payload?.employeePersonal.personalPayload.idTypePersonalID,
+      number: String(action?.payload?.employeePersonal.personalPayload.idNumberPersonalID),
+      // expiredAt: dayjs(action?.payload?.employeePersonal ? personalPayload..idExpirationDatePersonalID).format('YYYY-MM-DD'),
+      expiredAt: dayjs(action?.payload?.employeePersonal?.personalPayload.idExpirationDatePersonalID).format('YYYY-MM-DD'),
+      isPermanent: false
+    };
+
+    const residential = {
+      countryID: action?.payload?.employeePersonal.personalPayload.countryResidentialAddress,
+      firstLevelCode: action?.payload?.employeePersonal.personalPayload.provinceResidentialAddress,
+      secondLevelCode: action?.payload?.employeePersonal.personalPayload.cityResidentialAddress,
+      thirdLevelCode: action?.payload?.employeePersonal.personalPayload.subDistrictResidentialAddress,
+      address: action?.payload?.employeePersonal.personalPayload.addressResidentialAddress,
+      zipCode: action?.payload?.employeePersonal.personalPayload.zipCodeResidentialAddress,
+      isCitizen: true,
+      // isResident: action?.payload?.employeePersonal ? personalPayload..useResidentialAddress
+      // isResident: action?.payload?.employeePersonal.personalPayload?.useResidentialAddress
+      isResident: true
+    };
+
+    let payload = {};
+    if (checkObject(bank)) {
+      payload = {
+        ...payload,
+        employeeID: action?.payload?.employeePersonal.employeeID,
+        companyID: String(getCompanyData()?.id),
+        citizen: citizen,
+        personal: personal,
+        identity: identity,
+        residential: residential,
+      };
+    } else {
+      payload = {
+        ...payload,
+        employeeID: action?.payload?.employeePersonal.employeeID,
+        companyID: String(getCompanyData()?.id),
+        citizen: citizen,
+        personal: personal,
+        identity: identity,
+        residential: residential,
+        bank: bank
+      };
+    }
+    const res: AxiosResponse = yield call(patchEmployeePersonal, payload);
+
+    if (res.data.code === 200) {
+      yield put({ type: patchPersonalSuccess.toString() });
+      yield delay(2000);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: res?.data?.code,
+          message: 'Successfully Saved!',
+          footerMessage: 'Employee Profile has been updated'
+        }
+      });
+      yield delay(2000);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: 0,
+          message: null
+        }
+      });
+    }
+
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      yield put({ type: patchPersonalFailed.toString() });
+      yield delay(2000, true);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message
+        }
+      });
+    }
+  }
+}
+
+function* fetchGetDetailWorkSchedule(action: AnyAction) {
+  try {
+    const res: AxiosResponse = yield call(getDetailWorkSchedule, action?.payload);
+    if (res.data.code === 200) {
+      yield put({
+        type: getDetailWorkSchedulerSuccess.toString(),
+        payload: {
+          id: res?.data?.data?.id,
+          grossHour: res?.data?.data?.grossHours,
+          netHour: res?.data?.data?.netHours,
+          events: res?.data?.data?.items
+        }
+      });
+    }
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      yield put({ type: getDetailWorkSchedulerFailed.toString() });
+      yield delay(2000, true);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message,
+        }
+      });
+    }
+  }
+}
+
+function* fetchPostSimulationEvent(action: AnyAction) {
+  try {
+    const res: AxiosResponse = yield call(postSimulationEvent, action?.payload);
+    if (res.data.code === 200) {
+      yield put({
+        type: postSimulationEventSuccess.toString(), payload: {
+          events: res.data.data
+        }
+      });
+    }
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const error = err?.response?.data as Services.ErrorResponse;
+      yield put({ type: postSimulationEventFailed.toString() });
+      yield delay(2000, true);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: error?.code,
+          message: error?.message
+        }
+      });
+    }
+  }
+}
+
+function* fetchPostCalculateEvent(action: AnyAction) {
+  try {
+    const res: AxiosResponse = yield call(postCalculateEvent, action?.payload);
+    if (res.data.code === 200) {
+      yield put({
+        type: postCalculateEventSuccess.toString(),
+        payload: {
+          grossHour: res.data.data.gross,
+          netHour: res.data.data.net
+        }
+      });
+    }
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const error = err?.response?.data as Services.ErrorResponse;
+      yield put({ type: postCalculateEventFailed.toString() });
+      yield delay(2000, true);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: error?.code,
+          message: error?.message
+        }
+      });
+    }
+  }
+}
+
+function* fetchPostWorkSchedule(action: AnyAction) {
+  try {
+    const res: AxiosResponse = yield call(postWorkSchedule, action?.payload);
+    if (res.data.code === 201) {
+      yield put({ type: postWorkScheduleSuccess.toString() });
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: res.data.code,
+          message: 'Successfully saved!',
+          footerMessage: `Work schedule profile has been created`
+        }
+      });
+    }
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const error = err?.response?.data as Services.ErrorResponse;
+      yield put({ type: postWorkScheduleFailed.toString() });
+      yield delay(2000, true);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: error?.code,
+          message: error?.message
+        }
+      });
+    }
+  }
+}
+
+function* fetchPatchWorkSchedule(action: AnyAction) {
+  try {
+    const res: AxiosResponse = yield call(patchWorkSchedule, action?.payload);
+    if (res.data.code === 200 || res.data.code === 201) {
+      yield put({ type: patchWorkScheduleSuccess.toString() });
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: res?.data?.code,
+          message: 'Successfully saved!',
+          footerMessage: 'Work schedule has been updated'
+        }
+      });
+    }
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const error = err?.response?.data as Services.ErrorResponse;
+      yield put({ type: patchWorkScheduleFailed.toString() });
+      yield delay(2000, true);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: error?.code,
+          message: error?.message
+        }
+      });
+    }
+  }
+}
+
+function* fetchGetViewWorkSchedule(action: AnyAction) {
+  try {
+    const res: AxiosResponse = yield call(getViewWorkSchedule, action?.payload);
+    if (res.data.code === 200) {
+      yield put({
+        type: getViewWorkScheduleSuccess.toString(),
+        payload: {
+          id: res?.data?.data?.company_work_schedule_id,
+          name: res?.data?.data?.name,
+          grossHour: res?.data?.data?.grossHours,
+          netHour: res?.data?.data?.netHours,
+          events: res?.data?.data?.items
+        }
+      });
+    }
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      yield put({ type: getViewWorkScheduleFailed.toString() });
+      yield delay(2000, true);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message,
+        }
+      });
+    }
+  }
+}
+
+function* fetchPostTerminateEmployee(action: AnyAction) {
+  try {
+    const res: AxiosResponse = yield call(postTerminateEmployee, action?.payload, action?.id);
+    if (res.data.code === 200) {
+      yield put({
+        type: postTerminateEmployeeSuccess.toString(),
+        payload: {
+          id: res?.data?.data?.company_work_schedule_id,
+          status: res?.data?.data?.status,
+          message: res?.data?.data?.messages,
+        }
+      });
+      yield Router.back();
+    }
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      yield put({ type: postTerminateEmployeeFailed.toString() });
+      yield delay(2000, true);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message,
+        }
+      });
+    }
+  }
+}
+
+function* getEmployeeDetailCnb(action: AnyAction) {
+  try {
+    const res: AxiosResponse = yield call(getEmployeeCnb, action?.payload);
+    if (res.data.code === 200) {
+      yield put({
+        type: getEmployeeCnbDetailSuccess.toString(),
+        payload: res?.data?.data
+      });
+    }
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      yield put({ type: getEmployeeCnbDetailFailed.toString() });
+      yield delay(2000, true);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message
+        }
+      });
+    }
+  }
+}
+
+function* fetchPatchEmployeeCnb(action: AnyAction) {
+  try {
+    const employeeCnb = {
+      templateID: action?.payload?.employeeCnb?.templateId,
+      name: action?.payload?.employeeCnb?.name,
+      overtime: +action?.payload?.employeeCnb?.overtime,
+      base: {
+        ...action?.payload?.employeeCnb?.base,
+        rate: action?.payload?.employeeCnb?.base?.rate === null ? 0 : +action?.payload?.employeeCnb?.base?.rate,
+        rateType: action?.payload?.employeeCnb?.base?.rateType === null ? 0 : +action?.payload?.employeeCnb?.base?.rateType,
+        isTaxable: action?.payload?.employeeCnb?.base?.isTaxable === 'true' ? true : false
+      },
+      supplementaries: action?.payload?.employeeCnb?.supplementary?.map(val => ({
+        ...val,
+        rate: val.rate === null ? 0 : +val.rate,
+        rateType: val.rateType === null ? 0 : +val?.rateType,
+        isTaxable: val?.isTaxable === 'true' ? true : false
+      }))
+    };
+
+    const id = action?.payload?.id;
+
+    const payload = {
+      id: id,
+      employeeCnb: employeeCnb
+    };
+
+    const res: AxiosResponse = yield call(patchEmployeeCnb, payload);
+
+    if (res.data.code === 201 || res.data.code === 200) {
+      yield put({ type: patchEmployeeCnbSuccess.toString() });
+      yield delay(1000);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: res?.data?.code,
+          message: 'Successfully Saved!',
+          footerMessage: 'Employee Cnb has been updated'
+        }
+      });
+    }
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.request?.data as Services.ErrorResponse;
+      yield put({ type: patchEmployeeCnbFailed.toString() });
+      yield delay(2000, true);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message
+        }
+      });
+    }
+  }
+}
+
 function* employeeSaga() {
   yield takeEvery(getEmployeeRequested.toString(), fetchGetEmployee);
   yield takeEvery(postEmployeeInfoRequested.toString(), fetchPostEmployeeInfo);
-  yield takeEvery(postEmergencyRequested.toString(), fetchPostEmergency);
   yield takeEvery(postPersonalInformationRequested.toString(), fetchPostPersonalInformation);
+  yield takeEvery(postEmergencyRequested.toString(), fetchPostEmergency);
+  yield takeEvery(postCnbEmployeeRequested.toString(), fetchPostCnbEmployee);
+  yield takeEvery(postWorkScheduleRequested.toString(), fetchPostWorkSchedule);
   yield takeEvery(employeeInfoDetailRequested.toString(), fetchGetEmployeeInformation);
   yield takeEvery(personalInfoDetailRequested.toString(), fetchGetPersonalInformationDetail);
   yield takeEvery(getDetailCnbRequested.toString(), fetchGetDetailCnb);
-  yield takeEvery(postCnbEmplyeeRequested.toString(), fetchPostCnbEmployee);
   yield takeEvery(emergencyContactDetailRequested.toString(), fetchGetEmergencyContactDetail);
   yield takeEvery(patchEmployeeInformationRequested.toString(), fetchPatchEmployeeInformation);
   yield takeEvery(patchEmergencyContactRequested.toString(), fetchPatchEmergencyContact);
+  yield takeEvery(patchPersonalRequested.toString(), fetchPatchEmployeePersonal);
+  yield takeEvery(getDetailWorkScheduleRequested.toString(), fetchGetDetailWorkSchedule);
+  yield takeEvery(postSimulationEventRequested.toString(), fetchPostSimulationEvent);
+  yield takeEvery(postCalculateEventRequested.toString(), fetchPostCalculateEvent);
+  yield takeEvery(getViewWorkScheduleRequested.toString(), fetchGetViewWorkSchedule);
+  yield takeEvery(postTerminateEmployeeRequested.toString(), fetchPostTerminateEmployee);
+  yield takeEvery(patchWorkScheduleRequested.toString(), fetchPatchWorkSchedule);
+  yield takeEvery(getEmployeeCnbDetailRequested.toString(), getEmployeeDetailCnb);
+  yield takeEvery(patchEmployeeCnbRequested.toString(), fetchPatchEmployeeCnb);
 }
 
 export default employeeSaga;

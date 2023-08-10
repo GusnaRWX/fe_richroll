@@ -1,18 +1,30 @@
 import React, { useState } from 'react';
-import { 
+import {
   Typography,
   Card,
   Grid,
   Box,
-  Stepper,
-  Step,
-  StepLabel,
-  Button as MuiButton } from '@mui/material';
+  Button as MuiButton
+} from '@mui/material';
+import { Stepper } from '@/components/_shared/form';
 import { styled } from '@mui/material/styles';
 import { useRouter } from 'next/router';
 import AttendanceContent from './AttendanceContent';
+import GrossContent from './GrossContent';
+import NetContent from './NetContent';
+import DisbursementContent from './DisbursementContent';
+import CompleteContent from './CompleteContent';
 import CustomModal from '@/components/_shared/common/CustomModal';
 import { ifThenElse } from '@/utils/helper';
+import { useAppSelectors, useAppDispatch } from '@/hooks/index';
+import {
+  postPayrollGrossesRequested,
+  putPayrollWorkflowRequested,
+  generateNetAssistRequested,
+  generateDisbursementAssistRequested,
+  postPayrollDisbursementIdRequested,
+  patchPayrollDisbursementFinalRequested
+} from '@/store/reducers/slice/payroll/payrollSlice';
 
 const steps = [
   'Create Payroll',
@@ -34,21 +46,96 @@ const ButtonWrapper = styled(Box)(({
 
 const ContentWrapper = styled(Card)(({
   padding: '1rem',
+  borderRadius: '0px',
   marginBottom: '1rem'
 }));
 
 function PayrollAssistantCreate() {
   const router = useRouter();
+  const dispatch = useAppDispatch();
+  const assistantID = router?.query?.id;
+  const { name, start, end, grossesId, netId, disbursementId, id } = useAppSelectors((state) => state.payroll);
   const [value, setValue] = useState(1);
   const [open, setOpen] = useState(false);
   const [isExit, setIsExit] = useState(true);
+  const [isSeparate, setIsSeparate] = useState(false);
 
   const handleClose = () => {
     setOpen(false);
   };
 
   const handleConfirm = () => {
-    router.push('/payroll-disbursement/payroll-assistant');
+    if (value === 5) {
+      dispatch({
+        type: patchPayrollDisbursementFinalRequested.toString(),
+        payload: {
+          id: disbursementId,
+          isAssist: true
+        }
+      });
+    } else {
+      router.push('/payroll-disbursement/payroll-assistant');
+    }
+  };
+
+  const handleGenerateGross = () => {
+    dispatch({
+      type: putPayrollWorkflowRequested.toString(),
+      payload: {
+        id: id,
+        data: {
+          workflow: 0,
+          status: 1
+        }
+      }
+    });
+    dispatch({
+      type: postPayrollGrossesRequested.toString(),
+      payload: {
+        data: {
+          payrollID: [id],
+          assistantID: assistantID
+        },
+        isAssist: true
+      }
+    });
+    setValue(value + 1);
+  };
+
+  const handleGenerateNet = () => {
+    dispatch({
+      type: generateNetAssistRequested.toString(),
+      payload: {
+        grossesId: grossesId,
+        assistantID: router.query.id,
+      }
+    });
+    setValue(value + 1);
+  };
+
+  const handleGenerateDisbReceipt = () => {
+    dispatch({
+      type: generateDisbursementAssistRequested.toString(),
+      payload: {
+        netId: netId
+      }
+    });
+    setValue(value + 1);
+  };
+
+  const handleGenerateDisbFiles = () => {
+    dispatch({
+      type: postPayrollDisbursementIdRequested.toString(),
+      payload: {
+        id: netId,
+        body: {
+          assistantID: router.query.id,
+          isSeparate: isSeparate
+        },
+        isAssist: true
+      }
+    });
+    setValue(value + 1);
   };
 
   return (
@@ -56,7 +143,7 @@ function PayrollAssistantCreate() {
       <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
         <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
           <Typography variant='h6' color='#4B5563'><b>Payroll Assistant</b></Typography>
-          <Typography variant='text-base' color='#4B5563'><b>Payroll 280123 — </b>1/03/2023 - 14/03/2023</Typography>
+          <Typography variant='text-base' color='#4B5563'><b>{name} — </b>{start} - {end}</Typography>
         </Grid>
         <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
           <ButtonWrapper>
@@ -78,77 +165,44 @@ function PayrollAssistantCreate() {
               size='small'
               color='primary'
               onClick={() => {
-                if (value < 5) {
-                  setValue(value + 1);
-                }
-                if (value == 5) {
-                  setIsExit(false);
-                  setOpen(true);
+                switch (value) {
+                  case 1:
+                    handleGenerateGross();
+                    break;
+                  case 2:
+                    handleGenerateNet();
+                    break;
+                  case 3:
+                    handleGenerateDisbReceipt();
+                    break;
+                  case 4:
+                    handleGenerateDisbFiles();
+                    break;
+                  case 5:
+                    setIsExit(false);
+                    setOpen(true);
+                    break;
+
+                  default:
+                    break;
                 }
               }}
             >{ifThenElse(value == 1, 'Generate Gross Payroll Report', ifThenElse(value == 2, 'Generate Net Payroll Report', ifThenElse(value == 3, 'Generate Disbursement Receipt', ifThenElse(value == 4, 'Generate Disbursement Files', 'Mark All Paid and Complete'))))}</MuiButton>
           </ButtonWrapper>
         </Grid>
       </Grid>
+
       <ContentWrapper>
         <Box sx={{ width: '100%' }}>
-          <Stepper activeStep={value} alternativeLabel sx={{ marginTop: '45px' }}>
-            {steps.map((label) => (
-              <Step key={label} sx={{
-                '> .MuiStepConnector-root': {
-                  left: 'calc(-50% + 10px)',
-                  right: 'calc(50% + 10px)',
-                  '> .MuiStepConnector-line': {
-                    borderTopWidth: '2px',
-                    marginTop: '-20px !important'
-                  }
-                },
-                '> .Mui-active > .MuiStepConnector-line, > .Mui-completed > .MuiStepConnector-line': {
-                  borderColor: '#1C2C56'
-                },
-                '> .Mui-disabled > .MuiStepConnector-line': {
-                  borderColor: '#D1D5DB'
-                },
-              }}>
-                <StepLabel
-                  sx={{
-                    '& .Mui-completed, & .Mui-disabled': {
-                      color: '#D1D5DB !important',
-                    },
-                    '& .MuiStepLabel-alternativeLabel': {
-                      fontWeight: '400 !important',
-                      marginTop: '-20px !important'
-                    },
-                  }}
-                  StepIconComponent={({ active, completed }) => {
-                    return ifThenElse(
-                      active,
-                      <Box sx={{ width: '12px', height: '12px', border: '2px solid #1C2C56', borderRadius: '12px', background: '#FFF', top: '6px', position: 'relative' }}></Box>,
-                      ifThenElse(
-                        completed,
-                        <Box sx={{ width: '12px', height: '12px', borderRadius: '12px', background: '#1C2C56', top: '6px', position: 'relative' }}></Box>,
-                        <Box sx={{ width: '12px', height: '12px', borderRadius: '12px', background: '#D1D5DB', top: '6px', position: 'relative' }}></Box>
-                      )
-                    );
-                  }}
-                >
-                  {label}
-                </StepLabel>
-              </Step>
-            ))}
-          </Stepper>
+          <Stepper activeStep={value} steps={steps} />
         </Box>
       </ContentWrapper>
       
-      <ContentWrapper>
-        <Box sx={{ width: '100%' }}>
-          {value == 1 && <AttendanceContent />}
-          {value == 2 && <AttendanceContent />}
-          {value == 3 && <AttendanceContent />}
-          {value == 4 && <AttendanceContent />}
-          {value == 5 && <AttendanceContent />}
-        </Box>
-      </ContentWrapper>
+      {value == 1 && <AttendanceContent />}
+      {value == 2 && <GrossContent isPreview={false} />}
+      {value == 3 && <NetContent isAssist={true} />}
+      {value == 4 && <DisbursementContent isAssist={true} handleChecked={setIsSeparate} />}
+      {value == 5 && <CompleteContent isAssist={true} />}
 
       <CustomModal
         open={open}
@@ -162,7 +216,7 @@ function PayrollAssistantCreate() {
             {
               ifThenElse(
                 isExit,
-                <Typography variant='text-base' color='#4B5563'>You will stop the process, and saved in Payroll Assistant.<br/>Are you sure to stop the process?</Typography>,
+                <Typography variant='text-base' color='#4B5563'>You will stop the process, and saved in Payroll Assistant.<br />Are you sure to stop the process?</Typography>,
                 <Typography variant='text-base' color='#4B5563'>All disbursement will marked paid and complete the Payroll Assistant process</Typography>
               )
             }

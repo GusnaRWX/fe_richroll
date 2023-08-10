@@ -1,6 +1,18 @@
 import { AnyAction } from '@reduxjs/toolkit';
-import { getCompaniesItem, getCompanyTypeItem, getCompanySectorItem, getBankItem, getPaymentMethodItem, postCompanyProfile, getCompanyDetail, patchCompanyProfile } from '../saga-actions/company/companyActions';
-import { takeEvery, call, put, delay } from 'redux-saga/effects';
+import {
+  getCompaniesItem,
+  getCompanyTypeItem,
+  getCompanySectorItem,
+  getBankItem,
+  getPaymentMethodItem,
+  postCompanyProfile,
+  getCompanyDetail,
+  patchCompanyProfile,
+  postCompanyPayments,
+  getCompanyPayments,
+  patchCompanyPayments
+} from '../saga-actions/company/companyActions';
+import { takeEvery, call, put } from 'redux-saga/effects';
 import { Company } from '@/types/company';
 import {
   companiesRequested,
@@ -26,7 +38,16 @@ import {
   getCompanyDetailFailed,
   patchCompanyProfileRequested,
   patchCompanyProfileSuccess,
-  patchCompanyProfileFailed
+  patchCompanyProfileFailed,
+  postCompanyPaymentsRequested,
+  postCompanyPaymentsSuccess,
+  postCompanyPaymentsFailed,
+  patchCompanyPaymentsRequested,
+  patchCompanyPaymentsSuccess,
+  patchCompanyPaymentsFailed,
+  getCompanyProfilePaymentsRequested,
+  getCompanyProfilePaymentsSuccess,
+  getCompanyProfilePaymentsFailed
 } from '@/store/reducers/slice/company/companySlice';
 import { Services } from '@/types/axios';
 import { setResponserMessage } from '@/store/reducers/slice/responserSlice';
@@ -55,9 +76,7 @@ function* fetchGetCompanies() {
 
     if (err instanceof AxiosError) {
       const errorMessage = err?.response?.data as Services.ErrorResponse;
-      yield delay(2000, true);
       yield put({ type: companiesFailed.toString() });
-      yield delay(2000, true);
       yield put({
         type: setResponserMessage.toString(),
         payload: {
@@ -90,9 +109,7 @@ function* fetchGetCompanyType() {
 
     if (err instanceof AxiosError) {
       const errorMessage = err?.response?.data as Services.ErrorResponse;
-      yield delay(2000, true);
       yield put({ type: companyTypeFailed.toString() });
-      yield delay(2000, true);
       yield put({
         type: setResponserMessage.toString(),
         payload: {
@@ -125,9 +142,7 @@ function* fetchGetCompanySector() {
 
     if (err instanceof AxiosError) {
       const errorMessage = err?.response?.data as Services.ErrorResponse;
-      yield delay(2000, true);
       yield put({ type: companySectorFailed.toString() });
-      yield delay(2000, true);
       yield put({
         type: setResponserMessage.toString(),
         payload: {
@@ -160,9 +175,7 @@ function* fetchGetBank() {
 
     if (err instanceof AxiosError) {
       const errorMessage = err?.response?.data as Services.ErrorResponse;
-      yield delay(2000, true);
       yield put({ type: bankFailed.toString() });
-      yield delay(2000, true);
       yield put({
         type: setResponserMessage.toString(),
         payload: {
@@ -209,10 +222,9 @@ function* fetchGetPaymentMethod() {
 
 function* fetchPostCompanyProfile(action: AnyAction) {
   try {
-    const res: AxiosResponse = yield call(postCompanyProfile, action?.payload);
+    const res: AxiosResponse = yield call(postCompanyProfile, action?.payload?.companyProfile);
     if (res.data.code === 201) {
       yield put({ type: postCompanyProfileSuccess.toString(), payload: res.data.data });
-      Router.push('/company');
       yield put({
         type: setResponserMessage.toString(),
         payload: {
@@ -220,7 +232,6 @@ function* fetchPostCompanyProfile(action: AnyAction) {
           message: res.data.message
         }
       });
-      yield delay(2000);
       yield put({
         type: setResponserMessage.toString(),
         payload: {
@@ -244,17 +255,60 @@ function* fetchPostCompanyProfile(action: AnyAction) {
   }
 }
 
+function* fetchPostCompanyPayments(action: AnyAction) {
+  try {
+    const bankPayload = action?.payload?.payments?.bank;
+    const payrollsPayload = action?.payload?.payments?.payrolls;
+    const payload = {
+      bank: bankPayload,
+      payrolls: Object.values(payrollsPayload)
+    };
+    const res: AxiosResponse = yield call(postCompanyPayments,
+      action?.payload?.companyID,
+      payload
+    );
+    if (res.data.code === 201 || res.data.code === 200) {
+      yield put({ type: postCompanyPaymentsSuccess.toString() });
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: res.data.code,
+          message: 'Successfully Saved!',
+          footerMessage: 'New Company has been created'
+        }
+      });
+      yield Router.push('/company');
+    }
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      yield put({ type: postCompanyPaymentsFailed.toString() });
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message
+        }
+      });
+    }
+  }
+}
+
 function* fetchGetCompanyDetail(action: AnyAction) {
   try {
     const res: AxiosResponse = yield call(getCompanyDetail, action?.payload);
     if (res.data.code === 200) {
       yield put({ type: getCompanyDetailSuccess.toString(), payload: res.data.data });
+      const body = {
+        type: getCompanyProfilePaymentsRequested.toString(),
+        payload: action?.payload
+      };
+      yield call(fetchGetCompanyPaymentDetail, body);
     }
   } catch (err) {
     if (err instanceof AxiosError) {
       const errorMessage = err?.response?.data as Services.ErrorResponse;
       yield put({ type: getCompanyDetailFailed.toString() });
-      yield delay(2000, true);
       yield put({
         type: setResponserMessage.toString(),
         payload: {
@@ -266,21 +320,35 @@ function* fetchGetCompanyDetail(action: AnyAction) {
   }
 }
 
+function* fetchGetCompanyPaymentDetail(action: AnyAction) {
+  try {
+    const res: AxiosResponse = yield call(getCompanyPayments, action?.payload?.id);
+    if (res.data.code === 200) {
+      yield put({
+        type: getCompanyProfilePaymentsSuccess.toString(),
+        payload: res?.data?.data
+      });
+    }
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      yield put({ type: getCompanyProfilePaymentsFailed.toString() });
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message
+        }
+      });
+    }
+  }
+}
+
 function* fetchPatchCompanyProfile(action: AnyAction) {
   try {
     const res: AxiosResponse = yield call(patchCompanyProfile, action?.payload);
     if (res.data.code === 200) {
       yield put({ type: patchCompanyProfileSuccess.toString(), payload: res.data.data });
-      Router.back();
-      yield put({
-        type: setResponserMessage.toString(),
-        payload: {
-          code: res.data.code,
-          message: 'Successfully Saved',
-          footerMessage: 'Company profile has been updated'
-        }
-      });
-      yield delay(2000);
       yield put({
         type: setResponserMessage.toString(),
         payload: {
@@ -293,12 +361,52 @@ function* fetchPatchCompanyProfile(action: AnyAction) {
     if (err instanceof AxiosError) {
       const errorMessage = err?.response?.data as Services.ErrorResponse;
       yield put({ type: patchCompanyProfileFailed.toString() });
-      yield delay(2000, true);
       yield put({
         type: setResponserMessage.toString(),
         payload: {
           code: errorMessage?.code,
           message: errorMessage?.message,
+        }
+      });
+    }
+  }
+}
+
+function* fetchPatchCompanyPayments(action: AnyAction) {
+  try {
+    const bankPayload = action?.payload?.payments?.bank;
+    const payrollsPayload = action?.payload?.payments?.payrolls;
+    const payload = {
+      bank: bankPayload,
+      payrolls: Object.values(payrollsPayload)
+    };
+    const res: AxiosResponse = yield call(patchCompanyPayments,
+      action?.payload?.id,
+      payload
+    );
+    if (res) {
+      yield put({ type: patchCompanyPaymentsSuccess.toString() });
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: res.data.code,
+          message: 'Successfully Saved',
+          footerMessage: 'Company profile has been updated'
+        }
+      });
+      yield Router.push('/company-management/company-profile');
+    }
+
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      const errorMessage = err?.response?.data as Services.ErrorResponse;
+      yield put({ type: patchCompanyPaymentsFailed.toString() });
+      yield Router.push('/company-management/company-profile');
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: errorMessage?.code,
+          message: errorMessage?.message
         }
       });
     }
@@ -312,8 +420,11 @@ function* companySaga() {
   yield takeEvery(bankRequested.toString(), fetchGetBank);
   yield takeEvery(paymentMethodRequested.toString(), fetchGetPaymentMethod);
   yield takeEvery(postCompanyProfileRequested.toString(), fetchPostCompanyProfile);
+  yield takeEvery(postCompanyPaymentsRequested.toString(), fetchPostCompanyPayments);
+  yield takeEvery(getCompanyProfilePaymentsRequested.toString(), fetchGetCompanyPaymentDetail);
   yield takeEvery(getCompanyDetailRequested.toString(), fetchGetCompanyDetail);
   yield takeEvery(patchCompanyProfileRequested.toString(), fetchPatchCompanyProfile);
+  yield takeEvery(patchCompanyPaymentsRequested.toString(), fetchPatchCompanyPayments);
 }
 
 export default companySaga;

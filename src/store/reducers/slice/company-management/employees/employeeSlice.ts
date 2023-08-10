@@ -1,6 +1,22 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { HYDRATE } from 'next-redux-wrapper';
 
+interface EventType {
+  day: number,
+  event_id: number,
+  title: string,
+  name: string,
+  start: Date,
+  end: Date,
+  isBreak?: boolean,
+  isDuration?: boolean,
+  color?: string,
+  duration?: number | string,
+  allDay?: boolean,
+  scheduleType?: string | number,
+  type?: number
+}
+
 interface EmployeeState {
   isLoading: boolean;
   data: [];
@@ -9,6 +25,19 @@ interface EmployeeState {
   personalInformationDetail: object;
   detailCnb: object;
   emergencyContactDetail: object;
+  events: Array<EventType>;
+  grossHour: number;
+  netHour: number;
+  workScheduleId: string | number;
+  workScheduleDetail: {
+    events: Array<EventType>;
+    grossHour: number;
+    name: string;
+    netHour: number;
+    workScheduleId: string | number;
+  },
+  employeeCnbDetail: object,
+  employeeCnbDetailUpdate: object;
 }
 
 const initialState: EmployeeState = {
@@ -18,7 +47,20 @@ const initialState: EmployeeState = {
   employeeInformationDetail: {},
   personalInformationDetail: {},
   detailCnb: {},
-  emergencyContactDetail: {}
+  emergencyContactDetail: {},
+  events: [],
+  grossHour: 0,
+  netHour: 0,
+  workScheduleId: '',
+  workScheduleDetail: {
+    events: [],
+    name: '',
+    grossHour: 0,
+    netHour: 0,
+    workScheduleId: ''
+  },
+  employeeCnbDetail: {},
+  employeeCnbDetailUpdate: {}
 };
 
 export const employeeSlice = createSlice({
@@ -93,7 +135,7 @@ export const employeeSlice = createSlice({
     getDetailCnbFailed: (state) => {
       state.isLoading = false;
     },
-    postCnbEmplyeeRequested: (state) => {
+    postCnbEmployeeRequested: (state) => {
       state.isLoading = true;
     },
     postCnbEmployeeSuccess: (state) => {
@@ -129,6 +171,205 @@ export const employeeSlice = createSlice({
     },
     patchEmergencyContactFailed: (state) => {
       state.isLoading = false;
+    },
+    patchPersonalRequested: (state) => {
+      state.isLoading = true;
+    },
+    patchPersonalSuccess: (state) => {
+      state.isLoading = false;
+    },
+    patchPersonalFailed: (state) => {
+      state.isLoading = false;
+    },
+    getDetailWorkScheduleRequested: (state) => {
+      state.isLoading = true;
+    },
+    getDetailWorkSchedulerSuccess: (state, action) => {
+      state.isLoading = false;
+      state.workScheduleId = action?.payload?.id;
+      state.grossHour = action?.payload?.grossHour;
+      state.netHour = action?.payload?.netHour;
+      const tempData: Array<EventType> = [];
+      action?.payload?.events.map((item) => {
+        tempData.push({
+          day: item.day,
+          event_id: item.eventId,
+          title: item.name,
+          name: item.name,
+          start: new Date(item.start),
+          end: new Date(item.end),
+          isBreak: item.isBreak,
+          isDuration: item.isDuration,
+          color: item.color,
+          duration: item.duration,
+          allDay: item.allDay,
+          scheduleType: item.scheduleType,
+          type: item.type
+        });
+      });
+      state.events = tempData;
+    },
+    getDetailWorkSchedulerFailed: (state) => {
+      state.isLoading = false;
+    },
+    postSimulationEventRequested: (state) => {
+      state.isLoading = true;
+    },
+    postSimulationEventSuccess: (state, action) => {
+      state.isLoading = false;
+      const tempData: Array<EventType> = [];
+      action?.payload?.events.map((item) => {
+        tempData.push({
+          day: item.day,
+          event_id: item.eventId,
+          title: item.name,
+          name: item.name,
+          start: new Date(item.start),
+          end: new Date(item.end),
+          isBreak: item.isBreak,
+          isDuration: item.isDuration,
+          color: item.color,
+          duration: item.duration,
+          allDay: item.allDay,
+          scheduleType: item.scheduleType,
+          type: item.type
+        });
+      });
+      state.events = tempData;
+    },
+    postSimulationEventFailed: (state) => {
+      state.isLoading = false;
+    },
+    postCalculateEventRequested: (state) => {
+      state.isLoading = true;
+    },
+    postCalculateEventSuccess: (state, action) => {
+      state.isLoading = false;
+      state.grossHour = action?.payload?.grossHour;
+      state.netHour = action?.payload?.netHour;
+    },
+    postCalculateEventFailed: (state) => {
+      state.isLoading = false;
+    },
+    postWorkScheduleRequested: (state) => {
+      state.isLoading = true;
+    },
+    postWorkScheduleSuccess: (state) => {
+      state.isLoading = false;
+      state.employeeID = '';
+    },
+    postWorkScheduleFailed: (state) => {
+      state.isLoading = false;
+    },
+    getViewWorkScheduleRequested: (state) => {
+      state.isLoading = true;
+    },
+    getViewWorkScheduleSuccess: (state, action) => {
+      state.isLoading = false;
+      state.workScheduleDetail.workScheduleId = action?.payload?.id;
+      state.workScheduleDetail.grossHour = action?.payload?.grossHour;
+      state.workScheduleDetail.netHour = action?.payload?.netHour;
+      state.workScheduleDetail.name = action?.payload?.name;
+      state.grossHour = action?.payload?.grossHour;
+      state.netHour = action?.payload?.netHour;
+      state.workScheduleId = action?.payload?.id;
+      const tempData: Array<EventType> = [];
+      action?.payload?.events.map((item) => {
+        tempData.push({
+          day: item.day,
+          event_id: item.eventId,
+          title: item.name,
+          name: item.name,
+          start: new Date(item.start),
+          end: new Date(item.end),
+          isBreak: item.isBreak,
+          isDuration: item.isDuration,
+          color: item.color,
+          duration: item.duration,
+          allDay: item.allDay,
+          scheduleType: item.scheduleType,
+          type: item.type
+        });
+      });
+      state.workScheduleDetail.events = tempData;
+      state.events = tempData;
+    },
+    getViewWorkScheduleFailed: (state) => {
+      state.isLoading = false;
+    },
+    postTerminateEmployeeRequested: (state) => {
+      state.isLoading = true;
+    },
+    postTerminateEmployeeSuccess: (state) => {
+      state.isLoading = false;
+    },
+    postTerminateEmployeeFailed: (state) => {
+      state.isLoading = false;
+    },
+    patchWorkScheduleRequested: state => {
+      state.isLoading = true;
+    },
+    patchWorkScheduleSuccess: state => {
+      state.isLoading = false;
+    },
+    patchWorkScheduleFailed: state => {
+      state.isLoading = false;
+    },
+    clearWorkScheduleState: (state) => {
+      state.events = [];
+      state.grossHour = 0;
+      state.netHour = 0;
+    },
+    clearGrossNet: (state) => {
+      state.grossHour = 0;
+      state.netHour = 0;
+    },
+    getEmployeeCnbDetailRequested: state => {
+      state.isLoading = true;
+    },
+    getEmployeeCnbDetailSuccess: (state, action) => {
+      const formated = {
+        templateID: action?.payload?.template?.id,
+        name: action?.payload?.template?.name,
+        overtime: action?.payload?.overtime,
+        base: {
+          componentID: action?.payload?.base?.component?.id,
+          termID: action?.payload?.base?.term?.id,
+          isTaxable: action?.payload?.base?.isTaxable === true ? 'true' : 'false',
+          amount: action?.payload?.base?.amount === null ? '0' : action?.payload?.base?.amount,
+          amountType: action?.payload?.base?.amountType === null ? '0' : action?.payload?.base?.amountType,
+          rate: action?.payload?.base?.rate === null ? '0' : action?.payload?.base?.rate,
+          rateType: action?.payload?.base?.rateType === null ? '0' : action?.payload?.base?.rateType,
+          id: action?.payload?.base?.id || ''
+        },
+        supplementary: action?.payload?.supplementaries?.map(val => {
+          return {
+            componentID: val?.component?.id,
+            termID: val?.term?.id,
+            isTaxable: val?.isTaxable === true ? 'true' : 'false',
+            amount: val?.amount === null ? '0' : val?.amount,
+            amountType: val?.amountType === null ? '0' : val?.amountType,
+            rate: val?.rate === null ? '0' : val?.rate,
+            rateType: val?.rateType === null ? '0' : val?.rateType,
+            id: val?.id || ''
+          };
+        })
+      };
+      state.isLoading = false;
+      state.employeeCnbDetail = action?.payload;
+      state.employeeCnbDetailUpdate = formated;
+    },
+    getEmployeeCnbDetailFailed: state => {
+      state.isLoading = false;
+    },
+    patchEmployeeCnbRequested: state => {
+      state.isLoading = true;
+    },
+    patchEmployeeCnbSuccess: state => {
+      state.isLoading = false;
+    },
+    patchEmployeeCnbFailed: state => {
+      state.isLoading = false;
     }
   },
   extraReducers: {
@@ -163,7 +404,7 @@ export const {
   getDetailCnbFailed,
   getDetailCnbRequested,
   getDetailCnbSuccess,
-  postCnbEmplyeeRequested,
+  postCnbEmployeeRequested,
   postCnbEmployeeSuccess,
   postCnbEmployeeFailed,
   emergencyContactDetailFailed,
@@ -174,7 +415,39 @@ export const {
   patchEmployeeInformationFailed,
   patchEmergencyContactRequested,
   patchEmergencyContactSuccess,
-  patchEmergencyContactFailed
+  patchEmergencyContactFailed,
+  patchPersonalRequested,
+  patchPersonalSuccess,
+  patchPersonalFailed,
+  postSimulationEventFailed,
+  postSimulationEventRequested,
+  postSimulationEventSuccess,
+  postCalculateEventRequested,
+  postCalculateEventFailed,
+  postCalculateEventSuccess,
+  postWorkScheduleFailed,
+  postWorkScheduleRequested,
+  postWorkScheduleSuccess,
+  getDetailWorkScheduleRequested,
+  getDetailWorkSchedulerFailed,
+  getDetailWorkSchedulerSuccess,
+  getViewWorkScheduleFailed,
+  getViewWorkScheduleRequested,
+  getViewWorkScheduleSuccess,
+  postTerminateEmployeeFailed,
+  postTerminateEmployeeRequested,
+  postTerminateEmployeeSuccess,
+  clearWorkScheduleState,
+  patchWorkScheduleRequested,
+  patchWorkScheduleSuccess,
+  patchWorkScheduleFailed,
+  getEmployeeCnbDetailRequested,
+  getEmployeeCnbDetailSuccess,
+  getEmployeeCnbDetailFailed,
+  clearGrossNet,
+  patchEmployeeCnbRequested,
+  patchEmployeeCnbSuccess,
+  patchEmployeeCnbFailed
 } = employeeSlice.actions;
 
 export default employeeSlice.reducer;

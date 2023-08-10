@@ -1,13 +1,17 @@
 /* eslint-disable no-unused-vars */
-import React, { HTMLAttributes, useState } from 'react';
+import React, { HTMLAttributes, useState, useCallback, useRef } from 'react';
 import {
   Grid,
   Typography,
   Select,
   FormHelperText,
   MenuItem,
-  FormControl } from '@mui/material';
-import { Input, Textarea, FileUploadModal } from '@/components/_shared/form';
+  FormControl,
+  Modal,
+  IconButton,
+  Box
+} from '@mui/material';
+import { Input, Textarea, FileUploadModal, CropperImage } from '@/components/_shared/form';
 import { Text } from '@/components/_shared/common';
 import { styled as MuiStyled } from '@mui/material/styles';
 import { Image as ImageType } from '@/utils/assetsConstant';
@@ -19,6 +23,38 @@ import {
   administrativeSecondLevelRequested,
   administrativeThirdLevelRequsted
 } from '@/store/reducers/slice/options/optionSlice';
+import CancelIcon from '@mui/icons-material/Cancel';
+import Webcam from 'react-webcam';
+import { CameraAlt } from '@mui/icons-material';
+import { FiTrash2 } from 'react-icons/fi';
+import { useTranslation } from 'react-i18next';
+
+const modalStyleCamera = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: '30%',
+  bgcolor: 'background.paper',
+  border: '1px solid #E5E7EB',
+  borderRadius: '8px',
+  paddingTop: '.2rem',
+  paddingRight: '.5rem',
+  paddingLeft: '.5rem'
+};
+
+const ContentCameraWrapper = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center'
+};
+
+const videoConstraints = {
+  width: 500,
+  height: 720,
+  facingMode: 'user'
+};
 
 
 const AsteriskComponent = MuiStyled('span')(({ theme }) => ({
@@ -30,7 +66,7 @@ interface ImagePriviewProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 const ImageReview = styled.div`
-  background-image: url(${({image}: ImagePriviewProps) => image});
+  background-image: url(${({ image }: ImagePriviewProps) => image});
   background-repeat: no-repeat;
   width: 102px;
   height: 102px;
@@ -49,16 +85,55 @@ interface CompanyInfoProps {
   setImages;
 }
 
-function CompanyProfileInformationForm ({
+function CompanyProfileInformationForm({
   formik,
   companyType,
   companySector,
   countries,
   images,
   setImages
-}:CompanyInfoProps) {
+}: CompanyInfoProps) {
   const [open, setOpen] = useState(false);
   const dispatch = useAppDispatch();
+  const webcamRef = useRef<Webcam>(null);
+  const [isCaptureEnable, setCaptureEnable] = useState<boolean>(false);
+  const [openCamera, setOpenCamera] = useState(false);
+  const [modalCrop, setModalCrop] = useState(false);
+  const [tempImageCrop, setTempImageCrop] = useState(images);
+  const {t} = useTranslation();
+  const t_companyInformation = 'company_management.company_profile.form.company_information.company_information_section';
+  const t_companyAddress = 'company_management.company_profile.form.company_information.company_address_section';
+
+  const handleCloseCamera = () => {
+    setCaptureEnable(false);
+    setOpenCamera(false);
+  };
+
+  const handleOpenCamera = () => {
+    setCaptureEnable(true);
+    setOpenCamera(true);
+  };
+
+  const handleCancelCrop = () => {
+    setImages('');
+    setTempImageCrop('');
+    setModalCrop(false);
+  };
+
+  const handleSaveCropImage = (file, img) => {
+    setTempImageCrop(img);
+    formik.setFieldValue('picture', file);
+  };
+
+  const capture = useCallback(() => {
+    const imageSrc = webcamRef.current?.getScreenshot();
+    if (imageSrc) {
+      setImages(imageSrc);
+      setModalCrop(true);
+      handleClose();
+      handleCloseCamera();
+    }
+  }, [webcamRef]);
 
   const {
     administrativeFirst,
@@ -71,38 +146,76 @@ function CompanyProfileInformationForm ({
   };
 
   const handleClose = () => {
+    setModalCrop(true);
     setOpen(false);
+  };
+
+  const resetImages = () => {
+    setImages(null);
+    setTempImageCrop('');
   };
 
   return (
     <>
-      <Typography component='h3' fontSize={18} color='primary'>Company Information</Typography>
+      <Typography component='h3' fontSize={18} color='primary'>{t(`${t_companyInformation}.title`)}</Typography>
       <form>
-        <Typography variant='text-sm' component='div' color='primary' sx={{ mt: '16px' }}>Company Logo</Typography>
-        <ImageReview image={ifThenElse(!images, ImageType.PLACEHOLDER, images)} onClick={handleOpen}/>
+        <Typography variant='text-sm' component='div' color='primary' sx={{ mt: '16px' }}>{t(`${t_companyInformation}.company_logo`)}</Typography>
+        <ImageReview
+          image={ifThenElse(!tempImageCrop, ImageType.PLACEHOLDER, tempImageCrop)}
+          onClick={handleOpen} />
+        {tempImageCrop && (
+          <IconButton
+            sx={{
+              position: 'absolute',
+              border: '1px solid red',
+              backgroundColor: 'white',
+              borderRadius: '3px',
+              left: '65px',
+              height: '33px',
+              width: '33px',
+              ':hover': {
+                backgroundColor: 'white'
+              },
+              bottom: '5px'
+            }}
+            onClick={resetImages}
+          >
+            <FiTrash2 style={{ zIndex: '999', color: 'red' }} />
+          </IconButton>
+        )}
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <FormControl fullWidth error={compareCheck(formik.touched.companyType, Boolean(formik.errors.companyType))}>
-              <Typography sx={{ mb: '6px' }}>Company Type<AsteriskComponent>*</AsteriskComponent></Typography>
+              <Typography sx={{ mb: '6px' }}>{t(`${t_companyInformation}.company_type`)}<AsteriskComponent>*</AsteriskComponent></Typography>
               <Select
                 fullWidth
                 displayEmpty
                 variant='outlined'
                 size='small'
-                placeholder='Select Company Type'
+                placeholder={t(`${t_companyInformation}.company_type_placeholder`)}
                 name='companyType'
                 value={formik.values.companyType}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 renderValue={(value: string) => {
                   if (value?.length === 0) {
-                    return <Text title='Select Company Type' color='grey.400' />;
+                    return <Text title={t(`${t_companyInformation}.company_type_placeholder`)} color='grey.400' />;
                   }
                   const selectedType = companyType.find(type => type?.['id'] === value);
                   if (selectedType) {
                     return `${selectedType?.['name']}`;
                   }
                   return null;
+                }}
+                MenuProps={{
+                  PaperProps: {
+                    sx: {
+                      '& .MuiMenuItem-root:hover': {
+                        backgroundColor: '#223567',
+                        color: 'white'
+                      }
+                    }
+                  }
                 }}
               >
                 {companyType?.map((val, idx) => (
@@ -119,11 +232,11 @@ function CompanyProfileInformationForm ({
               onBlur={formik.handleBlur}
               error={compareCheck(formik.touched.companyName, Boolean(formik.errors.companyName))}
               helperText={ifThenElse(formik.touched.companyName, formik.errors.companyName, '')}
-              customLabel='Company Company Name'
+              customLabel={t(`${t_companyInformation}.company_name`)}
               withAsterisk={true}
               size='small'
               value={formik.values.companyName}
-              placeholder='Input Company Name'
+              placeholder={t(`${t_companyInformation}.company_name_placeholder`)}
             />
           </Grid>
         </Grid>
@@ -135,35 +248,45 @@ function CompanyProfileInformationForm ({
               onBlur={formik.handleBlur}
               error={compareCheck(formik.touched.companyNPWP, Boolean(formik.errors.companyNPWP))}
               helperText={ifThenElse(formik.touched.companyNPWP, formik.errors.companyNPWP, '')}
-              customLabel='Company NPWP'
+              customLabel={t(`${t_companyInformation}.company_npwp`)}
               withAsterisk={false}
               size='small'
               value={formik.values.companyNPWP}
-              placeholder='Input Company NPWP'
+              placeholder={t(`${t_companyInformation}.company_npwp_placeholder`)}
             />
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <FormControl fullWidth error={compareCheck(formik.touched.companySector, Boolean(formik.errors.companySector))}>
-              <Typography sx={{ mb: '6px' }}>Company Sector<AsteriskComponent>*</AsteriskComponent></Typography>
+              <Typography sx={{ mb: '6px' }}>{t(`${t_companyInformation}.company_sector`)}<AsteriskComponent>*</AsteriskComponent></Typography>
               <Select
                 fullWidth
                 displayEmpty
                 variant='outlined'
                 size='small'
-                placeholder='Select Company Sector'
+                placeholder={t(`${t_companyInformation}.company_sector_placeholder`)}
                 name='companySector'
                 value={formik.values.companySector}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 renderValue={(value: string) => {
                   if (value?.length === 0) {
-                    return <Text title='Select Company Sector' color='grey.400' />;
+                    return <Text title={t(`${t_companyInformation}.company_sector_placeholder`)} color='grey.400' />;
                   }
                   const selectedSector = companySector.find(type => type?.['id'] === value);
                   if (selectedSector) {
                     return `${selectedSector?.['name']}`;
                   }
                   return null;
+                }}
+                MenuProps={{
+                  PaperProps: {
+                    sx: {
+                      '& .MuiMenuItem-root:hover': {
+                        backgroundColor: '#223567',
+                        color: 'white'
+                      }
+                    }
+                  }
                 }}
               >
                 {companySector?.map((val, idx) => (
@@ -182,17 +305,17 @@ function CompanyProfileInformationForm ({
               onBlur={formik.handleBlur}
               error={compareCheck(formik.touched.companyEmail, Boolean(formik.errors.companyEmail))}
               helperText={ifThenElse(formik.touched.companyEmail, formik.errors.companyEmail, '')}
-              customLabel='Company Email Address'
+              customLabel={t(`${t_companyInformation}.company_email_address`)}
               withAsterisk={true}
               size='small'
               value={formik.values.companyEmail}
-              placeholder='Input Email Address'
+              placeholder={t(`${t_companyInformation}.company_email_address_placeholder`)}
             />
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6} sx={{ marginBottom: '1.5rem', marginTop: '.3rem' }}>
-            <Typography>Contact Number<AsteriskComponent>*</AsteriskComponent></Typography>
+            <Typography>{t(`${t_companyInformation}.contact_number`)}<AsteriskComponent>*</AsteriskComponent></Typography>
             <Grid container spacing={2}>
-              <Grid item xs={1} sm={3} md={3} lg={3} xl={3}>
+              <Grid item width='95px'>
                 <Select
                   fullWidth
                   displayEmpty
@@ -202,7 +325,17 @@ function CompanyProfileInformationForm ({
                   value={formik.values.phoneNumberPrefix}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  MenuProps={{ disableAutoFocus: true }}
+                  MenuProps={{
+                    disableAutoFocus: true,
+                    PaperProps: {
+                      sx: {
+                        '& .MuiMenuItem-root:hover': {
+                          backgroundColor: '#223567',
+                          color: 'white'
+                        }
+                      }
+                    }
+                  }}
                   sx={{
                     backgroundColor: '#D9EFE7',
                     border: '1px solid #D9EFE7',
@@ -214,7 +347,7 @@ function CompanyProfileInformationForm ({
                   <MenuItem value='+44'>+44</MenuItem>
                 </Select>
               </Grid>
-              <Grid item xs={9} sm={9} md={9} lg={9} xl={9} alignSelf='flex-end'>
+              <Grid item width='calc(100% - 95px)' alignSelf='flex-end'>
                 <Input
                   name='phoneNumber'
                   type='number'
@@ -225,7 +358,7 @@ function CompanyProfileInformationForm ({
                   withAsterisk={true}
                   size='small'
                   value={formik.values.phoneNumber}
-                  placeholder='Input Contact Number'
+                  placeholder={t(`${t_companyInformation}.contact_number`)}
                 />
               </Grid>
             </Grid>
@@ -233,19 +366,19 @@ function CompanyProfileInformationForm ({
         </Grid>
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
-            <Typography component='h3' fontSize={18} color='primary'>Company Address</Typography>
+            <Typography component='h3' fontSize={18} color='primary'>{t(`${t_companyAddress}.title`)}</Typography>
           </Grid>
         </Grid>
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <FormControl fullWidth error={compareCheck(formik.touched.countryCompanyAddress, Boolean(formik.errors.countryCompanyAddress))}>
-              <Typography sx={{ mb: '6px' }}>Country<AsteriskComponent>*</AsteriskComponent></Typography>
+              <Typography sx={{ mb: '6px' }}>{t(`${t_companyAddress}.contry`)}<AsteriskComponent>*</AsteriskComponent></Typography>
               <Select
                 fullWidth
                 displayEmpty
                 variant='outlined'
                 size='small'
-                placeholder='Select Country'
+                placeholder={t(`${t_companyAddress}.contry_placeholder`)}
                 name='countryCompanyAddress'
                 value={formik.values.countryCompanyAddress}
                 onChange={(e) => {
@@ -260,13 +393,23 @@ function CompanyProfileInformationForm ({
                 onBlur={formik.handleBlur}
                 renderValue={(value: string) => {
                   if (value?.length === 0) {
-                    return <Text title='Select Country' color='grey.400' />;
+                    return <Text title={t(`${t_companyAddress}.contry_placeholder`)} color='grey.400' />;
                   }
                   const selectedCountry = countries.find(type => type?.['value'] === value);
                   if (selectedCountry) {
                     return `${selectedCountry?.['label']}`;
                   }
                   return null;
+                }}
+                MenuProps={{
+                  PaperProps: {
+                    sx: {
+                      '& .MuiMenuItem-root:hover': {
+                        backgroundColor: '#223567',
+                        color: 'white'
+                      }
+                    }
+                  }
                 }}
               >
                 {countries?.map(item => (
@@ -278,13 +421,13 @@ function CompanyProfileInformationForm ({
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <FormControl fullWidth error={compareCheck(formik.touched.provinceCompanyAddress, Boolean(formik.errors.provinceCompanyAddress))}>
-              <Typography sx={{ mb: '6px' }}>Province<AsteriskComponent>*</AsteriskComponent></Typography>
+              <Typography sx={{ mb: '6px' }}>{t(`${t_companyAddress}.province`)}<AsteriskComponent>*</AsteriskComponent></Typography>
               <Select
                 fullWidth
                 displayEmpty
                 variant='outlined'
                 size='small'
-                placeholder='Select Province'
+                placeholder={t(`${t_companyAddress}.province_placeholder`)}
                 name='provinceCompanyAddress'
                 value={formik.values.provinceCompanyAddress}
                 onChange={(e) => {
@@ -300,13 +443,23 @@ function CompanyProfileInformationForm ({
                 onBlur={formik.handleBlur}
                 renderValue={(value: string) => {
                   if (value?.length === 0) {
-                    return <Text title='Select Province' color='grey.400' />;
+                    return <Text title={t(`${t_companyAddress}.province_placeholder`)} color='grey.400' />;
                   }
                   const selectedProvince = administrativeFirst.find(type => type?.['value'] === value);
                   if (selectedProvince) {
                     return `${selectedProvince?.['label']}`;
                   }
                   return null;
+                }}
+                MenuProps={{
+                  PaperProps: {
+                    sx: {
+                      '& .MuiMenuItem-root:hover': {
+                        backgroundColor: '#223567',
+                        color: 'white'
+                      }
+                    }
+                  }
                 }}
               >
                 {administrativeFirst?.map(item => (
@@ -320,13 +473,13 @@ function CompanyProfileInformationForm ({
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <FormControl fullWidth error={compareCheck(formik.touched.cityCompanyAddress, Boolean(formik.errors.cityCompanyAddress))}>
-              <Typography sx={{ mb: '6px' }}>City<AsteriskComponent>*</AsteriskComponent></Typography>
+              <Typography sx={{ mb: '6px' }}>{t(`${t_companyAddress}.city`)}<AsteriskComponent>*</AsteriskComponent></Typography>
               <Select
                 fullWidth
                 displayEmpty
                 variant='outlined'
                 size='small'
-                placeholder='Select City'
+                placeholder={t(`${t_companyAddress}.city_placeholder`)}
                 name='cityCompanyAddress'
                 value={formik.values.cityCompanyAddress}
                 onChange={(e) => {
@@ -343,13 +496,23 @@ function CompanyProfileInformationForm ({
                 onBlur={formik.handleBlur}
                 renderValue={(value: string) => {
                   if (value?.length === 0) {
-                    return <Text title='Select City' color='grey.400' />;
+                    return <Text title={t(`${t_companyAddress}.city_placeholder`)} color='grey.400' />;
                   }
                   const selectedCity = administrativeSecond.find(type => type?.['value'] === value);
                   if (selectedCity) {
                     return `${selectedCity?.['label']}`;
                   }
                   return null;
+                }}
+                MenuProps={{
+                  PaperProps: {
+                    sx: {
+                      '& .MuiMenuItem-root:hover': {
+                        backgroundColor: '#223567',
+                        color: 'white'
+                      }
+                    }
+                  }
                 }}
               >
                 {administrativeSecond?.map(item => (
@@ -361,26 +524,36 @@ function CompanyProfileInformationForm ({
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <FormControl fullWidth>
-              <Typography sx={{ mb: '6px' }}>Sub-District<AsteriskComponent>*</AsteriskComponent></Typography>
+              <Typography sx={{ mb: '6px' }}>{t(`${t_companyAddress}.sub_district`)}<AsteriskComponent>*</AsteriskComponent></Typography>
               <Select
                 fullWidth
                 displayEmpty
                 variant='outlined'
                 size='small'
-                placeholder='Select Sub-District'
+                placeholder={t(`${t_companyAddress}.sub_district_placeholder`)}
                 name='subDistrictCompanyAddress'
                 value={formik.values.subDistrictCompanyAddress}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 renderValue={(value: string) => {
                   if (value?.length === 0) {
-                    return <Text title='Select Sub-District' color='grey.400' />;
+                    return <Text title={t(`${t_companyAddress}.sub_district_placeholder`)} color='grey.400' />;
                   }
                   const selectedSubDistrict = administrativeThird.find(type => type?.['value'] === value);
                   if (selectedSubDistrict) {
                     return `${selectedSubDistrict?.['label']}`;
                   }
                   return null;
+                }}
+                MenuProps={{
+                  PaperProps: {
+                    sx: {
+                      '& .MuiMenuItem-root:hover': {
+                        backgroundColor: '#223567',
+                        color: 'white'
+                      }
+                    }
+                  }
                 }}
               >
                 {administrativeThird?.map(item => (
@@ -400,10 +573,10 @@ function CompanyProfileInformationForm ({
               value={formik.values.addressCompanyAddress}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={ifThenElse(formik.touched.addressCompanyAddress, formik.errors.addressCompanyAddress, false)}
+              error={ifThenElse(formik.touched.addressCompanyAddress, formik.errors.addressCompanyAddress, undefined)}
               withAsterisk={true}
-              customLabel='Street Name, Building Name'
-              placeholder='Input Address Details'
+              customLabel={t(`${t_companyAddress}.street_and_buildig_name`)}
+              placeholder={t(`${t_companyAddress}.street_and_buildig_name_placeholder`)}
             />
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
@@ -413,20 +586,66 @@ function CompanyProfileInformationForm ({
               onBlur={formik.handleBlur}
               error={compareCheck(formik.touched.zipCodeCompanyAddress, Boolean(formik.errors.zipCodeCompanyAddress))}
               helperText={ifThenElse(formik.touched.zipCodeCompanyAddress, formik.errors.zipCodeCompanyAddress, '')}
-              customLabel='ZIP Code'
+              customLabel={t(`${t_companyAddress}.zip_code`)}
               withAsterisk={true}
               size='small'
               value={formik.values.zipCodeCompanyAddress}
-              placeholder='Input ZIP Code'
+              placeholder={t(`${t_companyAddress}.zip_code_placeholder`)}
             />
           </Grid>
         </Grid>
-      </form>
+      </form >
       <FileUploadModal
         open={open}
         handleClose={handleClose}
         onChange={(e) => formik.handleChange(convertImageParams('picture', !e.target.files ? null : e.target.files[0], setImages, handleClose))}
+        onCapture={handleOpenCamera}
       />
+      <CropperImage
+        open={modalCrop}
+        onClose={handleCancelCrop}
+        image={images}
+        setCropValue={handleSaveCropImage}
+        ratio={4/3}
+      />
+      <Modal
+        open={openCamera}
+        onClose={handleCloseCamera}
+        keepMounted
+      >
+        <Box sx={modalStyleCamera}>
+          {
+            isCaptureEnable && (
+              <>
+                <Box sx={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'flex-end',
+                  marginBottom: '.5rem'
+                }}>
+                  <IconButton onClick={handleCloseCamera}>
+                    <CancelIcon />
+                  </IconButton>
+                </Box>
+                <Box sx={ContentCameraWrapper}>
+                  <Webcam
+                    audio={false}
+                    width={600}
+                    height={300}
+                    ref={webcamRef}
+                    screenshotFormat='image/jpeg'
+                    videoConstraints={videoConstraints}
+                  />
+                  <IconButton onClick={capture} sx={{ marginTop: '.5rem' }}>
+                    <CameraAlt sx={{ fontSize: '30px' }} />
+                  </IconButton>
+                </Box>
+              </>
+            )
+          }
+        </Box>
+      </Modal>
     </>
   );
 }

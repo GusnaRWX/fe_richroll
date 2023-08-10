@@ -5,6 +5,10 @@ import BorderColorIcon from '@mui/icons-material/BorderColor';
 import { getDetailRequested } from '@/store/reducers/slice/cnb/compensationSlice';
 import { numberFormat } from '@/utils/format';
 import { useRouter } from 'next/router';
+import dayjs from 'dayjs';
+import { Text } from '@/components/_shared/common';
+import { useTranslation } from 'react-i18next';
+import { ifEmptyReplace, ifThenElse } from '@/utils/helper';
 
 export interface DetailCNBProps {
   id: unknown,
@@ -18,6 +22,8 @@ const DetailCnb = ({ id, open }: DetailCNBProps) => {
   const detailLoading = useAppSelectors(
     (state) => state.compensation?.detailLoading
   );
+  const { t } = useTranslation();
+  const tPath = 'compensation_and_benefits.popup.detail.';
   const TitleData = styled(Typography)({
     fontSize: '14px',
     fontWeight: '600',
@@ -42,11 +48,15 @@ const DetailCnb = ({ id, open }: DetailCNBProps) => {
   });
 
   interface Supplement {
-    compensationComponent: { name: string };
-    taxStatus: boolean;
+    id: string;
     amount: number;
-    period: string;
-    rate: number;
+    amountType: number;
+    component: { id: string; name: string; type: number };
+    isBase: boolean;
+    isTaxable: boolean;
+    rate?: number;
+    rateType?: number;
+    term: { id: string, name: string }
   }
 
   React.useEffect(() => {
@@ -58,9 +68,11 @@ const DetailCnb = ({ id, open }: DetailCNBProps) => {
     }
   }, [id, open]);
 
+  const baseComponent = Object.assign({}, detail?.base);
+
   return (
     <>
-      {!detailLoading ? (
+      {ifThenElse(!detailLoading, (
         <Grid container direction='column' gap={4}>
           {/* name */}
           <Grid
@@ -70,7 +82,7 @@ const DetailCnb = ({ id, open }: DetailCNBProps) => {
             alignItems='center'
           >
             <Box display='flex' flexDirection='column' gap='6px'>
-              <TitleData>CnB Profile Name</TitleData>
+              <TitleData>{t(`${tPath}cnb_profile_name`)}</TitleData>
               <ItemData>{detail?.name}</ItemData>
             </Box>
             <Button
@@ -79,12 +91,12 @@ const DetailCnb = ({ id, open }: DetailCNBProps) => {
               startIcon={<BorderColorIcon sx={{ color: 'white' }} />}
               onClick={() =>
                 router.push(
-                  `/compensation-benefits/update?cnb=${id}&id=${detail?.baseCompensation[0].id}`
+                  `/compensation-benefits/update/${id}`
                 )
               }
             >
               <Typography fontSize={14} color='white'>
-                Edit
+                {t('button.edit')}
               </Typography>
             </Button>
           </Grid>
@@ -97,12 +109,12 @@ const DetailCnb = ({ id, open }: DetailCNBProps) => {
             alignItems='flex-start'
           >
             <Grid item xs={6} display='flex' flexDirection='column' gap='6px'>
-              <TitleData>Date Created</TitleData>
-              <ItemData>01/02/23, 12:00</ItemData>
+              <TitleData>{t('compensation_and_benefits.popup.detail.date_created')}</TitleData>
+              <ItemData>{ifThenElse(dayjs(detail?.createdAt).isValid(), dayjs(detail?.createdAt).format('DD/MM/YY hh:mm'), '-')}</ItemData>
             </Grid>
             <Grid item xs={6} display='flex' flexDirection='column' gap='6px'>
-              <TitleData>Last Updated</TitleData>
-              <ItemData>01/02/22</ItemData>
+              <TitleData>{t('compensation_and_benefits.popup.detail.last_update')}</TitleData>
+              <ItemData>{ifThenElse(dayjs(detail?.updatedAt).isValid(), dayjs(detail?.updatedAt).format('DD/MM/YY'), '-')}</ItemData>
             </Grid>
           </Grid>
 
@@ -116,7 +128,7 @@ const DetailCnb = ({ id, open }: DetailCNBProps) => {
           >
             <Grid item>
               <Typography fontWeight={700} color='#223567'>
-                Base
+                {t(`${tPath}base_section.title`)}
               </Typography>
             </Grid>
             <Grid
@@ -126,49 +138,46 @@ const DetailCnb = ({ id, open }: DetailCNBProps) => {
               alignItems='flex-start'
             >
               <Grid item xs={6} display='flex' flexDirection='column' gap='6px'>
-                <TitleData>Compensation Component</TitleData>
-                <ItemData>{detail?.baseCompensation[0]?.compensationComponent?.name}</ItemData>
+                <TitleData>{t(`${tPath}base_section.compensation_component`)}</TitleData>
+                <ItemData>{ifThenElse(baseComponent, baseComponent?.component?.name, '-')}</ItemData>
               </Grid>
               <Grid item xs={6} display='flex' flexDirection='column' gap='6px'>
-                <TitleData>Tax Status</TitleData>
+                <TitleData>{t(`${tPath}base_section.tax_status`)}</TitleData>
                 <TaxData>
-                  {detail?.baseCompensation[0]?.taxStatus
-                    ? 'Taxable'
-                    : 'NTaxable'}
+                  {ifThenElse(baseComponent, 
+                    ifThenElse(baseComponent?.isTaxable, t(`${tPath}base_section.tax_status_option.taxable`), t(`${tPath}base_section.tax_status_option_nontaxable`) ),
+                    '-'   )}
                 </TaxData>
               </Grid>
             </Grid>
             <Grid display='flex' flexDirection='column' gap='6px'>
               <TitleData>
-                {detail?.baseCompensation[0]?.amount ? 'Amount' : 'Rate'}&nbsp;
-                {detail?.baseCompensation[0].period}
+                {ifThenElse(baseComponent?.amount !== null, 'Amount', 'Rate')}&nbsp; per &nbsp;
+                {ifThenElse(baseComponent?.term, baseComponent?.term?.name, '-')}
               </TitleData>
               <ItemData>
                 Rp&nbsp;
-                {numberFormat(
-                  Math.round(detail?.baseCompensation[0]?.amount)
-                ) ||
-                  numberFormat(Math.round(detail?.baseCompensation[0]?.rate))}
+                {ifThenElse(baseComponent?.amount !== null,
+                  ifThenElse(baseComponent?.amount !== null, numberFormat(baseComponent?.amount), numberFormat(baseComponent?.rate)),  
+                  0)}
               </ItemData>
             </Grid>
           </Grid>
 
           {/* Supplement */}
-          {detail?.supplementaryCompensation.map(
-            (supplement: Supplement, i: number) => (
-              <Grid
-                key={i}
-                container
-                direction='column'
-                justifyContent='space-between'
-                alignItems='flex-start'
-                gap='16px'
-              >
-                <Grid item>
-                  <Typography fontWeight={700} color='#223567'>
-                    Supplementary
-                  </Typography>
-                </Grid>
+          {detail?.supplementaries?.map((supplement: Supplement, index: number) => (
+            <Grid
+              key={supplement.id}
+              container
+              direction='column'
+              justifyContent='space-between'
+              alignItems='flex-start'
+              gap='16px'
+            >
+              <Grid item>
+                <Text title={t(`${tPath}supplementary_section.title`)} fontWeight={700} color='#223567' />
+              </Grid>
+              <Grid item width='100%'>
                 <Grid
                   container
                   direction='row'
@@ -182,8 +191,8 @@ const DetailCnb = ({ id, open }: DetailCNBProps) => {
                     flexDirection='column'
                     gap='6px'
                   >
-                    <TitleData>Compensation Component {i + 1}</TitleData>
-                    <ItemData>{supplement?.compensationComponent?.name}</ItemData>
+                    <TitleData>{t(`${tPath}supplementary_section.compensation_component`)} {index + 1}</TitleData>
+                    <ItemData>{supplement?.component?.name}</ItemData>
                   </Grid>
                   <Grid
                     item
@@ -192,30 +201,31 @@ const DetailCnb = ({ id, open }: DetailCNBProps) => {
                     flexDirection='column'
                     gap='6px'
                   >
-                    <TitleData>Tax Status</TitleData>
+                    <TitleData>{t(`${tPath}supplementary_section.tax_status`)}</TitleData>
                     <TaxData>
-                      {supplement?.taxStatus ? 'Taxable' : 'NTaxable'}
+                      {ifThenElse(supplement?.isTaxable, t(`${tPath}supplementary_section.tax_status_option.taxable`), t(`${tPath}supplementary_section.tax_status_option.nontaxable`))}
                     </TaxData>
                   </Grid>
                 </Grid>
-                <Grid display='flex' flexDirection='column' gap='6px'>
+                <Grid display='flex' flexDirection='column' gap='6px' >
                   <TitleData>
-                    {supplement?.amount ? 'Amount' : 'Rate'}&nbsp;
-                    {supplement?.period}
+                    {ifThenElse(supplement?.amount, 'Amount', 'Rate')}&nbsp;
+                    {ifEmptyReplace(supplement?.term?.name, '-')}
                   </TitleData>
                   <ItemData>
                     Rp&nbsp;
-                    {numberFormat(Math.round(supplement?.amount)) ||
-                      numberFormat(Math.round(supplement?.rate))}
+                    {ifThenElse(supplement?.amount !== null, 
+                      ifThenElse(supplement?.amount, numberFormat(supplement?.amount), numberFormat(supplement.rate))  ,
+                      0)}
                   </ItemData>
                 </Grid>
               </Grid>
-            )
-          )}
+            </Grid>
+          ))}
         </Grid>
-      ) : (
+      ), (
         <Skeleton variant='rounded' height={100} />
-      )}
+      ))}
     </>
   );
 };

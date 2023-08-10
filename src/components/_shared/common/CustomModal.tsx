@@ -2,6 +2,7 @@ import React from 'react';
 import { Modal, Box, IconButton, Typography, Button as MuiButton } from '@mui/material';
 import { Close } from '@mui/icons-material';
 import styled from '@emotion/styled';
+import { useTranslation } from 'react-i18next';
 
 const modalStyle = {
   position: 'absolute',
@@ -12,7 +13,7 @@ const modalStyle = {
   border: '1px solid #E5E7EB',
   borderRadius: '8px',
   paddingTop: '10px',
-  p:2
+  p: 2
 };
 
 const ModalHeader = styled.div`
@@ -40,20 +41,37 @@ border-top: 1px solid #E5E7EB;
 interface CustomModalProps {
   open: boolean;
   handleClose: () => void;
-  handleConfirm: () => void;
+  handleConfirm?: () => void;
   title: string;
   children;
   width: string;
-  submitText?: string
+  submitText?: string;
+  ConfirmationDisable?: boolean;
+  keepMounted?: boolean;
+  deleteText?: string;
+  withFooter?: boolean;
 }
 
 
-function CustomModal({open, handleClose, handleConfirm, title, children, width, submitText}: CustomModalProps) {
+function CustomModal({
+  open,
+  handleClose,
+  handleConfirm,
+  title,
+  children,
+  width,
+  submitText,
+  ConfirmationDisable,
+  keepMounted,
+  deleteText,
+  withFooter = true }: CustomModalProps) {
+  const {t} = useTranslation();
+
   return (
     <Modal
       open={open}
       onClose={handleClose}
-      keepMounted
+      keepMounted={keepMounted}
       disableAutoFocus
     >
       <Box sx={modalStyle} width={width}>
@@ -64,10 +82,25 @@ function CustomModal({open, handleClose, handleConfirm, title, children, width, 
           ><Close /></IconButton>
         </ModalHeader>
         {children}
-        <ModalFooter>
-          <MuiButton variant='outlined' size='small' onClick={handleClose}>Cancel</MuiButton>
-          <MuiButton variant='contained' onClick={handleConfirm} size='small' color='primary'>{submitText || 'Confirm'}</MuiButton>
-        </ModalFooter>
+        {
+          withFooter && (
+            <ModalFooter>
+              <MuiButton variant='outlined' size='small' onClick={handleClose}>{t('button.cancel')}</MuiButton>
+              {submitText !== 'Suspend' && submitText !== 'Delete' && submitText !== 'Reactivate' &&
+                <MuiButton variant='contained' disabled={ConfirmationDisable} onClick={handleConfirm} size='small' color='primary'>{submitText || t('button.confirm')}</MuiButton>
+              }
+              {submitText === 'Suspend' &&
+                <MuiButton variant='contained' disabled={ConfirmationDisable} onClick={handleConfirm} size='small' sx={{ background: '#FFEDD5', color: '#EA580C' }}>{t('button.suspend')}</MuiButton>
+              }
+              {submitText === 'Delete' &&
+                <MuiButton variant='contained' disabled={ConfirmationDisable} onClick={handleConfirm} size='small' sx={{ background: '#FECACA', color: '#DC2626' }}>{deleteText || t('button.delete')}</MuiButton>
+              }
+              {submitText === 'Reactivate' &&
+                <MuiButton variant='contained' disabled={ConfirmationDisable} onClick={handleConfirm} size='small' sx={{ background: '#DCFCE7', color: '#16A34A' }}>{t('button.reactivate')}</MuiButton>
+              }
+            </ModalFooter>
+          )
+        }
       </Box>
     </Modal>
   );

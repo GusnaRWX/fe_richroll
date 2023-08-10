@@ -20,10 +20,9 @@ import {
   Paper,
   Grid,
 } from '@mui/material';
-import { Download } from '@mui/icons-material';
+import { Download, ArrowBack } from '@mui/icons-material';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import BasicDatePicker from '@/components/_shared/form/DatePicker';
-import { ArrowBack } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import { Form as FormikForm, Formik, FieldArray } from 'formik';
 import * as Yup from 'yup';
@@ -255,7 +254,7 @@ export default function CreateLeaveApplicationComponent() {
                       ))}
                     </Select>
                     <FormHelperText>
-                      {formik.touched.name && formik.errors.name}
+                      {formik.touched.name && formik.errors.name as unknown as React.ReactNode}
                     </FormHelperText>
                   </FormControl>
                 </Grid>
@@ -288,7 +287,7 @@ export default function CreateLeaveApplicationComponent() {
                           ))}
                         </Select>
                         <FormHelperText>
-                          {formik.touched.type && formik.errors.type}
+                          {formik.touched.type && formik.errors.type as unknown as React.ReactNode}
                         </FormHelperText>
                       </FormControl>
                     </Grid>
@@ -383,7 +382,7 @@ export default function CreateLeaveApplicationComponent() {
                             />
                             <FormHelperText>
                               {formik.touched.start_date &&
-                                formik.errors.start_date}
+                                formik.errors.start_date as unknown as React.ReactNode}
                             </FormHelperText>
                           </FormControl>
                         </Grid>
@@ -418,7 +417,7 @@ export default function CreateLeaveApplicationComponent() {
                             />
                             <FormHelperText>
                               {formik.touched.end_date &&
-                                formik.errors.end_date}
+                                formik.errors.end_date as unknown as React.ReactNode}
                             </FormHelperText>
                           </FormControl>
                         </Grid>

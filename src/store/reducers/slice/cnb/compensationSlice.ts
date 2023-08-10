@@ -8,6 +8,7 @@ interface CnbState {
   rerender: boolean;
   detail: [];
   detailLoading: boolean;
+  resetAll: object
 }
 
 const initialState: CnbState = {
@@ -17,6 +18,7 @@ const initialState: CnbState = {
   rerender: false,
   detail: [],
   detailLoading: false,
+  resetAll: {}
 };
 
 export const cnbSlice = createSlice({
@@ -29,7 +31,7 @@ export const cnbSlice = createSlice({
     },
     getTableSuccess: (state, action) => {
       state.loading = false;
-      state.dataTable = action.payload;
+      state.dataTable = action?.payload?.data;
     },
     getTableFailed: (state) => {
       state.loading = false;
@@ -93,6 +95,15 @@ export const cnbSlice = createSlice({
     putUpdateFailed: (state) => {
       state.detailLoading = false;
     },
+
+    resetAllState: (state) => {
+      // state.loading = false;
+      // state.dataTable = [];
+      // state.compensationComponentOption = [];
+      // state.rerender = false;
+      state.detail = [];
+      state.detailLoading = false;
+    }
   },
   extraReducers: {
     [HYDRATE]: (state, action) => {
@@ -123,6 +134,7 @@ export const {
   putUpdateRequested,
   putUpdateSuccess,
   putUpdateFailed,
+  resetAllState
 } = cnbSlice.actions;
 
 export default cnbSlice.reducer;

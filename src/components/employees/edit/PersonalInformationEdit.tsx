@@ -1,248 +1,115 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState, memo } from 'react';
 import { Alert, Text } from '@/components/_shared/common';
 import { RadioGroup, Input, Button, Textarea, DatePicker, CheckBox, Select } from '@/components/_shared/form';
-import { Box, Grid } from '@mui/material';
-import { useForm, useAppDispatch, useAppSelectors } from '@/hooks/index';
-import { maritialStatus, religions, IDTypes, employeeItems } from '@/utils/options';
+import { Box, Grid, SelectChangeEvent } from '@mui/material';
+import { useAppDispatch, useAppSelectors } from '@/hooks/index';
+import { maritialStatus, religions, IDTypes } from '@/utils/options';
 import {
   administrativeFirstLevelRequested,
   administrativeSecondLevelRequested,
   administrativeThirdLevelRequsted,
   countriesRequested,
+  getSecondAdministrativeFirstLevelRequested,
+  getSecondAdministrativeSecondLevelRequested,
+  getSecondAdministrativeThirdLevelRequested,
   getBanksRequested
 } from '@/store/reducers/slice/options/optionSlice';
 import dayjs from 'dayjs';
-import { convertDateValue, convertValue } from '@/utils/helper';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { Employees } from '@/types/employees';
+import { validationSchemePersonalInformation } from '@/components/employees/create/validate';
+import { useFormik } from 'formik';
+import { ifThenElse, compareCheck } from '@/utils/helper';
+import { useTranslation } from 'react-i18next';
 
 interface PersonalInformationProps {
   refProp: React.Ref<HTMLFormElement>
   nextPage: (_val: number) => void;
   setValues: React.Dispatch<React.SetStateAction<Employees.PersonalValues>>;
   personalValues: Employees.PersonalValues,
-  setIsPersonalInformationValid: React.Dispatch<React.SetStateAction<boolean>>
+  setIsPersonalInformationValid: React.Dispatch<React.SetStateAction<boolean>>,
+  handleSecondPersonal(): void;
 }
 
 
-const EmployeePersonalInformationEdit = ({ refProp, nextPage, setValues, personalValues, setIsPersonalInformationValid }: PersonalInformationProps) => {
+const EmployeePersonalInformationForm = ({ refProp, nextPage, setValues, personalValues, setIsPersonalInformationValid, handleSecondPersonal }: PersonalInformationProps) => {
   const dispatch = useAppDispatch();
+  const {t} = useTranslation();
+  const t_personalInformationSection = 'company_management.employees.form_&_detail.personal_information.personal_information_section';
+  const t_citizenAddressSection = 'company_management.employees.form_&_detail.personal_information.citizen_address_section';
+  const t_residentialAddressSection = 'company_management.employees.form_&_detail.personal_information.residential_addres_section';
+  const t_personalIdSection = 'company_management.employees.form_&_detail.personal_information.personal_id_section';
+  const t_bankInformationSection = 'company_management.employees.form_&_detail.personal_information.bank_information_section';
 
   const {
     countries,
     administrativeFirst,
     administrativeSecond,
     administrativeThird,
+    secondAdministrativeFirst,
+    secondAdministrativeSecond,
+    secondAdministrativeThird,
     banks
   } = useAppSelectors(state => state.option);
 
+  const { responser } = useAppSelectors(state => state);
 
   const [useResidentialAddress, setUseResidentialAddress] = useState(personalValues?.useResidentialAddress);
-  // const [isPermanentPersonalID, setIsPermanentPersonalID] = useState(personalValues?.isPermanentPersonalID);
 
-  const [initialValues] = useState({
+  const formik = useFormik({
+    initialValues: {
+      dateofBirthPersonalInformation: personalValues?.dateofBirthPersonalInformation === null ? null : dayjs(personalValues?.dateofBirthPersonalInformation),
+      genderPersonalInformation: personalValues?.genderPersonalInformation === null ? '' : personalValues?.genderPersonalInformation,
+      maritialStatusPersonalInformation: personalValues?.maritialStatusPersonalInformation === null ? '' : personalValues?.maritialStatusPersonalInformation,
+      numberOfDependantsPersonalInformation: personalValues?.numberOfDependantsPersonalInformation === null ? '' :personalValues?.numberOfDependantsPersonalInformation,
+      nationalityPersonalInformation: personalValues?.nationalityPersonalInformation === null ? '' :personalValues?.nationalityPersonalInformation,
+      religionPersonalInformation: personalValues?.religionPersonalInformation === null ? '' : personalValues?.religionPersonalInformation,
 
-    // Group Personal Information
-    dateofBirthPersonalInformation: dayjs(personalValues?.dateofBirthPersonalInformation),
-    genderPersonalInformation: personalValues?.genderPersonalInformation === 1 ? 'male' : 'female',
-    maritialStatusPersonalInformation: personalValues?.maritialStatusPersonalInformation,
-    numberOfDependantsPersonalInformation: personalValues?.numberOfDependantsPersonalInformation,
-    nationalityPersonalInformation: personalValues?.nationalityPersonalInformation,
-    religionPersonalInformation: personalValues?.religionPersonalInformation,
+      // Group Citizen Address
+      countryCitizenAddress: personalValues?.countryCitizenAddress === null ? '' :  personalValues?.countryCitizenAddress,
+      provinceCitizenAddress: personalValues?.provinceCitizenAddress === null ? '' : personalValues?.provinceCitizenAddress,
+      cityCitizenAddress: personalValues?.cityCitizenAddress === null ? '' : personalValues?.cityCitizenAddress,
+      subDistrictCitizenAddress: personalValues?.subDistrictCitizenAddress === null ? '' : personalValues?.subDistrictCitizenAddress,
+      addressCitizenAddress: personalValues?.addressCitizenAddress === null ? '' : personalValues?.addressCitizenAddress,
+      zipCodeCitizenAddress: personalValues?.zipCodeCitizenAddress === null ? '' :   personalValues?.zipCodeCitizenAddress,
 
-    // Group Citizen Address
-    countryCitizenAddress: personalValues?.countryCitizenAddress,
-    provinceCitizenAddress: personalValues?.provinceCitizenAddress,
-    cityCitizenAddress: personalValues?.cityCitizenAddress,
-    subDistrictCitizenAddress: personalValues?.subDistrictCitizenAddress,
-    addressCitizenAddress: personalValues?.addressCitizenAddress,
-    zipCodeCitizenAddress: personalValues?.zipCodeCitizenAddress,
-
-    // Group Residential Address
-    countryResidentialAddress: personalValues?.countryResidentialAddress,
-    provinceResidentialAddress: personalValues?.provinceResidentialAddress,
-    cityResidentialAddress: personalValues?.cityResidentialAddress,
-    subDistrictResidentialAddress: personalValues?.subDistrictResidentialAddress,
-    addressResidentialAddress: personalValues?.addressResidentialAddress,
-    zipCodeResidentialAddress: personalValues?.zipCodeResidentialAddress,
+      // Group Residential Address
+      countryResidentialAddress: personalValues?.countryResidentialAddress === null ? '' : personalValues?.countryResidentialAddress,
+      provinceResidentialAddress: personalValues?.provinceResidentialAddress === null ? '' : personalValues?.provinceResidentialAddress,
+      cityResidentialAddress: personalValues?.cityResidentialAddress === null ? '' : personalValues?.cityResidentialAddress,
+      subDistrictResidentialAddress: personalValues?.subDistrictResidentialAddress === null ? '' : personalValues?.subDistrictResidentialAddress,
+      addressResidentialAddress: personalValues?.addressResidentialAddress === null ? '' : personalValues?.addressResidentialAddress,
+      zipCodeResidentialAddress: personalValues?.zipCodeResidentialAddress === null ? '' : personalValues?.zipCodeResidentialAddress,
 
 
-    // Group Bank Information
-    bankBankInformation: personalValues?.bankBankInformation,
-    bankAccountHolderNameBankInformation: personalValues?.bankAccountHolderNameBankInformation,
-    bankAccoutNoBankInformation: personalValues?.bankAccoutNoBankInformation,
-    bankCodeBankInformation: personalValues?.bankCodeBankInformation,
-    branchCodeBankInformation: personalValues?.branchCodeBankInformation,
-    branchNameBankInformation: personalValues?.branchNameBankInformation,
-    swiftCodeBankInformation: personalValues?.swiftCodeBankInformation,
+      // Group Bank Information
+      bankBankInformation: personalValues?.bankBankInformation === null ? '' : personalValues?.bankBankInformation,
+      bankAccountHolderNameBankInformation: personalValues?.bankAccountHolderNameBankInformation === null ? '' : personalValues?.bankAccountHolderNameBankInformation,
+      bankAccoutNoBankInformation: personalValues?.bankAccoutNoBankInformation === null ? '' :  personalValues?.bankAccoutNoBankInformation,
+      bankCodeBankInformation: personalValues?.bankCodeBankInformation === null ? '' : personalValues?.bankCodeBankInformation,
+      branchCodeBankInformation: personalValues?.branchCodeBankInformation === null ? '' : personalValues?.branchCodeBankInformation,
+      branchNameBankInformation: personalValues?.branchNameBankInformation === null ? '' : personalValues?.branchNameBankInformation,
+      swiftCodeBankInformation: personalValues?.swiftCodeBankInformation === null ? '' : personalValues?.swiftCodeBankInformation,
 
-    // Group Personal ID
-    idTypePersonalID: personalValues?.idTypePersonalID,
-    idNumberPersonalID: personalValues?.idNumberPersonalID,
-    idExpirationDatePersonalID: dayjs(personalValues?.idExpirationDatePersonalID)
+      // Group Personal ID
+      idTypePersonalID: personalValues?.idTypePersonalID === null ? '' : personalValues?.idTypePersonalID,
+      idNumberPersonalID: personalValues?.idNumberPersonalID === null ? '' : personalValues?.idNumberPersonalID,
+      idExpirationDatePersonalID: personalValues?.idExpirationDatePersonalID === null ? null : dayjs(personalValues?.idExpirationDatePersonalID)
+    },
+    validationSchema: validationSchemePersonalInformation,
+    onSubmit: (values) => {
+      handleSubmit(values);
+    }
   });
 
-  const [errorFields, setErrorFields] = useState(false);
-
-  const validate = (fieldOfValues = values) => {
-    const temp = { ...errors };
-
-    // Group Personal Information
-
-    if ('dateofBirthPersonalInformation' in fieldOfValues)
-      temp.dateofBirthPersonalInformation = fieldOfValues.dateofBirthPersonalInformation ? '' : 'This field is required';
-
-    if ('genderPersonalInformation' in fieldOfValues)
-      temp.genderPersonalInformation = fieldOfValues.genderPersonalInformation ? '' : 'This is required';
-
-    if ('maritialStatusPersonalInformation' in fieldOfValues)
-      temp.maritialStatusPersonalInformation = fieldOfValues.maritialStatusPersonalInformation ? '' : 'This field is required';
-
-    if ('numberOfDependantsPersonalInformation' in fieldOfValues)
-      temp.numberOfDependantsPersonalInformation = fieldOfValues.numberOfDependantsPersonalInformation ? '' : 'This field is required';
-
-    if ('nationalityPersonalInformation' in fieldOfValues)
-      temp.nationalityPersonalInformation = fieldOfValues.nationalityPersonalInformation ? '' : 'This field is required';
-
-    if ('religionPersonalInformation' in fieldOfValues)
-      temp.religionPersonalInformation = fieldOfValues.religionPersonalInformation ? '' : '';
-
-    // Group Citizen Address
-
-    if ('countryCitizenAddress' in fieldOfValues) {
-      temp.countryCitizenAddress = dispatch({
-        type: administrativeFirstLevelRequested.toString(),
-        payload: {
-          countryId: fieldOfValues.countryCitizenAddress
-        }
-      }) ? '' : 'This field is required';
-    }
-
-
-    if ('provinceCitizenAddress' in fieldOfValues) {
-      temp.provinceCitizenAddress = dispatch({
-        type: administrativeSecondLevelRequested.toString(),
-        payload: {
-          countryId: values.countryCitizenAddress,
-          firstLevelCode: fieldOfValues.provinceCitizenAddress
-        }
-      }) ? '' : 'This field is required';
-    }
-
-    if ('cityCitizenAddress' in fieldOfValues) {
-      temp.cityCitizenAddress = dispatch({
-        type: administrativeThirdLevelRequsted.toString(),
-        payload: {
-          countryId: values.countryCitizenAddress,
-          firstLevelCode: values.provinceCitizenAddress,
-          secondLevelCode: fieldOfValues.cityCitizenAddress
-        }
-      }) ? '' : 'This field is required';
-    }
-
-
-    if ('subDistrictCitizenAddress' in fieldOfValues)
-      temp.subDistrictCitizenAddress = fieldOfValues.subDistrictCitizenAddress ? '' : 'This field is required';
-
-    if ('addressCitizenAddress' in fieldOfValues)
-      temp.addressCitizenAddress = fieldOfValues.addressCitizenAddress ? '' : 'This field is required';
-
-    if ('zipCodeCitizenAddress' in fieldOfValues)
-      temp.zipCodeCitizenAddress = fieldOfValues.zipCodeCitizenAddress ? '' : 'This field is required';
-
-    // Group Resdential Address
-    if ('countryResidentialAddress' in fieldOfValues) {
-      temp.countryResidentialAddress = dispatch({
-        type: administrativeFirstLevelRequested.toString(),
-        payload: {
-          countryId: fieldOfValues.countryResidentialAddress
-        }
-      }) ? '' : 'This field is required';
-    }
-
-    if ('provinceResidentialAddress' in fieldOfValues) {
-      temp.provinceResidentialAddress = dispatch({
-        type: administrativeSecondLevelRequested.toString(),
-        payload: {
-          countryId: values.countryResidentialAddress,
-          firstLevelCode: fieldOfValues.provinceResidentialAddress
-        }
-      }) ? '' : 'This field is required';
-    }
-
-    if ('cityResidentialAddress' in fieldOfValues) {
-      temp.cityResidentialAddress = dispatch({
-        type: administrativeThirdLevelRequsted.toString(),
-        payload: {
-          countryId: values.countryResidentialAddress,
-          firstLevelCode: values.provinceResidentialAddress,
-          secondLevelCode: fieldOfValues.cityResidentialAddress
-        }
-      }) ? '' : 'This field is required';
-    }
-
-    if ('subDistrictResidentialAddress' in fieldOfValues)
-      temp.subDistrictResidentialAddress = fieldOfValues.subDistrictResidentialAddress
-        ? ''
-        : 'This field is required';
-
-    if ('addressResidentialAddress' in fieldOfValues)
-      temp.addressResidentialAddress = fieldOfValues.addressResidentialAddress
-        ? ''
-        : 'This field is required';
-
-    if ('zipCodeResidentialAddress' in fieldOfValues)
-      temp.zipCodeResidentialAddress = fieldOfValues.zipCodeResidentialAddress
-        ? ''
-        : 'This field is required';
-
-    // Group Bank Information
-    if ('bankBankInformation' in fieldOfValues)
-      temp.bankBankInformation = fieldOfValues.bankBankInformation ? '' : '';
-
-    if ('bankAccountHolderNameBankInformation' in fieldOfValues)
-      temp.bankAccountHolderNameBankInformation = fieldOfValues.bankAccountHolderNameBankInformation ? '' : '';
-
-    if ('bankAccoutNoBankInformation' in fieldOfValues)
-      temp.bankAccoutNoBankInformation = fieldOfValues.bankAccoutNoBankInformation ? '' : '';
-
-    if ('bankCodeBankInformation' in fieldOfValues)
-      temp.bankCodeBankInformation = fieldOfValues.bankCodeBankInformation ? '' : '';
-
-    if ('branchCodeBankInformation' in fieldOfValues)
-      temp.branchCodeBankInformation = fieldOfValues.branchCodeBankInformation ? '' : '';
-
-    if ('branchNameBankInformation' in fieldOfValues)
-      temp.branchNameBankInformation = fieldOfValues.branchNameBankInformation ? '' : '';
-
-    if ('swiftCodeBankInformation' in fieldOfValues)
-      temp.swiftCodeBankInformation = fieldOfValues.swiftCodeBankInformation ? '' : '';
-
-
-    // Group Personal ID
-    if ('idTypePersonalID' in fieldOfValues)
-      temp.idTypePersonalID = fieldOfValues.idTypePersonalID ? '' : 'This field is required';
-
-    if ('idNumberPersonalID' in fieldOfValues)
-      temp.idNumberPersonalID = fieldOfValues.idNumberPersonalID ? '' : 'This field is required';
-
-    if ('idExpirationDatePersonalID' in fieldOfValues)
-      temp.idExpirationDatePersonalID = fieldOfValues.idExpirationDatePersonalID ? '' : 'This field is required';
-
-    setErrors({ ...temp });
-
-    if (fieldOfValues === values) {
-      return Object.values(temp).every((x) => x === '');
-    }
+  const handleSubmit = (_val) => {
+    setIsPersonalInformationValid(true);
+    handleSecondPersonal();
+    nextPage(2);
+    // setErrors({})
   };
-  const {
-    values,
-    errors,
-    setErrors,
-    handleInputChange
-  } = useForm(initialValues, true, validate);
 
+  // handleSecondPersonal
 
   useEffect(() => {
     dispatch({
@@ -251,48 +118,151 @@ const EmployeePersonalInformationEdit = ({ refProp, nextPage, setValues, persona
     dispatch({
       type: getBanksRequested.toString()
     });
+  }, []);
+
+  useEffect(() => {
+    const allPersonalValues = {
+      ...formik.values,
+      useResidentialAddress: useResidentialAddress
+    };
+    setValues(allPersonalValues as Employees.PersonalValues);
+  }, [formik.values, useResidentialAddress]);
+
+  useEffect(() => {
+    if (useResidentialAddress) {
+      formik.setFieldValue('countryResidentialAddress', formik.values.countryCitizenAddress);
+      dispatch({
+        type: getSecondAdministrativeFirstLevelRequested.toString(),
+        payload: {
+          countryId: formik.values.countryCitizenAddress
+        }
+      });
+      formik.setFieldValue('provinceResidentialAddress', formik.values.provinceCitizenAddress);
+      setTimeout(() => {
+        dispatch({
+          type: getSecondAdministrativeSecondLevelRequested.toString(),
+          payload: {
+            countryId: formik.values.countryCitizenAddress,
+            firstLevelCode: formik.values.provinceCitizenAddress
+          }
+        });
+      }, 3000);
+
+      formik.setFieldValue('cityResidentialAddress', formik.values.cityCitizenAddress);
+      setTimeout(() => {
+        dispatch({
+          type: getSecondAdministrativeThirdLevelRequested.toString(),
+          payload: {
+            countryId: formik.values.countryCitizenAddress,
+            firstLevelCode: formik.values.provinceCitizenAddress,
+            secondLevelCode: formik.values.cityCitizenAddress
+          }
+        });
+      }, 3500);
+
+      formik.setFieldValue('subDistrictResidentialAddress', formik.values.subDistrictCitizenAddress);
+      formik.setFieldValue('addressResidentialAddress', formik.values.addressCitizenAddress);
+      formik.setFieldValue('zipCodeResidentialAddress', formik.values.zipCodeCitizenAddress);
+    }
+  }, [useResidentialAddress]);
+
+  useEffect(() => {
+    formik.setFieldValue('countryCitizenAddress', formik.values.countryCitizenAddress);
     dispatch({
       type: administrativeFirstLevelRequested.toString(),
       payload: {
-        countryId: personalValues?.countryResidentialAddress
+        countryId: formik.values.countryCitizenAddress
       }
     });
-    dispatch({
-      type: administrativeSecondLevelRequested.toString(),
-      payload: {
-        countryId: personalValues?.countryResidentialAddress,
-        firstLevelCode: personalValues.provinceResidentialAddress
-      }
-    });
-    dispatch({
-      type: administrativeThirdLevelRequsted.toString(),
-      payload: {
-        countryId: personalValues?.countryResidentialAddress,
-        firstLevelCode: personalValues.provinceResidentialAddress,
-        secondLevelCode: personalValues?.cityCitizenAddress
-      }
-    });
+    formik.setFieldValue('provinceCitizenAddress', formik.values.provinceCitizenAddress);
+    setTimeout(() => {
+      dispatch({
+        type: administrativeSecondLevelRequested.toString(),
+        payload: {
+          countryId: formik.values.countryCitizenAddress,
+          firstLevelCode: formik.values.provinceCitizenAddress
+        }
+      });
+    }, 3000);
+
+    formik.setFieldValue('cityCitizenAddress', formik.values.cityCitizenAddress);
+    setTimeout(() => {
+      dispatch({
+        type: administrativeThirdLevelRequsted.toString(),
+        payload: {
+          countryId: formik.values.countryCitizenAddress,
+          firstLevelCode: formik.values.provinceCitizenAddress,
+          secondLevelCode: formik.values.cityCitizenAddress
+        }
+      });
+    }, 3500);
+
+    formik.setFieldValue('subDistrictCitizenAddress', formik.values.subDistrictCitizenAddress);
+    formik.setFieldValue('addressCitizenAddress', formik.values.addressCitizenAddress);
+    formik.setFieldValue('zipCodeCitizenAddress', formik.values.zipCodeCitizenAddress);
   }, []);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (validate()) {
-      setErrorFields(false);
-      nextPage(2);
-      setIsPersonalInformationValid(true);
-      setValues({ ...values, useResidentialAddress });
-    } else {
-      setErrorFields(true);
-      setIsPersonalInformationValid(false);
-    }
-  };
+  useEffect(() => {
+    formik.setFieldValue('countryResidentialAddress', formik.values.countryResidentialAddress);
+    dispatch({
+      type: getSecondAdministrativeFirstLevelRequested.toString(),
+      payload: {
+        countryID: formik.values.countryResidentialAddress
+      }
+    });
+    formik.setFieldValue('provinceResidentialAddress', formik.values.provinceResidentialAddress);
+    setTimeout(() => {
+      dispatch({
+        type: getSecondAdministrativeSecondLevelRequested.toString(),
+        payload: {
+          countryID: formik.values.countryResidentialAddress,
+          firstLevelCode: formik.values.provinceResidentialAddress
+        }
+      });
+    }, 3000);
+    formik.setFieldValue('cityResidentialAddress', formik.values.cityResidentialAddress);
+    setTimeout(() => {
+      dispatch({
+        type: getSecondAdministrativeThirdLevelRequested.toString(),
+        payload: {
+          countryId: formik.values.countryResidentialAddress,
+          firstLevelCode: formik.values.provinceResidentialAddress,
+          secondLevelCode: formik.values.cityResidentialAddress
+        }
+      });
+    }, 3500);
 
+    formik.setFieldValue('subDistrictResidentialAddress', formik.values.subDistrictResidentialAddress);
+    formik.setFieldValue('addressResidentialAddress', formik.values.addressResidentialAddress);
+    formik.setFieldValue('zipCodeResidentialAddress', formik.values.zipCodeResidentialAddress);
+  }, []);
+
+
+  console.log(formik.values);
+
+  const checkCountry = (value: unknown) => {
+    if ((value as string)?.length === 0) {
+      return <Text title='Select Country' color='grey.400' />;
+    }
+    const selectedCountries = (countries as Array<{ label: string, value: string }>).find(country => country?.value === value);
+    if (selectedCountries) {
+      return `${selectedCountries?.label}`;
+    }
+    return null;
+  };
   return (
-    <form onSubmit={handleSubmit} ref={refProp}>
-      {errorFields && (
+    <form onSubmit={formik.handleSubmit} ref={refProp}>
+      {Object.keys(formik.errors).length > 0 && (
         <Alert
           severity={'error'}
           content='Please fill in all the mandatory fields'
+          icon={<CancelIcon />}
+        />
+      )}
+      {![200, 201, 0].includes(responser?.code) && (
+        <Alert
+          severity='error'
+          content={responser?.message}
           icon={<CancelIcon />}
         />
       )}
@@ -303,7 +273,7 @@ const EmployeePersonalInformationEdit = ({ refProp, nextPage, setValues, persona
       >
         <Text
           variant='text-lg'
-          title='Personal Information'
+          title={t(`${t_personalInformationSection}.title`)}
           fontWeight={700}
           color='primary.500'
         />
@@ -320,11 +290,11 @@ const EmployeePersonalInformationEdit = ({ refProp, nextPage, setValues, persona
             sm={5.8}
           >
             <DatePicker
-              customLabel='Date of Birth'
-              value={values.dateofBirthPersonalInformation}
-              onChange={(e: unknown) => handleInputChange(convertDateValue('dateofBirthPersonalInformation', e))}
+              customLabel={t(`${t_personalInformationSection}.date_of_birth`)}
+              value={formik.values.dateofBirthPersonalInformation as unknown as Date}
+              onChange={(date: unknown) => formik.setFieldValue('dateofBirthPersonalInformation', date)}
               withAsterisk
-              error={errors.dateofBirthPersonalInformation}
+              error={ifThenElse(compareCheck(formik.touched.dateofBirthPersonalInformation, Boolean(formik.errors.dateofBirthPersonalInformation)), String(formik.errors.dateofBirthPersonalInformation), '')}
             />
           </Grid>
           <Grid
@@ -333,15 +303,16 @@ const EmployeePersonalInformationEdit = ({ refProp, nextPage, setValues, persona
           >
             <RadioGroup
               withAsterisk
-              label='Gender'
+              label={t(`${t_personalInformationSection}.gender`)}
               name='genderPersonalInformation'
               options={[
                 { label: 'Male', value: 'male' },
                 { label: 'Female', value: 'female' }
               ]}
-              value={values.genderPersonalInformation}
-              onChange={handleInputChange}
-              error={errors.genderPersonalInformation}
+              value={formik.values.genderPersonalInformation === 1 || (formik.values.genderPersonalInformation as any) === 'male' ? 'male' : 'female'}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={ifThenElse(compareCheck(formik.touched.genderPersonalInformation, Boolean(formik.errors.genderPersonalInformation)), formik.errors.genderPersonalInformation, '')}
               row
             />
           </Grid>
@@ -350,7 +321,7 @@ const EmployeePersonalInformationEdit = ({ refProp, nextPage, setValues, persona
           container
           wrap='wrap'
           justifyContent='space-between'
-          alignItems='center'
+          alignItems='baseline'
           mb='16px'
         >
           <Grid
@@ -361,28 +332,58 @@ const EmployeePersonalInformationEdit = ({ refProp, nextPage, setValues, persona
               variant='outlined'
               size='small'
               fullWidth
-              onChange={(e: unknown) => handleInputChange(convertValue('maritialStatusPersonalInformation', e))}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               options={maritialStatus}
-              value={values.maritialStatusPersonalInformation}
-              customLabel='Maritial Status'
+              name='maritialStatusPersonalInformation'
+              value={String(formik.values.maritialStatusPersonalInformation)}
+              customLabel={t(`${t_personalInformationSection}.marital_status`)}
               withAsterisk
-              error={errors.maritialStatusPersonalInformation}
+              displayEmpty
+              renderValue={(value: unknown) => {
+                if (value as number === 0) {
+                  return <Text title='Select Marital Status' color='grey.400' />;
+                }
+                const selectedMaritial = maritialStatus.find(marital => marital.value === value);
+                if (selectedMaritial) {
+                  return `${selectedMaritial.label}`;
+                }
+                return null;
+              }}
+              error={compareCheck(formik.touched.maritialStatusPersonalInformation, Boolean(formik.errors.maritialStatusPersonalInformation))}
+              helperText={ifThenElse(compareCheck(formik.touched.maritialStatusPersonalInformation, Boolean(formik.errors.maritialStatusPersonalInformation)), formik.errors.maritialStatusPersonalInformation, '')}
             />
           </Grid>
           <Grid
             item
             sm={5.8}
           >
-            <Select
+            {/* <Select
               customLabel='Number of Dependants'
               withAsterisk
               size='small'
               variant='outlined'
               options={employeeItems}
               fullWidth
-              onChange={(e: unknown) => handleInputChange(convertValue('numberOfDependantsPersonalInformation', e))}
-              value={values.numberOfDependantsPersonalInformation}
-              error={errors.numberOfDependantsPersonalInformation}
+              name='numberOfDependantsPersonalInformation'
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              value={formik.values.numberOfDependantsPersonalInformation}
+              error={compareCheck(formik.touched.numberOfDependantsPersonalInformation && Boolean(formik.errors.numberOfDependantsPersonalInformation))}
+              helperText={ifThenElse(compareCheck(formik.touched.numberOfDependantsPersonalInformation, Boolean(formik.errors.numberOfDependantsPersonalInformation)), formik.errors.numberOfDependantsPersonalInformation, '')}
+            /> */}
+            <Input
+              name='numberOfDependantsPersonalInformation'
+              placeholder={t(`${t_personalInformationSection}.number_of_children_placeholder`)}
+              withAsterisk
+              size='small'
+              type='number'
+              customLabel={t(`${t_personalInformationSection}.number_of_children`)}
+              value={formik.values.numberOfDependantsPersonalInformation}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={compareCheck(formik.touched.numberOfDependantsPersonalInformation, Boolean(formik.errors.numberOfDependantsPersonalInformation))}
+              helperText={ifThenElse(formik.touched.numberOfDependantsPersonalInformation, formik.errors.numberOfDependantsPersonalInformation, '')}
             />
           </Grid>
         </Grid>
@@ -390,7 +391,7 @@ const EmployeePersonalInformationEdit = ({ refProp, nextPage, setValues, persona
           container
           wrap='wrap'
           justifyContent='space-between'
-          alignItems='center'
+          alignItems='baseline'
           mb='16px'
         >
           <Grid
@@ -399,15 +400,28 @@ const EmployeePersonalInformationEdit = ({ refProp, nextPage, setValues, persona
           >
             <Select
               fullWidth
-              customLabel='Nationality'
+              customLabel={t(`${t_personalInformationSection}.nationality`)}
               withAsterisk
               variant='outlined'
               size='small'
               name='nationalityPersonalInformation'
-              value={values.nationalityPersonalInformation}
-              onChange={(e: unknown) => handleInputChange(convertValue('nationalityPersonalInformation', e))}
+              value={formik.values.nationalityPersonalInformation}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               options={countries}
-              error={errors.nationalityPersonalInformation}
+              displayEmpty
+              renderValue={(value: unknown) => {
+                if ((value as string)?.length === 0) {
+                  return <Text title={t(`${t_personalInformationSection}.nationality_placeholder`)} color='grey.400' />;
+                }
+                const selectedCountries = (countries as Array<{ label: string, value: string }>).find(country => country?.value === value);
+                if (selectedCountries) {
+                  return `${selectedCountries?.label}`;
+                }
+                return null;
+              }}
+              error={compareCheck(formik.touched.nationalityPersonalInformation && Boolean(formik.errors.nationalityPersonalInformation))}
+              helperText={ifThenElse(compareCheck(formik.touched.nationalityPersonalInformation, Boolean(formik.errors.nationalityPersonalInformation)), formik.errors.nationalityPersonalInformation, '')}
             />
           </Grid>
           <Grid
@@ -416,13 +430,25 @@ const EmployeePersonalInformationEdit = ({ refProp, nextPage, setValues, persona
           >
             <Select
               fullWidth
-              customLabel='Religion'
+              customLabel={t(`${t_personalInformationSection}.religion`)}
               variant='outlined'
               size='small'
               name='religionPersonalInformation'
-              value={values.religionPersonalInformation}
-              onChange={(e: unknown) => handleInputChange(convertValue('religionPersonalInformation', e))}
+              value={String(formik.values.religionPersonalInformation)}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               options={religions}
+              displayEmpty
+              renderValue={(value: unknown) => {
+                if ((value as number) === 0) {
+                  return <Text title={t(`${t_personalInformationSection}.religion_placeholder`)} color='grey.400' />;
+                }
+                const selectedReligions = religions.find(religion => religion.value === value);
+                if (selectedReligions) {
+                  return `${selectedReligions.label}`;
+                }
+                return null;
+              }}
             />
           </Grid>
         </Grid>
@@ -434,7 +460,7 @@ const EmployeePersonalInformationEdit = ({ refProp, nextPage, setValues, persona
       >
         <Text
           variant='text-base'
-          title='Citizen Address'
+          title={t(`${t_citizenAddressSection}.title`)}
           color='primary.500'
           fontWeight={700}
         />
@@ -442,7 +468,7 @@ const EmployeePersonalInformationEdit = ({ refProp, nextPage, setValues, persona
           container
           wrap='wrap'
           justifyContent='space-between'
-          alignItems='center'
+          alignItems='baseline'
           mb='16px'
           mt='16px'
         >
@@ -452,15 +478,29 @@ const EmployeePersonalInformationEdit = ({ refProp, nextPage, setValues, persona
           >
             <Select
               fullWidth
-              customLabel='Country'
+              customLabel={t(`${t_citizenAddressSection}.contry`)}
               withAsterisk
               variant='outlined'
               size='small'
               name='countryCitizenAddress'
-              value={values.countryCitizenAddress}
-              onChange={(e: unknown) => handleInputChange(convertValue('countryCitizenAddress', e))}
+              value={formik.values.countryCitizenAddress}
+              onBlur={formik.handleBlur}
+              onChange={(e: unknown) => {
+                formik.handleChange(e);
+                dispatch({
+                  type: administrativeFirstLevelRequested.toString(),
+                  payload: {
+                    countryId: (e as SelectChangeEvent).target.value
+                  }
+                });
+              }}
               options={countries}
-              error={errors.countryCitizenAddress}
+              error={compareCheck(formik.touched.countryCitizenAddress, Boolean(formik.errors.countryCitizenAddress))}
+              helperText={ifThenElse(compareCheck(formik.touched.countryCitizenAddress, Boolean(formik.errors.countryCitizenAddress)), formik.errors.countryCitizenAddress, '')}
+              displayEmpty
+              renderValue={(value: unknown) => {
+                return checkCountry(value);
+              }}
             />
           </Grid>
           <Grid
@@ -469,15 +509,37 @@ const EmployeePersonalInformationEdit = ({ refProp, nextPage, setValues, persona
           >
             <Select
               fullWidth
-              customLabel='Province'
+              customLabel={t(`${t_citizenAddressSection}.province`)}
               withAsterisk
               variant='outlined'
               size='small'
               name='provinceCitizenAddress'
-              value={values.provinceCitizenAddress}
-              onChange={(e: unknown) => handleInputChange(convertValue('provinceCitizenAddress', e))}
+              value={formik.values.provinceCitizenAddress}
+              onChange={(e: unknown) => {
+                formik.handleChange(e);
+                dispatch({
+                  type: administrativeSecondLevelRequested.toString(),
+                  payload: {
+                    countryId: formik.values.countryCitizenAddress,
+                    firstLevelCode: (e as SelectChangeEvent).target.value
+                  }
+                });
+              }}
+              onBlur={formik.handleBlur}
               options={administrativeFirst}
-              error={errors.provinceCitizenAddress}
+              error={compareCheck(formik.touched.provinceCitizenAddress && Boolean(formik.errors.provinceCitizenAddress))}
+              helperText={ifThenElse(compareCheck(formik.touched.provinceCitizenAddress, Boolean(formik.errors.provinceCitizenAddress)), formik.errors.provinceCitizenAddress, '')}
+              displayEmpty
+              renderValue={(value: unknown) => {
+                if ((value as string)?.length === 0) {
+                  return <Text title={t(`${t_citizenAddressSection}.province_placeholder`)} color='grey.400' />;
+                }
+                const selectedCountries = (administrativeFirst as Array<{ label: string, value: string }>).find(country => country.value === value);
+                if (selectedCountries) {
+                  return `${selectedCountries.label}`;
+                }
+                return null;
+              }}
             />
           </Grid>
         </Grid>
@@ -485,7 +547,7 @@ const EmployeePersonalInformationEdit = ({ refProp, nextPage, setValues, persona
           container
           wrap='wrap'
           justifyContent='space-between'
-          alignItems='center'
+          alignItems='baseline'
           mb='16px'
         >
           <Grid
@@ -494,15 +556,38 @@ const EmployeePersonalInformationEdit = ({ refProp, nextPage, setValues, persona
           >
             <Select
               fullWidth
-              customLabel='City'
+              customLabel={t(`${t_citizenAddressSection}.city`)}
               withAsterisk
               variant='outlined'
               size='small'
               name='cityCitizenAddress'
-              value={values.cityCitizenAddress}
-              onChange={(e: unknown) => handleInputChange(convertValue('cityCitizenAddress', e))}
+              value={formik.values.cityCitizenAddress}
+              onBlur={formik.handleBlur}
+              onChange={(e: unknown) => {
+                formik.handleChange(e);
+                dispatch({
+                  type: administrativeThirdLevelRequsted.toString(),
+                  payload: {
+                    countryId: formik.values.countryCitizenAddress,
+                    firstLevelCode: formik.values.provinceCitizenAddress,
+                    secondLevelCode: (e as SelectChangeEvent).target.value
+                  }
+                });
+              }}
               options={administrativeSecond}
-              error={errors.cityCitizenAddress}
+              error={compareCheck(formik.touched.cityCitizenAddress, Boolean(formik.errors.cityCitizenAddress))}
+              helperText={ifThenElse(compareCheck(formik.touched.cityCitizenAddress, Boolean(formik.errors.cityCitizenAddress)), formik.errors.cityCitizenAddress, '')}
+              displayEmpty
+              renderValue={(value: unknown) => {
+                if ((value as string)?.length === 0) {
+                  return <Text title={t(`${t_citizenAddressSection}.city_placeholder`)} color='grey.400' />;
+                }
+                const selectedCountries = (administrativeSecond as Array<{ label: string, value: string }>).find(country => country.value === value);
+                if (selectedCountries) {
+                  return `${selectedCountries.label}`;
+                }
+                return null;
+              }}
             />
           </Grid>
           <Grid
@@ -511,15 +596,28 @@ const EmployeePersonalInformationEdit = ({ refProp, nextPage, setValues, persona
           >
             <Select
               fullWidth
-              customLabel='Sub-District'
+              customLabel={t(`${t_citizenAddressSection}.sub_district`)}
               withAsterisk
               variant='outlined'
               size='small'
               name='subDistrictCitizenAddress'
-              value={values.subDistrictCitizenAddress}
-              onChange={(e: unknown) => handleInputChange(convertValue('subDistrictCitizenAddress', e))}
+              value={formik.values.subDistrictCitizenAddress}
+              onChange={(e: unknown) => formik.handleChange(e)}
+              onBlur={formik.handleBlur}
               options={administrativeThird}
-              error={errors.subDistrictCitizenAddress}
+              error={compareCheck(formik.touched.subDistrictCitizenAddress, Boolean(formik.errors.subDistrictCitizenAddress))}
+              helperText={ifThenElse(compareCheck(formik.touched.subDistrictCitizenAddress, Boolean(formik.errors.subDistrictCitizenAddress)), formik.errors.subDistrictCitizenAddress, '')}
+              displayEmpty
+              renderValue={(value: unknown) => {
+                if ((value as string)?.length === 0) {
+                  return <Text title={t(`${t_citizenAddressSection}.sub_district_placeholder`)} color='grey.400' />;
+                }
+                const selectedCountries = (administrativeThird as Array<{ label: string, value: string }>).find(country => country.value === value);
+                if (selectedCountries) {
+                  return `${selectedCountries.label}`;
+                }
+                return null;
+              }}
             />
           </Grid>
         </Grid>
@@ -527,7 +625,7 @@ const EmployeePersonalInformationEdit = ({ refProp, nextPage, setValues, persona
           container
           wrap='wrap'
           justifyContent='space-between'
-          alignItems='center'
+          alignItems='baseline'
           mb='16px'
         >
           <Grid
@@ -538,11 +636,13 @@ const EmployeePersonalInformationEdit = ({ refProp, nextPage, setValues, persona
               name='addressCitizenAddress'
               maxRows={5}
               minRows={3}
-              value={values.addressCitizenAddress}
-              onChange={handleInputChange}
-              error={errors.addressCitizenAddress}
+              value={formik.values.addressCitizenAddress}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={ifThenElse(compareCheck(formik.touched.addressCitizenAddress, Boolean(formik.errors.addressCitizenAddress)), formik.errors.addressCitizenAddress, '')}
               withAsterisk
-              customLabel='Citizen ID Street Name, Building Name'
+              customLabel={t(`${t_citizenAddressSection}.citizen_street_and_building_name`)}
+              placeholder={t(`${t_citizenAddressSection}.citizen_street_and_building_name_placeholder`)}
             />
           </Grid>
           <Grid
@@ -551,12 +651,14 @@ const EmployeePersonalInformationEdit = ({ refProp, nextPage, setValues, persona
           >
             <Input
               withAsterisk
-              customLabel='ZIP Code'
+              customLabel={t(`${t_citizenAddressSection}.zip_code`)}
               size='small'
               name='zipCodeCitizenAddress'
-              value={values.zipCodeCitizenAddress}
-              onChange={handleInputChange}
-              error={errors.zipCodeCitizenAddress}
+              value={formik.values.zipCodeCitizenAddress}
+              onChange={formik.handleChange}
+              error={compareCheck(formik.touched.zipCodeCitizenAddress, Boolean(formik.errors.zipCodeCitizenAddress))}
+              helperText={ifThenElse(formik.touched.zipCodeCitizenAddress, formik.errors.zipCodeCitizenAddress, '')}
+              placeholder={t(`${t_citizenAddressSection}.zip_code_placeholder`)}
             />
           </Grid>
         </Grid>
@@ -572,7 +674,7 @@ const EmployeePersonalInformationEdit = ({ refProp, nextPage, setValues, persona
             sm={5.8}
           >
             <CheckBox
-              customLabel='Use as residential address'
+              customLabel={t(`${t_citizenAddressSection}.use_as_residential_address`)}
               name='useResidentialCitizenAddress'
               checked={useResidentialAddress}
               onChange={() => setUseResidentialAddress((prev: boolean) => !prev)}
@@ -587,7 +689,7 @@ const EmployeePersonalInformationEdit = ({ refProp, nextPage, setValues, persona
       >
         <Text
           variant='text-base'
-          title='Residential Address'
+          title={t(`${t_residentialAddressSection}.title`)}
           color='primary.500'
           fontWeight={700}
           mb='16px'
@@ -596,7 +698,7 @@ const EmployeePersonalInformationEdit = ({ refProp, nextPage, setValues, persona
           container
           wrap='wrap'
           justifyContent='space-between'
-          alignItems='center'
+          alignItems='baseline'
           mb='16px'
           mt='16px'
         >
@@ -606,15 +708,29 @@ const EmployeePersonalInformationEdit = ({ refProp, nextPage, setValues, persona
           >
             <Select
               fullWidth
-              customLabel='Country'
+              customLabel={t(`${t_residentialAddressSection}.contry`)}
               withAsterisk
               variant='outlined'
               size='small'
               name='countryResidentialAddress'
-              value={values.countryResidentialAddress}
-              onChange={(e: unknown) => handleInputChange(convertValue('countryResidentialAddress', e))}
+              value={formik.values.countryResidentialAddress}
+              onBlur={formik.handleBlur}
+              onChange={(e: unknown) => {
+                formik.handleChange(e);
+                dispatch({
+                  type: getSecondAdministrativeFirstLevelRequested.toString(),
+                  payload: {
+                    countryId: (e as SelectChangeEvent).target.value
+                  }
+                });
+              }}
               options={countries}
-              error={useResidentialAddress ? '' : errors.countryResidentialAddress}
+              error={compareCheck(formik.touched.countryResidentialAddress, Boolean(formik.errors.countryResidentialAddress))}
+              helperText={ifThenElse(compareCheck(formik.touched.countryResidentialAddress, Boolean(formik.errors.countryResidentialAddress)), formik.errors.countryResidentialAddress, '')}
+              displayEmpty
+              renderValue={(value: unknown) => {
+                return checkCountry(value);
+              }}
             />
           </Grid>
           <Grid
@@ -623,15 +739,37 @@ const EmployeePersonalInformationEdit = ({ refProp, nextPage, setValues, persona
           >
             <Select
               fullWidth
-              customLabel='Province'
+              customLabel={t(`${t_residentialAddressSection}.province`)}
               withAsterisk
               variant='outlined'
               size='small'
               name='provinceResidentialAddress'
-              value={values.provinceResidentialAddress}
-              onChange={(e: unknown) => handleInputChange(convertValue('provinceResidentialAddress', e))}
-              options={administrativeFirst}
-              error={useResidentialAddress ? '' : errors.provinceResidentialAddress}
+              value={formik.values.provinceResidentialAddress}
+              onChange={(e: unknown) => {
+                formik.handleChange(e);
+                dispatch({
+                  type: getSecondAdministrativeSecondLevelRequested.toString(),
+                  payload: {
+                    countryId: formik.values.countryResidentialAddress,
+                    firstLevelCode: (e as SelectChangeEvent).target.value
+                  }
+                });
+              }}
+              onBlur={formik.handleBlur}
+              options={secondAdministrativeFirst}
+              error={compareCheck(formik.touched.provinceResidentialAddress, Boolean(formik.errors.provinceResidentialAddress))}
+              helperText={ifThenElse(compareCheck(formik.touched.provinceResidentialAddress, Boolean(formik.errors.provinceResidentialAddress)), formik.errors.provinceResidentialAddress, '')}
+              displayEmpty
+              renderValue={(value: unknown) => {
+                if ((value as string)?.length === 0) {
+                  return <Text title={t(`${t_residentialAddressSection}.province_placeholder`)} color='grey.400' />;
+                }
+                const selectedCountries = (secondAdministrativeFirst as Array<{ label: string, value: string }>).find(country => country.value === value);
+                if (selectedCountries) {
+                  return `${selectedCountries.label}`;
+                }
+                return null;
+              }}
             />
           </Grid>
         </Grid>
@@ -639,7 +777,7 @@ const EmployeePersonalInformationEdit = ({ refProp, nextPage, setValues, persona
           container
           wrap='wrap'
           justifyContent='space-between'
-          alignItems='center'
+          alignItems='baseline'
           mb='16px'
         >
           <Grid
@@ -648,15 +786,38 @@ const EmployeePersonalInformationEdit = ({ refProp, nextPage, setValues, persona
           >
             <Select
               fullWidth
-              customLabel='City'
+              customLabel={t(`${t_residentialAddressSection}.city`)}
               withAsterisk
               variant='outlined'
               size='small'
               name='cityResidentialAddress'
-              value={values.cityResidentialAddress}
-              onChange={(e: unknown) => handleInputChange(convertValue('cityResidentialAddress', e))}
-              options={administrativeSecond}
-              error={useResidentialAddress ? '' : errors.cityResidentialAddress}
+              value={formik.values.cityResidentialAddress}
+              onChange={(e: unknown) => {
+                formik.handleChange(e);
+                dispatch({
+                  type: getSecondAdministrativeThirdLevelRequested.toString(),
+                  payload: {
+                    countryId: formik.values.countryResidentialAddress,
+                    firstLevelCode: formik.values.provinceResidentialAddress,
+                    secondLevelCode: (e as SelectChangeEvent).target.value
+                  }
+                });
+              }}
+              onBlur={formik.handleBlur}
+              options={secondAdministrativeSecond}
+              error={compareCheck(formik.touched.cityResidentialAddress, Boolean(formik.errors.cityResidentialAddress))}
+              helperText={ifThenElse(compareCheck(formik.touched.cityResidentialAddress, Boolean(formik.errors.cityResidentialAddress)), formik.errors.cityResidentialAddress, '')}
+              displayEmpty
+              renderValue={(value: unknown) => {
+                if ((value as string)?.length === 0) {
+                  return <Text title={t(`${t_residentialAddressSection}.city_placeholder`)} color='grey.400' />;
+                }
+                const selectedCountries = (secondAdministrativeSecond as Array<{ label: string, value: string }>).find(country => country.value === value);
+                if (selectedCountries) {
+                  return `${selectedCountries.label}`;
+                }
+                return null;
+              }}
             />
           </Grid>
           <Grid
@@ -665,15 +826,28 @@ const EmployeePersonalInformationEdit = ({ refProp, nextPage, setValues, persona
           >
             <Select
               fullWidth
-              customLabel='Sub-District'
+              customLabel={t(`${t_residentialAddressSection}.sub_district`)}
               withAsterisk
               variant='outlined'
               size='small'
               name='subDistrictResidentialAddress'
-              value={values.subDistrictResidentialAddress}
-              onChange={(e: unknown) => handleInputChange(convertValue('subDistrictResidentialAddress', e))}
-              options={administrativeThird}
-              error={useResidentialAddress ? '' : errors.subDistrictResidentialAddress}
+              value={formik.values.subDistrictResidentialAddress}
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              options={secondAdministrativeThird}
+              error={compareCheck(formik.touched.subDistrictResidentialAddress, Boolean(formik.errors.subDistrictResidentialAddress))}
+              helperText={ifThenElse(compareCheck(formik.touched.subDistrictResidentialAddress, Boolean(formik.errors.subDistrictResidentialAddress)), formik.errors.subDistrictResidentialAddress, '')}
+              displayEmpty
+              renderValue={(value: unknown) => {
+                if ((value as string)?.length === 0) {
+                  return <Text title={t(`${t_residentialAddressSection}.sub_district_placeholder`)} color='grey.400' />;
+                }
+                const selectedCountries = (secondAdministrativeThird as Array<{ label: string, value: string }>).find(country => country.value === value);
+                if (selectedCountries) {
+                  return `${selectedCountries.label}`;
+                }
+                return null;
+              }}
             />
           </Grid>
         </Grid>
@@ -681,7 +855,7 @@ const EmployeePersonalInformationEdit = ({ refProp, nextPage, setValues, persona
           container
           wrap='wrap'
           justifyContent='space-between'
-          alignItems='center'
+          alignItems='baseline'
           mb='16px'
         >
           <Grid
@@ -692,11 +866,13 @@ const EmployeePersonalInformationEdit = ({ refProp, nextPage, setValues, persona
               name='addressResidentialAddress'
               maxRows={5}
               minRows={3}
-              value={values.addressResidentialAddress}
-              onChange={handleInputChange}
-              error={useResidentialAddress ? '' : errors.addressResidentialAddress}
+              value={formik.values.addressResidentialAddress}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={ifThenElse(compareCheck(formik.touched.addressResidentialAddress, Boolean(formik.errors.addressResidentialAddress)), formik.errors.addressResidentialAddress, '')}
               withAsterisk
-              customLabel='Citizen ID Street Name, Building Name'
+              customLabel={t(`${t_residentialAddressSection}.residential_street_and_building_name`)}
+              placeholder={t(`${t_residentialAddressSection}.residential_street_and_building_name_placeholder`)}
             />
           </Grid>
           <Grid
@@ -708,9 +884,12 @@ const EmployeePersonalInformationEdit = ({ refProp, nextPage, setValues, persona
               customLabel='ZIP Code'
               size='small'
               name='zipCodeResidentialAddress'
-              value={values.zipCodeResidentialAddress}
-              onChange={handleInputChange}
-              error={useResidentialAddress ? '' : errors.zipCodeResidentialAddress}
+              value={formik.values.zipCodeResidentialAddress}
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              error={compareCheck(formik.touched.zipCodeResidentialAddress, Boolean(formik.errors.zipCodeResidentialAddress))}
+              helperText={ifThenElse(formik.touched.zipCodeResidentialAddress, formik.errors.zipCodeResidentialAddress, '')}
+              placeholder='Input Zip Code'
             />
           </Grid>
         </Grid>
@@ -722,7 +901,7 @@ const EmployeePersonalInformationEdit = ({ refProp, nextPage, setValues, persona
       >
         <Text
           variant='text-lg'
-          title='Personal ID'
+          title={t(`${t_personalIdSection}.title`)}
           fontWeight={700}
           color='primary.500'
         />
@@ -740,15 +919,28 @@ const EmployeePersonalInformationEdit = ({ refProp, nextPage, setValues, persona
           >
             <Select
               fullWidth
-              customLabel='ID Type'
+              customLabel={t(`${t_personalIdSection}.id_type`)}
               withAsterisk
               variant='outlined'
               size='small'
               name='idTypePersonalID'
-              value={values.idTypePersonalID}
-              onChange={(e: unknown) => handleInputChange(convertValue('idTypePersonalID', e))}
+              value={String(formik.values.idTypePersonalID)}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               options={IDTypes}
-              error={errors.idTypePersonalID}
+              error={compareCheck(formik.touched.idTypePersonalID, Boolean(formik.errors.idTypePersonalID))}
+              helperText={ifThenElse(compareCheck(formik.touched.idTypePersonalID, Boolean(formik.errors.idTypePersonalID)), formik.errors.idTypePersonalID, '')}
+              displayEmpty
+              renderValue={(value: unknown) => {
+                if ((value as string)?.length === 0) {
+                  return <Text title={t(`${t_personalIdSection}.id_type_placeholder`)} color='grey.400' />;
+                }
+                const selectedType = IDTypes.find(IDType => IDType.value === value);
+                if (selectedType) {
+                  return `${selectedType.label}`;
+                }
+                return null;
+              }}
             />
           </Grid>
           <Grid
@@ -757,12 +949,16 @@ const EmployeePersonalInformationEdit = ({ refProp, nextPage, setValues, persona
           >
             <Input
               withAsterisk
-              customLabel='ID Number'
+              customLabel={t(`${t_personalIdSection}.id_number`)}
               size='small'
               name='idNumberPersonalID'
-              value={values.idNumberPersonalID}
-              onChange={handleInputChange}
-              error={errors.idNumberPersonalID}
+              value={formik.values.idNumberPersonalID}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={compareCheck(formik.touched.idNumberPersonalID, Boolean(formik.errors.idNumberPersonalID))}
+              helperText={ifThenElse(formik.touched.idNumberPersonalID, formik.errors.idNumberPersonalID, '')}
+              placeholder={t(`${t_personalIdSection}.id_number_placeholder`)}
+              type='number'
             />
           </Grid>
         </Grid>
@@ -778,12 +974,11 @@ const EmployeePersonalInformationEdit = ({ refProp, nextPage, setValues, persona
             sm={5.8}
           >
             <DatePicker
-              customLabel='ID Expiration Date'
+              customLabel={t(`${t_personalIdSection}.id_expiration_date`)}
+              value={formik.values.idExpirationDatePersonalID as unknown as Date}
+              onChange={(date: unknown) => formik.setFieldValue('idExpirationDatePersonalID', date)}
               withAsterisk
-              value={values.idExpirationDatePersonalID}
-              onChange={(e: unknown) => handleInputChange(convertDateValue('idExpirationDatePersonalID', e))}
-              error={values.PersonalIDPersonalID ? '' : errors.idExpirationDatePersonalID}
-              disabled={values.PersonalIDPersonalID}
+              error={ifThenElse(compareCheck(formik.touched.idExpirationDatePersonalID, Boolean(formik.errors.idExpirationDatePersonalID)), String(formik.errors.idExpirationDatePersonalID), '')}
             />
           </Grid>
         </Grid>
@@ -798,7 +993,7 @@ const EmployeePersonalInformationEdit = ({ refProp, nextPage, setValues, persona
               customLabel='Permanent'
               color='primary'
               name='PersonalIDPersonalID'
-              checked={values.PersonalIDPersonalID}
+              checked={isPermanentPersonalID}
               onChange={() => setIsPermanentPersonalID((prev: boolean) => !prev)}
             />
           </Grid>
@@ -810,7 +1005,7 @@ const EmployeePersonalInformationEdit = ({ refProp, nextPage, setValues, persona
       >
         <Text
           variant='text-lg'
-          title='Bank Information'
+          title={t(`${t_bankInformationSection}.title`)}
           fontWeight={700}
           color='primary.500'
         />
@@ -828,13 +1023,25 @@ const EmployeePersonalInformationEdit = ({ refProp, nextPage, setValues, persona
           >
             <Select
               fullWidth
-              customLabel='Bank'
+              customLabel={t(`${t_bankInformationSection}.bank`)}
               variant='outlined'
               size='small'
               name='bankBankInformation'
-              value={values.bankBankInformation}
-              onChange={(e: unknown) => handleInputChange(convertValue('bankBankInformation', e))}
+              value={formik.values.bankBankInformation}
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
               options={banks}
+              displayEmpty
+              renderValue={(value: unknown) => {
+                if ((value as string)?.length === 0) {
+                  return <Text title={t(`${t_bankInformationSection}.bank_placeholder`)} color='grey.400' />;
+                }
+                const selectedBanks = (banks as Array<{ label: string, value: string }>).find(bank => bank.value === value);
+                if (selectedBanks) {
+                  return `${selectedBanks.label}`;
+                }
+                return null;
+              }}
             />
           </Grid>
           <Grid
@@ -842,11 +1049,13 @@ const EmployeePersonalInformationEdit = ({ refProp, nextPage, setValues, persona
             sm={5.8}
           >
             <Input
-              customLabel={`Bank Account Holder's Name`}
+              customLabel={t(`${t_bankInformationSection}.bank_account_holder_name`)}
               size='small'
               name='bankAccountHolderNameBankInformation'
-              value={values.bankAccountHolderNameBankInformation}
-              onChange={handleInputChange}
+              value={formik.values.bankAccountHolderNameBankInformation}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              placeholder={t(`${t_bankInformationSection}.bank_account_holder_name_placeholder`)}
             />
           </Grid>
         </Grid>
@@ -862,11 +1071,13 @@ const EmployeePersonalInformationEdit = ({ refProp, nextPage, setValues, persona
             sm={5.8}
           >
             <Input
-              customLabel='Bank Account No'
+              customLabel={t(`${t_bankInformationSection}.bank_account_no`)}
               size='small'
               name='bankAccoutNoBankInformation'
-              value={values.bankAccoutNoBankInformation}
-              onChange={handleInputChange}
+              value={formik.values.bankAccoutNoBankInformation}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              placeholder={t(`${t_bankInformationSection}.bank_account_no_placeholder`)}
             />
           </Grid>
           <Grid
@@ -876,20 +1087,24 @@ const EmployeePersonalInformationEdit = ({ refProp, nextPage, setValues, persona
             <Grid container justifyContent='space-between'>
               <Grid item sm={5.8}>
                 <Input
-                  customLabel='Bank Code'
+                  customLabel={t(`${t_bankInformationSection}.bank_code`)}
                   size='small'
                   name='bankCodeBankInformation'
-                  value={values.bankCodeBankInformation}
-                  onChange={handleInputChange}
+                  value={formik.values.bankCodeBankInformation}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  placeholder={t(`${t_bankInformationSection}.bank_code_placeholder`)}
                 />
               </Grid>
               <Grid item sm={5.8}>
                 <Input
-                  customLabel='Branch Code'
+                  customLabel={t(`${t_bankInformationSection}.branch_code`)}
                   size='small'
                   name='branchCodeBankInformation'
-                  value={values.branchCodeBankInformation}
-                  onChange={handleInputChange}
+                  value={formik.values.branchCodeBankInformation}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  placeholder={t(`${t_bankInformationSection}.branch_code_placeholder`)}
                 />
               </Grid>
             </Grid>
@@ -907,11 +1122,13 @@ const EmployeePersonalInformationEdit = ({ refProp, nextPage, setValues, persona
             sm={5.8}
           >
             <Input
-              customLabel='Branch Name'
+              customLabel={t(`${t_bankInformationSection}.branch_name`)}
               size='small'
               name='branchNameBankInformation'
-              value={values.branchNameBankInformation}
-              onChange={handleInputChange}
+              value={formik.values.branchNameBankInformation}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              placeholder={t(`${t_bankInformationSection}.branch_name_placeholder`)}
             />
           </Grid>
           <Grid
@@ -919,11 +1136,12 @@ const EmployeePersonalInformationEdit = ({ refProp, nextPage, setValues, persona
             sm={5.8}
           >
             <Input
-              customLabel='Swift Code'
+              customLabel={t(`${t_bankInformationSection}.swift_code`)}
               size='small'
               name='swiftCodeBankInformation'
-              value={values.swiftCodeBankInformation}
-              onChange={handleInputChange}
+              value={formik.values.swiftCodeBankInformation}
+              onChange={formik.handleChange}
+              placeholder={t(`${t_bankInformationSection}.title`)}
             />
           </Grid>
         </Grid>
@@ -937,15 +1155,15 @@ const EmployeePersonalInformationEdit = ({ refProp, nextPage, setValues, persona
         <Grid item>
           <Button onClick={() => {
             nextPage(0);
-            setValues({ ...values, useResidentialAddress });
-          }} label='Back' variant='outlined' />
+            setValues({ ...formik.values as Employees.PersonalValues, useResidentialAddress });
+          }} label={t('button.back')} variant='outlined' />
         </Grid>
         <Grid item>
-          <Button type='submit' label='Next' />
+          <Button type='submit' label={t('button.next')} />
         </Grid>
       </Grid>
     </form>
   );
 };
 
-export default memo(EmployeePersonalInformationEdit);
+export default memo(EmployeePersonalInformationForm);

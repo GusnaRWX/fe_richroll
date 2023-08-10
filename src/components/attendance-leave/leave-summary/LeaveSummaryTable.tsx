@@ -5,12 +5,13 @@ import {
   // Avatar,
   Box,
   TableSortLabel,
-  Typography,
 } from '@mui/material';
 import Table from '@/components/_shared/form/Table';
 import { IconButton } from '@/components/_shared/form';
 import styled from '@emotion/styled';
 import { visuallyHidden } from '@mui/utils';
+import EmptyState from '@/components/_shared/common/EmptyState';
+import { ifThenElse, compareCheck } from '@/utils/helper';
 
 // Import Icon React Icon
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -61,7 +62,7 @@ function LeaveSummaryTable({
   ShowDetailAction,
 }: LeaveSummaryTableProps) {
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
   const [hydrated, setHaydrated] = useState(false);
@@ -121,16 +122,15 @@ function LeaveSummaryTable({
     setPage(newPage);
   };
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 0));
-    setPage(0);
+    setRowsPerPage(event);
   };
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
     headId: string
   ) => {
-    const isAsc = sort === headId && direction === 'asc';
-    setDirection(isAsc ? 'desc' : 'asc');
+    const isAsc = compareCheck(sort === headId, direction === 'asc');
+    setDirection(ifThenElse(isAsc, 'desc', 'asc'));
     setSort(headId);
   };
 
@@ -155,21 +155,19 @@ function LeaveSummaryTable({
             {headerItems.map((item) => (
               <TableCell
                 key={item.id}
-                sortDirection={sort === item.id ? direction : false}
+                sortDirection={ifThenElse(sort === item.id, direction, false)}
               >
                 <TableSortLabel
                   active={sort === item.id}
-                  direction={sort === item.id ? direction : 'asc'}
+                  direction={ifThenElse(sort === item.id, direction, 'asc')}
                   onClick={(e) => handleRequestSort(e, item.id)}
                 >
                   {item.label}
-                  {sort === item.id ? (
+                  {ifThenElse(sort === item.id, (
                     <Box component='span' sx={visuallyHidden}>
-                      {direction === 'asc'
-                        ? 'sorted descending'
-                        : 'sorted ascending'}
+                      {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
                     </Box>
-                  ) : null}
+                  ), null)}
                 </TableSortLabel>
               </TableCell>
             ))}
@@ -177,14 +175,14 @@ function LeaveSummaryTable({
         }
         bodyChildren={
           <>
-            {typeof data?.items !== 'undefined' ? (
-              data?.items.length === 0 ? (
+            {ifThenElse(typeof data?.items !== 'undefined', (
+              ifThenElse(data?.items.length === 0, (
                 <TableRow>
                   <TableCell colSpan={12} align='center'>
-                    <Typography>Data not found</Typography>
+                    <EmptyState />
                   </TableCell>
                 </TableRow>
-              ) : (
+              ), (
                 data?.items.map((item, index) => (
                   <TableRow key={index}>
                     <TableCell>{item.id}</TableCell>
@@ -213,7 +211,6 @@ function LeaveSummaryTable({
                     <TableCell>{item.date}</TableCell>
                     <TableCell>{item.period}</TableCell>
                     <TableCell>
-                      {/* {dayjs(item.user.createdAt).format('YYYY-MM-DD H:m:s')} */}
                       {item.Duration}
                     </TableCell>
                     <TableCell>{item.Notes}</TableCell>
@@ -249,14 +246,14 @@ function LeaveSummaryTable({
                     </TableCell>
                   </TableRow>
                 ))
-              )
-            ) : (
+              ))
+            ), (
               <TableRow>
                 <TableCell colSpan={12} align='center'>
-                  <Typography>Data not found</Typography>
+                  <EmptyState />
                 </TableCell>
               </TableRow>
-            )}
+            ))}
           </>
         }
       />

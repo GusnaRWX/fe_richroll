@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Grid, Autocomplete, Typography, Button as MuiButton, TextField, createFilterOptions, InputAdornment, Box } from '@mui/material';
 import { useFormik } from 'formik';
-import { Employees } from '@/types/employees';
 import { styled as MuiStyled } from '@mui/material/styles';
 import { Select, RadioGroup, Input } from '@/components/_shared/form';
 import { Add, Delete } from '@mui/icons-material';
@@ -16,7 +15,7 @@ interface SelectItemType {
   value?: string;
 }
 
-interface TempSuplementaryType {
+interface TempSupplementaryType {
   compensation: string;
   tax: string;
   rate: string;
@@ -25,12 +24,12 @@ interface TempSuplementaryType {
 
 function CnbEditForm() {
   const selectItems: readonly SelectItemType[] = [
-    { title: 'Product', value: 'Product'},
+    { title: 'Product', value: 'Product' },
     { title: 'Sales', value: 'Sales' },
     { title: 'Prep-Cook', value: 'Prep-cook' },
     { title: 'Waiter', value: 'Waiter' }
   ];
-  const [suplementary, setSuplementary] = useState<Array<TempSuplementaryType>>([]);
+  const [suplementary, setSupplementary] = useState<Array<TempSupplementaryType>>([]);
   const formik = useFormik({
     initialValues: {
       profile: '',
@@ -39,47 +38,47 @@ function CnbEditForm() {
       baseRate: '',
       basePeriod: '',
       suplementary: suplementary
-    } as Employees.CnbValues,
+    } as any,
     onSubmit: (values) => {
       console.log(values);
     }
   });
   const filter = createFilterOptions<SelectItemType>();
 
-  const handleAddSuplementary =  () => {
+  const handleAddSupplementary = () => {
     const data = {
       compensation: '',
       tax: '',
       rate: '',
       period: '',
     };
-    setSuplementary((prevState) => [...prevState, data]);
+    setSupplementary((prevState) => [...prevState, data]);
   };
 
   const handleDeleteItems = (index: number) => {
     const temp = [...suplementary];
     temp.splice(index, 1);
-    setSuplementary(temp);
+    setSupplementary(temp);
   };
   return (
     <>
       <Grid container mb='2rem'>
         <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
-          <Typography mb='6px'>Compensation and Benefit Profile<AsteriskComponent>*</AsteriskComponent></Typography>
+          <Typography mb='6px'>Compensation & Benefit Profilee<AsteriskComponent>*</AsteriskComponent></Typography>
           <Autocomplete
             id='profile'
             freeSolo={true}
             value={formik.values.profile}
             onChange={(event, newValue) => {
               console.log('new value', newValue);
-              if (typeof newValue === 'string'){
+              if (typeof newValue === 'string') {
                 formik.setFieldValue('profile', newValue, true);
-              }else if (newValue && newValue.inputValue){
+              } else if (newValue && newValue.inputValue) {
                 formik.setFieldValue('profile', newValue.inputValue, true);
-              }else{
+              } else {
                 formik.setFieldValue('profile', newValue?.title, true);
               }
-            } }
+            }}
             size='small'
             filterOptions={(options, params) => {
               const filtered = filter(options, params);
@@ -109,7 +108,7 @@ function CnbEditForm() {
               return option.title;
             }}
             renderOption={(props, option) => <li {...props}>{option.title}</li>}
-            renderInput={(params) => <TextField name='profile' {...params}/> }
+            renderInput={(params) => <TextField name='profile' {...params} />}
           />
         </Grid>
       </Grid>
@@ -131,8 +130,8 @@ function CnbEditForm() {
                   options={[
                     { label: 'Salary', value: 'salary' },
                     { label: 'Wage', value: 'Wage' },
-                    {label: 'Comission', value: 'Commision'},
-                    {label: 'Piece Rate', value: 'Piece Rate'}
+                    { label: 'Comission', value: 'Commision' },
+                    { label: 'Piece Rate', value: 'Piece Rate' }
                   ]}
                 />
               </Grid>
@@ -186,8 +185,8 @@ function CnbEditForm() {
                   options={[
                     { label: 'Per Hour', value: 'Per Hour' },
                     { label: 'Per Day', value: 'Per Day' },
-                    {label: 'Per Week', value: 'Per Week'},
-                    {label: 'Per Month', value: 'Per Month'}
+                    { label: 'Per Week', value: 'Per Week' },
+                    { label: 'Per Month', value: 'Per Month' }
                   ]}
                 />
               </Grid>
@@ -195,7 +194,7 @@ function CnbEditForm() {
             {
               suplementary.length > 0 && (
                 <>
-                  <Typography mb='1rem' color='primary' fontWeight='bold' fontSize='16px' >Suplementary</Typography>
+                  <Typography mb='1rem' color='primary' fontWeight='bold' fontSize='16px' >Supplementary</Typography>
                   {
                     suplementary.map((item, index) => (
                       <Box key={index} sx={{ width: '100%' }}>
@@ -212,10 +211,10 @@ function CnbEditForm() {
                               options={[
                                 { label: 'Bonus', value: 'Bonus' },
                                 { label: 'Overtime', value: 'Overtime' },
-                                {label: 'Comission', value: 'Commision'},
-                                {label: 'Piece Rate', value: 'Piece Rate'},
-                                {label: 'Wage', value: 'Wage'},
-                                {label: 'Salary', value: 'Salary'}
+                                { label: 'Comission', value: 'Commision' },
+                                { label: 'Piece Rate', value: 'Piece Rate' },
+                                { label: 'Wage', value: 'Wage' },
+                                { label: 'Salary', value: 'Salary' }
                               ]}
                             />
                           </Grid>
@@ -272,8 +271,8 @@ function CnbEditForm() {
                               options={[
                                 { label: 'Per Hour', value: 'Per Hour' },
                                 { label: 'Per Day', value: 'Per Day' },
-                                {label: 'Per Week', value: 'Per Week'},
-                                {label: 'Per Month', value: 'Per Month'}
+                                { label: 'Per Week', value: 'Per Week' },
+                                { label: 'Per Month', value: 'Per Month' }
                               ]}
                             />
                           </Grid>
@@ -284,7 +283,7 @@ function CnbEditForm() {
                 </>
               )
             }
-            <MuiButton size='small' variant='contained' color='secondary' sx={{ color: '#FFFFFF' }} onClick={handleAddSuplementary}><Add />&nbsp;Add Supplementary Compensation</MuiButton>
+            <MuiButton size='small' variant='contained' color='secondary' sx={{ color: '#FFFFFF' }} onClick={handleAddSupplementary}><Add />&nbsp;Add Supplementary Compensation</MuiButton>
           </>
         )
       }

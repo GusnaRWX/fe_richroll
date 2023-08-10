@@ -1,20 +1,17 @@
+import dayjs from 'dayjs';
 export declare namespace workSchedule {
+
+  type DayJS = dayjs.Dayjs | null | string;
+
+
   interface InitialValuesWorkScheduleForm {
-    profileName: string;
-    type: string | number;
-    flexiWorkHour: string,
-    flexiMinWorkHour: string,
-    fixedStartDay: string,
-    fixedEndDay: string,
-    fixedStartTime: string,
-    fixedEndTime: string,
-    fixedWorkDayType: string | number,
-    flexiWorkDay: string,
-    breakName: string,
-    breakDuration: string | number,
-    specifyBreakHour: boolean,
-    breakStartTime: string,
-    breakEndTime: string
+    name: string;
+    scheduleType: string | number;
+    type: number;
+    day: Array<string | number>
+    start: DayJS;
+    end: DayJS;
+    breaks: Array<BreakItemType>;
   }
   interface PostSimulationEventPayloadType {
     name: string;
@@ -42,7 +39,23 @@ export declare namespace workSchedule {
   }
   interface ItemsWorkScheduleType {
     day: number,
-    eventId: number,
+    eventId: string | number,
+    label: string,
+    name: string,
+    start: Date | string,
+    end:Date | string,
+    isBreak?: boolean,
+    isDuration?: boolean,
+    color?: string,
+    duration?: number | string,
+    allDay?: boolean
+    scheduleType?: string | number,
+    type?: number
+  }
+
+  interface ItemsPatchWorkScheduleType {
+    day: number,
+    eventId: string | number,
     label: string,
     name: string,
     start: Date | string,
@@ -64,6 +77,13 @@ export declare namespace workSchedule {
     items: Array<ItemsWorkScheduleType>;
   }
 
+  interface PatchWorkSchedulePayloadType {
+    name: string;
+    grossHours: string | number;
+    netHours: string | number;
+    items: Array<ItemsPatchWorkScheduleType>;
+  }
+
   interface WorkScheduleParams {
     page: number;
     itemPerPage: number;
@@ -71,5 +91,22 @@ export declare namespace workSchedule {
     direction: boolean;
     search: string;
     companyID?: number;
+  }
+
+  interface BreakItemType {
+    name: string;
+    start: DayJS;
+    end: DayJS;
+  }
+
+  interface WsFormType {
+    profileName: string;
+    type: string | number;
+    dayType: number;
+    day: Array<string | number>
+    startHour: DayJS;
+    endHour: DayJS;
+    flexiWorkHour?: string | number;
+    breakItem: Array<BreakItemType>;
   }
 }

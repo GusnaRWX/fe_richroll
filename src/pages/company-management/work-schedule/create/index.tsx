@@ -1,9 +1,13 @@
 import React from 'react';
 import WorkScheduleCreateContainer from '@/containers/work-schedule/WorkScheduleCreateContainer';
+import MetaHead from '@/components/_shared/_core/layout/MetaHead';
 
 function index() {
   return (
-    <WorkScheduleCreateContainer />
+    <>
+      <MetaHead title='Kayaroll - Create Work Schedule'/>
+      <WorkScheduleCreateContainer />
+    </>
   );
 }
 

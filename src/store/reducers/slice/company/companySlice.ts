@@ -8,17 +8,21 @@ interface CompanyState {
   companySector: [],
   bank: [],
   paymentMethod: [],
-  detail: object
+  detail: object,
+  companyPayment: object,
+  companyID: string,
 }
 
-const initialState:CompanyState = {
+const initialState: CompanyState = {
   loading: false,
   companies: [],
   companyType: [],
   companySector: [],
   bank: [],
   paymentMethod: [],
-  detail: {}
+  detail: {},
+  companyPayment: {},
+  companyID: ''
 };
 
 export const companySlice = createSlice({
@@ -88,8 +92,9 @@ export const companySlice = createSlice({
     postCompanyProfileRequested: (state) => {
       state.loading = true;
     },
-    postCompanyProfileSuccess: (state) => {
+    postCompanyProfileSuccess: (state, action) => {
       state.loading = false;
+      state.companyID = action?.payload;
     },
     postCompanyProfileFailed: (state) => {
       state.loading = false;
@@ -101,6 +106,34 @@ export const companySlice = createSlice({
       state.loading = false;
     },
     patchCompanyProfileFailed: (state) => {
+      state.loading = false;
+    },
+    postCompanyPaymentsRequested: (state) => {
+      state.loading = true;
+    },
+    postCompanyPaymentsSuccess: (state) => {
+      state.loading = false;
+    },
+    postCompanyPaymentsFailed: (state) => {
+      state.loading = false;
+    },
+    patchCompanyPaymentsRequested: (state) => {
+      state.loading = true;
+    },
+    patchCompanyPaymentsSuccess: (state) => {
+      state.loading = false;
+    },
+    patchCompanyPaymentsFailed: (state) => {
+      state.loading = false;
+    },
+    getCompanyProfilePaymentsRequested: (state) => {
+      state.loading = true;
+    },
+    getCompanyProfilePaymentsSuccess: (state, action) => {
+      state.loading = false;
+      state.companyPayment = action?.payload;
+    },
+    getCompanyProfilePaymentsFailed: (state) => {
       state.loading = false;
     }
   },
@@ -138,7 +171,16 @@ export const {
   postCompanyProfileFailed,
   patchCompanyProfileRequested,
   patchCompanyProfileSuccess,
-  patchCompanyProfileFailed
+  patchCompanyProfileFailed,
+  postCompanyPaymentsRequested,
+  postCompanyPaymentsSuccess,
+  postCompanyPaymentsFailed,
+  patchCompanyPaymentsRequested,
+  patchCompanyPaymentsSuccess,
+  patchCompanyPaymentsFailed,
+  getCompanyProfilePaymentsRequested,
+  getCompanyProfilePaymentsSuccess,
+  getCompanyProfilePaymentsFailed
 } = companySlice.actions;
 
 export default companySlice.reducer;

@@ -19,19 +19,39 @@ export const getAdministrativeThirdLevel = ({ countryId, firstLevelCode, secondL
 };
 
 export const getBanks = (): Promise<AxiosResponse> => {
-  return get('/banks');
+  return get('/banks?page=-1&itemPerPage=&sort=&direction=&search=');
 };
 
 export const getListDepartment = (): Promise<AxiosResponse> => {
-  const data =  getCompanyData();
+  const data = getCompanyData();
   return get(`/departments?page=1&itemPerPage=10000&companyID=${data?.id}`);
 };
 
-export const getListPosition = ({departmentID}): Promise<AxiosResponse> => {
+export const getListPosition = ({ departmentID }): Promise<AxiosResponse> => {
   return get(`/positions?page=1&itemPerPage=10000&departmentID=${departmentID}`);
 };
 
 export const getCnb = (): Promise<AxiosResponse> => {
-  const data =  getCompanyData();
-  return get(`compensation_benefits/${data?.id}`);
+  const data = getCompanyData();
+  return get(`compensations?page=1&itemPerPage=1000&companyID=${data?.id}`);
+};
+
+export const getListBaseCompensation = (): Promise<AxiosResponse> => {
+  return get(`compensation-components?page=1&itemPerPage=10000&direction=DESC&isBase=true`);
+};
+
+export const getListSuppCompensation = (): Promise<AxiosResponse> => {
+  return get(`compensation-components?page=1&itemPerPage=10000&direction=DESC&isBase=false`);
+};
+
+export const getListTermin = (payload: number): Promise<AxiosResponse> => {
+  return get(`term-compensations?page=-1&itemPerPage=0&direction=DESC&componentID=${payload}`);
+};
+
+export const getListSuppTermin = (payload: number): Promise<AxiosResponse> => {
+  return get(`term-compensations?page=-1&itemPerPage=0&direction=DESC&componentID=${payload}`);
+};
+
+export const getListWorkSchedule = (payload: number) => {
+  return get(`work-schedules?page=-1&itemPerPage=&sort=&direction=&search=&companyID=${payload}`);
 };

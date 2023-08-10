@@ -2,6 +2,7 @@ import axios, { AxiosHeaderValue, AxiosRequestHeaders, AxiosResponse } from 'axi
 import { Logger } from '@/utils/logger';
 import { config } from '@config';
 import { getStorage, setStorages } from './storage';
+import { getTimezone } from './helper';
 
 /**
  * Log Responser
@@ -43,21 +44,32 @@ async function refreshAccessToken() {
     const response = await service.post('/authentication/refresh', {
       refreshToken: getStorage('refreshToken'),
     });
-
+    // console.log(response, 'response');
     // Update the access token in the storage
-    setStorages([{ name: 'accessToken', value: response.data.accessToken }]);
+    // setStorages([{ name: 'accessTokenasd', value: response.data.accessToken }]);
 
     // Update the Authorization header for all subsequent requests
     service.defaults.headers.Authorization = `Bearer ${response.data.accessToken}`;
 
     // Return the new access token
-    return response.data.accessToken;
+    return response.data;
   } catch (error) {
     // Handle any error that occurred during the token refresh
     console.error('Error refreshing access token:', error);
     throw error;
   }
 }
+
+// Add a request interceptor to handle X-Timezone
+service.interceptors.request.use(
+  (configReq) => {
+    configReq.headers['X-Timezone'] = getTimezone();
+    return configReq;
+  },
+  async (error) => {
+    return Promise.reject(error);
+  }
+);
 
 // Add a response interceptor to handle unauthorized errors
 service.interceptors.response.use(
@@ -68,17 +80,20 @@ service.interceptors.response.use(
   },
   async (error) => {
     if (config.MODE !== 'production') logResponser(error);
-
-    // Check if the error status is 401 
-    if(error.response && error.response.status === 401) {
+    console.log(error, 'error');
+    // Check if the error status is 401
+    if (error.response && error.response.status === 401 && error.response.data.message !== 'incorrect email or password') {
       try {
         const accessToken = await refreshAccessToken();
-
         // Retry the failed request with the new access token
-        error.config.headers.Authorization = `Bearer ${accessToken}`;
+        error.config.headers.Authorization = `Bearer ${accessToken?.data?.accessToken}`;
+        setStorages([
+          { name: 'accessToken', value: accessToken.data.accessToken },
+          { name: 'refreshToken', value: accessToken.data.refreshToken }
+        ]);
         return axios(error.config);
 
-      } catch(refreshError) {
+      } catch (refreshError) {
         // Handle any error that occurred during the token refresh
         console.error('Error refreshing access token:', refreshError);
         return Promise.reject(refreshError);
@@ -125,7 +140,7 @@ export const patch = <T>(url: string, body: T) => {
  * @param {String} url
  * @param {*} params
  */
-export const del = (url: string, params: string) => {
+export const del = (url: string, params?: string) => {
   return service.delete(`${url}`, {
     params
   });

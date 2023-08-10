@@ -9,6 +9,7 @@ import { Employees } from '@/types/employees';
 import { useFormik } from 'formik';
 import { validationSchemeEmployeeEmergencyContact } from './validate';
 import { relationshipItems } from '@/utils/options';
+import { useTranslation } from 'react-i18next';
 
 const AsteriskComponent = MuiStyled('span')(({ theme }) => ({
   color: theme.palette.error.main
@@ -16,14 +17,18 @@ const AsteriskComponent = MuiStyled('span')(({ theme }) => ({
 
 interface EmergencyProps {
   refProp: React.Ref<HTMLFormElement>
-  nextPage: (_val: number) => void;
+  nextPage: (_val: number, _data: Employees.EmergencyContactValues) => void;
+  prevPage: () => void;
   setValues: React.Dispatch<React.SetStateAction<Employees.EmergencyContactValues>>;
   emergencyValues: Employees.EmergencyContactValues;
-  setIsEmergencyValid: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-function EmergencyContactForm({ refProp, nextPage, setValues, emergencyValues, setIsEmergencyValid }: EmergencyProps) {
+function EmergencyContactForm({ refProp, nextPage, prevPage, setValues, emergencyValues }: EmergencyProps) {
   const { responser } = useAppSelectors(state => state);
+  const {t} = useTranslation();
+  const t_emergencyContact = 'company_management.employees.form_&_detail.emergency_contact';
+  const t_primarySection = 'company_management.employees.form_&_detail.emergency_contact.primary_section';
+  const t_secondarySection = 'company_management.employees.form_&_detail.emergency_contact.secondary_section';
   const formik = useFormik({
     initialValues: {
       // employeeID: employeeID,
@@ -43,8 +48,7 @@ function EmergencyContactForm({ refProp, nextPage, setValues, emergencyValues, s
         phoneNumberPrimary: String(formik.values.phoneNumberPrimary)
       };
       setValues(emergencyLastValue);
-      nextPage(3);
-      setIsEmergencyValid(true);
+      nextPage(3, emergencyLastValue);
       setErrors({});
     }
   });
@@ -53,17 +57,13 @@ function EmergencyContactForm({ refProp, nextPage, setValues, emergencyValues, s
     e.preventDefault();
     if (formik.isValid) {
       setValues({ ...formik.values });
-      nextPage(1);
-      setIsEmergencyValid(true);
-    } else {
-      setIsEmergencyValid(false);
+      prevPage();
     }
-
   };
 
   const checkRelationship = (value: unknown) => {
     if ((value as string).length === 0) {
-      return <Text title='Select Relationship' color='grey.400' />;
+      return <Text title={t(`${t_primarySection}.relationship_placeholder`)} color='grey.400' />;
     }
     const selected = relationshipItems.find(item => item.value === value);
     if (selected) {
@@ -98,31 +98,31 @@ function EmergencyContactForm({ refProp, nextPage, setValues, emergencyValues, s
           variant='text-lg'
           fontWeight={700}
           color='primary.500'
-          title='Emergency Contact'
+          title={t(`${t_emergencyContact}.title`)}
           mb='16px'
         />
       </Box>
       <form ref={refProp} onSubmit={formik.handleSubmit}>
         <Box sx={{ marginBottom: '3rem', width: '100%' }}>
-          <Typography component='h3' fontSize={18} color='primary'>Primary</Typography>
+          <Typography component='h3' fontSize={18} color='primary'>{t(`${t_primarySection}.title`)}</Typography>
           <Grid container spacing={2} sx={{ marginBottom: '1.5rem', marginTop: '1rem' }}>
             <Grid item xs={6} md={6} lg={6} xl={6}>
               <Input
                 name='fullNamePrimary'
-                customLabel='Full Name'
+                customLabel={t(`${t_primarySection}.fullname`)}
                 withAsterisk={true}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 size='small'
                 value={formik.values.fullNamePrimary}
-                placeholder='Input Full Name'
+                placeholder={t(`${t_primarySection}.fullname_placeholder`)}
                 error={formik.touched.fullNamePrimary && Boolean(formik.errors.fullNamePrimary)}
                 helperText={formik.touched.fullNamePrimary && formik.errors.fullNamePrimary}
               />
             </Grid>
             <Grid item xs={6} md={6} lg={6} xl={6}>
               <FormControl fullWidth>
-                <Typography mb='6px'>Relationship</Typography>
+                <Typography mb='6px'>{t(`${t_primarySection}.relationship`)}</Typography>
                 <Select
                   fullWidth
                   variant='outlined'
@@ -146,7 +146,7 @@ function EmergencyContactForm({ refProp, nextPage, setValues, emergencyValues, s
           </Grid>
           <Grid container spacing={2}>
             <Grid item xs={6} md={6} lg={6} xl={6} sx={{ marginBottom: '1.5rem' }}>
-              <Typography>Contact Number<AsteriskComponent>*</AsteriskComponent></Typography>
+              <Typography>{t(`${t_primarySection}.contact_number`)}<AsteriskComponent>*</AsteriskComponent></Typography>
               <Grid container spacing={2}>
                 <Grid item xs={1} sm={3} md={2} lg={2} xl={2} spacing={2}>
                   <Select
@@ -173,7 +173,7 @@ function EmergencyContactForm({ refProp, nextPage, setValues, emergencyValues, s
                 <Grid item xs={9} sm={9} md={9} lg={9} xl={10} alignSelf='flex-end'>
                   <Input
                     name='phoneNumberPrimary'
-                    placeholder='Input contact number'
+                    placeholder={t(`${t_primarySection}.contact_number_placeholder`)}
                     withAsterisk={true}
                     size='small'
                     type='number'
@@ -190,23 +190,23 @@ function EmergencyContactForm({ refProp, nextPage, setValues, emergencyValues, s
         </Box>
 
         <Box sx={{ marginBottom: '3rem', width: '100%' }}>
-          <Typography component='h3' fontSize={18} color='primary'>Secondary</Typography>
+          <Typography component='h3' fontSize={18} color='primary'>{t(`${t_secondarySection}.title`)}</Typography>
           <Grid container spacing={2} sx={{ marginBottom: '1.5rem', marginTop: '1rem' }}>
             <Grid item xs={6} md={6} lg={6} xl={6}>
               <Input
                 name='fullNameSecondary'
-                customLabel='Full Name'
+                customLabel={t(`${t_secondarySection}.fullname`)}
                 withAsterisk={false}
                 size='small'
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                placeholder='Input Full Name'
+                placeholder={t(`${t_secondarySection}.fullname_placeholder`)}
                 value={formik.values.fullNameSecondary}
               />
             </Grid>
             <Grid item xs={6} md={6} lg={6} xl={6} spacing={2}>
               <FormControl fullWidth>
-                <Typography mb='6px'>Relationship</Typography>
+                <Typography mb='6px'>{t(`${t_secondarySection}.relationship`)}</Typography>
                 <Select
                   fullWidth
                   variant='outlined'
@@ -230,7 +230,7 @@ function EmergencyContactForm({ refProp, nextPage, setValues, emergencyValues, s
           </Grid>
           <Grid container spacing={2}>
             <Grid item xs={6} md={6} lg={6} xl={6} sx={{ marginBottom: '1.5rem' }}>
-              <Typography>Contact Number</Typography>
+              <Typography>{t(`${t_secondarySection}.contact_number`)}</Typography>
               <Grid container spacing={2} >
                 <Grid item xs={1} sm={3} md={2} lg={2} xl={2} spacing={2}>
                   <Select
@@ -257,12 +257,13 @@ function EmergencyContactForm({ refProp, nextPage, setValues, emergencyValues, s
                 <Grid item xs={9} sm={9} md={9} lg={9} xl={10} alignSelf='flex-end'>
                   <Input
                     name='phoneNumberSecondary'
-                    placeholder='Input contact number'
+                    placeholder={t(`${t_secondarySection}.contact_number_placeholder`)}
                     withAsterisk={true}
                     size='small'
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.phoneNumberSecondary}
+                    type='number'
                   />
                 </Grid>
               </Grid>
@@ -276,10 +277,10 @@ function EmergencyContactForm({ refProp, nextPage, setValues, emergencyValues, s
           gap={2}
         >
           <Grid item>
-            <Button onClick={handleBack} label='Back' variant='outlined' />
+            <Button onClick={handleBack} label={t('button.back')} variant='outlined' />
           </Grid>
           <Grid item>
-            <Button fullWidth={false} size='small' color='primary' type='submit' label='Next' />
+            <Button color='primary' type='submit' label={t('button.next')} />
           </Grid>
         </Grid>
       </form>

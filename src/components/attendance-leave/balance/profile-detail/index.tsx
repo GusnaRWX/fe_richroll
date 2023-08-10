@@ -5,9 +5,9 @@ import {
   Box,
   Avatar,
 } from '@mui/material';
-import LeaveBalanceProfileDetailTable from './leaveBalanceTable';
-import LeaveBalanceHistoryTable from './LeaveHistoryTable';
-import LeaveBalanceProfileEditModal from './EditModal';
+import LeaveBalanceProfileDetailTable from './LeaveBalanceProfileDetailTable';
+import LeaveBalanceHistoryTable from './LeaveBalanceHistoryTable';
+import LeaveBalanceProfileEditModal from './LeaveBalanceProfileEditModal';
 
 import { Button, IconButton } from '@/components/_shared/form';
 import { styled as MuiStyled } from '@mui/material/styles';
@@ -151,7 +151,7 @@ const LeaveBalanceProfileDetailComponent = () => {
         Leave Balance
       </Typography>
       <Paper sx={{ p: '16px', mb: '24px' }}>
-        <LeaveBalanceProfileDetailTable tabValue={0} />
+        <LeaveBalanceProfileDetailTable />
       </Paper>
       <Typography
         style={{

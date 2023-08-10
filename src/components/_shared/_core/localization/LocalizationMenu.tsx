@@ -1,28 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import { IconButton } from '@/components/_shared/form';
 import { LocalizationsMenu } from './localization';
-import Image from 'next/image';
+import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { Box, Menu, Typography } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { useTranslation } from 'react-i18next';
+import { setLanguage } from '@/store/reducers/slice/global/globalSlice';
 
 const LocalizationMenu = () => {
-  const [selectedCountry, setSelectedCountry] = useState('EN');
+  const { i18n } = useTranslation();
+  const dispatch = useAppDispatch();
+  const { global } = useAppSelectors(state => state);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const isLanguageOpen = Boolean(anchorEl);
   const [hydrated, setHaydrated] = useState(false);
-
+  const findCodeName = LocalizationsMenu.find(locale => locale.nativeName === global.language);
   const handleLanguageMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleChangeLocalization = (country: string) => {
-    setSelectedCountry(country);
-    setAnchorEl(null);
-  };
+
+  useEffect(() => {
+    i18n.changeLanguage(findCodeName?.codeName);
+  }, []);
 
   useEffect(() => {
     setHaydrated(true);
   }, []);
+
+
 
   if (!hydrated) {
     return null;
@@ -67,23 +73,24 @@ const LocalizationMenu = () => {
             sx={{
               display: 'flex',
               alignItems: 'center',
-              cursor: 'pointer'
+              cursor: 'pointer',
+              ':hover': {
+                backgroundColor: '#223567 !important',
+                color: '#fff'
+              },
+              backgroundColor: global.language === locale.nativeName ? '#223567 !important' : '',
+              color: global.language === locale.nativeName ? '#fff' : '#223567',
             }}
-            onClick={() => { handleChangeLocalization(locale.name); }}
+            onClick={() => {
+              i18n.changeLanguage(locale?.codeName);
+              dispatch({
+                type: setLanguage.toString(),
+                payload: locale.nativeName
+              });
+              setAnchorEl(null);
+            }}
           >
-            <IconButton
-              icons={
-                <Image
-                  src={locale.icons}
-                  width={19}
-                  height={14}
-                  alt={locale.name}
-                />
-              }
-              disableFocusRipple
-              disableRipple
-            />
-            <Typography>{locale.name}</Typography>
+            <Typography sx={{ paddingLeft: '.5rem' }}>{locale.nativeName}</Typography>
           </Box>
         ))
       }
@@ -94,7 +101,7 @@ const LocalizationMenu = () => {
     <>
       {
         LocalizationsMenu.map((locale) => (
-          locale.name === selectedCountry && (
+          locale.nativeName === global.language && (
             <Box
               key={locale.name}
               sx={{
@@ -102,22 +109,7 @@ const LocalizationMenu = () => {
                 alignItems: 'center'
               }}
             >
-              <IconButton
-                icons={
-                  <Image
-                    src={locale.icons}
-                    width={19}
-                    height={14}
-                    alt={locale.name}
-                  />
-                }
-
-                disableFocusRipple
-                disableRipple
-                sx={{ cursor: 'text' }}
-
-              />
-              <Typography>{locale.name}</Typography>
+              <Typography>{locale.nativeName}</Typography>
               <IconButton icons={<ExpandMoreIcon />}
                 aria-controls={languageId}
                 aria-label='current language'

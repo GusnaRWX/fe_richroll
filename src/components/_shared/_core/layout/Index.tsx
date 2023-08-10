@@ -1,4 +1,4 @@
-import { Box, Container, List, Toolbar, Typography } from '@mui/material';
+import { Box, Container, List, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import Appbar from '@/components/_shared/_core/appbar/Appbar';
 import DrawerCore from '@/components/_shared/_core/drawer/Index';
@@ -12,7 +12,7 @@ import Notify from '../../common/Notify';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { getStorage } from '@/utils/storage';
 import { meSuccessed } from '@/store/reducers/slice/auth/meSlice';
-import { getCompanyData, CompanyDataParse } from '@/utils/helper';
+import { getCompanyData, CompanyDataParse, getUserData, getSelectedRoles } from '@/utils/helper';
 
 export interface LayoutProps {
   children?: React.ReactNode;
@@ -30,8 +30,12 @@ const MainComponent = styled(Box)<BoxProps>(({ theme }) => ({
 const Layout = ({
   children,
 }: LayoutProps) => {
-  const [mobileOpen, setMobileOpen] = useState<boolean>(false);
+  const [mobileOpen, setMobileOpen] = useState<boolean>(true);
+  const [menuOpen, setMenuOpen] = useState<string>('');
   const [companyData, setCompanyData] = useState<CompanyDataParse | null>({});
+  const [hydrated, setHydrated] = useState(false);
+  const userData = getUserData();
+  const selectedRoles = getSelectedRoles();
   const dispatch = useAppDispatch();
 
   const handleDrawerToggle = () => {
@@ -52,60 +56,82 @@ const Layout = ({
     }
   }, []);
 
+  const handleMenuOpen = (name: string | undefined) => {
+    if(name) setMenuOpen(name);
+  };
+
   const container = typeof window !== 'undefined' ? () => window.document.body : undefined;
+  const { me: { profile } } = useAppSelectors(state => state);
 
   // Drawer
   const drawer = (
     <Box>
-      <Toolbar sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        margin: '20px 0'
-      }}>
-        <Box>
-          <Image
-            src={ImageType.KAYAROLL_LOGO}
-            width={151}
-            height={40}
-            alt='kayaroll'
-            priority
-          />
-        </Box>
-      </Toolbar>
-      <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', px: '16px', gap: '12px' }}>
-        <Box component='div' sx={{ position: 'relative', width: '60px', height: '60px' }}>
-          <Image
-            src={companyData?.imageUrl && companyData?.imageUrl.includes('http') ? companyData?.imageUrl : ImageType.PLACEHOLDER_COMPANY}
-            fill={true}
-            style={{ objectFit: 'contain' }}
-            sizes='(max-width: 60px) 100%, 60px'
-            alt='company-logo'
-          />
-        </Box>
-        <Box component='div'>
-          <Typography
-            variant='text-lg'
-            component='div'
-            sx={{ fontWeight: 700, width: '100%', color: '#223567' }}
-          >
-            {companyData?.name}
-          </Typography>
-          <Typography
-            variant='text-xs'
-            component='div'
-            sx={{ fontWeight: 500, width: '100%', color: '#6B7280' }}
-          >
-            {companyData?.sector}
-          </Typography>
-        </Box>
-      </Box>
-      <Typography
-        variant='text-base'
-        component='div'
-        sx={{ fontWeight: 400, px: '16px', mt: '8px', color: '#6B7280', width: '100%' }}
-      >
-        Menus
-      </Typography>
+      {!profile?.roles?.includes('Super Admin') &&
+        <>
+          {
+            selectedRoles === 'HR Admin' && (
+              <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', px: '16px', pt: '8px', gap: '12px' }}>
+                <Box component='div' sx={{ position: 'relative', width: '60px', height: '60px' }}>
+                  <Image
+                    src={companyData?.imageUrl && companyData?.imageUrl.includes('http') ? companyData?.imageUrl : ImageType.PLACEHOLDER_COMPANY}
+                    fill={true}
+                    style={{ objectFit: 'contain' }}
+                    sizes='(max-width: 60px) 100%, 60px'
+                    alt='company-logo'
+                  />
+                </Box>
+                <Box component='div'>
+                  <Typography
+                    variant='text-lg'
+                    component='div'
+                    sx={{ fontWeight: 700, width: '100%', color: '#223567' }}
+                  >
+                    {companyData?.name}
+                  </Typography>
+                  <Typography
+                    variant='text-xs'
+                    component='div'
+                    sx={{ fontWeight: 500, width: '100%', color: '#6B7280' }}
+                  >
+                    {companyData?.sector}
+                  </Typography>
+                </Box>
+              </Box>
+            )
+          }
+          {
+            selectedRoles === 'Employee' && (
+              <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', px: '16px', pt: '8px', gap: '12px' }}>
+                <Box component='div' sx={{ position: 'relative', width: '60px', height: '60px' }}>
+                  <Image
+                    src={userData?.picture && userData?.picture.includes('http') ? userData?.picture : ImageType.PLACEHOLDER_COMPANY}
+                    fill={true}
+                    style={{ objectFit: 'contain' }}
+                    sizes='(max-width: 60px) 100%, 60px'
+                    alt='company-logo'
+                  />
+                </Box>
+                <Box component='div'>
+                  <Typography
+                    variant='text-lg'
+                    component='div'
+                    sx={{ fontWeight: 700, width: '100%', color: '#223567' }}
+                  >
+                    {userData?.name}
+                  </Typography>
+                  <Typography
+                    variant='text-xs'
+                    component='div'
+                    sx={{ fontWeight: 500, width: '100%', color: '#6B7280' }}
+                  >
+                    {userData?.employee?.position === null ? '-' : userData?.employee?.position}
+                  </Typography>
+                </Box>
+              </Box>
+            )
+          }
+        </>
+      }
       <List>
         {
           Menus?.map(menu => (
@@ -116,6 +142,9 @@ const Layout = ({
               icons={menu.icons}
               hasChild={menu.hasChild}
               child={menu.child}
+              roles={menu.roles}
+              menuOpen={menuOpen}
+              setMenuOpen={handleMenuOpen}
             />
           ))
         }
@@ -123,6 +152,12 @@ const Layout = ({
     </Box>
   );
 
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
+  if (!hydrated) {
+    return null;
+  }
   return (
     <Box
       sx={{
@@ -140,7 +175,7 @@ const Layout = ({
       }
       {
         ![200, 201, 0].includes(responser?.code) && (
-          <Notify error={true} body={responser?.message}/>
+          <Notify error={true} body={responser?.message} />
         )
       }
       <DrawerCore

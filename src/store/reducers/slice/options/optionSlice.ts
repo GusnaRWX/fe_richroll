@@ -13,7 +13,22 @@ interface OptionState {
   banks: Array<{ label: string, value: string }>
   listDepartment: Array<{ label: string, value: string }>
   listPosition: Array<{ label: string, value: string }>
-  listCnb: Array<{label: string, value: number| string}>
+  listCnb: Array<{ label: string, value: number | string }>
+  listBaseCompensation: Array<{ label: string, value: string | number, type: string | number }>
+  listSuppCompensation: Array<{ label: string, value: string | number, type: string | number }>
+  listTermin: Array<{ label: string, value: string | number }>
+  listSuppTermin: Array<Array<{ label: string | number, value: string | number }>>,
+  listCompensationBenefits: {
+    label?: string,
+    value?: string,
+    base?: [],
+    supplementaries?: []
+  }
+  // listCnb: Array<{label: string, value: number| string}>
+  // listCompensation: Array<{label: string, value: string | number, type: string | number }>
+  // listTermin: Array<{label: string, value: string | number}>
+  // listSuppTermin: Array<Array<{label: string | number, value: string | number}>>
+  listWorkSchedule: Array<{ label: string, value: string | number }>
 }
 
 const initialState: OptionState = {
@@ -28,7 +43,13 @@ const initialState: OptionState = {
   secondAdministrativeFirst: [],
   secondAdministrativeSecond: [],
   secondAdministrativeThird: [],
-  listCnb: []
+  listCnb: [],
+  listBaseCompensation: [],
+  listSuppCompensation: [],
+  listTermin: [],
+  listSuppTermin: [[]],
+  listCompensationBenefits: {},
+  listWorkSchedule: []
 };
 
 const returnNameId = (item) => {
@@ -42,6 +63,14 @@ const returnNameCode = (item) => {
   return {
     label: item.name,
     value: item.code
+  };
+};
+
+const returnCompensationId = (item) => {
+  return {
+    label: item.name,
+    value: item.id,
+    type: item.type
   };
 };
 
@@ -103,10 +132,7 @@ export const optionSlice = createSlice({
     getBanksSuccess: (state, action) => {
       state.loading = false;
       state.banks = action?.payload?.items.map(item => {
-        return {
-          label: item.alias,
-          value: item.id
-        };
+        return returnNameId(item);
       });
     },
     getBanksFailed: (state) => {
@@ -180,9 +206,107 @@ export const optionSlice = createSlice({
       state.listCnb = action?.payload?.items?.map(item => {
         return returnNameId(item);
       });
+      state.listCompensationBenefits = action?.payload?.items?.map(item => {
+        return {
+          label: item.name,
+          value: item.id,
+          base: item.base,
+          supplementaries: item.supplementaries
+        };
+      });
     },
     getListCnbFailed: (state) => {
       state.loading = false;
+    },
+    getListBaseCompensationRequested: (state) => {
+      state.loading = true;
+    },
+    getListBaseCompensationSuccess: (state, action) => {
+      state.loading = false;
+      state.listBaseCompensation = action?.payload?.items?.map(item => {
+        return returnCompensationId(item);
+      });
+    },
+    getListBaseCompensationFailed: (state) => {
+      state.loading = false;
+    },
+    getListSuppCompensationRequested: (state) => {
+      state.loading = true;
+    },
+    getListSuppCompensationSuccess: (state, action) => {
+      state.loading = false;
+      state.listSuppCompensation = action?.payload?.items?.map(item => {
+        return returnCompensationId(item);
+      });
+    },
+    getListSuppCompensationFailed: (state) => {
+      state.loading = false;
+    },
+    getListTerminReqeusted: (state) => {
+      state.loading = true;
+    },
+    getListTerminSuccess: (state, action) => {
+      state.loading = false;
+      state.listTermin = action?.payload?.items?.map(item => {
+        return returnNameId(item);
+      });
+    },
+    getListTerminFailed: (state) => {
+      state.loading = false;
+    },
+    getListSuppTerminRequested: (state) => {
+      state.loading = true;
+    },
+    getListSuppTerminSuccess: (state, action) => {
+      const data: Array<{ label: string | number, value: string | number }> = [];
+      state.loading = false;
+      if (state.listSuppTermin[0].length === 0) {
+        state.listSuppTermin.splice(0, 1);
+        action?.payload?.items?.map((item) => {
+          data.push({
+            label: item.name,
+            value: item.id
+          });
+        });
+        state.listSuppTermin.push(data);
+      } else {
+        action?.payload?.items?.map(item => {
+          data.push({
+            label: item.name,
+            value: item.id
+          });
+        });
+        state.listSuppTermin.push(data);
+      }
+    },
+    getListSuppTerminFailed: (state) => {
+      state.loading = false;
+    },
+    removeListSuppTermin: (state, action) => {
+      state.listSuppTermin.slice(action?.payload, 1);
+    },
+    getListOptionWorkScheduleRequested: (state) => {
+      state.loading = true;
+    },
+    getListOptionWorkScheduleSuccess: (state, action) => {
+      const data: Array<{ label: string, value: string | number }> = [];
+      action?.payload?.items?.map(item => {
+        data.push({
+          label: item.name,
+          value: item.id
+        });
+      });
+      data.push({
+        label: 'Custom Profile',
+        value: 0
+      });
+      state.listWorkSchedule = data;
+    },
+    getListOptionWorkScheduleFailed: (state) => {
+      state.loading = false;
+    },
+    resetListWorkSchedule: (state) => {
+      state.listWorkSchedule = [];
     }
   },
   extraReducers: {
@@ -228,7 +352,24 @@ export const {
   getSecondAdministrativeThirdLevelFailed,
   getListCnbRequested,
   getListCnbFailed,
-  getListCnbSuccess
+  getListCnbSuccess,
+  getListBaseCompensationFailed,
+  getListBaseCompensationSuccess,
+  getListBaseCompensationRequested,
+  getListSuppCompensationFailed,
+  getListSuppCompensationSuccess,
+  getListSuppCompensationRequested,
+  getListTerminFailed,
+  getListTerminReqeusted,
+  getListTerminSuccess,
+  getListSuppTerminFailed,
+  getListSuppTerminRequested,
+  getListSuppTerminSuccess,
+  removeListSuppTermin,
+  getListOptionWorkScheduleFailed,
+  getListOptionWorkScheduleRequested,
+  getListOptionWorkScheduleSuccess,
+  resetListWorkSchedule
 } = optionSlice.actions;
 
 export default optionSlice.reducer;

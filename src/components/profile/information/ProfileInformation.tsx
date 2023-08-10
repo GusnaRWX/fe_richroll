@@ -1,38 +1,23 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Card, Text } from '@/components/_shared/common';
 import { Box, Grid } from '@mui/material';
-import { Input, Button } from '@/components/_shared/form';
-import { useAppSelectors, useForm } from '@/hooks/index';
+import { Input, Button, DatePicker } from '@/components/_shared/form';
+import { useAppSelectors } from '@/hooks/index';
+import { useFormik } from 'formik';
+import { ifThenElse } from '@/utils/helper';
+import dayjs from 'dayjs';
 
 const ProfileInformation = () => {
   const { profile } = useAppSelectors(state => state.me);
 
-  const [initialState] = useState({
-    fullName: ''
+  const formik = useFormik({
+    initialValues: {
+      fullName: ''
+    },
+    onSubmit: (_val) => {
+      console.log(_val);
+    }
   });
-
-  const validate = (fieldOfValues = values) => {
-    const temp = { ...errors };
-
-    if ('fullName' in fieldOfValues)
-      temp.fullName = fieldOfValues.fullName;
-
-    if (fieldOfValues === values)
-      return Object.values(temp).every(x => x === '');
-
-    setErrors({
-      ...temp
-    });
-
-  };
-
-  const {
-    values,
-    errors,
-    setErrors,
-    handleInputChange
-  } = useForm(initialState, true, validate);
-
 
   return (
     <Card sx={{
@@ -59,6 +44,7 @@ const ProfileInformation = () => {
         justifyContent='space-between'
         alignItems='center'
         rowGap={2}
+        mb='16px'
       >
         <Grid item xs={12} sm={5.9}>
           <Input
@@ -76,8 +62,18 @@ const ProfileInformation = () => {
             fullWidth
             customLabel='Full Name'
             name='fullName'
-            value={values.fullName}
-            onChange={handleInputChange}
+            value={formik.values.fullName}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+          />
+        </Grid>
+      </Grid>
+      <Grid container>
+        <Grid item xs={12} sm={5.9}>
+          <DatePicker
+            customLabel='Date of Birth'
+            disabled
+            value={ifThenElse(dayjs(profile.dateOfBirth).isValid(), dayjs(profile.dateOfBirth), null)}
           />
         </Grid>
       </Grid>

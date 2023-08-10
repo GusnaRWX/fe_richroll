@@ -7,41 +7,90 @@ export const getEmployee = (payload: Employees.EmployeeParams) => {
 };
 
 export const postEmployeeInfo = (payload: Employees.EmployeeInfoPayload) => {
-  return post('employees/information', payload);
+  return post('employees', payload);
 };
 
 export const postEmergency = (payload) => {
-  return post('employees/emergency', payload);
+  const { employeeID, ...restPayload } = payload;
+  return post(`employees/${employeeID}/emergency`, restPayload);
 };
 
-export const postPersonalInformation = (payload: Employees.PersonalInformationPayload | unknown) => {
-  return post('employees/personal', payload);
+export const postPersonalInformation = (payload) => {
+  const { employeeID, ...restPayload } = payload;
+  return post(`employees/${employeeID as string}/personal`, restPayload as Employees.PersonalInformationPayload);
 };
 
 export const getDetailEmployeeInformation = (payload: number | string) => {
-  return get('employees/information/' + payload);
+  return get(`employees/${payload}/information`);
 };
 
 export const getDetailPersonalInformation = (payload: number | string) => {
-  return get('employees/personal/' + payload);
+  return get(`employees/${payload}/personal`);
 };
 
 export const getDetailCnb = (payload: number | string) => {
   return get('compensation_benefits/detail/' + payload);
 };
 
-export const postEmployeeCNB = (payload: Employees.CnbEmployeePayload) => {
-  return post('employees/compensation-benefit', payload);
+export const postEmployeeCNB = (payload) => {
+  const { employeeID, data } = payload;
+  return post(`employees/${employeeID as string}/compensations`, data as Employees.CnbEmployeePayload);
 };
 
 export const getEmployeeEmergencyDetail = (payload: string) => {
-  return get(`employees/emergency/${payload}`);
+  return get(`employees/${payload}/emergency`);
 };
 
 export const patchEmployeeInformation = (payload) => {
-  return patch(`employees/information/${payload.employeeID}`, payload.information as Employees.PatchEmployeeInformation);
+  const { employeeID, information } = payload;
+  return patch(`employees/${employeeID}`, information as Employees.PatchEmployeeInformation);
 };
 
 export const patchEmergencyContact = (payload) => {
-  return patch(`employees/emergency/${payload.employeeID}`, payload.emergency as Employees.EmergencyContactValues);
+  const { employeeID, ...restPayload } = payload;
+  console.log(restPayload);
+  return patch(`employees/${employeeID}/emergency`, restPayload as Employees.EmergencyContactValues);
+};
+
+export const patchEmployeePersonal = (payload) => {
+  const { employeeID, ...restPayload } = payload;
+  return patch(`employees/${employeeID}/personal`, restPayload);
+};
+
+export const getDetailWorkSchedule = (payload) => {
+  return get(`work-schedules/${payload}/`);
+};
+
+export const getViewWorkSchedule = (payload) => {
+  return get(`employees/${payload}/work-schedules`);
+};
+
+export const postSimulationEvent = (payload: Employees.InitialValuesWorkScheduleForm) => {
+  return post('work-schedules/simulation', payload);
+};
+
+export const postCalculateEvent = (payload: Employees.PostCalculateEventPayloadType) => {
+  return post('work-schedules/calculate', payload);
+};
+
+export const postWorkSchedule = (payload) => {
+  return post(`employees/${payload?.id}/work-schedules`, payload?.workSchedule);
+};
+
+export const postTerminateEmployee = (payload, id) => {
+  return post(`employees/${id as string}/terminate`, payload as Employees.PostTerminateEmployee);
+};
+
+export const patchWorkSchedule = (payload) => {
+  const { id, workSchedule } = payload;
+  return patch(`employees/${id}/work-schedules`, workSchedule);
+};
+
+export const getEmployeeCnb = (payload) => {
+  return get(`employees/${payload}/compensations`);
+};
+
+export const patchEmployeeCnb = (payload) => {
+  const { id, employeeCnb } = payload;
+  return patch(`employees/${id}/compensations`, employeeCnb);
 };

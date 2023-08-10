@@ -1,16 +1,37 @@
-import React, { HTMLAttributes, useState } from 'react';
+import React, { HTMLAttributes, useState, useEffect, useRef } from 'react';
 import { Grid, Card, Button as MuiButton, Typography, Box, Pagination } from '@mui/material';
 import { Scheduler } from '@aldabil/react-scheduler';
 import styled from '@emotion/styled';
 import { Add } from '@mui/icons-material';
 import { IconButton } from '../_shared/form';
-import { HiPencilAlt } from 'react-icons/hi';
 import { BsTrashFill } from 'react-icons/bs';
+import { HiPencilAlt } from 'react-icons/hi';
 import AnnualWorkCalendarCreateForm from './create/AnnualWorkCalendarCreateForm';
+import AnnualWorkCalendarUpdateForm from './update/AnnualWorkCalendarUpdateForm';
+import ConfirmationModal from '../_shared/common/ConfirmationModal';
+import {
+  getListAnnualScheduleRequested,
+  getListEventRequested,
+  deleteAnnualScheduleRequested,
+  getViewAnnualScheduleRequested
+} from '@/store/reducers/slice/company-management/annual-work-schedule/annualSchedule';
+import { useAppDispatch, useAppSelectors } from '@/hooks/index';
+import dayjs from 'dayjs';
+import type { SchedulerRef } from '@aldabil/react-scheduler/types';
+import { OverlayLoading } from '../_shared/common';
+import { getCompanyData } from '@/utils/helper';
+import { useTranslation } from 'react-i18next';
+
 
 const ContentWrapper = styled(Card)(({
   padding: '2rem'
 }));
+
+const SchedulerWrapper = styled.div`
+ & > div > div:last-child > div:last-child {
+  overflow-x: hidden !important;
+ }
+`;
 
 const TopWrapper = styled.div`
  display: flex;
@@ -67,106 +88,171 @@ const ListWrapper = styled.div`
 
 function AnnualWorkCalendarComponent() {
   const [openCreateForm, setOpenCreateForm] = useState(false);
+  const [openUpdateForm, setOpenUpdateForm] = useState(false);
+  const [deleteConfirmation, setDeleteConfirmation] = useState(false);
+  const [rendered, setRendered] = useState(false);
+  const [deletedId, setDeletedId] = useState(0);
+  const [page, setPage] = useState(1);
+  const dispatch = useAppDispatch();
+  const {t} = useTranslation();
+  const t_annualWorkCalendar = 'company_management.annual_work_calendar';
+  const t_deleteConfirmation = 'company_management.annual_work_calendar.popup.delete';
+  const { data, events, isLoading, totalPages } = useAppSelectors((state) => state.annualSchedule);
+  const calendarRef = useRef<SchedulerRef>(null);
+
+  useEffect(() => {
+    dispatch({
+      type: getListAnnualScheduleRequested.toString(),
+      payload: {
+        page: page,
+        itemPerPage: 5,
+        sort: '',
+        direction: 'ASC',
+        companyID: getCompanyData()?.id,
+        search: '',
+        start: '',
+        end: ''
+      }
+    });
+  }, [page]);
+
+  const handleDelete = () => {
+    const eventLength = calendarRef?.current?.scheduler?.events?.length;
+    calendarRef?.current?.scheduler?.events?.splice(0, eventLength);
+  };
+
+  const handleChangePaginate = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
+  };
+
+  const handleDeleteSchedule = () => {
+    console.log(deletedId);
+    dispatch({
+      type: deleteAnnualScheduleRequested.toString(),
+      payload: deletedId
+    });
+    handleDelete();
+    setDeleteConfirmation(false);
+    setPage(1);
+  };
+
+
+  useEffect(() => {
+    dispatch({ type: getListEventRequested.toString() });
+    setRendered(true);
+  }, []);
+
+
+
+  useEffect(() => {
+    if (rendered){
+      calendarRef?.current?.scheduler.confirmEvent(events, 'create');
+    }
+  }, [events]);
+
+  const handleViewUpdate = (id) => {
+    dispatch({
+      type: getViewAnnualScheduleRequested.toString(),
+      payload: id
+    });
+    setTimeout(() => {
+      setOpenUpdateForm(true);
+    }, 1000);
+
+  };
+
   return (
     <>
+      <OverlayLoading open={isLoading}/>
       <TopWrapper>
-        <Typography fontSize='24px' color='primary' fontWeight='bold'>Annual Work Calendar</Typography>
+        <Typography fontSize='24px' color='primary' fontWeight='bold'>{t(`${t_annualWorkCalendar}.title`)}</Typography>
         <MuiButton
           variant='contained'
           size='small'
           color='primary'
           onClick={() => { setOpenCreateForm(true); }}
-        ><Add fontSize='small' />&nbsp; Add Calendar Item</MuiButton>
+        ><Add fontSize='small' />&nbsp; {t('button.add_calendar_item')}</MuiButton>
       </TopWrapper>
       <ContentWrapper>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={12} md={8} lg={8} xl={8}>
-            <Scheduler
-              events={[]}
-              disableViewNavigator={true}
-              view='month'
-            />
+            <SchedulerWrapper>
+              <Scheduler
+                events={[]}
+                ref={calendarRef}
+                disableViewNavigator={true}
+                view='month'
+                day={null}
+                deletable={false}
+                editable={false}
+                viewerExtraComponent={(fields, eventsData) => {
+                  return (
+                    <div>
+                      <p>Notes: {eventsData?.note}</p>
+                    </div>
+                  );
+                }}
+                week={null}
+                month={{
+                  weekDays: [0, 1,2,3,4,5,6],
+                  weekStartOn: 1,
+                  startHour: 1,
+                  endHour: 23,
+                  cellRenderer: () => {
+                    return (
+                      <MuiButton onClick={() => {
+                        return null;
+                      }}/>
+                    );
+                  }
+                }}
+              />
+            </SchedulerWrapper>
           </Grid>
           <Grid item xs={12} sm={12} md={4} lg={4} xl={4}>
             <Box width='100%' height='100%' sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between'  }}>
               <Box width='100%'>
-                <Typography mb='2rem' fontWeight='bold' fontSize='16px' color='gray'>Upcoming Events</Typography>
-                <Typography mb='.5rem'>15 March 2023</Typography>
-                <BoxWrapper>
-                  <LeftWrapper>
-                    <Dots color='#7C3AED'/>
-                    <ListWrapper>
-                      <Typography fontSize='14px' fontWeight='bold' color='primary'>Chairman Birthday</Typography>
-                      <Typography fontSize='12px' fontWeight='bold' color='gray'>Mar 15, 2023 - 11:15AM - 12:30PM</Typography>
-                    </ListWrapper>
-                  </LeftWrapper>
-                  <ButtonWrapper>
-                    <IconButton
-                      parentColor='primary.50'
-                      icons={
-                        <HiPencilAlt fontSize={20} color='#223567'/>
-                      }
-                    />
-                    <IconButton
-                      parentColor='red.100'
-                      icons={
-                        <BsTrashFill fontSize={20} color='#EF4444'/>
-                      }
-                    />
-                  </ButtonWrapper>
-                </BoxWrapper>
-                <Typography mb='.5rem'>24 March 2023</Typography>
-                <BoxWrapper>
-                  <LeftWrapper>
-                    <Dots color='#D97706'/>
-                    <ListWrapper>
-                      <Typography fontSize='14px' fontWeight='bold' color='primary'>Ramadhan Holiday</Typography>
-                      <Typography fontSize='12px' fontWeight='bold' color='gray'>Mar 15, 2023 - 11:15AM - 12:30PM</Typography>
-                    </ListWrapper>
-                  </LeftWrapper>
-                  <ButtonWrapper>
-                    <IconButton
-                      parentColor='primary.50'
-                      icons={
-                        <HiPencilAlt fontSize={20} color='#223567'/>
-                      }
-                    />
-                    <IconButton
-                      parentColor='red.100'
-                      icons={
-                        <BsTrashFill fontSize={20} color='#EF4444'/>
-                      }
-                    />
-                  </ButtonWrapper>
-                </BoxWrapper>
-                <Typography mb='.5rem'>25 March 2023</Typography>
-                <BoxWrapper>
-                  <LeftWrapper>
-                    <Dots color='#D97706'/>
-                    <ListWrapper>
-                      <Typography fontSize='14px' fontWeight='bold' color='primary'>Ramadhan Holiday</Typography>
-                      <Typography fontSize='12px' fontWeight='bold' color='gray'>Mar 15, 2023 - 11:15AM - 12:30PM</Typography>
-                    </ListWrapper>
-                  </LeftWrapper>
-                  <ButtonWrapper>
-                    <IconButton
-                      parentColor='primary.50'
-                      icons={
-                        <HiPencilAlt fontSize={20} color='#223567'/>
-                      }
-                    />
-                    <IconButton
-                      parentColor='red.100'
-                      icons={
-                        <BsTrashFill fontSize={20} color='#EF4444'/>
-                      }
-                    />
-                  </ButtonWrapper>
-                </BoxWrapper>
+                <Typography mb='2rem' fontWeight='bold' fontSize='16px' color='gray'>{t(`${t_annualWorkCalendar}.upcoming_event`)}</Typography>
+                {
+                  data?.items?.map((item) => (
+                    <>
+                      <Typography mb='.5rem'>{dayjs(item.start).format('DD MMM YYYY')}</Typography>
+                      <BoxWrapper>
+                        <LeftWrapper>
+                          <Dots color={item?.eventType === 0 ? '#7C3AED' : '#D97706'}/>
+                          <ListWrapper>
+                            <Typography fontSize='14px' fontWeight='bold' color='primary'>{item?.name}</Typography>
+                            <Typography fontSize='12px' fontWeight='bold' color='gray'>
+                              {dayjs(item?.start).format('MMM D, YYYY ')} - {dayjs(item?.start).format('HH:mm')} - {dayjs(item?.end).format('HH:mm')}</Typography>
+                          </ListWrapper>
+                        </LeftWrapper>
+                        <ButtonWrapper>
+                          <IconButton
+                            parentColor='primary.50'
+                            onClick={() => { handleViewUpdate(item?.id); }}
+                            icons={
+                              <HiPencilAlt fontSize={20} color='#223567'/>
+                            }
+                          />
+                          <IconButton
+                            parentColor='red.100'
+                            onClick={() => {
+                              setDeleteConfirmation(true);
+                              setDeletedId(item?.id);
+                            }}
+                            icons={
+                              <BsTrashFill fontSize={20} color='#EF4444'/>
+                            }
+                          />
+                        </ButtonWrapper>
+                      </BoxWrapper>
+                    </>
+                  ))
+                }
               </Box>
               <Box width='100%'>
                 <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}>
-                  <Pagination count={3} variant='outlined' shape='rounded' />
+                  <Pagination count={totalPages} page={page} onChange={handleChangePaginate} variant='outlined' shape='rounded' />
                 </Box>
               </Box>
             </Box>
@@ -176,7 +262,27 @@ function AnnualWorkCalendarComponent() {
       <AnnualWorkCalendarCreateForm
         open={openCreateForm}
         handleClose={() => setOpenCreateForm(false)}
-        handleConfirm={() => setOpenCreateForm(false)}
+        handleConfirm={() => {
+          setOpenCreateForm(false);
+          handleDelete();
+        }}
+      />
+      <AnnualWorkCalendarUpdateForm
+        open={openUpdateForm}
+        handleClose={() => setOpenUpdateForm(false)}
+        handleConfirm={() => {
+          setOpenUpdateForm(false);
+          handleDelete();
+        }}
+      />
+      <ConfirmationModal
+        open={deleteConfirmation}
+        handleClose={() => setDeleteConfirmation(false)}
+        title={t(`${t_deleteConfirmation}.title`)}
+        content={t(`${t_deleteConfirmation}.desc`)}
+        withCallback
+        noChange={true}
+        callback={() => {handleDeleteSchedule();}}
       />
     </>
   );

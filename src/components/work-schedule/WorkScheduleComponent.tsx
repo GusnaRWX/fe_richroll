@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import  styled  from '@emotion/styled';
+import styled from '@emotion/styled';
 import { Typography, Button as MuiButton, Card, Box, TableRow, TableCell, TableSortLabel } from '@mui/material';
 import { Add } from '@mui/icons-material';
 import Table from '../_shared/form/Table';
@@ -8,9 +8,13 @@ import { HiPencilAlt } from 'react-icons/hi';
 import { useRouter } from 'next/router';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { getCompanyData, compareCheck, ifThenElse } from '@/utils/helper';
-import { getListWorkScheduleRequested } from '@/store/reducers/slice/company-management/work-schedule/workScheduleSlice';
+import { getListWorkScheduleRequested, deleteWorkScheduleRequested } from '@/store/reducers/slice/company-management/work-schedule/workScheduleSlice';
 import { visuallyHidden } from '@mui/utils';
 import dayjs from 'dayjs';
+import EmptyState from '../_shared/common/EmptyState';
+import { BsTrashFill } from 'react-icons/bs';
+import { ConfirmationModal } from '../_shared/common';
+import { useTranslation } from 'react-i18next';
 
 const TopWrapper = styled.div`
  display: flex;
@@ -30,11 +34,11 @@ const ButtonWrapper = styled.div`
 `;
 
 const headerItems = [
-  { id: 'name', label: 'Profile Name' },
-  { id: 'grossHours', label: 'Weekly Gross(hours)' },
-  { id: 'netHours', label: 'Weekly Net(hours)' },
-  { id: 'createdAt', label: 'Date Created' },
-  { id: 'updatedAt', label: 'Last_Updated' }
+  { id: 'name', label: 'profile_name' },
+  { id: 'grossHours', label: 'weekly_gross' },
+  { id: 'netHours', label: 'weekly_net' },
+  { id: 'createdAt', label: 'date_created' },
+  { id: 'updatedAt', label: 'last_update' },
 ];
 
 type Order = 'asc' | 'desc'
@@ -42,19 +46,24 @@ type Order = 'asc' | 'desc'
 function WorkScheduleComponent() {
   const router = useRouter();
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
+  const [deletedId, setDeletedId] = useState(0);
+  const [deleteConfirmation, setDeleteConfirmation] = useState(false);
   const [hydrated, setHaydrated] = useState(false);
   const companyData = getCompanyData();
   const dispatch = useAppDispatch();
+  const {t} = useTranslation();
+  const t_workSchedule = 'company_management.work_schedule';
+  const t_tableHeader = 'company_management.work_schedule.table.table_cols_item';
+  const t_deleteConfirmation = 'company_management.work_schedule.popup.delete';
   const data = useAppSelectors(state => state.workSchedule.data);
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 0));
-    setPage(0);
+    setRowsPerPage(event);
   };
 
   const handleRequestSort = (event: React.MouseEvent<unknown>, headId: string) => {
@@ -63,11 +72,19 @@ function WorkScheduleComponent() {
     setSort(headId);
   };
 
+  const handleDeleteSchedule = () => {
+    dispatch({
+      type: deleteWorkScheduleRequested.toString(),
+      payload: deletedId
+    });
+    setDeleteConfirmation(false);
+  };
+
   useEffect(() => {
     dispatch({
       type: getListWorkScheduleRequested.toString(),
       payload: {
-        page: page + 1,
+        page: page,
         itemPerPage: rowsPerPage,
         sort: sort,
         direction: direction.toUpperCase(),
@@ -88,8 +105,8 @@ function WorkScheduleComponent() {
   return (
     <>
       <TopWrapper>
-        <Typography fontWeight='bold' variant='h5' color='primary'>Work Schedule</Typography>
-        <MuiButton variant='contained' onClick={() => { router.push('/company-management/work-schedule/create'); }} size='small'><Add />&nbsp; Add Work Schedule</MuiButton>
+        <Typography fontWeight='bold' variant='h5' color='primary'>{t(`${t_workSchedule}.title`)}</Typography>
+        <MuiButton variant='contained' onClick={() => { router.push('/company-management/work-schedule/create'); }} size='small'><Add />&nbsp; {t('button.add_work_schedule')}</MuiButton>
       </TopWrapper>
       <Card sx={{ padding: '1rem' }}>
         <Table
@@ -109,16 +126,17 @@ function WorkScheduleComponent() {
                       direction={sort === item.id ? direction : 'asc'}
                       onClick={(e) => handleRequestSort(e, item.id)}
                     >
-                      {item.label}
+                      {t(`${t_tableHeader}.${item.label}`)}
                       {sort === item.id ? (
                         <Box component='span' sx={visuallyHidden}>
                           {ifThenElse(direction === 'asc', 'sorted descending', 'sorted ascending')}
                         </Box>
-                      ): null}
+                      ) : null}
                     </TableSortLabel>
                   </TableCell>
                 ))
               }
+              <TableCell/>
             </TableRow>
           }
           bodyChildren={
@@ -127,7 +145,9 @@ function WorkScheduleComponent() {
                 ifThenElse(typeof data?.items !== 'undefined', (
                   ifThenElse(data?.items?.length === 0, (
                     <TableRow>
-                      <TableCell colSpan={12} align='center'><Typography>Data not found</Typography></TableCell>
+                      <TableCell colSpan={12} align='center'>
+                        <EmptyState />
+                      </TableCell>
                     </TableRow>
                   ), (
                     data?.items?.map((item, index) => (
@@ -142,8 +162,19 @@ function WorkScheduleComponent() {
                             <IconButton
                               parentColor='primary.50'
                               icons={
-                                <HiPencilAlt fontSize={20} color='#223567'/>
+                                <HiPencilAlt fontSize={20} color='#223567' />
                               }
+                              onClick={() => { router.push('/company-management/work-schedule/edit/' + item.id); }}
+                            />
+                            <IconButton
+                              parentColor='red.100'
+                              icons={
+                                <BsTrashFill fontSize={20} color='#EF4444' />
+                              }
+                              onClick={() => {
+                                setDeleteConfirmation(true);
+                                setDeletedId(item?.id);
+                              }}
                             />
                           </ButtonWrapper>
                         </TableCell>
@@ -152,7 +183,9 @@ function WorkScheduleComponent() {
                   ))
                 ), (
                   <TableRow>
-                    <TableCell colSpan={12} align='center'><Typography>Data not found</Typography></TableCell>
+                    <TableCell colSpan={12} align='center'>
+                      <EmptyState />
+                    </TableCell>
                   </TableRow>
                 ))
               }
@@ -160,6 +193,16 @@ function WorkScheduleComponent() {
           }
         />
       </Card>
+      <ConfirmationModal
+        open={deleteConfirmation}
+        handleClose={() => setDeleteConfirmation(false)}
+        title={t(`${t_deleteConfirmation}.title`)}
+        content={t(`${t_deleteConfirmation}.desc`)}
+        withCallback
+        type='delete'
+        noChange={true}
+        callback={() => {handleDeleteSchedule();}}
+      />
     </>
   );
 }

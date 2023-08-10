@@ -7,6 +7,13 @@ import departmentSaga from './company-management/departmentSaga';
 import companySaga from './company/companySaga';
 import cnbSaga from './cnb/compensationSaga';
 import workScheduleSaga from './company-management/workScheduleSaga';
+import annualScheduleSaga from './company-management/annualScheduleSaga';
+import employmentSaga from './employment/employmentSaga';
+import accountSaga from './account-management/accountSaga';
+import attendanceEntriesSaga from './attendance-leave/attendanceEntriesSaga';
+import overtimeSaga from './attendance-leave/overtimeSaga';
+import leaveEntriesSaga from './attendance-leave/leaveEntriesSaga';
+import payrollSaga from './payroll/payrollSaga';
 
 export default function* rootSaga() {
   yield all([
@@ -17,6 +24,13 @@ export default function* rootSaga() {
     departmentSaga(),
     companySaga(),
     cnbSaga(),
-    workScheduleSaga()
+    workScheduleSaga(),
+    annualScheduleSaga(),
+    employmentSaga(),
+    accountSaga(),
+    attendanceEntriesSaga(),
+    overtimeSaga(),
+    leaveEntriesSaga(),
+    payrollSaga()
   ]);
 }

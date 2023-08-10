@@ -5,6 +5,7 @@ import styled from '@emotion/styled';
 import { getCompanyData } from '@/utils/helper';
 import { useForm, useAppDispatch } from '@/hooks/index';
 import { postDepartmentRequested } from '@/store/reducers/slice/company-management/department/departmentSlice';
+import { useTranslation } from 'react-i18next';
 
 const TopWrapper = styled.div`
  display: flex;
@@ -39,7 +40,10 @@ const ContentWrapper = styled(Card)(({
 
 function DepartmentComponent() {
   const dispatch = useAppDispatch();
-  const companyData = getCompanyData();  
+  const companyData = getCompanyData();
+  const {t} = useTranslation();
+  const t_department = 'company_management.departments';
+  const t_departmentForm = 'company_management.departments.form';
 
   const [initialValues] = useState({
     department: '',
@@ -68,7 +72,7 @@ function DepartmentComponent() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     dispatch({
       type: postDepartmentRequested.toString(),
       payload: {companyID: companyData?.id?.toString(), name: values.department, position: values.position }
@@ -81,10 +85,10 @@ function DepartmentComponent() {
     <>
       <TopWrapper>
         <BackWrapper >
-          <Typography component='h3' fontWeight='bold'>Department</Typography>
+          <Typography component='h3' fontWeight='bold'>{t(`${t_department}.title`)}</Typography>
         </BackWrapper>
         <ButtonWrapper>
-          <MuiButton variant='contained' onClick={handleSubmit} size='small' color='primary'>Save</MuiButton>
+          <MuiButton variant='contained' onClick={handleSubmit} size='small' color='primary'>{t('button.save')}</MuiButton>
         </ButtonWrapper>
       </TopWrapper>
       <ContentWrapper>
@@ -93,8 +97,8 @@ function DepartmentComponent() {
             <Grid item xs={6} md={6} lg={6} xl={6}>
               <Input
                 name='department'
-                customLabel='Department'
-                placeholder='Input Department'
+                customLabel={t(`${t_departmentForm}.department`)}
+                placeholder={t(`${t_departmentForm}.department_placeholder`)}
                 withAsterisk={true}
                 onChange={handleInputChange}
                 size='small'
@@ -105,8 +109,8 @@ function DepartmentComponent() {
             <Grid item xs={6} md={6} lg={6} xl={6}>
               <Input
                 name='position'
-                customLabel='Position'
-                placeholder='Input Position'
+                customLabel={t(`${t_departmentForm}.position`)}
+                placeholder={t(`${t_departmentForm}.position_placeholder`)}
                 withAsterisk={true}
                 onChange={handleInputChange}
                 size='small'

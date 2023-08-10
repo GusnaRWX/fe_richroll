@@ -1,0 +1,1444 @@
+{
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "company_management": "Company Management",
+    "company_management_profile": "Company Profile",
+    "company_management_departments": "Departments",
+    "company_management_work_schedule": "Work Schedule",
+    "company_management_employees": "Employees",
+    "company_management_annual_work_calendars": "Annual Work Calendar",
+    "company_management_profile_information": "Profile Information",
+    "attendance_&_leave": "Attendance & Leave",
+    "attendance_&_leave_attendance_entries": "Attendance Entries",
+    "attendance_&_leave_leave_entries": "Leave Entries",
+    "attendance_&_leave_leave_summary": "Leave Summary",
+    "attendance_&_leave_overtime_summary": "Overtime Summary",
+    "attendance_&_leave_configuration": "Configuration",
+    "attendance_&_leave_balance": "Balance",
+    "attendance_&_leave_off_in_lieu": "Off in Lieu",
+    "attendance_&_leave_enchasment": "Enchasment",
+    "compensation_&_benefits": "Compensation & Benefits",
+    "reimbursement": "Reimbursement",
+    "internal_reports": "Internal Reports",
+    "payroll_&_disbursement": "Payroll & Disbursement",
+    "payroll_&_disbursement_payroll_assistant": "Payroll Assistant",
+    "payroll_&_disbursement_attendance_summary": "Attendance Summary",
+    "payroll_&_disbursement_payroll_reports": "Payroll Reports",
+    "payroll_&_disbursement_disbursement": "Disbursement",
+    "package_management": "Package Management",
+    "satutory_benefits": "Satutory Benefits",
+    "satutory_benefits_component": "Component",
+    "satutory_benefits_profile": "Profile",
+    "account_management": "Account Management",
+    "employee_management": "Employee Management",
+    "payroll_setting": "Payroll Setting",
+    "employment": "Employment",
+    "reports": "Reports",
+    "article_management": "Article Management",
+    "income_tax_profile" : "Income Tax Profile",
+    "income_tax_profile_deductable_component" : "Deductable Component",
+    "income_tax_profile_profile" : "Profile"
+  },
+
+  "button" : {
+    "next" : "Next",
+    "back" : "Back",
+    "save" : "Save",
+    "save_approve" : "Save and Approve",
+    "save_exit" : "Save and Exit",
+    "confirm" : "Confirm",
+    "submit" : "Submit",
+    "cancel" : "Cancel",
+    "close" : "Close",
+    "delete" : "Delete",
+    "edit" :"Edit",
+    "import" : "Import",
+    "activate" : "Activate",
+    "reactivate" : "Reactivate",
+    "suspend" : "Suspend",
+    "terminate" : "Terminate",
+    "archive" : "Archived",
+    "duplicate" : "Duplicate",
+    "download_data" : "Download Data",
+    "component" : "Component",
+    "deductable": "Deductable",
+    "mark_complete" : "Mark All and Complete",
+    "add_new" : "Add New",
+    "add_new_profile" : "Add New Profile",
+    "add_component" : "Add Component",
+    "add_new_component" : "Add New Component",
+    "add_profile" : "Add Profile",
+    "add_work_schedule" : "Add Work Schedule",
+    "add_schedule" : "Add Schedule",
+    "add_break" : "Add Break",
+    "add_supplementary_compensation" : "Add Supplementary Compensation",
+    "add_employee" : "Add Employee",
+    "add_calendar_item" : "Add Calendar Item",
+    "create_attendance_entry" : "Create Attendance Entry",
+    "create_entry" : "Create Entry",
+    "create_leave_entry" : "Create Leave Entry",
+    "create_overtime_entry" : "Create Overtime Entry",
+    "select_employee" : "Select Employee"
+   },
+
+  "alert_message" : {
+    "please_fill_in_all_the_mandatory_fields" : "Please fill in all the mandatory fields",
+    "this_is_required" : "This is required"
+  },
+
+  "empty_message" : {
+    "there_is_no_entry" : "There is no Entry"
+  },
+
+  "company" : {
+    "title" : "Your Company",
+    "create_title" : "Create Company Profile",
+    "desc" : "Choose the company you want to manage. You can add a maximum of 5 companies",
+    "create_card" : {
+      "title" : "Create New",
+      "desc" : "You can add a maximum of",
+      "max_company_amount" : "5 companies"
+    },
+    "form" : {
+      "wizard_option" : {
+        "company_information" : "Company Information",
+        "bank_and_payroll_information" : "Bank and Payroll Information"
+      },
+      "company_information" : {
+        "company_information_section" : {
+          "title" : "Company Information",
+          "company_logo" : "Company Logo",
+          "company_type" : "Company Type",
+          "company_type_placeholder" : "Select Company Type",
+          "company_name" : "Company Name",
+          "company_name_placeholder" : "Input Company Name",
+          "name_already_used" : "This company name is already exist",
+          "company_npwp" : "Company NPWP",
+          "company_npwp_placeholder" : "Input Company NPWP",
+          "company_sector" : "Company Sector",
+          "company_sector_placeholder" : "Select Company Sector",
+          "company_email_address" : "Company Email Address",
+          "company_email_address_placeholder" : "Input Email Address",
+          "contact_number" : "Contact Number",
+          "contact_number_placeholder" : "Input Contact Number"
+        },
+        "company_address_section" : {
+          "title" : "Company Address",
+          "contry" : "Country",
+          "contry_placeholder" : "Select Country",
+          "province" : "Province",
+          "province_placeholder" : "Select Province",
+          "city" :"City",
+          "city_placeholder" : "Select City",
+          "sub_district" :"Sub-District",
+          "sub_district_placeholder" : "Select Sub-District",
+          "street_and_buildig_name" : "Street Name. Building Name",
+          "street_and_buildig_name_placeholder" : "Input Address Detail",
+          "zip_code" : "Zip Code",
+          "zip_code_placeholder" : "Input Zip Code"
+        }
+      },
+      "bank_and_payroll_information" : {
+        "bank_information_section" : {
+          "title" : "Bank Information",
+          "bank" :"Bank",
+          "bank_placeholder" : "Select Bank",
+          "bank_account_holder_name" : "Bank Account Holders Name",
+          "bank_account_holder_name_placeholder" : "Input Bank Account Holders Name",
+          "bank_account_no" :"Bank Account No",
+          "bank_account_no_placeholder" :"Input Bank Account No",
+          "bank_code" :"Bank Code",
+          "bank_code_placeholder" :"Input Bank Code",
+          "branch_code" :"Branch Code",
+          "branch_code_placeholder" :"Input Branch Code",
+          "branch_name" :"Branch Name",
+          "branch_name_placeholder" :"Input Branch Name",
+          "swift_code" :"Swift Code",
+          "swift_code_placeholder" :"Input Swift Code"
+        },
+        "payroll_information_section" : {
+          "title" : "Payroll Information",
+          "schedule_type" : "Schedule Type",
+          "schedule_type_option" : {
+            "monthly" : "Monthly",
+            "weekly" : "Weekly",
+            "bi_weekly" : "Bi Weekly"
+          },
+          "monthly_pay_period" : "Monthly Pay Period (includes overtime)",
+          "payroll_date" : "Payroll Date",
+          "payroll_date_placeholder" : "Input Date",
+          "default_payment_method" : "Default Payment Method",
+          "default_payment_method_placeholder" : "Select Payment Method"
+        }
+      }
+    }
+  },
+
+  "company_management" : {
+    "company_profile" : {
+      "title" : "Company Profile",
+      "tabs_option" : {
+        "company_information" :"Company Information",
+        "payment_information" : "Payment Information"
+      },
+      "form" : {
+        "company_information" : {
+          "company_information_section" : {
+            "title" : "Company Information",
+            "company_logo" : "Company Logo",
+            "company_type" : "Company Type",
+            "company_type_placeholder" : "Select Company Type",
+            "company_name" : "Company Name",
+            "company_name_placeholder" : "Input Company Name",
+            "company_npwp" : "Company NPWP",
+            "company_npwp_placeholder" : "Input Company NPWP",
+            "company_sector" : "Company Sector",
+            "company_sector_placeholder" : "Select Company Sector",
+            "company_email_address" : "Company Email Address",
+            "company_email_address_placeholder" : "Input Email Address",
+            "contact_number" : "Contact Number",
+            "contact_number_placeholder" : "Input Contact Number"
+          },
+          "company_address_section" : {
+            "title" : "Company Address",
+            "contry" : "Country",
+            "contry_placeholder" : "Select Country",
+            "province" : "Province",
+            "province_placeholder" : "Select Province",
+            "city" :"City",
+            "city_placeholder" : "Select City",
+            "sub_district" :"Sub-District",
+            "sub_district_placeholder" : "Select Sub-District",
+            "street_and_buildig_name" : "Street Name. Building Name",
+            "street_and_buildig_name_placeholder" : "Input Address Detail",
+            "zip_code" : "Zip Code",
+            "zip_code_placeholder" : "Input Zip Code"
+          }
+        },
+        "payment_information" : {
+          "bank_information_section" : {
+            "title" : "Bank Information",
+            "bank" :"Bank",
+            "bank_placeholder" : "Select Bank",
+            "bank_account_holder_name" : "Bank Account Holders Name",
+            "bank_account_holder_name_placeholder" : "Input Bank Account Holders Name",
+            "bank_account_no" :"Bank Account No",
+            "bank_account_no_placeholder" :"Input Bank Account No",
+            "bank_code" :"Bank Code",
+            "bank_code_placeholder" :"Input Bank Code",
+            "branch_code" :"Branch Code",
+            "branch_code_placeholder" :"Input Branch Code",
+            "branch_name" :"Branch Name",
+            "branch_name_placeholder" :"Input Branch Name",
+            "swift_code" :"Swift Code",
+            "swift_code_placeholder" :"Input Swift Code"
+          },
+          "payroll_information_section" : {
+            "title" : "Payroll Information",
+            "schedule_type" : "Schedule Type",
+            "schedule_type_option" : {
+              "monthly" : "Monthly",
+              "weekly" : "Weekly",
+              "bi_weekly" : "Bi Weekly"
+            }
+          },
+          "payment_information_section" : {
+            "title" : "Payment Information"
+          }
+        }
+      }
+    },
+    "departments" : {
+      "title" : "Department",
+      "form" : {
+        "department" :"Department",
+        "department_placeholder" :"Input Department",
+        "position" :"Position",
+        "position_placeholder" :"Input Position"
+      }
+    },
+    "work_schedule" : {
+      "title" : "Work Schedule",
+      "table" : {
+        "table_cols_item" : {
+          "profile_name" :"Profile Name",
+          "weekly_gross" : "Weekly Gross (hours)",
+          "weekly_net" : "Weekly Net (hours)",
+          "date_created" :"Date Created",
+          "last_update" :"Last Update"
+        }
+      },
+      "form" : {
+        "create_title" : "Create Work Schedule Profile",
+        "update_title" : "Edit Work Schedule Profile",
+        "tabs_option" : {
+          "schedule_profile" : "Schedule Profile"
+        },
+        "schedule_profile_name" : "Schedule Profile Name",
+        "schedule_profile_name_placeholder" : "Input Profile Name",
+        "weekly_gross_hours" : "Weekly Gross Hours",
+        "weekly_gross_hours_placeholder" : "Input Weekly Gross",
+        "weekly_net_hours" : "Weekly Net Hours",
+        "weekly_net_hours_placeholder" : "input Weekly Net",
+        "hours_week" : "Hours/Week",
+        "today" : "Today"
+      },
+      "popup" : {
+        "add_schedule" : {
+          "title" : "Work Schedule Form",
+          "work_hour_type" : "Work Hour Type",
+          "spesific_working_day_section" : {
+            "title" : "Spesific Working Day",
+            "works_day" : "Works Day",
+            "works_hour" : "Work Hour",
+            "hour" : "Hours"
+          },
+          "break_section" : {
+            "title" : "Add Break",
+            "break_name" :"Break Name",
+            "start_time" :"Start Time",
+            "end_time" : "End Time"
+          }
+        },
+        "delete" : {
+          "title" : "Delete Profile from Work Schedule",
+          "desc" : "You are about to delete this event from the Work Schedule. This action cannot be undone."
+        },
+        "cancel" : {
+          "title" : "Are you sure you want to leave?",
+          "desc" : "Any unsaved changes will be discarded. This cannot be undone"
+        }
+      }
+    },
+    "employees" : {
+      "title" : "Employees",
+      "download_template_information" : "Please download the excel template here",
+      "table" : {
+        "tabs_option" : {
+          "active" : "ACTIVE",
+          "inactive" : "INACTIVE"
+        },
+        "table_cols_item" : {
+          "id" : "ID",
+          "name" :"Name",
+          "position" :"Position",
+          "department" :"Department",
+          "status" :"Status",
+          "created_on" :"Created On",
+          "last_login" : "Last Login"
+        },
+        "custom_value" : {
+          "active" : "Active",
+          "inactive" : "Non Active"
+        }
+      },
+      "form_&_detail" : {
+        "create_title" : "Add Employee",
+        "edit_title" : "Employee Profile",
+        "wizard_and_tab_options" : {
+          "employee_information" : "Employee Information",
+          "personal_information" : "Personal Information",
+          "emergency_contact" : "Emergency Contact",
+          "cnb" : "C&B",
+          "compensation_benefit" : "Compensation & Benefit",
+          "work_shcedule" : "Work Schedule"
+        },
+        "employee_information" : {
+          "employee_information_section" : {
+            "title" : "Employee Information",
+            "fullname" :"Full Name",
+            "fullname_placeholder" : "Input Full Name",
+            "nickname" : "Nickname",
+            "nickname_placeholder" : "Input Nickname",
+            "contact_number" :"Contact Number",
+            "contact_number_placeholder" :"Input Correct Number",
+            "personal_email_address" : "Personal Email Address",
+            "personal_email_address_placeholder" : "Personal Email Address",
+            "start_date" :"Start Date",
+            "end_date" :"End Date",
+            "permanent" :"Permanent",
+            "department" : "Department",
+            "position" :"Position",
+            "employee_self_service_box" : {
+              "title" : "Employee Self Service",
+              "desc" : "Activate button to send account activation link via email. Employee Self Service enables self-data filling."
+            }
+          },
+          "employee_self_service_section" : {
+            "title" : "Employee Self Service",
+            "status_option" : {
+              "disable" : "Disabled",
+              "enable" : "Enabled"
+            }
+          },
+          "employee_status_section" : {
+            "title" : "Employee Status",
+            "status_option" : {
+              "active" :"Active",
+              "inactive" :"Non Active"
+            },
+            "terminate_account_box" : {
+              "title" : "Terminate Account",
+              "subtitle" : "Permanently termination this account.",
+              "desc" : "Once this account is terminated, all of its resources and data will be permanently deleted. Before terminating this account, please make sure."
+            }
+          }
+        },
+        "personal_information" : {
+          "personal_information_section" : {
+            "title" : "Personal Information",
+            "date_of_birth" : "Date of Birth",
+            "gender" : "Gender",
+            "marital_status" : "Marital Status",
+            "marital_status_placeholder" : "Select Marital Status",
+            "number_of_dependants" : "Number of Dependants",
+            "number_of_children" : "Number of Children",
+            "number_of_children_placeholder" : "Input Number of Children",
+            "nationality" : "Nationality",
+            "nationality_placeholder" : "Select Nationality",
+            "religion" : "Religion",
+            "religion_placeholder" : "Select Religion"
+          },
+          "citizen_address_section" : {
+            "title" : "Citizen Address",
+            "contry" : "Country",
+            "contry_placeholder" : "Select Country",
+            "province" : "Province",
+            "province_placeholder" : "Select Province",
+            "city" :"City",
+            "city_placeholder" : "Select City",
+            "sub_district" :"Sub-District",
+            "sub_district_placeholder" : "Select Sub-District",
+            "street_and_buildig_name" : "Street Name. Building Name",
+            "street_and_buildig_name_placeholder" : "Input Address Detail",
+            "citizen_street_and_building_name" : "Citizen ID Street Name. Building Name",
+            "citizen_street_and_building_name_placeholder" : "Input Address Detail",
+            "zip_code" : "Zip Code",
+            "zip_code_placeholder" : "Input Zip Code",
+            "use_as_residential_address" : "Use as residential address"
+          },
+          "residential_addres_section" : {
+            "title" : "Residential Address",
+            "contry" : "Country",
+            "contry_placeholder" : "Select Country",
+            "province" : "Province",
+            "province_placeholder" : "Select Province",
+            "city" :"City",
+            "city_placeholder" : "Select City",
+            "sub_district" :"Sub-District",
+            "sub_district_placeholder" : "Select Sub-District",
+            "street_and_buildig_name" : "Street Name. Building Name",
+            "street_and_buildig_name_placeholder" : "Input Address Detail",
+            "residential_street_and_building_name" : "Residential Street Name. Building Name",
+            "residential_street_and_building_name_placeholder" : "Input Address Detail",
+            "zip_code" : "Zip Code",
+            "zip_code_placeholder" : "Input Zip Code",
+            "use_as_residential_address" : "Use as residential address"
+          },
+          "personal_id_section" : {
+            "title" : "Personal ID",
+            "id_type" : "ID Type",
+            "id_type_placeholder" : "Select ID type",
+            "id_number" : "ID Number",
+            "id_number_placeholder" : "Input ID Number",
+            "id_expiration_date" : "ID Expiration Date"
+          },
+          "bank_information_section" : {
+            "title" : "Bank Information",
+            "bank" :"Bank",
+            "bank_placeholder" : "Select Bank",
+            "bank_account_holder_name" : "Bank Account Holders Name",
+            "bank_account_holder_name_placeholder" : "Input Bank Account Holders Name",
+            "bank_account_no" :"Bank Account No",
+            "bank_account_no_placeholder" :"Input Bank Account No",
+            "bank_code" :"Bank Code",
+            "bank_code_placeholder" :"Input Bank Code",
+            "branch_code" :"Branch Code",
+            "branch_code_placeholder" :"Input Branch Code",
+            "branch_name" :"Branch Name",
+            "branch_name_placeholder" :"Input Branch Name",
+            "swift_code" :"Swift Code",
+            "swift_code_placeholder" :"Input Swift Code"
+          }
+        },
+        "emergency_contact" : {
+          "title" : "Emergency Contact",
+          "primary_section" : {
+            "title" : "Primary",
+            "fullname" :"Full Name",
+            "fullname_placeholder" :"Input Full Name",
+            "relationship" : "Relationship",
+            "relationship_placeholder" : "Select Relationship",
+            "contact_number" :"Contact Number",
+            "contact_number_placeholder" :"Input Contact Number"
+          },
+          "secondary_section" : {
+            "title" : "Secondary",
+            "fullname" :"Full Name",
+            "fullname_placeholder" :"Input Full Name",
+            "relationship" : "Relationship",
+            "relationship_placeholder" : "Select Relationship",
+            "contact_number" :"Contact Number",
+            "contact_number_placeholder" :"Input Contact Number"
+          }
+        },
+        "cnb" : {
+          "compensation_&_benefits_profile" :"Compensation & Benefits Profile",
+          "cnb_profile" :"C&B Profile",
+          "compensation_&_benefits_profile_placeholder" : "Select existing profile",
+          "base_section" : {
+            "title" : "Base",
+            "compensation_component" : "Compensation Component",
+            "compensation_component_placeholder" : "Select base compensation component",
+            "tax_status" : "Tax Status",
+            "tax_status_option" : {
+              "taxable" : "Taxable",
+              "nontaxable" : "Non-Taxable"
+            },
+            "amount" : "Amount",
+            "rate" : "Rate",
+            "overtime" : "Overtime"
+          },
+          "overtime_section" : {
+            "title" : "Overtime",
+            "rate" : "Rate"
+          },
+          "supplementary_section" : {
+            "title" : "Supplementary",
+            "compensation_component" : "Compensation Component",
+            "tax_status" : "Tax Status",
+            "tax_status_option" : {
+              "taxable" : "Taxable",
+              "nontaxable" : "Non-Taxable"
+            },
+            "amount" : "Amount",
+            "rate" : "Rate"
+          }
+        },
+        "work_schedule_section" : {
+          "schedule_profile_name" : "Schedule Profile Name",
+          "schedule_profile_name_placeholder" : "Input Profile Name",
+          "weekly_gross_hours" : "Weekly Gross Hours",
+          "weekly_net_hours" : "Weekly Net Hours",
+          "hours_week" : "Hours/Week",
+          "today" : "Today"
+        }
+      },
+      "popup" : {
+        "leave_confirmation" : {
+          "title" : "Are you sure you want to leave?",
+          "desc" : "Any unsaved changes will be discarded. This cannot be undone"
+        },
+        "confirmation_before_add_schedule" : {
+          "title" : "Modify Default Work Schedule",
+          "desc" : "Do you want use Work Schedule Profile?",
+          "option" : {
+            "yes" : "Yes",
+            "no" : "No"
+          }
+        },
+        "open_picture" : {
+          "title" : "Profile Picture"
+        },
+        "add_schedule" : {
+          "title" : "Work Schedule Form",
+          "work_hour_type" : "Work Hour Type",
+          "spesific_working_day_section" : {
+            "title" : "Spesific Working Day",
+            "works_day" : "Works Day",
+            "works_hour" : "Work Hour"
+          },
+          "break_section" : {
+            "title" : "Add Break",
+            "break_name" :"Break Name",
+            "start_time" :"Start Time",
+            "end_time" : "End Time"
+          }
+        },
+        "terminating_form" : {
+          "title" : "Termination Form",
+          "information" : {
+            "title" : "Important Information",
+            "desc" : "Employee Payroll Date is"
+          },
+          "effective_date" : "Input Effective Termination Date",
+          "note" : "Notes",
+          "note_placeholder" : "Input Notes"
+        }
+      }
+    },
+    "annual_work_calendar" : {
+      "title" : "Annual Work Calendar",
+      "upcoming_event" : "Upcoming Event",
+      "popup" : {
+        "add_calendar_item" : {
+          "create_title" : "Create New Event",
+          "update_title" : "Update Event",
+          "name_of_event" : "Name of Event",
+          "name_of_event_placeholder" : "Input name of event",
+          "event_type" : "Event type",
+          "start_date" :"Start Date",
+          "end_date" :"End Date",
+          "start_time" : "Start Time",
+          "end_time" :"End Time",
+          "notes" :"Notes"
+        },
+        "delete" : {
+          "title" : "Delete Event from Annual Work Calendar",
+          "desc" : "You are about to delete this event from the Annual Work Calendar. This action cannot be undone."
+        }
+      }
+    }
+  },
+
+  "attendance_&_leave" : {
+    "attendance_entries" : {
+      "title" : "Attendance & Leave",
+      "sub_title" : "Attendance Entry",
+      "table" : {
+        "table_cols_item" : {
+          "date" : "Date",
+          "employee_id" : "Employee ID",
+          "employee_name" :"Employee Name",
+          "check_in" : "Check In",
+          "check_out" : "Check Out",
+          "count" : "Count"
+        }
+      },
+      "popup" : {
+        "create" : {
+          "title" : "New Attendance Entry",
+          "select_date_label" : "Select Date",
+          "auto" : "Auto",
+          "table_cols_item" : {
+            "employee_id" : "Employee ID",
+            "employee_name" :"Employee Name",
+            "check_in" : "Check In",
+            "check_out" : "Check Out"
+          }
+        },
+        "add_employee" : {
+          "title" : "Select Employees",
+          "table_cols_item" : {
+            "employee_name" :"Employee Name",
+            "position" : "Position",
+            "department" : "Department"
+          }
+        },
+        "edit" : {
+          "title" : "Edit Attendance Entry",
+          "from_input_label" : "From",
+          "to_input_label" : "To"
+        },
+        "delete" : {
+          "title" : "Delete Attendance Entry",
+          "desc" : "You are about to delete this attendance entry. This action cannot be undone."
+        }
+      }
+    },
+    "leave_entries" : {
+      "title" : "Attendance & Leave",
+      "sub_title" : "Leave Entry",
+      "table" : {
+        "table_cols_item" : {
+          "employee_id" : "Employee ID",
+          "employee_name" :"Employee Name",
+          "leave_form" : "Leave From",
+          "leave_to" : "Leave To",
+          "From" : "From",
+          "date" : "Date",
+          "leave_type" : "Leave Type",
+          "status" :"Status"
+        },
+        "custom_value" : {
+          "half_day" : "Half-day",
+          "full_day" : "Full-day",
+          "paid" : "Paid",
+          "unpaid" : "Unpaid"
+        }
+      },
+      "popup" : {
+        "create" : {
+          "title" : "Select Employees",
+          "table_cols_item" : {
+            "employee_name" :"Employee Name",
+            "position" :"Position",
+            "department" :"Department"
+          }
+        },
+        "select_employee" : {
+          "title" : "New Leave Entry",
+          "leave_from_input_label" : "Leave From",
+          "leave_to_input_label" :"Leave To",
+          "select_date" :"Select Date",
+          "half_day_leave" : "Half-day Leave",
+          "from_input_label" : "From",
+          "to_input_label" :"To",
+          "leave_type_input_label" :"Leave Type",
+          "leave_type_input_placeholder" :"Select Leave Type",
+          "status_input_label" :"Status",
+          "status_input_placeholder" : "Select Leave Status",
+          "note_input_label" : "Note",
+          "note_input_placeholder" : "Add Notes"
+        },
+        "update" : {
+          "title" : "Edit Leave Entry",
+          "leave_from_input_label" : "Leave From",
+          "leave_to_input_label" :"Leave To",
+          "half_day_leave" : "Half-day Leave",
+          "from_input_label" : "From",
+          "to_input_label" :"Leave To",
+          "leave_type_input_label" :"Leave Type",
+          "leave_type_input_placeholder" :"Select Leave Type",
+          "status_input_label" :"Status",
+          "status_input_placeholder" : "Select Leave Status",
+          "note_input_label" : "Note",
+          "note_input_placeholder" : "Add Notes"
+        },
+        "delete" : {
+          "title" : "Delete Data Entry",
+          "desc" : "You are about to delete this leave data entry. This action cannot be undone"
+        }
+      }
+    },
+    "overtime_summary" : {
+      "title" : "Attendance & Leave",
+      "sub_title" : "Overtime Entry",
+      "table" : {
+        "table_cols_item" : {
+          "date" :"Date",
+          "employee_id" :"Employee ID",
+          "employee_name" :"Employee Name",
+          "start_time" : "Start Time",
+          "duration" : "Duration",
+          "multiplier" : "Multiplier"
+        }
+      },
+      "popup" : {
+        "create" :{
+          "title" : "New Overtime Entry",
+          "select_date_label" :"Select Date",
+          "auto" : "Auto",
+          "table_cols_item" : {
+            "employee_id" :"Employee ID",
+            "employee_name" :"Employee Name",
+            "start_time" :"Start Time",
+            "duration" :"Duration",
+            "multiplier" :"Multiplier"
+          }
+        },
+        "add_employee" : {
+          "title" : "Select Employees",
+          "table_cols_item" : {
+            "employee_name" :"Employee Name",
+            "position" : "Position",
+            "department" : "Department"
+          }
+        },
+        "update" : {
+          "title" : "Edit Overtime Entry",
+          "start_time_input_label" : "Start Time",
+          "duration_input_label" : "Duration",
+          "multiplier_input_label" : "Multiplier"
+        },
+        "delete" : {
+          "title" : "Delete Data Entry",
+          "desc" : "You are about to delete this overtime data entry. This action cannot be undone."
+        }
+      }
+    }
+  },
+
+  "compensation_and_benefits" : {
+    "title" : "Compensation & Benefits",
+    "table" : {
+      "table_cols_item" : {
+        "cnb_profile_name" : "C&B Profile Name",
+        "base_compensation" : "Base Compensation",
+        "supplementary_compensation" : "Supplementary Compensation",
+        "date_created" : "Date Created",
+        "last_update" : "Last Update"
+      }
+    },
+    "form" : {
+      "create_title" : "Create New C&B Profile",
+      "update_title" : "Update Profile",
+      "profile_name" : "Profile Name",
+      "profile_name_placeholder" : "Input Profile Name",
+      "compensation_sub_title" : "Compensation",
+      "base_section" : {
+        "title" : "Base",
+        "compensation_component" : "Compensation Component",
+        "compensation_component_placeholder" : "Select base compensation component",
+        "tax_status" : "Tax Status",
+        "tax_status_option" : {
+          "taxable" : "Taxable",
+          "nontaxable" : "Non-Taxable"
+        }
+      },
+      "overtime_section" : {
+        "title" : "Overtime",
+        "rate" : "Rate"
+      },
+      "supplementary_section" : {
+        "title" : "Supplementary",
+        "compensation_component" : "Compensation Component",
+        "tax_status" : "Tax Status",
+        "tax_status_option" : {
+          "taxable" : "Taxable",
+          "nontaxable" : "Non-Taxable"
+        },
+        "amount" : "Amount"
+      }
+    },
+    "popup" : {
+      "delete" : {
+        "title" : "Are you sure you want to delete this record?",
+        "desc" : "Any unsaved changes will be discarded. This cannot be undone"
+      },
+      "create_cancel" : {
+        "title" : "Are you sure you want to delete this record?",
+        "desc" : "Any unsaved changes will be discarded. This cannot be undone"
+      },
+      "update_cancel" : {
+        "title" : "Are you sure you want to leave?",
+        "desc" : "Any unsaved changes will be discarded"
+      },
+      "update_save" : {
+        "title" : "Save Changes",
+        "desc" : "Are you sure you want to update profile with this data? Any unsaved changes made to data will be discarded"
+      },
+      "detail" : {
+        "title" : "C&B Profile Detail",
+        "cnb_profile_name" :"C&B Profile Name",
+        "date_created" :"Date Created",
+        "last_update" :"Last Update",
+        "base_section" : {
+          "title" : "Base",
+          "compensation_component" : "Compensation Component",
+          "compensation_component_placeholder" : "Select base compensation component",
+          "tax_status" : "Tax Status",
+          "tax_status_option" : {
+            "taxable" : "Taxable",
+            "nontaxable" : "NTaxable"
+          },
+          "amount_per" : "Amount  per",
+          "rate_per" : "Rate  per "
+        },
+        "supplementary_section" : {
+          "title" : "Supplementary",
+          "compensation_component" : "Compensation Component",
+          "tax_status" : "Tax Status",
+          "tax_status_option" : {
+            "taxable" : "Taxable",
+            "nontaxable" : "NTaxable"
+          },
+          "amount_month" : "Amount Monthly"
+        }
+      }
+    },
+    "create_new_payroll" : "Create New Payroll",
+    "generate_attendance_report" : "Generate Attendance Report",
+    "generate_gross_payroll" : "Generate Gross Payroll",
+    "add_ad_hoc" : "Add Ad Hoc",
+    "calculate" : "Calculate"
+  },
+
+  "income_tax_profile": {
+    "deductable_component": {
+      "title": "Deductable Components Dashboard",
+      "detail_title" : "Deductable Component Detail",
+      "table": {
+        "company_name": "Company Name",
+        "country": "Country",
+        "component_condition": "Component Condition",
+        "last_update": "Last Update",
+        "delete_modal" : {
+          "title" : "Delete Data Entry",
+          "text" : "You are about to delete this statutory benefit component. This action cannot be undone."
+        }
+      },
+      "add_new_component" : {
+        "title" : "Add New Component",
+        "save_modal_text" : "You will stop the process, and saved in Add New Component.<br>Are you sure to stop the process?",
+        "mark_modal_text" : "All disbursement will marked paid and complete the Add New Component process",
+        "form" : {
+          "wizard_option" : {
+            "initial":"Create",
+            "basic_detail": "Basic Detail",
+            "designed_transfer_account": "Designed Transfer Account",
+            "transfer_account": "Transfer Account",
+            "rates": "Rates"
+          },
+          "create_basic_detail" : {
+            "name" : "Component Name",
+            "name_placeholder" : "Input Component Name",
+            "country": "Country",
+            "province": "Province",
+            "city": "City",
+            "sub_district": "Sub-District",
+            "citation": "Citation",
+            "internal_notes": "Internal Notes",
+            "external_notes": "External Notes",
+            "max_char_info" :"Max. 120 Character"
+          },
+          "create_dta" : {
+            "title" : "Bank Information",
+            "type": "Type",
+            "type_option" : {
+              "central_account" : "Central Account",
+              "individual_account" :"Individual Account",
+              "company_account_only" : "Company Account Only"
+            },
+            "message" : "The Designated Transfer Account is added manually to each employee’s profile",
+            "bank": "Bank",
+            "bank_account_holders_name": "Bank Account Holders Name",
+            "bank_account_no": "Bank Account No",
+            "bank_code": "Bank Code",
+            "branch_code": "Branch Code",
+            "branch_name": "Branch Name",
+            "swift_code": "Swift Code",
+            "notes": "Notes",
+            "bank_account_holders_name_placeholder": "Input Bank Account Holders Name",
+            "bank_account_no_placeholder": "Input Bank Account No",
+            "bank_code_placeholder": "Input Bank Code",
+            "branch_code_placeholder": "Input Branch Code",
+            "branch_name_placeholder": "Input Branch Name",
+            "swift_code_placeholder": "Input Swift Code",
+            "notes_placeholder": "Input Notes",
+            "max_char_info" :"Max. 100 Character"
+          },
+          "rates" : {
+            "select_type" : "Select Deductable Type",
+            "dc_condition" : "Deductable Component Condition",
+            "amount" : "Amount",
+            "fu_condition" : "Factor Unit Condition",
+            "sub_condition" : "Sub Condition"
+          }
+        }
+      },
+      "modal": {
+        "delete": {
+          "title": "Delete Data Entry",
+          "text": "You are about to delete this statutory benefit component. This action cannot be undone."
+        },
+        "duplicate": {
+          "title": "Confirmation",
+          "text": "Are you sure you want to duplicate this profile ?"
+        }
+      }
+    },
+    "profile": {
+      "title": "Tax Profile Configuration",
+      "add_new_title" : "Add New Tax Profile",
+      "tab": {
+        "draft": "Draft",
+        "active": "Active",
+        "archive": "Archived"
+      },
+      "draft_table": {
+        "name": "Name",
+        "country": "Country",
+        "effective_period": "Effective Period",
+        "created_on": "Created On",
+        "last_update": "Last Update"
+      },
+      "active_table": {
+        "profile_name": "Profile Name",
+        "country": "Country",
+        "province": "Province",
+        "effective_period": "Effective Period",
+        "created_on": "Created On",
+        "last_update": "Last Update"
+      },
+      "archieve_table": {
+        "profile_name": "Profile Name",
+        "country": "Country",
+        "province": "Province",
+        "effective_period": "Effective Period",
+        "created_on": "Created On",
+        "last_update": "Last Update"
+      },
+      "detail": {
+        "main": {
+          "title": "Tax Profile - Status"
+        },
+        "tab": {
+          "basic_detail": "Basic Detail",
+          "deductible_component": "Deductible Components",
+          "income_tax_rate": "Income Tax Rate",
+          "income_tax_multiplier": "Income Tax Multiplier",
+          "designated_transfer_account": "Designated Transfer Account"
+        },
+        "wizard_option":{
+          "initial":"Create",
+          "basic_detail": "Basic Detail",
+          "deductable_component": "Deductable Component",
+          "income_tax_rates": "Income Tax Rates",
+          "income_tax_multiplier": "Income Tax Multiplier",
+          "designed_transfer_account": "Designed Transfer Account"
+        },
+        "basic_detail": {
+          "tax_profile_name": "Tax Profile Name",
+          "tax_profile_name_placeholder": "Input Profile Name",
+          "country": "Country",
+          "different_currency": "Different Currency",
+          "effective_period": "Effective Period",
+          "citation": "Citation",
+          "internal_notes": "Internal Notes",
+          "external_notes": "External Notes",
+          "province": "Province",
+          "city": "City",
+          "sub_district": "Sub-District",
+          "effective_date": "Effective Date",
+          "expiration_date": "Expiration Date",
+          "max_char_info" : "Max. 120 Character"
+        },
+        "deductible_component": {
+          "martial_status": "Marital Status",
+          "number_of_dependence": "Number of Dependance",
+          "factor_unit_condition": "Factor Unit Condition",
+          "amount": "Amount",
+          "deductible": "Deductible"
+        },
+        "income_tax_rate": {
+          "progressive_rate": "Progressive Rate",
+          "income": "Income",
+          "rate": "Rate",
+          "min_income": "Min Income",
+          "amount": "Amount",
+          "max_income": "Max Income",
+          "additional_fixed_amount":"Additional Fixed Amount"
+        },
+        "income_tax_multiplier": {
+          "deductible_factor": "Deductible Factor",
+          "factor_unit_condition": "Factor Unit Condition",
+          "rate": "Rate",
+          "additional_fixed_amount": "Additional Fixed Amount",
+          "status": "Status",
+          "condition": "Condition",
+          "multiplier": "Multiplier",
+          "component": "Component"
+        },
+        "designated_transfer_account": {
+          "type": "Type",
+          "bank": "Bank",
+          "bank_account_holders_name": "Bank Account Holders Name",
+          "bank_account_holders_name_placeholder": "Input Bank Account Holders Name",
+          "bank_account_no": "Bank Account No",
+          "bank_account_no_placeholder": "Input Bank Account No",
+          "bank_code": "Bank Code",
+          "bank_code_placeholder": "Input Bank Code",
+          "branch_code": "Branch Code",
+          "branch_code_placeholder": "Input Branch Code",
+          "branch_name": "Branch Name",
+          "branch_name_placeholder": "Input Branch Name",
+          "swift_code": "Swift Code",
+          "swift_code_placeholder": "Input Swift Code",
+          "notes": "Notes",
+          "notes_placeholder": "Input Notes",
+          "bank_info": "Bank Information",
+          "central_account": "Central Account",
+          "individual_account": "Individual Account",
+          "company_account": "Company Account Only",
+          "message": "The Designated Transfer Account is added manually to each employee’s profile",
+          "max_char_info" :"Max. 100 Character"
+        }
+      },
+      "modal": {
+        "activate": {
+          "title": "Publication Date",
+          "description": "Do you want to Activate the tax profile?",
+          "effective_date": "Effective Date",
+          "expiration_date": "Expiration Date"
+        },
+        "duplicate": {
+          "title": "Confirmation",
+          "description": "Do you want to duplicate this profile?"
+        },
+        "delete": {
+          "title": "Delete Data Entry",
+          "description": "You are about to delete this attendance data entry. This action cannot be undone."
+        },
+        "archive": {
+          "title": "Archivation Date",
+          "description": "Input Effective Archivation Date",
+          "checkbox": "Replace with New Profile"
+        },
+        "mark_all": {
+          "title": "Mark all paid and Complete",
+          "description": "All disbursement will marked paid and complete the Payroll Assistant process"
+        },
+        "cancel": {
+          "title": "Save & Exit",
+          "description": "You will stop the process, and saved in Payroll Assistant Are you sure to stop the process?"
+        },
+        "add_deductable": {
+          "title": "Select Tax Deductable Components",
+          "component_name": "Component Name",
+          "component_condition": "Component Condition"
+        }
+      }
+    }
+  },
+
+  "satutory_benefit" : {
+    "component" : {
+      "title" : "Statutory Benefits Components Dashboard",
+      "detail_title" : "Statutory Benefit Component",
+      "table" : {
+        "company_name" : "Company Name",
+        "country" : "Country",
+        "contributors" : "Contributor(S)",
+        "rate_type" : "Rate Type",
+        "created_on" : "Created On",
+        "last_update" : "Last Update",
+        "action" : ""
+      },
+      "form_&_detail" : {
+        "dashboard_title" : "Add New Component",
+        "wizard_option" : {
+          "basic_detail" :"Basic Detail",
+          "designed_transfer_account" :"Designed Transfer Account",
+          "rate" : "Rate"
+        },
+        "create_basic_detail" : {
+          "detail_title" : "Basic Detail",
+          "name" : "Satutory Name",
+          "name_placeholder" : "Input Satutory Benefits Name",
+          "country" : "Country",
+          "province" :"Province",
+          "city" : "City",
+          "sub_district" : "Sub-District",
+          "citation" : "Citation",
+          "internal_notes" : "Internal Notes",
+          "external_notes" : "External Notes",
+          "max_char_info" : "Max. 120 Character",
+          "component_name": "Component Name"
+        },
+        "create_designed_transfer_account" : {
+          "form_title" : "Bank Information",
+          "detail_title" : "Bank Information",
+          "type_option" : {
+            "central_account" : "Central Account",
+            "individual_account" :"Individual Account",
+            "company_account_only" : "Company Account Only"
+          },
+          "information" : "The Designated Transfer Account is added manually to each employees profile",
+          "bank" :"Bank",
+          "bank_account_holders_name": "Bank Account Holders Name",
+          "bank_account_holders_name_placeholder": "Input Bank Account Holders Name",
+          "bank_account_no": "Bank Account No",
+          "bank_account_no_placeholder": "Input Bank Account No.",
+          "bank_code": "Bank Code",
+          "bank_code_placeholder": "Input Bank Code",
+          "branch_code": "Branch Code",
+          "branch_code_placeholder": "Input Branch Code",
+          "branch_name": "Branch Name",
+          "branch_name_placeholder": "Input Branch Name",
+          "swift_code": "Swift Code",
+          "swift_code_placeholder": "Input Swift Code",
+          "notes": "Notes",
+          "notes_placeholder": "Input Notes",
+          "bank_info": "Bank Information",
+          "message": "The Designated Transfer Account is added manually to each employees profile",
+          "max_char_info" : "Max. 100 Character",
+          "transfer_info": "Transfer Information"
+        },
+        "rates" : {
+          "contributor_option" : {
+            "label" : "Contributor",
+            "employee" : "Employee",
+            "employer" : "Employer"
+          },
+          "sub_title" : "Rates",
+          "match_rule_button" : "Employer Match Rule",
+          "start" : "Start",
+          "end" : "End",
+          "additional_fixed_amount" : "Additional Fixed Amount",
+          "amount_cap" : "Amount Cap",
+          "rate_type" :"Rate Type",
+          "flat_rate" : "Flat Rate"
+        },
+        "others" : {
+          "search_placeholder" : "Search"
+        }
+      },
+      "modal" : {
+        "delete" : {
+          "title" : "Delete Data Entry",
+          "text" :"You are about to delete this statutory benefit component. This action cannot be undone."
+        },
+        "duplicate" : {
+          "title" : "Confirmation",
+          "text" : "Are you sure you want to duplicate this profile ?"
+        }
+      }
+    },
+    "profile" : {
+      "title" : "Statutory Benefits Profile Dashboard",
+      "detail_title" : "Statutory Benefit Profile",
+      "table" : {
+        "table_tabs" : {
+          "draft" : "Draft",
+          "active" :"Active",
+          "archived" : "Archived"
+        },
+        "name" :"Name",
+        "profile_name" :"Profile Name",
+        "country" :"Country",
+        "province" :"Province",
+        "effective_period" :"Effective Period",
+        "created_on" :"Created On",
+        "last_update" :"Last Update"
+      },
+      "form_&_detail" : {
+        "create_title" : "Create Satutory Benefit",
+        "update_title" : "Update Satutory Benefit",
+        "name" : "Satutory Name",
+        "name_placeholder" : "Input Satutory Benefit Name",
+        "country" : "Country",
+        "province" :"Province",
+        "city" : "City",
+        "sub_district" : "Sub-District",
+        "effective_date" :"Effective Date",
+        "expiration_date" :"Expiration Date",
+        "citation" : "Citation",
+        "internal_notes" : "Internal Notes",
+        "external_notes" : "External Notes",
+        "max_char_info" : "Max. 120 Character",
+        "component" : {
+          "popup_title" : "Select Satutory Benefits Components",
+          "employee_name" : "Employee Name",
+          "effective_period" :"Effective Period",
+          "rate_type" :"Rate Type",
+          "contributor" : "Contributor",
+          "rate_types" : "Rate Types",
+          "flat_rate" :"Flat Rate",
+          "amount_cap" :"Amount Cap"
+        }
+      },
+      "modal" : {
+        "delete" : {
+          "title" : "Delete Data Entry",
+          "text" : "You are about to delete this attendance data entry. This action cannot be undone."
+        },
+        "duplicate" : {
+          "title" : "Confirmation",
+          "text" : "Are you sure you want to duplicate this profile ?"
+        },
+        "archive" : {
+          "title" : "Archivation Date",
+          "input_date" : "Input Effective Archivation Date",
+          "replace" : "Replace with New Profile"
+        },
+        "activate" : {
+          "title" : "Publication Date",
+          "text" : "Do you want to Activate the tax profile?",
+          "effective_date" :"Effective Date",
+          "expiration_date" :"Expiration Date"
+        }
+      }
+    }
+  },
+
+
+  "payroll_and_disbursement" : {
+    "payroll_assistant" : {
+      "title" : "Payroll Operation",
+      "sub_title" : "Payroll Assistant",
+      "table" : {
+        "tab_panel" : {
+          "in_progress" : "In Progress",
+          "completed" : "Completed"
+        },
+        "table_cols_item" : {
+          "name" : "Name",
+          "date_range" : "Date Range",
+          "created_on" : "Created On",
+          "last_updated" : "Last Updated"
+        }
+      },
+      "popup" : {
+        "create" : {
+          "title" : "Create New Payroll",
+          "name_input_label" : "Name",
+          "name_input_placeholder" : "Input Name",
+          "start_date" : "Start Date",
+          "end_date" : "End Date"
+        },
+        "delete" : {
+          "title" : "Delete Payroll Operation from Payroll Assistant?",
+          "desc" : "You are about to delete this payroll report. This action cannot be undone."
+        }
+      }
+    },
+    "attendance_summary" : {
+      "title" : "Payroll Operation",
+      "sub_title" : "Attendance Summary",
+      "table" : {
+        "tab_panel" : {
+          "draft" : "Draft",
+          "confirmed" : "Confirmed",
+          "completed" : "Completed",
+          "archive" : "Archive"
+        },
+        "table_cols_item" : {
+          "name" : "Name",
+          "date_range" : "Date Range",
+          "report_type" : "Report Type",
+          "created_on" : "Created On",
+          "last_updated" : "Last Updated",
+          "attachment" : "Attachment"
+        }
+      },
+      "popup" : {
+        "create" : {
+          "title" : "Create New Payroll",
+          "name_input_label" : "Name",
+          "name_input_placeholder" : "Input Name",
+          "start_date" : "Start Date",
+          "end_date" : "End Date"
+        },
+        "delete" : {
+          "title" : "Delete Attendance from Payroll Operation?",
+          "desc" : "You are about to delete this payroll report. This action cannot be undone."
+        }
+      },
+      "generate_gross_payroll" : {
+        "title" : "Generate Gross Payroll Report",
+        "sub_title" : "Payroll",
+        "table" : {
+          "table_cols_item" : {
+            "employee_name" : "Employee Name",
+            "attendance" : "Attendance",
+            "absent" : "Absent",
+            "paid_leave" : "Paid Leave",
+            "unpaid_leave" : "Unpaid Leave",
+            "overtime_hours" : "Overtime Hours",
+            "total_hours" : "Total Hours",
+            "average_hours" : "Average Hours work/day"
+          }
+        },
+        "detail" : {
+          "operational_department" : {
+            "title" : "Operational Department",
+            "card_items" : {
+              "total_base_compensation" : "Total Base Compensation",
+              "total_supplementary_compensation" : "Total Supplementary Compensation",
+              "total_ad_hoc_compensation" : "Total Ad Hoc Compensation",
+              "total_gross_payroll" : "Total Gross Payroll"
+            },
+            "table" : {
+              "table_cols_item" : {
+                "fullname" : "Full Name",
+                "base_compensation" : "Base Compensation",
+                "Supplementary_compensation" : "Supplementary Compensation",
+                "ad_hoc_compensation" : "Ad Hoc Compensation",
+                "gross_compensation" : "Gross Compensation"
+              }
+            }
+          },
+          "delivery_department" : {
+            "title" : "Delivery Department",
+            "card_items" : {
+              "total_base_compensation" : "Total Base Compensation",
+              "total_supplementary_compensation" : "Total Supplementary Compensation",
+              "total_ad_hoc_compensation" : "Total Ad Hoc Compensation",
+              "total_gross_payroll" : "Total Gross Payroll"
+            },
+            "table" : {
+              "table_cols_item" : {
+                "fullname" : "Full Name",
+                "base_compensation" : "Base Compensation",
+                "Supplementary_compensation" : "Supplementary Compensation",
+                "ad_hoc_compensation" : "Ad Hoc Compensation",
+                "gross_compensation" : "Gross Compensation"
+              }
+            }
+          },
+          "gross_calculating_payroll_form" : {
+            "section_title" : "Gross Calculating Payroll",
+            "base" : {
+              "section_title" : "Base",
+              "compensation_component" : "Compensation Component",
+              "amount" : "Amount",
+              "amount_placeholder" : "Input Amount",
+              "tax_status" : "Tax Status",
+              "tax_status_option" : {
+                "taxable": "Taxable",
+                "non_taxable" : "Non-Taxable"
+              }
+            },
+            "overtime_hours" : {
+              "section_title" : "Overtime Hours",
+              "overtime_hours" : "Overtime Hours",
+              "overtime_hours_placeholder" : "Input overtime hours",
+              "rate" : "Rate",
+              "rate_placeholder" : "Input rate"
+            },
+            "supplementary" : {
+              "section_title" : "Supplementary",
+              "compensation_component" :"Compensation Component",
+              "amount" :"Amount",
+              "amount_placeholder" :"Input Amount",
+              "tax_status" : "Tax Status",
+              "tax_status_option" : {
+                "taxable": "Taxable",
+                "non_taxable" : "Non-Taxable"
+              }
+            },
+            "ad_hoc" : {
+              "section_title" : "Ad Hoc",
+              "ad_hoc_component" : "Ad-Hoc Component",
+              "ad_hoc_component_placeholder" : "Input Hoc Name",
+              "amount" :"Amount",
+              "amount_placeholder" :"Input Amount"
+            }
+          }
+        }
+      }
+    },
+    "payroll_report" : {
+      "title" : "Payroll Operation",
+      "sub_title" : "Payroll Reports",
+      "table" : {
+        "tab_panel" : {
+          "draft" : "Draft",
+          "confirmed" : "Confirmed",
+          "completed" : "Completed",
+          "archive" : "Archive"
+        },
+        "table_cols_item" : {
+          "name" : "Name",
+          "date_range" : "Date Range",
+          "report_type" : "Report Type",
+          "created_on" : "Created On",
+          "last_updated" : "Last Updated",
+          "attachment" : "Attachment",
+          "empty": ""
+        }
+      }
+    },
+    "disbursement" : {
+      "title" : "Payroll Operation",
+      "sub_title" : "Disbursement",
+      "table" : {
+        "tab_panel" : {
+          "draft" : "Draft",
+          "completed" : "Completed",
+          "archive" : "Archive"
+        },
+        "table_cols_item" : {
+          "name" : "Name",
+          "date_range" : "Date Range",
+          "report_type" : "Report Type",
+          "created_on" : "Created On",
+          "last_updated" : "Last Updated",
+          "attachment" : "Attachment",
+          "empty": ""
+        }
+      }
+    }
+  }
+}

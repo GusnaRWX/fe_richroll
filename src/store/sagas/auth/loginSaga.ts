@@ -51,7 +51,14 @@ function* fetchAuthenticationLogin(action: AnyAction) {
         type: meSuccessed.toString(),
         payload: { ...profile?.data?.data as Auth.Me }
       });
-      yield Router.push('/company');
+      const roles = profile?.data?.data?.roles;
+      if (roles?.includes('Employee')) {
+        yield Router.push('/employe/company');
+      } else if (roles?.includes('Super Admin')) {
+        yield Router.push('/dashboard');
+      } else {
+        yield Router.push('/company');
+      }
     }
   } catch (err) {
     if (err instanceof AxiosError) {
@@ -61,9 +68,11 @@ function* fetchAuthenticationLogin(action: AnyAction) {
         type: setResponserMessage.toString(),
         payload: {
           code: errorMessage?.code || errorValidationMessage?.code,
-          message: errorMessage.message === 'Invalid email and password' ?
-            'Incorrect email address or password' :
-            readValidationResponse(errorValidationMessage.error).map(errMessage => errMessage.replace(/"/g, ''))
+          message: errorMessage?.message === 'Invalid email and password'
+            ? 'Incorrect email address or password'
+            : errorValidationMessage?.error
+              ? readValidationResponse(errorValidationMessage.error).map(errMessage => errMessage.replace(/"/g, ''))
+              : errorMessage?.message === 'incorrect email or password' ? 'Incorrect email address or password' : ''
         }
       });
       yield put({ type: loginFailured.toString() });

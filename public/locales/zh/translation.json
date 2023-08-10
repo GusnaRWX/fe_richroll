@@ -1,0 +1,1433 @@
+{
+  "sidebar": {
+    "dashboard": "仪表板",
+    "company_management": "公司管理",
+    "company_management_profile": "公司简介",
+    "company_management_departments": "部门",
+    "company_management_work_schedule": "工作日程",
+    "company_management_employees": "雇员",
+    "company_management_annual_work_calendars": "年度工作日历",
+    "company_management_profile_information": "档案信息",
+    "attendance_&_leave": "出席率",
+    "attendance_&_leave_attendance_entries": "出席条目",
+    "attendance_&_leave_leave_entries": "留下条目",
+    "attendance_&_leave_leave_summary": "休假总结",
+    "attendance_&_leave_overtime_summary": "加班总结",
+    "attendance_&_leave_configuration": "配置",
+    "attendance_&_leave_balance": "平衡",
+    "attendance_&_leave_off_in_lieu": "代替",
+    "attendance_&_leave_enchasment": "附魔",
+    "compensation_&_benefits": "赔偿",
+    "reimbursement": "报销",
+    "internal_reports": "内部报告",
+    "payroll_&_disbursement": "工资单",
+    "payroll_&_disbursement_payroll_assistant": "薪资助理",
+    "payroll_&_disbursement_attendance_summary": "出席总结",
+    "payroll_&_disbursement_payroll_reports": "工资报告",
+    "payroll_&_disbursement_disbursement": "支出",
+    "package_management": "包管理",
+    "satutory_benefits": "法定福利",
+    "satutory_benefits_component": "成分",
+    "satutory_benefits_profile": "轮廓",
+    "account_management": "帐户管理",
+    "employee_management": "员工管理",
+    "payroll_setting": "薪资设定",
+    "employment": "就业",
+    "reports": "报告",
+    "article_management": "文章管理",
+    "income_tax_profile": "所得税概况",
+    "income_tax_profile_deductable_component": "可扣除部分",
+    "income_tax_profile_profile": "轮廓"
+  },
+  "button": {
+    "next": "下一个",
+    "back": "后退",
+    "save": "节省",
+    "save_approve": "保存并批准",
+    "save_exit": "保存并退出",
+    "confirm": "确认",
+    "submit": "提交",
+    "cancel": "取消",
+    "close": "关闭",
+    "delete": "删除",
+    "edit": "编辑",
+    "import": "进口",
+    "activate": "启用",
+    "reactivate": "重新激活",
+    "suspend": "暂停",
+    "terminate": "终止",
+    "archive": "已存档",
+    "duplicate": "复制",
+    "download_data": "下载数据",
+    "component": "成分",
+    "deductable": "免赔额",
+    "mark_complete": "标记全部并完成",
+    "add_new": "添新",
+    "add_new_profile": "添加新的个人资料",
+    "add_component": "添加组件",
+    "add_new_component": "添加新组件",
+    "add_profile": "添加个人资料",
+    "add_work_schedule": "添加工作计划",
+    "add_schedule": "添加时间表",
+    "add_break": "添加中断",
+    "add_supplementary_compensation": "添加补充补偿",
+    "add_employee": "添加员工",
+    "add_calendar_item": "添加日历项目",
+    "create_attendance_entry": "创建考勤条目",
+    "create_entry": "创建条目",
+    "create_leave_entry": "创建休假条目",
+    "create_overtime_entry": "创建加班条目",
+    "select_employee": "选择员工"
+  },
+  "alert_message": {
+    "please_fill_in_all_the_mandatory_fields": "请填写所有必填字段",
+    "this_is_required": "这是必需的"
+  },
+  "empty_message": {
+    "there_is_no_entry": "没有条目"
+  },
+  "company": {
+    "title": "你的公司",
+    "create_title": "创建公司简介",
+    "desc": "选择您想要管理的公司。",
+    "create_card": {
+      "title": "创建新的",
+      "desc": "您最多可以添加",
+      "max_company_amount": "5家公司"
+    },
+    "form": {
+      "wizard_option": {
+        "company_information": "公司信息",
+        "bank_and_payroll_information": "银行和工资信息"
+      },
+      "company_information": {
+        "company_information_section": {
+          "title": "公司信息",
+          "company_logo": "公司标志",
+          "company_type": "公司类型",
+          "company_type_placeholder": "选择公司类型",
+          "company_name": "公司名称",
+          "company_name_placeholder": "输入公司名称",
+          "name_already_used": "该公司名称已存在",
+          "company_npwp": "公司NPWP",
+          "company_npwp_placeholder": "输入公司 NPWP",
+          "company_sector": "公司部门",
+          "company_sector_placeholder": "选择公司部门",
+          "company_email_address": "公司电子邮件地址",
+          "company_email_address_placeholder": "输入电子邮件地址",
+          "contact_number": "联系电话",
+          "contact_number_placeholder": "输入联系电话"
+        },
+        "company_address_section": {
+          "title": "公司地址",
+          "contry": "国家",
+          "contry_placeholder": "选择国家",
+          "province": "省",
+          "province_placeholder": "选择省份",
+          "city": "城市",
+          "city_placeholder": "选择城市",
+          "sub_district": "分地区",
+          "sub_district_placeholder": "选择街道",
+          "street_and_buildig_name": "街道名称。",
+          "street_and_buildig_name_placeholder": "输入地址详细信息",
+          "zip_code": "邮政编码",
+          "zip_code_placeholder": "输入邮政编码"
+        }
+      },
+      "bank_and_payroll_information": {
+        "bank_information_section": {
+          "title": "银行信息",
+          "bank": "银行",
+          "bank_placeholder": "选择银行",
+          "bank_account_holder_name": "银行账户持有人姓名",
+          "bank_account_holder_name_placeholder": "输入银行账户持有人姓名",
+          "bank_account_no": "银行帐号",
+          "bank_account_no_placeholder": "输入银行帐号",
+          "bank_code": "银行代码",
+          "bank_code_placeholder": "输入银行代码",
+          "branch_code": "分行代码",
+          "branch_code_placeholder": "输入分行代码",
+          "branch_name": "分店名称",
+          "branch_name_placeholder": "输入分行名称",
+          "swift_code": "SWIFT代码",
+          "swift_code_placeholder": "输入 Swift 代码"
+        },
+        "payroll_information_section": {
+          "title": "薪资信息",
+          "schedule_type": "时间表类型",
+          "schedule_type_option": {
+            "monthly": "每月",
+            "weekly": "每周",
+            "bi_weekly": "双周刊"
+          },
+          "monthly_pay_period": "每月支付期（包括加班费）",
+          "payroll_date": "发薪日期",
+          "payroll_date_placeholder": "输入日期",
+          "default_payment_method": "默认付款方式",
+          "default_payment_method_placeholder": "选择付款方式"
+        }
+      }
+    }
+  },
+  "company_management": {
+    "company_profile": {
+      "title": "公司简介",
+      "tabs_option": {
+        "company_information": "公司信息",
+        "payment_information": "支付信息"
+      },
+      "form": {
+        "company_information": {
+          "company_information_section": {
+            "title": "公司信息",
+            "company_logo": "公司标志",
+            "company_type": "公司类型",
+            "company_type_placeholder": "选择公司类型",
+            "company_name": "公司名称",
+            "company_name_placeholder": "输入公司名称",
+            "company_npwp": "公司NPWP",
+            "company_npwp_placeholder": "输入公司 NPWP",
+            "company_sector": "公司部门",
+            "company_sector_placeholder": "选择公司部门",
+            "company_email_address": "公司电子邮件地址",
+            "company_email_address_placeholder": "输入电子邮件地址",
+            "contact_number": "联系电话",
+            "contact_number_placeholder": "输入联系电话"
+          },
+          "company_address_section": {
+            "title": "公司地址",
+            "contry": "国家",
+            "contry_placeholder": "选择国家",
+            "province": "省",
+            "province_placeholder": "选择省份",
+            "city": "城市",
+            "city_placeholder": "选择城市",
+            "sub_district": "分地区",
+            "sub_district_placeholder": "选择街道",
+            "street_and_buildig_name": "街道名称。",
+            "street_and_buildig_name_placeholder": "输入地址详细信息",
+            "zip_code": "邮政编码",
+            "zip_code_placeholder": "输入邮政编码"
+          }
+        },
+        "payment_information": {
+          "bank_information_section": {
+            "title": "银行信息",
+            "bank": "银行",
+            "bank_placeholder": "选择银行",
+            "bank_account_holder_name": "银行账户持有人姓名",
+            "bank_account_holder_name_placeholder": "输入银行账户持有人姓名",
+            "bank_account_no": "银行帐号",
+            "bank_account_no_placeholder": "输入银行帐号",
+            "bank_code": "银行代码",
+            "bank_code_placeholder": "输入银行代码",
+            "branch_code": "分行代码",
+            "branch_code_placeholder": "输入分行代码",
+            "branch_name": "分店名称",
+            "branch_name_placeholder": "输入分行名称",
+            "swift_code": "SWIFT代码",
+            "swift_code_placeholder": "输入 Swift 代码"
+          },
+          "payroll_information_section": {
+            "title": "薪资信息",
+            "schedule_type": "时间表类型",
+            "schedule_type_option": {
+              "monthly": "每月",
+              "weekly": "每周",
+              "bi_weekly": "双周刊"
+            }
+          },
+          "payment_information_section": {
+            "title": "支付信息"
+          }
+        }
+      }
+    },
+    "departments": {
+      "title": "部门",
+      "form": {
+        "department": "部门",
+        "department_placeholder": "输入部",
+        "position": "位置",
+        "position_placeholder": "输入位置"
+      }
+    },
+    "work_schedule": {
+      "title": "工作日程",
+      "table": {
+        "table_cols_item": {
+          "profile_name": "个人资料名称",
+          "weekly_gross": "每周总时长（小时）",
+          "weekly_net": "每周网络（小时）",
+          "date_created": "创建日期",
+          "last_update": "最后更新"
+        }
+      },
+      "form": {
+        "create_title": "创建工作计划配置文件",
+        "update_title": "编辑工作计划资料",
+        "tabs_option": {
+          "schedule_profile": "日程简介"
+        },
+        "schedule_profile_name": "计划配置文件名称",
+        "schedule_profile_name_placeholder": "输入配置文件名称",
+        "weekly_gross_hours": "每周总工时",
+        "weekly_gross_hours_placeholder": "输入每周总收入",
+        "weekly_net_hours": "每周净工作时间",
+        "weekly_net_hours_placeholder": "输入周网",
+        "hours_week": "小时/周",
+        "today": "今天"
+      },
+      "popup": {
+        "add_schedule": {
+          "title": "工作计划表",
+          "work_hour_type": "工作时间类型",
+          "spesific_working_day_section": {
+            "title": "特定工作日",
+            "works_day": "工作日",
+            "works_hour": "工作时间",
+            "hour": "小时"
+          },
+          "break_section": {
+            "title": "添加中断",
+            "break_name": "中断名称",
+            "start_time": "开始时间",
+            "end_time": "时间结束"
+          }
+        },
+        "delete": {
+          "title": "从工作计划中删除个人资料",
+          "desc": "您即将从工作计划中删除此事件。"
+        },
+        "cancel": {
+          "title": "您确定要离开吗？",
+          "desc": "任何未保存的更改都将被丢弃。"
+        }
+      }
+    },
+    "employees": {
+      "title": "雇员",
+      "download_template_information": "请在此下载 Excel 模板",
+      "table": {
+        "tabs_option": {
+          "active": "积极的",
+          "inactive": "不活跃"
+        },
+        "table_cols_item": {
+          "id": "ID",
+          "name": "姓名",
+          "position": "位置",
+          "department": "部门",
+          "status": "地位",
+          "created_on": "创建于",
+          "last_login": "上次登录"
+        },
+        "custom_value": {
+          "active": "积极的",
+          "inactive": "不活跃"
+        }
+      },
+      "form_&_detail": {
+        "create_title": "添加员工",
+        "edit_title": "员工简介",
+        "wizard_and_tab_options": {
+          "employee_information": "员工信息",
+          "personal_information": "个人信息",
+          "emergency_contact": "紧急联系人",
+          "cnb": "C",
+          "compensation_benefit": "赔偿",
+          "work_shcedule": "工作日程"
+        },
+        "employee_information": {
+          "employee_information_section": {
+            "title": "员工信息",
+            "fullname": "全名",
+            "fullname_placeholder": "输入全名",
+            "nickname": "昵称",
+            "nickname_placeholder": "输入昵称",
+            "contact_number": "联系电话",
+            "contact_number_placeholder": "输入正确的数字",
+            "personal_email_address": "个人电子邮件地址",
+            "personal_email_address_placeholder": "个人电子邮件地址",
+            "start_date": "开始日期",
+            "end_date": "结束日期",
+            "permanent": "永恒的",
+            "department": "部门",
+            "position": "位置",
+            "employee_self_service_box": {
+              "title": "员工自助服务",
+              "desc": "激活按钮可通过电子邮件发送帐户激活链接。"
+            }
+          },
+          "employee_self_service_section": {
+            "title": "员工自助服务",
+            "status_option": {
+              "disable": "残疾人",
+              "enable": "启用"
+            }
+          },
+          "employee_status_section": {
+            "title": "员工状况",
+            "status_option": {
+              "active": "积极的",
+              "inactive": "不活跃"
+            },
+            "terminate_account_box": {
+              "title": "终止账户",
+              "subtitle": "永久终止此帐户。",
+              "desc": "一旦该帐户被终止，其所有资源和数据将被永久删除。"
+            }
+          }
+        },
+        "personal_information": {
+          "personal_information_section": {
+            "title": "个人信息",
+            "date_of_birth": "出生日期",
+            "gender": "性别",
+            "marital_status": "婚姻状况",
+            "marital_status_placeholder": "选择婚姻状况",
+            "number_of_dependants": "家属人数",
+            "number_of_children": "儿童人数",
+            "number_of_children_placeholder": "输入孩子数量",
+            "nationality": "国籍",
+            "nationality_placeholder": "选择国籍",
+            "religion": "宗教",
+            "religion_placeholder": "选择宗教"
+          },
+          "citizen_address_section": {
+            "title": "公民地址",
+            "contry": "国家",
+            "contry_placeholder": "选择国家",
+            "province": "省",
+            "province_placeholder": "选择省份",
+            "city": "城市",
+            "city_placeholder": "选择城市",
+            "sub_district": "分地区",
+            "sub_district_placeholder": "选择街道",
+            "street_and_buildig_name": "街道名称。",
+            "street_and_buildig_name_placeholder": "输入地址详细信息",
+            "citizen_street_and_building_name": "公民身份证街道名称。",
+            "citizen_street_and_building_name_placeholder": "输入地址详细信息",
+            "zip_code": "邮政编码",
+            "zip_code_placeholder": "输入邮政编码",
+            "use_as_residential_address": "用作居住地址"
+          },
+          "residential_addres_section": {
+            "title": "居住地址",
+            "contry": "国家",
+            "contry_placeholder": "选择国家",
+            "province": "省",
+            "province_placeholder": "选择省份",
+            "city": "城市",
+            "city_placeholder": "选择城市",
+            "sub_district": "分地区",
+            "sub_district_placeholder": "选择街道",
+            "street_and_buildig_name": "街道名称。",
+            "street_and_buildig_name_placeholder": "输入地址详细信息",
+            "residential_street_and_building_name": "住宅街道名称。",
+            "residential_street_and_building_name_placeholder": "输入地址详细信息",
+            "zip_code": "邮政编码",
+            "zip_code_placeholder": "输入邮政编码",
+            "use_as_residential_address": "用作居住地址"
+          },
+          "personal_id_section": {
+            "title": "个人身份证件",
+            "id_type": "身份证类型",
+            "id_type_placeholder": "选择身份证件类型",
+            "id_number": "身份证号",
+            "id_number_placeholder": "输入身份证号码",
+            "id_expiration_date": "身份证件有效期"
+          },
+          "bank_information_section": {
+            "title": "银行信息",
+            "bank": "银行",
+            "bank_placeholder": "选择银行",
+            "bank_account_holder_name": "银行账户持有人姓名",
+            "bank_account_holder_name_placeholder": "输入银行账户持有人姓名",
+            "bank_account_no": "银行帐号",
+            "bank_account_no_placeholder": "输入银行帐号",
+            "bank_code": "银行代码",
+            "bank_code_placeholder": "输入银行代码",
+            "branch_code": "分行代码",
+            "branch_code_placeholder": "输入分行代码",
+            "branch_name": "分店名称",
+            "branch_name_placeholder": "输入分行名称",
+            "swift_code": "SWIFT代码",
+            "swift_code_placeholder": "输入 Swift 代码"
+          }
+        },
+        "emergency_contact": {
+          "title": "紧急联系人",
+          "primary_section": {
+            "title": "基本的",
+            "fullname": "全名",
+            "fullname_placeholder": "输入全名",
+            "relationship": "关系",
+            "relationship_placeholder": "选择关系",
+            "contact_number": "联系电话",
+            "contact_number_placeholder": "输入联系电话"
+          },
+          "secondary_section": {
+            "title": "中学",
+            "fullname": "全名",
+            "fullname_placeholder": "输入全名",
+            "relationship": "关系",
+            "relationship_placeholder": "选择关系",
+            "contact_number": "联系电话",
+            "contact_number_placeholder": "输入联系电话"
+          }
+        },
+        "cnb": {
+          "compensation_&_benefits_profile": "赔偿",
+          "cnb_profile": "C",
+          "compensation_&_benefits_profile_placeholder": "选择现有的配置文件",
+          "base_section": {
+            "title": "根据",
+            "compensation_component": "补偿元件",
+            "compensation_component_placeholder": "选择基本补偿元件",
+            "tax_status": "税务状况",
+            "tax_status_option": {
+              "taxable": "应纳税",
+              "nontaxable": "免税"
+            },
+            "amount": "数量",
+            "rate": "速度",
+            "overtime": "随着时间的推移"
+          },
+          "overtime_section": {
+            "title": "随着时间的推移",
+            "rate": "速度"
+          },
+          "supplementary_section": {
+            "title": "补充",
+            "compensation_component": "补偿元件",
+            "tax_status": "税务状况",
+            "tax_status_option": {
+              "taxable": "应纳税",
+              "nontaxable": "免税"
+            },
+            "amount": "数量",
+            "rate": "速度"
+          }
+        },
+        "work_schedule_section": {
+          "schedule_profile_name": "计划配置文件名称",
+          "schedule_profile_name_placeholder": "输入配置文件名称",
+          "weekly_gross_hours": "每周总工时",
+          "weekly_net_hours": "每周净工作时间",
+          "hours_week": "小时/周",
+          "today": "今天"
+        }
+      },
+      "popup": {
+        "leave_confirmation": {
+          "title": "您确定要离开吗？",
+          "desc": "任何未保存的更改都将被丢弃。"
+        },
+        "confirmation_before_add_schedule": {
+          "title": "修改默认工作计划",
+          "desc": "您想使用工作时间表配置文件吗？",
+          "option": {
+            "yes": "是的",
+            "no": "不"
+          }
+        },
+        "open_picture": {
+          "title": "个人资料图片"
+        },
+        "add_schedule": {
+          "title": "工作计划表",
+          "work_hour_type": "工作时间类型",
+          "spesific_working_day_section": {
+            "title": "特定工作日",
+            "works_day": "工作日",
+            "works_hour": "工作时间"
+          },
+          "break_section": {
+            "title": "添加中断",
+            "break_name": "中断名称",
+            "start_time": "开始时间",
+            "end_time": "时间结束"
+          }
+        },
+        "terminating_form": {
+          "title": "终止表格",
+          "information": {
+            "title": "重要信息",
+            "desc": "员工发薪日期是"
+          },
+          "effective_date": "输入有效终止日期",
+          "note": "笔记",
+          "note_placeholder": "输入注释"
+        }
+      }
+    },
+    "annual_work_calendar": {
+      "title": "年度工作日历",
+      "upcoming_event": "即将发生的事件",
+      "popup": {
+        "add_calendar_item": {
+          "create_title": "创建新事件",
+          "update_title": "更新事件",
+          "name_of_event": "活动名称",
+          "name_of_event_placeholder": "输入事件名称",
+          "event_type": "事件类型",
+          "start_date": "开始日期",
+          "end_date": "结束日期",
+          "start_time": "开始时间",
+          "end_time": "时间结束",
+          "notes": "笔记"
+        },
+        "delete": {
+          "title": "从年度工作日历中删除事件",
+          "desc": "您即将从年度工作日历中删除此事件。"
+        }
+      }
+    }
+  },
+  "attendance_&_leave": {
+    "attendance_entries": {
+      "title": "出席率",
+      "sub_title": "考勤录入",
+      "table": {
+        "table_cols_item": {
+          "date": "日期",
+          "employee_id": "员工ID",
+          "employee_name": "员工姓名",
+          "check_in": "报到",
+          "check_out": "查看",
+          "count": "数数"
+        }
+      },
+      "popup": {
+        "create": {
+          "title": "新出勤条目",
+          "select_date_label": "选择日期",
+          "auto": "汽车",
+          "table_cols_item": {
+            "employee_id": "员工ID",
+            "employee_name": "员工姓名",
+            "check_in": "报到",
+            "check_out": "查看"
+          }
+        },
+        "add_employee": {
+          "title": "选择员工",
+          "table_cols_item": {
+            "employee_name": "员工姓名",
+            "position": "位置",
+            "department": "部门"
+          }
+        },
+        "edit": {
+          "title": "编辑考勤条目",
+          "from_input_label": "从",
+          "to_input_label": "到"
+        },
+        "delete": {
+          "title": "删除考勤条目",
+          "desc": "您将要删除此考勤条目。"
+        }
+      }
+    },
+    "leave_entries": {
+      "title": "出席率",
+      "sub_title": "离开入境",
+      "table": {
+        "table_cols_item": {
+          "employee_id": "员工ID",
+          "employee_name": "员工姓名",
+          "leave_form": "离开自",
+          "leave_to": "离开至",
+          "From": "从",
+          "date": "日期",
+          "leave_type": "休假类型",
+          "status": "地位"
+        },
+        "custom_value": {
+          "half_day": "半天",
+          "full_day": "全日",
+          "paid": "有薪酬的",
+          "unpaid": "未付"
+        }
+      },
+      "popup": {
+        "create": {
+          "title": "选择员工",
+          "table_cols_item": {
+            "employee_name": "员工姓名",
+            "position": "位置",
+            "department": "部门"
+          }
+        },
+        "select_employee": {
+          "title": "新休假条目",
+          "leave_from_input_label": "离开自",
+          "leave_to_input_label": "离开至",
+          "select_date": "选择日期",
+          "half_day_leave": "半天假",
+          "from_input_label": "从",
+          "to_input_label": "到",
+          "leave_type_input_label": "休假类型",
+          "leave_type_input_placeholder": "选择休假类型",
+          "status_input_label": "地位",
+          "status_input_placeholder": "选择休假状态",
+          "note_input_label": "笔记",
+          "note_input_placeholder": "添加注释"
+        },
+        "update": {
+          "title": "编辑请假条目",
+          "leave_from_input_label": "离开自",
+          "leave_to_input_label": "离开至",
+          "half_day_leave": "半天假",
+          "from_input_label": "从",
+          "to_input_label": "离开至",
+          "leave_type_input_label": "休假类型",
+          "leave_type_input_placeholder": "选择休假类型",
+          "status_input_label": "地位",
+          "status_input_placeholder": "选择休假状态",
+          "note_input_label": "笔记",
+          "note_input_placeholder": "添加注释"
+        },
+        "delete": {
+          "title": "删除数据条目",
+          "desc": "您将要删除此休假数据条目。"
+        }
+      }
+    },
+    "overtime_summary": {
+      "title": "出席率",
+      "sub_title": "加时赛入场",
+      "table": {
+        "table_cols_item": {
+          "date": "日期",
+          "employee_id": "员工ID",
+          "employee_name": "员工姓名",
+          "start_time": "开始时间",
+          "duration": "期间",
+          "multiplier": "乘数"
+        }
+      },
+      "popup": {
+        "create": {
+          "title": "新的加时赛条目",
+          "select_date_label": "选择日期",
+          "auto": "汽车",
+          "table_cols_item": {
+            "employee_id": "员工ID",
+            "employee_name": "员工姓名",
+            "start_time": "开始时间",
+            "duration": "期间",
+            "multiplier": "乘数"
+          }
+        },
+        "add_employee": {
+          "title": "选择员工",
+          "table_cols_item": {
+            "employee_name": "员工姓名",
+            "position": "位置",
+            "department": "部门"
+          }
+        },
+        "update": {
+          "title": "编辑加班条目",
+          "start_time_input_label": "开始时间",
+          "duration_input_label": "期间",
+          "multiplier_input_label": "乘数"
+        },
+        "delete": {
+          "title": "删除数据条目",
+          "desc": "您将要删除此加班数据条目。"
+        }
+      }
+    }
+  },
+  "compensation_and_benefits": {
+    "title": "赔偿",
+    "table": {
+      "table_cols_item": {
+        "cnb_profile_name": "C",
+        "base_compensation": "基本补偿",
+        "supplementary_compensation": "补充补偿",
+        "date_created": "创建日期",
+        "last_update": "最后更新"
+      }
+    },
+    "form": {
+      "create_title": "创建新C",
+      "update_title": "更新个人信息",
+      "profile_name": "个人资料名称",
+      "profile_name_placeholder": "输入配置文件名称",
+      "compensation_sub_title": "赔偿",
+      "base_section": {
+        "title": "根据",
+        "compensation_component": "补偿元件",
+        "compensation_component_placeholder": "选择基本补偿元件",
+        "tax_status": "税务状况",
+        "tax_status_option": {
+          "taxable": "应纳税",
+          "nontaxable": "免税"
+        }
+      },
+      "overtime_section": {
+        "title": "随着时间的推移",
+        "rate": "速度"
+      },
+      "supplementary_section": {
+        "title": "补充",
+        "compensation_component": "补偿元件",
+        "tax_status": "税务状况",
+        "tax_status_option": {
+          "taxable": "应纳税",
+          "nontaxable": "免税"
+        },
+        "amount": "数量"
+      }
+    },
+    "popup": {
+      "delete": {
+        "title": "您确定要删除此记录吗？",
+        "desc": "任何未保存的更改都将被丢弃。"
+      },
+      "create_cancel": {
+        "title": "您确定要删除此记录吗？",
+        "desc": "任何未保存的更改都将被丢弃。"
+      },
+      "update_cancel": {
+        "title": "您确定要离开吗？",
+        "desc": "任何未保存的更改都将被丢弃"
+      },
+      "update_save": {
+        "title": "保存更改",
+        "desc": "您确定要使用此数据更新个人资料吗？"
+      },
+      "detail": {
+        "title": "C",
+        "cnb_profile_name": "C",
+        "date_created": "创建日期",
+        "last_update": "最后更新",
+        "base_section": {
+          "title": "根据",
+          "compensation_component": "补偿元件",
+          "compensation_component_placeholder": "选择基本补偿元件",
+          "tax_status": "税务状况",
+          "tax_status_option": {
+            "taxable": "应纳税",
+            "nontaxable": "N应税"
+          },
+          "amount_per": "每份金额",
+          "rate_per": "每人费率 "
+        },
+        "supplementary_section": {
+          "title": "补充",
+          "compensation_component": "补偿元件",
+          "tax_status": "税务状况",
+          "tax_status_option": {
+            "taxable": "应纳税",
+            "nontaxable": "N应税"
+          },
+          "amount_month": "每月金额"
+        }
+      }
+    },
+    "create_new_payroll": "创建新工资单",
+    "generate_attendance_report": "生成考勤报告",
+    "generate_gross_payroll": "生成工资总额",
+    "add_ad_hoc": "添加临时",
+    "calculate": "计算"
+  },
+  "income_tax_profile": {
+    "deductable_component": {
+      "title": "可扣除部分仪表板",
+      "detail_title": "可扣除部分详细信息",
+      "table": {
+        "company_name": "公司名称",
+        "country": "国家",
+        "component_condition": "组件状况",
+        "last_update": "最后更新",
+        "delete_modal": {
+          "title": "删除数据条目",
+          "text": "您即将删除该法定福利部分。"
+        }
+      },
+      "add_new_component": {
+        "title": "添加新组件",
+        "save_modal_text": "您将停止该过程，并保存在“添加新组件”中。<br>您确定要停止该进程吗？",
+        "mark_modal_text": "所有付款都将标记为已付款并完成添加新组件流程",
+        "form": {
+          "wizard_option": {
+            "initial": "创造",
+            "basic_detail": "基本细节",
+            "designed_transfer_account": "设计转账账户",
+            "transfer_account": "转账账户",
+            "rates": "价格"
+          },
+          "create_basic_detail": {
+            "name": "组件名称",
+            "name_placeholder": "输入组件名称",
+            "country": "国家",
+            "province": "省",
+            "city": "城市",
+            "sub_district": "分地区",
+            "citation": "引文",
+            "internal_notes": "内部注释",
+            "external_notes": "外部注释",
+            "max_char_info": "最大限度。 "
+          },
+          "create_dta": {
+            "title": "银行信息",
+            "type": "类型",
+            "type_option": {
+              "central_account": "中央账户",
+              "individual_account": "个人账户",
+              "company_account_only": "仅限公司帐户"
+            },
+            "message": "指定转账账户手动添加到每个员工的个人资料中",
+            "bank": "银行",
+            "bank_account_holders_name": "银行账户持有人姓名",
+            "bank_account_no": "银行帐号",
+            "bank_code": "银行代码",
+            "branch_code": "分行代码",
+            "branch_name": "分店名称",
+            "swift_code": "SWIFT代码",
+            "notes": "笔记",
+            "bank_account_holders_name_placeholder": "输入银行账户持有人姓名",
+            "bank_account_no_placeholder": "输入银行帐号",
+            "bank_code_placeholder": "输入银行代码",
+            "branch_code_placeholder": "输入分行代码",
+            "branch_name_placeholder": "输入分行名称",
+            "swift_code_placeholder": "输入 Swift 代码",
+            "notes_placeholder": "输入注释",
+            "max_char_info": "最大限度。 "
+          },
+          "rates": {
+            "select_type": "选择免赔额类型",
+            "dc_condition": "可扣除成分条件",
+            "amount": "数量",
+            "fu_condition": "因素 单位 条件",
+            "sub_condition": "子条件"
+          }
+        }
+      },
+      "modal": {
+        "delete": {
+          "title": "删除数据条目",
+          "text": "您即将删除该法定福利部分。"
+        },
+        "duplicate": {
+          "title": "确认",
+          "text": "您确定要复制此配置文件吗？"
+        }
+      }
+    },
+    "profile": {
+      "title": "税务资料配置",
+      "add_new_title": "添加新的税务资料",
+      "tab": {
+        "draft": "草稿",
+        "active": "积极的",
+        "archive": "已存档"
+      },
+      "draft_table": {
+        "name": "姓名",
+        "country": "国家",
+        "effective_period": "有效期",
+        "created_on": "创建于",
+        "last_update": "最后更新"
+      },
+      "active_table": {
+        "profile_name": "个人资料名称",
+        "country": "国家",
+        "province": "省",
+        "effective_period": "有效期",
+        "created_on": "创建于",
+        "last_update": "最后更新"
+      },
+      "archieve_table": {
+        "profile_name": "个人资料名称",
+        "country": "国家",
+        "province": "省",
+        "effective_period": "有效期",
+        "created_on": "创建于",
+        "last_update": "最后更新"
+      },
+      "detail": {
+        "main": {
+          "title": "税务概况 - 状态"
+        },
+        "tab": {
+          "basic_detail": "基本细节",
+          "deductible_component": "可扣除部分",
+          "income_tax_rate": "所得税税率",
+          "income_tax_multiplier": "所得税乘数",
+          "designated_transfer_account": "指定转账账户"
+        },
+        "wizard_option": {
+          "initial": "创造",
+          "basic_detail": "基本细节",
+          "deductable_component": "可扣除部分",
+          "income_tax_rates": "所得税税率",
+          "income_tax_multiplier": "所得税乘数",
+          "designed_transfer_account": "设计转账账户"
+        },
+        "basic_detail": {
+          "tax_profile_name": "税务资料名称",
+          "tax_profile_name_placeholder": "输入配置文件名称",
+          "country": "国家",
+          "different_currency": "不同货币",
+          "effective_period": "有效期",
+          "citation": "引文",
+          "internal_notes": "内部注释",
+          "external_notes": "外部注释",
+          "province": "省",
+          "city": "城市",
+          "sub_district": "分地区",
+          "effective_date": "生效日期",
+          "expiration_date": "截止日期",
+          "max_char_info": "最大限度。 "
+        },
+        "deductible_component": {
+          "martial_status": "婚姻状况",
+          "number_of_dependence": "受抚养人数量",
+          "factor_unit_condition": "因素 单位 条件",
+          "amount": "数量",
+          "deductible": "免赔额"
+        },
+        "income_tax_rate": {
+          "progressive_rate": "累进率",
+          "income": "收入",
+          "rate": "速度",
+          "min_income": "最低收入",
+          "amount": "数量",
+          "max_income": "最高收入",
+          "additional_fixed_amount": "额外固定金额"
+        },
+        "income_tax_multiplier": {
+          "deductible_factor": "免赔额因素",
+          "factor_unit_condition": "因素 单位 条件",
+          "rate": "速度",
+          "additional_fixed_amount": "额外固定金额",
+          "status": "地位",
+          "condition": "健康）状况",
+          "multiplier": "乘数",
+          "component": "成分"
+        },
+        "designated_transfer_account": {
+          "type": "类型",
+          "bank": "银行",
+          "bank_account_holders_name": "银行账户持有人姓名",
+          "bank_account_holders_name_placeholder": "输入银行账户持有人姓名",
+          "bank_account_no": "银行帐号",
+          "bank_account_no_placeholder": "输入银行帐号",
+          "bank_code": "银行代码",
+          "bank_code_placeholder": "输入银行代码",
+          "branch_code": "分行代码",
+          "branch_code_placeholder": "输入分行代码",
+          "branch_name": "分店名称",
+          "branch_name_placeholder": "输入分行名称",
+          "swift_code": "SWIFT代码",
+          "swift_code_placeholder": "输入 Swift 代码",
+          "notes": "笔记",
+          "notes_placeholder": "输入注释",
+          "bank_info": "银行信息",
+          "central_account": "中央账户",
+          "individual_account": "个人账户",
+          "company_account": "仅限公司帐户",
+          "message": "指定转账账户手动添加到每个员工的个人资料中",
+          "max_char_info": "最大限度。 "
+        }
+      },
+      "modal": {
+        "activate": {
+          "title": "发布日期",
+          "description": "您想激活税务资料吗？",
+          "effective_date": "生效日期",
+          "expiration_date": "截止日期"
+        },
+        "duplicate": {
+          "title": "确认",
+          "description": "您想复制此配置文件吗？"
+        },
+        "delete": {
+          "title": "删除数据条目",
+          "description": "您将要删除此考勤数据条目。"
+        },
+        "archive": {
+          "title": "存档日期",
+          "description": "输入有效存档日期",
+          "checkbox": "替换为新配置文件"
+        },
+        "mark_all": {
+          "title": "标记所有已付款并已完成",
+          "description": "所有付款都将标记为已付款并完成薪资助理流程"
+        },
+        "cancel": {
+          "title": "节省",
+          "description": "您将停止该流程，并保存在薪资助手中 您确定要停止该流程吗？"
+        },
+        "add_deductable": {
+          "title": "选择可扣税部分",
+          "component_name": "组件名称",
+          "component_condition": "组件状况"
+        }
+      }
+    }
+  },
+  "satutory_benefit": {
+    "component": {
+      "title": "法定福利组件仪表板",
+      "detail_title": "法定福利成分",
+      "table": {
+        "company_name": "公司名称",
+        "country": "国家",
+        "contributors": "贡献者(S)",
+        "rate_type": "费率类型",
+        "created_on": "创建于",
+        "last_update": "最后更新",
+        "action": ""
+      },
+      "form_&_detail": {
+        "dashboard_title": "添加新组件",
+        "wizard_option": {
+          "basic_detail": "基本细节",
+          "designed_transfer_account": "设计转账账户",
+          "rate": "速度"
+        },
+        "create_basic_detail": {
+          "detail_title": "基本细节",
+          "name": "法定名称",
+          "name_placeholder": "输入法定福利名称",
+          "country": "国家",
+          "province": "省",
+          "city": "城市",
+          "sub_district": "分地区",
+          "citation": "引文",
+          "internal_notes": "内部注释",
+          "external_notes": "外部注释",
+          "max_char_info": "最大限度。 ",
+          "component_name": "组件名称"
+        },
+        "create_designed_transfer_account": {
+          "form_title": "银行信息",
+          "detail_title": "银行信息",
+          "type_option": {
+            "central_account": "中央账户",
+            "individual_account": "个人账户",
+            "company_account_only": "仅限公司帐户"
+          },
+          "information": "指定转账账户手动添加到每个员工的个人资料中",
+          "bank": "银行",
+          "bank_account_holders_name": "银行账户持有人姓名",
+          "bank_account_holders_name_placeholder": "输入银行账户持有人姓名",
+          "bank_account_no": "银行帐号",
+          "bank_account_no_placeholder": "输入银行帐号",
+          "bank_code": "银行代码",
+          "bank_code_placeholder": "输入银行代码",
+          "branch_code": "分行代码",
+          "branch_code_placeholder": "输入分行代码",
+          "branch_name": "分店名称",
+          "branch_name_placeholder": "输入分行名称",
+          "swift_code": "SWIFT代码",
+          "swift_code_placeholder": "输入 Swift 代码",
+          "notes": "笔记",
+          "notes_placeholder": "输入注释",
+          "bank_info": "银行信息",
+          "message": "指定转账账户手动添加到每个员工的个人资料中",
+          "max_char_info": "最大限度。 ",
+          "transfer_info": "转账信息"
+        },
+        "rates": {
+          "contributor_option": {
+            "label": "贡献者",
+            "employee": "员工",
+            "employer": "雇主"
+          },
+          "sub_title": "价格",
+          "match_rule_button": "雇主匹配规则",
+          "start": "开始",
+          "end": "结尾",
+          "additional_fixed_amount": "额外固定金额",
+          "amount_cap": "金额上限",
+          "rate_type": "费率类型",
+          "flat_rate": "扁平率"
+        },
+        "others": {
+          "search_placeholder": "搜索"
+        }
+      },
+      "modal": {
+        "delete": {
+          "title": "删除数据条目",
+          "text": "您即将删除该法定福利部分。"
+        },
+        "duplicate": {
+          "title": "确认",
+          "text": "您确定要复制此配置文件吗？"
+        }
+      }
+    },
+    "profile": {
+      "title": "法定福利概况仪表板",
+      "detail_title": "法定福利概况",
+      "table": {
+        "table_tabs": {
+          "draft": "草稿",
+          "active": "积极的",
+          "archived": "已存档"
+        },
+        "name": "姓名",
+        "profile_name": "个人资料名称",
+        "country": "国家",
+        "province": "省",
+        "effective_period": "有效期",
+        "created_on": "创建于",
+        "last_update": "最后更新"
+      },
+      "form_&_detail": {
+        "create_title": "创造法定效益",
+        "update_title": "更新法定福利",
+        "name": "法定名称",
+        "name_placeholder": "输入法定福利名称",
+        "country": "国家",
+        "province": "省",
+        "city": "城市",
+        "sub_district": "分地区",
+        "effective_date": "生效日期",
+        "expiration_date": "截止日期",
+        "citation": "引文",
+        "internal_notes": "内部注释",
+        "external_notes": "外部注释",
+        "max_char_info": "最大限度。 ",
+        "component": {
+          "popup_title": "选择法定福利组成部分",
+          "employee_name": "员工姓名",
+          "effective_period": "有效期",
+          "rate_type": "费率类型",
+          "contributor": "贡献者",
+          "rate_types": "费率类型",
+          "flat_rate": "扁平率",
+          "amount_cap": "金额上限"
+        }
+      },
+      "modal": {
+        "delete": {
+          "title": "删除数据条目",
+          "text": "您将要删除此考勤数据条目。"
+        },
+        "duplicate": {
+          "title": "确认",
+          "text": "您确定要复制此配置文件吗？"
+        },
+        "archive": {
+          "title": "存档日期",
+          "input_date": "输入有效存档日期",
+          "replace": "替换为新配置文件"
+        },
+        "activate": {
+          "title": "发布日期",
+          "text": "您想激活税务资料吗？",
+          "effective_date": "生效日期",
+          "expiration_date": "截止日期"
+        }
+      }
+    }
+  },
+  "payroll_and_disbursement": {
+    "payroll_assistant": {
+      "title": "薪资操作",
+      "sub_title": "薪资助理",
+      "table": {
+        "tab_panel": {
+          "in_progress": "进行中",
+          "completed": "完全的"
+        },
+        "table_cols_item": {
+          "name": "姓名",
+          "date_range": "日期范围",
+          "created_on": "创建于",
+          "last_updated": "最近更新时间"
+        }
+      },
+      "popup": {
+        "create": {
+          "title": "创建新工资单",
+          "name_input_label": "姓名",
+          "name_input_placeholder": "输入名称",
+          "start_date": "开始日期",
+          "end_date": "结束日期"
+        },
+        "delete": {
+          "title": "从薪资助手中删除薪资操作吗？",
+          "desc": "您将要删除此工资单报告。"
+        }
+      }
+    },
+    "attendance_summary": {
+      "title": "薪资操作",
+      "sub_title": "出席总结",
+      "table": {
+        "tab_panel": {
+          "draft": "草稿",
+          "confirmed": "确认的",
+          "completed": "完全的",
+          "archive": "档案"
+        },
+        "table_cols_item": {
+          "name": "姓名",
+          "date_range": "日期范围",
+          "report_type": "报告类型",
+          "created_on": "创建于",
+          "last_updated": "最近更新时间",
+          "attachment": "依恋"
+        }
+      },
+      "popup": {
+        "create": {
+          "title": "创建新工资单",
+          "name_input_label": "姓名",
+          "name_input_placeholder": "输入名称",
+          "start_date": "开始日期",
+          "end_date": "结束日期"
+        },
+        "delete": {
+          "title": "从薪资操作中删除考勤？",
+          "desc": "您将要删除此工资单报告。"
+        }
+      },
+      "generate_gross_payroll": {
+        "title": "生成工资总额报告",
+        "sub_title": "工资单",
+        "table": {
+          "table_cols_item": {
+            "employee_name": "员工姓名",
+            "attendance": "出席率",
+            "absent": "缺席的",
+            "paid_leave": "带薪休假",
+            "unpaid_leave": "无薪休假",
+            "overtime_hours": "加班时间",
+            "total_hours": "全部小时数",
+            "average_hours": "平均工作时间/天"
+          }
+        },
+        "detail": {
+          "operational_department": {
+            "title": "业务部",
+            "card_items": {
+              "total_base_compensation": "总基础补偿",
+              "total_supplementary_compensation": "总补充补偿",
+              "total_ad_hoc_compensation": "临时总补偿",
+              "total_gross_payroll": "工资总额"
+            },
+            "table": {
+              "table_cols_item": {
+                "fullname": "全名",
+                "base_compensation": "基本补偿",
+                "Supplementary_compensation": "补充补偿",
+                "ad_hoc_compensation": "临时补偿",
+                "gross_compensation": "总薪酬"
+              }
+            }
+          },
+          "delivery_department": {
+            "title": "配送部",
+            "card_items": {
+              "total_base_compensation": "总基础补偿",
+              "total_supplementary_compensation": "总补充补偿",
+              "total_ad_hoc_compensation": "临时总补偿",
+              "total_gross_payroll": "工资总额"
+            },
+            "table": {
+              "table_cols_item": {
+                "fullname": "全名",
+                "base_compensation": "基本补偿",
+                "Supplementary_compensation": "补充补偿",
+                "ad_hoc_compensation": "临时补偿",
+                "gross_compensation": "总薪酬"
+              }
+            }
+          },
+          "gross_calculating_payroll_form": {
+            "section_title": "工资总额计算",
+            "base": {
+              "section_title": "根据",
+              "compensation_component": "补偿元件",
+              "amount": "数量",
+              "amount_placeholder": "输入金额",
+              "tax_status": "税务状况",
+              "tax_status_option": {
+                "taxable": "应纳税",
+                "non_taxable": "免税"
+              }
+            },
+            "overtime_hours": {
+              "section_title": "加班时间",
+              "overtime_hours": "加班时间",
+              "overtime_hours_placeholder": "输入加班时间",
+              "rate": "速度",
+              "rate_placeholder": "输入速率"
+            },
+            "supplementary": {
+              "section_title": "补充",
+              "compensation_component": "补偿元件",
+              "amount": "数量",
+              "amount_placeholder": "输入金额",
+              "tax_status": "税务状况",
+              "tax_status_option": {
+                "taxable": "应纳税",
+                "non_taxable": "免税"
+              }
+            },
+            "ad_hoc": {
+              "section_title": "特别指定",
+              "ad_hoc_component": "临时组件",
+              "ad_hoc_component_placeholder": "输入临时名称",
+              "amount": "数量",
+              "amount_placeholder": "输入金额"
+            }
+          }
+        }
+      }
+    },
+    "payroll_report": {
+      "title": "薪资操作",
+      "sub_title": "工资报告",
+      "table": {
+        "tab_panel": {
+          "draft": "草稿",
+          "confirmed": "确认的",
+          "completed": "完全的",
+          "archive": "档案"
+        },
+        "table_cols_item": {
+          "name": "姓名",
+          "date_range": "日期范围",
+          "report_type": "报告类型",
+          "created_on": "创建于",
+          "last_updated": "最近更新时间",
+          "attachment": "依恋",
+          "empty": ""
+        }
+      }
+    },
+    "disbursement": {
+      "title": "薪资操作",
+      "sub_title": "支出",
+      "table": {
+        "tab_panel": {
+          "draft": "草稿",
+          "completed": "完全的",
+          "archive": "档案"
+        },
+        "table_cols_item": {
+          "name": "姓名",
+          "date_range": "日期范围",
+          "report_type": "报告类型",
+          "created_on": "创建于",
+          "last_updated": "最近更新时间",
+          "attachment": "依恋",
+          "empty": ""
+        }
+      }
+    }
+  }
+}

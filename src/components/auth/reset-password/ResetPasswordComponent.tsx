@@ -56,7 +56,7 @@ function ResetPasswordComponent() {
   const validate = (fieldOfValues = values) => {
     const temp = {...errors};
     if ('newPassword' in fieldOfValues) {
-      const patternPassword = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+      const patternPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
       const newPasswordValue = fieldOfValues.newPassword || '';
       let newPasswordErrorMessage = '';
       if (!newPasswordValue) {
@@ -124,16 +124,16 @@ function ResetPasswordComponent() {
           <Notify error={true} body='Please check your input or check your authorization'/>
         )
       }
-      <Card sx={{ width: '585px', height: '75%' }}>
+      <Card sx={{ width: '585px', height: 'fit-content' }}>
         <CardContent sx={{ padding: '2rem' }}>
           <div style={{ marginBottom: '1rem' }}>
             <Image src={kayaroll} alt='logo' height={56} width={211}/>
           </div>
           <div style={{ marginBottom: '1rem' }}>
-            <Typography component='h2' fontWeight='bold' fontSize='24px' color='primary'>Reset Password</Typography>
+            <Typography component='h2' fontWeight='bold' fontSize='24px' color='primary'>Set New Password</Typography>
           </div>
           <div style={{ marginBottom: '1rem' }}>
-            <Typography color='grey.400' fontSize='16px'>Enter your new password below</Typography>
+            <Typography color='grey.400' fontSize='16px'>This new password will be used to login</Typography>
           </div>
           <Box
             component='form'
@@ -165,11 +165,11 @@ function ResetPasswordComponent() {
               }}
             />
             <Input
-              customLabel='Confirm New Password'
+              customLabel='Repeat New Password'
               withAsterisk
               size='small'
               type={openConfirmPassword ? 'text' : 'password'}
-              placeholder='Confirm New Password'
+              placeholder='Repeat New Password'
               name='confirmPassword'
               onChange={handleInputChange}
               error={errors.confirmPassword}
@@ -192,7 +192,7 @@ function ResetPasswordComponent() {
                 color='primary'
                 size='large'
                 type='submit'
-                label='Reset Password'
+                label='Update Password'
               />
             </Stack>
           </Box>

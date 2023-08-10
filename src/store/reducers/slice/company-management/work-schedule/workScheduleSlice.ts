@@ -19,17 +19,21 @@ interface EventType {
 
 interface WorkScheduleState {
   isLoading: boolean;
+  id: string | number;
   events: Array<EventType>,
   grossHour: number,
   netHour: number,
+  name: string,
   data: []
 }
 
 const initialState: WorkScheduleState = {
   isLoading: false,
+  id: '',
   events: [],
   grossHour: 0,
   netHour: 0,
+  name: '',
   data: []
 };
 
@@ -94,6 +98,65 @@ export const workScheduleSlice = createSlice({
     },
     postWorkScheduleFailed: (state) => {
       state.isLoading = false;
+    },
+    getDetailWorkScheduleRequested: (state) => {
+      state.isLoading = true;
+    },
+    getDetailWorkScheduleSuccess: (state, action) => {
+      state.isLoading = false;
+      state.id = action?.payload?.id;
+      state.name = action?.payload?.name;
+      state.grossHour = action?.payload?.grossHour;
+      state.netHour = action?.payload?.netHour;
+      const tempData: Array<EventType> = [];
+      action?.payload?.events.map((item) => {
+        tempData.push({
+          day: item.day,
+          event_id: item.eventId,
+          title: item.name,
+          name: item.name,
+          start: new Date(item.start),
+          end: new Date(item.end),
+          isBreak: item.isBreak,
+          isDuration: item.isDuration,
+          color: item.color,
+          duration: item.duration,
+          allDay: item.allDay,
+          scheduleType: item.scheduleType,
+          type: item.type
+        });
+      });
+      state.events = tempData;
+    },
+    getDetailWorkScheduleFailed: (state) => {
+      state.isLoading = false;
+    },
+    deleteWorkScheduleRequested: (state) => {
+      state.isLoading = true;
+    },
+    deleteWorkScheduleSuccess: (state) => {
+      state.isLoading = false;
+    },
+    deleteWorkScheduleFailed: (state) => {
+      state.isLoading = false;
+    },
+    patchWorkScheduleRequested: (state) => {
+      state.isLoading = true;
+    },
+    patchWorkScheduleSuccess: (state) => {
+      state.isLoading = false;
+    },
+    patchWorkScheduleFailed: (state) => {
+      state.isLoading = false;
+    },
+    calculateGrossNet: (state, action) => {
+      state.grossHour = action?.payload?.gross;
+      state.netHour = action?.payload?.net;
+    },
+    clearState: (state) => {
+      state.events = [];
+      state.grossHour = 0;
+      state.netHour = 0;
     }
   },
   extraReducers: {
@@ -118,7 +181,18 @@ export const {
   postWorkScheduleSuccess,
   getListWorkScheduleRequested,
   getListWorkSchedulerFailed,
-  getListWorkSchedulerSuccess
+  getListWorkSchedulerSuccess,
+  getDetailWorkScheduleFailed,
+  getDetailWorkScheduleRequested,
+  getDetailWorkScheduleSuccess,
+  deleteWorkScheduleFailed,
+  deleteWorkScheduleRequested,
+  deleteWorkScheduleSuccess,
+  patchWorkScheduleFailed,
+  patchWorkScheduleRequested,
+  patchWorkScheduleSuccess,
+  calculateGrossNet,
+  clearState
 } = workScheduleSlice.actions;
 
 export default workScheduleSlice.reducer;

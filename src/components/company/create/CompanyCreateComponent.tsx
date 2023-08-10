@@ -7,25 +7,24 @@ import {
   Card,
   CardProps,
   Divider,
-  Typography,
-  Tab,
-  Tabs
+  Typography
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import Image from 'next/image';
 import { Company, CompanyCreate } from '@/types/component';
 import { Image as ImageType } from '@/utils/assetsConstant';
-import { IconButton } from '@/components/_shared/form';
+import { IconButton, Stepper } from '@/components/_shared/form';
 import { BsBellFill } from 'react-icons/bs';
 import LocalizationMenu from '@/components/_shared/_core/localization/LocalizationMenu';
 import Profile from '@/components/_shared/_core/appbar/Profile';
 import CompanyInformationForm from './CompanyInformationForm';
 import CompanyBankForm from './CompanyBankForm';
-import { useAppDispatch } from '@/hooks/index';
-import { postCompanyProfileRequested } from '@/store/reducers/slice/company/companySlice';
+import { useAppDispatch, useAppSelectors } from '@/hooks/index';
+import { postCompanyProfileRequested, postCompanyPaymentsRequested } from '@/store/reducers/slice/company/companySlice';
 import { base64ToFile } from '@/utils/helper';
 import { useFormik } from 'formik';
-import { validationSchemeCompanyProfile } from './validate';
+import { validationSchemeCompanyProfile, validationSchemeCompanyProfilePayment } from './validate';
+import { useTranslation } from 'react-i18next';
 
 const WrapperAuth = styled(Box)<BoxProps>(({ theme }) => ({
   background: theme.palette.secondary[100],
@@ -52,40 +51,6 @@ const WrapperNavbarContent = styled(Toolbar)(() => ({
   display: 'flex',
   justifyContent: 'space-between'
 }));
-
-interface TabPanelProps {
-  children?: React.ReactNode;
-  index: number;
-  value: number
-}
-
-function TabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role='tabpanel'
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      {...other}
-    >
-      {
-        value === index && (
-          <Box sx={{ p: 3 }}>
-            {children}
-          </Box>
-        )
-      }
-    </div>
-  );
-}
-
-function a11yProps(index: number) {
-  return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`
-  };
-}
 
 const Navbar = () => {
   return (
@@ -121,16 +86,19 @@ const CompanyCreateComponent = ({ companyType, companySector, bank, paymentMetho
   const [tabSelected, setTabSelected] = useState(0);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [images, setImages] = useState<string | null>(null);
+  const companyID = useAppSelectors(state => state.company.companyID);
   const dispatch = useAppDispatch();
+  const {t} = useTranslation();
+  const t_steps = 'company.form.wizard_option';
 
-  const formik = useFormik({
+  const formikDetail = useFormik({
     initialValues: {
       picture: [],
 
       // Group Company Information
       companyType: '',
       companyName: '',
-      companyNPWP: null,
+      companyNPWP: '',
       companySector: '',
       companyEmail: '',
       phoneNumberPrefix: '',
@@ -142,16 +110,24 @@ const CompanyCreateComponent = ({ companyType, companySector, bank, paymentMetho
       cityCompanyAddress: '',
       subDistrictCompanyAddress: '',
       addressCompanyAddress: '',
-      zipCodeCompanyAddress: '',
+      zipCodeCompanyAddress: ''
+    } as Company.Detail,
+    validationSchema: validationSchemeCompanyProfile,
+    onSubmit: (values) => {
+      handleSubmitDetail(values);
+    }
+  });
 
+  const formikPayment = useFormik({
+    initialValues: {
       // Group Bank Information
       bankBankInformation: '',
       bankAccountHolderNameBankInformation: '',
       bankAccoutNoBankInformation: '',
-      bankCodeBankInformation: null,
-      branchCodeBankInformation: null,
-      branchNameBankInformation: null,
-      swiftCodeBankInformation: null,
+      bankCodeBankInformation: '',
+      branchCodeBankInformation: '',
+      branchNameBankInformation: '',
+      swiftCodeBankInformation: '',
 
       // Group Payroll Information
       isMonthly: true,
@@ -166,39 +142,56 @@ const CompanyCreateComponent = ({ companyType, companySector, bank, paymentMetho
       biWeeklyPeriod: '',
       biWeeklyPeriodWeek: '',
       biWeeklyMethod: ''
-    } as Company.Detail,
-    validationSchema: validationSchemeCompanyProfile,
+    } as Company.Payment,
+    validationSchema: validationSchemeCompanyProfilePayment,
     onSubmit: (values) => {
-      handleSubmit(values);
+      handleSubmitPayment(values);
     }
   });
 
-  const handleSubmit = (val) => {
+  const handleSubmitDetail = (val) => {
     const convertToBase64 = base64ToFile(images as string, 'example.png');
 
     const informationData = {
-      typeId: val.companyType,
+      typeID: val.companyType,
       name: val.companyName,
-      npwp: val.companyNPWP,
-      sectorId: val.companySector,
+      taxIDNumber: val.companyNPWP,
+      sectorID: val.companySector,
       email: val.companyEmail,
       phoneNumber: val.phoneNumber.toString(),
       phoneNumberPrefix: val.phoneNumberPrefix,
     };
 
     const addressData = {
-      countryId: val.countryCompanyAddress,
+      countryID: val.countryCompanyAddress,
       firstLevelCode: val.provinceCompanyAddress,
       secondLevelCode: val.cityCompanyAddress,
       thirdLevelCode: val.subDistrictCompanyAddress,
-      fourthLevelCode: null,
+      fourthLevelCode: '',
       address: val.addressCompanyAddress,
       zipCode: val.zipCodeCompanyAddress,
     };
 
+    const inputData = new FormData();
+    const logoTemp = val?.picture?.length ? val.picture[0] : convertToBase64;
+    if (logoTemp) inputData.append('logo', logoTemp);
+    for (const key in informationData) {
+      if (informationData[key]) inputData.append(`${key}`, informationData[key]);
+    }
+    inputData.append('address', JSON.stringify(addressData));
+
+    dispatch({
+      type: postCompanyProfileRequested.toString(),
+      payload: {
+        companyProfile: inputData
+      }
+    });
+  };
+
+  const handleSubmitPayment = (val) => {
     const bankData = {
-      bankId: val.bankBankInformation,
-      accountName: val.bankAccountHolderNameBankInformation,
+      bankID: val.bankBankInformation,
+      holder: val.bankAccountHolderNameBankInformation,
       accountNumber: val.bankAccoutNoBankInformation,
       bankCode: val.bankCodeBankInformation,
       branchCode: val.branchCodeBankInformation,
@@ -211,10 +204,11 @@ const CompanyCreateComponent = ({ companyType, companySector, bank, paymentMetho
       payrollData = {
         ...payrollData, ...{
           monthly: {
-            periodStart: val.monthlyPeriodStart,
-            periodEnd: val.monthlyPeriodEnd,
+            start: val.monthlyPeriodStart,
+            end: val.monthlyPeriodEnd,
             payrollDate: val.monthlyPayrollDate,
-            methodId: val.monthlyMethod,
+            methodID: val.monthlyMethod,
+            type: 0
           }
         }
       };
@@ -223,8 +217,9 @@ const CompanyCreateComponent = ({ companyType, companySector, bank, paymentMetho
       payrollData = {
         ...payrollData, ...{
           weekly: {
-            period: val.weeklyPeriod,
-            methodId: val.weeklyMethod,
+            start: val.weeklyPeriod,
+            methodID: val.weeklyMethod,
+            type: 1
           }
         }
       };
@@ -233,30 +228,28 @@ const CompanyCreateComponent = ({ companyType, companySector, bank, paymentMetho
       payrollData = {
         ...payrollData, ...{
           biWeekly: {
-            period: val.biWeeklyPeriod,
-            periodWeek: val.biWeeklyPeriodWeek,
-            methodId: val.biWeeklyMethod,
+            start: val.biWeeklyPeriod,
+            end: val.biWeeklyPeriodWeek,
+            methodID: val.biWeeklyMethod,
+            type: 2
           }
         }
       };
     }
-
-    const inputData = new FormData();
-    inputData.append('picture', val?.picture?.length ? val.picture[0] : convertToBase64);
-    inputData.append('information', JSON.stringify(informationData));
-    inputData.append('address', JSON.stringify(addressData));
-    inputData.append('bank', JSON.stringify(bankData));
-    inputData.append('payroll', JSON.stringify(payrollData));
+    console.log(companyID);
 
     dispatch({
-      type: postCompanyProfileRequested.toString(),
-      payload: inputData
+      type: postCompanyPaymentsRequested.toString(),
+      payload: {
+        companyID: companyID,
+        payments: {
+          bank: bankData,
+          payrolls: payrollData
+        }
+      }
     });
   };
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setTabSelected(newValue);
-  };
   const handleNext = (val: number) => {
     setTabSelected(val);
   };
@@ -271,35 +264,32 @@ const CompanyCreateComponent = ({ companyType, companySector, bank, paymentMetho
             component='div'
             sx={{ fontWeight: 700, mb: '24px' }}
           >
-            Create Company Profile
+            {t('company.create_title')}
           </Typography>
           <WrapperCardContent>
             <Box sx={{ width: '100%' }}>
-              <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                <Tabs value={tabSelected} onChange={handleChange} aria-label='basic tabs'>
-                  <Tab sx={{ textTransform: 'none' }} label='Company Information' {...a11yProps(0)} />
-                  <Tab sx={{ textTransform: 'none' }} label='Bank and Payroll Information' {...a11yProps(1)} />
-                </Tabs>
+              <Box sx={{ borderBottom: 1, borderColor: 'divider', pb: '30px', mb: '10px' }}>
+                <Stepper steps={[t(`${t_steps}.company_information`), t(`${t_steps}.bank_and_payroll_information`)]} activeStep={tabSelected} />
               </Box>
-              <TabPanel value={tabSelected} index={0}>
+              {tabSelected == 0 &&
                 <CompanyInformationForm
                   nextPage={handleNext}
                   companyType={companyType}
                   companySector={companySector}
                   countries={countries}
-                  formik={formik}
+                  formik={formikDetail}
                   images={images}
                   setImages={setImages}
                   listAllCompany={listAllCompany}
                 />
-              </TabPanel>
-              <TabPanel value={tabSelected} index={1}>
+              }
+              {tabSelected == 1 &&
                 <CompanyBankForm
-                  formik={formik}
+                  formik={formikPayment}
                   bank={bank}
                   paymentMethod={paymentMethod}
                 />
-              </TabPanel>
+              }
             </Box>
           </WrapperCardContent>
         </WrapperCard>

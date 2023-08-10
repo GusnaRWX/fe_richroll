@@ -22,6 +22,8 @@ import Profile from '@/components/_shared/_core/appbar/Profile';
 import { setStorages } from '@/utils/storage';
 import Notify from '@/components/_shared/common/Notify';
 import { useAppSelectors } from '@/hooks/index';
+import { useTranslation } from 'react-i18next';
+import { t } from 'i18next';
 
 
 const WrapperAuth = styled(Box)<BoxProps>(({ theme }) => ({
@@ -122,14 +124,14 @@ const CardAdd = () => {
         component='div'
         sx={{ fontWeight: 700, mb: '4px' }}
       >
-        Create New
+        {t('company.create_card.title')}
       </Typography>
       <Typography
         variant='text-xs'
         component='div'
         sx={{ fontWeight: 500 }}
       >
-        You can add a maximum of<br />5 companies
+        {t('company.create_card.desc')}<br />{t('company.create_card.max_company_amount')}
       </Typography>
     </WrapperCardAdd>
   );
@@ -138,9 +140,11 @@ const CardAdd = () => {
 const CompanyComponent = ({ companies }: Company.Component) => {
   const { responser } = useAppSelectors((state) => state);
   const router = useRouter();
+  const {t: tl} = useTranslation();
   const handleClick = (val, path) => {
     setStorages([
-      { name: 'kaya_company', value: JSON.stringify({ id: val?.id, imageUrl: val?.imageUrl || '', name: val?.name, sector: val?.sector || '-' }) }
+      { name: 'kaya_company', value: JSON.stringify({ id: val?.id, imageUrl: val?.logo || '', name: val?.name, sector: val?.sector?.name || '-' }) },
+      { name:  'selected_roles', value: JSON.stringify('HR Admin')}
     ]);
     router.push(path);
   };
@@ -162,22 +166,22 @@ const CompanyComponent = ({ companies }: Company.Component) => {
               component='div'
               sx={{ fontWeight: 700, mb: '4px' }}
             >
-              Your Company
+              {tl('company.title')}
             </Typography>
             <Typography
               variant='text-base'
               component='div'
               sx={{ fontWeight: 400 }}
             >
-              Choose the company you want to manage. You can add a maximum of 5 companies
+              {tl('company.desc')}
             </Typography>
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: '25px', mt: '16px', height: '221px' }}>
-              {companies.map((val: object, idx) => (
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: '25px', mt: '16px', flexWrap:'wrap' }}>
+              {companies?.slice(0, 5)?.map((val: object, idx) => (
                 // <WrapperCardItem key={idx} onClick={() => { router.push(`/company/${val?.['id']}`);}}>
                 <WrapperCardItem key={idx} onClick={() => { handleClick(val, '/dashboard'); }}>
                   <Box component='div' sx={{ position: 'relative', width: '178px', height: '142px' }}>
                     <Image
-                      src={val?.['imageUrl']?.includes('http') ? val?.['imageUrl'] : ImageType.PLACEHOLDER_COMPANY}
+                      src={val?.['logo']?.includes('http') ? val?.['logo'] : ImageType.PLACEHOLDER_COMPANY}
                       fill={true}
                       style={{ objectFit: 'contain' }}
                       alt={val?.['name']}
@@ -195,7 +199,7 @@ const CompanyComponent = ({ companies }: Company.Component) => {
                     component='div'
                     sx={{ fontWeight: 500, width: '100%' }}
                   >
-                    {val?.['sector']}
+                    {val?.['sector']?.['name']}
                   </Typography>
                 </WrapperCardItem>
               ))}

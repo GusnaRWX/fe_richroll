@@ -1,4 +1,4 @@
-import { post, get } from '@/utils/services';
+import { post, get, del, patch } from '@/utils/services';
 import { workSchedule } from '@/types/workSchedule';
 
 export const getListWorkSchedule = (payload: workSchedule.WorkScheduleParams) => {
@@ -16,4 +16,16 @@ export const postCalculateEvent = (payload: workSchedule.PostCalculateEventPaylo
 
 export const postWorkSchedule = (payload: workSchedule.PostWorkSchedulePayloadType) => {
   return post('work-schedules', payload);
+};
+
+export const getDetailWorkSchedule = (id: number) => {
+  return get(`work-schedules/${id}`);
+};
+
+export const deleteWorkSchedule = (id: number) => {
+  return del(`work-schedules/${id}`);
+};
+
+export const patchWorkSchedule = (payload) => {
+  return patch(`work-schedules/${payload.id}`, payload.workSchedule);
 };

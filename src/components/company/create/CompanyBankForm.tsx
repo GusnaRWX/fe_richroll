@@ -16,6 +16,7 @@ import { useRouter } from 'next/router';
 import { useAppSelectors } from '@/hooks/index';
 import { ifThenElse, compareCheck } from '@/utils/helper';
 import { Cancel } from '@mui/icons-material';
+import { useTranslation } from 'react-i18next';
 
 
 const AsteriskComponent = MuiStyled('span')(({ theme }) => ({
@@ -40,6 +41,9 @@ interface CompanyBankProps {
 function CompanyBankForm({ bank, paymentMethod, formik }: CompanyBankProps) {
   const { responser } = useAppSelectors(state => state);
   const router = useRouter();
+  const {t} = useTranslation();
+  const t_bankInformation = 'company.form.bank_and_payroll_information.bank_information_section';
+  const t_payrollInformation = 'company.form.bank_and_payroll_information.payroll_information_section';
   const convertCheckbox = (name, event) => {
     return {
       target: {
@@ -50,7 +54,7 @@ function CompanyBankForm({ bank, paymentMethod, formik }: CompanyBankProps) {
 
   const checkPaymentMethod = (value: string) => {
     if (value?.length === 0) {
-      return <Text title='Select Payment Method' color='grey.400' />;
+      return <Text title={t(`${t_payrollInformation}.default_payment_method_placeholder`)} color='grey.400' />;
     }
     const selectedPaymentMethod = paymentMethod.find(type => type?.['id'] === value);
     if (selectedPaymentMethod) {
@@ -65,7 +69,7 @@ function CompanyBankForm({ bank, paymentMethod, formik }: CompanyBankProps) {
         formik.errors.bankBankInformation && formik.errors.bankAccountHolderNameBankInformation && formik.errors.bankAccoutNoBankInformation && (
           <Alert
             severity='error'
-            content='Please fill in all the mandatory fields'
+            content={t('alert_message.please_fill_in_all_the_mandatory_fields')}
             icon={<Cancel />}
           />
         )
@@ -73,32 +77,42 @@ function CompanyBankForm({ bank, paymentMethod, formik }: CompanyBankProps) {
       <form>
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
-            <Typography component='h3' fontSize={18} color='primary' fontWeight={700}>Bank Information</Typography>
+            <Typography component='h3' fontSize={18} color='primary' fontWeight={700}>{t(`${t_bankInformation}.title`)}</Typography>
           </Grid>
         </Grid>
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
             <FormControl fullWidth error={compareCheck(formik.touched.bankBankInformation, Boolean(formik.errors.bankBankInformation))}>
-              <Typography sx={{ mb: '6px' }}>Bank<AsteriskComponent>*</AsteriskComponent></Typography>
+              <Typography sx={{ mb: '6px' }}>{t(`${t_bankInformation}.bank`)}<AsteriskComponent>*</AsteriskComponent></Typography>
               <Select
                 fullWidth
                 displayEmpty
                 variant='outlined'
                 size='small'
-                placeholder='Select Bank'
+                placeholder={t(`${t_bankInformation}.bank_placeholder`)}
                 name='bankBankInformation'
                 value={formik.values.bankBankInformation}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 renderValue={(value: string) => {
                   if (value.length === 0) {
-                    return <Text title='Select Bank' color='grey.400' />;
+                    return <Text title={t(`${t_bankInformation}.bank_placeholder`)} color='grey.400' />;
                   }
                   const selectedBank = bank.find(type => type?.['id'] === value);
                   if (selectedBank) {
                     return `${selectedBank?.['name']}`;
                   }
                   return null;
+                }}
+                MenuProps={{
+                  PaperProps: {
+                    sx: {
+                      '& .MuiMenuItem-root:hover': {
+                        backgroundColor: '#223567',
+                        color: 'white'
+                      }
+                    }
+                  }
                 }}
               >
                 {bank?.map((val, idx) => (
@@ -115,11 +129,11 @@ function CompanyBankForm({ bank, paymentMethod, formik }: CompanyBankProps) {
               onBlur={formik.handleBlur}
               error={compareCheck(formik.touched.bankAccountHolderNameBankInformation, Boolean(formik.errors.bankAccountHolderNameBankInformation))}
               helperText={ifThenElse(formik.touched.bankAccountHolderNameBankInformation, formik.errors.bankAccountHolderNameBankInformation, '')}
-              customLabel='Bank Account Holder’s Name'
+              customLabel={t(`${t_bankInformation}.bank_account_holder_name`)}
               withAsterisk={true}
               size='small'
               value={formik.values.bankAccountHolderNameBankInformation}
-              placeholder='Input Bank Account Holder’s Name'
+              placeholder={t(`${t_bankInformation}.bank_account_holder_name_placeholder`)}
             />
           </Grid>
         </Grid>
@@ -131,11 +145,11 @@ function CompanyBankForm({ bank, paymentMethod, formik }: CompanyBankProps) {
               onBlur={formik.handleBlur}
               error={compareCheck(formik.touched.bankAccoutNoBankInformation, Boolean(formik.errors.bankAccoutNoBankInformation))}
               helperText={ifThenElse(formik.touched.bankAccoutNoBankInformation, formik.errors.bankAccoutNoBankInformation, '')}
-              customLabel='Bank Account No'
+              customLabel={t(`${t_bankInformation}.bank_account_no`)}
               withAsterisk={true}
               size='small'
               value={formik.values.bankAccoutNoBankInformation}
-              placeholder='Input Bank Account No'
+              placeholder={t(`${t_bankInformation}.bank_account_no_placeholder`)}
             />
           </Grid>
           <Grid item xs={3} md={3} lg={3} xl={3}>
@@ -145,11 +159,11 @@ function CompanyBankForm({ bank, paymentMethod, formik }: CompanyBankProps) {
               onBlur={formik.handleBlur}
               error={compareCheck(formik.touched.bankCodeBankInformation, Boolean(formik.errors.bankCodeBankInformation))}
               helperText={ifThenElse(formik.touched.bankCodeBankInformation, formik.errors.bankCodeBankInformation, '')}
-              customLabel='Bank Code'
+              customLabel={t(`${t_bankInformation}.bank_code`)}
               withAsterisk={false}
               size='small'
               value={formik.values.bankCodeBankInformation}
-              placeholder='Input Bank Code'
+              placeholder={t(`${t_bankInformation}.bank_code_placeholder`)}
             />
           </Grid>
           <Grid item xs={3} md={3} lg={3} xl={3}>
@@ -159,11 +173,11 @@ function CompanyBankForm({ bank, paymentMethod, formik }: CompanyBankProps) {
               onBlur={formik.handleBlur}
               error={compareCheck(formik.touched.branchCodeBankInformation, Boolean(formik.errors.branchCodeBankInformation))}
               helperText={ifThenElse(formik.touched.branchCodeBankInformation, formik.errors.branchCodeBankInformation, '')}
-              customLabel='Branch Code'
+              customLabel={t(`${t_bankInformation}.branch_code`)}
               withAsterisk={false}
               size='small'
               value={formik.values.branchCodeBankInformation}
-              placeholder='Input Branch Code'
+              placeholder={t(`${t_bankInformation}.branch_code_placeholder`)}
             />
           </Grid>
         </Grid>
@@ -175,11 +189,11 @@ function CompanyBankForm({ bank, paymentMethod, formik }: CompanyBankProps) {
               onBlur={formik.handleBlur}
               error={compareCheck(formik.touched.branchNameBankInformation, Boolean(formik.errors.branchNameBankInformation))}
               helperText={ifThenElse(formik.touched.branchNameBankInformation, formik.errors.branchNameBankInformation, '')}
-              customLabel='Branch Name'
+              customLabel={t(`${t_bankInformation}.branch_name`)}
               withAsterisk={false}
               size='small'
               value={formik.values.branchNameBankInformation}
-              placeholder='Input Branch Name'
+              placeholder={t(`${t_bankInformation}.branch_name_placeholder`)}
             />
           </Grid>
           <Grid item xs={6} md={6} lg={6} xl={6}>
@@ -189,26 +203,26 @@ function CompanyBankForm({ bank, paymentMethod, formik }: CompanyBankProps) {
               onBlur={formik.handleBlur}
               error={compareCheck(formik.touched.swiftCodeBankInformation, Boolean(formik.errors.swiftCodeBankInformation))}
               helperText={ifThenElse(formik.touched.swiftCodeBankInformation, formik.errors.swiftCodeBankInformation, '')}
-              customLabel='Swift Code'
+              customLabel={t(`${t_bankInformation}.swift_code`)}
               withAsterisk={false}
               size='small'
               value={formik.values.swiftCodeBankInformation}
-              placeholder='Input Swift Code'
+              placeholder={t(`${t_bankInformation}.swift_code_placeholder`)}
             />
           </Grid>
         </Grid>
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
           <Grid item xs={6} md={6} lg={6} xl={6}>
-            <Typography component='h3' fontSize={18} color='primary' fontWeight={700}>Payroll Information</Typography>
+            <Typography component='h3' fontSize={18} color='primary' fontWeight={700}>{t(`${t_payrollInformation}.title`)}</Typography>
           </Grid>
         </Grid>
         <Grid container spacing={2}>
-          <Grid item xs={6} md={6} lg={6} xl={6}>
-            <Typography component='div' variant='text-base'>Schedule Type<AsteriskComponent>*</AsteriskComponent></Typography>
+          <Grid item xs={12}>
+            <Typography component='div' variant='text-base'>{t(`${t_payrollInformation}.schedule_type`)}<AsteriskComponent>*</AsteriskComponent></Typography>
             {
               compareCheck(!formik.values.isMonthly, !formik.values.isWeekly, !formik.values.isBiWeekly) && (
                 <Box>
-                  <Typography component='span' fontSize='12px' color='red.500'>This field is required</Typography>
+                  <Typography component='span' fontSize='12px' color='red.500'>{t('alert_message.this_is_required')}</Typography>
                 </Box>
               )
             }
@@ -236,10 +250,10 @@ function CompanyBankForm({ bank, paymentMethod, formik }: CompanyBankProps) {
         </Grid>
         {!!formik.values.isMonthly && (
           <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
-            <Grid item xs={6} md={6} lg={6} xl={6}>
-              <Box component='div' sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
+            <Grid item xs={8}>
+              <Box component='div' sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
                 <Box component='div' sx={{ mr: '14px' }}>
-                  <Typography component='div' variant='text-base' sx={{ mb: '6px' }}>Monthly Pay Period (includes overtime)<AsteriskComponent>*</AsteriskComponent></Typography>
+                  <Typography component='div' variant='text-base' sx={{ mb: '6px' }}>{t(`${t_payrollInformation}.monthly_pay_period`)}<AsteriskComponent>*</AsteriskComponent></Typography>
                   <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px' }}>
                     <Input
                       name='monthlyPeriodStart'
@@ -266,7 +280,7 @@ function CompanyBankForm({ bank, paymentMethod, formik }: CompanyBankProps) {
                     />
                   </Box>
                 </Box>
-                <Box component='div'>
+                <Box component='div' width='50%'>
                   <Input
                     name='monthlyPayrollDate'
                     onChange={formik.handleChange}
@@ -276,27 +290,37 @@ function CompanyBankForm({ bank, paymentMethod, formik }: CompanyBankProps) {
                     withAsterisk={true}
                     size='small'
                     value={formik.values.monthlyPayrollDate}
-                    placeholder='Input Date'
-                    customLabel='Payroll Date'
+                    placeholder={t(`${t_payrollInformation}.payroll_date_placeholder`)}
+                    customLabel={t(`${t_payrollInformation}.payroll_date`)}
                   />
                 </Box>
               </Box>
             </Grid>
-            <Grid item xs={6} md={6} lg={6} xl={6}>
+            <Grid item xs={4}>
               <FormControl fullWidth error={compareCheck(formik.touched.monthlyMethod, Boolean(formik.errors.monthlyMethod))}>
-                <Typography sx={{ mb: '6px' }}>Default Payment Method<AsteriskComponent>*</AsteriskComponent></Typography>
+                <Typography sx={{ mb: '6px' }}>{t(`${t_payrollInformation}.default_payment_method`)}<AsteriskComponent>*</AsteriskComponent></Typography>
                 <Select
                   fullWidth
                   displayEmpty
                   variant='outlined'
                   size='small'
-                  placeholder='Select Payment Method'
+                  placeholder={t(`${t_payrollInformation}.default_payment_method_placeholder`)}
                   name='monthlyMethod'
                   value={formik.values.monthlyMethod}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   renderValue={(value: string) => {
                     return checkPaymentMethod(value);
+                  }}
+                  MenuProps={{
+                    PaperProps: {
+                      sx: {
+                        '& .MuiMenuItem-root:hover': {
+                          backgroundColor: '#223567',
+                          color: 'white'
+                        }
+                      }
+                    }
                   }}
                 >
                   {paymentMethod?.map((val, idx) => (
@@ -310,7 +334,7 @@ function CompanyBankForm({ bank, paymentMethod, formik }: CompanyBankProps) {
         )}
         {!!formik.values.isWeekly && (
           <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
-            <Grid item xs={6} md={6} lg={6} xl={6}>
+            <Grid item xs={8}>
               <FormControl fullWidth>
                 <Typography sx={{ mb: '6px' }}>Weekly Pay Period (includes overtime)<AsteriskComponent>*</AsteriskComponent></Typography>
                 <Select
@@ -321,31 +345,52 @@ function CompanyBankForm({ bank, paymentMethod, formik }: CompanyBankProps) {
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   name='weeklyPeriod'
+                  MenuProps={{
+                    PaperProps: {
+                      sx: {
+                        '& .MuiMenuItem-root:hover': {
+                          backgroundColor: '#223567',
+                          color: 'white'
+                        }
+                      }
+                    }
+                  }}
                 >
-                  <MenuItem value='Sunday'>Sunday</MenuItem>
-                  <MenuItem value='Monday'>Monday</MenuItem>
-                  <MenuItem value='Thursday'>Thursday</MenuItem>
-                  <MenuItem value='Wednesday'>Wednesday</MenuItem>
-                  <MenuItem value='Friday'>Friday</MenuItem>
-                  <MenuItem value='Saturday'>Saturday</MenuItem>
+                  <MenuItem value='0'>Sunday</MenuItem>
+                  <MenuItem value='1'>Monday</MenuItem>
+                  <MenuItem value='2'>Tuesday</MenuItem>
+                  <MenuItem value='3'>Thursday</MenuItem>
+                  <MenuItem value='4'>Wednesday</MenuItem>
+                  <MenuItem value='5'>Friday</MenuItem>
+                  <MenuItem value='6'>Saturday</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
-            <Grid item xs={6} md={6} lg={6} xl={6}>
+            <Grid item xs={4}>
               <FormControl fullWidth error={compareCheck(formik.touched.weeklyMethod, Boolean(formik.errors.weeklyMethod))}>
-                <Typography sx={{ mb: '6px' }}>Default Payment Method<AsteriskComponent>*</AsteriskComponent></Typography>
+                <Typography sx={{ mb: '6px' }}>{t(`${t_payrollInformation}.default_payment_method`)}<AsteriskComponent>*</AsteriskComponent></Typography>
                 <Select
                   fullWidth
                   displayEmpty
                   variant='outlined'
                   size='small'
-                  placeholder='Select Payment Method'
+                  placeholder={t(`${t_payrollInformation}.default_payment_method_placeholder`)}
                   name='weeklyMethod'
                   value={formik.values.weeklyMethod}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   renderValue={(value: string) => {
                     return checkPaymentMethod(value);
+                  }}
+                  MenuProps={{
+                    PaperProps: {
+                      sx: {
+                        '& .MuiMenuItem-root:hover': {
+                          backgroundColor: '#223567',
+                          color: 'white'
+                        }
+                      }
+                    }
                   }}
                 >
                   {paymentMethod?.map((val, idx) => (
@@ -359,7 +404,7 @@ function CompanyBankForm({ bank, paymentMethod, formik }: CompanyBankProps) {
         )}
         {!!formik.values.isBiWeekly && (
           <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
-            <Grid item xs={6} md={6} lg={6} xl={6}>
+            <Grid item xs={8}>
               <Typography component='div' variant='text-base' sx={{ mb: '6px' }}>Bi Weekly Pay Period (includes overtime)<AsteriskComponent>*</AsteriskComponent></Typography>
               <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px' }}>
                 <FormControl fullWidth>
@@ -371,13 +416,24 @@ function CompanyBankForm({ bank, paymentMethod, formik }: CompanyBankProps) {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     name='biWeeklyPeriod'
+                    MenuProps={{
+                      PaperProps: {
+                        sx: {
+                          '& .MuiMenuItem-root:hover': {
+                            backgroundColor: '#223567',
+                            color: 'white'
+                          }
+                        }
+                      }
+                    }}
                   >
-                    <MenuItem value='Sunday'>Sunday</MenuItem>
-                    <MenuItem value='Monday'>Monday</MenuItem>
-                    <MenuItem value='Thursday'>Thursday</MenuItem>
-                    <MenuItem value='Wednesday'>Wednesday</MenuItem>
-                    <MenuItem value='Friday'>Friday</MenuItem>
-                    <MenuItem value='Saturday'>Saturday</MenuItem>
+                    <MenuItem value='0'>Sunday</MenuItem>
+                    <MenuItem value='1'>Monday</MenuItem>
+                    <MenuItem value='2'>Tuesday</MenuItem>
+                    <MenuItem value='3'>Thursday</MenuItem>
+                    <MenuItem value='4'>Wednesday</MenuItem>
+                    <MenuItem value='5'>Friday</MenuItem>
+                    <MenuItem value='6'>Saturday</MenuItem>
                   </Select>
                 </FormControl>
                 <Typography component='div' variant='text-base'> - </Typography>
@@ -390,28 +446,48 @@ function CompanyBankForm({ bank, paymentMethod, formik }: CompanyBankProps) {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     name='biWeeklyPeriodWeek'
+                    MenuProps={{
+                      PaperProps: {
+                        sx: {
+                          '& .MuiMenuItem-root:hover': {
+                            backgroundColor: '#223567',
+                            color: 'white'
+                          }
+                        }
+                      }
+                    }}
                   >
-                    <MenuItem value='First Week'>First Week</MenuItem>
-                    <MenuItem value='Second Week'>Second Week</MenuItem>
+                    <MenuItem value='0'>First Week</MenuItem>
+                    <MenuItem value='1'>Second Week</MenuItem>
                   </Select>
                 </FormControl>
               </Box>
             </Grid>
-            <Grid item xs={6} md={6} lg={6} xl={6}>
+            <Grid item xs={4}>
               <FormControl fullWidth error={compareCheck(formik.touched.biWeeklyMethod, Boolean(formik.errors.biWeeklyMethod))}>
-                <Typography sx={{ mb: '6px' }}>Default Payment Method<AsteriskComponent>*</AsteriskComponent></Typography>
+                <Typography sx={{ mb: '6px' }}>{t(`${t_payrollInformation}.default_payment_method`)}<AsteriskComponent>*</AsteriskComponent></Typography>
                 <Select
                   fullWidth
                   displayEmpty
                   variant='outlined'
                   size='small'
-                  placeholder='Select Payment Method'
+                  placeholder={t(`${t_payrollInformation}.default_payment_method_placeholder`)}
                   name='biWeeklyMethod'
                   value={formik.values.biWeeklyMethod}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   renderValue={(value: string) => {
                     return checkPaymentMethod(value);
+                  }}
+                  MenuProps={{
+                    PaperProps: {
+                      sx: {
+                        '& .MuiMenuItem-root:hover': {
+                          backgroundColor: '#223567',
+                          color: 'white'
+                        }
+                      }
+                    }
                   }}
                 >
                   {paymentMethod?.map((val, idx) => (
@@ -432,8 +508,8 @@ function CompanyBankForm({ bank, paymentMethod, formik }: CompanyBankProps) {
           </Grid>
         )}
         <NextBtnWrapper>
-          <Button onClick={() => { router.push('/company'); }} fullWidth={false} size='small' label='Cancel' variant='outlined' sx={{ mr: '12px' }} color='primary' />
-          <Button onClick={() => { formik.submitForm(); }} disabled={compareCheck(!formik.values.isMonthly, !formik.values.isWeekly, !formik.values.isBiWeekly)} fullWidth={false} size='small' label='Save' color='primary' />
+          <Button onClick={() => { router.push('/company'); }} fullWidth={false} size='small' label={t('button.cancel')} variant='outlined' sx={{ mr: '12px' }} color='primary' />
+          <Button onClick={() => { formik.submitForm(); }} disabled={compareCheck(!formik.values.isMonthly, !formik.values.isWeekly, !formik.values.isBiWeekly)} fullWidth={false} size='small' label={t('button.save')} color='primary' />
         </NextBtnWrapper>
       </form>
     </>
