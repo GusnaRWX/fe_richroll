@@ -11,6 +11,7 @@ import {
   TableSortLabel
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { OverlayLoading } from '../_shared/common';
 import { useRouter } from 'next/router';
 import { Input, IconButton } from '@/components/_shared/form';
 import { Add, Search, ArrowBack } from '@mui/icons-material';
@@ -83,7 +84,7 @@ function AttendanceGenerateComponent() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(1);
   const [selected, setSelected] = useState<Array<SelectedProp>>(Array<SelectedProp>);
-  const { name, start, end, selectedEmployee } = useAppSelectors((state) => state.payroll);
+  const { name, start, end, selectedEmployee, isLoading } = useAppSelectors((state) => state.payroll);
   const [search, setSearch] = useState('');
   const [direction, setDirection] = useState<Order>('desc');
   const [sort, setSort] = useState('');
@@ -178,6 +179,7 @@ function AttendanceGenerateComponent() {
   }
   return (
     <>
+      <OverlayLoading open={isLoading}/>
       <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
         <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
           <BackWrapper >
@@ -206,6 +208,7 @@ function AttendanceGenerateComponent() {
               variant='contained'
               size='small'
               color='primary'
+              disabled={selectedEmployee?.items?.length === 0}
               onClick={() => { handleSave(); }}
               sx={{ color: 'white' }}
             >Confirm</MuiButton>
