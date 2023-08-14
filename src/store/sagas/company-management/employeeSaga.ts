@@ -400,17 +400,22 @@ function* fetchPostPersonalInformation(action: AnyAction) {
 function* fetchPostCnbEmployee(action: AnyAction) {
   try {
     const formatedData = {
-      templateID: action?.payload?.cnb?.templateId,
+      // templateID: action?.payload?.cnb?.templateId,
+      ...(action?.payload?.cnb?.templateId !== '' ? { templateId: action.payload.cnb.templateId } : {}),
       name: action?.payload?.cnb?.name,
       overtime: +action?.payload?.cnb?.overtime,
       base: {
         ...action?.payload?.cnb?.base,
+        amount: +action?.payload?.cnb?.base?.amount,
+        amountType: +action?.payload?.cnb?.base?.amountType,
         rate: action?.payload?.cnb?.base?.rate === null ? 0 : +action?.payload?.cnb?.base?.rate,
         rateType: action?.payload?.cnb?.base?.rateType === null ? 0 : +action?.payload?.cnb?.base?.rateType,
         isTaxable: action?.payload?.cnb?.base?.isTaxable === 'true' ? true : false
       },
       supplementaries: action?.payload?.cnb?.supplementary?.map(val => ({
         ...val,
+        amount: +val?.amount,
+        amountType: +val?.amountType,
         rate: val.rate === null ? 0 : +val.rate,
         rateType: val.rateType === null ? 0 : +val?.rateType,
         isTaxable: val?.isTaxable === 'true' ? true : false
