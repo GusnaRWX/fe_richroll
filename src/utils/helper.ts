@@ -73,6 +73,19 @@ export interface UserDataParse {
     isSelfEmployeeService?: boolean;
     position?: string | null;
   };
+  companies: Array<{
+    employee: {
+      companies?: [],
+      isActive?: boolean,
+      isSelfEmployeeService?: boolean,
+      position?: string | null,
+      terminateDate?: string | null,
+      terminateNote?: string | null
+    },
+    logo?: string | null,
+    name?: string | null,
+    sector?: string | null
+  }>
   picture?: string | null;
   roles?: string[];
 }
@@ -85,6 +98,19 @@ export const getUserData = () => {
       parse = JSON.parse(user);
       return parse;
     } else {
+      return null;
+    }
+  }
+};
+
+export const getSelfService = () => {
+  if (typeof window !== 'undefined') {
+    const selfService = getStorage('self_service');
+    let parse: string | null;
+    if (selfService) {
+      parse = JSON.parse(selfService);
+      return parse;
+    }else{
       return null;
     }
   }
