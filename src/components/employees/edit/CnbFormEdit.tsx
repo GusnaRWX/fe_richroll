@@ -29,7 +29,7 @@ interface Supplementary {
 }
 
 interface CnbInitialValues {
-  templateId: string;
+  templateID: string;
   name: string;
   overtime: string;
   base: {
@@ -88,7 +88,7 @@ const CnbFormEdit = ({ refProp, setValues, cnbValue }: CnbEditFormProps) => {
   const { dataTable } = useAppSelectors(state => state.compensation);
   const formik = useFormik({
     initialValues: {
-      templateId: cnbValue?.templateID ?? '',
+      templateID: cnbValue?.templateID ?? '',
       name: cnbValue?.name,
       overtime: cnbValue?.overtime,
       base: {
@@ -131,7 +131,7 @@ const CnbFormEdit = ({ refProp, setValues, cnbValue }: CnbEditFormProps) => {
     } else {
       const findCNB = dataTable?.items?.find(item => value?.value === item.id);
       if (findCNB) {
-        formik.setFieldValue('templateId', findCNB?.id);
+        formik.setFieldValue('templateID', findCNB?.id);
         formik.setFieldValue('name', findCNB?.name);
         formik.setFieldValue('overtime', findCNB?.overtime);
         formik.setFieldValue('base.componentID', findCNB?.base?.component?.id);
@@ -266,14 +266,14 @@ const CnbFormEdit = ({ refProp, setValues, cnbValue }: CnbEditFormProps) => {
               )}
               renderInput={(params) => (
                 <Input
-                  name='templateId'
+                  name='templateID'
                   {...params}
                 />
               )}
             />
           </Grid>
         </Grid>
-        {formik.values.templateId !== '' || formik.values.name !== '' ?  (
+        {formik.values.templateID !== '' || formik.values.name !== '' ?  (
           <Grid sx={{
             padding: '16px 16px',
             borderRadius: '8px',
