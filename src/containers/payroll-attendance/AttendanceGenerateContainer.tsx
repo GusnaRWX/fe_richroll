@@ -9,13 +9,15 @@ const AttendanceGenerateContainer = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch({
-      type: getDetailPayrollRequested.toString(),
-      payload: {
-        id: router?.query?.id
-      }
-    });
-  }, []);
+    if (router?.query?.id) {
+      dispatch({
+        type: getDetailPayrollRequested.toString(),
+        payload: {
+          id: router?.query?.id
+        }
+      });
+    }
+  }, [router?.query?.id]);
   return (
     <Layout>
       <AttendanceGenerateComponent />
