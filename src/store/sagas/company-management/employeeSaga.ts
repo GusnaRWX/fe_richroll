@@ -1048,23 +1048,26 @@ function* getEmployeeDetailCnb(action: AnyAction) {
 function* fetchPatchEmployeeCnb(action: AnyAction) {
   try {
     const employeeCnb = {
-      templateID: action?.payload?.employeeCnb?.templateId,
+      ...(action?.payload?.employeeCnb?.templateId !== '' ? { templateId: action.payload.employeeCnb.templateId } : {}),
       name: action?.payload?.employeeCnb?.name,
       overtime: +action?.payload?.employeeCnb?.overtime,
       base: {
         ...action?.payload?.employeeCnb?.base,
+        amount: +action?.payload?.employeeCnb?.base?.amount,
+        amountType: 0,
         rate: action?.payload?.employeeCnb?.base?.rate === null ? 0 : +action?.payload?.employeeCnb?.base?.rate,
         rateType: action?.payload?.employeeCnb?.base?.rateType === null ? 0 : +action?.payload?.employeeCnb?.base?.rateType,
         isTaxable: action?.payload?.employeeCnb?.base?.isTaxable === 'true' ? true : false
       },
       supplementaries: action?.payload?.employeeCnb?.supplementary?.map(val => ({
         ...val,
+        amount: +val?.amount,
+        amountType:0,
         rate: val.rate === null ? 0 : +val.rate,
         rateType: val.rateType === null ? 0 : +val?.rateType,
         isTaxable: val?.isTaxable === 'true' ? true : false
       }))
     };
-
     const id = action?.payload?.id;
 
     const payload = {

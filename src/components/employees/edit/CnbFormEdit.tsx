@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { getListBaseCompensationRequested, getListSuppCompensationRequested, getListTerminReqeusted } from '@/store/reducers/slice/options/optionSlice';
 import { useFormik } from 'formik';
 import { validateCnb } from './validate';
-import { Chip, Grid, InputAdornment } from '@mui/material';
+import { Chip, Grid, InputAdornment, createFilterOptions, Autocomplete, Box } from '@mui/material';
 import { getTableRequested } from '@/store/reducers/slice/cnb/compensationSlice';
 import { getCompanyData, getPaymentType, ifThenElse } from '@/utils/helper';
 import { Text } from '@/components/_shared/common';
@@ -14,6 +14,8 @@ import { numberFormat } from '@/utils/format';
 import { MdAdd } from 'react-icons/md';
 import { BsTrash3 } from 'react-icons/bs';
 import { useTranslation } from 'react-i18next';
+import { Option } from '@/types/option';
+import { AiOutlinePlus } from 'react-icons/ai';
 
 interface Supplementary {
   componentID: string,
@@ -45,10 +47,11 @@ interface CnbInitialValues {
 
 interface CnbEditFormProps {
   refProp: React.Ref<HTMLFormElement>,
-  setValues: React.Dispatch<React.SetStateAction<any>>
+  setValues: React.Dispatch<React.SetStateAction<any>>,
+  cnbValue: any
 }
 
-const CnbFormEdit = ({ refProp, setValues }: CnbEditFormProps) => {
+const CnbFormEdit = ({ refProp, setValues, cnbValue }: CnbEditFormProps) => {
   const dispatch = useAppDispatch();
   const {t} = useTranslation();
   const t_cnbForm = 'company_management.employees.form_&_detail.cnb';
@@ -57,6 +60,8 @@ const CnbFormEdit = ({ refProp, setValues }: CnbEditFormProps) => {
   const [isEdit, setIsEdit] = useState(false);
   const [withPercentage, setWithPercentage] = useState(false);
   const [title, setTitle] = useState('');
+
+  const filter = createFilterOptions<Option.FreesoloType>();
 
   useEffect(() => {
     dispatch({
@@ -79,30 +84,30 @@ const CnbFormEdit = ({ refProp, setValues }: CnbEditFormProps) => {
   }, []);
 
   const { listBaseCompensation, listSuppCompensation, listTermin } = useAppSelectors(state => state.option);
-  const {employeeCnbDetailUpdate} = useAppSelectors(state => state.employee);
-  console.log(employeeCnbDetailUpdate);
+
   const { dataTable } = useAppSelectors(state => state.compensation);
   const formik = useFormik({
     initialValues: {
-      templateId: employeeCnbDetailUpdate?.templateID,
-      name: employeeCnbDetailUpdate?.name,
-      overtime: employeeCnbDetailUpdate?.overtime,
+      templateId: cnbValue?.templateID ?? '',
+      name: cnbValue?.name,
+      overtime: cnbValue?.overtime,
       base: {
-        componentID: employeeCnbDetailUpdate?.base?.componentID,
-        termID: employeeCnbDetailUpdate?.base?.termID,
-        isTaxable: employeeCnbDetailUpdate?.base?.isTaxable,
-        amount: employeeCnbDetailUpdate?.base?.amount,
-        amountType: employeeCnbDetailUpdate?.base?.amounType,
-        rate: employeeCnbDetailUpdate?.base?.rate,
-        rateType: employeeCnbDetailUpdate?.base?.rateType,
-        id: employeeCnbDetailUpdate?.base?.id
+        componentID: cnbValue?.base?.componentID,
+        termID: cnbValue?.base?.termID,
+        isTaxable: cnbValue?.base?.isTaxable,
+        amount: cnbValue?.base?.amount,
+        amountType: cnbValue?.base?.amounType,
+        rate: cnbValue?.base?.rate,
+        rateType: cnbValue?.base?.rateType,
+        id: cnbValue?.base?.id
       },
-      supplementary: employeeCnbDetailUpdate?.supplementary
+      supplementary: cnbValue?.supplementary
     } as CnbInitialValues,
     validationSchema: validateCnb,
     onSubmit: (_val) => {
-      setValues(_val);
-    }
+      console.log(_val);
+    },
+    
   });
 
   useEffect(() => {
@@ -118,39 +123,47 @@ const CnbFormEdit = ({ refProp, setValues }: CnbEditFormProps) => {
     setValues(formik.values);
   }, [formik.values]);
 
-  console.log(formik.errors);
 
-  const handleChangeTemplate = (value) => {
-    const findCNB = dataTable?.items?.find(item => value.target.value === item.id);
-    if (findCNB) {
-      formik.setFieldValue('templateId', findCNB?.id);
-      formik.setFieldValue('name', findCNB?.name);
-      formik.setFieldValue('overtime', findCNB?.overtime);
-      formik.setFieldValue('base.componentID', findCNB?.base?.component?.id);
-      formik.setFieldValue('base.termID', findCNB?.base?.term?.id);
-      formik.setFieldValue('base.isTaxable', findCNB?.base?.isTaxable === true ? 'true' : 'false');
-      formik.setFieldValue('base.amount', findCNB?.base?.amount);
-      formik.setFieldValue('base.amountType', findCNB?.base?.amountType);
-      formik.setFieldValue('base.rate', findCNB?.base?.rate);
-      formik.setFieldValue('base.rateType', findCNB?.base?.rateType);
-      formik.setFieldValue(
-        'supplementary',
-        findCNB?.supplementaries?.map((val) => ({
-          componentID: val?.component?.id,
-          termID: val?.term?.id,
-          isTaxable: val?.isTaxable === true ? 'true' : 'false',
-          amount: val?.amount,
-          amountType: val?.amountType,
-          rate: val?.rate,
-          rateType: val?.rateType,
-        }))
-      );
+  const handleChangeTemplate = (e, value) => {
+    if(value?.inputValue) {
+      setIsEdit(true);
+      formik.setFieldValue('name', value?.inputValue);
+    } else {
+      const findCNB = dataTable?.items?.find(item => value?.value === item.id);
+      if (findCNB) {
+        formik.setFieldValue('templateId', findCNB?.id);
+        formik.setFieldValue('name', findCNB?.name);
+        formik.setFieldValue('overtime', findCNB?.overtime);
+        formik.setFieldValue('base.componentID', findCNB?.base?.component?.id);
+        formik.setFieldValue('base.termID', findCNB?.base?.term?.id);
+        formik.setFieldValue('base.isTaxable', findCNB?.base?.isTaxable === true ? 'true' : 'false');
+        formik.setFieldValue('base.amount', findCNB?.base?.amount);
+        formik.setFieldValue('base.amountType', findCNB?.base?.amountType);
+        formik.setFieldValue('base.rate', findCNB?.base?.rate);
+        formik.setFieldValue('base.rateType', findCNB?.base?.rateType);
+        formik.setFieldValue(
+          'supplementary',
+          findCNB?.supplementaries?.map((val) => ({
+            componentID: val?.component?.id,
+            termID: val?.term?.id,
+            isTaxable: val?.isTaxable === true ? 'true' : 'false',
+            amount: val?.amount,
+            amountType: val?.amountType,
+            rate: val?.rate,
+            rateType: val?.rateType,
+          }))
+        );
 
-      dispatch({
-        type: getListTerminReqeusted.toString(),
-        payload: formik.values.base.componentID
-      });
+        dispatch({
+          type: getListTerminReqeusted.toString(),
+          payload: formik.values.base.componentID
+        });
+      } else {
+        formik.resetForm();
+        setIsEdit(false);
+      }
     }
+    
   };
 
   const handleBaseCompensationComponent = (value) => {
@@ -162,6 +175,10 @@ const CnbFormEdit = ({ refProp, setValues }: CnbEditFormProps) => {
       setWithPercentage(false);
       setTitle(getPaymentType(value.target.value, listBaseCompensation)?.title);
     }
+    dispatch({
+      type: getListTerminReqeusted.toString(),
+      payload: value.target.value
+    });
   };
 
   const handleRemoveOrAppend = (type: string, id?: number) => {
@@ -179,7 +196,6 @@ const CnbFormEdit = ({ refProp, setValues }: CnbEditFormProps) => {
     }
   };
 
-  console.log(listTermin);
 
   const match = dataTable?.items?.map(item => item.supplementaries).flat();
 
@@ -188,16 +204,76 @@ const CnbFormEdit = ({ refProp, setValues }: CnbEditFormProps) => {
       <Grid>
         <Grid container mb='16px'>
           <Grid item md={6}>
-            <Select name='templateId' options={dataTable?.items?.map(val => {
-              return {
-                ...val,
-                label: val?.name,
-                value: val?.id
-              };
-            })} fullWidth size='small' variant='outlined' customLabel={t(`${t_cnbForm}.compensation_&_benefits_profile`)} onChange={handleChangeTemplate} onBlur={formik.handleBlur} value={formik.values.templateId} />
+            <Text title={t(`${t_cnbForm}.compensation_&_benefits_profile`)}/>
+            <Autocomplete
+              id='cnbcontainerupdate'
+              freeSolo
+              value={formik.values.name}
+              onChange={handleChangeTemplate}
+              onBlur={formik.handleBlur}
+              size='small'
+              filterOptions={(options, params) => {
+                const filtered = filter(options, params);
+                const {inputValue} = params;
+                const isExist = options?.some((option) => inputValue === option?.label);
+                if(inputValue !== '' && !isExist) {
+                  filtered.push({
+                    inputValue,
+                    label: (
+                      <Box component='span' sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '5px'
+                      }}>
+                        <AiOutlinePlus />
+                        Add New {inputValue}
+                      </Box>
+                    ) as unknown as Element
+                  });
+                }
+                return filtered;
+              }}
+              selectOnFocus
+              clearOnBlur
+              handleHomeEndKeys
+              options={dataTable?.items?.map(val => {
+                return {
+                  label: val?.name,
+                  value: val?.id
+                };
+              }) as readonly Option.FreesoloType[]
+              }
+              getOptionLabel={(option: any) => {
+                if(typeof option === 'string') {
+                  return option;
+                }
+
+                if(option?.inputValue) {
+                  return option.inputValue;
+                }
+                return option?.label;
+              }}
+              renderOption={(props, option) => (
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                  }}
+                >
+                  <li {...props} style={{ width: '100%' }}>{option?.label}</li>
+                </Box>
+              )}
+              renderInput={(params) => (
+                <Input
+                  name='templateId'
+                  {...params}
+                />
+              )}
+            />
           </Grid>
         </Grid>
-        {formik.values.templateId !== '' && (
+        {formik.values.templateId !== '' || formik.values.name !== '' ?  (
           <Grid sx={{
             padding: '16px 16px',
             borderRadius: '8px',
@@ -322,7 +398,7 @@ const CnbFormEdit = ({ refProp, setValues }: CnbEditFormProps) => {
                       </Grid>
                     </Grid>
                     {
-                      formik?.values?.supplementary?.length > 0 && (
+                      formik?.values?.supplementary?.length > 0 || formik.values.name !== '' ?  (
                         <>
                           <Grid container mb='16px'>
                             <Grid item md={6}>
@@ -409,7 +485,7 @@ const CnbFormEdit = ({ refProp, setValues }: CnbEditFormProps) => {
                             </Grid>
                           </Grid>
                         </>
-                      )
+                      ) : null
                     }
 
                   </>
@@ -486,7 +562,7 @@ const CnbFormEdit = ({ refProp, setValues }: CnbEditFormProps) => {
 
             </>
           </Grid>
-        )}
+        ) : null}
       </Grid>
     </form>
   );
