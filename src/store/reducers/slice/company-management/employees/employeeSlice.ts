@@ -329,8 +329,8 @@ export const employeeSlice = createSlice({
     },
     getEmployeeCnbDetailSuccess: (state, action) => {
       const formated = {
-        templateID: action?.payload?.template?.id,
-        name: action?.payload?.template?.name,
+        templateID: action?.payload?.template?.id || '',
+        name: action?.payload?.template?.name === null ? action?.payload?.name : action?.payload?.template?.name,
         overtime: action?.payload?.overtime,
         base: {
           componentID: action?.payload?.base?.component?.id,

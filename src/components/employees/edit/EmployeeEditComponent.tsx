@@ -107,6 +107,7 @@ function EmployeeEditComponent() {
   const [leave, setLeave] = useState(false);
   const employeeRef = useRef<HTMLFormElement>(null);
   const emergencyRef = useRef<HTMLFormElement>(null);
+  const { employeeCnbDetailUpdate } = useAppSelectors(state => state.employee);
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   const [isInformationValid, setIsInformationValid] = useState(false);
   const personalInformationRef = useRef<HTMLFormElement>(null);
@@ -195,7 +196,22 @@ function EmployeeEditComponent() {
     phoneNumberSecondary: dataEmergencyContact?.secondary?.phoneNumber
   });
 
-  const [cnbValues, setCnbValues] = useState({});
+  const [cnbValues, setCnbValues] = useState({
+    templateId: employeeCnbDetailUpdate?.templateID,
+    name: employeeCnbDetailUpdate?.name,
+    overtime: employeeCnbDetailUpdate?.overtime,
+    base: {
+      componentID: employeeCnbDetailUpdate?.base?.componentID,
+      termID: employeeCnbDetailUpdate?.base?.termID,
+      isTaxable: employeeCnbDetailUpdate?.base?.isTaxable,
+      amount: employeeCnbDetailUpdate?.base?.amount,
+      amountType: employeeCnbDetailUpdate?.base?.amounType,
+      rate: employeeCnbDetailUpdate?.base?.rate,
+      rateType: employeeCnbDetailUpdate?.base?.rateType,
+      id: employeeCnbDetailUpdate?.base?.id
+    },
+    supplementary: employeeCnbDetailUpdate?.supplementary
+  });
 
   const [valueWorkSchedule, setValueWorkSchedule] = useState<any>();
 
@@ -445,7 +461,8 @@ function EmployeeEditComponent() {
           <TabPanel value={value} index={3}>
             <EmployeeCnbForm
               refProp={cnbEditRef}
-              setValues={setCnbValues}
+              setValues={setCnbValues} 
+              cnbValue={cnbValues}
             />
           </TabPanel>
           <TabPanel value={value} index={4}>
