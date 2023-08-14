@@ -110,7 +110,7 @@ const baseSchema = Yup.object({
 });
 
 export const validateCnb = Yup.object({
-  templateId: Yup.string().notRequired(),
+  templateID: Yup.string().notRequired(),
   name: Yup.string().required(),
   overtime: Yup.string(),
   base: baseSchema,

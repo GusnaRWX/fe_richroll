@@ -28,7 +28,7 @@ interface Supplementary {
 }
 
 interface CnbInitialValues {
-  templateId: string;
+  templateID: string;
   name: string;
   overtime: string;
   base: {
@@ -86,7 +86,7 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
   const {dataTable} = useAppSelectors(state => state.compensation);
   const formik = useFormik({
     initialValues: {
-      templateId: '',
+      templateID: '',
       name: '',
       overtime: '',
       base: {
@@ -116,7 +116,7 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
       // this is for not custom
       const findCNB = dataTable?.items?.find(item => value?.value === item.id);
       if (findCNB) {
-        formik.setFieldValue('templateId', findCNB?.id);
+        formik.setFieldValue('templateID', findCNB?.id);
         formik.setFieldValue('name', findCNB?.name);
         formik.setFieldValue('overtime', findCNB?.overtime);
         formik.setFieldValue('base.componentID', findCNB?.base?.component?.id);
@@ -250,14 +250,14 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
             )}
             renderInput={(params) => (
               <Input
-                name='templateId'
+                name='templateID'
                 {...params}
               />
             )}
           />
         </Grid>
       </Grid>
-      {formik.values.templateId !== '' || formik.values.name !== '' ? (
+      {formik.values.templateID !== '' || formik.values.name !== '' ? (
         <Grid sx={{
           padding: '16px 16px',
           borderRadius: '8px',
@@ -559,7 +559,7 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
           <Button
             label={t('button.next')}
             onClick={() => { formik.handleSubmit(); }}
-            disabled={formik.values.templateId !== '' || formik.values.name !== '' ? false : true}
+            disabled={formik.values.templateID !== '' || formik.values.name !== '' ? false : true}
           />
         </Grid>
       </Grid>

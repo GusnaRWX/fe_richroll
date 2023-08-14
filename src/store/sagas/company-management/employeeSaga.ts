@@ -401,13 +401,13 @@ function* fetchPostCnbEmployee(action: AnyAction) {
   try {
     const formatedData = {
       // templateID: action?.payload?.cnb?.templateId,
-      ...(action?.payload?.cnb?.templateId !== '' ? { templateId: action.payload.cnb.templateId } : {}),
+      ...(action?.payload?.cnb?.templateID !== '' ? { templateID: action.payload.cnb.templateID } : {}),
       name: action?.payload?.cnb?.name,
       overtime: +action?.payload?.cnb?.overtime,
       base: {
         ...action?.payload?.cnb?.base,
         amount: +action?.payload?.cnb?.base?.amount,
-        amountType: +action?.payload?.cnb?.base?.amountType,
+        amountType: 0,
         rate: action?.payload?.cnb?.base?.rate === null ? 0 : +action?.payload?.cnb?.base?.rate,
         rateType: action?.payload?.cnb?.base?.rateType === null ? 0 : +action?.payload?.cnb?.base?.rateType,
         isTaxable: action?.payload?.cnb?.base?.isTaxable === 'true' ? true : false
@@ -415,7 +415,7 @@ function* fetchPostCnbEmployee(action: AnyAction) {
       supplementaries: action?.payload?.cnb?.supplementary?.map(val => ({
         ...val,
         amount: +val?.amount,
-        amountType: +val?.amountType,
+        amountType: 0,
         rate: val.rate === null ? 0 : +val.rate,
         rateType: val.rateType === null ? 0 : +val?.rateType,
         isTaxable: val?.isTaxable === 'true' ? true : false
@@ -426,7 +426,7 @@ function* fetchPostCnbEmployee(action: AnyAction) {
       employeeID: action?.payload?.id,
       data: formatedData
     };
-    
+
     const res: AxiosResponse = yield call(postEmployeeCNB, payload);
 
     if (res?.data?.code === 200 || res?.data?.code === 201) {
@@ -1048,7 +1048,7 @@ function* getEmployeeDetailCnb(action: AnyAction) {
 function* fetchPatchEmployeeCnb(action: AnyAction) {
   try {
     const employeeCnb = {
-      ...(action?.payload?.employeeCnb?.templateId !== '' ? { templateId: action.payload.employeeCnb.templateId } : {}),
+      ...(action?.payload?.employeeCnb?.templateID !== '' ? { templateID: action.payload.employeeCnb.templateID } : {}),
       name: action?.payload?.employeeCnb?.name,
       overtime: +action?.payload?.employeeCnb?.overtime,
       base: {

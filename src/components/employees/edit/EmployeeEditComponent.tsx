@@ -197,7 +197,7 @@ function EmployeeEditComponent() {
   });
 
   const [cnbValues, setCnbValues] = useState({
-    templateId: employeeCnbDetailUpdate?.templateID,
+    templateID: employeeCnbDetailUpdate?.templateID,
     name: employeeCnbDetailUpdate?.name,
     overtime: employeeCnbDetailUpdate?.overtime,
     base: {
