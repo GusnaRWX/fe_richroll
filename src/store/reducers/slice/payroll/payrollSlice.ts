@@ -95,7 +95,7 @@ export const payrollSlice = createSlice({
   initialState,
   reducers: {
     getPayrollRequested: (state) => {
-      state.isLoading = true;
+      state.isLoading = false;
     },
     getPayrollSuccess: (state, action) => {
       state.isLoading = false;
@@ -105,7 +105,7 @@ export const payrollSlice = createSlice({
       state.isLoading = false;
     },
     getPayrollCompletedRequested: (state) => {
-      state.isLoading = true;
+      state.isLoading = false;
     },
     getPayrollCompletedSuccess: (state, action) => {
       state.isLoading = false;
@@ -136,7 +136,7 @@ export const payrollSlice = createSlice({
       state.isLoading = false;
     },
     getGenerateGrossPayrollRequested: state => {
-      state.isLoading = true;
+      state.isLoading = false;
     },
     getGenerateGrossPayrollSuccess: (state, action) => {
       state.isLoading = false;
@@ -144,7 +144,7 @@ export const payrollSlice = createSlice({
     },
     getGenerateGrossPayrollFailed: state => { state.isLoading = false; },
     getDetailPayrollRequested: (state) => {
-      state.isLoading = true;
+      state.isLoading = false;
     },
     getDetailPayrollSuccess: (state, action) => {
       state.isLoading = false;
@@ -176,7 +176,7 @@ export const payrollSlice = createSlice({
       state.isLoading = false;
     },
     getSelectedEmployeeRequested: (state) => {
-      state.isLoading = true;
+      state.isLoading = false;
     },
     getSelectedEmployeeSuccess: (state, action) => {
       state.isLoading = false;
@@ -198,7 +198,7 @@ export const payrollSlice = createSlice({
       state.grossesId = '';
     },
     getGenerateGrossesEmployeeRequested: state => {
-      state.isLoading = true;
+      state.isLoading = false;
     },
     getGenerateGrossesEmployeeSuccess: (state, action) => {
       state.isLoading = false;
@@ -217,7 +217,7 @@ export const payrollSlice = createSlice({
       state.isLoading = false;
     },
     getPayrollGrossesRequested: state => {
-      state.isLoading = true;
+      state.isLoading = false;
     },
     getPayrollGrossesSuccess: (state, action) => {
       state.isLoading = false;
@@ -227,7 +227,7 @@ export const payrollSlice = createSlice({
       state.isLoading = false;
     },
     getDetailAttendanceRequested: (state) => {
-      state.isLoading = true;
+      state.isLoading = false;
     },
     getDetailAttendanceSuccess: (state, action) => {
       state.isLoading = false;
@@ -297,7 +297,7 @@ export const payrollSlice = createSlice({
       state.disbursementId = '';
     },
     getPayrollDisbursementIdRequested: state => {
-      state.isLoading = true;
+      state.isLoading = false;
     },
     getPayrollDisbursementIdSuccess: (state, action) => {
       state.isLoading = false;
@@ -307,7 +307,7 @@ export const payrollSlice = createSlice({
       state.isLoading = false;
     },
     getNetPayrollRequested: state => {
-      state.isLoading = true;
+      state.isLoading = false;
     },
     getNetPayrollSuccess: (state, action) => {
       state.isLoading = false;
