@@ -9,7 +9,7 @@ import PersonalInformationPersonalTabComponent from './PersonalInformationPerson
 import PersonalInformationEmergencyTabComponent from './PersonalInformationEmergencyTabComponent';
 import PersonalWorkSchedule from './PersonalWorkSchedule';
 import { useAppSelectors } from '@/hooks/index';
-import { getUserData } from '@/utils/helper';
+import { getSelfService } from '@/utils/helper';
 import { useRouter } from 'next/router';
 
 const TopWrapper = styled.div`
@@ -84,8 +84,6 @@ function TabPanel(props: TabPanelProps) {
 
 const PersonalInformationComponent = () => {
   const [value, setValue] = useState(0);
-  const isSelfService = getUserData()?.employee?.isSelfEmployeeService;
-  console.log(isSelfService);
   const router = useRouter();
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -109,7 +107,7 @@ const PersonalInformationComponent = () => {
           </TitleWrapper>
         </BackWrapper>
         {
-          isSelfService && (
+          getSelfService() && (
             <ButtonWrapper>
               <Button
                 color='secondary'

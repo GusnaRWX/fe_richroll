@@ -115,12 +115,15 @@ function CompanyComponent() {
             </Typography>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: '25px', mt: '16px', height: '221px' }}>
               {
-                getUserData()?.employee?.companies.map((item, index) => (
+                getUserData()?.companies.map((item, index) => (
                   <WrapperCardItem key={index}
                     onClick={() => {
                       router.push('/dashboard');
                       setStorages([{
                         name: 'selected_roles', value: JSON.stringify('Employee')
+                      }]);
+                      setStorages([{
+                        name: 'self_service', value: JSON.stringify(item?.employee?.isSelfEmployeeService)
                       }]);
                     }}>
                     <Box component={'div'} sx={{ position: 'relative', width: '178px', height: '142px' }}>
@@ -143,7 +146,7 @@ function CompanyComponent() {
                       component='div'
                       sx={{ fontWeight: 500, width: '100%' }}
                     >
-                      {ifThenElse(item?.sector === null, '-', item?.sector?.name)}
+                      {ifThenElse(item?.sector === null, '-', item?.sector)}
                     </Typography>
                   </WrapperCardItem>
                 ))
