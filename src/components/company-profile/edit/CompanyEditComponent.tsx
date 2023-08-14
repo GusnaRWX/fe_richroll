@@ -77,6 +77,7 @@ function a11yProps(index: number) {
 const CompanyEditComponent = ({ companyType, companySector, bank, paymentMethod, countries }: CompanyEdit.Component) => {
   const [tabSelected, setTabSelected] = useState(0);
   const [isError, setIsError] = useState(false);
+  const [isInc, setIsInc] = useState(0);
   const [hydrated, setHydrated] = useState(false);
   const detail = useAppSelectors(state => state.company.detail);
   const companyPayments = useAppSelectors(state => state.company.companyPayment);
@@ -323,7 +324,9 @@ const CompanyEditComponent = ({ companyType, companySector, bank, paymentMethod,
         id: companyData?.id
       }
     });
+  }, []);
 
+  useEffect(() => {
     dispatch({
       type: administrativeFirstLevelRequested.toString(),
       payload: {
@@ -347,7 +350,8 @@ const CompanyEditComponent = ({ companyType, companySector, bank, paymentMethod,
         secondLevelCode: detail?.address?.secondLevel?.code
       }
     });
-  }, []);
+    setIsInc(isInc + 1);
+  }, [detail]);
 
   useEffect(() => {
     window.onbeforeunload = function() {
@@ -409,6 +413,7 @@ const CompanyEditComponent = ({ companyType, companySector, bank, paymentMethod,
               />
             ), null)}
             <CompanyInformationForm
+              key={isInc}
               companyType={companyType}
               companySector={companySector}
               countries={countries}
