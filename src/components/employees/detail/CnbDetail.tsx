@@ -23,6 +23,7 @@ const CnbDetail = ({ data }: Employees.GetEmployeeCnbDetail) => {
   const t_cnbDetail = 'company_management.employees.form_&_detail.cnb';
   const t_cnbBaseSection = 'company_management.employees.form_&_detail.cnb.base_section';
   const t_cnbSupplementarySection = 'company_management.employees.form_&_detail.cnb.supplementary_section';
+  console.log(data.base.amount);
   return (
     <>
       <Grid container mb='1rem'>
@@ -61,7 +62,7 @@ const CnbDetail = ({ data }: Employees.GetEmployeeCnbDetail) => {
                 mb='.5rem'
               />
               <Text
-                title={`Rp ${ifThenElse(data?.base?.amount !== null, ifThenElse(data?.base?.amount !== null , numberFormat(data?.base?.amount), numberFormat(data?.base?.rate)), 0)}`}
+                title={`Rp ${ifThenElse(data?.base?.amount === null,numberFormat(+data?.base?.rate) , numberFormat(+data?.base?.amount))}`}
                 color='grey.400' fontWeight={500}
               />
             </Grid>
