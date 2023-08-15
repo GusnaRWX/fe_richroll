@@ -158,6 +158,7 @@ const CnbFormEdit = ({ refProp, setValues, cnbValue }: CnbEditFormProps) => {
           type: getListTerminReqeusted.toString(),
           payload: formik.values.base.componentID
         });
+        setTitle(getPaymentType(findCNB?.base?.component?.id, listBaseCompensation)?.title);
       } else {
         formik.resetForm();
         setIsEdit(false);
@@ -196,7 +197,12 @@ const CnbFormEdit = ({ refProp, setValues, cnbValue }: CnbEditFormProps) => {
     }
   };
 
+  useEffect(() => {
+    // running on the first mount
+    setTitle(getPaymentType(formik.values.base.componentID, listBaseCompensation)?.title);
+  }, []);
 
+  console.log(title);
   const match = dataTable?.items?.map(item => item.supplementaries).flat();
 
   return (
@@ -341,7 +347,7 @@ const CnbFormEdit = ({ refProp, setValues, cnbValue }: CnbEditFormProps) => {
                           InputProps={{
                             endAdornment: (
                               <InputAdornment position='end'>
-                              %
+                                {title === 'Amount' || title === 'Expected Amount (currency)' ? 'IDR' : '%'} 
                               </InputAdornment>
                             )
                           }}
