@@ -133,6 +133,7 @@ const LeaveEntriesEditComponent: React.FC<LeaveEntriesEditProps> = ({
         <Grid container sx={{ padding: '0px 16px' }} justifyContent='space-between' alignItems='center'>
           <Grid item md={5.5}>
             <DatePicker
+              disabled
               customLabel='Select Date'
               onChange={(date: unknown) => formik.setFieldValue('leaveFrom', date, false)}
               value={dayjs(formik.values.leaveFrom) as unknown as Date}
