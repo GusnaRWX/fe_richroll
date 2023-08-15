@@ -6,7 +6,7 @@ export const validationSchemeCreateLeaveEntries = Yup.object({
   leaveStatus: Yup.string().required('This field is required'),
   halfFrom: Yup.date().notRequired(),
   halfTo: Yup.date().notRequired(),
-  note: Yup.string().notRequired()
+  note: Yup.string().required('This field is required')
 });
 
 export const validationSchemeUpdateLeaveEntries = Yup.object({
