@@ -96,7 +96,7 @@ const CnbFormEdit = ({ refProp, setValues, cnbValue }: CnbEditFormProps) => {
         termID: cnbValue?.base?.termID,
         isTaxable: cnbValue?.base?.isTaxable,
         amount: cnbValue?.base?.amount,
-        amountType: cnbValue?.base?.amounType,
+        amountType: cnbValue?.base?.amountType,
         rate: cnbValue?.base?.rate,
         rateType: cnbValue?.base?.rateType,
         id: cnbValue?.base?.id
@@ -342,12 +342,12 @@ const CnbFormEdit = ({ refProp, setValues, cnbValue }: CnbEditFormProps) => {
                           fullWidth
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
-                          value={ifThenElse(formik.values.base.amount === '0', formik.values.base.rate , formik.values.base.amount)}
-                          name='base.amount'
+                          value={title === 'Rate' ? formik.values.base.rate : formik.values.base.amount}
+                          name={title === 'Rate' ? 'base.rate' : 'base.amount'}
                           InputProps={{
                             endAdornment: (
                               <InputAdornment position='end'>
-                                {title === 'Amount' || title === 'Expected Amount (currency)' ? 'IDR' : '%'} 
+                                {title === 'Rate' ? '%' : 'IDR'} 
                               </InputAdornment>
                             )
                           }}
@@ -526,7 +526,7 @@ const CnbFormEdit = ({ refProp, setValues, cnbValue }: CnbEditFormProps) => {
                     <Grid container mb='16px'>
                       <Grid item md={6}>
                         <Text title={t(`${t_cnbBaseSection}.rate`)}  color='#9CA3AF' fontWeight={500} fontSize={14} />
-                        <Text title={`Rp ${ifThenElse(formik.values.base.rate === '0', numberFormat(+formik.values.base.amount), numberFormat(+formik.values.base.rate))} per ${dataTable?.items?.find(item => item?.base?.term?.id === formik.values.base.termID)?.base?.term?.name?.replace('ly', '')}`} />
+                        <Text title={`Rp ${ifThenElse(+formik.values.base.rate === 0, numberFormat(+formik.values.base.amount), numberFormat(+formik.values.base.rate))} per ${dataTable?.items?.find(item => item?.base?.term?.id === formik.values.base.termID)?.base?.term?.name?.replace('ly', '')}`} />
                       </Grid>
                     </Grid>
                     {
@@ -553,7 +553,7 @@ const CnbFormEdit = ({ refProp, setValues, cnbValue }: CnbEditFormProps) => {
                                 <Grid container>
                                   <Grid item mb='16px'>
                                     <Text title={`${t(`${t_cnbSupplementarySection}.amount`)} per ${match?.find(item => item.term?.id === value?.termID)?.term?.name}`} color='#9CA3AF' fontWeight={500} fontSize={14} />
-                                    <Text title={`Rp ${ifThenElse(value.rate === null, numberFormat(+value.amount), numberFormat(+value.rate))} per ${match?.find(item => item.term?.id === value?.termID)?.term?.name?.replace('ly', '')}`} />
+                                    <Text title={`Rp ${ifThenElse(+value.rate === 0, numberFormat(+value.amount), numberFormat(+value.rate))} per ${match?.find(item => item.term?.id === value?.termID)?.term?.name?.replace('ly', '')}`} />
                                   </Grid>
                                 </Grid>
                               </>

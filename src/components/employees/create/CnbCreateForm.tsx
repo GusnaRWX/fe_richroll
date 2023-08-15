@@ -323,15 +323,15 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
                         fullWidth
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                        name='base.amount'
+                        name={title === 'Rate' ? 'base.rate' : 'base.amount'}
                         InputProps={{
                           endAdornment: (
                             <InputAdornment position='end'>
-                              {title === 'Amount' || title === 'Expected Amount (currency)' ? 'IDR' : '%'} 
+                              {title === 'Rate' ? '%' : 'IDR'} 
                             </InputAdornment>
                           )
                         }}
-                        value={formik.values.base.amount}
+                        value={title === 'Rate' ?formik.values.base.rate : formik.values.base.amount}
                       />
                     </Grid>
                     {
