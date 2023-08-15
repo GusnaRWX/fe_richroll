@@ -400,16 +400,29 @@ function* fetchPostPersonalInformation(action: AnyAction) {
 function* fetchPostCnbEmployee(action: AnyAction) {
   try {
     const formatedData = {
-      // templateID: action?.payload?.cnb?.templateId,
       ...(action?.payload?.cnb?.templateID !== '' ? { templateID: action.payload.cnb.templateID } : {}),
       name: action?.payload?.cnb?.name,
       overtime: +action?.payload?.cnb?.overtime,
       base: {
         ...action?.payload?.cnb?.base,
-        amount: +action?.payload?.cnb?.base?.amount,
-        amountType: 0,
-        rate: action?.payload?.cnb?.base?.rate === null ? 0 : +action?.payload?.cnb?.base?.rate,
-        rateType: action?.payload?.cnb?.base?.rateType === null ? 0 : +action?.payload?.cnb?.base?.rateType,
+        ...(action?.payload?.cnb?.base?.componentID === '1' && {
+          amount: +action?.payload?.cnb?.base?.amount,
+          amountType: 0,
+          rate: undefined,
+          rateType: undefined,
+        }),
+        ...(action?.payload?.cnb?.base?.componentID === '2' && {
+          amount: undefined,
+          amountType: undefined,
+          rate: +action?.payload?.cnb?.base?.rate,
+          rateType: 0
+        }),
+        ...(action?.payload?.cnb?.base?.componentID === '3' || action?.payload?.cnb?.base?.componentID === '4' ? {
+          amount: +action?.payload?.cnb?.base?.amount,
+          amountType: 0,
+          rate: +action?.payload?.cnb?.base?.rate,
+          rateType: 0
+        }: {}),
         isTaxable: action?.payload?.cnb?.base?.isTaxable === 'true' ? true : false
       },
       supplementaries: action?.payload?.cnb?.supplementary?.map(val => ({
@@ -417,7 +430,7 @@ function* fetchPostCnbEmployee(action: AnyAction) {
         amount: +val?.amount,
         amountType: 0,
         rate: val.rate === null ? 0 : +val.rate,
-        rateType: val.rateType === null ? 0 : +val?.rateType,
+        rateType: 0,
         isTaxable: val?.isTaxable === 'true' ? true : false
       }))
     };
@@ -1053,10 +1066,28 @@ function* fetchPatchEmployeeCnb(action: AnyAction) {
       overtime: +action?.payload?.employeeCnb?.overtime,
       base: {
         ...action?.payload?.employeeCnb?.base,
-        amount: +action?.payload?.employeeCnb?.base?.amount,
-        amountType: 0,
-        rate: action?.payload?.employeeCnb?.base?.rate === null ? 0 : +action?.payload?.employeeCnb?.base?.rate,
-        rateType: action?.payload?.employeeCnb?.base?.rateType === null ? 0 : +action?.payload?.employeeCnb?.base?.rateType,
+        ...(action?.payload?.employeeCnb?.base?.componentID === '1' && {
+          amount: +action?.payload?.employeeCnb?.base?.amount,
+          amountType: 0,
+          rate: undefined,
+          rateType: undefined,
+        }),
+        ...(action?.payload?.employeeCnb?.base?.componentID === '2' && {
+          amount: undefined,
+          amountType: undefined,
+          rate: +action?.payload?.employeeCnb?.base?.rate,
+          rateType: 0
+        }),
+        ...(action?.payload?.employeeCnb?.base?.componentID === '3' || action?.payload?.employeeCnb?.base?.componentID === '4' ? {
+          amount: +action?.payload?.employeeCnb?.base?.amount,
+          amountType: 0,
+          rate: +action?.payload?.employeeCnb?.base?.rate,
+          rateType: 0
+        } : {}),
+        // amount: +action?.payload?.employeeCnb?.base?.amount,
+        // amountType: 0,
+        // rate: action?.payload?.employeeCnb?.base?.rate === null ? 0 : +action?.payload?.employeeCnb?.base?.rate,
+        // rateType: action?.payload?.employeeCnb?.base?.rateType === null ? 0 : +action?.payload?.employeeCnb?.base?.rateType,
         isTaxable: action?.payload?.employeeCnb?.base?.isTaxable === 'true' ? true : false
       },
       supplementaries: action?.payload?.employeeCnb?.supplementary?.map(val => ({
