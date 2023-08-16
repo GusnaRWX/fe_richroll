@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import styled from '@emotion/styled';
 import Image from 'next/image';
+import { Image as ImageType } from '@/utils/assetsConstant';
 import { styled as MuiStyled } from '@mui/material/styles';
-import kayaroll from '../../../public/images/kayaroll-logo.png';
 import { Icons } from '@/utils/assetsConstant';
 import {
   Card,
@@ -134,7 +134,7 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
       <OverlayLoading open={register.loading} />
       <NavHead>
         <div>
-          <Image src={kayaroll} alt='logo' height={40} width={150} />
+          <Image src={ImageType.KAYAROLL_LOGO} alt='logo' height={40} width={151} />
         </div>
         <div>
           <LocalizationMenu />
@@ -149,7 +149,7 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
         <CardContent>
           <Box component='form' autoComplete='off' onSubmit={formik.handleSubmit}>
             <div>
-              <Image src={kayaroll} alt='logo' height={56} width={211} />
+              <Image src={ImageType.KAYAROLL_LOGO} alt='logo' height={56} width={221} />
             </div>
             <h2>Register</h2>
             {![200, 201, 0].includes(responser?.code) && (
