@@ -23,7 +23,7 @@ import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 // import { getGenerateGrossPayrollRequested } from '@/store/reducers/slice/payroll/payrollSlice';
 import EmptyState from '@/components/_shared/common/EmptyState';
 import { useTranslation } from 'react-i18next';
-import { getGenerateGrossesEmployeeRequested, putGenerateGrossesEmployeeRequested } from '@/store/reducers/slice/payroll/payrollSlice';
+import { getGenerateGrossesEmployeeRequested, putGenerateGrossesEmployeeRequested, getDetailPayrollRequested } from '@/store/reducers/slice/payroll/payrollSlice';
 
 const ButtonWrapper = styled(Box)(({
   display: 'flex',
@@ -187,6 +187,17 @@ function GenerateGrossEmployee() {
   }, []);
 
   useEffect(() => {
+    if (router.query.id) {
+      dispatch({
+        type: getDetailPayrollRequested.toString(),
+        payload: {
+          id: router.query.id
+        }
+      });
+    }
+  }, [router.query.id]);
+
+  useEffect(() => {
     if (router.isReady) {
       dispatch({
         type: getGenerateGrossesEmployeeRequested.toString(),
@@ -220,7 +231,7 @@ function GenerateGrossEmployee() {
             />
             <Box>
               <Typography variant='h6' color='#4B5563'><b>{t(`${tPath}title`)}</b></Typography>
-              <Typography variant='text-base' color='#4B5563'><b>Payroll 280123 — </b>1/03/2023 - 14/03/2023</Typography>
+              <Typography variant='text-base' color='#4B5563'><b>{payroll?.name} — </b>{payroll?.start} - {payroll?.end}</Typography>
             </Box>
           </BackWrapper>
         </Grid>
