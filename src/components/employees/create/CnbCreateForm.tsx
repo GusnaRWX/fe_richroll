@@ -181,7 +181,7 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
     }
   };
 
-  const match = dataTable?.items?.map(item => item.supplementaries).flat();
+  // const match = dataTable?.items?.map(item => item.supplementaries).flat();
 
   console.log(formik.values);
 
@@ -525,7 +525,7 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
                               <Grid container key={index}>
                                 <Grid item md={6}>
                                   <Text title={`${t(`${t_cnbSupplementarySection}.compensation_component`)} ${index + 1}`} fontWeight={500} fontSize={14} color='#9CA3AF' />
-                                  <Text title={match?.find(item => item.component?.id === value?.componentID)?.component?.name}/>
+                                  <Text title={listSuppCompensation?.find(item => item?.value === value?.componentID)?.label}/>
                                 </Grid>
                                 <Grid item md={6}>
                                   <Text title={t(`${t_cnbSupplementarySection}.tax_status`)} color='#9CA3AF' fontWeight={500} fontSize={14} />
@@ -534,8 +534,8 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
                               </Grid>
                               <Grid container>
                                 <Grid item mb='16px'>
-                                  <Text title={`${t(`${t_cnbSupplementarySection}.amount`)} per ${match?.find(item => item.term?.id === value?.termID)?.term?.name}`} color='#9CA3AF' fontWeight={500} fontSize={14} />
-                                  <Text title={`Rp ${ifThenElse(value.rate === '', numberFormat(+value.amount), numberFormat(+value.rate))} per ${listTermin?.find(item => item.value === value?.termID)?.label === 'Monthly' || listTermin?.find(item => item.value === value?.termID)?.label === 'Bi-Weekly' || listTermin?.find(item => item.value === value?.termID)?.label === 'Weekly' ? listTermin?.find(item => item.value === value?.termID)?.label?.slice(0, -2) : listTermin?.find(item => item.value === value?.termID)?.label}`}/>
+                                  <Text title={`${t(`${t_cnbSupplementarySection}.amount`)} per ${listTermin?.find(item => item.value === value?.termID)?.label === 'Monthly' || listTermin?.find(item => item.value === value?.termID)?.label === 'Bi-Weekly' || listTermin?.find(item => item.value === value?.termID)?.label === 'Weekly' ? listTermin?.find(item => item.value === value?.termID)?.label?.slice(0, -2) : listTermin?.find(item => item.value === value?.termID)?.label}`} color='#9CA3AF' fontWeight={500} fontSize={14} />
+                                  <Text title={`Rp ${ifThenElse(+value.rate === 0, numberFormat(+value.amount), numberFormat(+value.rate))} per ${listTermin?.find(item => item.value === value?.termID)?.label === 'Monthly' || listTermin?.find(item => item.value === value?.termID)?.label === 'Bi-Weekly' || listTermin?.find(item => item.value === value?.termID)?.label === 'Weekly' ? listTermin?.find(item => item.value === value?.termID)?.label?.slice(0, -2) : listTermin?.find(item => item.value === value?.termID)?.label}`}/>
                                 </Grid>
                               </Grid>
                             </>
