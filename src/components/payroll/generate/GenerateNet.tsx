@@ -60,7 +60,7 @@ function GenerateNet() {
               icons={
                 <ArrowBack sx={{ color: '#FFFFFF' }} />
               }
-              onClick={() => {router.push('/payroll-disbursement/payroll/gross-detail');}}
+              onClick={() => {router.back();}}
             />
             <Box>
               <Typography variant='h6' color='#4B5563'><b>Generate Net Payroll 280323</b></Typography>
