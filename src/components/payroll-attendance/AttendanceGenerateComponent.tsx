@@ -167,6 +167,7 @@ function AttendanceGenerateComponent() {
   }, [rowsPerPage, page, search, sort, direction, responser.code]);
 
   const handleClose = () => {
+    setSelected([]);
     setOpen(false);
   };
 
@@ -236,7 +237,7 @@ function AttendanceGenerateComponent() {
           </Grid>
           <Table
             count={selectedEmployee?.itemTotals}
-            rowsPerPageOptions={[5, 10, 15]}
+            rowsPerPageOptions={[5, 10, 25, 50, 75, 100, 500, 1000]}
             rowsPerPage={rowsPerPage}
             page={page}
             onChangePage={handleChangePage}
