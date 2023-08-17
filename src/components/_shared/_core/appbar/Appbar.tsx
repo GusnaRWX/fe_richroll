@@ -41,7 +41,7 @@ const WrapperNavbarContentResponsive = styled(Toolbar)(() => ({
 
 const Appbar: FC<AppbarProps> = (props) => {
   const { handleDrawerToggle } = props;
-  const matches = useMediaQuery('(max-width:888px)');
+  const matches = useMediaQuery('(max-width:899px)');
   return (
     <AppBar
       position='fixed'
