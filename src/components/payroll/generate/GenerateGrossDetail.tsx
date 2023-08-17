@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   Typography,
   Card,
@@ -12,8 +12,8 @@ import { IconButton } from '@/components/_shared/form';
 import { ArrowBack } from '@mui/icons-material';
 import GrossContent from '@/components/payroll-assistant/create/GrossContent';
 import { useTranslation } from 'react-i18next';
-import { useAppDispatch } from '@/hooks/index';
-import { putPayrollsGrossesFinalRequested } from '@/store/reducers/slice/payroll/payrollSlice';
+import { useAppDispatch, useAppSelectors } from '@/hooks/index';
+import { putPayrollsGrossesFinalRequested, getDetailPayrollRequested } from '@/store/reducers/slice/payroll/payrollSlice';
 
 const ButtonWrapper = styled(Box)(({
   display: 'flex',
@@ -42,6 +42,18 @@ function GenerateGrossDetail() {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const tPath = 'payroll_and_disbursement.attendance_summary.generate_gross_payroll.';
+  const { name, start, end } = useAppSelectors((state) => state.payroll);
+
+  useEffect(() => {
+    if (router.query.id) {
+      dispatch({
+        type: getDetailPayrollRequested.toString(),
+        payload: {
+          id: router.query.id
+        }
+      });
+    }
+  }, [router.query.id]);
 
   const handleConfirm = () => {
     dispatch({
@@ -69,7 +81,7 @@ function GenerateGrossDetail() {
             />
             <Box>
               <Typography variant='h6' color='#4B5563'><b>{t(`${tPath}title`)}</b></Typography>
-              <Typography variant='text-base' color='#4B5563'><b>Payroll 280123 — </b>1/03/2023 - 14/03/2023</Typography>
+              <Typography variant='text-base' color='#4B5563'><b>{name} — </b>{start} - {end}</Typography>
             </Box>
           </BackWrapper>
         </Grid>
