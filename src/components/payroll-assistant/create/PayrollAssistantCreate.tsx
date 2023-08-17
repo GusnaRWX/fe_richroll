@@ -54,7 +54,7 @@ function PayrollAssistantCreate() {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const assistantID = router?.query?.id;
-  const { name, start, end, grossesId, netId, disbursementId, id } = useAppSelectors((state) => state.payroll);
+  const { name, start, end, grossesId, netId, disbursementId, id, selectedEmployee } = useAppSelectors((state) => state.payroll);
   const [value, setValue] = useState(1);
   const [open, setOpen] = useState(false);
   const [isExit, setIsExit] = useState(true);
@@ -164,6 +164,7 @@ function PayrollAssistantCreate() {
               variant='contained'
               size='small'
               color='primary'
+              disabled={(value == 1 && !selectedEmployee?.items?.length)}
               onClick={() => {
                 switch (value) {
                   case 1:

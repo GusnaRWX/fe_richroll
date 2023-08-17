@@ -18,16 +18,16 @@ import Notify from '../../_shared/common/Notify';
 
 const WrapperAuth = styled(Box)<BoxProps>(({ theme }) => ({
   background: theme.palette.secondary[100],
-  minHeight: '100vh'
+  minHeight: '100vh',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
 }));
 
 const WrapperCard = styled(Card)<CardProps>(() => ({
-  paddingTop: '100px',
   background: 'none',
   borderRadius: 'none',
   boxShadow: 'none',
-  paddingLeft: '135px',
-  paddingRight: '135px'
 }));
 
 const WrapperCardContent = styled(Box)<BoxProps>(() => ({
@@ -57,7 +57,7 @@ const Navbar = () => {
             alt='kayaroll'
           />
         </Box>
-        <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+        <Box>
           <LocalizationMenu />
         </Box>
       </WrapperNavbarContent>
@@ -80,7 +80,7 @@ const LoginComponent = ({
       <WrapperAuth>
         <WrapperCard>
           <WrapperCardContent>
-            <Box component='div'>
+            <Box component='div' sx={{ display: { xs: 'none', md: 'block' } }}>
               <Image
                 src={ImageType.EXAMPLE_LOGIN}
                 alt='login'
@@ -88,7 +88,7 @@ const LoginComponent = ({
                 width={584}
               />
             </Box>
-            <Box width='100%' height='621px' sx={{ background: '#FFFFFF' }}>
+            <Box height='621px' sx={{ background: '#FFFFFF', width: '600px' }}>
               <LoginForm doLogin={doLogin} />
             </Box>
           </WrapperCardContent>
