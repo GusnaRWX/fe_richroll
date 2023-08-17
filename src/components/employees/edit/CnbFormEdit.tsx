@@ -236,7 +236,7 @@ const CnbFormEdit = ({ refProp, setValues, cnbValue }: CnbEditFormProps) => {
                         gap: '5px'
                       }}>
                         <AiOutlinePlus />
-                        Add New {inputValue}
+                        {t('button.add_new')} {inputValue}
                       </Box>
                     ) as unknown as Element
                   });
