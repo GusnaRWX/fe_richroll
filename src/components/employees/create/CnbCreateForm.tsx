@@ -507,8 +507,8 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
                   </Grid>
                   <Grid container mb='16px'>
                     <Grid item md={6}>
-                      <Text title={t(`${t_cnbBaseSection}.rate`)} color='#9CA3AF' fontWeight={500} fontSize={14} />
-                      <Text title={`Rp ${ifThenElse(formik.values.base.rate === null, numberFormat(+formik.values.base.amount), numberFormat(+formik.values.base.rate))} per ${listTermin?.find(item => item.value === formik.values.base.termID)?.label === 'Monthly' || listTermin?.find(item => item.value === formik.values.base.termID)?.label === 'Bi-Weekly' || listTermin?.find(item => item.value === formik.values.base.termID)?.label === 'Weekly' ? listTermin?.find(item => item.value === formik.values.base.termID)?.label?.slice(0, -2) : listTermin?.find(item => item.value === formik.values.base.termID)?.label}`}/>
+                      <Text title={ formik.values.base.componentID === '2' ?  t(`${t_cnbBaseSection}.rate`) : t(`${t_cnbBaseSection}.amount`)} color='#9CA3AF' fontWeight={500} fontSize={14} />
+                      <Text title={`Rp ${ifThenElse(formik.values.base.componentID !== '2', numberFormat(+formik.values.base.amount), numberFormat(+formik.values.base.rate))} per ${listTermin?.find(item => item.value === formik.values.base.termID)?.label === 'Monthly' || listTermin?.find(item => item.value === formik.values.base.termID)?.label === 'Bi-Weekly' || listTermin?.find(item => item.value === formik.values.base.termID)?.label === 'Weekly' ? listTermin?.find(item => item.value === formik.values.base.termID)?.label?.slice(0, -2) : listTermin?.find(item => item.value === formik.values.base.termID)?.label}`}/>
                     </Grid>
                   </Grid>
                   {
