@@ -130,8 +130,8 @@ function ResetPasswordComponent() {
         )
       }
       {
-        [400, 401].includes(responser.code) && (
-          <Notify error={true} body='Please check your input or check your authorization'/>
+        [400, 401, 422].includes(responser.code) && (
+          <Notify error={true} body={responser?.message}/>
         )
       }
       <WrapperAuth>
