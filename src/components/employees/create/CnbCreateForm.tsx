@@ -213,7 +213,7 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
                       gap: '5px'
                     }}>
                       <AiOutlinePlus />
-                      Add New  {inputValue}
+                      {t('button.add_new')}  {inputValue}
                     </Box>
                   ) as unknown as Element
                 });
