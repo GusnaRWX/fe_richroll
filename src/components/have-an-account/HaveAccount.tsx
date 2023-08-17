@@ -65,6 +65,10 @@ const HaveAccount = ({
   token,
   email
 }: AuthEmployee.HaveAccount) => {
+  const splitEmail = email.split('@');
+  const encodeEmail = encodeURIComponent(splitEmail[0]);
+  const newFormatEmail = encodeEmail + '@' + splitEmail[1];
+
   return (
     <>
       <Navbar />
@@ -112,7 +116,7 @@ const HaveAccount = ({
                 <Button
                   label='No'
                   LinkComponent={Link}
-                  href={`/auth-employee/set-new-password?email=${email}&token=${token}`}
+                  href={`/auth-employee/set-new-password?email=${newFormatEmail}&token=${token}`}
                   sx={{
                     background: '#FFF',
                     border: '1px solid #D1D5DB',
