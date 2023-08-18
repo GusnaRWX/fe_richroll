@@ -222,7 +222,7 @@ function CompanyInformationForm({
           )
         }
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
-          <Grid item xs={6} md={6} lg={6} xl={6}>
+          <Grid item xs={12} md={6} lg={6} xl={6}>
             <FormControl fullWidth error={compareCheck(formik.touched.companyType, Boolean(formik.errors.companyType))}>
               <Typography sx={{ mb: '6px' }}>{t(`${t_companyInformationSection}.company_type`)}<AsteriskComponent>*</AsteriskComponent></Typography>
               <Select
@@ -263,7 +263,7 @@ function CompanyInformationForm({
               <FormHelperText>{ifThenElse(formik.touched.companyType, formik.errors.companyType, '')}</FormHelperText>
             </FormControl>
           </Grid>
-          <Grid item xs={6} md={6} lg={6} xl={6}>
+          <Grid item xs={12} md={6} lg={6} xl={6}>
             <Input
               name='companyName'
               onChange={formik.handleChange}
@@ -282,7 +282,7 @@ function CompanyInformationForm({
           </Grid>
         </Grid>
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
-          <Grid item xs={6} md={6} lg={6} xl={6}>
+          <Grid item xs={12} md={6} lg={6} xl={6}>
             <Input
               name='companyNPWP'
               onChange={formik.handleChange}
@@ -296,7 +296,7 @@ function CompanyInformationForm({
               placeholder={t(`${t_companyInformationSection}.company_npwp_placeholder`)}
             />
           </Grid>
-          <Grid item xs={6} md={6} lg={6} xl={6}>
+          <Grid item xs={12} md={6} lg={6} xl={6}>
             <FormControl fullWidth error={compareCheck(formik.touched.companySector, Boolean(formik.errors.companySector))}>
               <Typography sx={{ mb: '6px' }}>{t(`${t_companyInformationSection}.company_sector`)}<AsteriskComponent>*</AsteriskComponent></Typography>
               <Select
@@ -339,7 +339,7 @@ function CompanyInformationForm({
           </Grid>
         </Grid>
         <Grid container spacing={2}>
-          <Grid item xs={6} md={6} lg={6} xl={6}>
+          <Grid item xs={12} md={6} lg={6} xl={6}>
             <Input
               name='companyEmail'
               onChange={formik.handleChange}
@@ -353,7 +353,7 @@ function CompanyInformationForm({
               placeholder={t(`${t_companyInformationSection}.company_email_address_placeholder`)}
             />
           </Grid>
-          <Grid item xs={6} md={6} lg={6} xl={6} sx={{ marginBottom: '1.5rem', marginTop: '.3rem' }}>
+          <Grid item xs={12} md={6} lg={6} xl={6} sx={{ marginBottom: '1.5rem', marginTop: '.3rem' }}>
             <Typography>{t(`${t_companyInformationSection}.contact_number`)}<AsteriskComponent>*</AsteriskComponent></Typography>
             <Grid container spacing={2}>
               <Grid item width='95px'>
@@ -406,12 +406,12 @@ function CompanyInformationForm({
           </Grid>
         </Grid>
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
-          <Grid item xs={6} md={6} lg={6} xl={6}>
+          <Grid item xs={12} md={6} lg={6} xl={6}>
             <Typography component='h3' fontSize={18} color='primary' fontWeight={700}>{t(`${t_companyAddressSection}.title`)}</Typography>
           </Grid>
         </Grid>
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
-          <Grid item xs={6} md={6} lg={6} xl={6}>
+          <Grid item xs={12} md={6} lg={6} xl={6}>
             <FormControl fullWidth error={compareCheck(formik.touched.countryCompanyAddress, Boolean(formik.errors.countryCompanyAddress))}>
               <Typography sx={{ mb: '6px' }}>{t(`${t_companyAddressSection}.contry`)}<AsteriskComponent>*</AsteriskComponent></Typography>
               <Select
@@ -460,7 +460,7 @@ function CompanyInformationForm({
               <FormHelperText>{ifThenElse(formik.touched.countryCompanyAddress, formik.errors.countryCompanyAddress, '')}</FormHelperText>
             </FormControl>
           </Grid>
-          <Grid item xs={6} md={6} lg={6} xl={6}>
+          <Grid item xs={12} md={6} lg={6} xl={6}>
             <FormControl fullWidth error={compareCheck(formik.touched.provinceCompanyAddress, Boolean(formik.errors.provinceCompanyAddress))}>
               <Typography sx={{ mb: '6px' }}>{t(`${t_companyAddressSection}.province`)}<AsteriskComponent>*</AsteriskComponent></Typography>
               <Select
@@ -512,7 +512,7 @@ function CompanyInformationForm({
           </Grid>
         </Grid>
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
-          <Grid item xs={6} md={6} lg={6} xl={6}>
+          <Grid item xs={12} md={6} lg={6} xl={6}>
             <FormControl fullWidth error={compareCheck(formik.touched.cityCompanyAddress, Boolean(formik.errors.cityCompanyAddress))}>
               <Typography sx={{ mb: '6px' }}>{t(`${t_companyAddressSection}.city`)}<AsteriskComponent>*</AsteriskComponent></Typography>
               <Select
@@ -563,7 +563,7 @@ function CompanyInformationForm({
               <FormHelperText>{ifThenElse(formik.touched.cityCompanyAddress, formik.errors.cityCompanyAddress, '')}</FormHelperText>
             </FormControl>
           </Grid>
-          <Grid item xs={6} md={6} lg={6} xl={6}>
+          <Grid item xs={12} md={6} lg={6} xl={6}>
             <FormControl fullWidth error={compareCheck(formik.touched.subDistrictCompanyAddress, Boolean(formik.errors.subDistrictCompanyAddress))}>
               <Typography sx={{ mb: '6px' }}>{t(`${t_companyAddressSection}.sub_district`)}<AsteriskComponent>*</AsteriskComponent></Typography>
               <Select
@@ -606,7 +606,7 @@ function CompanyInformationForm({
           </Grid>
         </Grid>
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
-          <Grid item xs={6} md={6} lg={6} xl={6}>
+          <Grid item xs={12} md={6} lg={6} xl={6}>
             <Textarea
               name='addressCompanyAddress'
               maxRows={5}
@@ -620,7 +620,7 @@ function CompanyInformationForm({
               placeholder={t(`${t_companyAddressSection}.street_and_buildig_name_placeholder`)}
             />
           </Grid>
-          <Grid item xs={6} md={6} lg={6} xl={6}>
+          <Grid item xs={12} md={6} lg={6} xl={6}>
             <Input
               name='zipCodeCompanyAddress'
               onChange={formik.handleChange}
