@@ -28,31 +28,34 @@ import { t } from 'i18next';
 
 const WrapperAuth = styled(Box)<BoxProps>(({ theme }) => ({
   background: theme.palette.secondary[100],
-  minHeight: '100vh'
+  minHeight: '100vh',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
 }));
 
 const WrapperCard = styled(Card)<CardProps>(() => ({
-  paddingTop: '100px',
   background: 'none',
   borderRadius: 'none',
   boxShadow: 'none',
-  paddingLeft: '135px',
-  paddingRight: '135px'
+  width: '100%',
+  maxWidth: '1100px'
 }));
 
 const WrapperCardContent = styled(Box)<BoxProps>(() => ({
   borderRadius: '8px',
   boxShadow: '0px 6px 20px rgba(0, 0, 0, 0.05)',
   background: 'white',
-  padding: '24px'
+  padding: '18px',
 }));
 
 const WrapperCardItem = styled(ButtonBase)(() => ({
   borderRadius: '12px',
+  margin: '16px 0px',
   boxShadow: '0px 6px 20px rgba(0, 0, 0, 0.05)',
   background: 'white',
   border: '1px solid #E5E7EB',
-  padding: '12px',
+  padding: '10px',
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
@@ -115,8 +118,8 @@ const CardAdd = () => {
     <WrapperCardAdd onClick={() => { router.push('/company/create'); }}>
       <Image
         src={ImageType.ADD_COMPANY}
-        width={178}
-        height={142}
+        width={170}
+        height={133}
         alt='add company'
       />
       <Typography
@@ -175,7 +178,7 @@ const CompanyComponent = ({ companies }: Company.Component) => {
             >
               {tl('company.desc')}
             </Typography>
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: '25px', mt: '16px', flexWrap:'wrap' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: companies.length < 4 ? 'flex-start' : 'space-between', gap: companies.length < 4 ? '20px' : '0px', width: '100%', flexWrap:'wrap' }}>
               {companies?.slice(0, 5)?.map((val: object, idx) => (
                 // <WrapperCardItem key={idx} onClick={() => { router.push(`/company/${val?.['id']}`);}}>
                 <WrapperCardItem key={idx} onClick={() => { handleClick(val, '/dashboard'); }}>

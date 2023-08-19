@@ -55,7 +55,8 @@ const WrapperCardContent = styled(Box)<BoxProps>(() => ({
   background: '#FFFFFF',
   maxWidth: '800px',
   width: '100%',
-  padding: '24px'
+  padding: '24px',
+  marginTop: '24px'
 }));
 
 const WrapperNavbarContent = styled(Toolbar)(() => ({
@@ -162,7 +163,7 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
         <WrapperCard>
           <WrapperCardContent>
             <Box component='form' autoComplete='off' onSubmit={formik.handleSubmit}>
-              <Box sx={{ display: { xs: 'none', md: 'block' } }}>
+              <Box sx={{ display: { xs: 'none', md: 'block' }, marginTop: '30px' }}>
                 <Image src={ImageType.KAYAROLL_LOGO} alt='logo' height={56} width={221} />
               </Box>
               <h2>Register</h2>

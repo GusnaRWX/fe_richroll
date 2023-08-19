@@ -76,12 +76,12 @@ function CompanyBankForm({ bank, paymentMethod, formik }: CompanyBankProps) {
       }
       <form>
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
-          <Grid item xs={6} md={6} lg={6} xl={6}>
+          <Grid item xs={12} md={6} lg={6} xl={6}>
             <Typography component='h3' fontSize={18} color='primary' fontWeight={700}>{t(`${t_bankInformation}.title`)}</Typography>
           </Grid>
         </Grid>
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
-          <Grid item xs={6} md={6} lg={6} xl={6}>
+          <Grid item xs={12} md={6} lg={6} xl={6}>
             <FormControl fullWidth error={compareCheck(formik.touched.bankBankInformation, Boolean(formik.errors.bankBankInformation))}>
               <Typography sx={{ mb: '6px' }}>{t(`${t_bankInformation}.bank`)}<AsteriskComponent>*</AsteriskComponent></Typography>
               <Select
@@ -122,7 +122,7 @@ function CompanyBankForm({ bank, paymentMethod, formik }: CompanyBankProps) {
               <FormHelperText>{ifThenElse(formik.touched.bankBankInformation, formik.errors.bankBankInformation, '')}</FormHelperText>
             </FormControl>
           </Grid>
-          <Grid item xs={6} md={6} lg={6} xl={6}>
+          <Grid item xs={12} md={6} lg={6} xl={6}>
             <Input
               name='bankAccountHolderNameBankInformation'
               onChange={formik.handleChange}
@@ -138,7 +138,7 @@ function CompanyBankForm({ bank, paymentMethod, formik }: CompanyBankProps) {
           </Grid>
         </Grid>
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
-          <Grid item xs={6} md={6} lg={6} xl={6}>
+          <Grid item xs={12} md={6} lg={6} xl={6}>
             <Input
               name='bankAccoutNoBankInformation'
               onChange={formik.handleChange}
@@ -152,7 +152,7 @@ function CompanyBankForm({ bank, paymentMethod, formik }: CompanyBankProps) {
               placeholder={t(`${t_bankInformation}.bank_account_no_placeholder`)}
             />
           </Grid>
-          <Grid item xs={3} md={3} lg={3} xl={3}>
+          <Grid item xs={6} md={3} lg={3} xl={3}>
             <Input
               name='bankCodeBankInformation'
               onChange={formik.handleChange}
@@ -166,7 +166,7 @@ function CompanyBankForm({ bank, paymentMethod, formik }: CompanyBankProps) {
               placeholder={t(`${t_bankInformation}.bank_code_placeholder`)}
             />
           </Grid>
-          <Grid item xs={3} md={3} lg={3} xl={3}>
+          <Grid item xs={6} md={3} lg={3} xl={3}>
             <Input
               name='branchCodeBankInformation'
               onChange={formik.handleChange}
@@ -182,7 +182,7 @@ function CompanyBankForm({ bank, paymentMethod, formik }: CompanyBankProps) {
           </Grid>
         </Grid>
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
-          <Grid item xs={6} md={6} lg={6} xl={6}>
+          <Grid item xs={12} md={6} lg={6} xl={6}>
             <Input
               name='branchNameBankInformation'
               onChange={formik.handleChange}
@@ -196,7 +196,7 @@ function CompanyBankForm({ bank, paymentMethod, formik }: CompanyBankProps) {
               placeholder={t(`${t_bankInformation}.branch_name_placeholder`)}
             />
           </Grid>
-          <Grid item xs={6} md={6} lg={6} xl={6}>
+          <Grid item xs={12} md={6} lg={6} xl={6}>
             <Input
               name='swiftCodeBankInformation'
               onChange={formik.handleChange}
@@ -212,7 +212,7 @@ function CompanyBankForm({ bank, paymentMethod, formik }: CompanyBankProps) {
           </Grid>
         </Grid>
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
-          <Grid item xs={6} md={6} lg={6} xl={6}>
+          <Grid item xs={12} md={6} lg={6} xl={6}>
             <Typography component='h3' fontSize={18} color='primary' fontWeight={700}>{t(`${t_payrollInformation}.title`)}</Typography>
           </Grid>
         </Grid>
@@ -501,8 +501,8 @@ function CompanyBankForm({ bank, paymentMethod, formik }: CompanyBankProps) {
         )}
         {![200, 201, 0].includes(responser?.code) && (
           <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
-            <Grid item xs={6} md={6} lg={6} xl={6}></Grid>
-            <Grid item xs={6} md={6} lg={6} xl={6}>
+            <Grid item xs={12} md={6} lg={6} xl={6}></Grid>
+            <Grid item xs={12} md={6} lg={6} xl={6}>
               <Alert severity='error'>{responser?.message}</Alert>
             </Grid>
           </Grid>
