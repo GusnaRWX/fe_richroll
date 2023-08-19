@@ -359,7 +359,7 @@ export default function UpdateCNBComponent() {
                   <span style={{ color: 'red' }}>*</span>
                 </Typography>
                 <Grid container>
-                  <Grid item xs={6} md={6} lg={6} xl={6}>
+                  <Grid item xs={12} md={6} lg={6} xl={6}>
                     <TextField
                       sx={{ marginTop: '.4rem' }}
                       size='small'
@@ -401,7 +401,7 @@ export default function UpdateCNBComponent() {
                 </Typography>
                 <Grid>
                   <Grid container spacing={2}>
-                    <Grid item xs={6} md={6} lg={6} xl={6}>
+                    <Grid item xs={12} md={6} lg={6} xl={6}>
                       <div style={{ marginBottom: '16px' }}>
                         <FormControl
                           fullWidth
@@ -453,7 +453,7 @@ export default function UpdateCNBComponent() {
                         </FormControl>
                       </div>
                     </Grid>
-                    <Grid item xs={6} md={6} lg={6} xl={6}>
+                    <Grid item xs={12} md={6} lg={6} xl={6}>
                       <Typography>
                         {t(`${tPath}base_section.tax_status`)}<span style={{ color: 'red' }}>*</span>
                       </Typography>
@@ -497,7 +497,7 @@ export default function UpdateCNBComponent() {
                   </Grid>
                   <Grid container>
                     <Grid container spacing={2}>
-                      <Grid item xs={3} md={3} lg={3} xl={3}>
+                      <Grid item xs={12} md={3} lg={3} xl={3}>
                         <Typography>
                           {title}
                           <span style={{ color: 'red' }}>*</span>
@@ -526,7 +526,7 @@ export default function UpdateCNBComponent() {
                       </Grid>
                       {
                         withPercentage && (
-                          <Grid item xs={3} md={3} lg={3} xl={3}>
+                          <Grid item xs={12} md={3} lg={3} xl={3}>
                             <FormControl fullWidth>
                               <Input
                                 fullWidth
@@ -547,7 +547,7 @@ export default function UpdateCNBComponent() {
                         )
                       }
 
-                      <Grid item xs={3} md={3} lg={3} xl={3}>
+                      <Grid item xs={12} md={3} lg={3} xl={3}>
                         <FormControl
                           fullWidth
                           error={compareCheck(formik.touched.period, Boolean(formik.errors.period))}
@@ -590,7 +590,7 @@ export default function UpdateCNBComponent() {
                   <Grid item xs={12}>
                     <Text title={t(`${tPath}overtime_section.title`)} fontWeight={700} fontSize='16px' mb='16px' color='primary.500' />
                   </Grid>
-                  <Grid item xs={3}>
+                  <Grid item xs={12} md={3}>
                     <Input
                       withAsterisk
                       size='small'
@@ -635,7 +635,7 @@ export default function UpdateCNBComponent() {
                             {formik.values.supplementary.map((suplement: any, i) => (
                               <div key={i} style={{ marginBottom: '33px' }}>
                                 <Grid container spacing={2}>
-                                  <Grid item xs={6} md={6} lg={6} xl={6}>
+                                  <Grid item xs={12} md={6} lg={6} xl={6}>
                                     <div style={{ marginBottom: '16px' }}>
                                       <Typography>
                                       {t(`${tPath}supplementary_section.compensation_component`)} {i + 1}
@@ -711,7 +711,7 @@ export default function UpdateCNBComponent() {
                                       </FormControl>
                                     </div>
                                   </Grid>
-                                  <Grid item xs={6} md={6} lg={6} xl={6}>
+                                  <Grid item xs={12} md={6} lg={6} xl={6}>
                                     <Typography>
                                       {t(`${tPath}supplementary_section.tax_status`)}
                                       <span style={{ color: 'red' }}>*</span>
@@ -802,7 +802,7 @@ export default function UpdateCNBComponent() {
                                   </Grid>
                                 </Grid>
                                 <Grid container spacing={2}>
-                                  <Grid item xs={3} md={3} lg={3} xl={3}>
+                                  <Grid item xs={12} md={3} lg={3} xl={3}>
                                     <Typography>
                                       {getPaymentType(suplement?.compensationComponentId, listSuppCompensation)?.title}
                                       <span style={{ color: 'red' }}>*</span>
@@ -858,7 +858,7 @@ export default function UpdateCNBComponent() {
                                   </Grid>
                                   {
                                     formik.values.supplementary[i].withPercentage === true && (
-                                      <Grid item xs={3} md={3} lg={3} xl={3}>
+                                      <Grid item xs={12} md={3} lg={3} xl={3}>
                                         <FormControl fullWidth>
                                           <Input
                                             fullWidth
@@ -881,7 +881,7 @@ export default function UpdateCNBComponent() {
                                     )
                                   }
 
-                                  <Grid item xs={3} md={3} lg={3} xl={3}>
+                                  <Grid item xs={12} md={3} lg={3} xl={3}>
                                     <FormControl
                                       fullWidth
                                       {...(formik.touched?.supplementary &&
