@@ -7,7 +7,8 @@ import {
   AppBar,
   Toolbar,
   Card,
-  CardProps
+  CardProps,
+  useMediaQuery
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import Image from 'next/image';
@@ -68,6 +69,7 @@ const Navbar = () => {
 const LoginComponent = ({
   doLogin
 }: Login.Component) => {
+  const matches = useMediaQuery('(max-width:899px)');
   const { responser } = useAppSelectors((state) => state);
   return (
     <>
@@ -88,7 +90,11 @@ const LoginComponent = ({
                 width={584}
               />
             </Box>
-            <Box height='621px' sx={{ background: '#FFFFFF', width: '600px' }}>
+            <Box height='621px' sx={{
+              background: '#FFFFFF', 
+              width: '600px' ,
+              marginTop: matches ? '40px' : ''
+            }}>
               <LoginForm doLogin={doLogin} />
             </Box>
           </WrapperCardContent>
