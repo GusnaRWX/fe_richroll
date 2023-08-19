@@ -158,6 +158,11 @@ const SetNewPasswordComponent = ({
               <Notify error={false} body={responser.message}/>
             )
           }
+          {
+            [400, 401, 422].includes(responser?.code) && (
+              <Notify error={true} body={responser?.message}/>
+            )
+          }
           <WrapperCardContent>
             <Image
               src={ImageType.KAYAROLL_LOGO}
