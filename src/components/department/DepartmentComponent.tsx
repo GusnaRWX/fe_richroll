@@ -94,7 +94,7 @@ function DepartmentComponent() {
       <ContentWrapper>
         <Box sx={{ width: '100%' }}>
           <Grid container spacing={2}>
-            <Grid item xs={6} md={6} lg={6} xl={6}>
+            <Grid item xs={12} md={6} lg={6} xl={6}>
               <Input
                 name='department'
                 customLabel={t(`${t_departmentForm}.department`)}
@@ -106,7 +106,7 @@ function DepartmentComponent() {
                 error={errors.department}
               />
             </Grid>
-            <Grid item xs={6} md={6} lg={6} xl={6}>
+            <Grid item xs={12} md={6} lg={6} xl={6}>
               <Input
                 name='position'
                 customLabel={t(`${t_departmentForm}.position`)}

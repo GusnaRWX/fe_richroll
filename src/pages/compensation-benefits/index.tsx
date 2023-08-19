@@ -5,7 +5,7 @@ import MetaHead from '@/components/_shared/_core/layout/MetaHead';
 export default function Index() {
   return (
     <>
-      <MetaHead title='Kayaroll - Company Profile' />
+      <MetaHead title='Kayaroll - Compensation & Benefits' />
       <CNBContainer />
     </>
   );
