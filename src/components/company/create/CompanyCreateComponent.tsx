@@ -28,7 +28,10 @@ import { useTranslation } from 'react-i18next';
 
 const WrapperAuth = styled(Box)<BoxProps>(({ theme }) => ({
   background: theme.palette.secondary[100],
-  minHeight: '100vh'
+  minHeight: '100vh',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
 }));
 
 const WrapperCard = styled(Card)<CardProps>(() => ({
@@ -36,8 +39,8 @@ const WrapperCard = styled(Card)<CardProps>(() => ({
   background: 'none',
   borderRadius: 'none',
   boxShadow: 'none',
-  paddingLeft: '135px',
-  paddingRight: '135px'
+  width: '100%',
+  maxWidth: '900px'
 }));
 
 const WrapperCardContent = styled(Box)<BoxProps>(() => ({
@@ -83,7 +86,7 @@ const Navbar = () => {
 };
 
 const CompanyCreateComponent = ({ companyType, companySector, bank, paymentMethod, countries, listAllCompany }: CompanyCreate.Component) => {
-  const [tabSelected, setTabSelected] = useState(0);
+  const [tabSelected, setTabSelected] = useState(1);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [images, setImages] = useState<string | null>(null);
   const companyID = useAppSelectors(state => state.company.companyID);

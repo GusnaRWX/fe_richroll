@@ -175,7 +175,7 @@ function AttendanceContent() {
           </Grid>
         </Grid>
         <Table
-          count={selectedEmployee?.length}
+          count={selectedEmployee?.items?.length}
           rowsPerPageOptions={[5, 10, 15]}
           rowsPerPage={rowsPerPage}
           page={page}

@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 import { getListBaseCompensationRequested, getListSuppCompensationRequested, getListTerminReqeusted } from '@/store/reducers/slice/options/optionSlice';
 import { useFormik } from 'formik';
 import { validateCnb } from './validate';
-import {  Chip, Grid, InputAdornment } from '@mui/material';
+import { Chip, Grid, InputAdornment, createFilterOptions, Autocomplete, Box, } from '@mui/material';
 import { getTableRequested } from '@/store/reducers/slice/cnb/compensationSlice';
 import { getCompanyData, getPaymentType, ifThenElse } from '@/utils/helper';
 import { Text } from '@/components/_shared/common';
@@ -14,6 +14,8 @@ import { numberFormat } from '@/utils/format';
 import { MdAdd } from 'react-icons/md';
 import { BsTrash3 } from 'react-icons/bs';
 import { useTranslation } from 'react-i18next';
+import { Option } from '@/types/option';
+import { AiOutlinePlus } from 'react-icons/ai';
 
 interface Supplementary {
   componentID: string,
@@ -26,7 +28,7 @@ interface Supplementary {
 }
 
 interface CnbInitialValues {
-  templateId: string;
+  templateID: string;
   name: string;
   overtime: string;
   base: {
@@ -57,6 +59,8 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
   const t_cnbBaseSection = 'company_management.employees.form_&_detail.cnb.base_section';
   const t_cnbSupplementarySection = 'company_management.employees.form_&_detail.cnb.supplementary_section';
 
+  const filter = createFilterOptions<Option.FreesoloType>();
+
   useEffect(() => {
     dispatch({
       type: getListBaseCompensationRequested.toString(),
@@ -82,7 +86,7 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
   const {dataTable} = useAppSelectors(state => state.compensation);
   const formik = useFormik({
     initialValues: {
-      templateId: '',
+      templateID: '',
       name: '',
       overtime: '',
       base: {
@@ -103,37 +107,48 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
     }
   });
 
-  const handleChangeTemplate = (value) => {
-    const findCNB = dataTable?.items?.find(item => value.target.value === item.id);
-    if(findCNB) {
-      formik.setFieldValue('templateId', findCNB?.id);
-      formik.setFieldValue('name', findCNB?.name);
-      formik.setFieldValue('overtime', findCNB?.overtime);
-      formik.setFieldValue('base.componentID', findCNB?.base?.component?.id);
-      formik.setFieldValue('base.termID', findCNB?.base?.term?.id);
-      formik.setFieldValue('base.isTaxable', findCNB?.base?.isTaxable === true ? 'true' : 'false');
-      formik.setFieldValue('base.amount', findCNB?.base?.amount);
-      formik.setFieldValue('base.amountType', findCNB?.base?.amountType);
-      formik.setFieldValue('base.rate', findCNB?.base?.rate);
-      formik.setFieldValue('base.rateType', findCNB?.base?.rateType);
-      formik.setFieldValue(
-        'supplementary',
-        findCNB?.supplementaries?.map((val) => ({
-          componentID: val?.component?.id,
-          termID: val?.term?.id,
-          isTaxable: val?.isTaxable === true ? 'true' : 'false',
-          amount: val?.amount,
-          amountType: val?.amountType,
-          rate: val?.rate,
-          rateType: val?.rateType,
-        }))
-      );
+  const handleChangeTemplate = (e, value) => {
+    // check if this value is custom
+    if(value?.inputValue) {
+      setIsEdit(true);
+      formik.setFieldValue('name', value?.inputValue);
+    } else {
+      // this is for not custom
+      const findCNB = dataTable?.items?.find(item => value?.value === item.id);
+      if (findCNB) {
+        formik.setFieldValue('templateID', findCNB?.id);
+        formik.setFieldValue('name', findCNB?.name);
+        formik.setFieldValue('overtime', findCNB?.overtime);
+        formik.setFieldValue('base.componentID', findCNB?.base?.component?.id);
+        formik.setFieldValue('base.termID', findCNB?.base?.term?.id);
+        formik.setFieldValue('base.isTaxable', findCNB?.base?.isTaxable === true ? 'true' : 'false');
+        formik.setFieldValue('base.amount', findCNB?.base?.amount);
+        formik.setFieldValue('base.amountType', findCNB?.base?.amountType);
+        formik.setFieldValue('base.rate', findCNB?.base?.rate);
+        formik.setFieldValue('base.rateType', findCNB?.base?.rateType);
+        formik.setFieldValue(
+          'supplementary',
+          findCNB?.supplementaries?.map((val) => ({
+            componentID: val?.component?.id,
+            termID: val?.term?.id,
+            isTaxable: val?.isTaxable === true ? 'true' : 'false',
+            amount: val?.amount,
+            amountType: val?.amountType,
+            rate: val?.rate,
+            rateType: val?.rateType,
+          }))
+        );
 
-      dispatch({
-        type: getListTerminReqeusted.toString(),
-        payload: formik.values.base.componentID
-      });
-    }
+        dispatch({
+          type: getListTerminReqeusted.toString(),
+          payload: formik.values.base.componentID
+        });
+        setTitle(getPaymentType(findCNB?.base?.component?.id, listBaseCompensation)?.title);
+      } else {
+        formik.resetForm();
+        setIsEdit(false);
+      }
+    } 
   };
 
   const handleBaseCompensationComponent = (value) => {
@@ -145,6 +160,10 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
       setWithPercentage(false);
       setTitle(getPaymentType(value.target.value, listBaseCompensation)?.title);
     }
+    dispatch({
+      type: getListTerminReqeusted.toString(),
+      payload: value.target.value
+    });
   };
 
   const handleRemoveOrAppend = (type: string, id?: number) => {
@@ -162,22 +181,86 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
     }
   };
 
-  const match = dataTable?.items?.map(item => item.supplementaries).flat();
+  // const match = dataTable?.items?.map(item => item.supplementaries).flat();
+
+  console.log(formik.values);
+
+  console.log(title);
 
   return (
     <Grid>
       <Grid container mb='16px'>
         <Grid item md={6}>
-          <Select name='templateId' options={dataTable?.items?.map(val => {
-            return {
-              ...val,
-              label: val?.name,
-              value: val?.id
-            };
-          })} fullWidth size='small' variant='outlined' customLabel={t(`${t_cnbForm}.compensation_&_benefits_profile`)} onChange={handleChangeTemplate} onBlur={formik.handleBlur}/>
+          <Text title={t(`${t_cnbForm}.compensation_&_benefits_profile`)}/>
+          <Autocomplete
+            id='cnbcontainer'
+            freeSolo
+            value={formik.values.name}
+            onChange={handleChangeTemplate}
+            onBlur={formik.handleBlur}
+            size='small'
+            filterOptions={(options, params) => {
+              const filtered = filter(options, params);
+              const {inputValue} = params; 
+              const isExist = options?.some((option) => inputValue === option?.label);
+              if(inputValue !== '' && !isExist) {
+                filtered?.push({
+                  inputValue,
+                  label: (
+                    <Box component='span' sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '5px'
+                    }}>
+                      <AiOutlinePlus />
+                      {t('button.add_new')}  {inputValue}
+                    </Box>
+                  ) as unknown as Element
+                });
+              }
+              return filtered;
+            }}
+            selectOnFocus
+            clearOnBlur
+            handleHomeEndKeys
+            options={dataTable?.items?.map(val => {
+              return {
+                label: val?.name,
+                value: val?.id
+              };
+            }) as readonly Option.FreesoloType[]}
+            getOptionLabel={(option: any) => {
+              if(typeof option === 'string') {
+                return option;
+              }
+
+              if(option?.inputValue) {
+                return option.inputValue;
+              }
+
+              return option?.label;
+            }}
+            renderOption={(props, option) => (
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                }}
+              >
+                <li {...props} style={{ width: '100%' }}>{option?.label}</li>
+              </Box>
+            )}
+            renderInput={(params) => (
+              <Input
+                name='templateID'
+                {...params}
+              />
+            )}
+          />
         </Grid>
       </Grid>
-      {formik.values.templateId !== '' && (
+      {formik.values.templateID !== '' || formik.values.name !== '' ? (
         <Grid sx={{
           padding: '16px 16px',
           borderRadius: '8px',
@@ -240,15 +323,15 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
                         fullWidth
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                        name='base.amount'
+                        name={title === 'Rate' ? 'base.rate' : 'base.amount'}
                         InputProps={{
                           endAdornment: (
                             <InputAdornment position='end'>
-                                    %
+                              {title === 'Rate' ? '%' : 'IDR'} 
                             </InputAdornment>
                           )
                         }}
-                        value={formik.values.base.amount}
+                        value={title === 'Rate' ?formik.values.base.rate : formik.values.base.amount}
                       />
                     </Grid>
                     {
@@ -302,7 +385,7 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
                     </Grid>
                   </Grid>
                   {
-                    formik.values.supplementary.length > 0 && (
+                    formik.values.supplementary.length > 0 || formik.values.name !== '' ?  (
                       <>
                         <Grid container mb='16px'>
                           <Grid item md={6}>
@@ -389,7 +472,7 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
                           </Grid>
                         </Grid>
                       </>
-                    )
+                    ) : null
                   }
 
                 </>
@@ -424,8 +507,8 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
                   </Grid>
                   <Grid container mb='16px'>
                     <Grid item md={6}>
-                      <Text title={t(`${t_cnbBaseSection}.rate`)} color='#9CA3AF' fontWeight={500} fontSize={14} />
-                      <Text title={`Rp ${ifThenElse(formik.values.base.rate === null, numberFormat(+formik.values.base.amount), numberFormat(+formik.values.base.rate))} per ${dataTable?.items?.find(item => item?.base?.term?.id === formik.values.base.termID)?.base?.term?.name}`}/>
+                      <Text title={ formik.values.base.componentID === '2' ?  t(`${t_cnbBaseSection}.rate`) : t(`${t_cnbBaseSection}.amount`)} color='#9CA3AF' fontWeight={500} fontSize={14} />
+                      <Text title={`Rp ${ifThenElse(formik.values.base.componentID !== '2', numberFormat(+formik.values.base.amount), numberFormat(+formik.values.base.rate))} per ${listTermin?.find(item => item.value === formik.values.base.termID)?.label === 'Monthly' || listTermin?.find(item => item.value === formik.values.base.termID)?.label === 'Bi-Weekly' || listTermin?.find(item => item.value === formik.values.base.termID)?.label === 'Weekly' ? listTermin?.find(item => item.value === formik.values.base.termID)?.label?.slice(0, -2) : listTermin?.find(item => item.value === formik.values.base.termID)?.label}`}/>
                     </Grid>
                   </Grid>
                   {
@@ -442,7 +525,7 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
                               <Grid container key={index}>
                                 <Grid item md={6}>
                                   <Text title={`${t(`${t_cnbSupplementarySection}.compensation_component`)} ${index + 1}`} fontWeight={500} fontSize={14} color='#9CA3AF' />
-                                  <Text title={match?.find(item => item.component?.id === value?.componentID)?.component?.name}/>
+                                  <Text title={listSuppCompensation?.find(item => item?.value === value?.componentID)?.label}/>
                                 </Grid>
                                 <Grid item md={6}>
                                   <Text title={t(`${t_cnbSupplementarySection}.tax_status`)} color='#9CA3AF' fontWeight={500} fontSize={14} />
@@ -451,8 +534,8 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
                               </Grid>
                               <Grid container>
                                 <Grid item mb='16px'>
-                                  <Text title={`${t(`${t_cnbSupplementarySection}.amount`)} per ${match?.find(item => item.term?.id === value?.termID)?.term?.name}`} color='#9CA3AF' fontWeight={500} fontSize={14} />
-                                  <Text title={`Rp ${ifThenElse(value.rate === null, numberFormat(+value.amount), numberFormat(+value.rate))} per ${match?.find(item => item.term?.id === value?.termID)?.term?.name}`}/>
+                                  <Text title={`${t(`${t_cnbSupplementarySection}.amount`)} per ${listTermin?.find(item => item.value === value?.termID)?.label === 'Monthly' || listTermin?.find(item => item.value === value?.termID)?.label === 'Bi-Weekly' || listTermin?.find(item => item.value === value?.termID)?.label === 'Weekly' ? listTermin?.find(item => item.value === value?.termID)?.label?.slice(0, -2) : listTermin?.find(item => item.value === value?.termID)?.label}`} color='#9CA3AF' fontWeight={500} fontSize={14} />
+                                  <Text title={`Rp ${ifThenElse(+value.rate === 0, numberFormat(+value.amount), numberFormat(+value.rate))} per ${listTermin?.find(item => item.value === value?.termID)?.label === 'Monthly' || listTermin?.find(item => item.value === value?.termID)?.label === 'Bi-Weekly' || listTermin?.find(item => item.value === value?.termID)?.label === 'Weekly' ? listTermin?.find(item => item.value === value?.termID)?.label?.slice(0, -2) : listTermin?.find(item => item.value === value?.termID)?.label}`}/>
                                 </Grid>
                               </Grid>
                             </>
@@ -466,7 +549,7 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
             }
           </>
         </Grid>
-      )}
+      ) : null}
       <Grid container justifyContent='flex-end' gap={2} alignItems='center' mt='16px'>
         <Grid item md={1}>
           <Button
@@ -479,7 +562,7 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
           <Button
             label={t('button.next')}
             onClick={() => { formik.handleSubmit(); }}
-            disabled={formik.values.templateId !== '' ? false : true}
+            disabled={formik.values.templateID !== '' || formik.values.name !== '' ? false : true}
           />
         </Grid>
       </Grid>

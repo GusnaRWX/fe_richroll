@@ -308,8 +308,8 @@ function PayrollTable({
                                 // );}}
                                 onClick={() => {
                                   item.workflow === 1 ?
-                                    router.push({ pathname: '/payroll-disbursement/payroll/generate-gross/detail', query: { id: item?.id } }) :
-                                    router.push({ pathname: '/payroll-disbursement/payroll/generate-net', query: { id: item?.id } });
+                                    router.push({pathname: '/payroll-disbursement/payroll/gross-detail', query: { id: item?.id }}) :
+                                    router.push({pathname:'/payroll-disbursement/payroll/net-detail', query: { id: item?.id }});
                                 }}
                                 icons={
                                   <TbFileImport fontSize={20} color='#223567' />

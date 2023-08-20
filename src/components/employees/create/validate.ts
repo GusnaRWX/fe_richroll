@@ -103,14 +103,14 @@ const baseSchema = Yup.object({
   componentID: Yup.string(),
   termID: Yup.string(),
   isTaxable: Yup.string(),
-  amount: Yup.string(),
-  amountType: Yup.string(),
+  amount: Yup.string().nullable(),
+  amountType: Yup.string().nullable(),
   rate: Yup.string().nullable().default('0'),
   rateType: Yup.string().nullable().default('0'),
 });
 
 export const validateCnb = Yup.object({
-  templateId: Yup.string().notRequired(),
+  templateID: Yup.string().notRequired(),
   name: Yup.string().required(),
   overtime: Yup.string(),
   base: baseSchema,

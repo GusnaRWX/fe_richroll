@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   Typography,
   Grid,
@@ -10,8 +10,8 @@ import { useRouter } from 'next/router';
 import { IconButton } from '@/components/_shared/form';
 import { ArrowBack } from '@mui/icons-material';
 import CompleteContent from '@/components/payroll-assistant/create/CompleteContent';
-import { patchPayrollDisbursementFinalRequested } from '@/store/reducers/slice/payroll/payrollSlice';
-import { useAppDispatch } from '@/hooks/index';
+import { patchPayrollDisbursementFinalRequested, getDetailPayrollRequested } from '@/store/reducers/slice/payroll/payrollSlice';
+import { useAppDispatch, useAppSelectors } from '@/hooks/index';
 
 const ButtonWrapper = styled(Box)(({
   display: 'flex',
@@ -34,6 +34,18 @@ const BackWrapper = styled(Box)(({
 function DisbursementGenerateComponent() {
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const { name, start, end } = useAppSelectors((state) => state.payroll);
+
+  useEffect(() => {
+    if (router.query.id) {
+      dispatch({
+        type: getDetailPayrollRequested.toString(),
+        payload: {
+          id: router.query.id
+        }
+      });
+    }
+  }, [router.query.id]);
 
   const handleFinalDisbursement = () => {
     dispatch({
@@ -58,7 +70,7 @@ function DisbursementGenerateComponent() {
             />
             <Box>
               <Typography variant='h6' color='#4B5563'><b>Generate Disbursment Receipt</b></Typography>
-              <Typography variant='text-base' color='#4B5563'><b>Payroll 280123 — </b>1/03/2023 - 14/03/2023</Typography>
+              <Typography variant='text-base' color='#4B5563'><b>{name} — </b>{start} - {end}</Typography>
             </Box>
           </BackWrapper>
         </Grid>

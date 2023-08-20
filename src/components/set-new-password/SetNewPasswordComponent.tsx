@@ -21,23 +21,16 @@ const WrapperNavbarContent = styled(Toolbar)(() => ({
 
 const WrapperAuth = styled(Box)(({ theme }) => ({
   background: theme.palette.secondary[100],
-  minHeight: '100vh'
+  minHeight: '100vh',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
 }));
 
 const WrapperCard = styled(Card)(() => ({
-  paddingTop: '100px',
   background: 'none',
-  borderRadius: '8px',
+  borderRadius: 'none',
   boxShadow: 'none',
-  paddingLeft: '135px',
-  paddingRight: '135px',
-  maxWidth: '800px',
-  margin: '0 auto',
-  '@media (max-width: 800px)': {
-    paddingLeft: '65px',
-    paddingRight: '65px',
-    maxWidth: '100%',
-  },
 }));
 
 const WrapperSSO = styled(Box)(() => ({
@@ -163,6 +156,11 @@ const SetNewPasswordComponent = ({
           {
             [200, 201].includes(responser.code) && (
               <Notify error={false} body={responser.message}/>
+            )
+          }
+          {
+            [400, 401, 422].includes(responser?.code) && (
+              <Notify error={true} body={responser?.message}/>
             )
           }
           <WrapperCardContent>

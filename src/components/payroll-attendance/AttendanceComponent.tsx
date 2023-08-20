@@ -104,8 +104,8 @@ function AttendanceComponent() {
         data: {
           companyID: companyData?.id,
           name: values.name,
-          start: dayjs(values.date[0]).toISOString(),
-          end: dayjs(values.date[1]).toISOString(),
+          start: dayjs(values.date[0]).format('YYYY-MM-DD'),
+          end: dayjs(values.date[1]).format('YYYY-MM-DD'),
           workflow: 0,
         }
       }

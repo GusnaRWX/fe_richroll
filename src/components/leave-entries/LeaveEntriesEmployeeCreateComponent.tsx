@@ -239,6 +239,7 @@ const LeaveEntriesEmployeeCreateComponent = ({
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             value={formik.values.note}
+            error={formik.errors.note}
           />
         </Grid>
       </Grid>

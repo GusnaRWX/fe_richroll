@@ -16,23 +16,17 @@ const WrapperNavbarContent = styled(Toolbar)(() => ({
 
 const WrapperAuth = styled(Box)(({ theme }) => ({
   background: theme.palette.secondary[100],
-  minHeight: '100vh'
+  minHeight: '100vh',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
 }));
 
 const WrapperCard = styled(Card)(() => ({
-  paddingTop: '100px',
   background: 'none',
-  borderRadius: '8px',
+  borderRadius: 'none',
   boxShadow: 'none',
-  paddingLeft: '135px',
-  paddingRight: '135px',
   maxWidth: '800px',
-  margin: '0 auto',
-  '@media (max-width: 800px)': {
-    paddingLeft: '65px',
-    paddingRight: '65px',
-    maxWidth: '100%',
-  },
 }));
 
 const WrapperCardContent = styled(Box)(() => ({
@@ -59,7 +53,7 @@ const Navbar = () => {
             alt='kayaroll'
           />
         </Box>
-        <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+        <Box>
           <LocalizationMenu />
         </Box>
       </WrapperNavbarContent>
@@ -71,6 +65,10 @@ const HaveAccount = ({
   token,
   email
 }: AuthEmployee.HaveAccount) => {
+  const splitEmail = email.split('@');
+  const encodeEmail = encodeURIComponent(splitEmail[0]);
+  const newFormatEmail = encodeEmail + '@' + splitEmail[1];
+
   return (
     <>
       <Navbar />
@@ -118,7 +116,7 @@ const HaveAccount = ({
                 <Button
                   label='No'
                   LinkComponent={Link}
-                  href={`/auth-employee/set-new-password?email=${email}&token=${token}`}
+                  href={`/auth-employee/set-new-password?email=${newFormatEmail}&token=${token}`}
                   sx={{
                     background: '#FFF',
                     border: '1px solid #D1D5DB',
