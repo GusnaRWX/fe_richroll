@@ -15,8 +15,8 @@ ENV PORT=3000
 EXPOSE $PORT
 
 #CMD ["npm", "start -- -p ${PORT}"]
-# CMD ["npm", "start", "--", "-p", "${PORT}"]
-CMD ["npm", "start"]
+CMD ["npm", "start", "--", "-p", "${PORT}"]
+# CMD ["npm", "start"]
 
 
 # DO NOT DELETE THE CODE BELOW NEED TO FIX TRANSLATOR FIRST THEN USE MULTISTAGED BUILD
