@@ -21,6 +21,7 @@ interface TableProps {
   count: number,
   page: number,
   rowsPerPage: number,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onChangePage: any,
   onRowsPerPagesChange?: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>,
   withPaginate?: boolean;

@@ -48,6 +48,7 @@
     "react-redux": "^8.0.5",
     "react-webcam": "^7.0.1",
     "redux-saga": "^1.2.3",
+    "sharp": "^0.32.5",
     "yup": "^1.1.1"
   },
   "devDependencies": {

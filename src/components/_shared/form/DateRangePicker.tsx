@@ -19,6 +19,7 @@ interface DatePickerType {
   error?: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const CustomInput = forwardRef((props: any, ref) => {
   const [start, end] = props.value.split(' - ');
   return (
