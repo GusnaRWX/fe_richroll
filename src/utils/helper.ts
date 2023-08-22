@@ -663,3 +663,17 @@ export const getPayloadAttendancePayroll = (val: InitialValuesPAType, event) => 
       return null;
   }
 };
+
+// https://lifepal.co.id/media/nomor-rekening/
+export const bankAccountLength = {
+  // 'Bank Rakyat Indonesia': 15,
+  // 'Bank Negara Indonesia': 10,
+  // 'Bank Central Asia' : 10,
+  // 'Bank Mandiri': 13,
+  // 'Bank CIMB Niaga': 14,
+  '1': 15, // BRI,
+  '2': 10, // BNI,
+  '3': 10,
+  '4': 13,
+  '5': 14
+};
