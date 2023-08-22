@@ -195,32 +195,34 @@ function CompanyInformationForm({
       <Typography component='h3' fontSize={18} color='primary' fontWeight={700}>{t(`${t_companyInformationSection}.title`)}</Typography>
       <form>
         <Typography variant='text-sm' component='div' color='primary' sx={{ mt: '16px' }}>{t(`${t_companyInformationSection}.company_logo`)}</Typography>
-        <ImageReview
-          image={ifThenElse(!tempImageCrop, ImageType.PLACEHOLDER, tempImageCrop)}
-          onClick={handleOpen}
-        />
-        {
-          tempImageCrop && (
-            <IconButton
-              sx={{
-                position: 'absolute',
-                border: '1px solid red',
-                backgroundColor: 'white',
-                borderRadius: '3px',
-                left: '65px',
-                height: '33px',
-                width: '33px',
-                ':hover': {
-                  backgroundColor: 'white'
-                },
-                bottom: '5px'
-              }}
-              onClick={resetPicture}
-            >
-              <FiTrash2 style={{ zIndex: '999', color: 'red' }} />
-            </IconButton>
-          )
-        }
+        <div style={{ position: 'relative' }}>
+          <ImageReview
+            image={ifThenElse(!tempImageCrop, ImageType.PLACEHOLDER, tempImageCrop)}
+            onClick={handleOpen}
+          />
+          {
+            tempImageCrop && (
+              <IconButton
+                sx={{
+                  position: 'absolute',
+                  border: '1px solid red',
+                  backgroundColor: 'white',
+                  borderRadius: '3px',
+                  left: '65px',
+                  height: '33px',
+                  width: '33px',
+                  ':hover': {
+                    backgroundColor: 'white'
+                  },
+                  bottom: '5px'
+                }}
+                onClick={resetPicture}
+              >
+                <FiTrash2 style={{ zIndex: '999', color: 'red' }} />
+              </IconButton>
+            )
+          }
+        </div>
         <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
           <Grid item xs={12} md={6} lg={6} xl={6}>
             <FormControl fullWidth error={compareCheck(formik.touched.companyType, Boolean(formik.errors.companyType))}>
