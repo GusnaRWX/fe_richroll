@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { bankAccountLength } from '@/utils/helper';
 import * as Yup from 'yup';
 
 export const validationSchemeCompanyProfile = Yup.object({
@@ -24,7 +26,16 @@ export const validationSchemeCompanyProfile = Yup.object({
 export const validationSchemeCompanyProfilePayment = Yup.object({
   bankBankInformation: Yup.string().required('Bank is required'),
   bankAccountHolderNameBankInformation: Yup.string().required('Bank Account Holder’s Name is required'),
-  bankAccoutNoBankInformation: Yup.string().required('Bank Account No is required'),
+  // bankAccoutNoBankInformation: Yup.string().required('Bank Account No is required'),
+  bankAccoutNoBankInformation: Yup.string().when('bankBankInformation', (bankBankInformation: any, schema: any) => {
+    const expectedLength = bankAccountLength[bankBankInformation];
+
+    if(expectedLength) {
+      return schema.required('Bank Account No is required').length(expectedLength, `Bank Account No must be ${expectedLength} characters`);
+    }
+
+    return schema;
+  }),
   bankCodeBankInformation: Yup.string().notRequired(),
   branchCodeBankInformation: Yup.string().notRequired(),
   branchNameBankInformation: Yup.string().notRequired(),
