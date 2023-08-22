@@ -25,10 +25,15 @@ const WrapperAuth = styled(Box)<BoxProps>(({ theme }) => ({
   justifyContent: 'center',
 }));
 
-const WrapperCard = styled(Card)<CardProps>(() => ({
+interface widthProps extends CardProps {
+  width: boolean
+}
+
+const WrapperCard = styled(Card)<widthProps>(({width}) => ({
   background: 'none',
   borderRadius: 'none',
   boxShadow: 'none',
+  paddingTop: width ? '0' : '64px'
 }));
 
 const WrapperCardContent = styled(Box)<BoxProps>(() => ({
@@ -80,7 +85,7 @@ const LoginComponent = ({
         )
       }
       <WrapperAuth>
-        <WrapperCard>
+        <WrapperCard width={matches}>
           <WrapperCardContent>
             <Box component='div' sx={{ display: { xs: 'none', md: 'block' } }}>
               <Image
@@ -91,7 +96,7 @@ const LoginComponent = ({
               />
             </Box>
             <Box height='621px' sx={{
-              background: '#FFFFFF', 
+              background: '#FFFFFF',
               width: '600px' ,
               marginTop: matches ? '40px' : ''
             }}>

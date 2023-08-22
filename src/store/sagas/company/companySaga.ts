@@ -347,13 +347,14 @@ function* fetchGetCompanyPaymentDetail(action: AnyAction) {
 function* fetchPatchCompanyProfile(action: AnyAction) {
   try {
     const res: AxiosResponse = yield call(patchCompanyProfile, action?.payload);
-    if (res.data.code === 200) {
+    if (res.data.code === 200 || res.data.code === 201) {
       yield put({ type: patchCompanyProfileSuccess.toString(), payload: res.data.data });
       yield put({
         type: setResponserMessage.toString(),
         payload: {
-          code: 0,
-          message: null
+          code: res.data.code,
+          message: 'Successfully Saved',
+          footerMessage: 'Company profile has been updated'
         }
       });
     }
