@@ -7,13 +7,13 @@ import {
   FormHelperText,
   Box,
   MenuItem,
-  Alert,
+  // Alert,
   FormControl
 } from '@mui/material';
 import { Input, CheckBox } from '@/components/_shared/form';
 import { Text } from '@/components/_shared/common';
 import { styled as MuiStyled } from '@mui/material/styles';
-import { useAppSelectors } from '@/hooks/index';
+// import { useAppSelectors } from '@/hooks/index';
 import { ifThenElse, compareCheck } from '@/utils/helper';
 import { useTranslation } from 'react-i18next';
 
@@ -28,7 +28,7 @@ interface CompanyBankProps {
 }
 
 function CompanyProfileBankForm({ bank, paymentMethod, formik }: CompanyBankProps) {
-  const { responser } = useAppSelectors(state => state);
+  // const { responser } = useAppSelectors(state => state);
   const {t} = useTranslation();
   const t_bankInformation = 'company_management.company_profile.form.payment_information.bank_information_section';
   const t_payrollInformation = 'company_management.company_profile.form.payment_information.payroll_information_section';
@@ -478,14 +478,14 @@ function CompanyProfileBankForm({ bank, paymentMethod, formik }: CompanyBankProp
             </Grid>
           </Grid>
         )}
-        {![200, 201, 0].includes(responser?.code) && (
+        {/* {![200, 201, 0].includes(responser?.code) && (
           <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
             <Grid item xs={6} md={6} lg={6} xl={6}></Grid>
             <Grid item xs={6} md={6} lg={6} xl={6}>
               <Alert severity='error'>{responser?.message}</Alert>
             </Grid>
           </Grid>
-        )}
+        )} */}
       </form>
     </>
   );
