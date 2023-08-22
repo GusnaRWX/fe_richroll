@@ -195,7 +195,7 @@ const AttendanceEntriesTable = () => {
                   data?.items?.map((item, index) => (
                     <TableRow key={index}>
                       <TableCell>{dayjs(item.date).format('DD/MM/YY')}</TableCell>
-                      <TableCell>{item.employee.employeeID}</TableCell>
+                      <TableCell>{ifThenElse(item?.employee?.employeeID === null, '-', item?.employee?.employeeID)}</TableCell>
                       <TableCell>
                         <NameWrapper>
                           <Avatar
