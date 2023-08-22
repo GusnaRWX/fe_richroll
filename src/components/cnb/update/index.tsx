@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/indent */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import React, { useEffect, useState } from 'react';
 import { Button, Form, IconButton, Input } from '@/components/_shared/form';
 import AddIcon from '@mui/icons-material/Add';
@@ -316,7 +318,7 @@ export default function UpdateCNBComponent() {
   if (!isDataReady) {
     return <div></div>;
   }
-  
+
 
   return (
     <>

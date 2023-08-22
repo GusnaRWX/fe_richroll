@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import dayjs from 'dayjs';
 
 type DayJS = dayjs.Dayjs | null | string;

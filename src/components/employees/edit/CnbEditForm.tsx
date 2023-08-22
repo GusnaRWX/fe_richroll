@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import React, { useState } from 'react';
 import { Grid, Autocomplete, Typography, Button as MuiButton, TextField, createFilterOptions, InputAdornment, Box } from '@mui/material';
 import { useFormik } from 'formik';

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import React, {useState, useEffect} from 'react';
 import { Button, CheckBox } from '@/components/_shared/form';
 import { styled } from '@mui/material/styles';

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import React, { useEffect, useState } from 'react';
 import { Box, Avatar, Grid } from '@mui/material';
 import { CustomModal, Text } from '../_shared/common';

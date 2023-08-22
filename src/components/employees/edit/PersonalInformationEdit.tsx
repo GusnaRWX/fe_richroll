@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import React, { useEffect, useState, memo } from 'react';
 import { Alert, Text } from '@/components/_shared/common';
 import { RadioGroup, Input, Button, Textarea, DatePicker, CheckBox, Select } from '@/components/_shared/form';

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import React, { useState, useRef, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { IconButton } from '@/components/_shared/form';
@@ -461,7 +463,7 @@ function EmployeeEditComponent() {
           <TabPanel value={value} index={3}>
             <EmployeeCnbForm
               refProp={cnbEditRef}
-              setValues={setCnbValues} 
+              setValues={setCnbValues}
               cnbValue={cnbValues}
             />
           </TabPanel>
