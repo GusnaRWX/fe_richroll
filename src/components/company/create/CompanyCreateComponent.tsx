@@ -86,7 +86,7 @@ const Navbar = () => {
 };
 
 const CompanyCreateComponent = ({ companyType, companySector, bank, paymentMethod, countries, listAllCompany }: CompanyCreate.Component) => {
-  const [tabSelected, setTabSelected] = useState(1);
+  const [tabSelected, setTabSelected] = useState(0);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [images, setImages] = useState<string | null>(null);
   const companyID = useAppSelectors(state => state.company.companyID);
