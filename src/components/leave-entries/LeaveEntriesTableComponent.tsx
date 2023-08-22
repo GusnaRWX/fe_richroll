@@ -142,6 +142,8 @@ const LeaveEntriesTableComponent = ({
     }
   };
 
+  console.log(leaveEntries?.leaveEntriesData?.items);
+
   return (
     <Card sx={{ marginTop: '16px' }}>
       <Grid container spacing={2}>
@@ -166,7 +168,7 @@ const LeaveEntriesTableComponent = ({
         rowsPerPage={rowsPerPage}
         page={page}
         onChangePage={handleChangePage}
-        onRowsPerPagesChange={handleChangeRowsPerPage}
+        onRowsPerPagesChange={(e) => handleChangeRowsPerPage(e)}
         headChildren={
           <TableRow>
             {
@@ -202,9 +204,8 @@ const LeaveEntriesTableComponent = ({
                   </TableRow>
                 ), (
                   leaveEntries?.leaveEntriesData?.items?.map(value => (
-                    console.log(value),
-                    <TableRow key={value.employee?.code}>
-                      <TableCell>{value.employee?.code}</TableCell>
+                    <TableRow key={value?.id}>
+                      <TableCell>{ifThenElse(value.employee?.code === null, '-', value.employee?.code)}</TableCell>
                       <TableCell>
                         <NameWrapper>
                           <Avatar
