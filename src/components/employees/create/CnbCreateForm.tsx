@@ -187,6 +187,58 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
 
   console.log(title);
 
+  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+  const {amountType, rateType, ...baseValid} = formik.values.base;
+
+  const validNext = () => {
+    let res = {};
+    switch(baseValid.componentID) {
+      case '1':
+        res = {
+          ...res,
+          amount: baseValid.amount,
+          componentID: baseValid.componentID,
+          termID: baseValid.termID,
+          isTaxable: baseValid.isTaxable,
+          overtime: formik.values.overtime
+        };
+        break;
+      case '2': 
+        res = {
+          ...res,
+          rate: baseValid.rate,
+          componentID: baseValid.componentID,
+          termID: baseValid.termID,
+          isTaxable: baseValid.isTaxable,
+          overtime: formik.values.overtime
+        };
+        break;
+      case '3' || '4':
+        res = {
+          ...res,
+          rate: baseValid.rate,
+          amount: baseValid.amount,
+          componentID: baseValid.componentID,
+          termID: baseValid.termID,
+          isTaxable: baseValid.isTaxable,
+          overtime: formik.values.overtime
+        };
+        break;
+      default: 
+        res = {
+          ...res,
+          rate: '',
+          amount: '',
+          componentID: '',
+          termID: '',
+          isTaxable: '',
+          overtime: ''
+        };
+    }
+    return res;
+  };
+
+  const validButton = Object.values(validNext());
   return (
     <Grid>
       <Grid container mb='16px'>
@@ -562,7 +614,11 @@ const CnbCreateForm = ({nextPage, prevPage,setValues}: CnbCreateFormProps) => {
           <Button
             label={t('button.next')}
             onClick={() => { formik.handleSubmit(); }}
-            disabled={formik.values.templateID !== '' || formik.values.name !== '' ? false : true}
+            disabled={
+              formik.values.templateID !== '' || (formik.values.name !== '' && validButton.every(v => v!== '') )
+                ? false 
+                : true
+            }
           />
         </Grid>
       </Grid>
