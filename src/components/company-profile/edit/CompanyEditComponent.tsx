@@ -9,7 +9,7 @@ import {
   Tabs
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { Alert } from '@/components/_shared/common';
+//import { Alert } from '@/components/_shared/common';
 import { Company, CompanyEdit } from '@/types/component';
 import CompanyInformationForm from './CompanyProfileInformationForm';
 import CompanyBankForm from './CompanyProfileBankForm';
@@ -24,7 +24,7 @@ import {
   administrativeSecondLevelRequested,
   administrativeThirdLevelRequsted
 } from '@/store/reducers/slice/options/optionSlice';
-import { Cancel } from '@mui/icons-material';
+//import { Cancel } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 
 const ButtonWrapper = styled(Box)(({
@@ -76,7 +76,7 @@ function a11yProps(index: number) {
 
 const CompanyEditComponent = ({ companyType, companySector, bank, paymentMethod, countries }: CompanyEdit.Component) => {
   const [tabSelected, setTabSelected] = useState(0);
-  const [isError, setIsError] = useState(false);
+  //const [isError, setIsError] = useState(false);
   const [isInc, setIsInc] = useState(0);
   const [hydrated, setHydrated] = useState(false);
   const detail = useAppSelectors(state => state.company.detail);
@@ -253,26 +253,28 @@ const CompanyEditComponent = ({ companyType, companySector, bank, paymentMethod,
       formikDetail.validateForm().then((a) => {
         const ifTrueDetail = () => {
           formikDetail.submitForm();
-          setIsError(false);
+          //setIsError(false);
           setTabSelected(newValue);
           return true;
         };
         ifThenElse(
           Object.keys(a).length === 0,
           ifTrueDetail(),
-          setIsError(true)
+          //setIsError(true)
+          null
         );
       }),
       formikPayment.validateForm().then((a) => {
         const ifTruePayment = () => {
-          setIsError(false);
+          //setIsError(false);
           setTabSelected(newValue);
           return true;
         };
         ifThenElse(
           Object.keys(a).length === 0,
           ifTruePayment(),
-          setIsError(true)
+          //setIsError(true)
+          null
         );
       })
     );
@@ -405,13 +407,13 @@ const CompanyEditComponent = ({ companyType, companySector, bank, paymentMethod,
             </Tabs>
           </Box>
           <TabPanel value={tabSelected} index={0}>
-            {ifThenElse(isError, (
+            {/* {ifThenElse(isError, (
               <Alert
                 severity='error'
                 content='Please fill in all the mandatory fields'
                 icon={<Cancel />}
               />
-            ), null)}
+            ), null)} */}
             <CompanyInformationForm
               key={isInc}
               companyType={companyType}
@@ -423,13 +425,13 @@ const CompanyEditComponent = ({ companyType, companySector, bank, paymentMethod,
             />
           </TabPanel>
           <TabPanel value={tabSelected} index={1}>
-            {ifThenElse(isError, (
+            {/* {ifThenElse(isError, (
               <Alert
                 severity='error'
                 content='Please fill in all the mandatory fields'
                 icon={<Cancel />}
               />
-            ), null)}
+            ), null)} */}
             <CompanyBankForm
               formik={formikPayment}
               bank={bank}
