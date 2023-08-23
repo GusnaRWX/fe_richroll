@@ -3,6 +3,7 @@ import { HYDRATE } from 'next-redux-wrapper';
 
 interface CompanyState {
   loading: boolean,
+  successCreate: boolean,
   companies: [],
   companyType: [],
   companySector: [],
@@ -15,6 +16,7 @@ interface CompanyState {
 
 const initialState: CompanyState = {
   loading: false,
+  successCreate: false,
   companies: [],
   companyType: [],
   companySector: [],
@@ -91,12 +93,16 @@ export const companySlice = createSlice({
     },
     postCompanyProfileRequested: (state) => {
       state.loading = true;
+      state.successCreate = false;
+      state.companyID = '';
     },
     postCompanyProfileSuccess: (state, action) => {
       state.loading = false;
+      state.successCreate = true;
       state.companyID = action?.payload;
     },
     postCompanyProfileFailed: (state) => {
+      state.successCreate = false;
       state.loading = false;
     },
     patchCompanyProfileRequested: (state) => {
@@ -110,6 +116,7 @@ export const companySlice = createSlice({
     },
     postCompanyPaymentsRequested: (state) => {
       state.loading = true;
+      state.successCreate = false;
     },
     postCompanyPaymentsSuccess: (state) => {
       state.loading = false;
