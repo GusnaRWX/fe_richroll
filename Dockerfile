@@ -16,6 +16,7 @@ EXPOSE $PORT
 
 #CMD ["npm", "start -- -p ${PORT}"]
 CMD ["npm", "start -- -p 3000"]
+# CMD ["npm start -- -p 3000"]
 # CMD ["npm", "start", "--", "-p", "${PORT}"]
 # CMD ["npm", "start"]
 
