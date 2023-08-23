@@ -283,6 +283,7 @@ function CompanyBankForm({ bank, paymentMethod, formik }: CompanyBankProps) {
                 <Box component='div' width='50%'>
                   <Input
                     name='monthlyPayrollDate'
+                    type='number'
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     error={compareCheck(formik.touched.monthlyPayrollDate, Boolean(formik.errors.monthlyPayrollDate))}
@@ -503,7 +504,7 @@ function CompanyBankForm({ bank, paymentMethod, formik }: CompanyBankProps) {
           <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
             <Grid item xs={12} md={6} lg={6} xl={6}></Grid>
             <Grid item xs={12} md={6} lg={6} xl={6}>
-              <Alert severity='error'>{responser?.message}</Alert>
+              <Alert severity='error' content={responser?.message} />
             </Grid>
           </Grid>
         )}

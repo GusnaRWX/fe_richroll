@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { HTMLAttributes, useCallback, useRef, useState } from 'react';
+import React, { HTMLAttributes, useCallback, useRef, useEffect, useState } from 'react';
 import {
   Grid,
   Typography,
@@ -145,6 +145,13 @@ function CompanyInformationForm({
     administrativeThird
   } = useAppSelectors(state => state.option);
 
+  const {
+    loading,
+    successCreate
+  } = useAppSelectors(state => state.company);
+
+  const { responser } = useAppSelectors(state => state);
+
   const handleOpen = () => {
     setOpen(true);
   };
@@ -169,9 +176,12 @@ function CompanyInformationForm({
   const handleNext = () => {
     formik.validateForm().then((a) => {
       if(Object.keys(a).length === 0) {
-        formik.submitForm();
-        setIsError(false);
-        nextPage(1);
+        formik.submitForm().then(() =>{
+          if (!loading && successCreate) {
+            setIsError(false);
+            nextPage(1);  
+          }
+        });
       } else {
         setIsError(true);
       }
@@ -182,6 +192,13 @@ function CompanyInformationForm({
     setImages(null);
     setTempImageCrop('');
   };
+
+  useEffect(() => {
+    if (!loading && successCreate) {
+      setIsError(false);
+      nextPage(1);  
+    }
+  }, [loading, successCreate]);
 
   return (
     <>
@@ -637,6 +654,14 @@ function CompanyInformationForm({
             />
           </Grid>
         </Grid>
+        {![200, 201, 0].includes(responser?.code) && (
+          <Grid container spacing={2} sx={{ marginBottom: '1.5rem' }}>
+            <Grid item xs={12} md={6} lg={6} xl={6}></Grid>
+            <Grid item xs={12} md={6} lg={6} xl={6}>
+              <Alert severity='error' content={responser?.message} />
+            </Grid>
+          </Grid>
+        )}
         <NextBtnWrapper>
           <Button onClick={() => { router.push('/company'); }} fullWidth={false} size='small' label={t('button.cancel')} variant='outlined' sx={{ mr: '12px' }} color='primary' />
           <Button onClick={handleNext} fullWidth={false} size='small' label={t('button.next')} color='primary' />
