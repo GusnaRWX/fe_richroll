@@ -14,7 +14,7 @@ import { Text, Alert } from '@/components/_shared/common';
 import { styled as MuiStyled } from '@mui/material/styles';
 import { useRouter } from 'next/router';
 import { useAppSelectors } from '@/hooks/index';
-import { ifThenElse, compareCheck } from '@/utils/helper';
+import { ifThenElse, compareCheck, bankAccountLength } from '@/utils/helper';
 import { Cancel } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 
@@ -141,7 +141,9 @@ function CompanyBankForm({ bank, paymentMethod, formik }: CompanyBankProps) {
           <Grid item xs={12} md={6} lg={6} xl={6}>
             <Input
               name='bankAccoutNoBankInformation'
-              onChange={formik.handleChange}
+              onChange={(e) => {
+                formik.setFieldValue('bankAccoutNoBankInformation', e.target.value.replace(/[^0-9]/g, ''));
+              }}
               onBlur={formik.handleBlur}
               error={compareCheck(formik.touched.bankAccoutNoBankInformation, Boolean(formik.errors.bankAccoutNoBankInformation))}
               helperText={ifThenElse(formik.touched.bankAccoutNoBankInformation, formik.errors.bankAccoutNoBankInformation, '')}
@@ -150,6 +152,9 @@ function CompanyBankForm({ bank, paymentMethod, formik }: CompanyBankProps) {
               size='small'
               value={formik.values.bankAccoutNoBankInformation}
               placeholder={t(`${t_bankInformation}.bank_account_no_placeholder`)}
+              inputProps={{
+                maxLength: bankAccountLength[formik.values.bankBankInformation]
+              }}
             />
           </Grid>
           <Grid item xs={6} md={3} lg={3} xl={3}>
