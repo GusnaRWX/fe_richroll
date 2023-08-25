@@ -5,7 +5,7 @@ export const validationSchemeEmployeeInformation = Yup.object({
   fullName: Yup.string().required('This field is required'),
   nickname: Yup.string().notRequired(),
   phoneNumberPrefix: Yup.string().required(),
-  phoneNumber: Yup.string().matches(/^\d{11}$/, 'Phone number should have 12 or 13 digits')
+  phoneNumber: Yup.string().matches(/^\d{9,12}$/, 'Phone number should have 10 or 13 digits include the nation code')
     .required('Phone number is required')
     .typeError('Phone number should be a number'),
   email: Yup.string().email('Email should be valid').required('Email is required'),
@@ -63,7 +63,7 @@ export const validationSchemeEmployeeEmergencyContact = Yup.object({
   fullNamePrimary: Yup.string().required('This field is required'),
   relationPrimary: Yup.string().notRequired(),
   phoneNumberPrefixPrimary: Yup.string().notRequired(),
-  phoneNumberPrimary: Yup.string().matches(/^\d{11}$/, 'Phone number should have 12 or 13 digits')
+  phoneNumberPrimary: Yup.string().matches(/^\d{9,12}$/, 'Phone number should have 10 or 13 digits include the nation code')
     .required('Phone number is required')
     .typeError('Phone number should be a number'),
   fullNameSecondary: Yup.string().notRequired(),
