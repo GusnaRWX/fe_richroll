@@ -519,7 +519,9 @@
           "schedule_profile_name" : "Schedule Profile Name",
           "schedule_profile_name_placeholder" : "Input Profile Name",
           "weekly_gross_hours" : "Weekly Gross Hours",
+          "weekly_gross_hours_placeholder" : "Input Weekly Gross",
           "weekly_net_hours" : "Weekly Net Hours",
+          "weekly_net_hours_placeholder" : "input Weekly Net",
           "hours_week" : "Hours/Week",
           "today" : "Today"
         }

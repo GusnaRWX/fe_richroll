@@ -370,7 +370,7 @@ export const employeeSlice = createSlice({
     },
     patchEmployeeCnbFailed: state => {
       state.isLoading = false;
-    }
+    },
   },
   extraReducers: {
     [HYDRATE]: (state, action) => {

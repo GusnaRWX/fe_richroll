@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Input, Select } from '@/components/_shared/form';
+import { Input } from '@/components/_shared/form';
 import { Grid, InputAdornment, Typography, Button } from '@mui/material';
 import { Scheduler } from '@aldabil/react-scheduler';
 import type { SchedulerRef } from '@aldabil/react-scheduler/types';
@@ -15,7 +15,6 @@ function EmployeeWorkScheduleDetail() {
   const t_employeeWorkSchedule = 'company_management.employees.form_&_detail.work_schedule_section';
   const router = useRouter();
   const { employee } = useAppSelectors((state) => state);
-  const { listWorkSchedule } = useAppSelectors((state) => state.option);
 
   const handleDeleteEventSchedule = () => {
     const eventLength = calendarRef?.current?.scheduler?.events?.length;
@@ -40,15 +39,13 @@ function EmployeeWorkScheduleDetail() {
     <>
       <Grid container spacing={4} mb='1rem' alignItems='center'>
         <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
-          <Select
+          <Input
             name='workScheduleID'
-            withAsterisk={true}
             customLabel={t(`${t_employeeWorkSchedule}.schedule_profile_name`)}
             size='small'
             fullWidth
             disabled={true}
-            value={employee?.workScheduleDetail.workScheduleId}
-            options={listWorkSchedule}
+            value={employee?.workScheduleDetail?.name}
           />
         </Grid>
         <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>

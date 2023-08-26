@@ -12,7 +12,7 @@ import { Employees } from '@/types/employees';
 import dayjs from 'dayjs';
 import { getCompanyData, ifThenElse } from '@/utils/helper';
 import { useAppSelectors, useAppDispatch } from '@/hooks/index';
-import { patchEmergencyContactRequested, patchEmployeeInformationRequested, patchPersonalRequested, postWorkScheduleRequested, patchEmployeeCnbRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
+import { patchEmergencyContactRequested, patchEmployeeInformationRequested, patchPersonalRequested, patchWorkScheduleRequested, patchEmployeeCnbRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
 import { useTranslation } from 'react-i18next';
 
 const EmployeeInformationEdit = dynamic(() => import('./EmployeeInformationEdit'), {
@@ -290,7 +290,7 @@ function EmployeeEditComponent() {
 
   const handleClickUpdateWorkSchedule = () => {
     dispatch({
-      type: postWorkScheduleRequested.toString(),
+      type: patchWorkScheduleRequested.toString(),
       payload: {
         id: router.query.id,
         workSchedule: valueWorkSchedule

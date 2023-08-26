@@ -835,7 +835,7 @@ function* fetchGetDetailWorkSchedule(action: AnyAction) {
       yield put({
         type: getDetailWorkSchedulerSuccess.toString(),
         payload: {
-          id: res?.data?.data?.id,
+          id: res?.data?.data?.companyWorkScheduleID,
           grossHour: res?.data?.data?.grossHours,
           netHour: res?.data?.data?.netHours,
           events: res?.data?.data?.items
@@ -979,7 +979,7 @@ function* fetchGetViewWorkSchedule(action: AnyAction) {
       yield put({
         type: getViewWorkScheduleSuccess.toString(),
         payload: {
-          id: res?.data?.data?.company_work_schedule_id,
+          id: res?.data?.data?.companyWorkScheduleID,
           name: res?.data?.data?.name,
           grossHour: res?.data?.data?.grossHours,
           netHour: res?.data?.data?.netHours,
