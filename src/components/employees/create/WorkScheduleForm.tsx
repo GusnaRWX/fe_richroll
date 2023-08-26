@@ -1,9 +1,22 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState, useRef } from 'react';
-import { Input, Select, RadioGroup, IconButton, Button } from '@/components/_shared/form';
-import { Button as MuiButton, Grid, InputAdornment, Typography, Stack, FormGroup, FormControlLabel, Checkbox } from '@mui/material';
-import { Add, Cancel } from '@mui/icons-material';
+import { Input, RadioGroup, IconButton, Button } from '@/components/_shared/form';
+import {
+  Box,
+  Button as MuiButton,
+  Grid,
+  InputAdornment,
+  Typography,
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
+  Autocomplete,
+  createFilterOptions
+} from '@mui/material';
+import { Add } from '@mui/icons-material';
 import { Scheduler } from '@aldabil/react-scheduler';
 import CustomModal from '@/components/_shared/common/CustomModal';
+import { Text } from '@/components/_shared/common';
 import { styled } from '@mui/material/styles';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -14,13 +27,12 @@ import { Employees } from '@/types/employees';
 import { validationSchemaWorkScheduler } from './validate';
 import dayjs from 'dayjs';
 import { useAppDispatch, useAppSelectors } from '@/hooks/index';
-import { Alert } from '@/components/_shared/common';
-import { compareCheck, ifThenElse } from '@/utils/helper';
 import { getDetailWorkScheduleRequested, postSimulationEventRequested, postCalculateEventRequested } from '@/store/reducers/slice/company-management/employees/employeeSlice';
-import { AiOutlineSwapRight } from 'react-icons/ai';
+import { AiOutlineSwapRight, AiOutlinePlus } from 'react-icons/ai';
 import { BsTrashFill } from 'react-icons/bs';
 import { workSchedule } from '@/types/workSchedule';
 import { useTranslation } from 'react-i18next';
+import { Option } from '@/types/option';
 
 const AsteriskComponent = styled('span')(({ theme }) => ({
   color: theme.palette.error.main
@@ -86,6 +98,8 @@ function WorkScheduleForm({ setData, prevPage }: WorkScheduleFormProps) {
   const [tempDay, setDayTemp] = useState<Array<number>>([]);
   const [workScheduleID, setWorkScheduleID] = useState('');
   const [workScheduleName, setWorkScheduleName] = useState('');
+  const [customProfile, setCustomProfile] = useState(false);
+  const filter = createFilterOptions<Option.FreesoloType>();
   const initialValues: Employees.InitialValuesWorkScheduleForm = {
     workScheduleID: '',
     profileName: '',
@@ -98,10 +112,34 @@ function WorkScheduleForm({ setData, prevPage }: WorkScheduleFormProps) {
     breakItem: []
   };
 
+  console.log(listWorkSchedule);
 
-  const handleConfirmOpen = (formik) => {
-    console.log(formik);
-    if (formik.values.workScheduleID !== 0) {
+  const handleChangeTemplate = (e, value, formik) => {
+    if (value?.inputValue) {
+      setCustomProfile(true);
+      formik.setFieldValue('profileName', value?.inputValue);
+      setWorkScheduleName(value?.inputValue);
+    }else{
+      console.log(value);
+      setCustomProfile(false);
+      formik.setFieldValue('workScheduleID', value?.value);
+      setWorkScheduleID(value?.value as string);
+      if (value?.value) {
+        dispatch({
+          type: getDetailWorkScheduleRequested.toString(),
+          payload: value?.value
+        });
+      } else {
+        handleDeleteEventSchedule();
+      }
+      const itemSelected = listWorkSchedule.find((el) => el.value === value?.value);
+      formik.setFieldValue('profileName', itemSelected?.label);
+      setWorkScheduleName(itemSelected?.label);
+    }
+  };
+
+  const handleConfirmOpen = () => {
+    if (!customProfile) {
       setConfirmation(true);
     } else {
       handleFormOpen();
@@ -109,7 +147,6 @@ function WorkScheduleForm({ setData, prevPage }: WorkScheduleFormProps) {
   };
 
   const handleConfirmation = () => {
-    console.log(isCustom);
     if (isCustom === 1) {
       setConfirmation(false);
     } else if (isCustom === 0) {
@@ -248,8 +285,9 @@ function WorkScheduleForm({ setData, prevPage }: WorkScheduleFormProps) {
           type: item.type
         });
       });
-      if (Number(workScheduleID) != 0) {
+      if (!customProfile) {
         setData({
+          isCustom: customProfile,
           workScheduleID: String(workScheduleID),
           name: workScheduleName,
           grossHours: employee?.grossHour,
@@ -258,6 +296,7 @@ function WorkScheduleForm({ setData, prevPage }: WorkScheduleFormProps) {
         });
       } else {
         setData({
+          isCustom: customProfile,
           name: workScheduleName,
           grossHours: employee?.grossHour,
           netHours: employee?.netHour,
@@ -293,21 +332,80 @@ function WorkScheduleForm({ setData, prevPage }: WorkScheduleFormProps) {
         {
           (formik) => (
             <>
-              {
-                Object.keys(formik.errors).length > 0 && (
-                  <Stack mb='1rem'>
-                    <Alert
-                      severity='error'
-                      content='Please fill in all the mandatory fields'
-                      icon={<Cancel />}
-                    />
-                  </Stack>
-                )
-              }
               <FormikForm>
                 <Grid container spacing={3} mb='1rem' alignItems='center'>
                   <Grid item xs={9} sm={9} md={9} lg={5.3} xl={5.3}>
-                    <Select
+                    <Text title={t(`${t_employeeWorkSchedule}.schedule_profile_name`)}/>
+                    <Autocomplete
+                      id='input_workschedule_id'
+                      freeSolo
+                      value={formik.values.profileName}
+                      size='small'
+                      onChange={(e, value) => {handleChangeTemplate(e, value, formik);}}
+                      onBlur={formik.handleBlur}
+                      filterOptions={(options, params) => {
+                        const filtered = filter(options, params);
+                        const { inputValue } = params;
+                        const isExis = options?.some((option) => inputValue === option?.label);
+                        if(inputValue !== '' && !isExis) {
+                          filtered?.push({
+                            inputValue,
+                            label: (
+                              <Box
+                                component='span'
+                                sx={{
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: '5px'
+                                }}
+                              >
+                                <AiOutlinePlus />
+                                {t('button.add_new')} {inputValue}
+                              </Box>
+                            ) as unknown as Element
+                          });
+                        }
+                        return filtered;
+                      }}
+                      selectOnFocus
+                      clearOnBlur
+                      handleHomeEndKeys
+                      options={listWorkSchedule.map(val => {
+                        return {
+                          label: val?.label,
+                          value: val?.value
+                        };
+                      }) as Option.FreesoloType[]}
+                      getOptionLabel={(option: any) => {
+                        if (typeof option === 'string') {
+                          return option;
+                        }
+
+                        if(option?.inputValue) {
+                          return option.inputValue;
+                        }
+
+                        return option?.label;
+                      }}
+                      renderOption={(props, option) => (
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                          }}
+                        >
+                          <li {...props} style={{ width: '100%' }}>{option?.label}</li>
+                        </Box>
+                      )}
+                      renderInput={(params) => (
+                        <Input
+                          name='workScheduleID'
+                          {...params}
+                        />
+                      )}
+                    />
+                    {/* <Select
                       name='workScheduleID'
                       withAsterisk={true}
                       customLabel={t(`${t_employeeWorkSchedule}.schedule_profile_name`)}
@@ -332,17 +430,16 @@ function WorkScheduleForm({ setData, prevPage }: WorkScheduleFormProps) {
                       error={compareCheck(formik.touched.workScheduleID, Boolean(formik.errors.workScheduleID))}
                       helperText={ifThenElse(formik.touched.workScheduleID, formik.errors.workScheduleID, '')}
                       options={listWorkSchedule}
-                    />
+                    /> */}
                   </Grid>
                   <Grid item xs={3} sm={3} md={3} lg={1.7} xl={1.7} mt={formik.errors.profileName ? '0px' : '28px'}>
-                    <MuiButton onClick={() => { handleConfirmOpen(formik); }} variant='contained' size='small' sx={{ height: '2.5rem' }}><Add />&nbsp; {t('button.add_schedule')}</MuiButton>
+                    <MuiButton onClick={() => { handleConfirmOpen(); }} variant='contained' size='small' sx={{ height: '2.5rem' }}><Add />&nbsp; {t('button.add_schedule')}</MuiButton>
                   </Grid>
                   <Grid item xs={6} sm={6} md={6} lg={2.5} xl={2.5}>
                     <Input
                       name='weeklyGross'
                       withAsterisk={false}
                       customLabel={t(`${t_employeeWorkSchedule}.weekly_gross_hours`)}
-                      placeholder={t(`${t_employeeWorkSchedule}.weekly_gross_hours_placeholder`)}
                       size='small'
                       disabled
                       type='number'
@@ -361,7 +458,6 @@ function WorkScheduleForm({ setData, prevPage }: WorkScheduleFormProps) {
                       name='weeklyNet'
                       withAsterisk={false}
                       customLabel={t(`${t_employeeWorkSchedule}.weekly_net_hours`)}
-                      placeholder={t(`${t_employeeWorkSchedule}.weekly_net_hours_placeholder`)}
                       size='small'
                       disabled
                       value={employee?.netHour}
@@ -439,6 +535,7 @@ function WorkScheduleForm({ setData, prevPage }: WorkScheduleFormProps) {
                     handleSubmit(formik, formik.values);
                     formik.resetForm();
                     formik.setFieldValue('workScheduleID', workScheduleID);
+                    formik.setFieldValue('profileName', workScheduleName);
                   }}
                 >
                   <Grid container mt='1rem' mb='1rem'>

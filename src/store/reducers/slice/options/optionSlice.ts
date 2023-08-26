@@ -296,10 +296,6 @@ export const optionSlice = createSlice({
           value: item.id
         });
       });
-      data.push({
-        label: 'Custom Profile',
-        value: 0
-      });
       state.listWorkSchedule = data;
     },
     getListOptionWorkScheduleFailed: (state) => {
