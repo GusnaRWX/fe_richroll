@@ -51,6 +51,23 @@ function* fetchAuthenticationLogin(action: AnyAction) {
         type: meSuccessed.toString(),
         payload: { ...profile?.data?.data as Auth.Me }
       });
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: res.data.code,
+          message: 'Successfully Login',
+          footerMessage: 'Please wait, the system will redirect'
+        }
+      });
+      yield delay(1500);
+      yield put({
+        type: setResponserMessage.toString(),
+        payload: {
+          code: 0,
+          message: null,
+          footerMessage: null
+        }
+      });
       const roles = profile?.data?.data?.roles;
       if (roles?.includes('Employee')) {
         yield Router.push('/employe/company');

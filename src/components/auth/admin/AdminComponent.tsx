@@ -13,6 +13,8 @@ import { styled } from '@mui/material/styles';
 import Image from 'next/image';
 import { Image as ImageType } from '@/utils/assetsConstant';
 import LocalizationMenu from '@/components/_shared/_core/localization/LocalizationMenu';
+import Notify from '@/components/_shared/common/Notify';
+import { useAppSelectors } from '@/hooks/index';
 
 
 const WrapperAuth = styled(Box)<BoxProps>(({ theme }) => ({
@@ -67,9 +69,16 @@ const Navbar = () => {
 const AdminComponent = ({
   doLogin
 }: Login.Component) => {
+  const { responser } = useAppSelectors((state) => state);
+  console.log(responser);
   return (
     <>
       <Navbar />
+      {
+        [200, 201].includes(responser.code) && (
+          <Notify error={false} body={responser?.message} footerMessage={responser?.footerMessage}/>
+        )
+      }
       <WrapperAuth>
         <WrapperCard>
           <WrapperCardContent>
