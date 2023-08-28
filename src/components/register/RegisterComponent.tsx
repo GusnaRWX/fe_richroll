@@ -333,6 +333,7 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
                         helperText={ifThenElse(formik.touched.phoneNumber, formik.errors.phoneNumber, '')}
                         withAsterisk={true}
                         size='small'
+                        type='number'
                         placeholder='Input Contact Number'
                       />
                     </Grid>
