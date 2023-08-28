@@ -246,10 +246,11 @@ function CompanyProfileInformationForm({
               name='companyNPWP'
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
+              type='number'
               error={compareCheck(formik.touched.companyNPWP, Boolean(formik.errors.companyNPWP))}
               helperText={ifThenElse(formik.touched.companyNPWP, formik.errors.companyNPWP, '')}
               customLabel={t(`${t_companyInformation}.company_npwp`)}
-              withAsterisk={false}
+              withAsterisk={true}
               size='small'
               value={formik.values.companyNPWP}
               placeholder={t(`${t_companyInformation}.company_npwp_placeholder`)}
