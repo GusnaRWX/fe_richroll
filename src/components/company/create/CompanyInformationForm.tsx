@@ -179,7 +179,7 @@ function CompanyInformationForm({
         formik.submitForm().then(() =>{
           if (!loading && successCreate) {
             setIsError(false);
-            nextPage(1);  
+            nextPage(1);
           }
         });
       } else {
@@ -196,7 +196,7 @@ function CompanyInformationForm({
   useEffect(() => {
     if (!loading && successCreate) {
       setIsError(false);
-      nextPage(1);  
+      nextPage(1);
     }
   }, [loading, successCreate]);
 
@@ -306,10 +306,11 @@ function CompanyInformationForm({
               name='companyNPWP'
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
+              type='number'
               error={compareCheck(formik.touched.companyNPWP, Boolean(formik.errors.companyNPWP))}
               helperText={ifThenElse(formik.touched.companyNPWP, formik.errors.companyNPWP, '')}
               customLabel={t(`${t_companyInformationSection}.company_npwp`)}
-              withAsterisk={false}
+              withAsterisk={true}
               size='small'
               value={formik.values.companyNPWP}
               placeholder={t(`${t_companyInformationSection}.company_npwp_placeholder`)}
