@@ -6,9 +6,11 @@ export const validationSchemeCompanyProfile = Yup.object({
   picture: Yup.mixed().notRequired(),
   companyType: Yup.string().required('Company type is required'),
   companyName: Yup.string().required('Company name is required'),
-  companyNPWP: Yup.string().notRequired(),
+  companyNPWP: Yup.string().matches(/^\d{15,16}$/, 'Company NPWP should have 15 or 16 digits'),
   companySector: Yup.string().required('Company sector is required'),
-  companyEmail: Yup.string().email('Email should be valid').required('Email is required'),
+  companyEmail: Yup.string().email('Email should be valid').required('Email is required')
+    .required('Company NPWP is required')
+    .typeError('Company NPWP should be a number'),
   phoneNumberPrefix: Yup.string().required(),
   phoneNumber: Yup.string()
     .matches(/^\d{9,12}$/, 'Phone number should have 10 or 13 digits include the nation code')

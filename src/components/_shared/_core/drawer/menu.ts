@@ -12,7 +12,7 @@ export const Menus: CoreLayout.SidebarItem[] = [
   // Dashboard
   {
     key: 'dashboard',
-    path: '/dashboard/',
+    path: '/dashboard',
     title: [
       {
         key: 'HR Admin',

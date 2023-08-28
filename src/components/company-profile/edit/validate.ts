@@ -6,7 +6,9 @@ export const validationSchemeCompanyProfile = Yup.object({
   picture: Yup.mixed().notRequired(),
   companyType: Yup.string().required('Company type is required'),
   companyName: Yup.string().required('Company name is required'),
-  companyNPWP: Yup.string().notRequired(),
+  companyNPWP: Yup.string().matches(/^\d{15,16}$/, 'Company NPWP should have 15 or 16 digits')
+    .required('Company NPWP is required')
+    .typeError('Company NPWP should be a number'),
   companySector: Yup.string().required('Company sector is required'),
   companyEmail: Yup.string().email('Email should be valid').required('Email is required'),
   phoneNumberPrefix: Yup.string().required(),
