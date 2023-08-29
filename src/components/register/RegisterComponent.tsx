@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from '@emotion/styled';
 import Image from 'next/image';
 import { Image as ImageType } from '@/utils/assetsConstant';
@@ -99,6 +99,7 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
   const [checked, setChecked] = useState(false);
 
   const [openPassword, setOpenPassword] = useState(false);
+  const [hydrated, setHydrated] = useState(false);
 
   const { register } = useAppSelectors(state => state);
   const { responser } = useAppSelectors(state => state);
@@ -129,6 +130,14 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
       console.log(err);
     }
   };
+
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
+
+  if (!hydrated) {
+    return null;
+  }
 
   return (
     <>
@@ -326,7 +335,8 @@ function RegisterComponent({ countries, doRegister }: Register.Component) {
                     <Grid item xs={9} sm={9} md={9} lg={9} xl={9}>
                       <Input
                         name='phoneNumber'
-                        onChange={formik.handleChange}
+                        // onChange={formik.handleChange}
+                        onChange={(e) => formik.setFieldValue('phoneNumber',e.target.value.toString())}
                         onBlur={formik.handleBlur}
                         value={formik.values.phoneNumber}
                         error={compareCheck(formik.touched.phoneNumber, Boolean(formik.errors.phoneNumber))}
