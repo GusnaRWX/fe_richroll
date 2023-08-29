@@ -788,13 +788,14 @@ function WorkScheduleForm({ setData, prevPage }: WorkScheduleFormProps) {
         justifyContent='flex-end'
         alignItems='end'
         gap={2}
+        mt='2rem'
       >
         <Grid item>
           <Button onClick={handleBack} label='Back' variant='outlined' />
         </Grid>
-        <Grid item>
+        {/* <Grid item>
           <Button color='primary' type='submit' label='Next' />
-        </Grid>
+        </Grid> */}
       </Grid>
     </>
   );
