@@ -66,6 +66,12 @@ function Notify({ body, error, footerMessage }: NotifyProps) {
   const [mounted, setMounted] = useState(false);
   const dispatch = useAppDispatch();
 
+  const handleClose = () => {
+    dispatch({ type: setResponserMessage.toString(), payload: { code: 0, message: null } });
+    setOpen(false);
+    setMounted(false);
+  };
+
   useEffect(() => {
     function watchNotify() {
       if (!mounted) {
@@ -91,7 +97,7 @@ function Notify({ body, error, footerMessage }: NotifyProps) {
                 <Typography fontWeight='bold'>{footerMessage ? body : `Successfully Saved!`}</Typography>
                 <Typography color='grey'>{footerMessage ? footerMessage : body}</Typography>
               </MessageWrapper>
-              <IconButton sx={{ margin: 0 }} onClick={() => setOpen(false)}><Close /></IconButton>
+              <IconButton sx={{ margin: 0 }} onClick={() => handleClose()}><Close /></IconButton>
             </ContentWrapaper>
           </CardWrapper>
         )
@@ -105,7 +111,7 @@ function Notify({ body, error, footerMessage }: NotifyProps) {
                 <Typography fontWeight='bold'>Request Failed!</Typography>
                 <Typography color='grey'>{body}</Typography>
               </MessageWrapper>
-              <IconButton sx={{ margin: 0 }} onClick={() => setOpen(false)}><Close /></IconButton>
+              <IconButton sx={{ margin: 0 }} onClick={() => handleClose()}><Close /></IconButton>
             </ContentWrapaper>
           </CardWrapper>
         )
