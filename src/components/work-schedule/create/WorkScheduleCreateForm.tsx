@@ -184,7 +184,7 @@ function WorkScheduleCreateForm({ setData, setIsValid }: WorkScheduleFormProps) 
   };
 
   useEffect(() => {
-    if (calendarRef?.current){
+    if (calendarRef?.current && workSchedule?.events.length > 0){
       const mergeData = [...calendarRef?.current?.scheduler?.events as ProcessedEvent[] || [] as ProcessedEvent[]];
       const newData = [...mergeData.filter((e) => {
         const found = workSchedule?.events.some((el) => dayjs(el.start).format('YYYY-MM-DD') === dayjs(e.start).format('YYYY-MM-DD'));
