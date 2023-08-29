@@ -2,6 +2,9 @@ import * as Yup from 'yup';
 
 export const validationSchemeRegister = Yup.object({
   email: Yup.string().email('Email should be valid').required('Email address is required'),
+  // email: Yup.string()
+  //   .matches(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/, 'Email should be valid')
+  //   .required('Email address is required'),
   password: Yup.string().min(12, 'Password at least have 12 character long').required('Password is required'),
   name: Yup.string().required('Full name is required'),
   countryID: Yup.string().required('Country is required'),
