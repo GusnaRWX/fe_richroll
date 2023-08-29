@@ -1,5 +1,5 @@
 import { AppBar, Box, Card, Toolbar } from '@mui/material';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import Image from 'next/image';
 import { Image as ImageType } from '@/utils/assetsConstant';
@@ -73,6 +73,16 @@ const Navbar = () => {
 
 const VerificationSuccessComponent = () => {
   const router = useRouter();
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
+
+  if (!hydrated) {
+    return null;
+  }
+  
   return (
     <>
       <Navbar />
